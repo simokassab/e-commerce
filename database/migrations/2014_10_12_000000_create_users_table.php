@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('first_name');
             $table->string('last_name');
-            $table->timestamp('is_confirmed')->default(0);
-            $table->timestamp('is_disabled')->default(0);
+            $table->boolean('is_confirmed')->nullable();
+            $table->boolean('is_disabled')->nullable();
             $table->string('salt')->nullable();
             $table->string('password');
 
