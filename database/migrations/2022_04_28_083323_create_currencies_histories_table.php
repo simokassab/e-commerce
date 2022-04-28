@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('currency_id');
             $table->foreign('currency_id')->references('id')->on('currencies');
             $table->double('rate');
-            $table->timestamps();
+            $table->timestamps(); // update_at will removed in model
         });
     }
 

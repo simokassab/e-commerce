@@ -20,7 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('field_id');
             $table->foreign('field_id')->references('id')->on('fields');
             $table->json('value')->nullable();
-            // $table->
+            $table->unsignedBigInteger('field_value_id');
+            $table->foreign('field_value_id')->references('id')->on('fields_values');
             $table->timestamps();
         });
     }
