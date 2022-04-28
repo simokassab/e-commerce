@@ -18,6 +18,7 @@ return new class extends Migration
             $table->json('name');
             $table->boolean('is_complex')->default(0);
             $table->double('percentage');
+            $table->enum('complex_behavior',['combine','after_other']);
             $table->timestamps();
         });
     }

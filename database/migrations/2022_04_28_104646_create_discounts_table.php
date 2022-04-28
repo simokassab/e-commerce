@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->json('name');
             $table->date('start_date');
-            $table->date('end_date');
-            $table->double('dicount_percentage');
+            $table->date('end_date')->nullable();
+            $table->double('discount_percentage');
             $table->timestamps();
         });
     }

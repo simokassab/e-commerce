@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->json('name');
             $table->string('code');
-            $table->string('symbol');
-            $table->double('rate');
+            $table->string('symbol')->nullable();
+            $table->double('rate')->nullable();
             $table->boolean('is_default')->nullable();
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->integer('sort');
             $table->timestamps();
         });

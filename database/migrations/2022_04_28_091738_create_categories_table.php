@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->json('name');
             $table->string('code');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('icon');
             $table->unsignedBigInteger('parent_id')->nullable();//foregin key in another migration
             $table->string('slug')->unique();

@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('currency_id');
             $table->foreign('currency_id')->references('id')->on('currencies');
             $table->boolean('is_virtual')->default(0);
-            $table->double('original_price');
-            $table->double('original_percent');
+            $table->double('original_price')->default(0);
+            $table->double('original_percent')->default(0);
             $table->timestamps();
         });
     }

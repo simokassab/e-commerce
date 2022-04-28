@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('key');
             $table->string('value');
-            $table->boolean('is_developer')->default(false);
+            $table->boolean('is_developer')->default(0);
             $table->timestamps();
         });
     }

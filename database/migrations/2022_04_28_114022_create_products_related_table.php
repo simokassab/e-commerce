@@ -17,7 +17,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('parent_product_id');
             $table->unsignedBigInteger('child_product_id');
-            $table->double('child_qty')->default(1);
+
+            $table->foreign('parent_product_id')->references('id')->on('products');
+            $table->foreign('child_product_id')->references('id')->on('products');
+
+            $table->double('child_quantity')->default(1);
             $table->timestamps();
         });
     }

@@ -15,11 +15,17 @@ return new class extends Migration
     {
         Schema::create('taxes_components', function (Blueprint $table) {
             $table->id();
+
             $table->unsignedBigInteger('tax_id');
             $table->foreign('tax_id')->references('id')->on('taxes');
+
             $table->unsignedBigInteger('component_tax_id');
+            $table->foreign('component_tax_id')->references('id')->on('taxes');
+
             $table->integer('sort');
+
             $table->timestamps();
+
         });
     }
 

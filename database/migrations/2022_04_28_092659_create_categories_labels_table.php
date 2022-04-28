@@ -15,8 +15,10 @@ return new class extends Migration
     {
         Schema::create('categories_labels', function (Blueprint $table) {
             $table->id();
+
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories');
+
             $table->unsignedBigInteger('label_id');
             $table->foreign('label_id')->references('id')->on('labels');
             $table->timestamps();

@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreign('product_id')->references('id')->on('products');
             $table->unsignedBigInteger('price_id');
             $table->foreign('price_id')->references('id')->on('prices');
-            $table->double('price');
-            $table->double('discounted_price');
+            $table->double('price')->default(0);
+            $table->double('discounted_price')->nullable();
             $table->timestamps();
         });
     }
