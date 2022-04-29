@@ -15,13 +15,18 @@ return new class extends Migration
     {
         Schema::create('categories_fields', function (Blueprint $table) {
             $table->id();
+
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories');
+
             $table->unsignedBigInteger('field_id');
             $table->foreign('field_id')->references('id')->on('fields');
+
             $table->json('value')->nullable();
+
             $table->unsignedBigInteger('field_value_id');
             $table->foreign('field_value_id')->references('id')->on('fields_values');
+
             $table->timestamps();
         });
     }

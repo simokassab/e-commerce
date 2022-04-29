@@ -16,7 +16,7 @@ return new class extends Migration
         //
         Schema::table('categories', function (Blueprint $table) {
 
-            $table->foreign('parent_id')->references('id')->on('categories');
+            $table->foreign('parent_id')->references('id')->on('categories')->nullOnDelete()->cascadeOnUpdate();
 
         });
     }

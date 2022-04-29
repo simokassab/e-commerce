@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('parent_product_id');
             $table->unsignedBigInteger('child_product_id');
 
-            $table->foreign('parent_product_id')->references('id')->on('products');
-            $table->foreign('child_product_id')->references('id')->on('products');
+            $table->foreign('parent_product_id')->references('id')->on('products')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreign('child_product_id')->references('id')->on('products')->nullOnDelete()->cascadeOnUpdate();
 
             $table->double('child_quantity')->default(1);
             $table->timestamps();

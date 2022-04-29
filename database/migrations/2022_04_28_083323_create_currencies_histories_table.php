@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('currencies_histories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('currency_id');
-            $table->foreign('currency_id')->references('id')->on('currencies');
+            $table->foreign('currency_id')->references('id')->on('currencies')->cascadeOnDelete();
             $table->double('rate');
             $table->timestamps(); // update_at will removed in model
         });

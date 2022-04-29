@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('attributes_values', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('attribute_id');
-            $table->foreign('attribute_id')->references('id')->on('attributes');
+            $table->foreign('attribute_id')->references('id')->on('attributes')->cascadeOnDelete()->cascadeOnUpdate();
             $table->json('value');
             $table->timestamps();
         });
