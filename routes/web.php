@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\CustomRole;
+use App\Http\Controllers\TestController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,6 +15,8 @@ use App\Models\CustomRole;
 */
 
 Route::get('/', function () {
-    return (new CustomRole)->dddd();
     return view('welcome');
 });
+
+
+Route::get('test',[TestController::class, 'test']);

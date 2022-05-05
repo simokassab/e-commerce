@@ -2,7 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\PermissinsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,4 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'dashbaord'],function (){
+    //here goes all of the routes inside teh dahsbaord
+    Route::apiResource('roles',RolesController::class);
+    Route::apiResource('permissions',PermissinsController::class);
 });
