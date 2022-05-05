@@ -16,12 +16,15 @@ return new class extends Migration
         Schema::create('brands_fields', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('brand_id');
-            $table->foreign('brand_id')->references('id')->on('brands');
+            $table->foreign('brand_id')->references('id')->on('brands')->cascadeOnDelete()->cascadeOnUpdate();
+
             $table->unsignedBigInteger('field_id');
-            $table->foreign('field_id')->references('id')->on('fields');
+            $table->foreign('field_id')->references('id')->on('fields')->cascadeOnDelete()->cascadeOnUpdate();
+
             $table->json('value');
             $table->unsignedBigInteger('field_value_id');
-            $table->foreign('field_value_id')->references('id')->on('fields_values');
+            $table->foreign('field_value_id')->references('id')->on('fields_values')->cascadeOnDelete()->cascadeOnUpdate();
+
             $table->timestamps();
         });
     }

@@ -44,7 +44,7 @@ return new class extends Migration
             $table->double('length')->nullable();
             $table->double('weight')->nullable();
             $table->boolean('is_disabled')->default(0);
-            $table->string('sort');
+            $table->string('sort')->nullable();
             $table->unsignedBigInteger('parent_product_id')->nullable();
             $table->boolean('is_default_child')->default(0);
             $table->timestamps();

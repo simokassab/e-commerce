@@ -15,13 +15,17 @@ return new class extends Migration
     {
         Schema::create('products_fields', function (Blueprint $table) {
             $table->id();
+
             $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete();
+
             $table->unsignedBigInteger('field_id');
-            $table->foreign('field_id')->references('id')->on('fields');
-            $table->json('value');
+            $table->foreign('field_id')->references('id')->on('fields')->cascadeOnDelete();
+
             $table->unsignedBigInteger('field_value_id');
-            $table->foreign('field_value_id')->references('id')->on('fields_value');
+            $table->foreign('field_value_id')->references('id')->on('fields_value')->nullOnDelete();
+
+            $table->json('value');
             $table->timestamps();
         });
     }

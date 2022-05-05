@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\CustomRole;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,5 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    return (new CustomRole)->dddd();
     return view('welcome');
 });

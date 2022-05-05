@@ -15,14 +15,18 @@ return new class extends Migration
     {
         Schema::create('discounts_entities', function (Blueprint $table) {
             $table->id();
+
             $table->unsignedBigInteger('discount_id');
-            $table->foreign('discount_id')->references('id')->on('discount');
+            $table->foreign('discount_id')->references('id')->on('discount')->nullOnDelete();
+
             $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('category_id')->references('id')->on('categories')->nullOnDelete();
+
             $table->unsignedBigInteger('brand_id');
-            $table->foreign('brand_id')->references('id')->on('brands');
+            $table->foreign('brand_id')->references('id')->on('brands')->nullOnDelete();
+
             $table->unsignedBigInteger('tag_id');
-            $table->foreign('tag_id')->references('id')->on('tags');
+            $table->foreign('tag_id')->references('id')->on('tags')->nullOnDelete();
 
             $table->timestamps();
         });
