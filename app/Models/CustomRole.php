@@ -44,12 +44,28 @@ class CustomRole extends Role
         return $this->belongsTo($this,'parent_id','id');
     }
 
+    // this function only returns the nearst children and dones'nt dig deeper into the relation
     public function children(){
         return $this->hasMany($this,'parent_id','id');
     }
 
-    public static function allChildren(){
-        return $this->has('children.children')->get();
+    public static function allChildren(Role | int $parent){
+        $query = CustomRole::find(4);
+        $old_count = 0;
+        $relations = "children";
+        $current_count = collect(CustomRole::with($relations)->find(4))->flatten()->count();
+
+        while($current_count > $old_count){
+            $old_count = collect(CustomRole::with($relations)->find(4))->flatten()->count();
+            $relations .= ".children";
+            $current_count = collect(CustomRole::with($relations)->find(4))->flatten()->count();
+        }
+
+        if(is_object($parent))
+
+        return CustomRole::with($relations)->find(4);
+
+
 
     }
 
