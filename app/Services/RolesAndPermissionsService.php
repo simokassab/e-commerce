@@ -11,31 +11,21 @@ use App\Models\CustomRole;
 
 class RolesAndPermissionsService {
 
-    public function givePermissionToParentRoleAndChildren(array|object $permissions , CustomRole $role) {
-        $role->children;
-    }
+    public static function givePermissionToParentRoleAndChildren(array|object $permissions , CustomRole $role) {
+        $roles = collect(array_merge(array($role), $role->allChildren()->children->toArray()));
 
-    public static function getAllChildren(int $id){
+        $modified_roles_array = $roles->map(function($item, $key) {
 
-        return CustomRole::with( RolesAndPermissionsService::generateRelation($id) )->find($id);
+            dd ($item->children);
 
-    }
+        });
 
-    private static function generateRelation(int $id){
-        $old_count = 0;
-        $relations = "children";
-        $current_count = collect(CustomRole::with($relations)->find($id))->flatten()->count();
 
-        while($current_count > $old_count){
-            $old_count = collect(CustomRole::with($relations)->find($id))->flatten()->count();
-            $relations .= ".children";
-            $current_count = collect(CustomRole::with($relations)->find($id))->flatten()->count();
-        }
+        return $modified_roles_array;
 
-        return $relations;
+
     }
 
 }
-
 
 

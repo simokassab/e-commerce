@@ -17,7 +17,9 @@ class TestController extends Controller
     use HasRoles;
 
     public function test(){
-        return RolesAndPermissionsService::getAllChildren(4);
+        $permissions = CustomRole::findMany([1,2,3]);
+        $role = CustomRole::find(4)->givePermissionTo();
+        return RolesAndPermissionsService::givePermissionToParentRoleAndChildren($permissions, $role);
 
     }
 }

@@ -49,23 +49,18 @@ class CustomRole extends Role
         return $this->hasMany($this,'parent_id','id');
     }
 
-    public static function allChildren(Role | int $parent){
-        $query = CustomRole::find(4);
+    public function allChildren(){
         $old_count = 0;
         $relations = "children";
-        $current_count = collect(CustomRole::with($relations)->find(4))->flatten()->count();
+        $current_count = collect($this->load($relations))->flatten()->count();
 
         while($current_count > $old_count){
-            $old_count = collect(CustomRole::with($relations)->find(4))->flatten()->count();
+            $old_count = collect($this->load($relations))->flatten()->count();
             $relations .= ".children";
-            $current_count = collect(CustomRole::with($relations)->find(4))->flatten()->count();
+            $current_count = collect($this->load($relations))->flatten()->count();
         }
 
-        if(is_object($parent))
-
-        return CustomRole::with($relations)->find(4);
-
-
+        return $this->load($relations);
 
     }
 
