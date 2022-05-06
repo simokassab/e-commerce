@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Currency;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\CurrencyHistory;
-use App\Models\Price;
+use App\Models\Currency\CurrencyHistory;
+use App\Models\Price\Price;
 
 class Currency extends Model
 {

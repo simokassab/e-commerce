@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Tax;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\TaxComponent;
-
+use App\Models\Tax\TaxComponent;
+use App\Models\Category\Category;
+use App\Models\Product\Product;
+use App\Models\Brand\Brand;
 class Tax extends Model
 {
     use HasFactory;

@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Category;
 
 use App\Models\Category as ModelsCategorie;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Label;
-use App\Models\Field;
-use App\Models\FieldValue;
-use App\Models\Tag;
-use App\Models\Discount;
-use App\Models\Brand;
+use App\Models\Label\Label;
+use App\Models\Field\Field;
+use App\Models\Field\FieldValue;
+use App\Models\Tag\Tag;
+use App\Models\Discount\Discount;
+use App\Models\Brand\Brand;
 class Category extends Model
 {
     use HasFactory;

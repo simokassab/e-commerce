@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Product;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Category;
-use App\Models\Unit;
-use App\Models\Tax;
-use App\Models\Brand;
-use App\Models\Price;
-use App\Models\Tag;
+use App\Models\Category\Category;
+use App\Models\Unit\Unit;
+use App\Models\Tax\Tax;
+use App\Models\Brand\Brand;
+use App\Models\Price\Price;
+use App\Models\Tag\Tag;
 use PDO;
-use App\Models\ProductImage;
-use App\Models\Label;
-use App\Models\Attribute;
-use App\Models\AttributeValue;
-use App\Models\Field;
-use App\Models\FieldValue;
+use App\Models\Product\ProductImage;
+use App\Models\Label\Label;
+use App\Models\Attribute\Attribute;
+use App\Models\Attribute\AttributeValue;
+use App\Models\Field\Field;
+use App\Models\Field\FieldValue;
 
 class Product extends Model
 {

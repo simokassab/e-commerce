@@ -2,11 +2,11 @@
 
 
 
-namespace App\Models;
+namespace App\Models\Currency;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Currency;
+use App\Models\Currency\Currency;
 
 class CurrencyHistory extends Model
 {

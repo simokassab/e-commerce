@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Tag;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Category;
-use App\Models\Discount;
-use App\Models\Brand;
-use App\Models\Product;
+use App\Models\Category\Category;
+use App\Models\Discount\Discount;
+use App\Models\Brand\Brand;
+use App\Models\Product\Product;
 class Tag extends Model
 {
     use HasFactory;

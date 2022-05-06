@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Tax;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Tax;
+use App\Models\Tax\Tax;
 
 class TaxComponent extends Model
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Brand;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Label;
-use App\Models\Field;
-use App\Models\FieldValue;
+use App\Models\Label\Label;
+use App\Models\Field\Field;
+use App\Models\Field\FieldValue;
 
 class Brand extends Model
 {

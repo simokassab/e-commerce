@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Discount;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Category\Category;
+use App\Models\Tag\Tag;
+use App\Models\Brand\Brand;
 class Discount extends Model
 {
     use HasFactory;
