@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('category_id')->references('id')->on('categories');
             $table->string('code');
             $table->string('sku');
-            $table->enum('type',['normal,bundle,service,variable,variable_child']);
+            $table->enum('type',['normal','bundle','service','variable','variable_child']);
             $table->unsignedBigInteger('unit_id');
             $table->foreign('unit_id')->references('id')->on('units');
             $table->integer('quantity')->default(0);
