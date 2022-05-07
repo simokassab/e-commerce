@@ -37,7 +37,7 @@ return new class extends Migration
             $table->json('title');
             $table->json('description');
             $table->json('keyword');
-            $table->enum('status',['draft,pending_review,published']);
+            $table->enum('status',['draft','pending_review','published']);
             $table->string('barcode');
             $table->double('height')->nullable();
             $table->double('width')->nullable();
