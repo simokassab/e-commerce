@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\RolesAndPermissionsService;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -50,17 +51,9 @@ class CustomRole extends Role
     }
 
     public function allChildren(){
-        $old_count = 0;
-        $relations = "children";
-        $current_count = collect($this->load($relations))->flatten()->count();
-
-        while($current_count > $old_count){
-            $old_count = collect($this->load($relations))->flatten()->count();
-            $relations .= ".children";
-            $current_count = collect($this->load($relations))->flatten()->count();
-        }
-
-        return $this->load($relations);
+        //this function will get all of the children and there children also
+        $relations = RolesAndPermissionsService::generateRelationStringForRoleChildren($this->id);
+        // return $this->load($relations);
 
     }
 
