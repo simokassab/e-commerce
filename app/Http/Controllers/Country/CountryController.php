@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Country;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreCountry;
+use App\Http\Requests\Countries\StoreCountry;
+use App\Http\Resources\CountryResource;
 use App\Models\Country\Country;
 use Illuminate\Http\Request;
-use App\Http\Resources\CountryResource;
-use PHPUnit\Framework\Constraint\Count;
 
 class Countries extends Controller
 {

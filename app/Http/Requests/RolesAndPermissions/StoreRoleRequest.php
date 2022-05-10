@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\RolesAndPermissions;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Spatie\Permission\Models\Permission;
+
 class StoreRoleRequest extends FormRequest
 {
     /**

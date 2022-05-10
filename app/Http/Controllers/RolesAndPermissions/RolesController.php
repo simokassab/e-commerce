@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\RolesAndPermissions;
 
-use App\Http\Requests\StoreRoleRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\RolesAndPermissions\StoreRoleRequest;
 use App\Http\Resources\RolesResource;
 use App\Models\RolesAndPermissions\CustomRole;
 use App\Models\RolesAndPermissions\RolePermission;
-use App\Services\RolesAndPermissionsService;
+use App\Services\RolesAndPermissions\RolesAndPermissionsService;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 

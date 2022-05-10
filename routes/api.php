@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\Country\Countries;
+use App\Http\Controllers\RolesAndPermissions\PermissinsController;
+use App\Http\Controllers\RolesAndPermissions\RolesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RolesController;
-use App\Http\Controllers\PermissinsController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
