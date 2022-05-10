@@ -18,8 +18,8 @@ use App\Http\Controllers\PermissinsController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'dashbaord'],function (){
+//'middleware' => 'auth:sanctum',
+Route::group([ 'prefix' => 'dashboard'],function (){
     //here goes all of the routes inside teh dahsbaord
     Route::apiResource('roles',RolesController::class);
     Route::apiResource('permissions',PermissinsController::class);

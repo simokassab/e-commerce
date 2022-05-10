@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Services\RolesAndPermissionsService;
 use App\Models\CustomRole;
+use App\Http\Requests\StoreRoleRequest;
+use Illuminate\Support\Facades\DB;
+use App\Models\RolePermission;
+use App\Http\Resources\RolesResource;
+
+
 
 class RolesController extends Controller
 {
@@ -15,7 +22,10 @@ class RolesController extends Controller
      */
     public function index()
     {
-        return CustomRole::all();
+        return response()->json(['data' => [
+            'roles' =>RolesResource::collection(CustomRole::all()),
+            ]
+        ],202);
     }
 
     /**
@@ -33,21 +43,47 @@ class RolesController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function store(Request $request)
+    public function store(StoreRoleRequest $request)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $role = CustomRole::create(['name' => $request->name]);
+
+            if($request->has('parent_id') && isset($request->parent_id) ){
+                $role->setParent($request->parent_id);
+            }
+
+            if($request->has('permissions') && !empty($request->permissions) ){
+                $role->givePermissionTo($request->permissions);
+            }
+
+            DB::commit();
+
+            return response()->json(['data' => [
+                'message' => 'The role has been created',
+                'role' => new RolesResource($role),
+            ]],201);
+
+        }catch (\Exception | QueryException $e){
+            DB::rollBack();
+            return response('Error While creating the role please try again later, the error message: '.$e ,500);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $role
+     * @param  CustomRole  $role
      * @return \Illuminate\Http\Response
      */
     public function show(CustomRole $role)
     {
-        return $role;
+        return response()->json(['data' => [
+            'role' => new RolesResource($role),
+        ]],202);
     }
 
     /**
@@ -68,19 +104,44 @@ class RolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreRoleRequest $request, CustomRole $role)
+
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $role->update(['name' => $request->name]);
+
+            if($request->has('parent_id') && isset($request->parent_id) ){
+                $role->setParent($request->parent_id);
+            }
+
+            RolePermission::whereIn('role_id' , $role->allChildren($flatten=true))->whereNotIn('permission_id',$request->permissions)->delete();
+
+            DB::commit();
+
+            return response()->json(['data' => [
+                'role' => new RolesResource($role),
+            ]],200);
+
+        }catch (\Exception | QueryException $e){
+            DB::rollBack();
+            return response('Error While creating the role please try again later, the error message: '.$e ,500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  CustomRole  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(CustomRole $role)
     {
-        //
+        if($role->delete()){
+            return response('The role was deleted',200);
+        }
+        return response('Error, the role was not deleted',500);
+
     }
 }

@@ -14,42 +14,60 @@ class RolesAndPermissionsService {
 
     public static function givePermissionToParentRoleAndChildren(array|Permission $permissions , CustomRole $roles) {
         return $roles->allChildren();
-        $ids = collect($roles->allChildren()->children)
-            ->map(function($item){
-                return [$item->id, collect($item->children)->map('getIds')->all()];
-
-            })  // call getIds function which will in turn do the same for all children
-            ->flatten()      // flatten the resulting array
-            ->sort()         // sort the resulting ids since they probably won't be in order
-            ->values()       // only interested in the values, not the keys
-            ->all();         // transform collection to array
-
-        return $ids;
-
-        $roles = $roles->allChildren()->children->map(function($item, $key) {
-
-            $children_string = explode('.',RolesAndPermissionsService::generateRelationStringForRoleChildren($item->id));
-            $roles_array = array();
-
-            for($i = 0; $i < count($children_string); $i++){
-
-                $children = CustomRole::with("children".str_repeat('.children',$i))->find($item->id);
-                if( $children == null || !isset($children) ){
-                    continue;
-                }
-                //there is data, we will enter the cuurent child to the array and do the same to ghe rest of the array uhnvtil we fisnhs all the arrays
-                array_push($roles_array , $children);
-            }
-
-            return $roles_array;
-
-        });
-
-
-        return $roles;
-
 
     }
+
+    public static function getRoleChildren(int | Role $role, $flatten= false) : Array
+    {
+        // got all the roles
+        $allRoles = CustomRole::all(); //get all roles info
+
+        // we passed the main role that we want to get its children along with the roles and there children
+        $roleChildren = self::generateChildrenForAllRoles($allRoles);
+
+        //if the given data was numeric then take it as the roleId if not then take the id of the passed object
+        $roleId = (is_numeric($role) ? $role : $role->id);
+
+
+        return self::drawRoleChildren($roleId, $roleChildren,!$flatten, $allRoles);
+    }
+
+    private static function generateChildrenForAllRoles($allRoles):Array {
+        $roleChildren = [];
+        foreach($allRoles as $currentRole){
+            // get the parent ID if there is any if not set to 0, so the values of the first index `0` do not have any parents
+            $parentId = ($currentRole->parent_id ?? 0);
+
+            // if the index was not set we just set it.
+            if(!isset($roleChildren[$parentId])){
+                $roleChildren[$parentId] = [];
+            }
+            // under the given index we add a new value the new child of that index
+            $roleChildren[$parentId][] = $currentRole->id;
+        }
+
+        return $roleChildren;
+
+    }
+
+    private static function drawRoleChildren(Int $parentRoleId, Array $allRolesID ,$isMultiLevel = false, $allRoles): Array{ //with levels
+        if(empty($allRolesID[$parentRoleId])){
+            return [];
+        }
+
+        foreach($allRolesID[$parentRoleId] as $childRoleId){
+            if($isMultiLevel){
+                $childRoles[$childRoleId] = ['data' => $allRoles->find($childRoleId), 'children' => []];
+                $childRoles[$childRoleId]['children'] = self::drawRoleChildren($childRoleId, $allRolesID, $isMultiLevel,$allRoles);
+            }
+            else{
+                $childRoles[] = $childRoleId;
+                $childRoles = array_merge($childRoles, self::drawRoleChildren($childRoleId, $allRolesID, $isMultiLevel,$allRoles));
+            }
+        }
+        return $childRoles;
+    }
+
 
     // public static function generateRelationStringForRoleChildren(int | Role $role): String
     // {
@@ -67,45 +85,6 @@ class RolesAndPermissionsService {
 
     //     return $relations;
     // }
-
-    public static function generateRelationStringForRoleChildren(int | Role $role): Array
-    {
-        $allRoles = CustomRole::all();
-        $roleChildren = [];
-        foreach($allRoles as $currentRole){
-            $parentId = ($currentRole->parent_id ?? 0);
-            if(!isset($roleChildren[$parentId]))
-                $roleChildren[$parentId] = [];
-            $roleChildren[$parentId][] = $currentRole->id;
-        }
-        $roleId = (is_numeric($role) ? $role : $role->id);
-        // $roleIds = self::getRoleChildren1($roleId, $roleChildren);
-        $childRoles = [];
-        self::drawRoleChildren($roleId, $roleChildren, $childRoles);
-        // echo $roleId; print_r($roleChildren);
-        // dd($roleIds);
-        echo '<pre>';print_r($childRoles);
-        return $childRoles;
-    }
-
-    public static function getRoleChildren1($parentRoleId, $allRoles){
-        if(empty($allRoles[$parentRoleId]))
-            return [];
-        $childRoles = [];
-        foreach($allRoles[$parentRoleId] as $childRoleId){
-            $childRoles[] = $childRoleId;
-            $childRoles = array_merge($childRoles, self::getRoleChildren1($childRoleId, $allRoles));
-        }
-        return $childRoles;
-    }
-    public static function drawRoleChildren($parentRoleId, $allRoles, &$childRoles){
-        if(empty($allRoles[$parentRoleId]))
-            return;
-        foreach($allRoles[$parentRoleId] as $childRoleId){
-            $childRoles[$childRoleId] = ['id' => $childRoleId, 'children' => []];
-            self::drawRoleChildren($childRoleId, $allRoles, $childRoles[$childRoleId]['children']);
-        }
-    }
 
 }
 
