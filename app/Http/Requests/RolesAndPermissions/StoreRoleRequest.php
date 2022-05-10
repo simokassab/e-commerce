@@ -25,7 +25,8 @@ class StoreRoleRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'permissions.*' => 'nullable|exists:Spatie\Permission\Models\Permission,id'
+            'permissions.*' => 'nullable|exists:Spatie\Permission\Models\Permission,id',
+            'parent_id' => 'nullable|exists:Spatie\Permission\Models\Role,id',
         ];
     }
 
@@ -33,7 +34,8 @@ class StoreRoleRequest extends FormRequest
     {
         return [
             'name.required' => 'The role\'s name is required',
-            'permissions.*.exists' => 'One of the permissions that you have selected is not valid '
+            'permissions.*.exists' => 'One of the permissions that you have selected is not valid',
+            'parent_id.exists' => 'The parent role that you chose is not valid',
         ];
     }
 }

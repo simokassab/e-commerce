@@ -53,10 +53,13 @@ class RolesController extends Controller
 
             if($request->has('parent_id') && isset($request->parent_id) ){
                 $role->setParent($request->parent_id);
+                $parent = CustomRole::findOrFail($request->parent_id);
             }
 
             if($request->has('permissions') && !empty($request->permissions) ){
-                $role->givePermissionTo($request->permissions);
+                if(true){
+                    $role->givePermissionTo($request->permissions);
+                }
             }
 
             DB::commit();
