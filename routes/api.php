@@ -20,11 +20,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-//'middleware' => 'auth:sanctum',
-Route::group([ 'prefix' => 'dashboard'],function (){
-    //here goes all of the routes inside teh dahsbaord
+
+Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function (){
+    //here goes all the routes inside teh dashboard
     Route::apiResource('roles',RolesController::class);
-    Route::apiResource('permissions',PermissinsController::class);
+    Route::apiResource('country',Countries::class);
+
 });
 
-Route::apiResource('country',Countries::class);

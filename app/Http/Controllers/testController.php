@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\RolesAndPermissionsService;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\User\User;
 
 class TestController extends Controller
 {
@@ -12,6 +12,9 @@ class TestController extends Controller
 
     public function test(){
 
-        $permissionsToPermit = Permission::findMany([1,2,3]);
+    }
+
+    public function getToken(){
+        return User::first()->createToken('developer-access');
     }
 }
