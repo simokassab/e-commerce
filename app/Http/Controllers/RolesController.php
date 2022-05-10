@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
-use App\Services\RolesAndPermissionsService;
-use App\Models\CustomRole;
 use App\Http\Requests\StoreRoleRequest;
-use Illuminate\Support\Facades\DB;
-use App\Models\RolePermission;
 use App\Http\Resources\RolesResource;
-
+use App\Models\RolesAndPermissions\CustomRole;
+use App\Models\RolesAndPermissions\RolePermission;
+use App\Services\RolesAndPermissionsService;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
 
 
 class RolesController extends Controller

@@ -1,18 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\RolesAndPermissions;
 
-use App\Services\RolesAndPermissionsService;
+use App\Services\RolesAndPermissions\RolesAndPermissionsService;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use phpDocumentor\Reflection\Types\Boolean;
-use PhpParser\Node\Expr\Cast\Object_;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role as Role;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
-
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 
 class CustomRole extends Role

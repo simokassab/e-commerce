@@ -1,14 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\RolesAndPermissions;
 
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Traits\HasRoles;
-use Spatie\Permission\Traits\HasPermissions;
-use App\Models\User;
+use App\Models\RolesAndPermissions\CustomRole;
 use Spatie\Permission\Models\Permission;
-use App\Models\CustomRole;
-use PhpParser\Node\Expr\Cast\String_;
+use Spatie\Permission\Models\Role;
 
 class RolesAndPermissionsService {
 
