@@ -107,6 +107,11 @@ class CurrencyController extends Controller
      */
     public function update(Request $request, Currency $currency)
     {
+        // begin transaction put the whole logic inside a try and catch function,
+        // the catch will catch any kind of exception and will return response error and rollback the transaction
+        CurrencyService::updateCurrencyHistory($currency,$request->rate);
+
+
         $currency->name=json_encode($request->name);
         $currency->code=$request->code;
         $currency->symbol=$request->symbol;
@@ -114,14 +119,6 @@ class CurrencyController extends Controller
         $currency->is_default=$request->is_default;
         $currency->image=$request->image;
         $currency->sort=$request->sort;
-
-        if(!$currency->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The currency was not updated ! please try again later',
-                ]
-            ],512);
-        }
 
         return response()->json([
             'data' => [
@@ -131,7 +128,8 @@ class CurrencyController extends Controller
 
         ],201);
 
-            CurrencyService::updateCurrencyHistory($currency,$request->rate);
+
+
     }
 
     /**

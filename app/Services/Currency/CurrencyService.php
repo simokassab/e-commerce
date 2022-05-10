@@ -9,33 +9,15 @@ use PhpParser\Node\Expr\Cast\Double;
 
 class CurrencyService {
 
-    public static function updateCurrencyHistory(Currency $currency,Double $newrate){
+    public static function updateCurrencyHistory(Currency &$currency,Double $newRate) : Void{
 
-        if($currency->rate!=$newrate){
-            $currency->rate=$newrate;
+        if($currency->rate != $newRate){
 
+            //create a new history
+            CurrencyHistory::create([
 
+            ]);
         }
-        if(!$currency->save()){
-
-            return response()->json([
-                  'data' => [
-                      'message' => 'The rate doesnot updated ! please try again',
-                  ]
-              ],512);
-            }
-        return response()->json([
-            'data' => [
-                'message' => 'rate updated successfully',
-                'currency' => new CurrencyResource($currency)
-            ]
-
-        ],201);
-        $currencyHistory= CurrencyHistory::create([
-            'currency_id' => $currency->id,
-            'rate' => $newrate
-
-           ]);
     }
     }
 
