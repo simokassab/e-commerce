@@ -7,6 +7,7 @@ use App\Http\Requests\Currency\StoreCurrency;
 use App\Http\Resources\CurrencyResource;
 use App\Models\Country\Country;
 use App\Models\Currency\Currency;
+use App\Services\Currency\CurrencyService;
 use Illuminate\Http\Request;
 
 class CurrencyController extends Controller
@@ -117,18 +118,20 @@ class CurrencyController extends Controller
         if(!$currency->save()){
             return response()->json([
                 'data' => [
-                    'message' => 'The currency was not created ! please try again later',
+                    'message' => 'The currency was not updated ! please try again later',
                 ]
             ],512);
         }
 
         return response()->json([
             'data' => [
-                'message' => 'currency created successfully',
+                'message' => 'currency updated successfully',
                 'currency' => new CurrencyResource($currency)
             ]
 
         ],201);
+
+            CurrencyService::updateCurrencyHistory($currency,$request->rate);
     }
 
     /**
