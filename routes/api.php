@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Country\Countries;
-use App\Http\Controllers\RolesAndPermissions\PermissinsController;
 use App\Http\Controllers\RolesAndPermissions\RolesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Country\CountryController;
+use App\Http\Controllers\Currency\CurrencyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group([ 'prefix' => 'dashboard'],function (){
     //here goes all of the routes inside teh dahsbaord
     Route::apiResource('roles',RolesController::class);
-    Route::apiResource('permissions',PermissinsController::class);
 });
 
-Route::apiResource('country',Countries::class);
+Route::apiResource('country',CountryController::class);
+Route::apiResource('currency',CurrencyController::class);

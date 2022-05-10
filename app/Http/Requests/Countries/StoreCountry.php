@@ -29,7 +29,7 @@ class StoreCountry extends FormRequest
             'iso_code_1' => 'required',
             'iso_code_2' => 'required',
             'phone_code' => ['required','regex:/^\+\d{1,3}$/'],
-            'flag' => 'required'
+            'flag' => 'required |max:'.config('app.default_image_size')
 
         ];
     }
@@ -37,11 +37,12 @@ class StoreCountry extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'The field name is required',
-            'iso_code_1.required' => 'The 1st iso code is requrired',
-            'is_code_2.required'  => 'The 2nd iso code is requrired',
-            'phone_code.required' => 'The phone code is required',
-            'flag.required' => 'The flag image is required'
+            'name.required' => 'The field name is required.',
+            'iso_code_1.required' => 'The 1st iso code is requrired.',
+            'is_code_2.required'  => 'The 2nd iso code is requrired.',
+            'phone_code.required' => 'The phone code is required.',
+            'flag.required' => 'The flag image is required.',
+            'flag.size' => 'The :attribute must be exactly :size.',
         ];
     }
 }
