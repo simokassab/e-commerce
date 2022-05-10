@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Country;
+namespace App\Http\Controllers\Currency;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Countries\StoreCountry;
-use App\Http\Resources\CountryResource;
+use App\Http\Requests\Currency\StoreCurrency;
+use App\Http\Resources\CurrencyResource;
 use App\Models\Country\Country;
+use App\Models\Currency\Currency;
 use Illuminate\Http\Request;
 
-class CountryController extends Controller
+class CurrencyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +20,7 @@ class CountryController extends Controller
     {
         return response()->json([
             'data' => [
-                'countries' =>  CountryResource::collection(Country::all()),
+                'currncies' =>  CurrencyResource::collection(Currency::all()),
             ]
         ],200);
     }
@@ -40,49 +41,46 @@ class CountryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCountry $request)
+    public function store(StoreCurrency $request)
     {
-    //    return  $country = Country::create($request->all());
+        $currency = new Currency();
+        $currency->name=json_encode($request->name);
+        $currency->code=$request->code;
+        $currency->symbol=$request->symbol;
+        $currency->rate=$request->rate;
+        $currency->is_default=$request->is_default;
+        $currency->image=$request->image;
+        $currency->sort=$request->sort;
 
-        $country = new Country();
-        $country->name = json_encode($request->name);
-        $country->iso_code_1 = $request->iso_code_1;
-        $country->iso_code_2 = $request->iso_code_2;
-        $country->phone_code = $request->phone_code;
-        $country->flag = $request->flag;
-
-        if(!$country->save()){
+        if(!$currency->save()){
             return response()->json([
                 'data' => [
-                    'message' => 'The country was not created ! please try again later',
+                    'message' => 'The currency was not created ! please try again later',
                 ]
             ],512);
         }
 
         return response()->json([
             'data' => [
-                'message' => 'country created successfully',
-                'country' => new CountryResource($country)
+                'message' => 'currency created successfully',
+                'currency' => new CurrencyResource($currency)
             ]
 
         ],201);
 
-
-
-
     }
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Country $country)
+    public function show(Currency $currency)
     {
-
         return response()->json([
             'data' => [
-                'country' =>  new CountryResource( $country),
+                'currency' =>  new CurrencyResource( $currency),
             ]
         ],200);
 
@@ -96,8 +94,7 @@ class CountryController extends Controller
      */
     public function edit($id)
     {
-
-
+        //
     }
 
     /**
@@ -107,26 +104,28 @@ class CountryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Country $country)
+    public function update(Request $request, Currency $currency)
     {
-        $country->name = json_encode($request->name);
-        $country->iso_code_1 = ($request->iso_code_1);
-        $country->iso_code_2 = ($request->iso_code_2);
-        $country->phone_code = ($request->phone_code);
-        $country->flag = ($request->flag);
+        $currency->name=json_encode($request->name);
+        $currency->code=$request->code;
+        $currency->symbol=$request->symbol;
+        $currency->rate=$request->rate;
+        $currency->is_default=$request->is_default;
+        $currency->image=$request->image;
+        $currency->sort=$request->sort;
 
-        if(!$country->save()){
+        if(!$currency->save()){
             return response()->json([
                 'data' => [
-                    'message' => 'The country was not updated ! please try again later',
+                    'message' => 'The currency was not created ! please try again later',
                 ]
             ],512);
         }
 
         return response()->json([
             'data' => [
-                'message' => 'country updated successfully',
-                'country' => new CountryResource($country)
+                'message' => 'currency created successfully',
+                'currency' => new CurrencyResource($currency)
             ]
 
         ],201);
@@ -138,23 +137,22 @@ class CountryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Country $country)
+    public function destroy(Currency $currency)
     {
-        if(!$country->delete()){
+        if(!$currency->delete()){
             return response()->json([
                 'data' => [
-                    'message' => 'The country was not deleted ! please try again later',
+                    'message' => 'The currency was not deleted ! please try again later',
                 ]
             ],512);
         }
 
         return response()->json([
             'data' => [
-                'message' => 'country deleted successfully',
-                'country' => new CountryResource($country)
+                'message' => 'currency deleted successfully',
+                'currency' => new CurrencyResource($currency)
             ]
 
         ],201);
-
     }
 }

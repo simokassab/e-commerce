@@ -196,4 +196,6 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+
+    'default_image_size'=>'10240',
 ];
