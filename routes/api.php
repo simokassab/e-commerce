@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Country\Countries;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolesController;
@@ -24,3 +25,5 @@ Route::group([ 'prefix' => 'dashboard'],function (){
     Route::apiResource('roles',RolesController::class);
     Route::apiResource('permissions',PermissinsController::class);
 });
+
+Route::apiResource('country',Countries::class);

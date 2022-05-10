@@ -18,7 +18,7 @@ return new class extends Migration
             $table->json('name'); //translatable field
             $table->string('iso_code_1');
             $table->string('iso_code_2');
-            $table->integer('phone_code');
+            $table->string('phone_code');
             $table->string('flag');
             $table->timestamps();
         });

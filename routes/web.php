@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\testController;
 use App\Models\CustomRole;
 use App\Http\Controllers\TestController;
 /*
