@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('permissions', function (Blueprint $table) {
-            $table->unsignedBigInteger('parent_id');
-            $table->foreign('parent_id')->references('id')->on('permissions');
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreign('parent_id')->references('id')->on('permissions')->nullOnDelete()->cascadeOnUpdate();
         });
     }
 

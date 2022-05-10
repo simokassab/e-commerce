@@ -15,10 +15,13 @@ return new class extends Migration
     {
         Schema::create('brands_labels', function (Blueprint $table) {
             $table->id();
+
             $table->unsignedBigInteger('brand_id');
-            $table->foreign('brand_id')->references('id')->on('brands');
+            $table->foreign('brand_id')->references('id')->on('brands')->cascadeOnDelete()->cascadeOnUpdate();
+
             $table->unsignedBigInteger('label_id');
-            $table->foreign('label_id')->references('id')->on('labels');
+            $table->foreign('label_id')->references('id')->on('labels')->cascadeOnDelete()->cascadeOnUpdate();
+
             $table->timestamps();
         });
     }
