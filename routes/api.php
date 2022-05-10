@@ -25,7 +25,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function 
 
     //here goes all the routes inside teh dashboard
     Route::apiResource('roles',RolesController::class);
-    Route::apiResource('country',Countries::class);
+    Route::apiResource('country',CountryController::class);
     Route::apiResource('currency',CurrencyController::class);
 
 });

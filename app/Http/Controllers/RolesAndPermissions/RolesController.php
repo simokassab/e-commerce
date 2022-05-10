@@ -10,6 +10,7 @@ use App\Models\RolesAndPermissions\RolePermission;
 use App\Services\RolesAndPermissions\RolesAndPermissionsService;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
 
 
 class RolesController extends Controller
@@ -53,13 +54,13 @@ class RolesController extends Controller
 
             if($request->has('parent_id') && isset($request->parent_id) ){
                 $role->setParent($request->parent_id);
-                $parent = CustomRole::findOrFail($request->parent_id);
             }
 
             if($request->has('permissions') && !empty($request->permissions) ){
-                if(true){
-                    $role->givePermissionTo($request->permissions);
-                }
+                $parentPermissions = CustomRole::findOrFail($request->parent_id)->permissions->pluck('id')->toArray();
+                $permissions = RolesAndPermissionsService::filterPermissionsAccordingToParentPermissions($parentPermissions,$request->permissions);
+                $role->givePermissionTo($permissions);
+
             }
 
             DB::commit();
@@ -107,7 +108,6 @@ class RolesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(StoreRoleRequest $request, CustomRole $role)
-
     {
         DB::beginTransaction();
 
@@ -118,7 +118,13 @@ class RolesController extends Controller
                 $role->setParent($request->parent_id);
             }
 
-            RolePermission::whereIn('role_id' , $role->allChildren($flatten=true))->whereNotIn('permission_id',$request->permissions)->delete();
+            if($request->has('permissions') && !empty($request->permissions)){
+                $parentPermissions = CustomRole::findOrFail($request->parent_id)->permissions->pluck('id')->toArray();
+                $permissions = RolesAndPermissionsService::filterPermissionsAccordingToParentPermissions($parentPermissions,$request->permissions);
+                $role->setParent($permissions);
+            }
+
+            RolePermission::whereIn('role_id' , $role->allChildren($flatten=true))->whereNotIn('permission_id',$permissions)->delete();
 
             DB::commit();
 
@@ -140,6 +146,11 @@ class RolesController extends Controller
      */
     public function destroy(CustomRole $role)
     {
+        $message = '';
+        if(!$role->canDeleteRole($message)){
+            return response($message,405);
+        }
+
         if($role->delete()){
             return response('The role was deleted',200);
         }

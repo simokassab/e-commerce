@@ -101,6 +101,21 @@ class CustomRole extends Role
 
     }
 
+    public function canDeleteRole(&$message){
+        if( ($this->permissions()->exists())){
+            $message = "the role can't be deleted it is attached to permissions!";
+            return false;
+        }
+
+        if( ($this->users()->exists())){
+            $message = "the role can't be deleted it is attached to users!";
+            return false;
+        }
+
+        return true;
+
+    }
+
 
 
 

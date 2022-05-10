@@ -64,6 +64,15 @@ class RolesAndPermissionsService {
         return $childRoles;
     }
 
+    public static function filterPermissionsAccordingToParentPermissions(Array $parentPermissions,Array $permissions): Array {
+        $notAllowedPermissions = array_diff($permissions, $parentPermissions);
+        return collect($permissions)->diff($notAllowedPermissions)->all();
+    }
+
+    public function storeRole(){
+
+    }
+
 
     // public static function generateRelationStringForRoleChildren(int | Role $role): String
     // {
