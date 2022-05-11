@@ -8,7 +8,7 @@ use App\Http\Controllers\Currency\CurrencyController;
 use \App\Http\Controllers\Labls\LablsController;
 use App\Http\Controllers\Language\LanguageController;
 use App\Http\Controllers\Tag\TagController;
-
+use App\Http\Controllers\FieldsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -33,6 +33,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function 
     Route::apiResource('labels',LablsController::class);
     Route::apiResource('language',LanguageController::class);
     Route::apiResource('tag',TagController::class);
+    Route::apiResource('fields',FieldsController::class);
 
 });
 
