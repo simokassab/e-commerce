@@ -121,6 +121,7 @@ class CurrencyController extends Controller
             $currency->image=$request->image;
             $currency->sort=$request->sort;
 
+            $currency->save();
             DB::commit();
 
             return response()->json([
