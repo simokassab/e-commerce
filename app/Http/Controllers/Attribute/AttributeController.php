@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Tag;
+namespace App\Http\Controllers\Attribute;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Tag\StoreTag;
-use App\Http\Resources\TagResource;
-use App\Models\Tag\Tag;
+use App\Http\Requests\Attribute\StoreAttributeRequest;
+use App\Http\Resources\AttributeResource;
+use App\Models\Attribute\Attribute;
 use Illuminate\Http\Request;
 
-class TagController extends Controller
+class AttributeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,10 +17,9 @@ class TagController extends Controller
      */
     public function index()
     {
-
         return response()->json([
             'data' => [
-                'tag' => TagResource::collection(  Tag::all())
+                'attributes' => AttributeResource::collection(  Attribute::all())
             ]
         ],200);
     }
@@ -41,24 +40,24 @@ class TagController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreTag $request)
+    public function store(StoreAttributeRequest $request)
     {
-        $tag=new Tag();
-        $tag->name=json_encode($request->name);
+        $attribute=new Attribute();
+        $attribute->title=json_encode($request->title);
 
 
-        if(!$tag->save()){
+        if(!$attribute->save()){
             return response()->json([
                 'data' => [
-                    'message' => 'The tag was not created ! please try again later',
+                    'message' => 'The attribute was not created ! please try again later',
                 ]
                 ],512);
         }
 
         return response()->json([
             'data' => [
-                'message' => 'tag created successfully',
-                'tag' => new TagResource($tag)
+                'message' => 'attribute created successfully',
+                'attribute' => new AttributeResource($attribute)
             ]
 
         ],201);
@@ -70,11 +69,11 @@ class TagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Tag $tag)
+    public function show(Attribute $attribute)
     {
         return response()->json([
             'data' => [
-                'tag' =>  new TagResource($tag),
+                'attribute' =>  new AttributeResource($attribute),
             ]
         ],200);
     }
@@ -97,23 +96,23 @@ class TagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tag $tag)
+    public function update(Request $request, Attribute $attribute)
     {
-        $tag->name=json_encode($request->name);
+        $attribute->title=json_encode($request->title);
 
 
-        if(!$tag->save()){
+        if(!$attribute->save()){
             return response()->json([
                 'data' => [
-                    'message' => 'The tag was not updated ! please try again later',
+                    'message' => 'The attribute was not updated ! please try again later',
                 ]
                 ],512);
         }
 
         return response()->json([
             'data' => [
-                'message' => 'tag updated successfully',
-                'tag' => new TagResource($tag)
+                'message' => 'attribute updated successfully',
+                'attribute' => new AttributeResource($attribute)
             ]
 
         ],201);
@@ -125,23 +124,22 @@ class TagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tag $tag)
+    public function destroy(Attribute $attribute)
     {
-        if(!$tag->delete()){
+        if(!$attribute->delete()){
             return response()->json([
                 'data' => [
-                    'message' => 'The tag was not deleted ! please try again later',
+                    'message' => 'The attribute was not deleted ! please try again later',
                 ]
             ],512);
         }
 
         return response()->json([
             'data' => [
-                'message' => 'tag deleted successfully',
-                'tag' => new TagResource($tag)
+                'message' => 'attribute deleted successfully',
+                'attribute' => new AttributeResource($attribute)
             ]
 
         ],201);
     }
-    }
-
+}

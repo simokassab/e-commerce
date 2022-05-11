@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Attribute\AttributeController;
 use App\Http\Controllers\RolesAndPermissions\RolesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function 
     Route::apiResource('labels',LablsController::class);
     Route::apiResource('language',LanguageController::class);
     Route::apiResource('tag',TagController::class);
+    Route::apiResource('attribute',AttributeController::class);
 
 });
 
