@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Language;
+namespace App\Http\Controllers\Tag;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Language\StoreLanguage;
-use App\Http\Resources\LanguageResource;
+use App\Http\Requests\Tag\StoreTag;
 use App\Http\Resources\TagResource;
-use App\Models\Language\Language;
+use App\Models\Tag\Tag;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
 
-class LanguageController extends Controller
+class TagController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,7 +20,7 @@ class LanguageController extends Controller
 
         return response()->json([
             'data' => [
-                'languages' => LanguageResource::collection(  Language::all())
+                'tag' => TagResource::collection(  Tag::all())
             ]
         ],200);
     }
@@ -43,33 +41,27 @@ class LanguageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreLanguage $request)
+    public function store(StoreTag $request)
     {
-        $language=new Language();
-        $language->name=$request->name;
-        $language->code=$request->code;
-        $language->is_default=$request->is_default;
-        $language->is_disabled=$request->is_disabled;
-        $language->image=$request->image;
-        $language->sort=$request->sort;
+        $tag=new Tag();
+        $tag->name=json_encode($request->name);
 
-        if(!$language->save()){
+
+        if(!$tag->save()){
             return response()->json([
                 'data' => [
-                    'message' => 'The Language was not created ! please try again later',
+                    'message' => 'The tag was not created ! please try again later',
                 ]
                 ],512);
         }
 
         return response()->json([
             'data' => [
-                'message' => 'language created successfully',
-                'language' => new LanguageResource($language)
+                'message' => 'tag created successfully',
+                'tag' => new TagResource($tag)
             ]
 
         ],201);
-
-
     }
 
     /**
@@ -78,11 +70,11 @@ class LanguageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Language $language)
+    public function show(Tag $tag)
     {
         return response()->json([
             'data' => [
-                'language' =>  new LanguageResource($language),
+                'tag' =>  new TagResource($tag),
             ]
         ],200);
     }
@@ -105,31 +97,26 @@ class LanguageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Language $language)
+    public function update(Request $request, Tag $tag)
     {
-        $language->name=$request->name;
-        $language->code=$request->code;
-        $language->is_default=$request->is_default;
-        $language->is_disabled=$request->is_disabled;
-        $language->image=$request->image;
-        $language->sort=$request->sort;
+        $tag->name=$request->name;
 
-        if(!$language->save()){
+
+        if(!$tag->save()){
             return response()->json([
                 'data' => [
-                    'message' => 'The Language was not updated ! please try again later',
+                    'message' => 'The tag was not updated ! please try again later',
                 ]
                 ],512);
         }
 
         return response()->json([
             'data' => [
-                'message' => 'language updated successfully',
-                'language' => new LanguageResource($language)
+                'message' => 'tag updated successfully',
+                'tag' => new TagResource($tag)
             ]
 
         ],201);
-
     }
 
     /**
@@ -138,20 +125,20 @@ class LanguageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Language $language)
+    public function destroy(Tag $tag)
     {
-        if(!$language->delete()){
+        if(!$tag->delete()){
             return response()->json([
                 'data' => [
-                    'message' => 'The language was not deleted ! please try again later',
+                    'message' => 'The tag was not deleted ! please try again later',
                 ]
             ],512);
         }
 
         return response()->json([
             'data' => [
-                'message' => 'language deleted successfully',
-                'language' => new LanguageResource($language)
+                'message' => 'tag deleted successfully',
+                'tag' => new TagResource($tag)
             ]
 
         ],201);
