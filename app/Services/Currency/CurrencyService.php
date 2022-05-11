@@ -9,14 +9,16 @@ use PhpParser\Node\Expr\Cast\Double;
 
 class CurrencyService {
 
-    public static function updateCurrencyHistory(Currency &$currency,Double $newRate) : Void{
+    public static function updateCurrencyHistory(Currency $currency,float $newRate) : Void{
 
         if($currency->rate ?? null != $newRate){
 
             //create a new history
             CurrencyHistory::create([
-
+              'currency_id'=> $currency->id,
+              'rate' => $newRate
             ]);
+
         }
     }
     }

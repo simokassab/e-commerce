@@ -8,6 +8,7 @@ use App\Http\Resources\CurrencyResource;
 use App\Models\Country\Country;
 use App\Models\Currency\Currency;
 use App\Services\Currency\CurrencyService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -136,7 +137,7 @@ class CurrencyController extends Controller
                 'data' => [
                     'message' => 'currency currency was not updated the error message: '.$exception->getMessage(),
                 ]
-            ],201);
+            ],500);
         }
 
     }
