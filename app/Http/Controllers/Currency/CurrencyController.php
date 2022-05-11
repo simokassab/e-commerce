@@ -8,7 +8,10 @@ use App\Http\Resources\CurrencyResource;
 use App\Models\Country\Country;
 use App\Models\Currency\Currency;
 use App\Services\Currency\CurrencyService;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\TryCatch;
 
 class CurrencyController extends Controller
 {
@@ -109,24 +112,41 @@ class CurrencyController extends Controller
     {
         // begin transaction put the whole logic inside a try and catch function,
         // the catch will catch any kind of exception and will return response error and rollback the transaction
-        CurrencyService::updateCurrencyHistory($currency,$request->rate);
+        DB::beginTransaction();
+        try {
+
+            CurrencyService::updateCurrencyHistory($currency,$request->rate);
+
+            $currency->name=json_encode($request->name);
+            $currency->code=$request->code;
+            $currency->symbol=$request->symbol;
+            $currency->rate=$request->rate;
+            $currency->is_default=$request->is_default;
+            $currency->image=$request->image;
+            $currency->sort=$request->sort;
+
+            $currency->save();
+
+            return response()->json([
+                'data' => [
+                    'message' => 'currency updated successfully',
+                    'currency' => new CurrencyResource($currency)
+                ]
+            ],200);
+
+            DB::commit();
+
+        }catch (Exception $exception){
+            DB::rollback();
+            return response()->json([
+                'data' => [
+                    'message' => 'an error occoured the error message: '. $exception->getMessage()
+                ]
+            ],500);
+        }
 
 
-        $currency->name=json_encode($request->name);
-        $currency->code=$request->code;
-        $currency->symbol=$request->symbol;
-        $currency->rate=$request->rate;
-        $currency->is_default=$request->is_default;
-        $currency->image=$request->image;
-        $currency->sort=$request->sort;
 
-        return response()->json([
-            'data' => [
-                'message' => 'currency updated successfully',
-                'currency' => new CurrencyResource($currency)
-            ]
-
-        ],201);
 
 
 
