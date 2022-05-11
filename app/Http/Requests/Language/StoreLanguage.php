@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Currency;
+namespace App\Http\Requests\Language;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCurrency extends FormRequest
+class StoreLanguage extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +24,14 @@ class StoreCurrency extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|json',
+            'name' => 'required',
             'code' => 'required',
-            'symbol' => 'required',
-            'rate' => 'nullable|doubleval',
-            'image' => 'nullable |max:'.config('app.default_image_size'),
+            'is_default' => 'nullable',
+            'is_disabled' => 'nullable',
+            'image' => 'max:'.config('app.default_image_size'),
             'sort' => 'required'
-         ];
+
+        ];
     }
 
     public function messages()
@@ -38,9 +39,8 @@ class StoreCurrency extends FormRequest
         return [
             'name.required' => 'The field name is required.',
             'code.required' => 'The code is required.',
-            'symbol.required' => 'The symbol is required.',
             'image.size' => 'The :attribute must be exactly :size.',
-            'sort.required' => 'The sort is required.',
-            'rate.doubleval' => 'The rate must be decimal.' ];
+            'sort.required' => 'The sort is required.'
+        ];
     }
 }

@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Country\CountryController;
 use App\Http\Controllers\Currency\CurrencyController;
 use \App\Http\Controllers\Labls\LablsController;
+use App\Http\Controllers\Language\LanguageController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,6 +30,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function 
     Route::apiResource('country',CountryController::class);
     Route::apiResource('currency',CurrencyController::class);
     Route::apiResource('labels',LablsController::class);
+    Route::apiResource('language',LanguageController::class);
 
 });
 
