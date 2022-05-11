@@ -7,6 +7,7 @@ use App\Http\Requests\Currency\StoreCurrency;
 use App\Http\Resources\CurrencyResource;
 use App\Models\Country\Country;
 use App\Models\Currency\Currency;
+use App\Services\Currency\CurrencyService;
 use Illuminate\Http\Request;
 
 class CurrencyController extends Controller
@@ -106,6 +107,11 @@ class CurrencyController extends Controller
      */
     public function update(Request $request, Currency $currency)
     {
+        // begin transaction put the whole logic inside a try and catch function,
+        // the catch will catch any kind of exception and will return response error and rollback the transaction
+        CurrencyService::updateCurrencyHistory($currency,$request->rate);
+
+
         $currency->name=json_encode($request->name);
         $currency->code=$request->code;
         $currency->symbol=$request->symbol;
@@ -114,21 +120,16 @@ class CurrencyController extends Controller
         $currency->image=$request->image;
         $currency->sort=$request->sort;
 
-        if(!$currency->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The currency was not created ! please try again later',
-                ]
-            ],512);
-        }
-
         return response()->json([
             'data' => [
-                'message' => 'currency created successfully',
+                'message' => 'currency updated successfully',
                 'currency' => new CurrencyResource($currency)
             ]
 
         ],201);
+
+
+
     }
 
     /**

@@ -20,6 +20,6 @@ Route::get('/', function () {
 
 Route::get('test',[testController::class,'index']);
 
-Route::get('test',[TestController::class, 'test']);
+Route::get('test',[testController::class, 'test']);
 
-Route::get('create-token',[TestController::class,'getToken']);
+Route::get('create-token',[testController::class,'getToken']);

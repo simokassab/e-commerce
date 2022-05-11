@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Services\Currency;
+
+use App\Http\Resources\CurrencyResource;
+use App\Models\Currency\Currency;
+use App\Models\Currency\CurrencyHistory;
+use PhpParser\Node\Expr\Cast\Double;
+
+class CurrencyService {
+
+    public static function updateCurrencyHistory(Currency &$currency,Double $newRate) : Void{
+
+        if($currency->rate != $newRate){
+
+            //create a new history
+            CurrencyHistory::create([
+
+            ]);
+        }
+    }
+    }
+
+
+
+
