@@ -25,7 +25,7 @@ class StoreCountry extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|json',
+            'name' => 'required',
             'iso_code_1' => 'required',
             'iso_code_2' => 'required',
             'phone_code' => ['required','regex:/^\+\d{1,3}$/'],

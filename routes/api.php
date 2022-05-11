@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Country\CountryController;
 use App\Http\Controllers\Currency\CurrencyController;
 use App\Http\Controllers\Language\LanguageController;
+use App\Http\Controllers\Tag\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function 
     Route::apiResource('country',CountryController::class);
     Route::apiResource('currency',CurrencyController::class);
     Route::apiResource('language',LanguageController::class);
+    Route::apiResource('tag',TagController::class);
 
 });
 

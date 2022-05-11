@@ -24,7 +24,7 @@ class StoreCurrency extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|json',
+            'name' => 'required',
             'code' => 'required',
             'symbol' => 'required',
             'rate' => 'nullable|doubleval',
