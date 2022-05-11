@@ -18,8 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('test',[testController::class,'index']);
-
-Route::get('test',[testController::class, 'test']);
-
-Route::get('create-token',[testController::class,'getToken']);
+Route::get('create-token',[TestController::class,'getToken']);

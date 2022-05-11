@@ -196,6 +196,7 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
-
     'default_image_size'=>'10240',
+
+    'validation_default_entities' => 'category,product,brand'
 ];

@@ -12,14 +12,14 @@ class Label extends Model
     use HasFactory;
     protected $table='labels';
 
-    public function category(){
+    public function categories(){
         return $this->belongsToMany(Category::class,'categories_labels','label_id','category_id');
     }
-    public function brand(){
+    public function brands(){
         return $this->belongsToMany(brand::class,'brands_labels','label_id');
 
     }
-    public function product(){
+    public function products(){
         return $this->hasMany(Product::class,'product_id');
 
     }

@@ -150,20 +150,20 @@ class CurrencyController extends Controller
      */
     public function destroy(Currency $currency)
     {
-        if(!$currency->delete()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The currency was not deleted ! please try again later',
-                ]
-            ],512);
-        }
-
-        return response()->json([
-            'data' => [
-                'message' => 'currency deleted successfully',
-                'currency' => new CurrencyResource($currency)
-            ]
-
-        ],201);
+//        if(!$currency->delete()){
+//            return response()->json([
+//                'data' => [
+//                    'message' => 'The currency was not deleted ! please try again later',
+//                ]
+//            ],512);
+//        }
+//
+//        return response()->json([
+//            'data' => [
+//                'message' => 'currency deleted successfully',
+//                'currency' => new CurrencyResource($currency)
+//            ]
+//
+//        ],201);
     }
 }
