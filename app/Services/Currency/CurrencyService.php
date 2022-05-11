@@ -11,7 +11,7 @@ class CurrencyService {
 
     public static function updateCurrencyHistory(Currency &$currency,Double $newRate) : Void{
 
-        if($currency->rate != $newRate){
+        if($currency->rate ?? null != $newRate){
 
             //create a new history
             CurrencyHistory::create([

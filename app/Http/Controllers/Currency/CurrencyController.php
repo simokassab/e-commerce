@@ -9,6 +9,7 @@ use App\Models\Country\Country;
 use App\Models\Currency\Currency;
 use App\Services\Currency\CurrencyService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CurrencyController extends Controller
 {
@@ -107,28 +108,36 @@ class CurrencyController extends Controller
      */
     public function update(Request $request, Currency $currency)
     {
-        // begin transaction put the whole logic inside a try and catch function,
-        // the catch will catch any kind of exception and will return response error and rollback the transaction
-        CurrencyService::updateCurrencyHistory($currency,$request->rate);
+        DB::beginTransaction();
 
+        try {
+            CurrencyService::updateCurrencyHistory($currency,$request->rate);
+            $currency->name=json_encode($request->name);
+            $currency->code=$request->code;
+            $currency->symbol=$request->symbol;
+            $currency->rate=$request->rate;
+            $currency->is_default=$request->is_default;
+            $currency->image=$request->image;
+            $currency->sort=$request->sort;
 
-        $currency->name=json_encode($request->name);
-        $currency->code=$request->code;
-        $currency->symbol=$request->symbol;
-        $currency->rate=$request->rate;
-        $currency->is_default=$request->is_default;
-        $currency->image=$request->image;
-        $currency->sort=$request->sort;
+            DB::commit();
 
-        return response()->json([
-            'data' => [
-                'message' => 'currency updated successfully',
-                'currency' => new CurrencyResource($currency)
-            ]
+            return response()->json([
+                'data' => [
+                    'message' => 'currency updated successfully',
+                    'currency' => new CurrencyResource($currency)
+                ]
 
-        ],201);
+            ],201);
+        }catch(\Exception $exception){
+            DB::rollBack();
 
-
+            return response()->json([
+                'data' => [
+                    'message' => 'currency currency was not updated the error message: '.$exception->getMessage(),
+                ]
+            ],201);
+        }
 
     }
 
