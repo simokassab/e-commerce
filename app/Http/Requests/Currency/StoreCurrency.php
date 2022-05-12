@@ -29,7 +29,7 @@ class StoreCurrency extends FormRequest
             'symbol' => 'required',
             'rate' => 'nullable|doubleval',
             'image' => 'nullable |max:'.config('app.default_image_size'),
-            'sort' => 'required'
+            'sort' => 'required|integer'
          ];
     }
 

@@ -198,5 +198,7 @@ return [
 
     'default_image_size'=>'10240',
 
-    'validation_default_entities' => 'category,product,brand'
+    'validation_default_entities' => 'category,product,brand',
+
+    'validation_default_type' => 'checkbox,text,select,textarea,date',
 ];
