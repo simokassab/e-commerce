@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Setting\StoreSettingRequest;
 use App\Http\Resources\SettingsResource;
 use App\Models\Settings\Setting;
 use Illuminate\Http\Request;
@@ -16,11 +17,18 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        return response()->json([
+
+        $setting=cache()->remember('dashboard-settings',config('cache.default_cache_time'),function(){
+            return Setting::all();
+        });
+
+        response()->json([
             'data' => [
-                'settings' => SettingsResource::collection(Setting::all())
+                'settings' => SettingsResource::collection($setting),
             ]
         ],200);
+
+        return"fdaf";
     }
 
     /**
@@ -39,8 +47,9 @@ class SettingsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreSettingRequest $request)
     {
+
         $settings=new Setting();
         $settings->title = ($request->title);
         $settings->type = ($request->type);
