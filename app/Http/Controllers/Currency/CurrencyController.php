@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Currency;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Currency\StoreCurrency;
+use App\Http\Resources\CurrencyHistoryResource;
 use App\Http\Resources\CurrencyResource;
 use App\Models\Country\Country;
 use App\Models\Currency\Currency;
+use App\Models\Currency\CurrencyHistory;
 use App\Services\Currency\CurrencyService;
 use Exception;
 use Illuminate\Http\Request;
@@ -28,6 +30,13 @@ class CurrencyController extends Controller
         ],200);
     }
 
+    public function getCurrencyHistories(){
+        return response()->json([
+            'data' => [
+                'currncies_histories' =>  CurrencyHistoryResource::collection(CurrencyHistory::all()),
+            ]
+        ],200);
+    }
     /**
      * Show the form for creating a new resource.
      *

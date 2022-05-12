@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Currency;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreCurrency extends FormRequest
 {
@@ -13,7 +14,8 @@ class StoreCurrency extends FormRequest
      */
     public function authorize()
     {
-        return true;
+
+        return ;
     }
 
     /**

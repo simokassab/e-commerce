@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\CurrencyHistoryResource;
+
 
 class CurrencyResource extends JsonResource
 {
@@ -22,7 +24,8 @@ class CurrencyResource extends JsonResource
             'rate'=>$this->rate,
             'is_default'=>$this->is_default,
             'image'=>$this->image,
-            'sort'=>$this->sort
+            'sort'=>$this->sort,
+            'history' => CurrencyHistoryResource::collection($this->currencyHistory),
 
         ];
     }
