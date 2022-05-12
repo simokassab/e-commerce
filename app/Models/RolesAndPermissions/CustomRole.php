@@ -25,7 +25,7 @@ class CustomRole extends Role
     }
 
     public function allChildren($flatten = false){
-        //this function will get all of the children and there children also
+        //this function will get all of the children and their nested children also
         return RolesAndPermissionsService::getRoleChildren($this->id, $flatten);
     }
 

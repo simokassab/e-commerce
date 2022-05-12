@@ -72,7 +72,123 @@ class RolesAndPermissionsService {
         return collect($permissions)->diff($notAllowedPermissions)->all();
     }
 
-    public function storeRole(){
+    private static function createSinglePermssion(String $name,Int $parentId=null){
+
+        return CustomPermission::create([
+            'name' => $name,
+            'parent_id' => $parentId
+        ]);
+
+    }
+    private static function createSingalRole(String $name,Int $parentId=null){
+
+        return CustomPermission::create([
+            'name' => $name,
+            'parent_id' => $parentId
+        ]);
+
+    }
+
+    public static function createRoles(){
+        CustomRole::query()->truncate();
+
+        self::createSingalRole('admin');
+
+        $chefEmployee = self::createSingalRole('chef_employee');
+        self::createSingalRole('chef_employee',$chefEmployee->id);
+
+    }
+
+    public static function createPermissions(){
+        CustomPermission::query()->truncate();
+         //Currency Permission
+       $parentCurrency= self::createSinglePermssion('currency_permissions');
+       self::createSinglePermssion('currency_create',$parentCurrency->id );
+       self::createSinglePermssion('currency_show',$parentCurrency->id );
+       self::createSinglePermssion('currency_read',$parentCurrency->id );
+       self::createSinglePermssion('currency_update',$parentCurrency->id );
+       self::createSinglePermssion('currency_delete',$parentCurrency->id );
+       //End of Currency Permission
+
+       //Currency History Permission
+       $parentCountry= self::createSinglePermssion('currency_history_permissions');
+           self::createSinglePermssion('currency_history_read',$parentCountry->id );
+       //End of Currency History Permission
+
+       //Country Permission
+      $parentCountry= self::createSinglePermssion('country_permissions');
+           self::createSinglePermssion('country_create',$parentCountry->id );
+           self::createSinglePermssion('country_show',$parentCountry->id );
+           self::createSinglePermssion('country_read',$parentCountry->id );
+           self::createSinglePermssion('country_update',$parentCountry->id );
+           self::createSinglePermssion('country_delete',$parentCountry->id );
+      //End of Country Permission
+
+      //Tag Permission
+      $parentTag= self::createSinglePermssion('tag_permissions');
+           self::createSinglePermssion('tag_create',$parentTag->id );
+           self::createSinglePermssion('tag_show',$parentTag->id );
+           self::createSinglePermssion('tag_read',$parentTag->id );
+           self::createSinglePermssion('tag_update',$parentTag->id );
+           self::createSinglePermssion('tag_delete',$parentTag->id );
+      //End of Tag Permission
+
+      //Attribute Permission
+      $parentAttribute= self::createSinglePermssion('attribute_permissions');
+           self::createSinglePermssion('attribute_create',$parentAttribute->id );
+           self::createSinglePermssion('attribute_show',$parentAttribute->id );
+           self::createSinglePermssion('attribute_read',$parentAttribute->id );
+           self::createSinglePermssion('attribute_update',$parentAttribute->id );
+           self::createSinglePermssion('attribute_delete',$parentAttribute->id );
+      //End of Attribute Permission
+
+      //Field Permission
+      $parentField= self::createSinglePermssion('field_permissions');
+           self::createSinglePermssion('field_create',$parentField->id );
+           self::createSinglePermssion('field_show',$parentField->id );
+           self::createSinglePermssion('field_read',$parentField->id );
+           self::createSinglePermssion('field_update',$parentField->id );
+           self::createSinglePermssion('field_delete',$parentField->id );
+      //End of Field Permission
+
+      //Language Permission
+      $parentLanguage= self::createSinglePermssion('language_permissions');
+           self::createSinglePermssion('language_create',$parentLanguage->id );
+           self::createSinglePermssion('language_show',$parentLanguage->id );
+           self::createSinglePermssion('language_read',$parentLanguage->id );
+           self::createSinglePermssion('language_update',$parentLanguage->id );
+           self::createSinglePermssion('language_delete',$parentLanguage->id );
+      //End of Language Permission
+
+      //Label Permission
+      $parentLabel= self::createSinglePermssion('label_permissions');
+           self::createSinglePermssion('label_create',$parentLabel->id );
+           self::createSinglePermssion('label_show',$parentLabel->id );
+           self::createSinglePermssion('label_read',$parentLabel->id );
+           self::createSinglePermssion('label_update',$parentLabel->id );
+           self::createSinglePermssion('label_delete',$parentLabel->id );
+      //End of Label Permission
+
+      //Permission Permission
+      $parentPermission= self::createSinglePermssion('permission_permissions');
+           self::createSinglePermssion('permission_create',$parentLabel->id );
+           self::createSinglePermssion('permission_show',$parentLabel->id );
+           self::createSinglePermssion('permission_read',$parentLabel->id );
+           self::createSinglePermssion('permission_update',$parentLabel->id );
+           self::createSinglePermssion('permission_delete',$parentLabel->id );
+      //End of Permission Permission
+
+      //Setting Permission
+      $parentSetting= self::createSinglePermssion('setting_permissions');
+           self::createSinglePermssion('setting_create',$parentSetting->id );
+           self::createSinglePermssion('setting_show',$parentSetting->id );
+           self::createSinglePermssion('setting_read',$parentSetting->id );
+           self::createSinglePermssion('setting_update',$parentSetting->id );
+           self::createSinglePermssion('setting_delete',$parentSetting->id );
+      //End of Setting Permission
+
+
+
 
     }
 
@@ -94,106 +210,6 @@ class RolesAndPermissionsService {
     //     return $relations;
     // }
 
-    private static function createSinglePermssion(String $name,Int $id=null){
-
-        return CustomPermission::create([
-            'name' => $name,
-            'parent_id' => $id
-        ]);
-
-    }
-    public static function createPermissions(){
-        CustomPermission::query()->truncate();
-         //Currency Permission
-       $parentCurrency= self::createSinglePermssion('currency_permissions');
-       self::createSinglePermssion('currency_create',$parentCurrency->id );
-       self::createSinglePermssion('currency_show',$parentCurrency->id );
-       self::createSinglePermssion('currency_read',$parentCurrency->id );
-       self::createSinglePermssion('currency_update',$parentCurrency->id );
-       self::createSinglePermssion('currency_delete',$parentCurrency->id );
-   //End of Currency Permission
-
-   //Currency History Permission
-   $parentCountry= self::createSinglePermssion('currency_history_permissions');
-       self::createSinglePermssion('currency_history_read',$parentCountry->id );
-   //End of Currency History Permission
-
-   //Country Permission
-  $parentCountry= self::createSinglePermssion('country_permissions');
-       self::createSinglePermssion('country_create',$parentCountry->id );
-       self::createSinglePermssion('country_show',$parentCountry->id );
-       self::createSinglePermssion('country_read',$parentCountry->id );
-       self::createSinglePermssion('country_update',$parentCountry->id );
-       self::createSinglePermssion('country_delete',$parentCountry->id );
-  //End of Country Permission
-
-  //Tag Permission
-  $parentTag= self::createSinglePermssion('tag_permissions');
-       self::createSinglePermssion('tag_create',$parentTag->id );
-       self::createSinglePermssion('tag_show',$parentTag->id );
-       self::createSinglePermssion('tag_read',$parentTag->id );
-       self::createSinglePermssion('tag_update',$parentTag->id );
-       self::createSinglePermssion('tag_delete',$parentTag->id );
-  //End of Tag Permission
-
-  //Attribute Permission
-  $parentAttribute= self::createSinglePermssion('attribute_permissions');
-       self::createSinglePermssion('attribute_create',$parentAttribute->id );
-       self::createSinglePermssion('attribute_show',$parentAttribute->id );
-       self::createSinglePermssion('attribute_read',$parentAttribute->id );
-       self::createSinglePermssion('attribute_update',$parentAttribute->id );
-       self::createSinglePermssion('attribute_delete',$parentAttribute->id );
-  //End of Attribute Permission
-
-  //Field Permission
-  $parentField= self::createSinglePermssion('field_permissions');
-       self::createSinglePermssion('field_create',$parentField->id );
-       self::createSinglePermssion('field_show',$parentField->id );
-       self::createSinglePermssion('field_read',$parentField->id );
-       self::createSinglePermssion('field_update',$parentField->id );
-       self::createSinglePermssion('field_delete',$parentField->id );
-  //End of Field Permission
-
-  //Language Permission
-  $parentLanguage= self::createSinglePermssion('language_permissions');
-       self::createSinglePermssion('language_create',$parentLanguage->id );
-       self::createSinglePermssion('language_show',$parentLanguage->id );
-       self::createSinglePermssion('language_read',$parentLanguage->id );
-       self::createSinglePermssion('language_update',$parentLanguage->id );
-       self::createSinglePermssion('language_delete',$parentLanguage->id );
-  //End of Language Permission
-
-  //Label Permission
-  $parentLabel= self::createSinglePermssion('label_permissions');
-       self::createSinglePermssion('label_create',$parentLabel->id );
-       self::createSinglePermssion('label_show',$parentLabel->id );
-       self::createSinglePermssion('label_read',$parentLabel->id );
-       self::createSinglePermssion('label_update',$parentLabel->id );
-       self::createSinglePermssion('label_delete',$parentLabel->id );
-  //End of Label Permission
-
-  //Permission Permission
-  $parentPermission= self::createSinglePermssion('permission_permissions');
-       self::createSinglePermssion('permission_create',$parentLabel->id );
-       self::createSinglePermssion('permission_show',$parentLabel->id );
-       self::createSinglePermssion('permission_read',$parentLabel->id );
-       self::createSinglePermssion('permission_update',$parentLabel->id );
-       self::createSinglePermssion('permission_delete',$parentLabel->id );
-  //End of Permission Permission
-
-  //Setting Permission
-  $parentSetting= self::createSinglePermssion('setting_permissions');
-       self::createSinglePermssion('setting_create',$parentSetting->id );
-       self::createSinglePermssion('setting_show',$parentSetting->id );
-       self::createSinglePermssion('setting_read',$parentSetting->id );
-       self::createSinglePermssion('setting_update',$parentSetting->id );
-       self::createSinglePermssion('setting_delete',$parentSetting->id );
-  //End of Setting Permission
-
-
-  
-
-    }
 
 }
 
