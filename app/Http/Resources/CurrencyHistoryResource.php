@@ -3,8 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-
-class AttributeResource extends JsonResource
+USE App\Http\Resources\CurrencyResource;
+class CurrencyHistoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +15,12 @@ class AttributeResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'attributes_values' => $this->attributeValue
+            'data' => [
+                'id' => $this->id,
+                'rate' => $this->rate,
+                // 'currency' => new CurrencyResource($this->currency),
+                'currency' =>$this->currency,
+            ]
         ];
     }
 }

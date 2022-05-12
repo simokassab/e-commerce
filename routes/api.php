@@ -10,6 +10,7 @@ use App\Http\Controllers\RolesAndPermissions\RolesController;
 use App\Http\Controllers\Tag\TagController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RolesAndPermissions\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::apiResource('currency',CurrencyController::class);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -31,12 +33,13 @@ Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function 
     //here goes all the routes inside teh dashboard
     Route::apiResource('roles',RolesController::class);
     Route::apiResource('country',CountryController::class);
-    Route::apiResource('currency',CurrencyController::class);
     Route::apiResource('labels',LablsController::class);
     Route::apiResource('language',LanguageController::class);
     Route::apiResource('tag',TagController::class);
     Route::apiResource('attribute',AttributeController::class);
     Route::apiResource('fields',FieldsController::class);
+    Route::get('create-permission' , [PermissionController::class, 'test']);
+
 
 });
 
