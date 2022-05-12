@@ -17,14 +17,9 @@ class SettingsController extends Controller
      */
     public function index()
     {
-
-        $setting=cache()->remember('dashboard-settings',config('cache.default_cache_time'),function(){
-            return Setting::all();
-        });
-
         response()->json([
             'data' => [
-                'settings' => SettingsResource::collection($setting),
+                'settings' => SettingsResource::collection( cache()->remember( 'settings',config('cache.default_cache_time'),fn() => Setting::all() ) ),
             ]
         ],200);
 
@@ -38,7 +33,7 @@ class SettingsController extends Controller
      */
     public function create()
     {
-
+        //
     }
 
     /**
@@ -51,10 +46,9 @@ class SettingsController extends Controller
     {
 
         $settings=new Setting();
-        $settings->title = ($request->title);
-        $settings->type = ($request->type);
-        $settings->entity = ($request->entity);
-        $settings->is_required = ($request->is_required);
+        $settings->key = json_encode($request->key);
+        $settings->value = ($request->value);
+        $settings->is_developer = ($request->is_developer);
 
 
         if(!$settings->save()){

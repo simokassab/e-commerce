@@ -38,7 +38,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function 
     Route::apiResource('tag',TagController::class);
     Route::apiResource('attribute',AttributeController::class);
     Route::apiResource('fields',FieldsController::class);
+    Route::apiResource('settings',SettingsController::class);
+
 
 });
-Route::apiResource('settings',SettingsController::class);
 

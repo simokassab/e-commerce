@@ -24,22 +24,20 @@ class StoreSettingRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
-            'type' => 'required',
-            'entity' => 'required',
-            'is_required' => 'required'
+            'value' => 'required',
+            'key' => 'required',
+            'is_developer' => 'nullable|boolean',
+
         ];
     }
 
     public function messages()
     {
         return [
+        'is_developer.boolean' => 'the :attribute must be either true or false',
+        'value.required' => 'the :attribute field is required',
+        'key.required' => 'the :attribute field is required',
 
-
-        'title.required' => 'the title field is required',
-        'type.required' => 'the type field is required',
-        'entity.required' => 'the entity field is required',
-        'is_required.required' => 'the is_required field is required',
         ];
     }
 }
