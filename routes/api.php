@@ -10,6 +10,7 @@ use App\Http\Controllers\RolesAndPermissions\RolesController;
 use App\Http\Controllers\Tag\TagController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function 
     Route::apiResource('tag',TagController::class);
     Route::apiResource('attribute',AttributeController::class);
     Route::apiResource('fields',FieldsController::class);
+    Route::apiResource('settings',SettingsController::class);
 
 });
 
