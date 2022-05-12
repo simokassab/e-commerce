@@ -13,7 +13,7 @@ class FieldsStorRequest extends FormRequest
      */
     public function authorize()
     {
-        //check if
+        //check if the riole has permission
         return true;
     }
 
@@ -29,7 +29,6 @@ class FieldsStorRequest extends FormRequest
             'type' => 'required|in:'.config('app.validation_default_type'),
             'entity' => 'required|in:'.config('app.validation_default_entities'),
             'is_required' => 'required|boolean',
-
         ];
     }
 
