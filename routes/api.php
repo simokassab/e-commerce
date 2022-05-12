@@ -7,10 +7,10 @@ use App\Http\Controllers\Fields\FieldsController;
 use App\Http\Controllers\Labls\LablsController;
 use App\Http\Controllers\Language\LanguageController;
 use App\Http\Controllers\RolesAndPermissions\RolesController;
+use App\Http\Controllers\Settings\SettingsController;
 use App\Http\Controllers\Tag\TagController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SettingsController;
 
 /*
 |--------------------------------------------------------------------------

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Settings;
 
-use App\Http\Resources\FieldsResource;
-use App\Models\Setting;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\SettingsResource;
+use App\Models\Settings\Setting;
+use Illuminate\Http\Request;
 
 class SettingsController extends Controller
 {
@@ -68,7 +68,7 @@ class SettingsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Setting  $setting
+     * @param  \App\Models\Settings\Setting  $setting
      * @return \Illuminate\Http\Response
      */
     public function show(Setting $setting)
@@ -83,7 +83,7 @@ class SettingsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Setting  $setting
+     * @param  \App\Models\Settings\Setting  $setting
      * @return \Illuminate\Http\Response
      */
     public function edit(Setting $setting)
@@ -95,7 +95,7 @@ class SettingsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Setting  $setting
+     * @param  \App\Models\Settings\Setting  $setting
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Setting $setting)
@@ -126,7 +126,7 @@ class SettingsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Setting  $setting
+     * @param  \App\Models\Settings\Setting  $setting
      * @return \Illuminate\Http\Response
      */
     public function destroy(Setting $setting)
