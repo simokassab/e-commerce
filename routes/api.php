@@ -1,15 +1,16 @@
 <?php
 
 use App\Http\Controllers\Attribute\AttributeController;
-use App\Http\Controllers\RolesAndPermissions\RolesController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Country\CountryController;
 use App\Http\Controllers\Currency\CurrencyController;
-use \App\Http\Controllers\Labls\LablsController;
+use App\Http\Controllers\Fields\FieldsController;
+use App\Http\Controllers\Labls\LablsController;
 use App\Http\Controllers\Language\LanguageController;
+use App\Http\Controllers\RolesAndPermissions\RolesController;
 use App\Http\Controllers\Tag\TagController;
-use App\Http\Controllers\FieldsController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes

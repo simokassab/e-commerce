@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Fields;
 
-use App\Models\Field\Field;
-use Illuminate\Http\Request;
-use App\Http\Resources\FieldsResource;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Field\FieldsStorRequest;
+use App\Http\Resources\FieldsResource;
+use App\Models\Field\Field;
 
 
 class FieldsController extends Controller
