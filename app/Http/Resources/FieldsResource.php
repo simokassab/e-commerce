@@ -19,6 +19,7 @@ class FieldsResource extends JsonResource
             'type'=> $this->type,
             'entity'=> $this->entity,
             'is_required'=> $this->is_required,
+            'fields_values' => $this->fieldValue
         ];
     }
 }
