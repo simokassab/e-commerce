@@ -14,6 +14,6 @@ class TestController extends Controller
     use HasRoles;
 
     public function getToken(){
-        return User::first();
+        return User::first()->createToken('my-token');
     }
 }
