@@ -12,6 +12,8 @@ use App\Http\Controllers\Tag\TagController;
 use App\Http\Controllers\Unit\UnitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TestController;
+
 use App\Http\Controllers\RolesAndPermissions\PermissionController;
 
 /*
@@ -29,6 +31,7 @@ Route::apiResource('currency',CurrencyController::class);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 
 Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function (){
 

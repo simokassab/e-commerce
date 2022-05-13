@@ -27,7 +27,7 @@ return new class extends Migration
      */
     public function down()
     {
-        DB::unprepared('DROP TRIGGER `add_Item_city`');
+        DB::unprepared('DROP TRIGGER IF EXISTS  `rate_trigger`');
 
     }
 };
