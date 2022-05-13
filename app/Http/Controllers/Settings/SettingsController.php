@@ -17,13 +17,12 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        response()->json([
+        return response()->json([
             'data' => [
                 'settings' => SettingsResource::collection( cache()->remember( 'settings',config('cache.default_cache_time'),fn() => Setting::all() ) ),
             ]
         ],200);
 
-        return"fdaf";
     }
 
     /**
