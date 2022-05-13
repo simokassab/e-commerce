@@ -82,7 +82,7 @@ class RolesAndPermissionsService {
     }
     private static function createSingalRole(String $name,Int $parentId=null){
 
-        return CustomPermission::create([
+        return CustomRole::create([
             'name' => $name,
             'parent_id' => $parentId
         ]);
@@ -95,7 +95,7 @@ class RolesAndPermissionsService {
         self::createSingalRole('admin');
 
         $chefEmployee = self::createSingalRole('chef_employee');
-        self::createSingalRole('chef_employee',$chefEmployee->id);
+        self::createSingalRole('chef_employee1',$chefEmployee->id);
 
     }
 

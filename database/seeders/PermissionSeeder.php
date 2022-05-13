@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\RolesAndPermissions\CustomPermission;
 use App\Services\RolesAndPermissions\RolesAndPermissionsService;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -18,5 +19,6 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         RolesAndPermissionsService::createPermissions();
+
     }
 }

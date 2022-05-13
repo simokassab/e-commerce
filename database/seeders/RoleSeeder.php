@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\RolesAndPermissions\CustomPermission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Services\RolesAndPermissions\RolesAndPermissionsService;
