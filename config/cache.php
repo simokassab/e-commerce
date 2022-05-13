@@ -107,4 +107,6 @@ return [
 
     'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache_'),
 
+    //1 year cache time
+    'default_cache_time' => 31556952000
 ];

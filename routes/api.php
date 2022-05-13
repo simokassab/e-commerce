@@ -7,6 +7,7 @@ use App\Http\Controllers\Fields\FieldsController;
 use App\Http\Controllers\Labls\LablsController;
 use App\Http\Controllers\Language\LanguageController;
 use App\Http\Controllers\RolesAndPermissions\RolesController;
+use App\Http\Controllers\Settings\SettingsController;
 use App\Http\Controllers\Tag\TagController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,8 +39,9 @@ Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function 
     Route::apiResource('tag',TagController::class);
     Route::apiResource('attribute',AttributeController::class);
     Route::apiResource('fields',FieldsController::class);
+    Route::apiResource('settings',SettingsController::class);
+
 
 
 });
-
 
