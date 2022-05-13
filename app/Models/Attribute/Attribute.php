@@ -11,6 +11,7 @@ class Attribute extends Model
 {
     use HasFactory;
     protected $table='attributes';
+    protected $guard_name = 'sanctum';
 
     public function attributeValue(){
         return $this->hasMany(AttributeValue::class,'attribute_value_id');

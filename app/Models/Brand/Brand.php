@@ -12,6 +12,7 @@ class Brand extends Model
 {
     use HasFactory;
     protected $table='brands';
+    protected $guard_name = 'sanctum';
 
     public function label(){
         return $this->belongsToMany(Label::class,'brands_labels','brand_id');

@@ -12,6 +12,7 @@ class Tax extends Model
 {
     use HasFactory;
     protected $table='taxes';
+    protected $guard_name = 'sanctum';
 
     public function taxComponent(){
         return $this->hasMany(TaxComponent::class,'tax_id');

@@ -12,6 +12,7 @@ class Field extends Model
 {
     use HasFactory;
     protected $table='fields';
+    protected $guard_name = 'sanctum';
 
     public function fieldValue(){
         return $this->hasMany(fieldValue::class,'field_value_id');

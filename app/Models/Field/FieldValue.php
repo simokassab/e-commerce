@@ -13,6 +13,7 @@ class FieldValue extends Model
 {
     use HasFactory;
     protected $table='fields_values';
+    protected $guard_name = 'sanctum';
 
     public function field(){
         return $this->belongsTo(Field::class,'field_id');

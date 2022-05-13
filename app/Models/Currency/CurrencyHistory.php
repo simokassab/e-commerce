@@ -13,6 +13,9 @@ class CurrencyHistory extends Model
     use HasFactory;
     protected $table='currencies_histories';
     protected $fillable=['currency_id','rate'];
+    protected $guard_name = 'sanctum';
+
+
     public function currency(){
         return $this->belongsTo(Currency::class,'currency_id');
     }

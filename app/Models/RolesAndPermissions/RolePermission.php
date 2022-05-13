@@ -10,4 +10,6 @@ class RolePermission extends Pivot
 {
     use HasFactory;
     protected $table = "role_has_permissions";
+    protected $guard_name = 'sanctum';
+
 }

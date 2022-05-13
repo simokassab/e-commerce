@@ -13,6 +13,7 @@ class Unit extends Model
 {
     use HasFactory;
     protected $table='units';
+    protected $guard_name = 'sanctum';
 
     public function cateogry(){
         $this->hasMany(Category::class,'category_id');

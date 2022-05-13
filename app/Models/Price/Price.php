@@ -11,6 +11,7 @@ class Price extends Model
 {
     use HasFactory;
     protected $table='prices';
+    protected $guard_name = 'sanctum';
 
     public function currency(){
         return $this->belongsTo(Currency::class,'currency_id');

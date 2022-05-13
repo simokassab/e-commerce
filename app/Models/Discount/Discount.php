@@ -11,6 +11,7 @@ class Discount extends Model
 {
     use HasFactory;
     protected $table='discounts';
+    protected $guard_name = 'sanctum';
 
     public function category(){
         return $this->belongsToMany(Category::class,'discounts_entities','discount_id','category_id');

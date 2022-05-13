@@ -15,6 +15,7 @@ class Category extends Model
 {
     use HasFactory;
     protected $table='categories';
+    protected $guard_name = 'sanctum';
 
     public function parent(){
         return $this->belongsTo(Category::class,'parent_id');

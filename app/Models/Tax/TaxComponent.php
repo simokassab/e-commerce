@@ -10,6 +10,7 @@ class TaxComponent extends Model
 {
     use HasFactory;
     protected $table='taxes_components';
+    protected $guard_name = 'sanctum';
 
     public function tax(){
         return $this->belongsTo(Tax::class,'tax_id');

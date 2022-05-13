@@ -9,4 +9,6 @@ use Spatie\Permission\Models\Permission;
 class CustomPermission extends Permission
 {
     use HasFactory;
+    protected $guard_name = 'sanctum';
+
 }

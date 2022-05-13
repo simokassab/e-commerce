@@ -11,6 +11,7 @@ class AttributeValue extends Model
 {
     use HasFactory;
     protected $table='attributes_values';
+    protected $guard_name = 'sanctum';
 
     public function attribute(){
         return $this->belongsTo(Attribute::class,'attribute_id');

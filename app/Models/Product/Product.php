@@ -22,6 +22,7 @@ class Product extends Model
 {
     use HasFactory;
     protected $table='products';
+    protected $guard_name = 'sanctum';
 
     public function parent(){
         return $this->belongsTo(Product::class,'parent_product_id');

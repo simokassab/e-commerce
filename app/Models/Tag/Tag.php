@@ -12,6 +12,7 @@ class Tag extends Model
 {
     use HasFactory;
     protected $table='tags';
+    protected $guard_name = 'sanctum';
 
     public function category(){
         return $this->belongsToMany(Category::class,'discounts_entities','tag_id','category_id');

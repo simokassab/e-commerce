@@ -11,6 +11,7 @@ class Label extends Model
 {
     use HasFactory;
     protected $table='labels';
+    protected $guard_name = 'sanctum';
 
     public function categories(){
         return $this->belongsToMany(Category::class,'categories_labels','label_id','category_id');
