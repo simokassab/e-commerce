@@ -30,14 +30,13 @@ use App\Http\Controllers\RolesAndPermissions\PermissionController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+Route::apiResource('labels',LablsController::class);
 
 Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function (){
 
     //here goes all the routes inside teh dashboard
     Route::apiResource('roles',RolesController::class);
     Route::apiResource('country',CountryController::class);
-    Route::apiResource('labels',LablsController::class);
     Route::apiResource('language',LanguageController::class);
     Route::apiResource('tag',TagController::class);
     Route::apiResource('attribute',AttributeController::class);

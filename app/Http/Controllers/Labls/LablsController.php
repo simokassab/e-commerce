@@ -10,9 +10,17 @@ use App\Models\RolesAndPermissions\CustomRole;
 use Illuminate\Http\Request;
 use App\Http\Resources\LabelsResource;
 use App\Models\Label\Label;
-
-class LablsController extends Controller
+use App\Http\Controllers\MainController;
+class LablsController extends MainController
 {
+
+    public function __construct()
+    {
+        $this->map_permissions = [
+            'LablsController@index' => 'LablsController@store'
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,6 +28,7 @@ class LablsController extends Controller
      */
     public function index()
     {
+        //check
         return response()->json(['data' => [
             'labels' =>LabelsResource::collection(Label::all()),
         ]
@@ -97,6 +106,9 @@ class LablsController extends Controller
      */
     public function update(LableStorRequest $request, Label $label)
     {
+        if(!auth()->hasPermissions('permissions name'))
+            return response();
+
         $label->title = json_encode($request->title);
         $label->entity = ($request->entity);
         $label->color = ($request->color);

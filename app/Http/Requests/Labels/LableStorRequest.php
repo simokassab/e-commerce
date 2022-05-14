@@ -13,7 +13,8 @@ class LableStorRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth()->hasPermissions('permissions name');
+//        return true;
     }
 
     /**
