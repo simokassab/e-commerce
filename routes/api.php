@@ -26,7 +26,6 @@ use App\Http\Controllers\RolesAndPermissions\PermissionController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::apiResource('currency',CurrencyController::class);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -45,6 +44,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function 
     Route::apiResource('fields',FieldsController::class);
     Route::apiResource('settings',SettingsController::class);
     Route::apiResource('unit',UnitController::class);
+    Route::apiResource('currency',CurrencyController::class);
+
 
 
 
