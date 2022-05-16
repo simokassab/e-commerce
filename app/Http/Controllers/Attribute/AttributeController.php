@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Attribute\StoreAttributeRequest;
 use App\Http\Resources\AttributeResource;
 use App\Models\Attribute\Attribute;
+use App\Models\Attribute\AttributeValue;
 use Illuminate\Http\Request;
 
 class AttributeController extends Controller
@@ -19,7 +20,7 @@ class AttributeController extends Controller
     {
         return response()->json([
             'data' => [
-                'attributes' => AttributeResource::collection(  Attribute::all())
+                'attributes' => AttributeResource::collection(  Attribute::with('attributeValues')->get())
             ]
         ],200);
     }

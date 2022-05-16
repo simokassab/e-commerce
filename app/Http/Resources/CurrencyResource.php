@@ -16,6 +16,8 @@ class CurrencyResource extends JsonResource
      */
     public function toArray($request)
     {
+
+        $currency_history=$this->whenLoaded('currencyHistory');
         return [
             'id' => $this->id,
             'name'=>$this->name,
@@ -25,7 +27,7 @@ class CurrencyResource extends JsonResource
             'is_default'=>$this->is_default,
             'image'=>$this->image,
             'sort'=>$this->sort,
-            'history' => CurrencyHistoryResource::collection($this->currencyHistory),
+            'history' => CurrencyHistoryResource::collection($currency_history),
 
         ];
     }

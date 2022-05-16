@@ -18,12 +18,14 @@ class MainController extends Controller
         $route_action = basename(Route::currentRouteAction());
         if(isset($this->map_permissions[$route_action]))
             $route_action = $this->map_permissions[$route_action];
-        if(authorize($route_action))
-        parent::__construct();
+        // if(authorize($route_action))
+        // parent::__construct();
     }
 
     protected function successResponse($data){
         response('data', $data, 200);
     }
+
+
 
 }

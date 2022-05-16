@@ -15,7 +15,7 @@ class Field extends Model
     protected $guard_name = 'sanctum';
 
     public function fieldValue(){
-        return $this->hasMany(fieldValue::class,'field_value_id');
+        return $this->hasMany(fieldValue::class,'fields_id');
     }
     public function category(){
         return $this->belongsToMany(Category::class,'categories_fields','field_id','category_id');

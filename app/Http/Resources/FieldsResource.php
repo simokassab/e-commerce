@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Controllers\Fields\FieldValueController;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FieldsResource extends JsonResource
@@ -14,13 +15,14 @@ class FieldsResource extends JsonResource
      */
     public function toArray($request)
     {
+        $fields_values=$this->whenLoaded('fieldValue');
         return [
             'id' =>$this->id,
             'title'=> $this->title,
             'type'=> $this->type,
             'entity'=> $this->entity,
             'is_required'=> $this->is_required,
-            'fields_values' => $this->fieldValue
+            'fields_values' => FieldsValueResource::collection($fields_values)
         ];
     }
 }

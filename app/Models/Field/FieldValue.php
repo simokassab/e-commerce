@@ -16,7 +16,7 @@ class FieldValue extends Model
     protected $guard_name = 'sanctum';
 
     public function field(){
-        return $this->belongsTo(Field::class,'field_id');
+        return $this->belongsTo(Field::class,'fields_id');
         }
 
     public function fieldCategorie(){

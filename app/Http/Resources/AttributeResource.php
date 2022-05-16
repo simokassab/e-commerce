@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Attribute\AttributeValue;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AttributeResource extends JsonResource
@@ -14,10 +15,11 @@ class AttributeResource extends JsonResource
      */
     public function toArray($request)
     {
+        $attributesValues= $this->whenLoaded('attributeValues');
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'attributes_values' => $this->attributeValue
+            'attributes_values' =>  AttributeValueResource::collection($attributesValues)
         ];
     }
 }
