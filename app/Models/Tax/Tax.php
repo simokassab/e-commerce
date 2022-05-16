@@ -3,12 +3,12 @@
 namespace App\Models\Tax;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\MainModel;
 use App\Models\Tax\TaxComponent;
 use App\Models\Category\Category;
 use App\Models\Product\Product;
 use App\Models\Brand\Brand;
-class Tax extends Model
+class Tax extends MainModel
 {
     use HasFactory;
     protected $table='taxes';

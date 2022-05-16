@@ -3,10 +3,10 @@
 namespace App\Models\Product;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\MainModel;
 use App\Models\Product\Product;
 
-class ProductImage extends Model
+class ProductImage extends MainModel
 {
     use HasFactory;
     protected $table='products_images';

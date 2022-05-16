@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Language;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MainController;
 use App\Http\Requests\Language\StoreLanguage;
 use App\Http\Resources\LanguageResource;
-use App\Http\Resources\TagResource;
 use App\Models\Language\Language;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
 
-class LanguageController extends Controller
+class LanguageController extends MainController
 {
     /**
      * Display a listing of the resource.

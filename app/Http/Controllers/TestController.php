@@ -9,8 +9,8 @@ use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Arr;
 use Spatie\Permission\Models\Permission;
-
-class TestController extends Controller
+use App\Http\Controllers\MainController;
+class TestController extends MainController
 {
     use HasRoles;
 

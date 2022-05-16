@@ -3,9 +3,9 @@
 namespace App\Models\Country;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\MainModel;
 
-class Country extends Model
+class Country extends MainModel
 {
     use HasFactory;
     protected $table='countries';

@@ -3,13 +3,15 @@
 namespace App\Models\Field;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\MainModel;
 use App\Models\Field\Field;
 use App\Models\Brand\Brand;
 use App\Models\Category\Category;
 use App\Models\Product\Product;
 
-class FieldValue extends Model
+class FieldValue extends MainModel
+
+
 {
     use HasFactory;
     protected $table='fields_values';

@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Currency;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MainController;
 use App\Http\Requests\Currency\StoreCurrency;
 use App\Http\Resources\CurrencyHistoryResource;
 use App\Http\Resources\CurrencyResource;
-use App\Models\Country\Country;
 use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyHistory;
 use App\Services\Currency\CurrencyService;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class CurrencyController extends Controller
+class CurrencyController extends MainController
 {
     /**
      * Display a listing of the resource.

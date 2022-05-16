@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Settings;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MainController;
 use App\Http\Requests\Setting\StoreSettingRequest;
 use App\Http\Resources\SettingsResource;
 use App\Models\Settings\Setting;
 use Illuminate\Http\Request;
 
-class SettingsController extends Controller
+class SettingsController extends MainController
 {
     /**
      * Display a listing of the resource.

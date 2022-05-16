@@ -3,12 +3,12 @@
 namespace App\Models\Tag;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\MainModel;
 use App\Models\Category\Category;
 use App\Models\Discount\Discount;
 use App\Models\Brand\Brand;
 use App\Models\Product\Product;
-class Tag extends Model
+class Tag extends MainModel
 {
     use HasFactory;
     protected $table='tags';

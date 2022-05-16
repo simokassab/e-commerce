@@ -3,13 +3,13 @@
 namespace App\Models\Unit;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\MainModel;
 use App\Models\Category\Category;
 use App\Models\Product\Product;
 use App\Models\Tax\Tax;
 use App\Models\Brand\Brand;
 
-class Unit extends Model
+class Unit extends MainModel
 {
     use HasFactory;
     protected $table='units';

@@ -3,10 +3,10 @@
 namespace App\Models\Tax;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\MainModel;
 use App\Models\Tax\Tax;
 
-class TaxComponent extends Model
+class TaxComponent extends MainModel
 {
     use HasFactory;
     protected $table='taxes_components';

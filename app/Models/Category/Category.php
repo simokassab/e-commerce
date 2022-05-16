@@ -4,14 +4,14 @@ namespace App\Models\Category;
 
 use App\Models\Category as ModelsCategorie;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\MainModel;
 use App\Models\Label\Label;
 use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
 use App\Models\Tag\Tag;
 use App\Models\Discount\Discount;
 use App\Models\Brand\Brand;
-class Category extends Model
+class Category extends MainModel
 {
     use HasFactory;
     protected $table='categories';

@@ -3,9 +3,9 @@
 namespace App\Models\Settings;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\MainModel;
 
-class Setting extends Model
+class Setting extends MainModel
 {
     use HasFactory;
     protected $guard_name = 'sanctum';

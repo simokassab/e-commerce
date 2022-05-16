@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Fields;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MainController;
 use App\Http\Requests\Field\StoreFieldsValueRequest;
 use App\Http\Resources\FieldsValueResource;
 use App\Models\Field\FieldValue;
 use Illuminate\Http\Request;
 
-class FieldValueController extends Controller
+class FieldValueController extends MainController
 {
     /**
      * Display a listing of the resource.
