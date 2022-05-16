@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 
 class CurrencyController extends MainController
 {
+
+
     /**
      * Display a listing of the resource.
      *

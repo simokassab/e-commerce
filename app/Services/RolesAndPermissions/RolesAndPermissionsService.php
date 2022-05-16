@@ -101,13 +101,14 @@ class RolesAndPermissionsService {
 
     public static function createPermissions(){
         CustomPermission::query()->truncate();
+
          //Currency Permission
-       $parentCurrency= self::createSinglePermssion('currency_permissions');
-       self::createSinglePermssion('currency_create',$parentCurrency->id );
-       self::createSinglePermssion('currency_show',$parentCurrency->id );
-       self::createSinglePermssion('currency_read',$parentCurrency->id );
-       self::createSinglePermssion('currency_update',$parentCurrency->id );
-       self::createSinglePermssion('currency_delete',$parentCurrency->id );
+       $parentCurrency= self::createSinglePermssion('currency');
+       self::createSinglePermssion('currency@index',$parentCurrency->id );
+       self::createSinglePermssion('currency@store',$parentCurrency->id );
+       self::createSinglePermssion('currency@show',$parentCurrency->id );
+       self::createSinglePermssion('currency@update',$parentCurrency->id );
+       self::createSinglePermssion('currency@destroy',$parentCurrency->id );
        //End of Currency Permission
 
        //Currency History Permission
