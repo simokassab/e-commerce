@@ -19,14 +19,14 @@ class MainController extends Controller
         $route_action = basename(Route::currentRouteAction());
         if(isset($this->map_permissions[$route_action]))
             $route_action = $this->map_permissions[$route_action];
-        if(authorize($route_action)){
+    //        if(authorize($route_action)){
+    //
+    //        }
 
-        }
-
-        $this->defaultLocalize = config('app.locale');
+//        $this->defaultLocalize = config('app.locale');
 
 
-        parent::__construct();
+//        parent::__construct();
     }
 
     protected function successResponse($data){

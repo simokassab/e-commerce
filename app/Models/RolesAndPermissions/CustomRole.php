@@ -102,7 +102,6 @@ class CustomRole extends Role
     }
 
     public function canDeleteRole(&$message){
-        dd($this->users);
         if( $this->children()->exists()){
             $message = "The role can't be deleted it is a parent to other children roles";
             return false;

@@ -28,7 +28,8 @@ class TestController extends MainController
 //        return User::first()->hasPermissionTo('currency_permissions');
 
         $message = '';
-        return $role = CustomRole::find(1)->users();
+        $role = CustomRole::find(1)->canDeleteRole($message);
+        return $message;
 
 
     }
