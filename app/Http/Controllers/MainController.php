@@ -29,8 +29,10 @@ class MainController extends Controller
 //        parent::__construct();
     }
 
-    protected function successResponse($data){
-        response('data', $data, 200);
+    protected function successResponse($data, $statusCode= 200){
+        return response()->json([
+            'data' => $data
+        ],$statusCode);
     }
 
 }

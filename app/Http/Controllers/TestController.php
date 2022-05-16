@@ -19,18 +19,6 @@ class TestController extends MainController
     }
 
     public function test(){
-//        $role = CustomRole::find('1')->givePermissionTo('currency_permissions');
-//
-//        $user =  User::first();
-//
-//        dd($user->hasPermissionTo('currency_create'));
-
-//        return User::first()->hasPermissionTo('currency_permissions');
-
-        $message = '';
-        $role = CustomRole::find(1)->canDeleteRole($message);
-        return $message;
-
 
     }
 }
