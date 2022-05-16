@@ -4,6 +4,7 @@ use App\Http\Controllers\Attribute\AttributeController;
 use App\Http\Controllers\Country\CountryController;
 use App\Http\Controllers\Currency\CurrencyController;
 use App\Http\Controllers\Fields\FieldsController;
+use App\Http\Controllers\Fields\FieldValueController;
 use App\Http\Controllers\Labls\LablsController;
 use App\Http\Controllers\Language\LanguageController;
 use App\Http\Controllers\RolesAndPermissions\RolesController;
@@ -41,6 +42,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function 
     Route::apiResource('tag',TagController::class);
     Route::apiResource('attribute',AttributeController::class);
     Route::apiResource('fields',FieldsController::class);
+    Route::apiResource('field-value',FieldValueController::class);
     Route::apiResource('settings',SettingsController::class);
     Route::apiResource('unit',UnitController::class);
     Route::apiResource('currency',CurrencyController::class);
