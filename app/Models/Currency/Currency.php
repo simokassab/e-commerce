@@ -3,11 +3,11 @@
 namespace App\Models\Currency;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\MainModel;
 use App\Models\Currency\CurrencyHistory;
 use App\Models\Price\Price;
 
-class Currency extends Model
+class Currency extends MainModel
 {
     use HasFactory;
     protected $table='currencies';

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Unit;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MainController;
 use App\Http\Requests\Unit\StoreUnitRequest;
 use App\Http\Resources\UnitResource;
 use App\Models\Unit\Unit;
 use Illuminate\Http\Request;
 
-class UnitController extends Controller
+class UnitController extends MainController
 {
     /**
      * Display a listing of the resource.

@@ -3,12 +3,12 @@
 namespace App\Models\Field;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\MainModel;
 use App\Models\Field\FieldValue;
 use App\Models\Category\Category;
 use App\Models\Brand\Brand;
 use App\Models\Product\Product;
-class Field extends Model
+class Field extends MainModel
 {
     use HasFactory;
     protected $table='fields';

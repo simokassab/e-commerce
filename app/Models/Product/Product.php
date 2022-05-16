@@ -3,7 +3,6 @@
 namespace App\Models\Product;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Category\Category;
 use App\Models\Unit\Unit;
 use App\Models\Tax\Tax;
@@ -17,8 +16,9 @@ use App\Models\Attribute\Attribute;
 use App\Models\Attribute\AttributeValue;
 use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
+use App\Models\MainModel;
 
-class Product extends Model
+class Product extends MainModel
 {
     use HasFactory;
     protected $table='products';

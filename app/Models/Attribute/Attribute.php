@@ -3,11 +3,11 @@
 namespace App\Models\Attribute;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\MainModel;
 use App\Models\Attribute\AttributeValue;
 use App\Models\Product\Product;
 
-class Attribute extends Model
+class Attribute extends MainModel
 {
     use HasFactory;
     protected $table='attributes';

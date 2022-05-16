@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Tag;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MainController;
 use App\Http\Requests\Tag\StoreTag;
 use App\Http\Resources\TagResource;
 use App\Models\Tag\Tag;
 use Illuminate\Http\Request;
 
-class TagController extends Controller
+class TagController extends MainController
 {
     /**
      * Display a listing of the resource.

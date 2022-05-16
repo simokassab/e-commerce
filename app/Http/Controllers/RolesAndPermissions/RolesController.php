@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\RolesAndPermissions;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MainController;
 use App\Http\Requests\RolesAndPermissions\StoreRoleRequest;
 use App\Http\Resources\RolesResource;
 use App\Models\RolesAndPermissions\CustomRole;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 
 
-class RolesController extends Controller
+class RolesController extends MainController
 {
     /**
      * Display a listing of the resource.

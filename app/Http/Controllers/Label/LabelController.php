@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers\Label;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Labels\LableStorRequest;
-use App\Http\Resources\CurrencyResource;
-use App\Http\Resources\RolesResource;
 use App\Models\RolesAndPermissions\CustomRole;
-use Illuminate\Http\Request;
 use App\Http\Resources\LabelsResource;
 use App\Models\Label\Label;
 use App\Http\Controllers\MainController;

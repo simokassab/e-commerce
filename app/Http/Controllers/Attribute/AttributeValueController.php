@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Attribute;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Attribute\StoreAttributeRequest;
+use App\Http\Controllers\MainController;
 use App\Http\Requests\Attribute\StoreAttributeValueRequest;
 use App\Http\Resources\AttributeValueResource;
 use App\Models\Attribute\AttributeValue;
 use Attribute;
 use Illuminate\Http\Request;
 
-class AttributeValueController extends Controller
+class AttributeValueController extends MainController
 {
     /**
      * Display a listing of the resource.

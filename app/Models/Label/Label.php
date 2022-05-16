@@ -3,11 +3,11 @@
 namespace App\Models\Label;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\MainModel;
 use App\Models\Category\Category;
 use App\Models\Brand\brand;
 use App\Models\Product\Product;
-class Label extends Model
+class Label extends MainModel
 {
     use HasFactory;
     protected $table='labels';

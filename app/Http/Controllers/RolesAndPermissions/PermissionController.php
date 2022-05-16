@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\RolesAndPermissions;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MainController;
 use App\Models\RolesAndPermissions\CustomPermission;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\Cast\String_;
 
-class PermissionController extends Controller
+class PermissionController extends MainController
 {
     /**
      * Display a listing of the resource.

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Attribute;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MainController;
 use App\Http\Requests\Attribute\StoreAttributeRequest;
 use App\Http\Resources\AttributeResource;
 use App\Models\Attribute\Attribute;
 use Illuminate\Http\Request;
 
-class AttributeController extends Controller
+class AttributeController extends MainController
 {
     /**
      * Display a listing of the resource.

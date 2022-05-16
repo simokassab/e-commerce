@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Country;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MainController;
 use App\Http\Requests\Countries\StoreCountry;
 use App\Http\Resources\CountryResource;
 use App\Models\Country\Country;
 use Illuminate\Http\Request;
 
-class CountryController extends Controller
+class CountryController extends MainController
 {
     /**
      * Display a listing of the resource.
