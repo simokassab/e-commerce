@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 class MainController extends Controller
 {
+    protected $defaultLocalize;
     protected $map_permissions = [];
     protected $SUCCESS_RESPONSE_CODE =200;
 
@@ -18,7 +19,13 @@ class MainController extends Controller
         $route_action = basename(Route::currentRouteAction());
         if(isset($this->map_permissions[$route_action]))
             $route_action = $this->map_permissions[$route_action];
-        if(authorize($route_action))
+        if(authorize($route_action)){
+
+        }
+
+        $this->defaultLocalize = config('app.locale');
+
+
         parent::__construct();
     }
 

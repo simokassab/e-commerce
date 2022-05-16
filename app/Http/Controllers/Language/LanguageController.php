@@ -49,6 +49,10 @@ class LanguageController extends Controller
         $language->name=$request->name;
         $language->code=$request->code;
         $language->is_default=$request->is_default;
+        if($request->is_default==1){
+            app()->setLocale($request->name);
+
+        }
         $language->is_disabled=$request->is_disabled;
         $language->image=$request->image;
         $language->sort=$request->sort;

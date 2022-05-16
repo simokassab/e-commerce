@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-
 class CustomRole extends Role
 {
     use HasFactory;
@@ -103,16 +102,16 @@ class CustomRole extends Role
     }
 
     public function canDeleteRole(&$message){
-        if( ($this->permissions()->exists())){
-            $message = "the role can't be deleted it is attached to permissions!";
+        dd($this->users);
+        if( $this->children()->exists()){
+            $message = "The role can't be deleted it is a parent to other children roles";
             return false;
         }
 
-        if( ($this->users()->exists())){
-            $message = "the role can't be deleted it is attached to users!";
+        if( $this->users()->exists() ){
+            $message = "The role can't be deleted it is attached to users!";
             return false;
         }
-
         return true;
 
     }
