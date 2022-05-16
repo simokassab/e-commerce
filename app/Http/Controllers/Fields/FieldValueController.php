@@ -94,7 +94,7 @@ class FieldValueController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  FieldValue  $field_value
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, FieldValue $field_value)
@@ -123,7 +123,7 @@ class FieldValueController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  FieldValue  $field_value
      * @return \Illuminate\Http\Response
      */
     public function destroy(FieldValue $field_value)
