@@ -35,4 +35,16 @@ class MainController extends Controller
         ],$statusCode);
     }
 
+    protected function errorResponse($data, $statusCode= 500){
+        return response()->json([
+            'data' => $data
+        ],$statusCode);
+    }
+
+    protected function notFoundResponse($data, $statusCode= 404){
+        return response()->json([
+            'data' => $data
+        ],$statusCode);
+    }
+
 }

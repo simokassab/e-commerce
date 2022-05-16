@@ -17,11 +17,10 @@ class AttributeController extends MainController
      */
     public function index()
     {
-        return response()->json([
-            'data' => [
-                'attributes' => AttributeResource::collection(  Attribute::all())
-            ]
-        ],200);
+        $data = ['attributes' => AttributeResource::collection(  Attribute::all())];
+
+        return $this->successResponse($data);
+
     }
 
     /**
@@ -47,11 +46,10 @@ class AttributeController extends MainController
 
 
         if(!$attribute->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The attribute was not created ! please try again later',
-                ]
-                ],512);
+            $data = [
+                'message' => 'The attribute was not created ! please try again later',
+            ];
+            return $this->errorResponse($data);
         }
 
         return response()->json([
