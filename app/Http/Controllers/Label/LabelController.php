@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Labls;
+namespace App\Http\Controllers\Label;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Labels\LableStorRequest;
@@ -11,13 +11,13 @@ use Illuminate\Http\Request;
 use App\Http\Resources\LabelsResource;
 use App\Models\Label\Label;
 use App\Http\Controllers\MainController;
-class LablsController extends MainController
+class LabelController extends MainController
 {
 
     public function __construct()
     {
         $this->map_permissions = [
-            'LablsController@index' => 'LablsController@store'
+            'LabelController@index' => 'LabelController@store'
         ];
     }
 
