@@ -46,7 +46,9 @@ class LanguageController extends MainController
         $language=new Language();
         $language->name=$request->name;
         $language->code=$request->code;
-        $language->is_default=$request->is_default;
+       if($request->is_default){
+        $language->setIsDefault();
+       }
         $language->is_disabled=$request->is_disabled;
         $language->image=$request->image;
         $language->sort=$request->sort;
@@ -107,7 +109,9 @@ class LanguageController extends MainController
     {
         $language->name=$request->name;
         $language->code=$request->code;
-        $language->is_default=$request->is_default;
+        if($request->is_default){
+            $language->setIsDefault();
+           }
         $language->is_disabled=$request->is_disabled;
         $language->image=$request->image;
         $language->sort=$request->sort;

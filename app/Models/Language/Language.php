@@ -2,6 +2,7 @@
 
 namespace App\Models\Language;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
 
