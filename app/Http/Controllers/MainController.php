@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use PhpParser\Node\Expr\FuncCall;
 
 class MainController extends Controller
 {
@@ -25,6 +25,7 @@ class MainController extends Controller
     protected function successResponse($data){
         response('data', $data, 200);
     }
+
 
 
 
