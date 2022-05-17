@@ -6,10 +6,17 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Field\FieldsStorRequest;
 use App\Http\Resources\FieldsResource;
 use App\Models\Field\Field;
+use Illuminate\Support\Facades\Route;
 
 
 class FieldsController extends MainController
 {
+
+    public function __construct($defaultPermissionsFromChild = null)
+    {
+        parent::__construct($defaultPermissionsFromChild);
+    }
+
     /**
      * Display a listing of the resource.
      *

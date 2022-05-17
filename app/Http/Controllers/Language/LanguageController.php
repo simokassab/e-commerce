@@ -7,9 +7,16 @@ use App\Http\Requests\Language\StoreLanguage;
 use App\Http\Resources\LanguageResource;
 use App\Models\Language\Language;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
 
 class LanguageController extends MainController
 {
+
+    public function __construct($defaultPermissionsFromChild = null)
+    {
+        parent::__construct($defaultPermissionsFromChild);
+    }
     /**
      * Display a listing of the resource.
      *

@@ -7,7 +7,7 @@ use App\Models\RolesAndPermissions\CustomRole;
 use App\Http\Resources\LabelsResource;
 use App\Models\Label\Label;
 use App\Http\Controllers\MainController;
-
+use Illuminate\Support\Facades\Route;
 
 class LabelController extends MainController
 {

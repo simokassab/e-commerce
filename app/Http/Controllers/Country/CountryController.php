@@ -14,7 +14,7 @@ class CountryController extends MainController
 
     public function __construct($defaultPermissionsFromChild = null)
     {
-        dd(basename(Route::currentRouteAction()));
+
     }
 
     /**
