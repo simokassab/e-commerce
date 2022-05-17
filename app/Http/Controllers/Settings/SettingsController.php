@@ -14,7 +14,7 @@ class SettingsController extends MainController
 
     public function __construct()
     {
-        dd(basename(Route::currentRouteAction()));
+//        dd(basename(Route::currentRouteAction()));
 
     }
 
