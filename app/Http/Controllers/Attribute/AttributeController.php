@@ -7,9 +7,16 @@ use App\Http\Requests\Attribute\StoreAttributeRequest;
 use App\Http\Resources\AttributeResource;
 use App\Models\Attribute\Attribute;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class AttributeController extends MainController
 {
+    public function __construct($defaultPermissionsFromChild = null)
+    {
+    dd(basename(Route::currentRouteAction()));
+    parent::__construct($defaultPermissionsFromChild);
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -7,9 +7,18 @@ use App\Http\Requests\Setting\StoreSettingRequest;
 use App\Http\Resources\SettingsResource;
 use App\Models\Settings\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class SettingsController extends MainController
 {
+
+    public function __construct()
+    {
+        dd(basename(Route::currentRouteAction()));
+
+    }
+
+
     /**
      * Display a listing of the resource.
      *

@@ -33,23 +33,25 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+
 Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function (){
 
     //here goes all the routes inside teh dashboard
     Route::apiResource('roles',RolesController::class);
-    Route::apiResource('country',CountryController::class);
-    Route::apiResource('language',LanguageController::class);
-    Route::apiResource('tag',TagController::class);
     Route::apiResource('attribute',AttributeController::class);
+    Route::apiResource('language',LanguageController::class);
     Route::apiResource('fields',FieldsController::class);
     Route::apiResource('field-value',FieldValueController::class);
     Route::apiResource('settings',SettingsController::class);
-    Route::apiResource('unit',UnitController::class);
+    Route::apiResource('labels',LabelController::class);
     Route::apiResource('currency',CurrencyController::class);
     Route::apiResource('labels',LabelController::class);
-
-
-
+    Route::apiResource('tag',TagController::class);
+    Route::apiResource('unit',UnitController::class);
+    Route::apiResource('country',CountryController::class);
 
 });
+
+
 

@@ -7,14 +7,14 @@ use App\Models\RolesAndPermissions\CustomRole;
 use App\Http\Resources\LabelsResource;
 use App\Models\Label\Label;
 use App\Http\Controllers\MainController;
+use Illuminate\Support\Facades\Route;
+
 class LabelController extends MainController
 {
 
     public function __construct()
     {
-        $this->map_permissions = [
-            'LabelController@index' => 'LabelController@store'
-        ];
+
     }
 
     /**
@@ -102,9 +102,6 @@ class LabelController extends MainController
      */
     public function update(LableStorRequest $request, Label $label)
     {
-        if(!auth()->hasPermissions('permissions name'))
-            return response();
-
         $label->title = json_encode($request->title);
         $label->entity = ($request->entity);
         $label->color = ($request->color);

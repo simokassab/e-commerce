@@ -8,25 +8,24 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
+
 class MainController extends Controller
 {
-    protected $defaultLocalize;
-    protected $map_permissions = [];
-    protected $SUCCESS_RESPONSE_CODE =200;
+    protected $mapPermissions = [];
 
-    public function __construct()
+    public function __construct($defaultPermissionsFromChild = null)
     {
-        $route_action = basename(Route::currentRouteAction());
-        if(isset($this->map_permissions[$route_action]))
-            $route_action = $this->map_permissions[$route_action];
-    //        if(authorize($route_action)){
-    //
-    //        }
+
+        $routeAction = basename(Route::currentRouteAction()); //we got the permission name
+
+        if(isset($defaultPermissionsFromChild[$routeAction])){
+            $routeAction = $defaultPermissionsFromChild[$routeAction];
+        }
+        abort_if(!auth()->user()->hasPermissionTo($routeAction),401,'you are not authorized for this action');
 
 //        $this->defaultLocalize = config('app.locale');
 
 
-//        parent::__construct();
     }
 
     protected function successResponse($data, $statusCode= 200){

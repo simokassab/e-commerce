@@ -7,9 +7,16 @@ use App\Http\Requests\Countries\StoreCountry;
 use App\Http\Resources\CountryResource;
 use App\Models\Country\Country;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class CountryController extends MainController
 {
+
+    public function __construct($defaultPermissionsFromChild = null)
+    {
+
+    }
+
     /**
      * Display a listing of the resource.
      *
