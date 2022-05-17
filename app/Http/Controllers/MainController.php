@@ -15,7 +15,6 @@ class MainController extends Controller
 
     public function __construct($defaultPermissionsFromChild = null)
     {
-<<<<<<< HEAD
 
         $routeAction = basename(Route::currentRouteAction()); //we got the permission name
 
@@ -27,13 +26,11 @@ class MainController extends Controller
 //        $this->defaultLocalize = config('app.locale');
 
 
-=======
         $route_action = basename(Route::currentRouteAction());
         if(isset($this->map_permissions[$route_action]))
             $route_action = $this->map_permissions[$route_action];
         // if(authorize($route_action))
         // parent::__construct();
->>>>>>> origin/FixingRelations
     }
 
     protected function successResponse($data, $statusCode= 200){

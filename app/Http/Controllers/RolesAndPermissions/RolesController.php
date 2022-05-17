@@ -121,9 +121,10 @@ class RolesController extends MainController
             if($request->has('permissions') && !empty($request->permissions)){
                 $parentPermissions = CustomRole::findOrFail($request->parent_id)->permissions->pluck('id')->toArray();
                 $permissions = RolesAndPermissionsService::filterPermissionsAccordingToParentPermissions($parentPermissions,$request->permissions);
-                $role->setParent($permissions);
+                $role->givePermissionTo($permissions);
             }
 
+            //removed the permissions from the children and parent after updating the parent
             RolePermission::whereIn('role_id' , $role->allChildren($flatten=true))->whereNotIn('permission_id',$permissions)->delete();
 
             DB::commit();
