@@ -31,6 +31,16 @@ class RolesAndPermissionsService {
         return self::drawRoleChildren($roleId, $roleChildren,!$flatten, $allRoles);
     }
 
+    public static function filterPermissionsAccordingToParentPermissions(Array $parentPermissions,Array $permissions): Array {
+        $notAllowedPermissions = array_diff($permissions, $parentPermissions);
+        return collect($permissions)->diff($notAllowedPermissions)->all();
+    }
+
+    //gets the children role and set each parent and under it its children in a non nested way example:
+    // [2] => 1,2
+    // [2] => 5,6
+    // [2] => 3,4
+
     private static function generateChildrenForAllRoles($allRoles):Array {
         $roleChildren = [];
         foreach($allRoles as $currentRole){
@@ -67,10 +77,6 @@ class RolesAndPermissionsService {
         return $childRoles;
     }
 
-    public static function filterPermissionsAccordingToParentPermissions(Array $parentPermissions,Array $permissions): Array {
-        $notAllowedPermissions = array_diff($permissions, $parentPermissions);
-        return collect($permissions)->diff($notAllowedPermissions)->all();
-    }
 
     private static function createSinglePermssion(String $name,Int $parentId=null){
 
