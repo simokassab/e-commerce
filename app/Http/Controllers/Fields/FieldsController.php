@@ -26,7 +26,7 @@ class FieldsController extends MainController
     {
         return response()->json([
             'data' => [
-                'fields' => FieldsResource::collection(Field::all())
+                'fields' => FieldsResource::collection(Field::with('fieldValue')->get())
             ]
         ],200);
     }

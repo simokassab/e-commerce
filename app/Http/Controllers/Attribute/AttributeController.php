@@ -6,6 +6,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Attribute\StoreAttributeRequest;
 use App\Http\Resources\AttributeResource;
 use App\Models\Attribute\Attribute;
+use App\Models\Attribute\AttributeValue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,10 +25,18 @@ class AttributeController extends MainController
      */
     public function index()
     {
+<<<<<<< HEAD
         $data = ['attributes' => AttributeResource::collection(  Attribute::all())];
 
         return $this->successResponse($data);
 
+=======
+        return response()->json([
+            'data' => [
+                'attributes' => AttributeResource::collection(  Attribute::with('attributeValues')->get())
+            ]
+        ],200);
+>>>>>>> origin/FixingRelations
     }
 
     /**

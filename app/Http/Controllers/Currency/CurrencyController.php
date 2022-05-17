@@ -23,9 +23,10 @@ class CurrencyController extends MainController
      */
     public function index()
     {
+
         return response()->json([
             'data' => [
-                'currncies' =>  CurrencyResource::collection(Currency::all()),
+                'currncies' =>  CurrencyResource::collection(Currency::with('currencyHistory')->get()),
             ]
         ],200);
     }

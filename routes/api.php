@@ -6,7 +6,6 @@ use App\Http\Controllers\Currency\CurrencyController;
 use App\Http\Controllers\Fields\FieldsController;
 use App\Http\Controllers\Fields\FieldValueController;
 use App\Http\Controllers\Label\LabelController;
-use App\Http\Controllers\Labls\LablsController;
 use App\Http\Controllers\Language\LanguageController;
 use App\Http\Controllers\RolesAndPermissions\RolesController;
 use App\Http\Controllers\Settings\SettingsController;
@@ -39,15 +38,14 @@ Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function 
 
     //here goes all the routes inside teh dashboard
     Route::apiResource('roles',RolesController::class);
+    Route::apiResource('tag',TagController::class);
     Route::apiResource('attribute',AttributeController::class);
     Route::apiResource('language',LanguageController::class);
     Route::apiResource('fields',FieldsController::class);
     Route::apiResource('field-value',FieldValueController::class);
     Route::apiResource('settings',SettingsController::class);
-    Route::apiResource('labels',LabelController::class);
     Route::apiResource('currency',CurrencyController::class);
     Route::apiResource('labels',LabelController::class);
-    Route::apiResource('tag',TagController::class);
     Route::apiResource('unit',UnitController::class);
     Route::apiResource('country',CountryController::class);
 
