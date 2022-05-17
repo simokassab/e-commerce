@@ -21,7 +21,7 @@ class MainController extends Controller
         if(isset($defaultPermissionsFromChild[$routeAction])){
             $routeAction = $defaultPermissionsFromChild[$routeAction];
         }
-//        abort_if(!auth()->user()->hasPermissionTo($routeAction),401,'you are not authorized for this action');
+        abort_if(!auth()->user()->hasPermissionTo($routeAction),401,'you are not authorized for this action');
 
 //        $this->defaultLocalize = config('app.locale');
 
