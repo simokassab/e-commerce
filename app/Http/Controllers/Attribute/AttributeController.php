@@ -12,12 +12,6 @@ use Illuminate\Support\Facades\Route;
 
 class AttributeController extends MainController
 {
-    public function __construct($defaultPermissionsFromChild = null)
-    {
-    dd(basename(Route::currentRouteAction()));
-    parent::__construct($defaultPermissionsFromChild);
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -25,18 +19,10 @@ class AttributeController extends MainController
      */
     public function index()
     {
-<<<<<<< HEAD
         $data = ['attributes' => AttributeResource::collection(  Attribute::all())];
 
         return $this->successResponse($data);
 
-=======
-        return response()->json([
-            'data' => [
-                'attributes' => AttributeResource::collection(  Attribute::with('attributeValues')->get())
-            ]
-        ],200);
->>>>>>> origin/FixingRelations
     }
 
     /**
@@ -60,7 +46,6 @@ class AttributeController extends MainController
         $attribute=new Attribute();
         $attribute->title=json_encode($request->title);
 
-
         if(!$attribute->save()){
             $data = [
                 'message' => 'The attribute was not created ! please try again later',
@@ -68,13 +53,11 @@ class AttributeController extends MainController
             return $this->errorResponse($data);
         }
 
-        return response()->json([
-            'data' => [
-                'message' => 'attribute created successfully',
-                'attribute' => new AttributeResource($attribute)
-            ]
+        return $this->successResponse([
+            'message' => 'attribute created successfully',
+            'attribute' => new AttributeResource($attribute)
+        ]);
 
-        ],201);
     }
 
     /**
@@ -85,11 +68,7 @@ class AttributeController extends MainController
      */
     public function show(Attribute $attribute)
     {
-        return response()->json([
-            'data' => [
-                'attribute' =>  new AttributeResource($attribute),
-            ]
-        ],200);
+        return $this->successResponse(['attribute' =>  new AttributeResource($attribute)]);
     }
 
     /**
@@ -116,20 +95,16 @@ class AttributeController extends MainController
 
 
         if(!$attribute->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The attribute was not updated ! please try again later',
-                ]
-                ],512);
+            return $this->errorResponse([
+                'message' => 'The attribute was not updated ! please try again later',
+            ]);
         }
 
-        return response()->json([
-            'data' => [
-                'message' => 'attribute updated successfully',
-                'attribute' => new AttributeResource($attribute)
-            ]
+        return $this->successResponse([
+            'message' => 'attribute updated successfully',
+            'attribute' => new AttributeResource($attribute)
+        ]);
 
-        ],201);
     }
 
     /**

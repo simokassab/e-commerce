@@ -24,8 +24,6 @@ class MainController extends Controller
             $this->errorResponse(['message' => 'you are un authorized for this action'],401);
         }
 
-        abort_if(!auth()->user()->hasPermissionTo($routeAction),401,'you are not authorized for this action');
-
 //        $this->defaultLocalize = config('app.locale');
 
 
@@ -35,19 +33,19 @@ class MainController extends Controller
 
     }
 
-    protected function successResponse($data, $statusCode= 200){
+    protected function successResponse(Array $data, $statusCode= 200){
         return response()->json([
             'data' => $data
         ],$statusCode);
     }
 
-    protected function errorResponse($data, $statusCode= 500){
+    protected function errorResponse(Array $data, $statusCode= 500){
         return response()->json([
             'data' => $data
         ],$statusCode);
     }
 
-    protected function notFoundResponse($data, $statusCode= 404){
+    protected function notFoundResponse(Array $data, $statusCode= 404){
         return response()->json([
             'data' => $data
         ],$statusCode);
