@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::apiResource('settings',SettingsController::class);
 
 
 Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function (){
@@ -43,7 +44,6 @@ Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function 
     Route::apiResource('language',LanguageController::class);
     Route::apiResource('fields',FieldsController::class);
     Route::apiResource('field-value',FieldValueController::class);
-    Route::apiResource('settings',SettingsController::class);
     Route::apiResource('currency',CurrencyController::class);
     Route::apiResource('labels',LabelController::class);
     Route::apiResource('unit',UnitController::class);

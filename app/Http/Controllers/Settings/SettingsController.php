@@ -12,13 +12,6 @@ use Illuminate\Support\Facades\Route;
 class SettingsController extends MainController
 {
 
-    public function __construct()
-    {
-//        dd(basename(Route::currentRouteAction()));
-
-    }
-
-
     /**
      * Display a listing of the resource.
      *

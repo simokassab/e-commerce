@@ -15,22 +15,24 @@ class MainController extends Controller
 
     public function __construct($defaultPermissionsFromChild = null)
     {
-
         $routeAction = basename(Route::currentRouteAction()); //we got the permission name
 
         if(isset($defaultPermissionsFromChild[$routeAction])){
             $routeAction = $defaultPermissionsFromChild[$routeAction];
         }
+        if(!auth()->user()->hasPermissionTo($routeAction)){
+            $this->errorResponse(['message' => 'you are un authorized for this action'],401);
+        }
+
         abort_if(!auth()->user()->hasPermissionTo($routeAction),401,'you are not authorized for this action');
 
 //        $this->defaultLocalize = config('app.locale');
 
 
-        $route_action = basename(Route::currentRouteAction());
-        if(isset($this->map_permissions[$route_action]))
-            $route_action = $this->map_permissions[$route_action];
-        // if(authorize($route_action))
-        // parent::__construct();
+//        $route_action = basename(Route::currentRouteAction());
+//        if(isset($this->map_permissions[$route_action]))
+//            $route_action = $this->map_permissions[$route_action];
+
     }
 
     protected function successResponse($data, $statusCode= 200){
