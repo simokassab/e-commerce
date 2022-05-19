@@ -10,10 +10,12 @@ use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyHistory;
 use App\Services\Currency\CurrencyService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 
 class CurrencyController extends MainController
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -21,9 +23,10 @@ class CurrencyController extends MainController
      */
     public function index()
     {
+
         return response()->json([
             'data' => [
-                'currncies' =>  CurrencyResource::collection(Currency::all()),
+                'currncies' =>  CurrencyResource::collection(Currency::with('currencyHistory')->get()),
             ]
         ],200);
     }

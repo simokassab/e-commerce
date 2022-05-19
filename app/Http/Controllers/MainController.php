@@ -8,30 +8,34 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Route;
+use PhpParser\Node\Expr\FuncCall;
 
 
 class MainController extends Controller
 {
-    protected $defaultLocalize;
-    protected $map_permissions = [];
-    protected $SUCCESS_RESPONSE_CODE =200;
+    protected $mapPermissions = [];
 
-    public function __construct()
+    public function __construct($defaultPermissionsFromChild = null)
     {
-        $route_action = basename(Route::currentRouteAction());
-        if(isset($this->map_permissions[$route_action]))
-            $route_action = $this->map_permissions[$route_action];
-    //        if(authorize($route_action)){
-    //
-    //        }
+        $routeAction = basename(Route::currentRouteAction()); //we got the permission name
+
+        if(isset($defaultPermissionsFromChild[$routeAction])){
+            $routeAction = $defaultPermissionsFromChild[$routeAction];
+        }
+        // if(!auth()->user()->hasPermissionTo($routeAction)){
+        //     $this->errorResponse(['message' => 'you are un authorized for this action'],401);
+        // }
 
 //        $this->defaultLocalize = config('app.locale');
 
 
-//        parent::__construct();
+//        $route_action = basename(Route::currentRouteAction());
+//        if(isset($this->map_permissions[$route_action]))
+//            $route_action = $this->map_permissions[$route_action];
+
     }
 
-    protected function successResponse($data, $statusCode= 200){
+    protected function successResponse(Array $data, $statusCode= 200){
         return response()->json([
             'data' => $data
         ],$statusCode);
@@ -45,4 +49,19 @@ class MainController extends Controller
         return App::getLocale();
 
     }
+    protected function errorResponse(Array $data, $statusCode= 500){
+        return response()->json([
+            'data' => $data
+        ],$statusCode);
+    }
+
+    protected function notFoundResponse(Array $data, $statusCode= 404){
+        return response()->json([
+            'data' => $data
+        ],$statusCode);
+    }
+
+
+
+
 }

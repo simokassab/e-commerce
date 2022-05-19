@@ -7,9 +7,11 @@ use App\Http\Requests\Setting\StoreSettingRequest;
 use App\Http\Resources\SettingsResource;
 use App\Models\Settings\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class SettingsController extends MainController
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -17,12 +19,10 @@ class SettingsController extends MainController
      */
     public function index()
     {
-        return response()->json([
-            'data' => [
-                'settings' => SettingsResource::collection( cache()->remember( 'settings',config('cache.default_cache_time'),fn() => Setting::all() ) ),
-            ]
-        ],200);
-
+        $data = [
+            'settings' => SettingsResource::collection( cache()->remember( 'settings',config('cache.default_cache_time'),fn() => Setting::all() ) ),
+        ];
+        return $this->successResponse($data);
     }
 
     /**
@@ -51,11 +51,7 @@ class SettingsController extends MainController
 
 
         if(!$settings->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The settings was not created! please try again later',
-                ]
-            ],512);
+            return $this->errorResponse(['message' => 'The settings was not created! please try again later']);
         }
 
         return response()->json([

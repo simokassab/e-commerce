@@ -18,8 +18,7 @@ class CurrencyHistoryResource extends JsonResource
             'data' => [
                 'id' => $this->id,
                 'rate' => $this->rate,
-                // 'currency' => new CurrencyResource($this->currency),
-                'currency' =>$this->currency,
+                'currency' => new CurrencyResource($this->currency),
             ]
         ];
     }

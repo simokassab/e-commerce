@@ -13,8 +13,8 @@ class Attribute extends MainModel
     protected $table='attributes';
     protected $guard_name = 'sanctum';
 
-    public function attributeValue(){
-        return $this->hasMany(AttributeValue::class,'attribute_value_id');
+    public function attributeValues(){
+        return $this->hasMany(AttributeValue::class,'attribute_id','id');
     }
 
     public function product(){

@@ -7,9 +7,12 @@ use App\Http\Requests\Tag\StoreTag;
 use App\Http\Resources\TagResource;
 use App\Models\Tag\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class TagController extends MainController
 {
+
+
     /**
      * Display a listing of the resource.
      *
