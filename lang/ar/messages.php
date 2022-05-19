@@ -1,20 +1,20 @@
 <?php
 
-$name_value=':name';
+$nameValue=':name';
 
 return [
 
     'success' => [
-        'create' =>  'تم إضافة '.$name_value.' بنجاح',
-        'update' => 'تم تعديل '.$name_value.' بنجاح',
-        'delete' => 'تم حذف '.$name_value.' بنجاح',
+        'create' =>  'تم إضافة '.$nameValue.' بنجاح',
+        'update' => 'تم تعديل '.$nameValue.' بنجاح',
+        'delete' => 'تم حذف '.$nameValue.' بنجاح',
         'index' => ''
     ],
 
     'failed' => [
-        'create' => 'لم يتم إضافة '.$name_value.' | حاول مرة أخرى',
-        'update' => 'لم يتم تعديل '.$name_value.'  | حاول مرة أخرى',
-        'delete' => 'لم يتم حذف '.$name_value.'  | حاول مرة أخرى',
+        'create' => 'لم يتم إضافة '.$nameValue.' | حاول مرة أخرى',
+        'update' => 'لم يتم تعديل '.$nameValue.'  | حاول مرة أخرى',
+        'delete' => 'لم يتم حذف '.$nameValue.'  | حاول مرة أخرى',
         'index' => ''
     ],
    

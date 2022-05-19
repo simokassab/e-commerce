@@ -1,19 +1,20 @@
 <?php
 
-$name_value=':name';
+$nameValue=':name';
+
 return [
 
     'success' => [
-        'create' =>  'The '.$name_value.' was created successfully',
-        'update' => 'The '.$name_value.' was updated successfully',
-        'delete' => 'The '.$name_value.' was deleted successfully',
+        'create' =>  'The :name was created successfully',
+        'update' => 'The '.$nameValue.' was updated successfully',
+        'delete' => 'The '.$nameValue.' was deleted successfully',
         'index' => ''
     ],
     
     'failed' => [
-        'create' => 'The '.$name_value.' was not created ! please try again later',
-        'update' => 'The '.$name_value.' was not updated ! please try again later',
-        'delete' => 'The '.$name_value.' was not deleted ! please try again later',
+        'create' => 'The '.$nameValue.' was not created ! please try again later',
+        'update' => 'The '.$nameValue.' was not updated ! please try again later',
+        'delete' => 'The '.$nameValue.' was not deleted ! please try again later',
         'index' => ''
     ],
     

@@ -11,6 +11,8 @@ use App\Models\Field\FieldValue;
 use App\Models\Tag\Tag;
 use App\Models\Discount\Discount;
 use App\Models\Brand\Brand;
+use App\Models\Product\Product;
+
 class Category extends MainModel
 {
     use HasFactory;
@@ -48,8 +50,8 @@ class Category extends MainModel
         return $this->belongsToMany(Brand::class,'discounts_entities','category_id','brand_id');
     }
 
-    public function productCategory(){
-        return $this->hasMany(Product::class,'product_id');
+    public function products(){
+        return $this->hasMany(Product::class,'id','product_id');
 
     }
 }

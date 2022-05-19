@@ -15,7 +15,6 @@ class CategoryResource extends JsonResource
     public function toArray($request)
     {
 
-        $data=$this->whenLoaded('parent','children','label','fields','fieldValue','tags','discount','brand','productCategory');
 
         return [
             'id' => $this->id,
@@ -32,13 +31,13 @@ class CategoryResource extends JsonResource
             'is_disabled' => $this->is_disabled,
             'parent' => new CategoryResource($this->whenLoaded('parent')),
             'children' => self::collection( $this->whenLoaded('children')),
-            'labels' => new CategoryResource($this->whenLoaded('label')),
-            'fields' => new CategoryResource($this->whenLoaded('fields')),
-            'fieldsValues' => new CategoryResource($this->whenLoaded('fieldValue')),
-            'tags' => new CategoryResource($this->whenLoaded('tags')),
-            'discounts' => new CategoryResource($this->whenLoaded('discount')),
-            'brands' => new CategoryResource($this->whenLoaded('brand')),
-            'products' => new CategoryResource($this->whenLoaded('productCategory')),
+            'labels' => LabelsResource::collection($this->whenLoaded('label')),
+            'fields' => FieldsResource::collection($this->whenLoaded('fields')),
+            'fieldsValues' => FieldsValueResource::collection($this->whenLoaded('fieldValue')),
+            'tags' => TagResource::collection($this->whenLoaded('tags')),
+            // 'discounts' => new discount($this->whenLoaded('discount')),
+            // 'brands' => new CategoryResource($this->whenLoaded('brand')),
+            // 'products' => new CategoryResource($this->whenLoaded('products')),
 
              ];
     }

@@ -18,7 +18,8 @@ class CategoryController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['categories' => CategoryResource::collection(Category::with('parent','children','label','fields','fieldValue','tags','discount','brand','productCategory')->get())]);
+        return $this->successResponse(['categories' => CategoryResource::collection( Category::with('parent','children','label','fields','fieldValue','tags','discount','brand','products')->get() )]);
+
     }
 
     /**
@@ -55,11 +56,9 @@ class CategoryController extends MainController
         if(!$category->save())
             return $this->errorResponse([__('messages.failed.create'),['name' => __('objects.category')]]);
 
-        return $this->successResponse([__('messages.success.create'),['name' => __('objects.category')],
-            'category' =>  new CategoryResource($category)
-        ]);
-
-
+        return $this->successResponse([__('messages.success.create',['name'=>__('objects.category')]),
+        'category' =>  new CategoryResource($category)
+    ]);
 
     }
 
@@ -108,11 +107,12 @@ class CategoryController extends MainController
         $category->is_disabled= $request->is_disabled;
 
         if(!$category->save())
-            return $this->errorResponse([__('messages.failed.update'),['name' => __('objects.category')]]);
+              return $this->errorResponse([__('messages.failed.update'),['name' => __('objects.category')]]);
 
-        return $this->successResponse([__('messages.success.update'),['name' => __('objects.category')],
-            'category' =>  new CategoryResource($category)
-        ]);
+        return $this->successResponse([__('messages.success.update',['name'=>__('objects.category')]),
+        'category' =>  new CategoryResource($category)
+    ]);
+
 
 
     }
@@ -126,11 +126,11 @@ class CategoryController extends MainController
     public function destroy(Category $category)
     {
         if(!$category->delete())
-            return $this->errorResponse([__('messages.failed.delete'),['name' => __('objects.category')]]);
+             return $this->errorResponse([__('messages.failed.delete'),['name' => __('objects.category')]]);
 
-            return $this->successResponse([__('messages.success.delete'),['name' => __('objects.category')],
-                'category' =>  new CategoryResource($category)
-            ]);
+        return $this->successResponse([__('messages.success.delete',['name'=>__('objects.category')]),
+        'category' =>  new CategoryResource($category)
+    ]);
 
 
     }

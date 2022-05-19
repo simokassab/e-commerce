@@ -33,7 +33,7 @@ class Product extends MainModel
     }
 
     public function cateogry(){
-        return $this->belongsTo(Category::class,'category_id');
+        return $this->hasMany(Category::class,'category_id');
     }
     public function unit(){
         return $this->belongsTo(Unit::class,'unit_id');
@@ -61,7 +61,7 @@ class Product extends MainModel
         return $this->hasMany(ProductImage::class,'product_id');
     }
 
-    public function productCategory(){
+    public function defaultCategory(){
         return $this->hasMany(Category::class,'category_id');
 
     }
