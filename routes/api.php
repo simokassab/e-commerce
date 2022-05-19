@@ -7,6 +7,7 @@ use App\Http\Controllers\Fields\FieldsController;
 use App\Http\Controllers\Fields\FieldValueController;
 use App\Http\Controllers\Label\LabelController;
 use App\Http\Controllers\Language\LanguageController;
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\RolesAndPermissions\RolesController;
 use App\Http\Controllers\Settings\SettingsController;
 use App\Http\Controllers\Tag\TagController;
@@ -32,13 +33,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('settings',SettingsController::class);
+Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localization'] ],function (){
 
-
-Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function (){
-
-    //here goes all the routes inside teh dashboard
+    //here goes all the routes inside the dashboard
     Route::apiResource('roles',RolesController::class);
+    Route::apiResource('settings',SettingsController::class);
     Route::apiResource('tag',TagController::class);
     Route::apiResource('attribute',AttributeController::class);
     Route::apiResource('language',LanguageController::class);
@@ -46,10 +45,11 @@ Route::group([ 'prefix' => 'dashboard','middleware' => 'auth:sanctum'],function 
     Route::apiResource('field-value',FieldValueController::class);
     Route::apiResource('currency',CurrencyController::class);
     Route::apiResource('labels',LabelController::class);
-    Route::apiResource('unit',UnitController::class);
     Route::apiResource('country',CountryController::class);
 
+    //change language for dashboard
+    Route::put('change-language/{lang}',[MainController::class,'setLang'])->middleware('localization');
+
+
+
 });
-
-
-

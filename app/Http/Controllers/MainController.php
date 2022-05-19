@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Route;
 use PhpParser\Node\Expr\FuncCall;
 
@@ -33,19 +35,27 @@ class MainController extends Controller
 
     }
 
-    protected function successResponse($data, $statusCode= 200){
+    protected function successResponse(Array $data, $statusCode= 200){
         return response()->json([
             'data' => $data
         ],$statusCode);
     }
 
-    protected function errorResponse($data, $statusCode= 500){
+    public function setLang($locale){
+
+        session(['locale' => $locale]);
+        App::setLocale($locale);
+
+        return App::getLocale();
+
+    }
+    protected function errorResponse(Array $data, $statusCode= 500){
         return response()->json([
             'data' => $data
         ],$statusCode);
     }
 
-    protected function notFoundResponse($data, $statusCode= 404){
+    protected function notFoundResponse(Array $data, $statusCode= 404){
         return response()->json([
             'data' => $data
         ],$statusCode);

@@ -19,12 +19,10 @@ class SettingsController extends MainController
      */
     public function index()
     {
-        return response()->json([
-            'data' => [
-                'settings' => SettingsResource::collection( cache()->remember( 'settings',config('cache.default_cache_time'),fn() => Setting::all() ) ),
-            ]
-        ],200);
-
+        $data = [
+            'settings' => SettingsResource::collection( cache()->remember( 'settings',config('cache.default_cache_time'),fn() => Setting::all() ) ),
+        ];
+        return $this->successResponse($data);
     }
 
     /**
@@ -53,11 +51,7 @@ class SettingsController extends MainController
 
 
         if(!$settings->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The settings was not created! please try again later',
-                ]
-            ],512);
+            return $this->errorResponse(['message' => 'The settings was not created! please try again later']);
         }
 
         return response()->json([
