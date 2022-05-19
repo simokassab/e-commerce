@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Route;
 
 
@@ -35,4 +37,12 @@ class MainController extends Controller
         ],$statusCode);
     }
 
+    public function setLang($locale){
+
+        session(['locale' => $locale]);
+        App::setLocale($locale);
+
+        return App::getLocale();
+
+    }
 }
