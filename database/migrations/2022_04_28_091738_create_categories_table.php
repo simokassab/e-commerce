@@ -18,13 +18,13 @@ return new class extends Migration
             $table->json('name');
             $table->string('code');
             $table->string('image')->nullable();
-            $table->string('icon');
+            $table->string('icon')->default('default');
             $table->unsignedBigInteger('parent_id')->nullable();//foregin key in another migration
             $table->string('slug')->unique();
             $table->json('title');
             $table->json('description');
             $table->json('keyword');
-            $table->integer('sort');
+            $table->integer('sort')->nullable();
             $table->boolean('is_disabled')->default(0);
             $table->timestamps();
         });
