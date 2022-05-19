@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Attribute\AttributeController;
+use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Country\CountryController;
 use App\Http\Controllers\Currency\CurrencyController;
 use App\Http\Controllers\Fields\FieldsController;
@@ -46,6 +47,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::apiResource('currency',CurrencyController::class);
     Route::apiResource('labels',LabelController::class);
     Route::apiResource('country',CountryController::class);
+    Route::apiResource('category',CategoryController::class);
 
     //change language for dashboard
     Route::put('change-language/{lang}',[MainController::class,'setLang'])->middleware('localization');

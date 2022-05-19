@@ -18,7 +18,7 @@ class CategoryController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['categories' => CategoryResource::collection(Category::with('currencyHistory')->get())]);
+        return $this->successResponse(['categories' => CategoryResource::collection(Category::with('parent','children','label','fields','fieldValue','tags','discount','brand','productCategory')->get())]);
     }
 
     /**
@@ -40,7 +40,27 @@ class CategoryController extends MainController
     public function store(StoreCategoryRequest $request)
     {
         $category=new Category();
-        $category->
+        $category->name= json_encode($request->name);
+        $category->code= $request->code;
+        $category->image= $request->image;
+        $category->icon= $request->icon;
+        $category->parent_id= $request->parent_id;
+        $category->slug= $request->slug;
+        $category->title= json_encode($request->title);
+        $category->description= json_encode($request->description);
+        $category->keyword= json_encode($request->keyword);
+        $category->sort= $request->sort;
+        $category->is_disabled= $request->is_disabled;
+
+        if(!$category->save())
+            return $this->errorResponse([__('messages.failed.create'),['name' => __('objects.category')]]);
+
+        return $this->successResponse([__('messages.success.create'),['name' => __('objects.category')],
+            'category' =>  new CategoryResource($category)
+        ]);
+
+
+
     }
 
     /**
@@ -49,9 +69,10 @@ class CategoryController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        //
+        return $this->successResponse(['category' =>  new CategoryResource($category)]);
+
     }
 
     /**
@@ -72,9 +93,28 @@ class CategoryController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $category->name= json_encode($request->name);
+        $category->code= $request->code;
+        $category->image= $request->image;
+        $category->icon= $request->icon;
+        $category->parent_id= $request->parent_id;
+        $category->slug= $request->slug;
+        $category->title= json_encode($request->title);
+        $category->description= json_encode($request->description);
+        $category->keyword= json_encode($request->keyword);
+        $category->sort= $request->sort;
+        $category->is_disabled= $request->is_disabled;
+
+        if(!$category->save())
+            return $this->errorResponse([__('messages.failed.update'),['name' => __('objects.category')]]);
+
+        return $this->successResponse([__('messages.success.update'),['name' => __('objects.category')],
+            'category' =>  new CategoryResource($category)
+        ]);
+
+
     }
 
     /**
@@ -83,8 +123,16 @@ class CategoryController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        if(!$category->delete())
+            return $this->errorResponse([__('messages.failed.delete'),['name' => __('objects.category')]]);
+
+            return $this->successResponse([__('messages.success.delete'),['name' => __('objects.category')],
+                'category' =>  new CategoryResource($category)
+            ]);
+
+
     }
 }
+

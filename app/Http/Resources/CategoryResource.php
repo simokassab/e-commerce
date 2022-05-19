@@ -31,8 +31,15 @@ class CategoryResource extends JsonResource
             'sort' => $this->sort,
             'is_disabled' => $this->is_disabled,
             'parent' => new CategoryResource($this->whenLoaded('parent')),
-            'children' => self::collection( $this->whenLoaded('parent')),
-            'label' => new CategoryResource($this->whenLoaded('parent')),
-        ];
+            'children' => self::collection( $this->whenLoaded('children')),
+            'labels' => new CategoryResource($this->whenLoaded('label')),
+            'fields' => new CategoryResource($this->whenLoaded('fields')),
+            'fieldsValues' => new CategoryResource($this->whenLoaded('fieldValue')),
+            'tags' => new CategoryResource($this->whenLoaded('tags')),
+            'discounts' => new CategoryResource($this->whenLoaded('discount')),
+            'brands' => new CategoryResource($this->whenLoaded('brand')),
+            'products' => new CategoryResource($this->whenLoaded('productCategory')),
+
+             ];
     }
 }

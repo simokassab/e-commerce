@@ -15,7 +15,8 @@ return [
     'setting' => 'setting',
     'tag' => 'tag',
     'unit' => 'unit',
-
+    'category' => 'category',
+    
     
 
 ];
