@@ -7,6 +7,7 @@ use App\Http\Requests\Countries\StoreCountry;
 use App\Http\Resources\CountryResource;
 use App\Models\Country\Country;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 class CountryController extends MainController
@@ -49,6 +50,7 @@ class CountryController extends MainController
      */
     public function store(StoreCountry $request)
     {
+
     //    return  $country = Country::create($request->all());
 
         $country = new Country();
@@ -61,16 +63,18 @@ class CountryController extends MainController
         if(!$country->save()){
             return response()->json([
                 'data' => [
-                    'message' => 'The country was not created ! please try again later',
+                    'message' => __('messages.Failed_Create_Country'),
                 ]
             ],512);
         }
 
+
         return response()->json([
             'data' => [
-                'message' => 'country created successfully',
+                'message' => __('messages.Success', ['name' => __('objects.country') ]),
                 'country' => new CountryResource($country)
             ]
+
 
         ],201);
 
@@ -125,14 +129,14 @@ class CountryController extends MainController
         if(!$country->save()){
             return response()->json([
                 'data' => [
-                    'message' => 'The country was not updated ! please try again later',
+                    'message' => __('messages.Failed_Update_Country'),
                 ]
             ],512);
         }
 
         return response()->json([
             'data' => [
-                'message' => 'country updated successfully',
+                'message' => __('messages.Success_Update_Country'),
                 'country' => new CountryResource($country)
             ]
 
@@ -150,14 +154,14 @@ class CountryController extends MainController
         if(!$country->delete()){
             return response()->json([
                 'data' => [
-                    'message' => 'The country was not deleted ! please try again later',
+                    'message' => __('messages.Failed_Delete_Country'),
                 ]
             ],512);
         }
 
         return response()->json([
             'data' => [
-                'message' => 'country deleted successfully',
+                'message' => __('messages.Success_Delete_Country'),
                 'country' => new CountryResource($country)
             ]
 

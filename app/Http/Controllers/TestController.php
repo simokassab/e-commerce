@@ -29,6 +29,7 @@ class TestController extends MainController
     }
 
     public function test(){
-
+        CustomRole::find(1)->hasPermissionTo('CountryController@store');
+        return "hello";
     }
 }
