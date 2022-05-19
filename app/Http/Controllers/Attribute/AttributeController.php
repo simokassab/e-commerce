@@ -25,18 +25,11 @@ class AttributeController extends MainController
      */
     public function index()
     {
-<<<<<<< HEAD
-        $data = ['attributes' => AttributeResource::collection(  Attribute::all())];
-
-        return $this->successResponse($data);
-
-=======
         return response()->json([
             'data' => [
                 'attributes' => AttributeResource::collection(  Attribute::with('attributeValues')->get())
             ]
         ],200);
->>>>>>> origin/FixingRelations
     }
 
     /**
