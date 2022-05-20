@@ -16,6 +16,7 @@ return [
     'tag' => 'tag',
     'unit' => 'unit',
     'category' => 'category',
+    'brand' => 'brand',
     
     
 
