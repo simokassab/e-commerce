@@ -126,15 +126,13 @@ class CategoryController extends MainController
     public function destroy(Category $category)
     {
         if(!$category->delete())
-<<<<<<< HEAD
-              return $this->errorResponse([__('messages.failed.delete',['name' => __('objects.category')])]);
-=======
-             return $this->errorResponse(['message' => __('messages.failed.delete'),['name' => __('objects.category')]]);
->>>>>>> category
+            return $this->errorResponse(['message' => __('messages.failed.delete'),['name' => __('objects.category')]]);
 
-        return $this->successResponse(['message' => __('messages.success.delete',['name'=>__('objects.category')]),
-        'category' =>  new CategoryResource($category)
-    ]);
+
+        return $this->successResponse([
+            'message' => __('messages.success.delete',['name'=>__('objects.category')]),
+            'category' =>  new CategoryResource($category)
+        ]);
 
 
     }
