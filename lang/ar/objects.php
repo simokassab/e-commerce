@@ -18,5 +18,6 @@ return [
     'category' => 'الفئة',
     'brand' => 'العلامة التجارية',
     'discount' => 'الخصم',
+    'discountEntity' => 'عنوان الخصم',
 
 ];

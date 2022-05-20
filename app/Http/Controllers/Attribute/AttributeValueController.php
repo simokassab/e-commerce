@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 
 class AttributeValueController extends MainController
 {
+    const OBJECT_NAME = 'objects.attributeValue';
+
     /**
      * Display a listing of the resource.
      *
@@ -18,11 +20,8 @@ class AttributeValueController extends MainController
      */
     public function index()
     {
-        return response()->json([
-            'data' => [
-                'attribute_value' => AttributeValueResource::collection(AttributeValue::all())
-            ]
-        ],200);
+        return $this->successResponse(['attribute_value' => AttributeValueResource::collection(AttributeValue::all())]);
+
     }
 
     /**
@@ -43,26 +42,17 @@ class AttributeValueController extends MainController
      */
     public function store(StoreAttributeValueRequest $request)
     {
-        $attribute_value=new AttributeValue();
-        $attribute_value->attribute_id = $request->attribute_id;
-        $attribute_value->value = json_encode($request->value);
+        $attributeValue=new AttributeValue();
+        $attributeValue->attribute_id = $request->attribute_id;
+        $attributeValue->value = json_encode($request->value);
 
 
-        if(!$attribute_value->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The attribute value was not created ! please try again later',
-                ]
-            ],512);
-        }
+        if(!$attributeValue->save())
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'attribute value created successfully',
-                'attribute_value' => new AttributeValueResource($attribute_value)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                'attribute_value' => new AttributeValueResource($attributeValue)
+            ]);
     }
 
     /**
@@ -71,13 +61,10 @@ class AttributeValueController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(AttributeValue $attribute_value)
+    public function show(AttributeValue $attributeValue)
     {
-        return response()->json([
-            'data' => [
-                'attribute_value' =>  new AttributeValueResource($attribute_value),
-            ]
-        ],200);
+        return $this->successResponse(['attribute_value' => new AttributeValueResource($attributeValue)]);
+
     }
 
     /**
@@ -98,27 +85,18 @@ class AttributeValueController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AttributeValue $attribute_value)
+    public function update(Request $request, AttributeValue $attributeValue)
     {
-        $attribute_value->attribute_id = $request->attribute_id;
-        $attribute_value->value = json_encode($request->value);
+        $attributeValue->attribute_id = $request->attribute_id;
+        $attributeValue->value = json_encode($request->value);
 
 
-        if(!$attribute_value->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The attribute value was not updated ! please try again later',
-                ]
-            ],512);
-        }
+        if(!$attributeValue->save())
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'attribute value updated successfully',
-                'attribute_value' => new AttributeValueResource($attribute_value)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+                'attribute_value' => new AttributeValueResource($attributeValue)
+            ]);
     }
 
     /**
@@ -127,22 +105,13 @@ class AttributeValueController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AttributeValue $attribute_value)
+    public function destroy(AttributeValue $attributeValue)
     {
-        if(!$attribute_value->delete()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The attribute value was not deleted ! please try again later',
-                ]
-            ],512);
-        }
+        if(!$attributeValue->delete())
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'attribute value deleted successfully',
-                'attribute_value' => new AttributeValueResource($attribute_value)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+                'attribute_value' => new AttributeValueResource($attributeValue)
+            ]);
     }
 }

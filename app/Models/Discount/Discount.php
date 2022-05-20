@@ -24,4 +24,5 @@ class Discount extends MainModel
     public function brand(){
         return $this->belongsToMany(Brand::class,'discounts_entities','discount_id','brand_id');
     }
+    
 }

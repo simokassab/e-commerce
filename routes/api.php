@@ -6,6 +6,7 @@ use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Country\CountryController;
 use App\Http\Controllers\Currency\CurrencyController;
 use App\Http\Controllers\Discount\DiscountController;
+use App\Http\Controllers\Discount\DiscountEntityController;
 use App\Http\Controllers\Fields\FieldsController;
 use App\Http\Controllers\Fields\FieldValueController;
 use App\Http\Controllers\Label\LabelController;
@@ -52,6 +53,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::apiResource('category',CategoryController::class);
     Route::apiResource('brand',BrandController::class);
     Route::apiResource('discount',DiscountController::class);
+    Route::apiResource('discount-entity',DiscountEntityController::class);
 
     //change language for dashboard and get the dashborad translated objects
     Route::put('change-language/{lang}',[LanguageController::class,'setLang'])->middleware('localization');

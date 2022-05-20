@@ -42,12 +42,12 @@ class FieldValueController extends MainController
      */
     public function store(StoreFieldsValueRequest $request)
     {
-        $field_value=new FieldValue();
-        $field_value->fields_id = $request->fields_id;
-        $field_value->value = json_encode($request->value);
+        $fieldValue=new FieldValue();
+        $fieldValue->fields_id = $request->fields_id;
+        $fieldValue->value = json_encode($request->value);
 
 
-        if(!$field_value->save()){
+        if(! $fieldValue->save()){
             return response()->json([
                 'data' => [
                     'message' => 'The field value was not created ! please try again later',
@@ -58,7 +58,7 @@ class FieldValueController extends MainController
         return response()->json([
             'data' => [
                 'message' => 'field value created successfully',
-                'field_value' => new FieldsValueResource($field_value)
+                'field_value' => new FieldsValueResource( $fieldValue)
             ]
 
         ],201);
@@ -70,11 +70,11 @@ class FieldValueController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(FieldValue $field_value)
+    public function show(FieldValue $fieldValue)
     {
         return response()->json([
             'data' => [
-                'field_value' =>  new FieldsValueResource($field_value),
+                'field_value' =>  new FieldsValueResource( $fieldValue),
             ]
         ],200);
     }
@@ -94,16 +94,16 @@ class FieldValueController extends MainController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  FieldValue  $field_value
+     * @param  FieldValue  $fieldValue
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FieldValue $field_value)
+    public function update(Request $request, FieldValue $fieldValue)
     {
-        $field_value->fields_id = $request->fields_id;
-        $field_value->value =json_encode($request->value);
+        $fieldValue->fields_id = $request->fields_id;
+        $fieldValue->value =json_encode($request->value);
 
 
-        if(!$field_value->save()){
+        if(! $fieldValue->save()){
             return response()->json([
                 'data' => [
                     'message' => 'The field value was not updated ! please try again later',
@@ -114,7 +114,7 @@ class FieldValueController extends MainController
         return response()->json([
             'data' => [
                 'message' => 'field value updated successfully',
-                'field_value' => new FieldsValueResource($field_value)
+                'field_value' => new FieldsValueResource( $fieldValue)
             ]
 
         ],201);
@@ -123,12 +123,12 @@ class FieldValueController extends MainController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  FieldValue  $field_value
+     * @param  FieldValue  $fieldValue
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FieldValue $field_value)
+    public function destroy(FieldValue $fieldValue)
     {
-        if(!$field_value->delete()){
+        if(! $fieldValue->delete()){
             return response()->json([
                 'data' => [
                     'message' => 'The field value was not deleted ! please try again later',
@@ -139,7 +139,7 @@ class FieldValueController extends MainController
         return response()->json([
             'data' => [
                 'message' => 'field value deleted successfully',
-                'field_value' => new FieldsValueResource($field_value)
+                'field_value' => new FieldsValueResource( $fieldValue)
             ]
 
         ],201);
