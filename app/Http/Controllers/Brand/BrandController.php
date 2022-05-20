@@ -50,9 +50,9 @@ class BrandController extends MainController
         $brand->is_disabled = $request->is_disabled;
 
         if(!($brand->save()))
-            return $this->errorResponse([__('messages.failed.create',['name' => __(self::OBJECT_NAME)])]);
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return $this->successResponse([__('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             'brand' => new BrandResource($brand)
         ]);
         }
@@ -98,9 +98,9 @@ class BrandController extends MainController
         $brand->is_disabled = $request->is_disabled;
 
         if(!($brand->save()))
-            return $this->errorResponse([__('messages.failed.update',['name' => __(self::OBJECT_NAME)])]);
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)])]);
 
-        return $this->successResponse([__('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             'brand' => new BrandResource($brand)
         ]);
     }
@@ -114,9 +114,9 @@ class BrandController extends MainController
     public function destroy(Brand $brand)
     {
         if(!$brand->delete())
-           return $this->errorResponse([__('messages.failed.delete',['name' => __(self::OBJECT_NAME)])]);
+           return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])]);
 
-        return $this->successResponse([__('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
             'brand' => new BrandResource($brand)
         ]);
 
