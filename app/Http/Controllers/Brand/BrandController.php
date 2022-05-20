@@ -77,14 +77,14 @@ class BrandController extends MainController
      */
     public function edit($id)
     {
-        //
+
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Brand  $brand
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Brand $brand)
