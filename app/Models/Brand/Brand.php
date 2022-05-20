@@ -39,4 +39,6 @@ class Brand extends MainModel
     public function unit(){
         $this->hasMany(Unit::class,'unit_id');
     }
+
+
 }
