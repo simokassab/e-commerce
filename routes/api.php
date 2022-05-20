@@ -50,7 +50,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::apiResource('category',CategoryController::class);
 
     //change language for dashboard and get the dashborad translated objects
-    Route::put('change-language/{lang}',[LanguageController::class,'setLang'])->middleware('localization');
+    Route::put('change-language/{lang}',[LanguageController::class,'setLanguage'])->middleware('localization');
 
 
 

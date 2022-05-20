@@ -166,12 +166,16 @@ class LanguageController extends MainController
 
         ],201);
     }
-    public function setLang($locale){
+    public function setLanguage($locale){
 
         session(['locale' => $locale]);
         App::setLocale($locale);
 
-     return $this->successResponse([__('objects')]);
+        if(App::getLocale() == $locale){
+            return $this->successResponse([__('objects'),'messages' => __('messages.success.update', ['name' => __('objects.language')] )]);
+        }
+
+        return $this->errorResponse( [ 'messages' => __('messages.failed.update', ['name' => __('objects.language')] )] );
 
     }
     }
