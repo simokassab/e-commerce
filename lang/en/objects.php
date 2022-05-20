@@ -17,7 +17,6 @@ return [
     'unit' => 'unit',
     'category' => 'category',
     'brand' => 'brand',
+    'discount' => 'discount',
     
-    
-
 ];
