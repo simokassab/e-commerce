@@ -7,6 +7,7 @@ use App\Http\Requests\Language\StoreLanguage;
 use App\Http\Resources\LanguageResource;
 use App\Models\Language\Language;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 
@@ -164,6 +165,14 @@ class LanguageController extends MainController
             ]
 
         ],201);
+    }
+    public function setLang($locale){
+
+        session(['locale' => $locale]);
+        App::setLocale($locale);
+
+     return $this->successResponse([__('objects')]);
+
     }
     }
 

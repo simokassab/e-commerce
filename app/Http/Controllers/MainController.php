@@ -41,14 +41,7 @@ class MainController extends Controller
         ],$statusCode);
     }
 
-    public function setLang($locale){
 
-        session(['locale' => $locale]);
-        App::setLocale($locale);
-
-        return App::getLocale();
-
-    }
     protected function errorResponse(Array $data, $statusCode= 500){
         return response()->json([
             'data' => $data
@@ -60,8 +53,5 @@ class MainController extends Controller
             'data' => $data
         ],$statusCode);
     }
-
-
-
 
 }
