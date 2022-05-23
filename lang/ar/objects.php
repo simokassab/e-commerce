@@ -12,7 +12,7 @@ return [
     'language' => 'اللغة',
     'permission' => 'الصلاحية',
     'role' => 'الدور',
-    'setting' => 'الاعدادات',
+    'setting' => 'الإعدادات',
     'tag' => 'الشعار',
     'unit' => 'الوحدة',
     'category' => 'الفئة',

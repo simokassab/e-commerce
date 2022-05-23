@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 class TagController extends MainController
 {
 
+    const OBJECT_NAME = 'objects.tag';
 
     /**
      * Display a listing of the resource.
@@ -20,12 +21,8 @@ class TagController extends MainController
      */
     public function index()
     {
+        return $this->successResponse(['tags' => TagResource::collection(Tag::all())]);
 
-        return response()->json([
-            'data' => [
-                'tag' => TagResource::collection(  Tag::all())
-            ]
-        ],200);
     }
 
     /**
@@ -50,21 +47,12 @@ class TagController extends MainController
         $tag->name=json_encode($request->name);
 
 
-        if(!$tag->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The tag was not created ! please try again later',
-                ]
-                ],512);
-        }
+        if(!$tag->save())
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'tag created successfully',
-                'tag' => new TagResource($tag)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            'tag' => new TagResource($tag)
+        ]);
     }
 
     /**
@@ -75,11 +63,7 @@ class TagController extends MainController
      */
     public function show(Tag $tag)
     {
-        return response()->json([
-            'data' => [
-                'tag' =>  new TagResource($tag),
-            ]
-        ],200);
+        return $this->successResponse(['tag' => new TagResource($tag)]);
     }
 
     /**
@@ -105,21 +89,12 @@ class TagController extends MainController
         $tag->name=json_encode($request->name);
 
 
-        if(!$tag->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The tag was not updated ! please try again later',
-                ]
-                ],512);
-        }
+        if(!$tag->save())
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'tag updated successfully',
-                'tag' => new TagResource($tag)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            'tag' => new TagResource($tag)
+        ]);
     }
 
     /**
@@ -130,21 +105,12 @@ class TagController extends MainController
      */
     public function destroy(Tag $tag)
     {
-        if(!$tag->delete()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The tag was not deleted ! please try again later',
-                ]
-            ],512);
-        }
+        if(!$tag->delete())
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'tag deleted successfully',
-                'tag' => new TagResource($tag)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            'tag' => new TagResource($tag)
+        ]);
     }
     }
 

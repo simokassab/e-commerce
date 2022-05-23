@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 class SettingsController extends MainController
 {
+    const OBJECT_NAME = 'objects.setting';
 
     /**
      * Display a listing of the resource.
@@ -19,10 +20,7 @@ class SettingsController extends MainController
      */
     public function index()
     {
-        $data = [
-            'settings' => SettingsResource::collection( cache()->remember( 'settings',config('cache.default_cache_time'),fn() => Setting::all() ) ),
-        ];
-        return $this->successResponse($data);
+        return $this->successResponse(['settings' => SettingsResource::collection(cache()->remember( 'settings',config('cache.default_cache_time'),fn() => Setting::all() ) )]);
     }
 
     /**
@@ -44,23 +42,18 @@ class SettingsController extends MainController
     public function store(StoreSettingRequest $request)
     {
 
-        $settings=new Setting();
-        $settings->key = json_encode($request->key);
-        $settings->value = ($request->value);
-        $settings->is_developer = ($request->is_developer);
+        $setting=new Setting();
+        $setting->key = json_encode($request->key);
+        $setting->value = ($request->value);
+        $setting->is_developer = ($request->is_developer);
 
 
-        if(!$settings->save()){
-            return $this->errorResponse(['message' => 'The settings was not created! please try again later']);
-        }
+        if(!$setting->save())
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'setting created successfully',
-                'settings' => new SettingsResource($settings)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            'setting' => new SettingsResource($setting)
+        ]);
     }
 
     /**
@@ -71,11 +64,7 @@ class SettingsController extends MainController
      */
     public function show(Setting $setting)
     {
-        return response()->json([
-            'data' => [
-                'setting' =>  new SettingsResource($setting),
-            ]
-        ],200);
+        return $this->successResponse(['setting' => new SettingsResource($setting)]);
     }
 
     /**
@@ -104,21 +93,12 @@ class SettingsController extends MainController
         $setting->is_required = ($request->is_required);
 
 
-        if(!$setting->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The settings was not updated ! please try again later',
-                ]
-            ],512);
-        }
+        if(!$setting->save())
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'settings updated successfully',
-                'settings' => new SettingsResource($setting)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            'setting' => new SettingsResource($setting)
+        ]);
     }
 
     /**
@@ -129,20 +109,12 @@ class SettingsController extends MainController
      */
     public function destroy(Setting $setting)
     {
-        if(!$setting->delete()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The field was not deleted ! please try again later',
-                ]
-            ],512);
-        }
+        if(!$setting->delete())
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'field deleted successfully',
-                'setting' => new SettingsResource($setting),
-            ]
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            'setting' => new SettingsResource($setting)
+        ]);
     }
 
 

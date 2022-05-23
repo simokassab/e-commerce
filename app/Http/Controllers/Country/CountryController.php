@@ -9,9 +9,11 @@ use App\Models\Country\Country;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
+use PHPUnit\Framework\Constraint\Count;
 
 class CountryController extends MainController
 {
+    const OBJECT_NAME = 'objects.country';
 
     public function __construct($defaultPermissionsFromChild = null)
     {
@@ -25,11 +27,7 @@ class CountryController extends MainController
      */
     public function index()
     {
-        return response()->json([
-            'data' => [
-                'countries' =>  CountryResource::collection(Country::all()),
-            ]
-        ],200);
+        return $this->successResponse(['countries' => CountryResource::collection(Country::all())]);
     }
 
     /**
@@ -60,26 +58,12 @@ class CountryController extends MainController
         $country->phone_code = $request->phone_code;
         $country->flag = $request->flag;
 
-        if(!$country->save()){
-            return response()->json([
-                'data' => [
-                    'message' => __('messages.Failed_Create_Country'),
-                ]
-            ],512);
-        }
+        if(!$country->save())
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-
-        return response()->json([
-            'data' => [
-                'message' => __('messages.Success', ['name' => __('objects.country') ]),
-                'country' => new CountryResource($country)
-            ]
-
-
-        ],201);
-
-
-
+        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            'country' => new CountryResource($country)
+        ]);
 
     }
     /**
@@ -90,12 +74,7 @@ class CountryController extends MainController
      */
     public function show(Country $country)
     {
-
-        return response()->json([
-            'data' => [
-                'country' =>  new CountryResource( $country),
-            ]
-        ],200);
+        return $this->successResponse(['country' => new CountryResource($country)]);
 
     }
 
@@ -126,21 +105,12 @@ class CountryController extends MainController
         $country->phone_code = ($request->phone_code);
         $country->flag = ($request->flag);
 
-        if(!$country->save()){
-            return response()->json([
-                'data' => [
-                    'message' => __('messages.Failed_Update_Country'),
-                ]
-            ],512);
-        }
+        if(!$country->save())
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => __('messages.Success_Update_Country'),
-                'country' => new CountryResource($country)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            'country' => new CountryResource($country)
+        ]);
     }
 
     /**
@@ -151,21 +121,12 @@ class CountryController extends MainController
      */
     public function destroy(Country $country)
     {
-        if(!$country->delete()){
-            return response()->json([
-                'data' => [
-                    'message' => __('messages.Failed_Delete_Country'),
-                ]
-            ],512);
-        }
+        if(!$country->delete())
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => __('messages.Success_Delete_Country'),
-                'country' => new CountryResource($country)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            'country' => new CountryResource($country)
+        ]);
 
     }
 }

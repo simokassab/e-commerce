@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 
 class FieldValueController extends MainController
 {
+    const OBJECT_NAME = 'objects.fieldValue';
+
     /**
      * Display a listing of the resource.
      *
@@ -17,11 +19,7 @@ class FieldValueController extends MainController
      */
     public function index()
     {
-        return response()->json([
-            'data' => [
-                'fields_value' => FieldsValueResource::collection(FieldValue::all())
-            ]
-        ],200);
+        return $this->successResponse(['fields_values' => FieldsValueResource::collection(FieldValue::all())]);
     }
 
     /**
@@ -47,21 +45,12 @@ class FieldValueController extends MainController
         $fieldValue->value = json_encode($request->value);
 
 
-        if(! $fieldValue->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The field value was not created ! please try again later',
-                ]
-            ],512);
-        }
+        if(! $fieldValue->save())
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'field value created successfully',
-                'field_value' => new FieldsValueResource( $fieldValue)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            'field_value' => new FieldsValueResource($fieldValue)
+        ]);
     }
 
     /**
@@ -72,11 +61,8 @@ class FieldValueController extends MainController
      */
     public function show(FieldValue $fieldValue)
     {
-        return response()->json([
-            'data' => [
-                'field_value' =>  new FieldsValueResource( $fieldValue),
-            ]
-        ],200);
+
+        return $this->successResponse(['field_value' => new FieldsValueResource($fieldValue)]);
     }
 
     /**
@@ -103,21 +89,12 @@ class FieldValueController extends MainController
         $fieldValue->value =json_encode($request->value);
 
 
-        if(! $fieldValue->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The field value was not updated ! please try again later',
-                ]
-            ],512);
-        }
+        if(! $fieldValue->save())
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'field value updated successfully',
-                'field_value' => new FieldsValueResource( $fieldValue)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            'field_value' => new FieldsValueResource($fieldValue)
+        ]);
     }
 
     /**
@@ -128,20 +105,11 @@ class FieldValueController extends MainController
      */
     public function destroy(FieldValue $fieldValue)
     {
-        if(! $fieldValue->delete()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The field value was not deleted ! please try again later',
-                ]
-            ],512);
-        }
+        if(! $fieldValue->delete())
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'field value deleted successfully',
-                'field_value' => new FieldsValueResource( $fieldValue)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            'field_value' => new FieldsValueResource($fieldValue)
+        ]);
     }
 }
