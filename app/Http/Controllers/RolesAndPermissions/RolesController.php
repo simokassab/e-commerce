@@ -15,6 +15,8 @@ use Spatie\Permission\Models\Permission;
 
 class RolesController extends MainController
 {
+    const OBJECT_NAME = 'objects.role';
+
     /**
      * Display a listing of the resource.
      *
@@ -22,10 +24,7 @@ class RolesController extends MainController
      */
     public function index()
     {
-        return response()->json(['data' => [
-            'roles' =>RolesResource::collection(CustomRole::all()),
-            ]
-        ],202);
+        return $this->successResponse(['roles' => RolesResource::collection(CustomRole::all())]);
     }
 
     /**
@@ -64,11 +63,9 @@ class RolesController extends MainController
             }
 
             DB::commit();
-
-            return response()->json(['data' => [
-                'message' => 'The role has been created',
-                'role' => new RolesResource($role),
-            ]],201);
+            return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            'role' => new RolesResource($role)
+        ],201);
 
         }catch (\Exception | QueryException $e){
             DB::rollBack();
@@ -84,9 +81,7 @@ class RolesController extends MainController
      */
     public function show(CustomRole $role)
     {
-        return response()->json(['data' => [
-            'role' => new RolesResource($role),
-        ]],202);
+        return $this->successResponse(['role' => new RolesResource($role)],202);
     }
 
     /**
@@ -129,9 +124,9 @@ class RolesController extends MainController
 
             DB::commit();
 
-            return response()->json(['data' => [
-                'role' => new RolesResource($role),
-            ]],200);
+            return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            'role' => new RolesResource($role)
+        ],200);
 
         }catch (\Exception | QueryException $e){
             DB::rollBack();

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 class FieldsController extends MainController
 {
+    const OBJECT_NAME = 'objects.field';
 
     public function __construct($defaultPermissionsFromChild = null)
     {
@@ -24,11 +25,8 @@ class FieldsController extends MainController
      */
     public function index()
     {
-        return response()->json([
-            'data' => [
-                'fields' => FieldsResource::collection(Field::with('fieldValue')->get())
-            ]
-        ],200);
+        return $this->successResponse(['fields' => FieldsResource::collection(Field::with('fieldValue')->get())]);
+
     }
 
     /**
@@ -57,21 +55,13 @@ class FieldsController extends MainController
         $field->is_required = ($request->is_required);
 
 
-        if(!$field->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The field was not created ! please try again later',
-                ]
-            ],512);
-        }
+        if(!$field->save())
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'field created successfully',
-                'field' => new FieldsResource($field)
-            ]
+        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            'fields' => new FieldsResource($field)
+        ]);
 
-        ],201);
     }
 
     /**
@@ -82,11 +72,8 @@ class FieldsController extends MainController
      */
     public function show(Field $field)
     {
-        return response()->json([
-            'data' => [
-                'field' =>  new FieldsResource($field),
-            ]
-        ],200);
+        return $this->successResponse(['field' => new FieldsResource($field)]);
+
     }
 
     /**
@@ -115,21 +102,12 @@ class FieldsController extends MainController
         $field->is_required = ($request->is_required);
 
 
-        if(!$field->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The field was not updated ! please try again later',
-                ]
-            ],512);
-        }
+        if(!$field->save())
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'field updated successfully',
-                'field' => new FieldsResource($field)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            'fields' => new FieldsResource($field)
+        ]);
     }
 
     /**
@@ -140,20 +118,11 @@ class FieldsController extends MainController
      */
     public function destroy(Field $field)
     {
-        if(!$field->delete()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The field was not deleted ! please try again later',
-                ]
-            ],512);
-        }
+        if(!$field->delete())
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'field deleted successfully',
-                'field' => new FieldsResource($field)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            'fields' => new FieldsResource($field)
+        ]);
     }
 }

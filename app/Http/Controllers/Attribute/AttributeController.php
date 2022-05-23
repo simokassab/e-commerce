@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Route;
 
 class AttributeController extends MainController
 {
+    const OBJECT_NAME = 'objects.attribute';
+
     /**
      * Display a listing of the resource.
      *
@@ -44,15 +46,10 @@ class AttributeController extends MainController
         $attribute=new Attribute();
         $attribute->title=json_encode($request->title);
 
-        if(!$attribute->save()){
-            $data = [
-                'message' => 'The attribute was not created ! please try again later',
-            ];
-            return $this->errorResponse($data);
-        }
+        if(!$attribute->save())
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return $this->successResponse([
-            'message' => 'attribute created successfully',
+        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             'attribute' => new AttributeResource($attribute)
         ]);
 
@@ -91,15 +88,10 @@ class AttributeController extends MainController
     {
         $attribute->title=json_encode($request->title);
 
+        if(!$attribute->save())
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
-        if(!$attribute->save()){
-            return $this->errorResponse([
-                'message' => 'The attribute was not updated ! please try again later',
-            ]);
-        }
-
-        return $this->successResponse([
-            'message' => 'attribute updated successfully',
+        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             'attribute' => new AttributeResource($attribute)
         ]);
 
@@ -113,20 +105,12 @@ class AttributeController extends MainController
      */
     public function destroy(Attribute $attribute)
     {
-        if(!$attribute->delete()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The attribute was not deleted ! please try again later',
-                ]
-            ],512);
-        }
+        if(!$attribute->delete())
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'attribute deleted successfully',
+            return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
                 'attribute' => new AttributeResource($attribute)
-            ]
+            ]);
 
-        ],201);
     }
 }

@@ -1,18 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Tag;
+namespace App\Http\Controllers\Discount;
 
 use App\Http\Controllers\MainController;
-use App\Http\Requests\Tag\StoreTag;
-use App\Http\Resources\TagResource;
-use App\Models\Tag\Tag;
+use App\Http\Requests\Discount\StoreDiscountRequest;
+use App\Http\Resources\DiscountResource;
+use App\Models\Discount\Discount;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
-class TagController extends MainController
+class DiscountController extends MainController
 {
-
-    const OBJECT_NAME = 'objects.tag';
+    const OBJECT_NAME = 'objects.discount';
 
     /**
      * Display a listing of the resource.
@@ -21,7 +19,7 @@ class TagController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['tags' => TagResource::collection(Tag::all())]);
+        return $this->successResponse(['discounts' => DiscountResource::collection(Discount::all())]);
 
     }
 
@@ -41,17 +39,19 @@ class TagController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreTag $request)
+    public function store(StoreDiscountRequest $request)
     {
-        $tag=new Tag();
-        $tag->name=json_encode($request->name);
+        $discount = new Discount();
+        $discount->name = json_encode($request->name);
+        $discount->start_date = $request->start_date;
+        $discount->end_date = $request->end_date;
+        $discount->discount_percentage = $request->discount_percentage;
 
-
-        if(!$tag->save())
+        if(!($discount->save()))
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'tag' => new TagResource($tag)
+            'discount' => new DiscountResource($discount)
         ]);
     }
 
@@ -61,9 +61,10 @@ class TagController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Tag $tag)
+    public function show(Discount $discount)
     {
-        return $this->successResponse(['tag' => new TagResource($tag)]);
+        return $this->successResponse(['discount' => new DiscountResource($discount)]);
+
     }
 
     /**
@@ -84,16 +85,18 @@ class TagController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tag $tag)
+    public function update(Request $request, Discount $discount)
     {
-        $tag->name=json_encode($request->name);
+        $discount->name = json_encode($request->name);
+        $discount->start_date = $request->start_date;
+        $discount->end_date = $request->end_date;
+        $discount->discount_percentage = $request->discount_percentage;
 
-
-        if(!$tag->save())
+        if(!($discount->save()))
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
         return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'tag' => new TagResource($tag)
+            'discount' => new DiscountResource($discount)
         ]);
     }
 
@@ -103,14 +106,13 @@ class TagController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tag $tag)
+    public function destroy(Discount $discount)
     {
-        if(!$tag->delete())
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+        if(!$discount->delete())
+        return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])]);
 
-        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'tag' => new TagResource($tag)
-        ]);
+     return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+         'discount' => new DiscountResource($discount)
+     ]);
     }
-    }
-
+}

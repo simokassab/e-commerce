@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 class LabelController extends MainController
 {
+    const OBJECT_NAME = 'objects.label';
 
     public function __construct()
     {
@@ -24,11 +25,8 @@ class LabelController extends MainController
      */
     public function index()
     {
-        //check
-        return response()->json(['data' => [
-            'labels' =>LabelsResource::collection(Label::all()),
-        ]
-        ],202);
+        return $this->successResponse(['labels' => LabelsResource::collection(Label::all())]);
+
     }
 
     /**
@@ -57,14 +55,12 @@ class LabelController extends MainController
         $label->image = ($request->image);
         $label->key = ($request->key);
 
-        if(!$label->save()){
-            return response('Error while create new label please try again later! ' ,500);
-        }
+        if(!$label->save())
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json(['data' => [
-            'message' => 'The label has been created',
-            'role' => new LabelsResource($label),
-        ]],201);
+        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            'label' => new LabelsResource($label)
+        ]);
 
     }
 
@@ -76,10 +72,8 @@ class LabelController extends MainController
      */
     public function show(Label $label)
     {
-        return response()->json(['data' => [
-            'label' =>new LabelsResource($label),
-        ]
-        ],200);
+        return $this->successResponse(['label' => new LabelsResource($label)]);
+
     }
 
     /**
@@ -108,14 +102,12 @@ class LabelController extends MainController
         $label->image = ($request->image);
         $label->key = ($request->key);
 
-        if(!$label->save()){
-            return response('Error while saving the label please try again later! ' ,500);
-        }
+        if(!$label->save())
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json(['data' => [
-            'message' => 'The label has been created',
-            'label' => new LabelsResource($label),
-        ]],200);
+        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            'label' => new LabelsResource($label)
+        ]);
     }
 
     /**
@@ -126,20 +118,13 @@ class LabelController extends MainController
      */
     public function destroy(Label $label)
     {
-        if(!$label->delete()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The currency was not deleted ! please try again later',
-                ]
-            ],512);
-        }
+        if(!$label->delete())
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'currency deleted successfully',
-                'currency' => new LabelsResource($label)
-            ]
+        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            'label' => new LabelsResource($label)
+        ]);
 
-        ],201);
-    }
+
+}
 }

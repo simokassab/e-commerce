@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 class LanguageController extends MainController
 {
+    const OBJECT_NAME = 'objects.language';
 
     public function __construct($defaultPermissionsFromChild = null)
     {
@@ -25,12 +26,7 @@ class LanguageController extends MainController
      */
     public function index()
     {
-
-        return response()->json([
-            'data' => [
-                'languages' => LanguageResource::collection(  Language::all())
-            ]
-        ],200);
+        return $this->successResponse(['languages' => LanguageResource::collection(Language::all())]);
     }
 
     /**
@@ -61,21 +57,12 @@ class LanguageController extends MainController
         $language->image=$request->image;
         $language->sort=$request->sort;
 
-        if(!$language->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The Language was not created ! please try again later',
-                ]
-                ],512);
-        }
+        if(!$language->save())
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'language created successfully',
-                'language' => new LanguageResource($language)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            'language' => new LanguageResource($language)
+        ]);
 
 
     }
@@ -88,12 +75,8 @@ class LanguageController extends MainController
      */
     public function show(Language $language)
     {
-        return response()->json([
-            'data' => [
-                'language' =>  new LanguageResource($language),
-            ]
-        ],200);
-    }
+        return $this->successResponse(['language' => new LanguageResource($language)]);
+      }
 
     /**
      * Show the form for editing the specified resource.
@@ -124,21 +107,12 @@ class LanguageController extends MainController
         $language->image=$request->image;
         $language->sort=$request->sort;
 
-        if(!$language->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The Language was not updated ! please try again later',
-                ]
-                ],512);
-        }
+        if(!$language->save())
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'language updated successfully',
-                'language' => new LanguageResource($language)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            'language' => new LanguageResource($language)
+        ]);
 
     }
 
@@ -150,21 +124,13 @@ class LanguageController extends MainController
      */
     public function destroy(Language $language)
     {
-        if(!$language->delete()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The language was not deleted ! please try again later',
-                ]
-            ],512);
-        }
+        if(!$language->delete())
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'language deleted successfully',
-                'language' => new LanguageResource($language)
-            ]
+        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            'language' => new LanguageResource($language)
+        ]);
 
-        ],201);
     }
     public function setLanguage($locale){
 

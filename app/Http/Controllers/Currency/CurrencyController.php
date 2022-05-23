@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class CurrencyController extends MainController
 {
+    const OBJECT_NAME = 'objects.currency';
 
     /**
      * Display a listing of the resource.
@@ -23,20 +24,14 @@ class CurrencyController extends MainController
      */
     public function index()
     {
+        return $this->successResponse(['currencies' => CurrencyResource::collection(Currency::with('currencyHistory')->get())]);
 
-        return response()->json([
-            'data' => [
-                'currncies' =>  CurrencyResource::collection(Currency::with('currencyHistory')->get()),
-            ]
-        ],200);
     }
 
     public function getCurrencyHistories(){
-        return response()->json([
-            'data' => [
-                'currncies_histories' =>  CurrencyHistoryResource::collection(CurrencyHistory::all()),
-            ]
-        ],200);
+
+        return $this->successResponse(['currncies_histories' => CurrencyHistoryResource::collection(CurrencyHistory::all())]);
+
     }
     /**
      * Show the form for creating a new resource.
@@ -65,21 +60,12 @@ class CurrencyController extends MainController
         $currency->image=$request->image;
         $currency->sort=$request->sort;
 
-        if(!$currency->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The currency was not created ! please try again later',
-                ]
-            ],512);
-        }
+        if(!$currency->save())
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'currency created successfully',
-                'currency' => new CurrencyResource($currency)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            'currency' => new CurrencyResource($currency)
+            ]);
 
     }
 
@@ -91,11 +77,7 @@ class CurrencyController extends MainController
      */
     public function show(Currency $currency)
     {
-        return response()->json([
-            'data' => [
-                'currency' =>  new CurrencyResource( $currency),
-            ]
-        ],200);
+        return $this->successResponse(['currency' => new CurrencyResource($currency)]);
 
     }
 
@@ -134,19 +116,15 @@ class CurrencyController extends MainController
             $currency->save();
             DB::commit();
 
-            return response()->json([
-                'data' => [
-                    'message' => 'currency updated successfully',
-                    'currency' => new CurrencyResource($currency)
-                ]
+            return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            'currency' => new CurrencyResource($currency)
+        ]);
 
-            ],201);
         }catch(\Exception $exception){
             DB::rollBack();
-
             return response()->json([
                 'data' => [
-                    'message' => 'currency currency was not updated the error message: '.$exception->getMessage(),
+                    'message' => 'currency was not updated the error message: '.$exception->getMessage(),
                 ]
             ],500);
         }

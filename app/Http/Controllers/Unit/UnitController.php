@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 
 class UnitController extends MainController
 {
+    const OBJECT_NAME = 'objects.unit';
+
     /**
      * Display a listing of the resource.
      *
@@ -17,11 +19,8 @@ class UnitController extends MainController
      */
     public function index()
     {
-        return response()->json([
-            'data' => [
-                'unit' => UnitResource::collection(  Unit::all())
-            ]
-        ],200);
+        return $this->successResponse(['units' => UnitResource::collection(Unit::all())]);
+
     }
 
     /**
@@ -47,21 +46,12 @@ class UnitController extends MainController
         $unit->code=$request->code;
 
 
-        if(!$unit->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The unit was not created ! please try again later',
-                ]
-                ],512);
-        }
+        if(!$unit->save())
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'unit created successfully',
-                'unit' => new UnitResource($unit)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            'unit' => new UnitResource($unit)
+        ]);
     }
 
     /**
@@ -72,11 +62,8 @@ class UnitController extends MainController
      */
     public function show(Unit $unit)
     {
-        return response()->json([
-            'data' => [
-                'unit' =>  new UnitResource($unit),
-            ]
-        ],200);
+        return $this->successResponse(['unit' => new UnitResource($unit)]);
+
     }
 
     /**
@@ -103,21 +90,12 @@ class UnitController extends MainController
         $unit->code=$request->name;
 
 
-        if(!$unit->save()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The unit was not updated ! please try again later',
-                ]
-                ],512);
-        }
+        if(!$unit->save())
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'unit updated successfully',
-                'unit' => new UnitResource($unit)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            'unit' => new UnitResource($unit)
+        ]);
     }
 
     /**
@@ -128,21 +106,12 @@ class UnitController extends MainController
      */
     public function destroy(Unit $unit)
     {
-        if(!$unit->delete()){
-            return response()->json([
-                'data' => [
-                    'message' => 'The unit was not deleted ! please try again later',
-                ]
-            ],512);
-        }
+        if(!$unit->delete())
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return response()->json([
-            'data' => [
-                'message' => 'unit deleted successfully',
-                'unit' => new UnitResource($unit)
-            ]
-
-        ],201);
+        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            'unit' => new UnitResource($unit)
+        ]);
 
     }
 }
