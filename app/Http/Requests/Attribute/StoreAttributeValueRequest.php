@@ -32,8 +32,8 @@ class StoreAttributeValueRequest extends FormRequest
     public function messages()
     {
         return [
-            'attribute_id.required' => 'the attribute id is required',
-            'value.required' => 'the value field is required'
+            'attribute_id.required' => 'The attribute id is required',
+            'value.required' => 'The value field is required'
         ];
 
     }

@@ -17,9 +17,10 @@ return new class extends Migration
             $table->id();
             $table->json('name');
             $table->string('code');
-            $table->json('title');
+            $table->json('meta_title');
+            $table->json('meta_description');
+            $table->json('meta_keyword');
             $table->json('description');
-            $table->json('keyword');
             $table->integer('sort');
             $table->boolean('is_disabled')->default(0);
             $table->timestamps();
