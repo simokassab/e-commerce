@@ -24,7 +24,7 @@ class StoreFieldsValueRequest extends FormRequest
     public function rules()
     {
         return [
-            'fields_id' => 'required',
+            'field_id' => 'required',
             'value' => 'required'
         ];
     }
@@ -33,8 +33,8 @@ class StoreFieldsValueRequest extends FormRequest
     {
         return [
 
-        'fields_id.required' => 'the field id is required',
-        'value' => 'the field value is required'
+        'field_id.required' => 'the :attribute is required',
+        'value.required' => 'the :attribute is required'
         ];
     }
 }

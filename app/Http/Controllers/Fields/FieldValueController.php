@@ -83,7 +83,7 @@ class FieldValueController extends MainController
      * @param  FieldValue  $fieldValue
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FieldValue $fieldValue)
+    public function update(StoreFieldsValueRequest $request, FieldValue $fieldValue)
     {
         $fieldValue->fields_id = $request->fields_id;
         $fieldValue->value =json_encode($request->value);

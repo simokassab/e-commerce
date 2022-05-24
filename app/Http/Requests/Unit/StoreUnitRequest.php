@@ -25,7 +25,7 @@ class StoreUnitRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'code' => 'required'
+            'code' => 'required | max:125'
         ];
     }
 
@@ -33,7 +33,10 @@ class StoreUnitRequest extends FormRequest
     {
         return [
             'name.required' => 'the name field is required',
-            'code.required' => 'the code field is required'
+            'code.required' => 'the code field is required',
+            'code.max' => 'the maximum string length is :max',
+
+
         ];
     }
 }

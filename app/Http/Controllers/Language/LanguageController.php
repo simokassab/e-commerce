@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Language;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Language\StoreLanguage;
+use App\Http\Requests\Language\StoreLanguageRequest;
 use App\Http\Resources\LanguageResource;
 use App\Models\Language\Language;
 use Illuminate\Http\Request;
@@ -45,7 +46,7 @@ class LanguageController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreLanguage $request)
+    public function store(StoreLanguageRequest $request)
     {
         $language=new Language();
         $language->name=$request->name;
@@ -96,7 +97,7 @@ class LanguageController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Language $language)
+    public function update(StoreLanguageRequest $request, Language $language)
     {
         $language->name=$request->name;
         $language->code=$request->code;

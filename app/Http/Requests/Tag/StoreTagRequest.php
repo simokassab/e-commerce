@@ -4,7 +4,7 @@ namespace App\Http\Requests\Tag;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreTag extends FormRequest
+class StoreTagRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,7 +31,7 @@ class StoreTag extends FormRequest
     public function messages()
     {
         return [
-        'name.required' => 'the field name is required.'
+        'name.required' => 'the :attribute field is required.'
     ];
     }
 }

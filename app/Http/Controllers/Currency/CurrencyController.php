@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Currency;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Currency\StoreCurrency;
+use App\Http\Requests\Currency\StoreCurrencyRequest;
 use App\Http\Resources\CurrencyHistoryResource;
 use App\Http\Resources\CurrencyResource;
 use App\Models\Currency\Currency;
@@ -49,7 +50,7 @@ class CurrencyController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCurrency $request)
+    public function store(StoreCurrencyRequest $request)
     {
         $currency = new Currency();
         $currency->name=json_encode($request->name);
@@ -99,7 +100,7 @@ class CurrencyController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Currency $currency)
+    public function update(StoreCurrencyRequest $request, Currency $currency)
     {
         DB::beginTransaction();
 

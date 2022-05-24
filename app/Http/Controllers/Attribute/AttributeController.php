@@ -84,7 +84,7 @@ class AttributeController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Attribute $attribute)
+    public function update(StoreAttributeRequest $request, Attribute $attribute)
     {
         $attribute->title=json_encode($request->title);
 

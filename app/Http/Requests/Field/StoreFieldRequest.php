@@ -4,7 +4,7 @@ namespace App\Http\Requests\Field;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FieldsStorRequest extends FormRequest
+class StoreFieldRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +26,9 @@ class FieldsStorRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'type' => 'required|in:'.config('app.validation_default_type'),
-            'entity' => 'required|in:'.config('app.validation_default_entities'),
-            'is_required' => 'required|boolean',
+            'type' => 'required | in:'.config('app.validation_default_type'),
+            'entity' => 'required | in:'.config('app.validation_default_entities'),
+            'is_required' => 'required | boolean',
         ];
     }
 
@@ -36,14 +36,17 @@ class FieldsStorRequest extends FormRequest
     {
         return [
             'title.required' => 'The :attribute is required',
-            'type.required' => 'The :attribute is required',
-            'entity.required' => 'The :attribute is required',
-            'is_required.required' => 'The :attribute is required',
 
+            'type.required' => 'The :attribute is required',
             'type.in' => 'The :attribute is not a valid type',
+
+            'entity.required' => 'The :attribute is required',
             'entity.in' => 'The :attribute is not a valid type',
 
-            'type.is_required' => 'The :attribute should be true or false',
+            'is_required.required' => 'The :attribute is required',
+
+            'is_required.required' => 'The :attribute field is required',
+            'is_required.boolean' =>  'The :attribute field accepts only 0 or 1',
 
 
         ];

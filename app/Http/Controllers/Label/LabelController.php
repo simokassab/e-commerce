@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Label;
 
-use App\Http\Requests\Labels\LableStorRequest;
-use App\Models\RolesAndPermissions\CustomRole;
 use App\Http\Resources\LabelsResource;
 use App\Models\Label\Label;
 use App\Http\Controllers\MainController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Requests\Labels\StoreLabelRequest;
 
 class LabelController extends MainController
 {
@@ -45,7 +43,7 @@ class LabelController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(LableStorRequest $request)
+    public function store(StoreLabelRequest $request)
     {
         $label = new Label();
 
@@ -94,7 +92,7 @@ class LabelController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(LableStorRequest $request, Label $label)
+    public function update(StoreLabelRequest $request, Label $label)
     {
         $label->title = json_encode($request->title);
         $label->entity = ($request->entity);

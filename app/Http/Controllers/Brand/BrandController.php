@@ -9,6 +9,7 @@ use App\Http\Resources\BrandResource;
 use App\Models\Brand\Brand;
 use Illuminate\Http\Request;
 
+
 class BrandController extends MainController
 {
     const OBJECT_NAME = 'objects.brand';
@@ -87,7 +88,7 @@ class BrandController extends MainController
      * @param  Brand  $brand
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Brand $brand)
+    public function update(StoreBrandRequest $request, Brand $brand)
     {
         $brand->name = json_encode($request->name);
         $brand->code = $request->code;

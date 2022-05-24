@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Country;
 
 use App\Http\Controllers\MainController;
-use App\Http\Requests\Countries\StoreCountry;
+use App\Http\Requests\Countries\StoreCountryRequest;
 use App\Http\Resources\CountryResource;
 use App\Models\Country\Country;
 use Illuminate\Http\Request;
@@ -46,7 +46,7 @@ class CountryController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCountry $request)
+    public function store(StoreCountryRequest $request)
     {
 
     //    return  $country = Country::create($request->all());
@@ -97,7 +97,7 @@ class CountryController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Country $country)
+    public function update(StoreCountryRequest $request, Country $country)
     {
         $country->name = json_encode($request->name);
         $country->iso_code_1 = ($request->iso_code_1);

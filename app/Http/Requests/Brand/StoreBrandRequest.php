@@ -40,15 +40,15 @@ class StoreBrandRequest extends FormRequest
     {
         return [
 
-            'name.required' => 'the name field is required',
-            'code.required' => 'the code field is required',
-            'meta_title.required' => 'the meta_title field is required',
-            'meta_description.required' => 'the meta_description field is required',
-            'meta_keyword.required' => 'the meta_keyword field is required',
-            'description.required' => 'the description field is required',
-            'sort.required' => 'the sort field is required',
-            'is_disabled.required' => 'the is_disabled field is required',
-            'is_disabled.boolean' => 'The is_disabled field accepts only 0 or 1',
+            'name.required' => 'the :attribute field is required',
+            'code.required' => 'the :attribute field is required',
+            'meta_title.required' => 'the :attribute field is required',
+            'meta_description.required' => 'the :attribute field is required',
+            'meta_keyword.required' => 'the :attribute field is required',
+            'description.required' => 'the :attribute field is required',
+            'sort.required' => 'the :attribute field is required',
+            'is_disabled.required' => 'the :attribute field is required',
+            'is_disabled.boolean' => 'The :attribute field accepts only 0 or 1',
 
         ];
     }

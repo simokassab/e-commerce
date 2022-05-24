@@ -26,13 +26,27 @@ class StoreCategoryRequest extends FormRequest
         return [
             'name' => 'required',
             'code' => 'required | max:125',
-            'image' => 'nullable | max:125',
-            'icon' => 'nullable | max:125',
+
+            'image' => 'nullable | image
+            | mimes:'.config('app.default_image_extentions').'
+            | max:'.config('app.default_image_size').'
+            | dimensions:min_width='.config('app.default_image_minimum_width').',min_height='.config('app.default_image_minimum_height').'
+                ,max_width='.config('app.default_image_maximum_width').',max_height='.config('app.default_image_maximum_height'),
+
+            'icon' => 'nullable | image
+            | mimes:'.config('app.default_icon_extentions').'
+            | max:'.config('app.default_icon_size').'
+            | dimensions:min_width='.config('app.default_icon_minimum_width').',min_height='.config('app.default_icon_minimum_height').'
+                ,max_width='.config('app.default_icon_maximum_width').',max_height='.config('app.default_icon_maximum_height'),
+
             'parent_id' => 'nullable | integer',
             'slug' => 'required | max:125 | unique:App\Models\Category\Category,slug',
-            'title' => 'required',
+
+            'meta_title' => 'required',
+            'meta_description' => 'required',
+            'meta_keyword' => 'required',
+
             'description' => 'required',
-            'keyword' => 'required',
             'sort' => 'nullable | integer',
             'is_disabled' => 'required | boolean'
 
@@ -41,20 +55,42 @@ class StoreCategoryRequest extends FormRequest
 
     public function messages()
     {
-        $stringLength='The maximum string length is 125!';
+
         return [
-            'name.required' => 'the name field is required',
-            'code.required' => 'the code field is required',
-            'code.max' => $stringLength,
-            'image.max' => $stringLength,
-            'icon.max' => $stringLength,
-            'slug.required' => 'the slug field is required',
-            'slug.unique' => 'The slug already exists!',
-            'title.required' => 'the title field is required',
-            'description.required' => 'the description field is required',
-            'keyword.required' => 'the keyword field is required',
-            'is_disabled.required' => 'The is_disabled field is required',
-            'is_disabled.boolean' => 'The is_disabled field accepts only 0 or 1',
+            'name.required' => 'the :attribute field is required',
+
+            'code.required' => 'the :attribute field is required',
+            'code.max' => 'the maximum string length is :max',
+
+            'image.image' => 'The input is not an image',
+            'image.max' => 'The maximum :attribute size is :max.',
+            'image.mimes' => 'Invalid extention.',
+            'image.dimensions' => 'Invalid dimentions, minimum('.config('app.default_image_minimum_width').'x'.config('app.default_image_minimum_height').'),
+                 maximum('.config('app.default_image_maximum_width').'x'.config('app.default_image_maximum_height').')',
+
+            'icon.image' => 'The input is not an image',
+            'icon.max' => 'The maximum :attribute size is :max.',
+            'icon.mimes' => 'Invalid extention.',
+            'icon.dimensions' => 'Invalid dimentions, minimum('.config('app.default_icon_minimum_width').'x'.config('app.default_icon_minimum_height').'),
+                maximum('.config('app.default_icon_maximum_width').'x'.config('app.default_icon_maximum_height').')',
+
+            'parent_id.integer' => 'the :attribute should be an integer',
+
+
+            'slug.required' => 'the :attribute field is required',
+            'slug.max' => 'the maximum string length is :max',
+            'slug.unique' => 'The :attribute already exists!',
+
+            'meta_title.required' => 'the :attribute field is required',
+            'meta_description.required' => 'the :attribute field is required',
+            'meta_keyword.required' => 'the :attribute field is required',
+
+            'description.required' => 'the :attribute field is required',
+
+            'sort.integer' => 'the :attribute should be an integer',
+
+            'is_disabled.required' => 'The :attribute field is required',
+            'is_disabled.boolean' => 'The :attribute field accepts only 0 or 1',
 
         ];
 

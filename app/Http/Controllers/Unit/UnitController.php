@@ -60,7 +60,7 @@ class UnitController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Unit $unit)
+    public function show(StoreUnitRequest $unit)
     {
         return $this->successResponse(['unit' => new UnitResource($unit)]);
 
@@ -84,7 +84,7 @@ class UnitController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Unit $unit)
+    public function update(StoreUnitRequest $request, Unit $unit)
     {
         $unit->name=json_encode($request->name);
         $unit->code=$request->name;

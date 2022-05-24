@@ -26,19 +26,25 @@ class StoreDiscountRequest extends FormRequest
         return [
             'name' => 'required',
             'start_date' => 'required | date',
-            'end_date' => 'after:start_date',
-            'discount_percentage' => 'required | between:0,100',
+            'end_date' => 'nullable | date | after:start_date',
+            'discount_percentage' => 'required | between:0,100 | doubleval',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'the name field is required',
-            'start_date.required' => 'the name field is required',
-            'end_date.after' => 'the date should be greater than the start_date',
-            'discount_percentage.between' => 'the discount should be between 0 and 100 percent',
-            'discount_percentage.required' => 'the discount_percentage field is required',
+            'name.required' => 'the :attribute field is required',
+
+            'start_date.required' => 'the :attribute field is required',
+            'start_date.date' => 'the :attribute should be a date',
+
+            'end_date.after' => 'the :attribute should be greater than the start_date',
+            'end_date.date' => 'the :attribute should be a date',
+
+            'discount_percentage.required' => 'the :attribute field is required',
+            'discount_percentage.between' => 'the :attribute should be between 0 and 100 percent',
+            'discount_percentage.doubleval' => 'the :attribute should be an integer or decimal',
 
         ];
     }

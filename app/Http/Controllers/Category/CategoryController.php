@@ -92,7 +92,7 @@ class CategoryController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(StoreCategoryRequest $request, Category $category)
     {
         $category->name= json_encode($request->name);
         $category->code= $request->code;

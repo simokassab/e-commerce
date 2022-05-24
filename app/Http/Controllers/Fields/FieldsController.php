@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Fields;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Field\FieldsStorRequest;
+use App\Http\Requests\Field\StoreFieldRequest;
 use App\Http\Resources\FieldsResource;
 use App\Models\Field\Field;
 use Illuminate\Support\Facades\Route;
@@ -45,7 +46,7 @@ class FieldsController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(FieldsStorRequest $request)
+    public function store(StoreFieldRequest $request)
     {
 
         $field=new Field();
@@ -94,7 +95,7 @@ class FieldsController extends MainController
      * @param  Field  $field
      * @return \Illuminate\Http\Response
      */
-    public function update(FieldsStorRequest $request, Field $field)
+    public function update(StoreFieldRequest $request, Field $field)
     {
         $field->title = json_encode($request->title);
         $field->type = ($request->type);

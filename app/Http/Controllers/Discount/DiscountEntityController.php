@@ -85,7 +85,7 @@ class DiscountEntityController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DiscountEntity $discountEntity)
+    public function update(StoreDiscountEntityRequest $request, DiscountEntity $discountEntity)
     {
         $discountEntity->discount_id = $request->discount_id;
         $discountEntity->category_id = $request->category_id;

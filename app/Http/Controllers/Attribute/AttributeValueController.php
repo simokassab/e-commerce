@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Attribute;
 
 use App\Http\Controllers\MainController;
+use App\Http\Requests\Attribute\StoreAttributeRequest;
 use App\Http\Requests\Attribute\StoreAttributeValueRequest;
 use App\Http\Resources\AttributeValueResource;
 use App\Models\Attribute\AttributeValue;
@@ -85,7 +86,7 @@ class AttributeValueController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AttributeValue $attributeValue)
+    public function update(StoreAttributeValueRequest $request, AttributeValue $attributeValue)
     {
         $attributeValue->attribute_id = $request->attribute_id;
         $attributeValue->value = json_encode($request->value);

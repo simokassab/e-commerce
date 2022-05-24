@@ -33,7 +33,7 @@ class StoreRoleRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'The role\'s name is required',
+            'name.required' => "The role's name is required:",
             'permissions.*.exists' => 'One of the permissions that you have selected is not valid',
             'parent_id.exists' => 'The parent role that you chose is not valid',
         ];

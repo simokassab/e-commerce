@@ -85,7 +85,7 @@ class DiscountController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Discount $discount)
+    public function update(StoreDiscountRequest $request, Discount $discount)
     {
         $discount->name = json_encode($request->name);
         $discount->start_date = $request->start_date;

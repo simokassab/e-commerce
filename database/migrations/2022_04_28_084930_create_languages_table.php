@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('is_default')->default(0);
             $table->boolean('is_disabled')->default(0);
             $table->string('image')->nullable();
-            $table->integer('sort');
+            $table->integer('sort')->nullable();
             $table->timestamps();
         });
     }

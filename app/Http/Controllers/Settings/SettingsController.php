@@ -85,7 +85,7 @@ class SettingsController extends MainController
      * @param  \App\Models\Settings\Setting  $setting
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Setting $setting)
+    public function update(StoreSettingRequest $request, Setting $setting)
     {
         $setting->title = ($request->title);
         $setting->type = ($request->type);
