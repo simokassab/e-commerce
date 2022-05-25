@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localization'] ],function (){
+Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','Localization'] ],function (){
 
     //here goes all the routes inside the dashboard
     Route::apiResource('roles',RolesController::class);
@@ -56,7 +56,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::apiResource('discount-entity',DiscountEntityController::class);
 
     //change language for dashboard and get the dashborad translated objects
-    Route::put('change-language/{lang}',[LanguageController::class,'setLanguage'])->middleware('localization');
+    Route::put('change-language/{lang}',[LanguageController::class,'setLanguage'])->middleware('Localization');
 
 
 
