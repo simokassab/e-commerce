@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\RolesAndPermissions\CustomPermission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Services\RolesAndPermissions\RolesAndPermissionsService;
+use App\Services\RolesAndPermissions\RolesService;
 
 class RoleSeeder extends Seeder
 {
@@ -16,6 +16,6 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        RolesAndPermissionsService::createRoles();
+        RolesService::createRoles();
     }
 }

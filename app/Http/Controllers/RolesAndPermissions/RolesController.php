@@ -7,7 +7,7 @@ use App\Http\Requests\RolesAndPermissions\StoreRoleRequest;
 use App\Http\Resources\RolesResource;
 use App\Models\RolesAndPermissions\CustomRole;
 use App\Models\RolesAndPermissions\RolePermission;
-use App\Services\RolesAndPermissions\RolesAndPermissionsService;
+use App\Services\RolesAndPermissions\RolesService;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
@@ -57,7 +57,7 @@ class RolesController extends MainController
 
             if($request->has('permissions') && !empty($request->permissions) ){
                 $parentPermissions = CustomRole::findOrFail($request->parent_id)->permissions->pluck('id')->toArray();
-                $permissions = RolesAndPermissionsService::filterPermissionsAccordingToParentPermissions($parentPermissions,$request->permissions);
+                $permissions = RolesService::filterPermissionsAccordingToParentPermissions($parentPermissions,$request->permissions);
                 $role->givePermissionTo($permissions);
 
             }
@@ -115,7 +115,7 @@ class RolesController extends MainController
 
             if($request->has('permissions') && !empty($request->permissions)){
                 $parentPermissions = CustomRole::findOrFail($request->parent_id)->permissions->pluck('id')->toArray();
-                $permissions = RolesAndPermissionsService::filterPermissionsAccordingToParentPermissions($parentPermissions,$request->permissions);
+                $permissions = RolesService::filterPermissionsAccordingToParentPermissions($parentPermissions,$request->permissions);
                 $role->givePermissionTo($permissions);
             }
 

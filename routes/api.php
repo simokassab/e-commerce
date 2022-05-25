@@ -13,14 +13,13 @@ use App\Http\Controllers\Label\LabelController;
 use App\Http\Controllers\Language\LanguageController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\RolesAndPermissions\RolesController;
+use App\Http\Controllers\RolesAndPermissions\PermissionController;
 use App\Http\Controllers\Settings\SettingsController;
 use App\Http\Controllers\Tag\TagController;
 use App\Http\Controllers\Unit\UnitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
-
-use App\Http\Controllers\RolesAndPermissions\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,10 +36,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','Localization'] ],function (){
+Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localization'] ],function (){
 
     //here goes all the routes inside the dashboard
     Route::apiResource('roles',RolesController::class);
+    Route::get('get-nested-permissions',[PermissionController::class,'getNestedPermissions']);
     Route::apiResource('settings',SettingsController::class);
     Route::apiResource('tag',TagController::class);
     Route::apiResource('attribute',AttributeController::class);
@@ -56,7 +56,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','Localiza
     Route::apiResource('discount-entity',DiscountEntityController::class);
 
     //change language for dashboard and get the dashborad translated objects
-    Route::put('change-language/{lang}',[LanguageController::class,'setLanguage'])->middleware('Localization');
+    Route::put('change-language/{lang}',[LanguageController::class,'setLanguage'])->middleware('localization');
 
 
 

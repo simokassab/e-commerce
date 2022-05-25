@@ -9,7 +9,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class RolesAndPermissionsService {
+class RolesService {
 
     public static function givePermissionToParentRoleAndChildren(array|Permission $permissions , CustomRole $roles) {
         return $roles->allChildren();
@@ -35,11 +35,6 @@ class RolesAndPermissionsService {
         $notAllowedPermissions = array_diff($permissions, $parentPermissions);
         return collect($permissions)->diff($notAllowedPermissions)->all();
     }
-
-    //gets the children role and set each parent and under it its children in a non nested way example:
-    // [2] => 1,2
-    // [2] => 5,6
-    // [2] => 3,4
 
     private static function generateChildrenForAllRoles($allRoles):Array {
         $roleChildren = [];
@@ -77,7 +72,6 @@ class RolesAndPermissionsService {
         return $childRoles;
     }
 
-
     private static function createSinglePermssion(String $name,Int $parentId=null){
 
         return CustomPermission::create([
@@ -86,6 +80,7 @@ class RolesAndPermissionsService {
         ]);
 
     }
+
     private static function createSingalRole(String $name,Int $parentId=null){
 
         return CustomRole::create([

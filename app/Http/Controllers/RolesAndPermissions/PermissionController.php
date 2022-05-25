@@ -17,7 +17,11 @@ class PermissionController extends MainController
      */
     public function index()
     {
-        //
+
+    }
+
+    public function getNestedPermissions(){
+        return "hello";
     }
 
 

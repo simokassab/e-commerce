@@ -2,7 +2,7 @@
 
 namespace App\Models\RolesAndPermissions;
 
-use App\Services\RolesAndPermissions\RolesAndPermissionsService;
+use App\Services\RolesAndPermissions\RolesService;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Collection;
@@ -26,7 +26,7 @@ class CustomRole extends Role
 
     public function allChildren($flatten = false){
         //this function will get all of the children and their nested children also
-        return RolesAndPermissionsService::getRoleChildren($this->id, $flatten);
+        return RolesService::getRoleChildren($this->id, $flatten);
     }
 
     public function checkIfParentHasPermission(Int | Permission $permission){
