@@ -54,4 +54,10 @@ class Category extends MainModel
         return $this->hasMany(Product::class,'id','product_id');
 
     }
+
+    public static function getMaxSortValue(){
+
+        return self::query()->max('sort')+1;
+
+    }
 }

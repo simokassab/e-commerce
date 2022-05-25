@@ -19,7 +19,7 @@ use App\Http\Controllers\Unit\UnitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
-
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\RolesAndPermissions\PermissionController;
 
 /*
@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','Localization'] ],function (){
+Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localization'] ],function (){
 
     //here goes all the routes inside the dashboard
     Route::apiResource('roles',RolesController::class);
@@ -56,8 +56,10 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','Localiza
     Route::apiResource('discount-entity',DiscountEntityController::class);
 
     //change language for dashboard and get the dashborad translated objects
-    Route::put('change-language/{lang}',[LanguageController::class,'setLanguage'])->middleware('Localization');
+    Route::put('change-language/{lang}',[LanguageController::class,'setLanguage'])->middleware('localization');
 
+    Route::patch('toggle-status/{id}',[CategoryController::class,'toggleStatus']);
+    Route::get('parents',[CategoryController::class,'getAllParentsSorted']);
 
 
 });

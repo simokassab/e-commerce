@@ -42,6 +42,10 @@ class StoreCategoryRequest extends FormRequest
             'parent_id' => 'nullable | integer',
             'slug' => 'required | max:125 | unique:App\Models\Category\Category,slug',
 
+            //first => search
+            //else:
+                // your own rule checks if the slug is already taken by another catergory
+
             'meta_title' => 'nullable',
             'meta_description' => 'nullable',
             'meta_keyword' => 'nullable',
