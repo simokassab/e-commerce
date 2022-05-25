@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->json('name');
             $table->string('code');
-            $table->json('meta_title');
-            $table->json('meta_description');
-            $table->json('meta_keyword');
+            $table->json('meta_title')->nullable();
+            $table->json('meta_description')->nullable();
+            $table->json('meta_keyword')->nullable();
             $table->json('description');
             $table->integer('sort');
             $table->boolean('is_disabled')->default(0);

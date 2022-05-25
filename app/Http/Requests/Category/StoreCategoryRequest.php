@@ -42,9 +42,9 @@ class StoreCategoryRequest extends FormRequest
             'parent_id' => 'nullable | integer',
             'slug' => 'required | max:125 | unique:App\Models\Category\Category,slug',
 
-            'meta_title' => 'required',
-            'meta_description' => 'required',
-            'meta_keyword' => 'required',
+            'meta_title' => 'nullable',
+            'meta_description' => 'nullable',
+            'meta_keyword' => 'nullable',
 
             'description' => 'required',
             'sort' => 'nullable | integer',
@@ -80,10 +80,6 @@ class StoreCategoryRequest extends FormRequest
             'slug.required' => 'the :attribute field is required',
             'slug.max' => 'the maximum string length is :max',
             'slug.unique' => 'The :attribute already exists!',
-
-            'meta_title.required' => 'the :attribute field is required',
-            'meta_description.required' => 'the :attribute field is required',
-            'meta_keyword.required' => 'the :attribute field is required',
 
             'description.required' => 'the :attribute field is required',
 

@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('icon')->nullable()->default('default');
             $table->unsignedBigInteger('parent_id')->nullable();//foregin key in another migration
             $table->string('slug')->unique();
-            $table->json('meta_title');
-            $table->json('meta_description');
-            $table->json('meta_keyword');
+            $table->json('meta_title')->nullable();
+            $table->json('meta_description')->nullable();
+            $table->json('meta_keyword')->nullable();
             $table->json('description');
             $table->integer('sort')->nullable();
             $table->boolean('is_disabled')->default(0);

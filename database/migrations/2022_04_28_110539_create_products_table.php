@@ -34,9 +34,10 @@ return new class extends Migration
             $table->foreign('brand_id')->references('id')->on('brands')->nullOnDelete()->cascadeOnUpdate();
             $table->unsignedBigInteger('tax_id');
             $table->foreign('tax_id')->references('id')->on('taxes')->nullOnDelete()->cascadeOnUpdate();
-            $table->json('title');
+            $table->json('meta_title')->nullable();
+            $table->json('meta_description')->nullable();
+            $table->json('meta_keyword')->nullable();
             $table->json('description');
-            $table->json('keyword');
             $table->enum('status',['draft','pending_review','published']);
             $table->string('barcode');
             $table->double('height')->nullable();
