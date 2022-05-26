@@ -40,11 +40,7 @@ class StoreCategoryRequest extends FormRequest
                 ,max_width='.config('app.default_icon_maximum_width').',max_height='.config('app.default_icon_maximum_height'),
 
             'parent_id' => 'nullable | integer',
-            'slug' => 'required | max:125 | unique:App\Models\Category\Category,slug',
-
-            //first => search
-            //else:
-                // your own rule checks if the slug is already taken by another catergory
+            'slug' => 'required | max:125 | unique:categories,slug,'.$this->id,
 
             'meta_title' => 'nullable',
             'meta_description' => 'nullable',

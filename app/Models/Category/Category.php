@@ -57,7 +57,7 @@ class Category extends MainModel
 
     public static function getMaxSortValue(){
 
-        return self::query()->max('sort')+1;
+        return self::max('sort')+1;
 
     }
 }

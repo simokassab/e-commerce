@@ -60,6 +60,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
 
     Route::patch('toggle-status/{id}',[CategoryController::class,'toggleStatus']);
     Route::get('parents',[CategoryController::class,'getAllParentsSorted']);
+    Route::get('newsorted',[CategoryController::class,'updateSortValues']);
 
 
 });

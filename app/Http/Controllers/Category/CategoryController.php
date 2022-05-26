@@ -159,15 +159,15 @@ class CategoryController extends MainController
 
     }
 
-    public function getAllParentsSorted(Category $category){
+    public function getAllParentsSorted(){
 
-        $category=Category::whereNull('parent_id')->orderByRaw('ISNULL(sort), sort ASC')->get();
-        return $this->successResponse(['categories' => $category ]);
+        $categories=Category::whereNull('parent_id')->orderByRaw('ISNULL(sort), sort ASC')->get();
+        return $this->successResponse(['categories' => $categories ]);
     }
 
     public function updateSortValues(){
 
-        Category::whereId($id)->update(['sort' => $value]);
+
     }
 
 }
