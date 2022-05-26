@@ -59,8 +59,12 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::put('change-language/{lang}',[LanguageController::class,'setLanguage'])->middleware('localization');
 
     Route::patch('toggle-status/{id}',[CategoryController::class,'toggleStatus']);
-    Route::get('parents',[CategoryController::class,'getAllParentsSorted']);
-    Route::get('newsorted',[CategoryController::class,'updateSortValues']);
+
 
 
 });
+Route::get('parents',[CategoryController::class,'getAllParentsSorted']);
+Route::get('childs/{parent_id}',[CategoryController::class,'getAllChildsSorted']);
+
+Route::get('newsorted',[CategoryController::class,'updateSortValues']);
+

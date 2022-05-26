@@ -2,7 +2,6 @@
 
 namespace App\Models\Category;
 
-use App\Models\Category as ModelsCategorie;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
 use App\Models\Label\Label;
@@ -16,8 +15,8 @@ use App\Models\Product\Product;
 class Category extends MainModel
 {
     use HasFactory;
-    protected $table='categories';
-    protected $guard_name = 'sanctum';
+    // protected $table='categories';
+    // protected $guard_name = 'sanctum';
 
     public function parent(){
         return $this->belongsTo(Category::class,'parent_id');

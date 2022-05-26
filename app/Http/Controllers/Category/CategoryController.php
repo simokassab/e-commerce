@@ -8,6 +8,7 @@ use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category\Category;
 use App\Services\Category\CategoryService;
+use Illuminate\Bus\Batch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -165,9 +166,27 @@ class CategoryController extends MainController
         return $this->successResponse(['categories' => $categories ]);
     }
 
+    public function getAllChildsSorted($parent_id){
+
+        $categories=Category::where('parent_id',$parent_id)->orderByRaw('ISNULL(sort), sort ASC')->get();
+        return $this->successResponse(['categories' => $categories ]);
+    }
+
+
     public function updateSortValues(){
 
+        $category = new Category();
+        $data=[
 
+            //array['id' => 1 , 'sort' => 1]
+        ];
+
+        $index = 'id';
+
+      batch()->update($category,$data,$index);
+
+
+      return "test";
     }
 
 }

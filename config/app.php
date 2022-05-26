@@ -164,6 +164,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        Mavinoo\Batch\BatchServiceProvider::class,
+
 
 
         /*
@@ -194,6 +196,9 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Batch' => Mavinoo\Batch\BatchFacade::class,
+
+
     ])->toArray(),
 
     //IMAGE
