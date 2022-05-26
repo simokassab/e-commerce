@@ -26,8 +26,8 @@ class StoreFieldRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'type' => 'required | in:'.config('app.validation_default_type'),
-            'entity' => 'required | in:'.config('app.validation_default_entities'),
+            'type' => 'required | in:'.config('defaults.validation_default_type'),
+            'entity' => 'required | in:'.config('defaults.validation_default_entities'),
             'is_required' => 'required | boolean',
         ];
     }

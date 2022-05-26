@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('languages', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('code');
+            $table->string('name',250);
+            $table->string('code',250);
             $table->boolean('is_default')->default(0);
             $table->boolean('is_disabled')->default(0);
-            $table->string('image')->nullable();
+            $table->string('image',250)->nullable();
             $table->integer('sort')->nullable();
             $table->timestamps();
         });

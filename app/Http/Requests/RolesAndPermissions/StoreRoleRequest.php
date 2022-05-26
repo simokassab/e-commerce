@@ -24,7 +24,7 @@ class StoreRoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
+            'name' => 'required | max:'.config('defaults.string_length'),
             'permissions.*' => 'nullable|exists:Spatie\Permission\Models\Permission,id',
             'parent_id' => 'nullable|exists:Spatie\Permission\Models\Role,id',
         ];

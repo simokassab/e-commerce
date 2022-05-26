@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->json('name');
-            $table->string('slug')->unique();
+            $table->string('slug',250)->unique();
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')->nullOnDelete()->cascadeOnUpdate();
-            $table->string('code');
-            $table->string('sku');
+            $table->string('code',250);
+            $table->string('sku',250);
             $table->enum('type',['normal,bundle,service,variable,variable_child']);
             $table->unsignedBigInteger('unit_id')->nullable();
             $table->foreign('unit_id')->references('id')->on('units')->nullOnDelete()->cascadeOnUpdate();
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->integer('minimum_quantity')->default(0);
             $table->json('summary');
             $table->json('specification');
-            $table->string('image')->nullable();
+            $table->string('image',250)->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->foreign('brand_id')->references('id')->on('brands')->nullOnDelete()->cascadeOnUpdate();
             $table->unsignedBigInteger('tax_id');
@@ -37,15 +37,15 @@ return new class extends Migration
             $table->json('meta_title')->nullable();
             $table->json('meta_description')->nullable();
             $table->json('meta_keyword')->nullable();
-            $table->json('description');
+            $table->json('description')->nullable();
             $table->enum('status',['draft','pending_review','published']);
-            $table->string('barcode');
+            $table->string('barcode',250);
             $table->double('height')->nullable();
             $table->double('width')->nullable();
             $table->double('length')->nullable();
             $table->double('weight')->nullable();
             $table->boolean('is_disabled')->default(0);
-            $table->string('sort')->nullable();
+            $table->string('sort',250)->nullable();
             $table->unsignedBigInteger('parent_product_id')->nullable();
             $table->boolean('is_default_child')->default(0);
             $table->timestamps();

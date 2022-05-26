@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->json('title');
             $table->enum('entity',['category','product','brand']);
-            $table->string('color');
-            $table->string('image')->nullable();
-            $table->string('key');
+            $table->string('color',250);
+            $table->string('image',250)->nullable();
+            $table->string('key',250);
             $table->timestamps();
         });
     }
