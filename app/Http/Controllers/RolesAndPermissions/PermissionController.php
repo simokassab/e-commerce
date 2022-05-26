@@ -20,8 +20,8 @@ class PermissionController extends MainController
 
     }
 
-    public function getNestedPermissions(){
-        return "hello";
+    public function getNestedPermissions($permission){
+        return $permissionObject = CustomPermission::find($permission)->allChildren(true);
     }
 
 

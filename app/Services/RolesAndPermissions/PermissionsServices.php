@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Services\RolesAndPermissions;
+
 use App\Models\RolesAndPermissions\CustomPermission;
 use App\Models\RolesAndPermissions\CustomRole;
 use Spatie\Permission\Models\Permission;

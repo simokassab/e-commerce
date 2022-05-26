@@ -40,7 +40,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
 
     //here goes all the routes inside the dashboard
     Route::apiResource('roles',RolesController::class);
-    Route::get('get-nested-permissions',[PermissionController::class,'getNestedPermissions']);
+    Route::get('get-nested-permissions/{permission}',[PermissionController::class,'getNestedPermissions']);
     Route::apiResource('settings',SettingsController::class);
     Route::apiResource('tag',TagController::class);
     Route::apiResource('attribute',AttributeController::class);
