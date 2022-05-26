@@ -56,7 +56,8 @@ class CategoryController extends MainController
         $category->meta_description= json_encode($request->meta_description);
         $category->meta_keyword= json_encode($request->meta_keyword);
         $category->description= json_encode($request->description);
-        $category->sort= Category::getMaxSortValue();
+        $category->sort= Category::getChildsMaxSortValue($request->parent_id ? NULL:$request->parent_id);
+
         $category->is_disabled= $request->is_disabled;
 
         if(!$category->save())
@@ -173,7 +174,7 @@ class CategoryController extends MainController
     }
 
 
-    public function updateSortValues(){
+    public function updateSortValues($parent_id){
 
         $category = new Category();
         $data=[
@@ -187,6 +188,7 @@ class CategoryController extends MainController
 
 
       return "test";
+
     }
 
 }

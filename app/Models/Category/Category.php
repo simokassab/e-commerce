@@ -54,9 +54,15 @@ class Category extends MainModel
 
     }
 
-    public static function getMaxSortValue(){
+    public static function getMaxSortValue($parent_id = null){
+        if($parent_id)
+            return self::where('parent_id',$parent_id)->max('sort')  + 1; // get the max sort for child with specific parent
 
-        return self::max('sort')+1;
+            return self::whereNull('parent_id')->max('sort') + 1;// get the max sort between parents
 
     }
+    // public static function getParentMaxSortValue(){
+    //     return self::whereNull('parent_id')->max('sort') + 1;// get the max sort between parents
+
+    // }
 }
