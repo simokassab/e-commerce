@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
             $table->json('name'); //translatable field
-            $table->string('iso_code_1');
-            $table->string('iso_code_2');
-            $table->string('phone_code');
+            $table->string('iso_code_1',250);
+            $table->string('iso_code_2',250);
+            $table->string('phone_code',250);
             $table->string('flag');
             $table->timestamps();
         });

@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('currencies', function (Blueprint $table) {
             $table->id();
             $table->json('name');
-            $table->string('code');
-            $table->string('symbol')->nullable();
+            $table->string('code',250);
+            $table->string('symbol',250)->nullable();
             $table->double('rate')->nullable();
             $table->boolean('is_default')->nullable();
-            $table->string('image')->nullable();
+            $table->string('image',250)->nullable();
             $table->integer('sort')->nullable();;
             $table->timestamps();
         });

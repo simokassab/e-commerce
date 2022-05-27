@@ -7,10 +7,15 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category\Category;
+use App\Services\Category\CategoryService;
+use Illuminate\Bus\Batch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends MainController
 {
+    const OBJECT_NAME = 'objects.category';
+
     /**
      * Display a listing of the resource.
      *
@@ -47,18 +52,21 @@ class CategoryController extends MainController
         $category->icon= $request->icon;
         $category->parent_id= $request->parent_id;
         $category->slug= $request->slug;
-        $category->title= json_encode($request->title);
+        $category->meta_title= json_encode($request->meta_title);
+        $category->meta_description= json_encode($request->meta_description);
+        $category->meta_keyword= json_encode($request->meta_keyword);
         $category->description= json_encode($request->description);
-        $category->keyword= json_encode($request->keyword);
-        $category->sort= $request->sort;
+        $category->sort= Category::getChildsMaxSortValue($request->parent_id ? NULL:$request->parent_id);
+
         $category->is_disabled= $request->is_disabled;
 
         if(!$category->save())
-            return $this->errorResponse(['message' => __('messages.failed.create'),['name' => __('objects.category')]]);
+          return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return $this->successResponse(['message' => __('messages.success.create',['name'=>__('objects.category')]),
-        'category' =>  new CategoryResource($category)
-    ]);
+        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            'category' =>  new CategoryResource($category)
+        ]);
+
 
     }
 
@@ -100,18 +108,18 @@ class CategoryController extends MainController
         $category->icon= $request->icon;
         $category->parent_id= $request->parent_id;
         $category->slug= $request->slug;
-        $category->title= json_encode($request->title);
+        $category->meta_title= json_encode($request->meta_title);
+        $category->meta_description= json_encode($request->meta_description);
+        $category->meta_keyword= json_encode($request->meta_keyword);
         $category->description= json_encode($request->description);
-        $category->keyword= json_encode($request->keyword);
-        $category->sort= $request->sort;
         $category->is_disabled= $request->is_disabled;
 
         if(!$category->save())
-              return $this->errorResponse(['message' => __('messages.failed.update'),['name' => __('objects.category')]]);
+             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return $this->successResponse(['message' => __('messages.success.update',['name'=>__('objects.category')]),
-        'category' =>  new CategoryResource($category)
-    ]);
+        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            'category' =>  new CategoryResource($category)
+        ]);
 
 
 
@@ -126,15 +134,62 @@ class CategoryController extends MainController
     public function destroy(Category $category)
     {
         if(!$category->delete())
-            return $this->errorResponse(['message' => __('messages.failed.delete'),['name' => __('objects.category')]]);
+          return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
-
-        return $this->successResponse([
-            'message' => __('messages.success.delete',['name'=>__('objects.category')]),
+        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
             'category' =>  new CategoryResource($category)
         ]);
 
 
     }
+
+
+    public function toggleStatus(Request $request ,$id){
+
+        $request->validate([
+            'is_disabled' => 'boolean|required'
+        ]);
+
+            $category = Category::findOrFail($id);
+        $category->is_disabled=$request->is_disabled;
+        if(!$category->save())
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+
+        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            'category' =>  new CategoryResource($category)
+        ]);
+
+    }
+
+    public function getAllParentsSorted(){
+
+        $categories=Category::whereNull('parent_id')->orderByRaw('ISNULL(sort), sort ASC')->get();
+        return $this->successResponse(['categories' => $categories ]);
+    }
+
+    public function getAllChildsSorted($parent_id){
+
+        $categories=Category::where('parent_id',$parent_id)->orderByRaw('ISNULL(sort), sort ASC')->get();
+        return $this->successResponse(['categories' => $categories ]);
+    }
+
+
+    public function updateSortValues($parent_id){
+
+        $category = new Category();
+        $data=[
+
+            //array['id' => 1 , 'sort' => 1]
+        ];
+
+        $index = 'id';
+
+      batch()->update($category,$data,$index);
+
+
+      return "test";
+
+    }
+
 }
 

@@ -100,10 +100,10 @@ class CountryController extends MainController
     public function update(StoreCountryRequest $request, Country $country)
     {
         $country->name = json_encode($request->name);
-        $country->iso_code_1 = ($request->iso_code_1);
-        $country->iso_code_2 = ($request->iso_code_2);
-        $country->phone_code = ($request->phone_code);
-        $country->flag = ($request->flag);
+        $country->iso_code_1 = $request->iso_code_1;
+        $country->iso_code_2 = $request->iso_code_2;
+        $country->phone_code = $request->phone_code;
+        $country->flag = $request->flag;
 
         if(!$country->save())
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);

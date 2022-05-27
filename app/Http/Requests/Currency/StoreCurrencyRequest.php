@@ -27,16 +27,16 @@ class StoreCurrencyRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'code' => 'required | max:125',
-            'symbol' => 'nullable | max:125',
+            'code' => 'required | max:'.config('defaults.string_length'),
+            'symbol' => 'nullable | max:'.config('defaults.string_length'),
             'rate' => 'nullable | doubleval',
             'is_default' => 'nullable | boolean',
 
             'image' => 'nullable | image
-            | mimes:'.config('app.default_image_extentions').'
-            | max:'.config('app.default_image_size').'
-            | dimensions:min_width='.config('app.default_image_minimum_width').',min_height='.config('app.default_image_minimum_height').'
-                ,max_width='.config('app.default_image_maximum_width').',max_height='.config('app.default_image_maximum_height'),
+            | mimes:'.config('defaults.default_image_extentions').'
+            | max:'.config('defaults.default_image_size').'
+            | dimensions:min_width='.config('defaults.default_image_minimum_width').',min_height='.config('defaults.default_image_minimum_height').'
+                ,max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
 
             'sort' => 'nullable | integer'
          ];
@@ -59,8 +59,8 @@ class StoreCurrencyRequest extends FormRequest
             'image.image' => 'The input is not an image',
             'image.max' => 'The maximum :attribute size is :max.',
             'image.mimes' => 'Invalid extention.',
-            'image.dimensions' => 'Invalid dimentions, minimum('.config('app.default_image_minimum_width').'x'.config('app.default_image_minimum_height').'),
-                 maximum('.config('app.default_image_maximum_width').'x'.config('app.default_image_maximum_height').')',
+            'image.dimensions' => 'Invalid dimentions, minimum('.config('defaults.default_image_minimum_width').'x'.config('defaults.default_image_minimum_height').'),
+                 maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
 
             'sort.integer' => 'the :attribute should be an integer',
           ];

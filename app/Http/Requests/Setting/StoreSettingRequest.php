@@ -24,8 +24,8 @@ class StoreSettingRequest extends FormRequest
     public function rules()
     {
         return [
-            'value' => 'required | max:125',
-            'key' => 'required | max:125',
+            'value' => 'required | max:'.config('defaults.string_length'),
+            'key' => 'required | max:'.config('defaults.string_length'),
             'is_developer' => 'nullable | boolean',
 
         ];
@@ -41,7 +41,7 @@ class StoreSettingRequest extends FormRequest
         'key.required' => 'the :attribute field is required',
         'key.max' => 'the maximum string length is :max',
 
-        'is_developer.boolean' => 'the :attribute must be either true or false',
+        'is_developer.boolean' => 'the :attribute must be either false or true (0 or 1)',
 
         ];
     }

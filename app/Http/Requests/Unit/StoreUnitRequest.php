@@ -25,7 +25,7 @@ class StoreUnitRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'code' => 'required | max:125'
+            'code' => 'required | max:'.config('defaults.string_length')
         ];
     }
 

@@ -20,6 +20,7 @@ use App\Http\Controllers\Unit\UnitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,12 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     //change language for dashboard and get the dashborad translated objects
     Route::put('change-language/{lang}',[LanguageController::class,'setLanguage'])->middleware('localization');
 
+    Route::patch('toggle-status/{id}',[CategoryController::class,'toggleStatus']);
+
 
 
 });
+Route::get('parents',[CategoryController::class,'getAllParentsSorted']);
+Route::get('childs/{parent_id}',[CategoryController::class,'getAllChildsSorted']);
+Route::get('update-category-order',[CategoryController::class,'updateSortValues']);
+

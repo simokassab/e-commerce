@@ -2,7 +2,6 @@
 
 namespace App\Models\Category;
 
-use App\Models\Category as ModelsCategorie;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
 use App\Models\Label\Label;
@@ -16,8 +15,8 @@ use App\Models\Product\Product;
 class Category extends MainModel
 {
     use HasFactory;
-    protected $table='categories';
-    protected $guard_name = 'sanctum';
+    // protected $table='categories';
+    // protected $guard_name = 'sanctum';
 
     public function parent(){
         return $this->belongsTo(Category::class,'parent_id');
@@ -54,4 +53,16 @@ class Category extends MainModel
         return $this->hasMany(Product::class,'id','product_id');
 
     }
+
+    public static function getMaxSortValue($parent_id = null){
+        if($parent_id)
+            return self::where('parent_id',$parent_id)->max('sort')  + 1; // get the max sort for child with specific parent
+
+            return self::whereNull('parent_id')->max('sort') + 1;// get the max sort between parents
+
+    }
+    // public static function getParentMaxSortValue(){
+    //     return self::whereNull('parent_id')->max('sort') + 1;// get the max sort between parents
+
+    // }
 }

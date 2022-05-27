@@ -25,11 +25,11 @@ class StoreBrandRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'code' => 'required | max:125',
+            'code' => 'required | max:'.config('defaults.string_length'),
             'meta_title' => 'nullable',
             'meta_description' => 'nullable',
             'meta_keyword' => 'nullable',
-            'description' => 'required',
+            'description' => 'nullable',
             'sort' => 'required | integer',
             'is_disabled' => 'required | boolean',
 
@@ -42,7 +42,6 @@ class StoreBrandRequest extends FormRequest
 
             'name.required' => 'the :attribute field is required',
             'code.required' => 'the :attribute field is required',
-            'description.required' => 'the :attribute field is required',
             'sort.required' => 'the :attribute field is required',
             'is_disabled.required' => 'the :attribute field is required',
             'is_disabled.boolean' => 'The :attribute field accepts only 0 or 1',

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('products_statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name',250);
             $table->boolean('is_website');
             $table->integer('sort');
 
