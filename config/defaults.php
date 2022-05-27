@@ -2,7 +2,7 @@
 
 return [
  //IMAGE
-    // image extentions and size
+    // image extentions and sistring_lengthze
     'default_image_size'=>10240,
     'default_image_extentions'=>'jpeg,bmp,png,jpg',
 
@@ -18,7 +18,7 @@ return [
 //ICON
      // icon extentions and size
      'default_icon_size'=>'10240',
-     'default_icon_extentions'=>'ico',
+     'default_icon_extentions'=>'jpeg,bmp,png,jpg',
 
      //minimum width and height for icon
      'default_icon_minimum_width' => 100,
@@ -33,5 +33,5 @@ return [
 
     'validation_default_type' => 'checkbox,text,select,textarea,date',
 
-    'defaults.string_length' => 250
+    'default_string_length' => 250
 ];

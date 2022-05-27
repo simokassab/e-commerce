@@ -24,23 +24,23 @@ class StoreCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'code' => 'required | max:'.config('defaults.string_length'),
 
-            'image' => 'nullable | image
+            'name' => 'required',
+            'code' => 'required | max:'.config('defaults.default_string_length'),
+
+            'image' => 'nullable | file
             | mimes:'.config('defaults.default_image_extentions').'
             | max:'.config('defaults.default_image_size').'
-            | dimensions:min_width='.config('defaults.default_image_minimum_width').',min_height='.config('defaults.default_image_minimum_height').'
-                ,max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
+            | dimensions:min_width='.config('defaults.default_image_minimum_width').',min_height='.config('defaults.default_image_minimum_height').',max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
 
-            'icon' => 'nullable | image
+
+            'icon' => 'nullable | file
             | mimes:'.config('defaults.default_icon_extentions').'
             | max:'.config('defaults.default_icon_size').'
-            | dimensions:min_width='.config('defaults.default_icon_minimum_width').',min_height='.config('defaults.default_icon_minimum_height').'
-                ,max_width='.config('defaults.default_icon_maximum_width').',max_height='.config('defaults.default_icon_maximum_height'),
+            | dimensions:max_width='.config('defaults.default_icon_maximum_width').',max_height='.config('defaults.default_icon_maximum_height'),
 
             'parent_id' => 'nullable | integer',
-            'slug' => 'required | max:'.config('defaults.string_length').'| unique:categories,slug,'.$this->id,
+            'slug' => 'required | max:'.config('defaults.default_string_length').'| unique:categories,slug,'.$this->id,
 
             'meta_title' => 'nullable',
             'meta_description' => 'nullable',
@@ -62,17 +62,15 @@ class StoreCategoryRequest extends FormRequest
             'code.required' => 'the :attribute field is required',
             'code.max' => 'the maximum string length is :max',
 
-            'image.image' => 'The input is not an image',
+            'image.file' => 'The input is not an image',
             'image.max' => 'The maximum :attribute size is :max.',
             'image.mimes' => 'Invalid extention.',
-            'image.dimensions' => 'Invalid dimentions, minimum('.config('defaults.default_image_minimum_width').'x'.config('defaults.default_image_minimum_height').'),
-                 maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
+            'image.dimensions' => 'Invalid dimentions, minimum('.config('defaults.default_image_minimum_width').'x'.config('defaults.default_image_minimum_height').'),maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
 
-            'icon.image' => 'The input is not an image',
+            // 'icon.file' => 'The input is not an image',
             'icon.max' => 'The maximum :attribute size is :max.',
             'icon.mimes' => 'Invalid extention.',
-            'icon.dimensions' => 'Invalid dimentions, minimum('.config('defaults.default_icon_minimum_width').'x'.config('defaults.default_icon_minimum_height').'),
-                maximum('.config('defaults.default_icon_maximum_width').'x'.config('defaults.default_icon_maximum_height').')',
+            'icon.dimensions' => 'Invalid dimentions, minimum('.config('defaults.default_icon_minimum_width').'x'.config('defaults.default_icon_minimum_height').'),maximum('.config('defaults.default_icon_maximum_width').'x'.config('defaults.default_icon_maximum_height').')',
 
             'parent_id.integer' => 'the :attribute should be an integer',
 

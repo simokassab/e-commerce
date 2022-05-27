@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Category\Category;
+use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Expr\FuncCall;
 
 
@@ -54,9 +57,16 @@ class MainController extends Controller
         ],$statusCode);
     }
 
-    public function ImageUpload(Request $request,$filename){
-        $file=$request->hasFile($filename);
-        $ext
+    public function ImageUpload($file,$folderpath,$type){
+        return uploadImage($file,$folderpath,$type);
+
+        }
+
+        public function test(){
+            return config('defaults.default_icon_extentions');
+
+        }
 
     }
-}
+
+

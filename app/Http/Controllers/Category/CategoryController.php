@@ -11,6 +11,7 @@ use App\Services\Category\CategoryService;
 use Illuminate\Bus\Batch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends MainController
 {
@@ -46,27 +47,27 @@ class CategoryController extends MainController
     public function store(StoreCategoryRequest $request)
     {
         $category=new Category();
-        $category->name= json_encode($request->name);
-        $category->code= $request->code;
+            $category->name= json_encode($request->name);
+            $category->code= $request->code;
 
-        // should be repeated
-        $category->image= $request->image;
-        // should be repeated
+            if($request->image){
+                $category->image= $this->ImageUpload($request->file('image'),config(self::OBJECT_NAME.'.images'),'image');
+            }
+            if($request->icon){
+                $category->icon= $this->ImageUpload($request->file('icon'),config(self::OBJECT_NAME.'.icons'),'icon');
+            }
+            $category->parent_id= $request->parent_id;
+            $category->slug= $request->slug;
+            $category->meta_title= json_encode($request->meta_title);
+            $category->meta_description= json_encode($request->meta_description);
+            $category->meta_keyword= json_encode($request->meta_keyword);
+            $category->description= json_encode($request->description);
+            $category->sort= Category::getMaxSortValue($request->parent_id ? NULL:$request->parent_id);
 
-        $category->icon= $request->icon;
-        $category->parent_id= $request->parent_id;
-        $category->slug= $request->slug;
-        $category->meta_title= json_encode($request->meta_title);
-        $category->meta_description= json_encode($request->meta_description);
-        $category->meta_keyword= json_encode($request->meta_keyword);
-        $category->description= json_encode($request->description);
-        $category->sort= Category::getChildsMaxSortValue($request->parent_id ? NULL:$request->parent_id);
+            $category->is_disabled= $request->is_disabled;
 
-        $category->is_disabled= $request->is_disabled;
-
-        if(!$category->save())
-          return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
-
+            if(!$category->save())
+                return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             'category' =>  new CategoryResource($category)
         ]);
@@ -194,6 +195,7 @@ class CategoryController extends MainController
       return $this->successResponse(['messsage' => 'updated Successfully!']);
 
     }
+
 
 }
 
