@@ -33,5 +33,5 @@ return [
 
     'validation_default_type' => 'checkbox,text,select,textarea,date',
 
-    '   ' => 250
+    'defaults.string_length' => 250
 ];

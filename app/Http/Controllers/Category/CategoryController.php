@@ -183,7 +183,7 @@ class CategoryController extends MainController
         $category = new Category();
         $data=[
 
-            //array['id' => 1 , 'sort' => 1]
+           ['id' => 10 , 'sort' => 1]
         ];
 
         $index = 'id';

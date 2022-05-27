@@ -54,4 +54,9 @@ class MainController extends Controller
         ],$statusCode);
     }
 
+    public function ImageUpload(Request $request,$filename){
+        $file=$request->hasFile($filename);
+        $ext
+
+    }
 }
