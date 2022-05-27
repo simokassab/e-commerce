@@ -48,7 +48,11 @@ class CategoryController extends MainController
         $category=new Category();
         $category->name= json_encode($request->name);
         $category->code= $request->code;
+
+        // should be repeated
         $category->image= $request->image;
+        // should be repeated
+
         $category->icon= $request->icon;
         $category->parent_id= $request->parent_id;
         $category->slug= $request->slug;
