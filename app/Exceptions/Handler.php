@@ -3,7 +3,10 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use \Exception;
+use Spatie\FlareClient\Http\Exceptions\NotFound;
 use Throwable;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -36,6 +39,28 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
+
+
+    /**
+     * A list of the expected exceptions.
+     *
+     * @var array<Exception, string>
+     *
+     * */
+    protected array $exceptions= [
+        [
+            'class' => NotFoundHttpException::class,
+            'message' => 'The object was not found! '
+        ],
+
+        [
+            'name' => \Exception::class,
+            'message' => 'An error occurred please refresh the page and try again later'
+        ],
+
+
+    ];
+
     /**
      * Register the exception handling callbacks for the application.
      *
@@ -43,8 +68,21 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (Throwable $exception,$request) {
+
+            if(!config('app.debug_code')){
+                if($exception instanceof \Error){
+                    return errorResponse(['message'=>'error, please try again later']);
+                }
+            }
+
+            if(!config('app.debug')){
+                foreach ($this->exceptions as $currentException){
+                    if($exception instanceof $currentException['class']){
+                        return errorResponse(['message'=>$currentException['message']] ?: 'error, please try again later' );
+                    }
+                }
+            }
         });
     }
 }

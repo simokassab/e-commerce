@@ -36,22 +36,16 @@ class MainController extends Controller
     }
 
     protected function successResponse(Array $data, $statusCode= 200){
-        return response()->json([
-            'data' => $data
-        ],$statusCode);
+        return successResponse($data, $statusCode);
     }
 
 
     protected function errorResponse(Array $data, $statusCode= 500){
-        return response()->json([
-            'data' => $data
-        ],$statusCode);
+        return errorResponse($data, $statusCode);
     }
 
     protected function notFoundResponse(Array $data, $statusCode= 404){
-        return response()->json([
-            'data' => $data
-        ],$statusCode);
+        return notFoundError($data, $statusCode);
     }
 
 }
