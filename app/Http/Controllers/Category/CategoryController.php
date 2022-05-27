@@ -191,7 +191,7 @@ class CategoryController extends MainController
       batch()->update($category,$data,$index);
 
 
-      return "test";
+      return $this->successResponse(['messsage' => 'updated Successfully!']);
 
     }
 
