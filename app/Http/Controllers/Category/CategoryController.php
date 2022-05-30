@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Category;
 
+use App\Exceptions\FileErrorException;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Category\StoreCategoryRequest;
@@ -110,18 +111,21 @@ class CategoryController extends MainController
     public function update(StoreCategoryRequest $request, Category $category)
     {
 
-
         $category->name= json_encode($request->name);
         $category->code= $request->code;
         if($request->image){
-           if( $this->removeImage($category->image)){
-                $category->image= $this->imageUpload($request->file('image'),config('ImagesPaths.category.images'));
-           }
+           if( !$this->removeImage($category->image) ){
+                throw new FileErrorException();
+            }
+           $category->image= $this->imageUpload($request->file('image'),config('ImagesPaths.category.images'));
+
         }
         if($request->icon){
-            if( $this->removeImage($category->icon)){
-                $category->icon= $this->imageUpload($request->file('icon'),config('ImagesPaths.category.icons'));
-           }
+            if( !$this->removeImage($category->icon)){
+                throw new FileErrorException();
+            }
+           $category->icon= $this->imageUpload($request->file('icon'),config('ImagesPaths.category.icons'));
+
         }
         $category->parent_id= $request->parent_id;
         $category->slug= $request->slug;

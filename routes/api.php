@@ -64,7 +64,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::get('children/{parent_id}',[CategoryController::class,'getAllChildsSorted']);
     Route::get('update-category-order',[CategoryController::class,'updateSortValues']);
 
-    // Route::post('category-update/{category}',[CategoryController::class,'update']);
+    Route::post('category-update/{category}',[CategoryController::class,'update']);
 
 });
 Route::get('test',[MainController::class,'test']);

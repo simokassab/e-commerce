@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Expr\FuncCall;
-
+use App\Exceptions\FileErrorException;
 
 class MainController extends Controller
 {
@@ -59,16 +59,12 @@ class MainController extends Controller
 
     public function imageUpload($file,$folderpath){
         return uploadImage($file,$folderpath);
+    }
 
-        }
     public function removeImage($folderpath){
         return removeImage($folderpath);
+    }
 
-            }
-        public function test(){
-            return config('defaults.default_icon_extentions');
-
-        }
 
     }
 
