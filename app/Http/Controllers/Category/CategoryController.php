@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Category\StoreCategoryRequest;
+use App\Http\Requests\Countries\StoreCountryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category\Category;
 use App\Services\Category\CategoryService;
 use Illuminate\Bus\Batch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -51,10 +53,10 @@ class CategoryController extends MainController
             $category->code= $request->code;
 
             if($request->image){
-                $category->image= $this->ImageUpload($request->file('image'),config('ImagesPaths.category.images'));
+                $category->image= $this->imageUpload($request->file('image'),config('ImagesPaths.category.images'));
             }
             if($request->icon){
-                $category->icon= $this->ImageUpload($request->file('icon'),config('ImagesPaths.category.icons'));
+                $category->icon= $this->imageUpload($request->file('icon'),config('ImagesPaths.category.icons'));
             }
             $category->parent_id= $request->parent_id;
             $category->slug= $request->slug;
@@ -105,19 +107,21 @@ class CategoryController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(StoreCategoryRequest $request, Category $category)
     {
+
 
         $category->name= json_encode($request->name);
         $category->code= $request->code;
         if($request->image){
-            //if to check if teh image exists in the given path
-            //delete image
-            // if image delete was succsefful
-            $category->image= $this->ImageUpload($request->file('image'),config('ImagesPaths.category.images'));
+           if( $this->removeImage($category->image)){
+                $category->image= $this->imageUpload($request->file('image'),config('ImagesPaths.category.images'));
+           }
         }
         if($request->icon){
-            $category->icon= $this->ImageUpload($request->file('icon'),config('ImagesPaths.category.icons'));
+            if( $this->removeImage($category->icon)){
+                $category->icon= $this->imageUpload($request->file('icon'),config('ImagesPaths.category.icons'));
+           }
         }
         $category->parent_id= $request->parent_id;
         $category->slug= $request->slug;

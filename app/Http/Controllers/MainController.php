@@ -57,11 +57,14 @@ class MainController extends Controller
         ],$statusCode);
     }
 
-    public function ImageUpload($file,$folderpath){
+    public function imageUpload($file,$folderpath){
         return uploadImage($file,$folderpath);
 
         }
+    public function removeImage($folderpath){
+        return removeImage($folderpath);
 
+            }
         public function test(){
             return config('defaults.default_icon_extentions');
 

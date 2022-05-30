@@ -23,7 +23,7 @@ class StoreCategoryRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+    return [
 
             'name' => 'required',
             'code' => 'required | max:'.config('defaults.default_string_length'),

@@ -1,23 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
-// function uploadImage(Request $request=null,$folderName,$folderType){
-
-//     "/categories/images/";
-//     try {
-//         $filePathName = $folderName.'/'.$folderType;
-//         $fileName = uniqid().'_'.$request->file('image')->getClientOriginalName();
-//         $path = Storage::putFileAs($filePathName, $request->file('image'), $fileName);
-
-//         return $path;
-//     } catch (\Exception $exception) {
-//         throw new Exception();
-//     }
-
-// }
-
+use phpDocumentor\Reflection\Types\Boolean;
 
 function uploadImage($file,$folderpath){
 
@@ -29,5 +13,22 @@ function uploadImage($file,$folderpath){
                     throw new Exception();
                 }
 
-
 }
+
+function removeImage($folderpath)
+{
+
+   try {
+        if(Storage::exists($folderpath)){
+           return Storage::delete($folderpath);
+        }
+
+        return true;
+
+    } catch (\Exception $exception) {
+        throw new Exception();
+    }
+
+
+  }
+
