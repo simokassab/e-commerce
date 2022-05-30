@@ -43,7 +43,7 @@ class Handler extends ExceptionHandler
 
     /**
      * A list of the expected exceptions.
-     *
+     * Register all exceptions here
      * @var array<Exception, string>
      *
      * */
@@ -52,12 +52,6 @@ class Handler extends ExceptionHandler
             'class' => NotFoundHttpException::class,
             'message' => 'The object was not found! '
         ],
-
-        [
-            'name' => \Exception::class,
-            'message' => 'An error occurred please refresh the page and try again later'
-        ],
-
 
     ];
 
@@ -68,6 +62,12 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+
+        $this->exceptionsp[]=[
+            'name' => \Exception::class,
+            'message' => 'An error occurred please refresh the page and try again later'
+        ];
+
         $this->renderable(function (Throwable $exception,$request) {
 
             if(!config('app.debug_code')){
