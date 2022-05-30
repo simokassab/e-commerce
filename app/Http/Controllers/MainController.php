@@ -48,4 +48,9 @@ class MainController extends Controller
         return notFoundError($data, $statusCode);
     }
 
+    public function ImageUpload(Request $request,$filename){
+        $file=$request->hasFile($filename);
+        $ext
+
+    }
 }
