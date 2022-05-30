@@ -5,7 +5,7 @@ $nameValue=':name';
 return [
 
     'success' => [
-        'create' =>  'The :name was created successfully',
+        'create' =>  'The '.$nameValue.' was created successfully',
         'update' => 'The '.$nameValue.' was updated successfully',
         'delete' => 'The '.$nameValue.' was deleted successfully',
         'index' => ''

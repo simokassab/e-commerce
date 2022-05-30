@@ -57,8 +57,8 @@ class MainController extends Controller
         ],$statusCode);
     }
 
-    public function ImageUpload($file,$folderpath,$type){
-        return uploadImage($file,$folderpath,$type);
+    public function ImageUpload($file,$folderpath){
+        return uploadImage($file,$folderpath);
 
         }
 

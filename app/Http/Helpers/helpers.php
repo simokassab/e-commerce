@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Storage;
 // }
 
 
-function uploadImage($file,$folderpath,$type){
+function uploadImage($file,$folderpath){
 
         try {
             $fileName = uniqid().'_'.$file->getClientOriginalName();

@@ -69,3 +69,4 @@ Route::get('parents',[CategoryController::class,'getAllParentsSorted']);
 Route::get('childs/{parent_id}',[CategoryController::class,'getAllChildsSorted']);
 Route::get('update-category-order',[CategoryController::class,'updateSortValues']);
 Route::get('test',[MainController::class,'test']);
+Route::post('category-update',[CategoryController::class,'update']);
