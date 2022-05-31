@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Language;
 
+use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Language\StoreLanguage;
 use App\Http\Requests\Language\StoreLanguageRequest;
@@ -55,7 +56,9 @@ class LanguageController extends MainController
         $language->setIsDefault();
        }
         $language->is_disabled=$request->is_disabled;
-        $language->image=$request->image;
+        if($request->image){
+            $language->image= $this->imageUpload($request->file('image'),config('ImagesPaths.language.images'));
+        }
         $language->sort=$request->sort;
 
         if(!$language->save())
@@ -105,7 +108,13 @@ class LanguageController extends MainController
             $language->setIsDefault();
            }
         $language->is_disabled=$request->is_disabled;
-        $language->image=$request->image;
+        if($request->image){
+            if( !$this->removeImage($language->image) ){
+                 throw new FileErrorException();
+             }
+            $language->image= $this->imageUpload($request->file('image'),config('ImagesPaths.language.images'));
+
+         }
         $language->sort=$request->sort;
 
         if(!$language->save())
@@ -139,7 +148,7 @@ class LanguageController extends MainController
         session(['locale' => $locale]);
 
         App::setLocale($locale);
-            
+
         if(App::getLocale() == $locale){
             return $this->successResponse([__('objects'),'messages' => __('messages.success.update', ['name' => __('objects.language')] )]);
         }

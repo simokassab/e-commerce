@@ -26,6 +26,13 @@ class StoreBrandRequest extends FormRequest
         return [
             'name' => 'required',
             'code' => 'required | max:'.config('defaults.string_length'),
+
+            'image' => 'nullable | file
+            | mimes:'.config('defaults.default_image_extentions').'
+            | max:'.config('defaults.default_image_size').'
+            | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
+
+
             'meta_title' => 'nullable',
             'meta_description' => 'nullable',
             'meta_keyword' => 'nullable',
@@ -42,6 +49,12 @@ class StoreBrandRequest extends FormRequest
 
             'name.required' => 'the :attribute field is required',
             'code.required' => 'the :attribute field is required',
+
+            'image.file' => 'The input is not an image',
+            'image.max' => 'The maximum :attribute size is :max.',
+            'image.mimes' => 'Invalid extention.',
+            'image.dimensions' => 'Invalid dimentions, minimum('.config('defaults.default_image_minimum_width').'x'.config('defaults.default_image_minimum_height').'),maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
+
             'sort.required' => 'the :attribute field is required',
             'is_disabled.required' => 'the :attribute field is required',
             'is_disabled.boolean' => 'The :attribute field accepts only 0 or 1',
