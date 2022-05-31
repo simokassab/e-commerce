@@ -27,8 +27,27 @@ class CategoryController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['categories' => CategoryResource::collection( Category::with('parent','children','label','fields','fieldValue','tags','discount','brand','products')->paginate(config('defaults.default_pagination')))]);
+        // $data = array();
+        // return CategoryResource::collection(Category::paginate(15));
+        // //  $this->successResponsePaginated(CategoryResource::class,Category::class,15);
+        //  return "s";
+        // // $category=Category::paginate();
+        // // return new CategoryResource($category);
+        // return Category::with('parent','children','label','fields','fieldValue','tags','discount','brand','products')->paginate(config('defaults.default_pagination'));
+        // return CategoryResource::collection(Category::paginate(config('defaults.default_pagination')));
+        // return $this->successResponse($data);
+        // return $this->successResponse(['categories' => CategoryResource::collection(Category::paginate(config('defaults.default_pagination')))]);
 
+        // $category=Category::paginate();
+        // return response()->json( $category);
+
+        $category=Category::paginate(10);
+        // $custom=collect(['my_data' => 'metagea']);
+        // $data=$custom->merge($category);
+        return $this->successResponse([$category]);
+        // return  response()->json($category);
+
+        // return response()->json($category,200);
     }
 
     /**

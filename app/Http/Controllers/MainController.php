@@ -47,6 +47,10 @@ class MainController extends Controller
         return errorResponse($data, $statusCode);
     }
 
+    protected function successResponsePaginated($resource, $model,$pagination=15){
+        return $resource::collection($model::paginate($pagination));
+    }
+
     protected function notFoundResponse(Array $data, $statusCode= 404){
         return notFoundError($data, $statusCode);
     }
