@@ -10,7 +10,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Arr;
 use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\MainController;
-
+use App\Exceptions\FileErrorException;
 class TestController extends MainController
 {
     use HasRoles;

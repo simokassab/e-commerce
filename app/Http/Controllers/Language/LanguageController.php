@@ -135,9 +135,11 @@ class LanguageController extends MainController
     }
     public function setLanguage($locale){
 
-        session(['locale' => $locale]);
-        App::setLocale($locale);
 
+        session(['locale' => $locale]);
+
+        App::setLocale($locale);
+            
         if(App::getLocale() == $locale){
             return $this->successResponse([__('objects'),'messages' => __('messages.success.update', ['name' => __('objects.language')] )]);
         }

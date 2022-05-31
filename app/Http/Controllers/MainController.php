@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Category\Category;
+use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Expr\FuncCall;
-
+use App\Exceptions\FileErrorException;
 
 class MainController extends Controller
 {
@@ -48,9 +51,15 @@ class MainController extends Controller
         return notFoundError($data, $statusCode);
     }
 
-    public function ImageUpload(Request $request,$filename){
-        $file=$request->hasFile($filename);
-        $ext
+    public function imageUpload($file,$folderpath){
+        return uploadImage($file,$folderpath);
+    }
+
+    public function removeImage($folderpath){
+        return removeImage($folderpath);
+    }
+
 
     }
-}
+
+

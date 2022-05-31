@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Category;
 
+use App\Exceptions\FileErrorException;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Category\StoreCategoryRequest;
+use App\Http\Requests\Countries\StoreCountryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category\Category;
 use App\Services\Category\CategoryService;
 use Illuminate\Bus\Batch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends MainController
 {
@@ -46,27 +50,27 @@ class CategoryController extends MainController
     public function store(StoreCategoryRequest $request)
     {
         $category=new Category();
-        $category->name= json_encode($request->name);
-        $category->code= $request->code;
+            $category->name= json_encode($request->name);
+            $category->code= $request->code;
 
-        // should be repeated
-        $category->image= $request->image;
-        // should be repeated
+            if($request->image){
+                $category->image= $this->imageUpload($request->file('image'),config('ImagesPaths.category.images'));
+            }
+            if($request->icon){
+                $category->icon= $this->imageUpload($request->file('icon'),config('ImagesPaths.category.icons'));
+            }
+            $category->parent_id= $request->parent_id;
+            $category->slug= $request->slug;
+            $category->meta_title= json_encode($request->meta_title);
+            $category->meta_description= json_encode($request->meta_description);
+            $category->meta_keyword= json_encode($request->meta_keyword);
+            $category->description= json_encode($request->description);
+            $category->sort= Category::getMaxSortValue($request->parent_id ? NULL:$request->parent_id);
 
-        $category->icon= $request->icon;
-        $category->parent_id= $request->parent_id;
-        $category->slug= $request->slug;
-        $category->meta_title= json_encode($request->meta_title);
-        $category->meta_description= json_encode($request->meta_description);
-        $category->meta_keyword= json_encode($request->meta_keyword);
-        $category->description= json_encode($request->description);
-        $category->sort= Category::getChildsMaxSortValue($request->parent_id ? NULL:$request->parent_id);
+            $category->is_disabled= $request->is_disabled;
 
-        $category->is_disabled= $request->is_disabled;
-
-        if(!$category->save())
-          return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
-
+            if(!$category->save())
+                return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             'category' =>  new CategoryResource($category)
         ]);
@@ -106,10 +110,23 @@ class CategoryController extends MainController
      */
     public function update(StoreCategoryRequest $request, Category $category)
     {
+
         $category->name= json_encode($request->name);
         $category->code= $request->code;
-        $category->image= $request->image;
-        $category->icon= $request->icon;
+        if($request->image){
+           if( !$this->removeImage($category->image) ){
+                throw new FileErrorException();
+            }
+           $category->image= $this->imageUpload($request->file('image'),config('ImagesPaths.category.images'));
+
+        }
+        if($request->icon){
+            if( !$this->removeImage($category->icon)){
+                throw new FileErrorException();
+            }
+           $category->icon= $this->imageUpload($request->file('icon'),config('ImagesPaths.category.icons'));
+
+        }
         $category->parent_id= $request->parent_id;
         $category->slug= $request->slug;
         $category->meta_title= json_encode($request->meta_title);
@@ -194,6 +211,7 @@ class CategoryController extends MainController
       return $this->successResponse(['messsage' => 'updated Successfully!']);
 
     }
+
 
 }
 
