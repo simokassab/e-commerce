@@ -28,7 +28,7 @@ class LanguageController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['languages' => LanguageResource::collection(Language::all())]);
+        return $this->successResponse(['languages' => LanguageResource::collection(Language::paginate(config('defaults.default_pagination')))]);
     }
 
     /**

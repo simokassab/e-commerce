@@ -26,13 +26,13 @@ class CurrencyController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['currencies' => CurrencyResource::collection(Currency::with('currencyHistory')->get())]);
+        return $this->successResponse(['currencies' => CurrencyResource::collection(Currency::with('currencyHistory')->paginate(config('defaults.default_pagination')))]);
 
     }
 
     public function getCurrencyHistories(){
 
-        return $this->successResponse(['currncies_histories' => CurrencyHistoryResource::collection(CurrencyHistory::all())]);
+        return $this->successResponse(['currncies_histories' => CurrencyHistoryResource::collection(CurrencyHistory::paginate(config('defaults.default_pagination')))]);
 
     }
     /**

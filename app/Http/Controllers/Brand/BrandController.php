@@ -21,7 +21,7 @@ class BrandController extends MainController
      */
     public function index()
     {
-       return $this->successResponse(['brands' => BrandResource::collection(Brand::all())]);
+       return $this->successResponse(['brands' => BrandResource::collection(Brand::paginate(config('defaults.default_pagination')))]);
     }
 
     /**

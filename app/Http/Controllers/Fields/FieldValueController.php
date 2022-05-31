@@ -19,7 +19,7 @@ class FieldValueController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['fields_values' => FieldsValueResource::collection(FieldValue::all())]);
+        return $this->successResponse(['fields_values' => FieldsValueResource::collection(FieldValue::paginate(config('defaults.default_pagination')))]);
     }
 
     /**

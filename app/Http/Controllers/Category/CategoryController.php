@@ -27,7 +27,7 @@ class CategoryController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['categories' => CategoryResource::collection( Category::with('parent','children','label','fields','fieldValue','tags','discount','brand','products')->get() )]);
+        return $this->successResponse(['categories' => CategoryResource::collection( Category::with('parent','children','label','fields','fieldValue','tags','discount','brand','products')->paginate(config('defaults.default_pagination')))]);
 
     }
 
