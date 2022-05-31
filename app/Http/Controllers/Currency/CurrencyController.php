@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Currency;
 
+use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Currency\StoreCurrency;
 use App\Http\Requests\Currency\StoreCurrencyRequest;
@@ -58,8 +59,9 @@ class CurrencyController extends MainController
         $currency->symbol=$request->symbol;
         $currency->rate=$request->rate;
         $currency->is_default=$request->is_default;
-        $currency->image=$request->image;
-        $currency->sort=$request->sort;
+        if($request->image){
+            $currency->image= $this->imageUpload($request->file('image'),config('ImagesPaths.currency.images'));
+        }        $currency->sort=$request->sort;
 
         if(!$currency->save())
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
@@ -111,9 +113,15 @@ class CurrencyController extends MainController
             $currency->symbol=$request->symbol;
             $currency->rate=$request->rate;
             $currency->is_default=$request->is_default;
-            $currency->image=$request->image;
-            $currency->sort=$request->sort;
 
+            if($request->image){
+                if( !$this->removeImage($currency->image) ){
+                     throw new FileErrorException();
+                 }
+                $currency->image= $this->imageUpload($request->file('image'),config('ImagesPaths.currency.images'));
+
+             }
+            $currency->sort=$request->sort;
             $currency->save();
             DB::commit();
 

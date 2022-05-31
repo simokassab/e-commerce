@@ -12,6 +12,10 @@ function uploadImage($file,$folderpath){
         return $path;
     }catch (\App\Exceptions\FileErrorException $exception) {
         throw new FileErrorException();
+    }catch(ValueError $exception){
+        throw $exception;
+    }catch(ErrorException $exception){
+        throw new FileErrorException();
     }
 }
 
