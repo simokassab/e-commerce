@@ -20,7 +20,7 @@ class SettingsController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['settings' => SettingsResource::collection(cache()->remember( 'settings',config('cache.default_cache_time'),fn() => Setting::all() ) )]);
+        return $this->successResponse(['settings' => SettingsResource::collection(cache()->remember( 'settings',config('cache.default_cache_time'),fn() => Setting::paginate(config('defaults.default_pagination')) ) )]);
     }
 
     /**

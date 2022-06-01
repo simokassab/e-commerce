@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category\Category;
+use http\Client\Response;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -45,6 +46,9 @@ class MainController extends Controller
 
     protected function errorResponse(Array $data, $statusCode= 500){
         return errorResponse($data, $statusCode);
+    }
+    protected function successResponsePaginated($resource, $model, $pagination=15 ){
+        return ($resource::collection($model::paginate(config('defaults.default_pagination') ?? 15))) ;
     }
 
     protected function notFoundResponse(Array $data, $statusCode= 404){

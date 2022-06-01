@@ -21,8 +21,8 @@ class AttributeController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['attributes' => AttributeResource::collection(  Attribute::all() )]);
 
+        return $this->successResponse(['attributes' => AttributeResource::collection(Attribute::paginate(config('defaults.default_pagination')))]);
     }
 
     /**

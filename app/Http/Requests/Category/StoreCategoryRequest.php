@@ -67,7 +67,7 @@ class StoreCategoryRequest extends FormRequest
             'image.mimes' => 'Invalid extention.',
             'image.dimensions' => 'Invalid dimentions, minimum('.config('defaults.default_image_minimum_width').'x'.config('defaults.default_image_minimum_height').'),maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
 
-            // 'icon.file' => 'The input is not an image',
+            'icon.file' => 'The input is not an image',
             'icon.max' => 'The maximum :attribute size is :max.',
             'icon.mimes' => 'Invalid extention.',
             'icon.dimensions' => 'Invalid dimentions, minimum('.config('defaults.default_icon_minimum_width').'x'.config('defaults.default_icon_minimum_height').'),maximum('.config('defaults.default_icon_maximum_width').'x'.config('defaults.default_icon_maximum_height').')',

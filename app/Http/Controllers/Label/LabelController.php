@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Label;
 
+use App\Exceptions\FileErrorException;
 use App\Http\Resources\LabelsResource;
 use App\Models\Label\Label;
 use App\Http\Controllers\MainController;
@@ -23,7 +24,7 @@ class LabelController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['labels' => LabelsResource::collection(Label::all())]);
+        return $this->successResponse(['labels' => LabelsResource::collection(Label::paginate(config('defaults.default_pagination')))]);
 
     }
 
@@ -48,10 +49,12 @@ class LabelController extends MainController
         $label = new Label();
 
         $label->title = json_encode($request->title);
-        $label->entity = ($request->entity);
-        $label->color = ($request->color);
-        $label->image = ($request->image);
-        $label->key = ($request->key);
+        $label->entity = $request->entity;
+        $label->color = $request->color;
+        if($request->image){
+            $label->image= $this->imageUpload($request->file('image'),config('ImagesPaths.label.images'));
+        }
+        $label->key = $request->key;
 
         if(!$label->save())
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
@@ -95,10 +98,16 @@ class LabelController extends MainController
     public function update(StoreLabelRequest $request, Label $label)
     {
         $label->title = json_encode($request->title);
-        $label->entity = ($request->entity);
-        $label->color = ($request->color);
-        $label->image = ($request->image);
-        $label->key = ($request->key);
+        $label->entity =$request->entity;
+        $label->color = $request->color;
+        if($request->image){
+            if( !$this->removeImage($label->image) ){
+                 throw new FileErrorException();
+             }
+            $label->image= $this->imageUpload($request->file('image'),config('ImagesPaths.label.images'));
+
+         }
+        $label->key = $request->key;
 
         if(!$label->save())
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);

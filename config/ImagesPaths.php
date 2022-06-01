@@ -6,5 +6,19 @@ return [
             'images' => 'categories/images',
             'icons' => 'categories/icons',
 
-    ]
-];
+    ],
+    'currency' => [
+        'images' => 'currencies/images',
+    ],
+    'language' => [
+        'images' => 'languages/images',
+    ],
+    'label' => [
+        'images' => 'labels/images',
+    ],
+
+    'brand' => [
+        'images' => 'brands/images',
+    ],
+
+ ];

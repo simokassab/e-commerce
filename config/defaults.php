@@ -33,5 +33,7 @@ return [
 
     'validation_default_type' => 'checkbox,text,select,textarea,date',
 
-    'default_string_length' => 250
+    'default_string_length' => 250,
+
+    'default_pagination' => 15,
 ];

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Brand;
 
+use App\Exceptions\FileErrorException;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Brand\StoreBrandRequest;
@@ -20,7 +21,7 @@ class BrandController extends MainController
      */
     public function index()
     {
-       return $this->successResponse(['brands' => BrandResource::collection(Brand::all())]);
+       return $this->successResponse(['brands' => BrandResource::collection(Brand::paginate(config('defaults.default_pagination')))]);
     }
 
     /**
@@ -44,6 +45,9 @@ class BrandController extends MainController
         $brand = new Brand();
         $brand->name = json_encode($request->name);
         $brand->code = $request->code;
+        if($request->image){
+            $brand->image= $this->imageUpload($request->file('image'),config('ImagesPaths.brand.images'));
+        }
         $brand->title = json_encode($request->title);
         $brand->description = json_encode($request->description);
         $brand->keyword = json_encode($request->keyword);
@@ -92,6 +96,13 @@ class BrandController extends MainController
     {
         $brand->name = json_encode($request->name);
         $brand->code = $request->code;
+        if($request->image){
+            if( !$this->removeImage($brand->image) ){
+                 throw new FileErrorException();
+             }
+            $brand->image= $this->imageUpload($request->file('image'),config('ImagesPaths.brand.images'));
+
+         }
         $brand->title = json_encode($request->title);
         $brand->description = json_encode($request->description);
         $brand->keyword = json_encode($request->keyword);

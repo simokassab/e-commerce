@@ -19,7 +19,7 @@ class UnitController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['units' => UnitResource::collection(Unit::all())]);
+        return $this->successResponse(['units' => UnitResource::collection(Unit::paginate(config('defaults.default_pagination')))]);
 
     }
 
