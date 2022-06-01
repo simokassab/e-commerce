@@ -14,15 +14,14 @@ class MainModel extends Model
 
 
     public function setIsDefault(){
-        $query = self::where('is_default',1);
+        $this->query()
+            ->where('is_default' , 1)
+            ->whereNot('id',$this->id)
+            ->update(['is_default' => 0]);
 
-        if($query->exists())
-            $query->update(['is_default'=>0]);
-
-        $this->is_default =1;
+        $this->is_default = 1;
 
         return $this;
-
     }
 
 

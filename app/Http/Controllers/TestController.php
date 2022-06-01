@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Currency\Currency;
 
 use App\Models\RolesAndPermissions\CustomRole;
 use Illuminate\Http\Request;
@@ -29,6 +30,7 @@ class TestController extends MainController
     }
 
     public function test(){
-        return Permission::findOrFail(50000);
+
+        $currency = Currency::find(3)->setIsDefault()->save();
     }
 }
