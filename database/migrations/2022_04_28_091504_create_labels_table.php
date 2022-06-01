@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('entity',['category','product','brand']);
             $table->string('color',250);
             $table->string('image',250)->nullable();
-            $table->string('key',250);
+            $table->string('key',250)->unique();
             $table->timestamps();
         });
     }
