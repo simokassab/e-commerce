@@ -37,6 +37,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::apiResource('settings',SettingsController::class);
+
 Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localization'] ],function (){
 
     //here goes all the routes inside the dashboard
@@ -44,7 +46,6 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::get('get-nested-permissions/{permission}',[PermissionController::class,'getNestedPermissions']);
     Route::apiResource('category',CategoryController::class);
     Route::apiResource('tag',TagController::class);
-    Route::apiResource('settings',SettingsController::class);
     Route::apiResource('attribute',AttributeController::class);
     Route::apiResource('language',LanguageController::class);
     Route::apiResource('fields',FieldsController::class);

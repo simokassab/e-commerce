@@ -23,16 +23,19 @@ class SettingsController extends MainController
      */
     public function index()
     {
-            // Cache::forget('settings'.request('page',1));
-            $this->successResponsePaginated(SettingsResource::class,Setting::class,null,config('defaults.default_pagination'),'settings'.request('page',1));
-            return "Dg";
+//        Cache::forget('settings');
+        return (SettingsResource::collection(
+            Cache::remember('settings-'.\request('page',1), config('defaults.default_cache_time'),
+            fn()=>Setting::paginate( 10))));
+
+        return "Dg";
         }
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
-     */
+     **/
     public function create()
     {
         //
