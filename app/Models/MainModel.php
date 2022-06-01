@@ -11,7 +11,10 @@ class MainModel extends Model
 
 
     public function setIsDefault(){
-        $this->query()->where('is_default' , 1)->whereNot('id',$this->id)->update(['is_default' => 0]);
+        $this->query()
+            ->where('is_default' , 1)
+            ->whereNot('id',$this->id)
+            ->update(['is_default' => 0]);
 
         $this->is_default = 1;
 
