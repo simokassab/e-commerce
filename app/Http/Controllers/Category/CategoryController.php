@@ -27,7 +27,7 @@ class CategoryController extends MainController
      */
     public function index()
     {
-        return $this->successResponsePaginated(CategoryResource::class,Category::class);
+        return $this->successResponsePaginated(CategoryResource::class,Category::class,['parent','children','label','fields','fieldValue','tags']);
     }
 
     /**

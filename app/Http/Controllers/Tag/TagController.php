@@ -22,7 +22,7 @@ class TagController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['tags' => TagResource::collection(Tag::paginate(config('defaults.default_pagination')))]);
+        return $this->successResponsePaginated(TagResource::class,Tag::class);
 
     }
 

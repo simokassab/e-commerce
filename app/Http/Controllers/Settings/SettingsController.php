@@ -6,8 +6,11 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Setting\StoreSettingRequest;
 use App\Http\Resources\SettingsResource;
 use App\Models\Settings\Setting;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Mockery\Generator\StringManipulation\Pass\Pass;
 
 class SettingsController extends MainController
 {
@@ -20,8 +23,10 @@ class SettingsController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['settings' => SettingsResource::collection(cache()->remember( 'settings',config('cache.default_cache_time'),fn() => Setting::paginate(config('defaults.default_pagination')) ) )]);
-    }
+            // Cache::forget('settings'.request('page',1));
+            $this->successResponsePaginated(SettingsResource::class,Setting::class,null,config('defaults.default_pagination'),'settings'.request('page',1));
+            return "Dg";
+        }
 
     /**
      * Show the form for creating a new resource.

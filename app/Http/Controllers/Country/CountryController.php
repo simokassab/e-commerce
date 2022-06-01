@@ -27,8 +27,8 @@ class CountryController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['countries' => CountryResource::collection(Country::paginate(config('defaults.default_pagination')))]);
-    }
+        return $this->successResponsePaginated(CountryResource::class,Country::class);
+        }
 
     /**
      * Show the form for creating a new resource.

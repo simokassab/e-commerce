@@ -19,7 +19,8 @@ class DiscountController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['discounts' => DiscountResource::collection(Discount::paginate(config('defaults.default_pagination')))]);
+        return $this->successResponsePaginated(DiscountResource::class,Discount::class);
+
 
     }
 
