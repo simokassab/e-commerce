@@ -9,6 +9,9 @@ class MainModel extends Model
 {
     use HasFactory;
 
+    protected $guard_name = 'sanctum';
+
+
 
     public function setIsDefault(){
         $query = self::where('is_default',1);

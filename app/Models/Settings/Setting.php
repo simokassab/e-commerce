@@ -8,6 +8,5 @@ use App\Models\MainModel;
 class Setting extends MainModel
 {
     use HasFactory;
-    protected $guard_name = 'sanctum';
 
 }
