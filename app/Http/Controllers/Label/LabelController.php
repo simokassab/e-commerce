@@ -24,7 +24,7 @@ class LabelController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['labels' => LabelsResource::collection(Label::paginate(config('defaults.default_pagination')))]);
+        return $this->successResponsePaginated(LabelsResource::class,Label::class);
 
     }
 

@@ -21,7 +21,7 @@ class AttributeValueController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['attribute_value' => AttributeValueResource::collection(AttributeValue::paginate(config('defaults.default_pagination')))]);
+        return $this->successResponsePaginated(AttributeValueResource::class,AttributeValue::class);
 
     }
 

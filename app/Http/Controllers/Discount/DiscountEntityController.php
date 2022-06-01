@@ -19,7 +19,7 @@ class DiscountEntityController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['discounts_entities' => DiscountEntityResource::collection(DiscountEntity::paginate(config('defaults.default_pagination')))]);
+        return $this->successResponsePaginated(DiscountEntityResource::class,DiscountEntity::class);
 
     }
 

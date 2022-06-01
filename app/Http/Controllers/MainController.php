@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Expr\FuncCall;
 use App\Exceptions\FileErrorException;
+use Illuminate\Support\Facades\Cache;
+use PDO;
 
 class MainController extends Controller
 {
@@ -47,8 +49,26 @@ class MainController extends Controller
     protected function errorResponse(Array $data, $statusCode= 500){
         return errorResponse($data, $statusCode);
     }
-    protected function successResponsePaginated($resource, $model, $pagination=15 ){
-        return ($resource::collection($model::paginate(config('defaults.default_pagination') ?? 15))) ;
+    protected function successResponsePaginated($resource, $model,  Array $relation=null ,$pagination=15,$cacheKey=null){
+        if($relation==null){
+            if($cacheKey!=null){
+
+                return ($resource::collection(Cache::remember($cacheKey,config('defaults.default_cache_time'),fn()=>$model::paginate(config('defaults.default_pagination') ?? $pagination))));
+                   }
+            return ($resource::collection($model::paginate(config('defaults.default_pagination') ?? $pagination))) ;
+
+        }
+        else{
+            if($cacheKey!=null){
+                // return ($resource::collection(cache()->remember($cacheKey,config('defaults.default_cache_time'),fn()=>$model::paginate(config('defaults.default_pagination') ?? $pagination))));
+              }
+            return ($resource::collection($model::with($relation)->paginate(config('defaults.default_pagination') ?? $pagination))) ;
+
+        }
+
+
+
+
     }
 
     protected function notFoundResponse(Array $data, $statusCode= 404){

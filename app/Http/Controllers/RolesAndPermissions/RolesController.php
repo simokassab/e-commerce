@@ -24,7 +24,7 @@ class RolesController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['roles' => RolesResource::collection(CustomRole::paginate(config('defaults.default_pagination')))]);
+        return $this->successResponsePaginated(RolesResource::class,CustomRole::class);
     }
 
     /**

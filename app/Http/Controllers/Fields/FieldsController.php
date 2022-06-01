@@ -26,7 +26,7 @@ class FieldsController extends MainController
      */
     public function index()
     {
-        return $this->successResponse(['fields' => FieldsResource::collection(Field::with('fieldValue')->paginate(config('defaults.default_pagination')))]);
+        return $this->successResponsePaginated(FieldsResource::class,Field::class,['fieldValue']);
 
     }
 
