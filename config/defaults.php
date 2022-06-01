@@ -35,5 +35,5 @@ return [
 
     'default_string_length' => 250,
 
-    'default_pagination' => 2,
+    'default_pagination' => 15,
 ];

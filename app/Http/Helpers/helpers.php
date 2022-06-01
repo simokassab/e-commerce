@@ -27,7 +27,7 @@ function errorResponse(Array $data, $statusCode= 500){
 }
 
 function successResponse(Array $data, $statusCode= 200){
-    $data['success'] = true;
+//    $data['success'] = true;
     return response()->json([
         'data' => $data
     ],$statusCode);

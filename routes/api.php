@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Auth;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::apiResource('category',CategoryController::class);
 
 Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localization'] ],function (){
 
@@ -51,7 +52,6 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::apiResource('currency',CurrencyController::class);
     Route::apiResource('labels',LabelController::class);
     Route::apiResource('country',CountryController::class);
-    Route::apiResource('category',CategoryController::class);
     Route::apiResource('brand',BrandController::class);
     Route::apiResource('discount',DiscountController::class);
     Route::apiResource('discount-entity',DiscountEntityController::class);
