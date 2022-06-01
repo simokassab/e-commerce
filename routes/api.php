@@ -63,7 +63,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::get('brands-order',[BrandController::class,'getAllBrandsSorted']);
     Route::get('update-brands-order',[BrandController::class,'updateSortValues']);
 
-
+    // Route::resource('brands-order' ,BrandController::class)->only(['getAllBrandsSorted']);
 
     Route::patch('toggle-status/{id}',[CategoryController::class,'toggleStatus']);
     Route::get('parents-order',[CategoryController::class,'getAllParentsSorted']);
