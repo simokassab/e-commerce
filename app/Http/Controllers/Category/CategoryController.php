@@ -207,7 +207,7 @@ class CategoryController extends MainController
       batch()->update($category,$data,$index);
 
 
-      return $this->successResponse(['messsage' => 'updated Successfully!']);
+      return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)])]);
 
     }
 

@@ -48,11 +48,13 @@ class BrandController extends MainController
         if($request->image){
             $brand->image= $this->imageUpload($request->file('image'),config('ImagesPaths.brand.images'));
         }
-        $brand->title = json_encode($request->title);
+        $brand->meta_title = json_encode($request->meta_title);
+        $brand->meta_description = json_encode($request->meta_description);
+        $brand->meta_keyword = json_encode($request->meta_keyword);
         $brand->description = json_encode($request->description);
-        $brand->keyword = json_encode($request->keyword);
-        $brand->sort = $request->sort;
-        $brand->is_disabled = $request->is_disabled;
+        $brand->sort = Brand::getMaxSortValue();
+        $brand->is_disabled=0;
+
 
         if(!($brand->save()))
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
@@ -103,11 +105,10 @@ class BrandController extends MainController
             $brand->image= $this->imageUpload($request->file('image'),config('ImagesPaths.brand.images'));
 
          }
-        $brand->title = json_encode($request->title);
+         $brand->meta_title = json_encode($request->meta_title);
+        $brand->meta_description = json_encode($request->meta_description);
+        $brand->meta_keyword = json_encode($request->meta_keyword);
         $brand->description = json_encode($request->description);
-        $brand->keyword = json_encode($request->keyword);
-        $brand->sort = $request->sort;
-        $brand->is_disabled = $request->is_disabled;
 
         if(!($brand->save()))
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)])]);
@@ -132,4 +133,44 @@ class BrandController extends MainController
             'brand' => new BrandResource($brand)
         ]);
 
-}}
+}
+public function toggleStatus(Request $request ,$id){
+
+    $request->validate([
+        'is_disabled' => 'boolean|required'
+    ]);
+
+    $brand = Brand::findOrFail($id);
+    $brand->is_disabled=$request->is_disabled;
+    if(!$brand->save())
+        return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+
+    return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+        'brand' =>  new BrandResource($brand)
+    ]);
+
+}
+
+public function getAllBrandsSorted(){
+
+    $brands=Brand::orderByRaw('ISNULL(sort), sort ASC')->get();
+    return $this->successResponse(['brands' => $brands ]);
+}
+
+
+public function updateSortValues(){
+
+    $brand = new Brand();
+    $data=[
+
+       ['id' => 1 , 'sort' => 10],['id' => 2 , 'sort' => 20],['id' => 3, 'sort' => 30]
+    ];
+
+    $index = 'id';
+
+  batch()->update($brand,$data,$index);
+
+  return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)])]);
+
+}
+}

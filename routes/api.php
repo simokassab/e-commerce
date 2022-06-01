@@ -59,12 +59,18 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     //change language for dashboard and get the dashborad translated objects
     Route::put('change-language/{lang}',[LanguageController::class,'setLanguage']);
 
-    Route::patch('toggle-status/{id}',[CategoryController::class,'toggleStatus']);
-    Route::get('parents',[CategoryController::class,'getAllParentsSorted']);
-    Route::get('children/{parent_id}',[CategoryController::class,'getAllChildsSorted']);
-    Route::get('update-category-order',[CategoryController::class,'updateSortValues']);
+    Route::patch('toggle-status/{id}',[BrandController::class,'toggleStatus']);
+    Route::get('brands-order',[BrandController::class,'getAllBrandsSorted']);
+    Route::get('update-brands-order',[BrandController::class,'updateSortValues']);
 
-    Route::post('category-update/{category}',[CategoryController::class,'update']);
+
+
+    Route::patch('toggle-status/{id}',[CategoryController::class,'toggleStatus']);
+    Route::get('parents-order',[CategoryController::class,'getAllParentsSorted']);
+    Route::get('children-order/{parent_id}',[CategoryController::class,'getAllChildsSorted']);
+    Route::get('update-categories-order',[CategoryController::class,'updateSortValues']);
+
+    // Route::post('category-update/{category}',[CategoryController::class,'update']);
 
 });
 Route::get('test',[MainController::class,'test']);
