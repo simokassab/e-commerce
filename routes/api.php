@@ -52,16 +52,17 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::apiResource('currency',CurrencyController::class);
     Route::apiResource('labels',LabelController::class);
     Route::apiResource('country',CountryController::class);
-    Route::apiResource('brand',BrandController::class);
     Route::apiResource('discount',DiscountController::class);
     Route::apiResource('discount-entity',DiscountEntityController::class);
 
     //change language for dashboard and get the dashborad translated objects
     Route::put('change-language/{lang}',[LanguageController::class,'setLanguage']);
 
-    Route::patch('toggle-status/{id}',[BrandController::class,'toggleStatus']);
-    Route::get('brands-order',[BrandController::class,'getAllBrandsSorted']);
-    Route::get('update-brands-order',[BrandController::class,'updateSortValues']);
+    //check
+    Route::customBrandResource('brand', BrandController::class);
+
+
+
 
     // Route::resource('brands-order' ,BrandController::class)->only(['getAllBrandsSorted']);
 

@@ -152,7 +152,6 @@ public function toggleStatus(Request $request ,$id){
 }
 
 public function getAllBrandsSorted(){
-
     $brands=Brand::orderByRaw('ISNULL(sort), sort ASC')->get();
     return $this->successResponse(['brands' => $brands ]);
 }
@@ -162,8 +161,9 @@ public function updateSortValues(){
 
     $brand = new Brand();
     $data=[
-
-       ['id' => 1 , 'sort' => 10],['id' => 2 , 'sort' => 20],['id' => 3, 'sort' => 30]
+        ['id' => 1 , 'sort' => 10],
+        ['id' => 2 , 'sort' => 20],
+        ['id' => 3, 'sort' => 30]
     ];
 
     $index = 'id';
