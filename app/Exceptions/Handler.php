@@ -2,8 +2,11 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use \Exception;
+use League\Flysystem\FilesystemException;
+use Ramsey\Collection\Exception\ValueExtractionException;
 use Spatie\FlareClient\Http\Exceptions\NotFound;
 use Throwable;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -51,6 +54,18 @@ class Handler extends ExceptionHandler
         [
             'class' => NotFoundHttpException::class,
             'message' => 'The object was not found! '
+        ],
+        [
+            'class' => FileNotFoundException::class,
+            'message' => 'The file was not found'
+        ],
+        [
+            'class' => FilesystemException::class,
+            'message' => 'The file was not saved please try again later'
+        ],
+        [
+            'class' => ValueExtractionException::class,
+            'message' => 'The file was not saved please try again later'
         ],
 
     ];

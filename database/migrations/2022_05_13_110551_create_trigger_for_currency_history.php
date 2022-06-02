@@ -14,8 +14,13 @@ return new class extends Migration
      */
     public function up()
     {
-        DB::unprepared('DROP TRIGGER IF EXISTS  `rate_trigger`');
-        DB::unprepared('CREATE TRIGGER `rate_trigger` AFTER UPDATE ON `currencies`
+        DB::unprepared('DROP TRIGGER IF EXISTS  `rate_trigger_update`');
+        DB::unprepared('DROP TRIGGER IF EXISTS  `rate_trigger_create`');
+        DB::unprepared('CREATE TRIGGER `rate_trigger_update` AFTER UPDATE ON `currencies`
+        FOR EACH ROW
+            INSERT INTO `currencies_histories` (currency_id, rate,created_at,updated_at) VALUES (new.id,new.rate,CURRENT_TIMESTAMP,null)');
+
+        DB::unprepared('CREATE TRIGGER `rate_trigger_create` AFTER INSERT ON `currencies`
         FOR EACH ROW
             INSERT INTO `currencies_histories` (currency_id, rate,created_at,updated_at) VALUES (new.id,new.rate,CURRENT_TIMESTAMP,null)');
     }
