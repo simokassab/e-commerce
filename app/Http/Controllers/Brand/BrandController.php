@@ -153,7 +153,7 @@ public function toggleStatus(Request $request ,$id){
 }
 
 public function getAllBrandsSorted(){
-    $brands=Brand::orderByRaw('ISNULL(sort), sort ASC')->get();
+    $brands=Brand::OrderBy()->get();
     return $this->successResponse(['brands' => $brands ]);
 }
 
