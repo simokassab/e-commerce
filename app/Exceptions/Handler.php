@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use \Exception;
+use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemException;
 use Ramsey\Collection\Exception\ValueExtractionException;
 use Spatie\FlareClient\Http\Exceptions\NotFound;
@@ -56,7 +57,11 @@ class Handler extends ExceptionHandler
             'message' => 'The object was not found! '
         ],
         [
-            'class' => FileNotFoundException::class,
+            'class' => FilesystemAdapter::class,
+            'message' => 'The file was not found'
+        ],
+        [
+            'class' => \Illuminate\Filesystem\FilesystemAdapter::class,
             'message' => 'The file was not found'
         ],
         [
