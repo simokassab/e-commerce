@@ -37,7 +37,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('settings',SettingsController::class);
 
 Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localization'] ],function (){
 
@@ -51,6 +50,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::apiResource('fields',FieldsController::class);
     Route::apiResource('field-value',FieldValueController::class);
     Route::apiResource('currency',CurrencyController::class);
+    Route::apiResource('settings',SettingsController::class);
     Route::apiResource('labels',LabelController::class);
     Route::apiResource('country',CountryController::class);
     Route::apiResource('brand',BrandController::class);

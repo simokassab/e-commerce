@@ -23,13 +23,8 @@ class SettingsController extends MainController
      */
     public function index()
     {
-//        Cache::forget('settings');
-        return (SettingsResource::collection(
-            Cache::remember('settings-'.\request('page',1), config('defaults.default_cache_time'),
-            fn()=>Setting::paginate( 10))));
-
-        return "Dg";
-        }
+       return $this->successResponsePaginated(SettingsResource::class,Setting::class);
+     }
 
     /**
      * Show the form for creating a new resource.
@@ -49,12 +44,10 @@ class SettingsController extends MainController
      */
     public function store(StoreSettingRequest $request)
     {
-
         $setting=new Setting();
         $setting->key = json_encode($request->key);
         $setting->value = ($request->value);
         $setting->is_developer = ($request->is_developer);
-
 
         if(!$setting->save())
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
