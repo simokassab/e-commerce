@@ -15,7 +15,7 @@ class StoreCurrencyRequest extends FormRequest
     public function authorize()
     {
 
-        return ;
+        return true ;
     }
 
     /**
@@ -27,9 +27,9 @@ class StoreCurrencyRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'code' => 'required | max:'.config('defaults.string_length'),
-            'symbol' => 'nullable | max:'.config('defaults.string_length'),
-            'rate' => 'nullable | doubleval',
+            'code' => 'required | max:'.config('defaults.default_string_length'),
+            'symbol' => 'nullable | max:'.config('defaults.default_string_length'),
+            'rate' => 'nullable | numeric',
             'is_default' => 'nullable | boolean',
 
             'image' => 'nullable | image
@@ -52,7 +52,7 @@ class StoreCurrencyRequest extends FormRequest
 
             'symbol.max' => 'the maximum string length is :max',
 
-            'rate.doubleval' => 'The :attribute must be decimal.',
+            'rate.numeric' => 'The :attribute must be decimal.',
 
             'is_default.boolean' => 'The :attribute field accepts only 0 or 1',
 

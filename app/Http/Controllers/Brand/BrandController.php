@@ -52,9 +52,10 @@ class BrandController extends MainController
         $brand->meta_description = json_encode($request->meta_description);
         $brand->meta_keyword = json_encode($request->meta_keyword);
         $brand->description = json_encode($request->description);
-        $brand->sort = Brand::getMaxSortValue();
-        $brand->is_disabled=0;
-
+        $brand->saort = $brand->getMaxSortValue();
+        if($request->is_disabled){
+            $brand->is_disabled=$request->is_disabled;
+        }
 
         if(!($brand->save()))
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
@@ -157,20 +158,16 @@ public function getAllBrandsSorted(){
 }
 
 
-public function updateSortValues(){
+public function updateSortValues(Request $request){
 
     $brand = new Brand();
-    $data=[
-        ['id' => 1 , 'sort' => 10],
-        ['id' => 2 , 'sort' => 20],
-        ['id' => 3, 'sort' => 30]
-    ];
-
+    $order = $request->order;
     $index = 'id';
 
-  batch()->update($brand,$data,$index);
+    batch()->update($brand,$order,$index);
 
-  return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)])]);
-
+    return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+    'brand' => new BrandResource($brand)
+]);
 }
 }

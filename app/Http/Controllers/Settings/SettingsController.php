@@ -46,8 +46,8 @@ class SettingsController extends MainController
     {
         $setting=new Setting();
         $setting->key = json_encode($request->key);
-        $setting->value = ($request->value);
-        $setting->is_developer = ($request->is_developer);
+        $setting->value = $request->value;
+        $setting->is_developer = $request->is_developer;
 
         if(!$setting->save())
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);

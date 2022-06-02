@@ -24,6 +24,16 @@ class MainModel extends Model
         return $this;
     }
 
+    public static function getMaxSortValue(){
+
+        return self::max('sort') + 1;// get the max sort
+
+}
+
+public function scopeOrderBy($query)
+    {
+        $query->orderByRaw('ISNULL(sort), sort ASC');
+    }
 
 
 }

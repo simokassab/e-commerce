@@ -24,8 +24,8 @@ class StoreLanguageRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required | max:'.config('defaults.string_length'),
-            'code' => 'required | max:'.config('defaults.string_length'),
+            'name' => 'required | max:'.config('defaults.default_string_length'),
+            'code' => 'required | max:'.config('defaults.default_string_length'),
             'is_default' => 'nullable | boolean',
             'is_disabled' => 'nullable | boolean',
 

@@ -58,8 +58,10 @@ class CurrencyController extends MainController
         $currency->code=$request->code;
         $currency->symbol=$request->symbol;
         $currency->rate=$request->rate;
-        $currency->is_default=$request->is_default;
-        if($request->image){
+        if($request->is_default){
+            $currency->setIsDefault();
+           }
+             if($request->image){
             $currency->image= $this->imageUpload($request->file('image'),config('ImagesPaths.currency.images'));
         }        $currency->sort=$request->sort;
 
@@ -112,7 +114,7 @@ class CurrencyController extends MainController
             $currency->code=$request->code;
             $currency->symbol=$request->symbol;
             $currency->rate=$request->rate;
-            $currency->is_default=$request->is_default;
+
 
             if($request->image){
                 if( !$this->removeImage($currency->image) ){
@@ -163,5 +165,14 @@ class CurrencyController extends MainController
 //            ]
 //
 //        ],201);
+    }
+    public function setCurrencyIsDefault($currency){
+
+        $currencyObject = Currency::findOrFail($currency);
+        $currencyObject->setIsDefault();
+        $currencyObject->save();
+        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+        'currency' => new CurrencyResource($currency)
+    ]);
     }
 }
