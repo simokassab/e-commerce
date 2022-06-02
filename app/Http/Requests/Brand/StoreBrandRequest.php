@@ -25,7 +25,7 @@ class StoreBrandRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'code' => 'required | max:'.config('defaults.string_length'),
+            'code' => 'required | max:'.config('defaults.default_string_length'),
 
             'image' => 'nullable | file
             | mimes:'.config('defaults.default_image_extentions').'
@@ -37,8 +37,7 @@ class StoreBrandRequest extends FormRequest
             'meta_description' => 'nullable',
             'meta_keyword' => 'nullable',
             'description' => 'nullable',
-            'sort' => 'required | integer',
-            'is_disabled' => 'required | boolean',
+            'sort' => 'nullable | integer',
 
         ];
     }
@@ -55,9 +54,7 @@ class StoreBrandRequest extends FormRequest
             'image.mimes' => 'Invalid extention.',
             'image.dimensions' => 'Invalid dimentions, minimum('.config('defaults.default_image_minimum_width').'x'.config('defaults.default_image_minimum_height').'),maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
 
-            'sort.required' => 'the :attribute field is required',
-            'is_disabled.required' => 'the :attribute field is required',
-            'is_disabled.boolean' => 'The :attribute field accepts only 0 or 1',
+            'sort.integer' => 'the :attribute should be an integer',
 
         ];
     }

@@ -48,7 +48,6 @@ class StoreCategoryRequest extends FormRequest
 
             'description' => 'nullable',
             'sort' => 'nullable | integer',
-            'is_disabled' => 'required | boolean'
 
         ];
     }
@@ -81,8 +80,6 @@ class StoreCategoryRequest extends FormRequest
 
             'sort.integer' => 'the :attribute should be an integer',
 
-            'is_disabled.required' => 'The :attribute field is required',
-            'is_disabled.boolean' => 'The :attribute field accepts only 0 or 1',
 
         ];
 

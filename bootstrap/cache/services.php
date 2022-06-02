@@ -36,10 +36,11 @@
     32 => 'Spatie\\Translatable\\TranslatableServiceProvider',
     33 => 'Spatie\\Permission\\PermissionServiceProvider',
     34 => 'Mavinoo\\Batch\\BatchServiceProvider',
-    35 => 'App\\Providers\\AppServiceProvider',
-    36 => 'App\\Providers\\AuthServiceProvider',
-    37 => 'App\\Providers\\EventServiceProvider',
-    38 => 'App\\Providers\\RouteServiceProvider',
+    35 => 'App\\Providers\\RouteMacroServiceProvider',
+    36 => 'App\\Providers\\AppServiceProvider',
+    37 => 'App\\Providers\\AuthServiceProvider',
+    38 => 'App\\Providers\\EventServiceProvider',
+    39 => 'App\\Providers\\RouteServiceProvider',
   ),
   'eager' => 
   array (
@@ -64,10 +65,11 @@
     18 => 'Spatie\\Translatable\\TranslatableServiceProvider',
     19 => 'Spatie\\Permission\\PermissionServiceProvider',
     20 => 'Mavinoo\\Batch\\BatchServiceProvider',
-    21 => 'App\\Providers\\AppServiceProvider',
-    22 => 'App\\Providers\\AuthServiceProvider',
-    23 => 'App\\Providers\\EventServiceProvider',
-    24 => 'App\\Providers\\RouteServiceProvider',
+    21 => 'App\\Providers\\RouteMacroServiceProvider',
+    22 => 'App\\Providers\\AppServiceProvider',
+    23 => 'App\\Providers\\AuthServiceProvider',
+    24 => 'App\\Providers\\EventServiceProvider',
+    25 => 'App\\Providers\\RouteServiceProvider',
   ),
   'deferred' => 
   array (

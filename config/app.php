@@ -167,6 +167,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Mavinoo\Batch\BatchServiceProvider::class,
+        App\Providers\RouteMacroServiceProvider::class,
 
 
 

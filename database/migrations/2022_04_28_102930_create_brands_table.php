@@ -22,7 +22,7 @@ return new class extends Migration
             $table->json('meta_description')->nullable();
             $table->json('meta_keyword')->nullable();
             $table->json('description')->nullable();
-            $table->integer('sort');
+            $table->integer('sort')->nullable();
             $table->boolean('is_disabled')->default(0);
             $table->timestamps();
         });
