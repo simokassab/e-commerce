@@ -62,10 +62,10 @@ class CurrencyController extends MainController
             $currency->setIsDefault();
         }
         if($request->image){
-            $currency->image= $this->imageUpload($request->file('image'),config('ImagesPaths.currency.images'));
+            $currency->image= $this->imageUpload($request->file('image'),config('image_paths.currency.images'));
         }
 
-        $currency->sort=$request->sort;
+        $currency->sort = $currency->getMaxSortValue();
 
         if(!$currency->save())
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
@@ -121,11 +121,9 @@ class CurrencyController extends MainController
                 if( !$this->removeImage($currency->image) ){
                      throw new FileErrorException();
                  }
-                $currency->image= $this->imageUpload($request->file('image'),config('ImagesPaths.currency.images'));
+                $currency->image= $this->imageUpload($request->file('image'),config('image_paths.currency.images'));
              }
-
-            $currency->sort=$request->sort;
-            $currency->save();
+             $currency->save();
             DB::commit();
 
             return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
@@ -135,9 +133,10 @@ class CurrencyController extends MainController
         }catch(\Exception $exception){
             DB::rollBack();
 
-            return $this->errorResponse([
-                'message' => '',
-            ]);
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]),[
+                $exception->getMessage()
+            ] ]);
+
         }
 
     }

@@ -30,7 +30,7 @@ class MainModel extends Model
 
 }
 
-public function order($query)
+    public function scopeOrder($query)
     {
         $query->orderByRaw('ISNULL(sort), sort ASC');
     }

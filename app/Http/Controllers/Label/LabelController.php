@@ -52,7 +52,7 @@ class LabelController extends MainController
         $label->entity = $request->entity;
         $label->color = $request->color;
         if($request->image){
-            $label->image= $this->imageUpload($request->file('image'),config('ImagesPaths.label.images'));
+            $label->image= $this->imageUpload($request->file('image'),config('image_paths.label.images'));
         }
         $label->key = $request->key;
 
@@ -104,7 +104,7 @@ class LabelController extends MainController
             if( !$this->removeImage($label->image) ){
                  throw new FileErrorException();
              }
-            $label->image= $this->imageUpload($request->file('image'),config('ImagesPaths.label.images'));
+            $label->image= $this->imageUpload($request->file('image'),config('image_paths.label.images'));
 
          }
         $label->key = $request->key;

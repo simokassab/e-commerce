@@ -53,10 +53,10 @@ class CategoryController extends MainController
             $category->code= $request->code;
 
             if($request->image){
-                $category->image= $this->imageUpload($request->file('image'),config('ImagesPaths.category.images'));
+                $category->image= $this->imageUpload($request->file('image'),config('image_paths.category.images'));
             }
             if($request->icon){
-                $category->icon= $this->imageUpload($request->file('icon'),config('ImagesPaths.category.icons'));
+                $category->icon= $this->imageUpload($request->file('icon'),config('image_paths.category.icons'));
             }
             $category->parent_id= $request->parent_id;
             $category->slug= $request->slug;
@@ -115,14 +115,14 @@ class CategoryController extends MainController
            if( !$this->removeImage($category->image) ){
                 throw new FileErrorException();
             }
-           $category->image= $this->imageUpload($request->file('image'),config('ImagesPaths.category.images'));
+           $category->image= $this->imageUpload($request->file('image'),config('image_paths.category.images'));
 
         }
         if($request->icon){
             if( !$this->removeImage($category->icon)){
                 throw new FileErrorException();
             }
-           $category->icon= $this->imageUpload($request->file('icon'),config('ImagesPaths.category.icons'));
+           $category->icon= $this->imageUpload($request->file('icon'),config('image_paths.category.icons'));
 
         }
         $category->parent_id= $request->parent_id;
@@ -182,14 +182,14 @@ class CategoryController extends MainController
 
     public function getAllParentsSorted(){
 
-        $categories=Category::RootParent()->OrderBy()->get();
+        $categories=Category::rootParent()->order()->get();
         return $this->successResponse(['categories' => $categories ]);
 
     }
 
     public function getAllChildsSorted($parent_id){
 
-        $categories=Category::whereParentId($parent_id)->OrderBy()->get();
+        $categories=Category::whereParentId($parent_id)->order()->get();
         return $this->successResponse(['categories' => $categories ]);
     }
 

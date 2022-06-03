@@ -56,7 +56,7 @@ class LanguageController extends MainController
             $language->setIsDefault();
        }
         if($request->image){
-            $language->image= $this->imageUpload($request->file('image'),config('ImagesPaths.language.images'));
+            $language->image= $this->imageUpload($request->file('image'),config('image_paths.language.images'));
         }
         $language->sort= $language->getMaxSortValue();
 
@@ -111,7 +111,7 @@ class LanguageController extends MainController
             if( !$this->removeImage($language->image) ){
                  throw new FileErrorException();
             }
-            $language->image= $this->imageUpload($request->file('image'),config('ImagesPaths.language.images'));
+            $language->image= $this->imageUpload($request->file('image'),config('image_paths.language.images'));
 
          }
 

@@ -46,7 +46,7 @@ class BrandController extends MainController
         $brand->name = json_encode($request->name);
         $brand->code = $request->code;
         if($request->image){
-            $brand->image= $this->imageUpload($request->file('image'),config('ImagesPaths.brand.images'));
+            $brand->image= $this->imageUpload($request->file('image'),config('image_paths.brand.images'));
         }
         $brand->meta_title = json_encode($request->meta_title);
         $brand->meta_description = json_encode($request->meta_description);
@@ -103,7 +103,7 @@ class BrandController extends MainController
             if( !$this->removeImage($brand->image) ){
                  throw new FileErrorException();
              }
-            $brand->image= $this->imageUpload($request->file('image'),config('ImagesPaths.brand.images'));
+            $brand->image= $this->imageUpload($request->file('image'),config('image_paths.brand.images'));
 
          }
         $brand->meta_title = json_encode($request->meta_title);
