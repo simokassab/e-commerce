@@ -52,9 +52,9 @@ class BrandController extends MainController
         $brand->meta_description = json_encode($request->meta_description);
         $brand->meta_keyword = json_encode($request->meta_keyword);
         $brand->description = json_encode($request->description);
-        $brand->saort = $brand->getMaxSortValue();
+        $brand->sort = $brand->getMaxSortValue();
         if($request->is_disabled){
-            $brand->is_disabled=$request->is_disabled;
+            $brand->is_disabled = $request->is_disabled;
         }
 
         if(!($brand->save()))
@@ -106,7 +106,7 @@ class BrandController extends MainController
             $brand->image= $this->imageUpload($request->file('image'),config('ImagesPaths.brand.images'));
 
          }
-         $brand->meta_title = json_encode($request->meta_title);
+        $brand->meta_title = json_encode($request->meta_title);
         $brand->meta_description = json_encode($request->meta_description);
         $brand->meta_keyword = json_encode($request->meta_keyword);
         $brand->description = json_encode($request->description);
@@ -122,7 +122,7 @@ class BrandController extends MainController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Brand  $brand
      * @return \Illuminate\Http\Response
      */
     public function destroy(Brand $brand)
@@ -142,7 +142,7 @@ public function toggleStatus(Request $request ,$id){
     ]);
 
     $brand = Brand::findOrFail($id);
-    $brand->is_disabled=$request->is_disabled;
+    $brand->is_disabled = $request->is_disabled;
     if(!$brand->save())
         return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
@@ -153,21 +153,18 @@ public function toggleStatus(Request $request ,$id){
 }
 
 public function getAllBrandsSorted(){
-    $brands=Brand::OrderBy()->get();
+    $brands=Brand::order()->get();
     return $this->successResponse(['brands' => $brands ]);
 }
 
 
 public function updateSortValues(Request $request){
 
-    $brand = new Brand();
-    $order = $request->order;
-    $index = 'id';
+    batch()->update($brand = new Brand(),$request->order,'id');
 
-    batch()->update($brand,$order,$index);
-
-    return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-    'brand' => new BrandResource($brand)
-]);
+    return $this->successResponse(
+        ['message' => __('messages.success.update',
+        ['name' => __(self::OBJECT_NAME)]), 'brand' => new BrandResource($brand)
+        ]);
 }
 }

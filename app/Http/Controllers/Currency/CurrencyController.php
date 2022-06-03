@@ -60,10 +60,12 @@ class CurrencyController extends MainController
         $currency->rate=$request->rate;
         if($request->is_default){
             $currency->setIsDefault();
-           }
-             if($request->image){
+        }
+        if($request->image){
             $currency->image= $this->imageUpload($request->file('image'),config('ImagesPaths.currency.images'));
-        }        $currency->sort=$request->sort;
+        }
+
+        $currency->sort=$request->sort;
 
         if(!$currency->save())
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
@@ -109,7 +111,6 @@ class CurrencyController extends MainController
         DB::beginTransaction();
 
         try {
-            CurrencyService::updateCurrencyHistory($currency,$request->rate);
             $currency->name=json_encode($request->name);
             $currency->code=$request->code;
             $currency->symbol=$request->symbol;
@@ -121,8 +122,8 @@ class CurrencyController extends MainController
                      throw new FileErrorException();
                  }
                 $currency->image= $this->imageUpload($request->file('image'),config('ImagesPaths.currency.images'));
-
              }
+
             $currency->sort=$request->sort;
             $currency->save();
             DB::commit();
@@ -133,11 +134,10 @@ class CurrencyController extends MainController
 
         }catch(\Exception $exception){
             DB::rollBack();
-            return response()->json([
-                'data' => [
-                    'message' => 'currency was not updated the error message: '.$exception->getMessage(),
-                ]
-            ],500);
+
+            return $this->errorResponse([
+                'message' => '',
+            ]);
         }
 
     }

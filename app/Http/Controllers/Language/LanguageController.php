@@ -53,7 +53,7 @@ class LanguageController extends MainController
         $language->name=json_encode($request->name);
         $language->code=$request->code;
        if($request->is_default){
-        $language->setIsDefault();
+            $language->setIsDefault();
        }
         if($request->image){
             $language->image= $this->imageUpload($request->file('image'),config('ImagesPaths.language.images'));
@@ -79,7 +79,7 @@ class LanguageController extends MainController
     public function show(Language $language)
     {
         return $this->successResponse(['language' => new LanguageResource($language)]);
-      }
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -110,7 +110,7 @@ class LanguageController extends MainController
         if($request->image){
             if( !$this->removeImage($language->image) ){
                  throw new FileErrorException();
-             }
+            }
             $language->image= $this->imageUpload($request->file('image'),config('ImagesPaths.language.images'));
 
          }
@@ -161,7 +161,7 @@ public function toggleStatus(Request $request ,$id){
             'is_disabled' => 'boolean|required'
         ]);
 
-            $language = Language::findOrFail($id);
+        $language = Language::findOrFail($id);
         $language->is_disabled=$request->is_disabled;
         if(!$language->save())
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
