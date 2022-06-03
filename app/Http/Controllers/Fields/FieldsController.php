@@ -51,9 +51,9 @@ class FieldsController extends MainController
 
         $field=new Field();
         $field->title = json_encode($request->title);
-        $field->type = ($request->type);
-        $field->entity = ($request->entity);
-        $field->is_required = ($request->is_required);
+        $field->type = $request->type;
+        $field->entity = $request->entity;
+        $field->is_required = $request->is_required;
 
 
         if(!$field->save())

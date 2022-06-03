@@ -62,4 +62,10 @@ class Category extends MainModel
 
     }
 
+    public function scopeRootParent($query)
+    {
+        $query->whereNull('parent_id');
+    }
+
+
 }

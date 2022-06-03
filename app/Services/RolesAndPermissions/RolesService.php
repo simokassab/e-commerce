@@ -103,28 +103,29 @@ class RolesService {
     public static function createPermissions(){
         CustomPermission::query()->truncate();
 
-         //Currency Permission
+       //Country Permission
         $parentCountry= self::createSinglePermssion('CountryController');
        self::createSinglePermssion('CountryController@index',$parentCountry->id );
        self::createSinglePermssion('CountryController@store',$parentCountry->id );
        self::createSinglePermssion('CountryController@show',$parentCountry->id );
        self::createSinglePermssion('CountryController@update',$parentCountry->id );
        self::createSinglePermssion('CountryController@destroy',$parentCountry->id );
-       //End of Currency Permission
+       //End of Country Permission
+
+        //Currency Permission
+          $parentCurrency= self::createSinglePermssion('CurrencyController');
+        self::createSinglePermssion('CurrencyController@index',$parentCurrency->id );
+        self::createSinglePermssion('CurrencyController@store',$parentCurrency->id );
+        self::createSinglePermssion('CurrencyController@show',$parentCurrency->id );
+        self::createSinglePermssion('CurrencyController@update',$parentCurrency->id );
+        self::createSinglePermssion('CurrencyController@destroy',$parentCurrency->id );
+        self::createSinglePermssion('CurrencyController@setCurrencyIsDefault',$parentCurrency->id );
+        //End of Currency Permission
 
        //Currency History Permission
        $parentCountry= self::createSinglePermssion('currency_history_permissions');
            self::createSinglePermssion('currency_history_read',$parentCountry->id );
        //End of Currency History Permission
-
-       //Country Permission
-        $parentCurrency= self::createSinglePermssion('CurrencyController');
-           self::createSinglePermssion('CurrencyController@index',$parentCurrency->id );
-           self::createSinglePermssion('CurrencyController@store',$parentCurrency->id );
-           self::createSinglePermssion('CurrencyController@show',$parentCurrency->id );
-           self::createSinglePermssion('CurrencyController@update',$parentCurrency->id );
-           self::createSinglePermssion('CurrencyController@destroy',$parentCurrency->id );
-      //End of Country Permission
 
       //Tag Permission
       $parentTag= self::createSinglePermssion('TagController');
@@ -144,6 +145,15 @@ class RolesService {
            self::createSinglePermssion('AttributeController@destroy',$parentAttribute->id );
       //End of Attribute Permission
 
+      //Attribute Value Permission
+      $parentAttributeValue= self::createSinglePermssion('AttributeValueController');
+           self::createSinglePermssion('AttributeValueController@index',$parentAttributeValue->id );
+           self::createSinglePermssion('AttributeValueController@store',$parentAttributeValue->id );
+           self::createSinglePermssion('AttributeValueController@show',$parentAttributeValue->id );
+           self::createSinglePermssion('AttributeValueController@update',$parentAttributeValue->id );
+           self::createSinglePermssion('AttributeValueController@destroy',$parentAttributeValue->id );
+      //End of Attribute Value Permission
+
       //Field Permission
       $parentField= self::createSinglePermssion('FieldsController');
            self::createSinglePermssion('FieldsController@index',$parentField->id );
@@ -153,6 +163,15 @@ class RolesService {
            self::createSinglePermssion('FieldsController@destroy',$parentField->id );
       //End of Field Permission
 
+       //Field Permission
+       $parentFieldValue= self::createSinglePermssion('FieldValueController');
+           self::createSinglePermssion('FieldValueController@index',$parentFieldValue->id );
+           self::createSinglePermssion('FieldValueController@store',$parentFieldValue->id );
+           self::createSinglePermssion('FieldValueController@show',$parentFieldValue->id );
+           self::createSinglePermssion('FieldValueController@update',$parentFieldValue->id );
+           self::createSinglePermssion('FieldValueController@destroy',$parentFieldValue->id );
+     //End of Field Permission
+
       //Language Permission
       $parentLanguage= self::createSinglePermssion('LanguageController');
            self::createSinglePermssion('LanguageController@index',$parentLanguage->id );
@@ -160,6 +179,9 @@ class RolesService {
            self::createSinglePermssion('LanguageController@show',$parentLanguage->id );
            self::createSinglePermssion('LanguageController@update',$parentLanguage->id );
            self::createSinglePermssion('LanguageController@destroy',$parentLanguage->id );
+           self::createSinglePermssion('LanguageController@setLanguage',$parentLanguage->id );
+           self::createSinglePermssion('LanguageController@toggleStatus',$parentLanguage->id );
+           self::createSinglePermssion('LanguageController@updateSortValues',$parentLanguage->id );
       //End of Language Permission
 
       //Label Permission
@@ -180,6 +202,15 @@ class RolesService {
            self::createSinglePermssion('PermissionsController@destroy',$parentPermissions->id );
       //End of Permission Permission
 
+      //Permission Permission
+      $parentRole= self::createSinglePermssion('RolesController');
+           self::createSinglePermssion('RolesController@index',$parentRole->id );
+           self::createSinglePermssion('RolesController@store',$parentRole->id );
+           self::createSinglePermssion('RolesController@show',$parentRole->id );
+           self::createSinglePermssion('RolesController@update',$parentRole->id );
+           self::createSinglePermssion('RolesController@destroy',$parentRole->id );
+     //End of Permission Permission
+
       //Setting Permission
       $parentSetting= self::createSinglePermssion('SettingsController');
            self::createSinglePermssion('SettingsController@index',$parentSetting->id );
@@ -189,8 +220,57 @@ class RolesService {
            self::createSinglePermssion('SettingsController@destroy',$parentSetting->id );
       //End of Setting Permission
 
+      //Brand Permission
+      $parentBrand= self::createSinglePermssion('BrandController');
+        self::createSinglePermssion('BrandController@index',$parentBrand->id );
+        self::createSinglePermssion('BrandController@store',$parentBrand->id );
+        self::createSinglePermssion('BrandController@show',$parentBrand->id );
+        self::createSinglePermssion('BrandController@update',$parentBrand->id );
+        self::createSinglePermssion('BrandController@destroy',$parentBrand->id );
+        self::createSinglePermssion('BrandController@toggleStatus',$parentBrand->id );
+        self::createSinglePermssion('BrandController@getAllBrandsSorted',$parentBrand->id );
+        self::createSinglePermssion('BrandController@updateSortValues',$parentBrand->id );
+      //End of Brand Permission
 
+     //Category Permission
+      $parentCategory= self::createSinglePermssion('CategoryController');
+        self::createSinglePermssion('CategoryController@index',$parentCategory->id );
+        self::createSinglePermssion('CategoryController@store',$parentCategory->id );
+        self::createSinglePermssion('CategoryController@show',$parentCategory->id );
+        self::createSinglePermssion('CategoryController@update',$parentCategory->id );
+        self::createSinglePermssion('CategoryController@destroy',$parentCategory->id );
+        self::createSinglePermssion('CategoryController@toggleStatus',$parentCategory->id );
+        self::createSinglePermssion('CategoryController@getAllParentsSorted',$parentCategory->id );
+        self::createSinglePermssion('CategoryController@getAllChildsSorted',$parentCategory->id );
+        self::createSinglePermssion('CategoryController@updateSortValues',$parentCategory->id );
+     //End of Category Permission
 
+     //Discount Permission
+      $parentDiscount= self::createSinglePermssion('DiscountController');
+        self::createSinglePermssion('DiscountController@index',$parentDiscount->id );
+        self::createSinglePermssion('DiscountController@store',$parentDiscount->id );
+        self::createSinglePermssion('DiscountController@show',$parentDiscount->id );
+        self::createSinglePermssion('DiscountController@update',$parentDiscount->id );
+        self::createSinglePermssion('DiscountController@destroy',$parentDiscount->id );
+   //End of Discount Permission
+
+    //Discount Permission
+      $parentDiscountEntity= self::createSinglePermssion('DiscountEntityController');
+        self::createSinglePermssion('DiscountEntityController@index',$parentDiscountEntity->id );
+        self::createSinglePermssion('DiscountEntityController@store',$parentDiscountEntity->id );
+        self::createSinglePermssion('DiscountEntityController@show',$parentDiscountEntity->id );
+        self::createSinglePermssion('DiscountEntityController@update',$parentDiscountEntity->id );
+        self::createSinglePermssion('DiscountEntityController@destroy',$parentDiscountEntity->id );
+    //End of Discount Permission
+
+      //Unit Permission
+      $parentUnit= self::createSinglePermssion('UnitController');
+        self::createSinglePermssion('UnitController@index',$parentUnit->id );
+        self::createSinglePermssion('UnitController@store',$parentUnit->id );
+        self::createSinglePermssion('UnitController@show',$parentUnit->id );
+        self::createSinglePermssion('UnitController@update',$parentUnit->id );
+        self::createSinglePermssion('UnitController@destroy',$parentUnit->id );
+    //End of Unit Permission
 
     }
 

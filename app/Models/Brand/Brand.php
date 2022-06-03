@@ -40,10 +40,6 @@ class Brand extends MainModel
         $this->hasMany(Unit::class,'unit_id');
     }
 
-    public static function getMaxSortValue(){
 
-            return self::max('sort') + 1;// get the max sort
-
-    }
 
 }

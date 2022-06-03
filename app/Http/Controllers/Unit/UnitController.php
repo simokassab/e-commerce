@@ -87,7 +87,7 @@ class UnitController extends MainController
     public function update(StoreUnitRequest $request, Unit $unit)
     {
         $unit->name=json_encode($request->name);
-        $unit->code=$request->name;
+        $unit->code=$request->code;
 
 
         if(!$unit->save())

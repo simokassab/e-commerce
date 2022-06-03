@@ -90,17 +90,19 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (Throwable $exception,$request) {
 
-            if(!config('app.debug_code')){
-                if($exception instanceof \Error){
-                    return errorResponse(['message'=>'error, please try again later']);
-                }
-            }
+
 
             if(!config('app.debug')){
                 foreach ($this->exceptions as $currentException){
                     if($exception instanceof $currentException['class']){
                         return errorResponse(['message'=>$currentException['message']] ?: 'error, please try again later' );
                     }
+                }
+            }
+
+            if(!config('app.debug_code')){
+                if($exception instanceof \Error){
+                    return errorResponse(['message'=>'error, please try again later']);
                 }
             }
         });

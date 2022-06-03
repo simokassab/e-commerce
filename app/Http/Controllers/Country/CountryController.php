@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Country;
 
+use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Countries\StoreCountryRequest;
 use App\Http\Resources\CountryResource;
@@ -49,15 +50,15 @@ class CountryController extends MainController
     public function store(StoreCountryRequest $request)
     {
 
-    //    return  $country = Country::create($request->all());
-
         $country = new Country();
         $country->name = json_encode($request->name);
         $country->iso_code_1 = $request->iso_code_1;
         $country->iso_code_2 = $request->iso_code_2;
         $country->phone_code = $request->phone_code;
         $country->flag = $request->flag;
-
+        if($request->flag){
+            $country->flag= $this->imageUpload($request->file('flag'),config('image_paths.country.images'));
+        }
         if(!$country->save())
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
@@ -103,8 +104,13 @@ class CountryController extends MainController
         $country->iso_code_1 = $request->iso_code_1;
         $country->iso_code_2 = $request->iso_code_2;
         $country->phone_code = $request->phone_code;
-        $country->flag = $request->flag;
+        if($request->flag){
+            if( !$this->removeImage($country->image) ){
+                 throw new FileErrorException();
+             }
+            $country->flag= $this->imageUpload($request->file('flag'),config('image_paths.country.images'));
 
+         }
         if(!$country->save())
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 

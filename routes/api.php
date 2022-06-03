@@ -42,37 +42,30 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
 
     //here goes all the routes inside the dashboard
     Route::apiResource('roles',RolesController::class);
-    Route::get('get-nested-permissions/{permission}',[PermissionController::class,'getNestedPermissions']);
-    Route::apiResource('category',CategoryController::class);
     Route::apiResource('tag',TagController::class);
     Route::apiResource('attribute',AttributeController::class);
-    Route::apiResource('language',LanguageController::class);
     Route::apiResource('fields',FieldsController::class);
     Route::apiResource('field-value',FieldValueController::class);
-    Route::apiResource('currency',CurrencyController::class);
     Route::apiResource('settings',SettingsController::class);
     Route::apiResource('labels',LabelController::class);
     Route::apiResource('country',CountryController::class);
     Route::apiResource('discount',DiscountController::class);
     Route::apiResource('discount-entity',DiscountEntityController::class);
 
-    //change language for dashboard and get the dashborad translated objects
-    Route::put('change-language/{lang}',[LanguageController::class,'setLanguage']);
 
-    //check
+    //Permission
+    Route::get('get-nested-permissions/{permission}',[PermissionController::class,'getNestedPermissions']);
+
+    // Route Macro
     Route::customBrandResource('brand', BrandController::class);
+    Route::customCategoryResource('category', CategoryController::class);
+    Route::customLanguageResource('language',LanguageController::class);
+
+    Route::apiResource('currency',CurrencyController::class);
+    Route::patch('currency/set-is-default/{id}',[CurrencyController::class,'setCurrencyIsDefault']);
 
 
-
-
-    // Route::resource('brands-order' ,BrandController::class)->only(['getAllBrandsSorted']);
-
-    Route::patch('toggle-status/{id}',[CategoryController::class,'toggleStatus']);
-    Route::get('parents-order',[CategoryController::class,'getAllParentsSorted']);
-    Route::get('children-order/{parent_id}',[CategoryController::class,'getAllChildsSorted']);
-    Route::get('update-categories-order',[CategoryController::class,'updateSortValues']);
-
-    // Route::post('category-update/{category}',[CategoryController::class,'update']);
 
 });
-Route::get('test',[MainController::class,'test']);
+
+    Route::get('test',[MainController::class,'test']);

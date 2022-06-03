@@ -11,7 +11,6 @@ class Currency extends MainModel
 {
     use HasFactory;
     protected $table='currencies';
-    protected $guard_name = 'sanctum';
 
     public function currencyHistory(){
         return $this->hasMany(CurrencyHistory::class,'currency_id');

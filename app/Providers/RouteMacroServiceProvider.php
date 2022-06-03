@@ -25,14 +25,30 @@ class RouteMacroServiceProvider extends ServiceProvider
     public function boot()
     {
         Route::macro('customBrandResource', function ($uri, $controller) {
-            Route::get("{$uri}/order",[$controller,'getAllBrandsSorted']);
-            Route::patch("{$uri}/toggle-status/{id}",[$controller,'toggleStatus']);
-            Route::get("{$uri}/update-order",[$controller,'updateSortValues']);
+            Route::get("$uri/order",[$controller,'getAllBrandsSorted']);
+            Route::patch("$uri/toggle-status/{id}",[$controller,'toggleStatus']);
+            Route::get("$uri/update-order",[$controller,'updateSortValues']);
 
-            Route::resource($uri, $controller);
+            Route::apiResource($uri, $controller);
+        });
+
+        Route::macro('customCategoryResource', function ($uri, $controller) {
+            Route::get("$uri/parents-order",[$controller,'getAllParentsSorted']);
+            Route::get("$uri/children-order/{parent_id}",[$controller,'getAllChildsSorted']);
+            Route::patch("$uri/toggle-status/{id}",[$controller,'toggleStatus']);
+            Route::get("$uri/update-order",[$controller,'updateSortValues']);
+
+            Route::apiResource($uri, $controller);
         });
 
 
+        Route::macro('customLanguageResource', function ($uri, $controller) {
+            Route::patch("$uri/toggle-status/{id}",[$controller,'toggleStatus']);
+            Route::get("$uri/update-order",[$controller,'updateSortValues']);
+            Route::put("$uri/change-language/{lang}",[LanguageController::class,'setLanguage']);     //change language for dashboard and get the dashborad translated objects
+
+            Route::apiResource($uri, $controller);
+        });
 
     }
 }

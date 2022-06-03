@@ -53,10 +53,10 @@ class CategoryController extends MainController
             $category->code= $request->code;
 
             if($request->image){
-                $category->image= $this->imageUpload($request->file('image'),config('ImagesPaths.category.images'));
+                $category->image= $this->imageUpload($request->file('image'),config('image_paths.category.images'));
             }
             if($request->icon){
-                $category->icon= $this->imageUpload($request->file('icon'),config('ImagesPaths.category.icons'));
+                $category->icon= $this->imageUpload($request->file('icon'),config('image_paths.category.icons'));
             }
             $category->parent_id= $request->parent_id;
             $category->slug= $request->slug;
@@ -66,7 +66,6 @@ class CategoryController extends MainController
             $category->description= json_encode($request->description);
             $category->sort= Category::getMaxSortValue($request->parent_id ? NULL:$request->parent_id);
 
-            $category->is_disabled= $request->is_disabled;
 
             if(!$category->save())
                 return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
@@ -116,14 +115,14 @@ class CategoryController extends MainController
            if( !$this->removeImage($category->image) ){
                 throw new FileErrorException();
             }
-           $category->image= $this->imageUpload($request->file('image'),config('ImagesPaths.category.images'));
+           $category->image= $this->imageUpload($request->file('image'),config('image_paths.category.images'));
 
         }
         if($request->icon){
             if( !$this->removeImage($category->icon)){
                 throw new FileErrorException();
             }
-           $category->icon= $this->imageUpload($request->file('icon'),config('ImagesPaths.category.icons'));
+           $category->icon= $this->imageUpload($request->file('icon'),config('image_paths.category.icons'));
 
         }
         $category->parent_id= $request->parent_id;
@@ -183,33 +182,31 @@ class CategoryController extends MainController
 
     public function getAllParentsSorted(){
 
-        $categories=Category::whereNull('parent_id')->orderByRaw('ISNULL(sort), sort ASC')->get();
+        $categories=Category::rootParent()->order()->get();
         return $this->successResponse(['categories' => $categories ]);
+
     }
 
     public function getAllChildsSorted($parent_id){
 
-        $categories=Category::where('parent_id',$parent_id)->orderByRaw('ISNULL(sort), sort ASC')->get();
+        $categories=Category::whereParentId($parent_id)->order()->get();
         return $this->successResponse(['categories' => $categories ]);
     }
 
-
-    public function updateSortValues($parent_id){
+    public function updateSortValues(Request $request){
 
         $category = new Category();
-        $data=[
-
-           ['id' => 10 , 'sort' => 1]
-        ];
-
+        $order = $request->order;
         $index = 'id';
 
-      batch()->update($category,$data,$index);
+        batch()->update($category,$order,$index);
 
-
-      return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)])]);
+        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+        'category' =>  new CategoryResource($category)
+    ]);
 
     }
+
 
 
 }
