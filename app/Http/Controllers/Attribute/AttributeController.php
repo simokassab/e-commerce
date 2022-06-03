@@ -19,9 +19,20 @@ class AttributeController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return $this->successResponsePaginated(AttributeResource::class,Attribute::class);
+            switch ($request->method()) {
+                case 'POST':
+                   return $this->getSearchPaginated(AttributeResource::class,Attribute::class,$request->column_name,$request->value);
+                 break;
+
+
+                case 'GET':
+                    return $this->successResponsePaginated(AttributeResource::class,Attribute::class);
+                    break;
+
+            }
+
     }
 
     /**

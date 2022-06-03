@@ -45,7 +45,7 @@ class RouteMacroServiceProvider extends ServiceProvider
         Route::macro('customLanguageResource', function ($uri, $controller) {
             Route::patch("$uri/toggle-status/{id}",[$controller,'toggleStatus']);
             Route::get("$uri/update-order",[$controller,'updateSortValues']);
-            Route::put("$uri/change-language/{lang}",[LanguageController::class,'setLanguage']);     //change language for dashboard and get the dashborad translated objects
+            Route::put("$uri/change-language/{lang}",[$controller,'setLanguage']);     //change language for dashboard and get the dashborad translated objects
 
             Route::apiResource($uri, $controller);
         });

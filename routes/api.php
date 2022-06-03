@@ -43,7 +43,6 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     //here goes all the routes inside the dashboard
     Route::apiResource('roles',RolesController::class);
     Route::apiResource('tag',TagController::class);
-    Route::apiResource('attribute',AttributeController::class);
     Route::apiResource('fields',FieldsController::class);
     Route::apiResource('field-value',FieldValueController::class);
     Route::apiResource('settings',SettingsController::class);
@@ -65,6 +64,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::patch('currency/set-is-default/{id}',[CurrencyController::class,'setCurrencyIsDefault']);
 
 
+    Route::apiResource('attribute',AttributeController::class);
+    Route::post('attribute',[AttributeController::class,'index']);
 
 });
 

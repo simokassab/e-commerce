@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Expr\FuncCall;
 use App\Exceptions\FileErrorException;
+use App\Http\Resources\AttributeResource;
+use App\Models\Attribute\Attribute;
 use Illuminate\Support\Facades\Cache;
 use PDO;
 
@@ -66,6 +68,10 @@ class MainController extends Controller
         return removeImage($folderpath);
     }
 
+    public function getSearchPaginated($resource,$model,$columnName,$value,$pagination=null){
+
+        return  $resource::collection($model::where($columnName, 'LIKE', "%$value%")->paginate( $pagination ?? config('defaults.default_pagination')));
+    }
 
     }
 
