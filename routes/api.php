@@ -61,8 +61,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::customCategoryResource('category', CategoryController::class);
     Route::customLanguageResource('language',LanguageController::class);
 
-    Route::apiResource('currency',CurrencyController::class);
     Route::patch('currency/set-is-default/{id}',[CurrencyController::class,'setCurrencyIsDefault']);
+    Route::apiResource('currency',CurrencyController::class);
 
 
 
