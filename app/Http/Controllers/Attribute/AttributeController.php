@@ -26,7 +26,7 @@ class AttributeController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(AttributeResource::class,Attribute::class,$request->data[0],$request->limit);
+            return $this->getSearchPaginated(AttributeResource::class,Attribute::class,$request->data,$request->limit);
         }
         return $this->getSearchPaginated(AttributeResource::class,Attribute::class,$request->query,$request->limit);
     }

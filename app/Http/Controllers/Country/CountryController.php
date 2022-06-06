@@ -32,7 +32,7 @@ class CountryController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(CategoryResource::class,Category::class,$request->data[0],$request->limit);
+            return $this->getSearchPaginated(CategoryResource::class,Category::class,$request->data,$request->limit);
         }
         return $this->successResponsePaginated(CountryResource::class,Country::class);
         }

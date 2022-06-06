@@ -21,7 +21,7 @@ class DiscountController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(DiscountResource::class,Discount::class,$request->data[0],$request->limit);
+            return $this->getSearchPaginated(DiscountResource::class,Discount::class,$request->data,$request->limit);
         }
         return $this->successResponsePaginated(DiscountResource::class,Discount::class);
 

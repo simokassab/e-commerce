@@ -23,7 +23,7 @@ class BrandController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(BrandResource::class,Brand::class,$request->data[0],$request->limit);
+            return $this->getSearchPaginated(BrandResource::class,Brand::class,$request->data,$request->limit);
         }
         return $this->successResponsePaginated(BrandResource::class,Brand::class);
     }

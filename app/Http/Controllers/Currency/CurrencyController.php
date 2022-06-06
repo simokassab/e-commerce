@@ -28,7 +28,7 @@ class CurrencyController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(CurrencyResource::class,Currency::class,$request->data[0],$request->limit);
+            return $this->getSearchPaginated(CurrencyResource::class,Currency::class,$request->data,$request->limit,['currencyHistory']);
         }
         return $this->successResponsePaginated(CurrencyResource::class,Currency::class,['currencyHistory']);
 

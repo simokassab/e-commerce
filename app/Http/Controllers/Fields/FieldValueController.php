@@ -21,7 +21,7 @@ class FieldValueController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(FieldsValueResource::class,FieldValue::class,$request->data[0],$request->limit);
+            return $this->getSearchPaginated(FieldsValueResource::class,FieldValue::class,$request->data,$request->limit);
         }
         return $this->successResponsePaginated(FieldsValueResource::class,FieldValue::class);
     }

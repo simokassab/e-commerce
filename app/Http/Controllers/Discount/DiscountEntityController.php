@@ -21,7 +21,7 @@ class DiscountEntityController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(DiscountEntityResource::class,DiscountEntity::class,$request->data[0],$request->limit);
+            return $this->getSearchPaginated(DiscountEntityResource::class,DiscountEntity::class,$request->data,$request->limit);
         }
         return $this->successResponsePaginated(DiscountEntityResource::class,DiscountEntity::class);
 

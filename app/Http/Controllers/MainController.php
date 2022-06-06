@@ -69,11 +69,11 @@ class MainController extends Controller
         return removeImage($folderpath);
     }
 
-    public function getSearchPaginated($resource,$model,$data,$pagination=null){
+    public function getSearchPaginated($resource,$model,$data,$pagination=null,Array $relations=[]){
 
         $keys = array_keys($data);
 
-        $rows = $model::where(function($q) use($keys,$data){
+        $rows = $model::with($relations)->where(function($q) use($keys,$data){
             foreach($keys as $key)
                 $q->where($key,'LIKE','%'.$data[$key].'%');
 

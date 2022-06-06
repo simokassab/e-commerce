@@ -4,13 +4,11 @@ namespace App\Http\Controllers\Language;
 
 use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
-use App\Http\Requests\Language\StoreLanguage;
 use App\Http\Requests\Language\StoreLanguageRequest;
 use App\Http\Resources\LanguageResource;
 use App\Models\Language\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Route;
 
 
 class LanguageController extends MainController
@@ -30,7 +28,7 @@ class LanguageController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(LanguageResource::class,Language::class,$request->data[0],$request->limit);
+            return $this->getSearchPaginated(LanguageResource::class,Language::class,$request->data,$request->limit);
         }
         return $this->successResponsePaginated(LanguageResource::class,Language::class);
     }

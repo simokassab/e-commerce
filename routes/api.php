@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Attribute\AttributeController;
+use App\Http\Controllers\Attribute\AttributeValueController;
 use App\Http\Controllers\Brand\BrandController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Country\CountryController;
@@ -19,8 +20,6 @@ use App\Http\Controllers\Tag\TagController;
 use App\Http\Controllers\Unit\UnitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TestController;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,18 +39,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localization'] ],function (){
 
-    //here goes all the routes inside the dashboard
-    Route::apiResource('roles',RolesController::class);
-    Route::apiResource('tag',TagController::class);
-    Route::apiResource('fields',FieldsController::class);
-    Route::apiResource('field-value',FieldValueController::class);
-    Route::apiResource('settings',SettingsController::class);
-    Route::apiResource('labels',LabelController::class);
-    Route::apiResource('country',CountryController::class);
-    Route::apiResource('discount',DiscountController::class);
-    Route::apiResource('discount-entity',DiscountEntityController::class);
-
-
     //Permission
     Route::get('get-nested-permissions/{permission}',[PermissionController::class,'getNestedPermissions']);
 
@@ -60,13 +47,46 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::customCategoryResource('category', CategoryController::class);
     Route::customLanguageResource('language',LanguageController::class);
 
-    Route::apiResource('currency',CurrencyController::class);
-    Route::patch('currency/set-is-default/{id}',[CurrencyController::class,'setCurrencyIsDefault']);
-
 
     Route::apiResource('attribute',AttributeController::class);
-    Route::post('attribute',[AttributeController::class,'index']);
+    Route::post('attribute/all',[AttributeController::class,'index']);
 
+    Route::apiResource('attribute-value',AttributeValueController::class);
+    Route::post('attribute-value/all',[AttributeValueController::class,'index']);
+
+    Route::apiResource('country',CountryController::class);
+    Route::post('country/all',[CountryController::class,'index']);
+
+    Route::apiResource('currency',CurrencyController::class);
+    Route::patch('currency/set-is-default/{id}',[CurrencyController::class,'setCurrencyIsDefault']);
+    Route::post('currency/all',[CurrencyController::class,'index']);
+
+    Route::apiResource('discount',DiscountController::class);
+    Route::post('discount/all',[DiscountController::class,'index']);
+
+    Route::apiResource('discount-entity',DiscountEntityController::class);
+    Route::post('discount-entity/all',[DiscountEntityController::class,'index']);
+
+    Route::apiResource('field',FieldsController::class);
+    Route::post('field/all',[FieldsController::class,'index']);
+
+    Route::apiResource('field-value',FieldValueController::class);
+    Route::post('field-value/all',[FieldValueController::class,'index']);
+
+    Route::apiResource('label',LabelController::class);
+    Route::post('label/all',[LabelController::class,'index']);
+
+    Route::apiResource('role',RolesController::class);
+    Route::post('role/all',[RolesController::class,'index']);
+
+    Route::apiResource('setting',SettingsController::class);
+    Route::post('setting/all',[SettingsController::class,'index']);
+
+    Route::apiResource('tag',TagController::class);
+    Route::post('tag/all',[TagController::class,'index']);
+
+    Route::apiResource('unit',UnitController::class);
+    Route::post('unit/all',[UnitController::class,'index']);
 });
 
     Route::get('test',[MainController::class,'test']);

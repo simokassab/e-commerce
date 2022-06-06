@@ -29,7 +29,7 @@ class CategoryController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(CategoryResource::class,Category::class,$request->data[0],$request->limit);
+            return $this->getSearchPaginated(CategoryResource::class,Category::class,$request->data,$request->limit,['parent','children','label','fields','fieldValue','tags']);
         }
         return $this->successResponsePaginated(CategoryResource::class,Category::class,['parent','children','label','fields','fieldValue','tags']);
     }

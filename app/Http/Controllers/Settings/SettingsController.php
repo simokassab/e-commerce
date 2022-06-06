@@ -6,11 +6,8 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Setting\StoreSettingRequest;
 use App\Http\Resources\SettingsResource;
 use App\Models\Settings\Setting;
-use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Route;
-use Mockery\Generator\StringManipulation\Pass\Pass;
+
 
 class SettingsController extends MainController
 {
@@ -25,7 +22,7 @@ class SettingsController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(SettingsResource::class,Setting::class,$request->data[0],$request->limit);
+            return $this->getSearchPaginated(SettingsResource::class,Setting::class,$request->data,$request->limit);
         }
        return $this->successResponsePaginated(SettingsResource::class,Setting::class);
      }

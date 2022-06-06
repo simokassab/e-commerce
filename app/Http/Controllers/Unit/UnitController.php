@@ -21,7 +21,7 @@ class UnitController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(UnitResource::class,Unit::class,$request->data[0],$request->limit);
+            return $this->getSearchPaginated(UnitResource::class,Unit::class,$request->data,$request->limit);
         }
         return $this->successResponsePaginated(UnitResource::class,Unit::class);
 
