@@ -49,10 +49,9 @@ class MainController extends Controller
     protected function errorResponse(Array $data, $statusCode= 500){
         return errorResponse($data, $statusCode);
     }
-    protected function successResponsePaginated($resource, $model, Array $relation=[]){
-        $pagination = requres[items_per_page] ? requres[items_per_page] :  config('defaults.default_pagination')
+    protected function successResponsePaginated($resource, $model, Array $relation=[],$pagintaion= null){
+        $pagination = $pagintaion ? $pagintaion :  config('defaults.default_pagination');
         return $resource::collection( $model::with($relation)->paginate( $pagination ) );
-
     }
 
     protected function notFoundResponse(Array $data, $statusCode= 404){

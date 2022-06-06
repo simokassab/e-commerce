@@ -32,8 +32,7 @@ class CurrencyController extends MainController
 
     public function getCurrencyHistories(){
 
-        return $this->successResponse(['currncies_histories' => CurrencyHistoryResource::collection(CurrencyHistory::paginate(config('defaults.default_pagination')))]);
-
+        return $this->successResponsePaginated(CurrencyHistoryResource::class,CurrencyHistory::class);
     }
     /**
      * Show the form for creating a new resource.
@@ -65,7 +64,8 @@ class CurrencyController extends MainController
             $currency->image= $this->imageUpload($request->file('image'),config('image_paths.currency.images'));
         }
 
-        $currency->sort = $currency->getMaxSortValue();
+            //@todo: remove the function and let it null
+//        $currency->sort = $currency->getMaxSortValue();
 
         if(!$currency->save())
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
