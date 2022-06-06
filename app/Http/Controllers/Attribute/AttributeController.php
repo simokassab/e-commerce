@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Attribute;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Attribute\StoreAttributeRequest;
 use App\Http\Resources\AttributeResource;
+use App\Http\Resources\CategoryResource;
 use App\Models\Attribute\Attribute;
 use App\Models\Attribute\AttributeValue;
+use App\Models\Category\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
 class AttributeController extends MainController
@@ -21,18 +24,11 @@ class AttributeController extends MainController
      */
     public function index(Request $request)
     {
-            switch ($request->method()) {
-                case 'POST':
-                   return $this->getSearchPaginated(AttributeResource::class,Attribute::class,$request->column_name,$request->value);
-                 break;
 
-
-                case 'GET':
-                    return $this->successResponsePaginated(AttributeResource::class,Attribute::class);
-                    break;
-
-            }
-
+        if ($request->method()=='POST') {
+            return $this->getSearchPaginated(AttributeResource::class,Attribute::class,$request->data[0],$request->limit);
+        }
+        return $this->getSearchPaginated(AttributeResource::class,Attribute::class,$request->query,$request->limit);
     }
 
     /**

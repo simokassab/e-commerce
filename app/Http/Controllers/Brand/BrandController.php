@@ -19,8 +19,12 @@ class BrandController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->method()=='POST') {
+            return $this->getSearchPaginated(BrandResource::class,Brand::class,$request->data[0],$request->limit);
+        }
         return $this->successResponsePaginated(BrandResource::class,Brand::class);
     }
 

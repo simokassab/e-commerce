@@ -26,8 +26,12 @@ class LanguageController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->method()=='POST') {
+            return $this->getSearchPaginated(LanguageResource::class,Language::class,$request->data[0],$request->limit);
+        }
         return $this->successResponsePaginated(LanguageResource::class,Language::class);
     }
 

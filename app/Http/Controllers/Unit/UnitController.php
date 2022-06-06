@@ -17,8 +17,12 @@ class UnitController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->method()=='POST') {
+            return $this->getSearchPaginated(UnitResource::class,Unit::class,$request->data[0],$request->limit);
+        }
         return $this->successResponsePaginated(UnitResource::class,Unit::class);
 
     }

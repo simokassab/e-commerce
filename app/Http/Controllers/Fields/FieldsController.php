@@ -7,6 +7,7 @@ use App\Http\Requests\Field\FieldsStorRequest;
 use App\Http\Requests\Field\StoreFieldRequest;
 use App\Http\Resources\FieldsResource;
 use App\Models\Field\Field;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -24,8 +25,12 @@ class FieldsController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->method()=='POST') {
+            return $this->getSearchPaginated(FieldsResource::class,Fields::class,$request->data[0],$request->limit);
+        }
         return $this->successResponsePaginated(FieldsResource::class,Field::class,['fieldValue']);
 
     }

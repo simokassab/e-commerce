@@ -7,6 +7,7 @@ use App\Http\Resources\LabelsResource;
 use App\Models\Label\Label;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Labels\StoreLabelRequest;
+use Illuminate\Support\Facades\Request;
 
 class LabelController extends MainController
 {
@@ -22,8 +23,12 @@ class LabelController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->method()=='POST') {
+            return $this->getSearchPaginated(LabelsResource::class,Label::class,$request->data[0],$request->limit);
+        }
         return $this->successResponsePaginated(LabelsResource::class,Label::class);
 
     }

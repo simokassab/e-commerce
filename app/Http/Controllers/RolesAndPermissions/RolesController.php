@@ -10,6 +10,7 @@ use App\Models\RolesAndPermissions\RolePermission;
 use App\Services\RolesAndPermissions\RolesService;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 use Spatie\Permission\Models\Permission;
 
 
@@ -22,8 +23,12 @@ class RolesController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->method()=='POST') {
+            return $this->getSearchPaginated(RolesResource::class,RolePermission::class,$request->data[0],$request->limit);
+        }
         return $this->successResponsePaginated(RolesResource::class,CustomRole::class);
     }
 

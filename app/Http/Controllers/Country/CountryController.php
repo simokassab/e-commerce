@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Country;
 use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Countries\StoreCountryRequest;
+use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CountryResource;
+use App\Models\Category\Category;
 use App\Models\Country\Country;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -26,8 +28,12 @@ class CountryController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->method()=='POST') {
+            return $this->getSearchPaginated(CategoryResource::class,Category::class,$request->data[0],$request->limit);
+        }
         return $this->successResponsePaginated(CountryResource::class,Country::class);
         }
 
