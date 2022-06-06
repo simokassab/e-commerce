@@ -42,51 +42,52 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     //Permission
     Route::get('get-nested-permissions/{permission}',[PermissionController::class,'getNestedPermissions']);
 
-    // Route Macro
+    // Routes Macro
     Route::customBrandResource('brand', BrandController::class);
     Route::customCategoryResource('category', CategoryController::class);
     Route::customLanguageResource('language',LanguageController::class);
+    //End of Routes Macro
 
 
     Route::apiResource('attribute',AttributeController::class);
-    Route::post('attribute/all',[AttributeController::class,'index']);
+    Route::post('attribute/all',[AttributeController::class,'index']); // for search
 
     Route::apiResource('attribute-value',AttributeValueController::class);
-    Route::post('attribute-value/all',[AttributeValueController::class,'index']);
+    Route::post('attribute-value/all',[AttributeValueController::class,'index']); // for search
 
     Route::apiResource('country',CountryController::class);
-    Route::post('country/all',[CountryController::class,'index']);
+    Route::post('country/all',[CountryController::class,'index']); // for search
 
     Route::apiResource('currency',CurrencyController::class);
     Route::patch('currency/set-is-default/{id}',[CurrencyController::class,'setCurrencyIsDefault']);
-    Route::post('currency/all',[CurrencyController::class,'index']);
+    Route::post('currency/all',[CurrencyController::class,'index']); // for search
 
     Route::apiResource('discount',DiscountController::class);
-    Route::post('discount/all',[DiscountController::class,'index']);
+    Route::post('discount/all',[DiscountController::class,'index']); // for search
 
     Route::apiResource('discount-entity',DiscountEntityController::class);
-    Route::post('discount-entity/all',[DiscountEntityController::class,'index']);
+    Route::post('discount-entity/all',[DiscountEntityController::class,'index']); // for search
 
     Route::apiResource('field',FieldsController::class);
-    Route::post('field/all',[FieldsController::class,'index']);
+    Route::post('field/all',[FieldsController::class,'index']);// for search
 
     Route::apiResource('field-value',FieldValueController::class);
-    Route::post('field-value/all',[FieldValueController::class,'index']);
+    Route::post('field-value/all',[FieldValueController::class,'index']);// for search
 
     Route::apiResource('label',LabelController::class);
-    Route::post('label/all',[LabelController::class,'index']);
+    Route::post('label/all',[LabelController::class,'index']);// for search
 
     Route::apiResource('role',RolesController::class);
-    Route::post('role/all',[RolesController::class,'index']);
+    Route::post('role/all',[RolesController::class,'index']);// for search
 
     Route::apiResource('setting',SettingsController::class);
-    Route::post('setting/all',[SettingsController::class,'index']);
+    Route::post('setting/all',[SettingsController::class,'index']);// for search
 
     Route::apiResource('tag',TagController::class);
-    Route::post('tag/all',[TagController::class,'index']);
+    Route::post('tag/all',[TagController::class,'index']);// for search
 
     Route::apiResource('unit',UnitController::class);
-    Route::post('unit/all',[UnitController::class,'index']);
+    Route::post('unit/all',[UnitController::class,'index']);// for search
 });
 
     Route::get('test',[MainController::class,'test']);
