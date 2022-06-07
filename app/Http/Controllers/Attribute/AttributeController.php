@@ -24,11 +24,10 @@ class AttributeController extends MainController
      */
     public function index(Request $request)
     {
-
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(AttributeResource::class,Attribute::class,$request->data,$request->limit);
+            return $this->getSearchPaginated(AttributeResource::class,Attribute::class,$request->data,$request->limit,['attributeValues']);
         }
-        return $this->getSearchPaginated(AttributeResource::class,Attribute::class,$request->query,$request->limit);
+        return $this->successResponsePaginated(AttributeResource::class,Attribute::class,['attributeValues'],[]);
     }
 
     /**

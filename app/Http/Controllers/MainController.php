@@ -82,6 +82,18 @@ class MainController extends Controller
         return  $resource::collection($rows);
         }
 
+        public function getMultiSearchPaginated($resource,$model,$data,$pagination=null,Array $relations=[]){
+
+            $keys = array_keys($data);
+
+            $rows = $model::with($relations)->where(function($q) use($keys,$data){
+                foreach($keys as $key)
+                    $q->where($key,'LIKE','%'.$data[$key].'%');
+
+                })->paginate($pagination ?? config('defaults.default_pagination'));
+
+            return  $resource::collection($rows);
+            }
     }
 
 
