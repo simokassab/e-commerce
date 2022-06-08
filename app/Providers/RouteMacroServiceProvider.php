@@ -28,6 +28,7 @@ class RouteMacroServiceProvider extends ServiceProvider
             Route::get("$uri/order",[$controller,'getAllBrandsSorted']);
             Route::patch("$uri/toggle-status/{id}",[$controller,'toggleStatus']);
             Route::get("$uri/update-order",[$controller,'updateSortValues']);
+            Route::post("$uri/all",[$controller,'index']);
 
             Route::apiResource($uri, $controller);
         });
@@ -37,6 +38,7 @@ class RouteMacroServiceProvider extends ServiceProvider
             Route::get("$uri/children-order/{parent_id}",[$controller,'getAllChildsSorted']);
             Route::patch("$uri/toggle-status/{id}",[$controller,'toggleStatus']);
             Route::get("$uri/update-order",[$controller,'updateSortValues']);
+            Route::post("$uri/all",[$controller,'index']);
 
             Route::apiResource($uri, $controller);
         });
@@ -45,7 +47,8 @@ class RouteMacroServiceProvider extends ServiceProvider
         Route::macro('customLanguageResource', function ($uri, $controller) {
             Route::patch("$uri/toggle-status/{id}",[$controller,'toggleStatus']);
             Route::get("$uri/update-order",[$controller,'updateSortValues']);
-            Route::put("$uri/change-language/{lang}",[LanguageController::class,'setLanguage']);     //change language for dashboard and get the dashborad translated objects
+            Route::put("$uri/change-language/{lang}",[$controller,'setLanguage']);     //change language for dashboard and get the dashborad translated objects
+            Route::post("$uri/all",[$controller,'index']);
 
             Route::apiResource($uri, $controller);
         });

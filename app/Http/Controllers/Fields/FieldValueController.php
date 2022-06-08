@@ -17,8 +17,12 @@ class FieldValueController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->method()=='POST') {
+            return $this->getSearchPaginated(FieldsValueResource::class,FieldValue::class,$request->data,$request->limit);
+        }
         return $this->successResponsePaginated(FieldsValueResource::class,FieldValue::class);
     }
 

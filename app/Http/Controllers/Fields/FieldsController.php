@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\Fields;
 
 use App\Http\Controllers\MainController;
-use App\Http\Requests\Field\FieldsStorRequest;
 use App\Http\Requests\Field\StoreFieldRequest;
 use App\Http\Resources\FieldsResource;
 use App\Models\Field\Field;
-use Illuminate\Support\Facades\Route;
-
-
+use Illuminate\Http\Request;
 class FieldsController extends MainController
 {
     const OBJECT_NAME = 'objects.field';
@@ -24,8 +21,12 @@ class FieldsController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->method()=='POST') {
+            return $this->getSearchPaginated(FieldsResource::class,Field::class,$request->data,$request->limit,['fieldValue']);
+        }
         return $this->successResponsePaginated(FieldsResource::class,Field::class,['fieldValue']);
 
     }

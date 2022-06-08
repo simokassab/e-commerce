@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Tag;
 
 use App\Http\Controllers\MainController;
-use App\Http\Requests\Tag\StoreTag;
 use App\Http\Requests\Tag\StoreTagRequest;
 use App\Http\Resources\TagResource;
 use App\Models\Tag\Tag;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 class TagController extends MainController
 {
@@ -20,8 +18,12 @@ class TagController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->method()=='POST') {
+            return $this->getSearchPaginated(TagResource::class,Tag::class,$request->data,$request->limit);
+        }
         return $this->successResponsePaginated(TagResource::class,Tag::class);
 
     }

@@ -19,8 +19,12 @@ class AttributeValueController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->method()=='POST') {
+            return $this->getSearchPaginated(AttributeValueResource::class,AttributeValue::class,$request->data,$request->limit);
+        }
         return $this->successResponsePaginated(AttributeValueResource::class,AttributeValue::class);
 
     }

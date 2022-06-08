@@ -170,8 +170,6 @@ return [
         App\Providers\RouteMacroServiceProvider::class,
 
 
-
-
         /*
          * Package Service Providers...
          */

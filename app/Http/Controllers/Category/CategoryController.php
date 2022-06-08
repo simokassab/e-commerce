@@ -25,8 +25,12 @@ class CategoryController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->method()=='POST') {
+            return $this->getSearchPaginated(CategoryResource::class,Category::class,$request->data,$request->limit,['parent','children','label','fields','fieldValue','tags']);
+        }
         return $this->successResponsePaginated(CategoryResource::class,Category::class,['parent','children','label','fields','fieldValue','tags']);
     }
 

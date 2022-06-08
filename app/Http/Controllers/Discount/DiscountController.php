@@ -17,8 +17,12 @@ class DiscountController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->method()=='POST') {
+            return $this->getSearchPaginated(DiscountResource::class,Discount::class,$request->data,$request->limit);
+        }
         return $this->successResponsePaginated(DiscountResource::class,Discount::class);
 
 
