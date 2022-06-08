@@ -74,10 +74,9 @@ class MainController extends Controller
 
         $keys = array_keys($data);
         $rows = $model::with($relations)
-        ->where(function($q) use($keys,$data){
+        ->where(function($query) use($keys,$data){
             foreach($keys as $key)
-                $q->where($key,'LIKE','%'.$data[$key].'%');
-
+                $query->where($key,'LIKE','%'.$data[$key].'%');
             })
             ->paginate($pagination ?? config('defaults.default_pagination'));
 

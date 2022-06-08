@@ -27,7 +27,7 @@ class AttributeController extends MainController
             return $this->getSearchPaginated(AttributeResource::class,Attribute::class,$request->data,$request->limit,['attributeValues']);
 
             }
-        return $this->successResponsePaginated(AttributeResource::class,Attribute::class,['attributeValues'],[]);
+        return $this->successResponsePaginated(AttributeResource::class,Attribute::class,['attributeValues']);
 
     }
 
