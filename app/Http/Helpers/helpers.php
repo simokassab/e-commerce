@@ -48,3 +48,9 @@ function removeImage($folderpath)
         return true;
   }
 
+  function getLocaleTranslation($model,$key)
+{
+    return $model->getTranslation($key);
+
+  }
+

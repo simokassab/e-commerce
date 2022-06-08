@@ -83,7 +83,9 @@ class MainController extends Controller
         return  $resource::collection($rows);
         }
 
-
+        public function getLocaleTranslation($model,$key){
+            return getLocaleTranslation($model,$key);
+        }
     }
 
 

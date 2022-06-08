@@ -9,6 +9,7 @@ use App\Models\Attribute\Attribute;
 use App\Models\Attribute\AttributeValue;
 use App\Models\Category\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use ProtoneMedia\LaravelCrossEloquentSearch\Search;
 
 
@@ -24,9 +25,33 @@ class AttributeController extends MainController
     public function index(Request $request)
     {
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(AttributeResource::class,Attribute::class,$request->data,$request->limit,['attributeValues']);
+            // return $this->getSearchPaginated(AttributeResource::class,Attribute::class,$request->data,$request->limit,['attributeValues']);
+            // $data=$request->data;
+            // $keys = array_keys($data);
 
-            }
+            $d=Attribute::find(2);
+             return $d->getTranslation('title',App::getLocale());
+//             $rows = Attribute::with('attributeValues')
+// //where title = english
+
+
+//             ->whereHas('attributeValues',function ($query) use ($keys,$data) {
+//                     foreach($keys as $key){
+//                         $query->where($key,'LIKE','%'.$data[$key].'%');
+//                     }
+//                            })
+//             ->orWhere(function ($query) use ($keys,$data) {
+//                 foreach($keys as $key){
+//                     $query->orWhere($key,'LIKE','%'.$data[$key].'%');
+//                 }})
+
+
+//             ->paginate($request->limit ?? config('defaults.default_pagination'));
+
+
+
+            // return  AttributeResource::collection($rows);
+        }
         return $this->successResponsePaginated(AttributeResource::class,Attribute::class,['attributeValues']);
 
     }

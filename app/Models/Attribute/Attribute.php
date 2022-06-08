@@ -7,11 +7,15 @@ use App\Models\MainModel;
 use App\Models\Attribute\AttributeValue;
 use App\Models\Product\Product;
 
+
 class Attribute extends MainModel
 {
     use HasFactory;
+
     protected $table='attributes';
     protected $guard_name = 'sanctum';
+
+    public $translatable = ['title'];
 
     public function attributeValues(){
         return $this->hasMany(AttributeValue::class,'attribute_id','id');

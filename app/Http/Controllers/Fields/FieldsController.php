@@ -7,6 +7,8 @@ use App\Http\Requests\Field\StoreFieldRequest;
 use App\Http\Resources\FieldsResource;
 use App\Models\Field\Field;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+
 class FieldsController extends MainController
 {
     const OBJECT_NAME = 'objects.field';
@@ -25,7 +27,10 @@ class FieldsController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(FieldsResource::class,Field::class,$request->data,$request->limit,['fieldValue']);
+            // return $this->getSearchPaginated(FieldsResource::class,Field::class,$request->data,$request->limit,['fieldValue']);
+            $d=Field::find(2);
+            return $d->getTranslation('title',App::getLocale());
+
         }
         return $this->successResponsePaginated(FieldsResource::class,Field::class,['fieldValue']);
 
