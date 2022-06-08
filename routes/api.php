@@ -91,3 +91,4 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
 });
 
     Route::get('test',[MainController::class,'test']);
+    Route::get('s',[AttributeController::class,'serachdata']);

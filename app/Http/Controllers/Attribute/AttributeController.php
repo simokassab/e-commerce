@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Attribute;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Attribute\StoreAttributeRequest;
 use App\Http\Resources\AttributeResource;
-use App\Http\Resources\CategoryResource;
 use App\Models\Attribute\Attribute;
 use App\Models\Attribute\AttributeValue;
 use App\Models\Category\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Route;
+use ProtoneMedia\LaravelCrossEloquentSearch\Search;
+
 
 class AttributeController extends MainController
 {
@@ -26,8 +25,10 @@ class AttributeController extends MainController
     {
         if ($request->method()=='POST') {
             return $this->getSearchPaginated(AttributeResource::class,Attribute::class,$request->data,$request->limit,['attributeValues']);
-        }
+
+            }
         return $this->successResponsePaginated(AttributeResource::class,Attribute::class,['attributeValues'],[]);
+
     }
 
     /**
