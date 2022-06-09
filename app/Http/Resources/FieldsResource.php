@@ -15,6 +15,7 @@ class FieldsResource extends JsonResource
      */
     public function toArray($request)
     {
+
         $fields_values=$this->whenLoaded('fieldValue');
         return [
             'id' =>$this->id,

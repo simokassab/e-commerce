@@ -8,17 +8,19 @@ use App\Models\Field\Field;
 use App\Models\Brand\Brand;
 use App\Models\Category\Category;
 use App\Models\Product\Product;
+use Spatie\Translatable\HasTranslations;
 
 class FieldValue extends MainModel
 
 
 {
-    use HasFactory;
+    use HasFactory,HasTranslations;
+    protected $translatable=['value'];
     protected $table='fields_values';
     protected $guard_name = 'sanctum';
 
     public function field(){
-        return $this->belongsTo(Field::class,'fields_id');
+        return $this->belongsTo(Field::class,'field_id');
         }
 
     public function fieldCategorie(){

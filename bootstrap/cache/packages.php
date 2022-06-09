@@ -67,6 +67,13 @@
       0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     ),
   ),
+  'protonemedia/laravel-cross-eloquent-search' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'ProtoneMedia\\LaravelCrossEloquentSearch\\ServiceProvider',
+    ),
+  ),
   'spatie/laravel-ignition' => 
   array (
     'providers' => 

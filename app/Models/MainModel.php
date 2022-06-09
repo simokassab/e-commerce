@@ -37,4 +37,9 @@ class MainModel extends Model
     }
 
 
+    // a new function that is called on an objec and retuens the translated value of the field
+    // it will paginate the data and return it with translations
+    
+
+
 }

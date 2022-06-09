@@ -26,31 +26,31 @@ class AttributeController extends MainController
     {
         if ($request->method()=='POST') {
             // return $this->getSearchPaginated(AttributeResource::class,Attribute::class,$request->data,$request->limit,['attributeValues']);
-            // $data=$request->data;
-            // $keys = array_keys($data);
+            $data=$request->data;
+            $keys = array_keys($data);
 
-            $d=Attribute::find(2);
-             return $d->getTranslation('title',App::getLocale());
-//             $rows = Attribute::with('attributeValues')
+            // $d=Attribute::find(2);
+            //  return $d->getTranslation('title',App::getLocale());
+            $rows = Attribute::with('attributeValues')
 // //where title = english
 
 
-//             ->whereHas('attributeValues',function ($query) use ($keys,$data) {
-//                     foreach($keys as $key){
-//                         $query->where($key,'LIKE','%'.$data[$key].'%');
-//                     }
-//                            })
+            ->whereHas('attributeValues',function ($query) use ($keys,$data) {
+                    foreach($keys as $key){
+                        $query->where($key,'LIKE','%'.$data[$key].'%');
+                    }
+                           })
 //             ->orWhere(function ($query) use ($keys,$data) {
 //                 foreach($keys as $key){
 //                     $query->orWhere($key,'LIKE','%'.$data[$key].'%');
 //                 }})
 
 
-//             ->paginate($request->limit ?? config('defaults.default_pagination'));
+            ->paginate($request->limit ?? config('defaults.default_pagination'));
 
 
 
-            // return  AttributeResource::collection($rows);
+            return  AttributeResource::collection($rows);
         }
         return $this->successResponsePaginated(AttributeResource::class,Attribute::class,['attributeValues']);
 

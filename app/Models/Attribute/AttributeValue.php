@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
 use App\Models\Attribute\Attribute;
 use App\Models\Product\Product;
+use Spatie\Translatable\HasTranslations;
 
 class AttributeValue extends MainModel
 {
-    use HasFactory;
+    use HasFactory,HasTranslations;
+    protected $translatable=['title'];
     protected $table='attributes_values';
     protected $guard_name = 'sanctum';
 

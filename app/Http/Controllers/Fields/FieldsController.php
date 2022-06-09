@@ -7,6 +7,7 @@ use App\Http\Requests\Field\StoreFieldRequest;
 use App\Http\Resources\FieldsResource;
 use App\Models\Field\Field;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 
 class FieldsController extends MainController
@@ -27,9 +28,18 @@ class FieldsController extends MainController
     {
 
         if ($request->method()=='POST') {
-            // return $this->getSearchPaginated(FieldsResource::class,Field::class,$request->data,$request->limit,['fieldValue']);
-            $d=Field::find(2);
-            return $d->getTranslation('title',App::getLocale());
+
+            $data=$request->data;
+            $keys = array_keys($data);
+            $fields=Field::with('fieldValue')
+            ->where(function($query) use($data,$keys){
+                    foreach($keys as $key)
+                            $query->where($key,'LIKE', '%'.$data[$key].'%');
+                         })
+                ->paginate($request->limit ?? config('defaults.default_pagination'));
+
+            return FieldsResource::collection($fields);
+
 
         }
         return $this->successResponsePaginated(FieldsResource::class,Field::class,['fieldValue']);

@@ -16,7 +16,7 @@ class FieldsValueResource extends JsonResource
     {
         return [
           'id' => $this->id,
-          'field_id'=> $this->fields_id,
+          'field_id'=> $this->field_id,
           'value' => $this->value
         ];
     }
