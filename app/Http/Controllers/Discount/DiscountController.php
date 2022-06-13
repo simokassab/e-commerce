@@ -6,6 +6,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Discount\StoreDiscountRequest;
 use App\Http\Resources\DiscountResource;
 use App\Models\Discount\Discount;
+use Exception;
 use Illuminate\Http\Request;
 
 class DiscountController extends MainController
@@ -21,7 +22,24 @@ class DiscountController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(DiscountResource::class,Discount::class,$request->data,$request->limit);
+
+            $arrayKeys=['name','start_date','end_date','discount_percentage'];
+            $data=$request->data;
+            $keys = array_keys($data);
+            $rows = Discount::where(function($query) use($keys,$data,$arrayKeys){
+                foreach($keys as $key){
+                    if(in_array($key,$arrayKeys)){
+                        $value=strtolower($data[$key]);
+                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                            }
+                    else{
+                        throw new Exception();
+                         }
+                        }
+                })->paginate($pagination ?? config('defaults.default_pagination'));
+
+            return  DiscountResource::collection($rows);
+
         }
         return $this->successResponsePaginated(DiscountResource::class,Discount::class);
 

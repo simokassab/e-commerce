@@ -12,7 +12,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Field extends MainModel
 {
-    use HasFactory;
+    use HasFactory,HasTranslations;
 
     protected $translatable=['title'];
     protected $table='fields';

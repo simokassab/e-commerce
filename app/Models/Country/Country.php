@@ -4,10 +4,13 @@ namespace App\Models\Country;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
+use Spatie\Translatable\HasTranslations;
 
 class Country extends MainModel
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
+
+    protected $translatable=['name'];
     protected $table='countries';
     protected $guard_name = 'sanctum';
 

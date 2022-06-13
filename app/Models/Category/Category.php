@@ -11,10 +11,12 @@ use App\Models\Tag\Tag;
 use App\Models\Discount\Discount;
 use App\Models\Brand\Brand;
 use App\Models\Product\Product;
+use Spatie\Translatable\HasTranslations;
 
 class Category extends MainModel
 {
-    use HasFactory;
+    use HasFactory,HasTranslations;
+    protected $translatable=['name'];
     // protected $table='categories';
     // protected $guard_name = 'sanctum';
 

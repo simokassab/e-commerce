@@ -6,6 +6,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Unit\StoreUnitRequest;
 use App\Http\Resources\UnitResource;
 use App\Models\Unit\Unit;
+use Exception;
 use Illuminate\Http\Request;
 
 class UnitController extends MainController
@@ -21,7 +22,22 @@ class UnitController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(UnitResource::class,Unit::class,$request->data,$request->limit);
+            $arrayKeys=['name','code'];
+            $data=$request->data;
+            $keys = array_keys($data);
+            $rows = Unit::where(function($query) use($keys,$data,$arrayKeys){
+                foreach($keys as $key){
+                    if(in_array($key,$arrayKeys)){
+                        $value=strtolower($data[$key]);
+                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                            }
+                    else{
+                        throw new Exception();
+                         }
+                        }
+                })->paginate($pagination ?? config('defaults.default_pagination'));
+
+            return  UnitResource::collection($rows);
         }
         return $this->successResponsePaginated(UnitResource::class,Unit::class);
 

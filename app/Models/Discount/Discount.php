@@ -7,9 +7,12 @@ use App\Models\MainModel;
 use App\Models\Category\Category;
 use App\Models\Tag\Tag;
 use App\Models\Brand\Brand;
+use Spatie\Translatable\HasTranslations;
+
 class Discount extends MainModel
 {
-    use HasFactory;
+    use HasFactory,HasTranslations;
+    protected $translatable=['name'];
     protected $table='discounts';
     protected $guard_name = 'sanctum';
 
@@ -24,5 +27,5 @@ class Discount extends MainModel
     public function brand(){
         return $this->belongsToMany(Brand::class,'discounts_entities','discount_id','brand_id');
     }
-    
+
 }

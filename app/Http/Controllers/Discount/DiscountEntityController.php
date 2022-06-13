@@ -6,6 +6,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Discount\StoreDiscountEntityRequest;
 use App\Http\Resources\DiscountEntityResource;
 use App\Models\Discount\DiscountEntity;
+use Exception;
 use Illuminate\Http\Request;
 
 class DiscountEntityController extends MainController
@@ -21,7 +22,24 @@ class DiscountEntityController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(DiscountEntityResource::class,DiscountEntity::class,$request->data,$request->limit);
+
+                $arrayKeys=['discount_id','category_id','brand_id','tag_id'];
+                $data=$request->data;
+                $keys = array_keys($data);
+                $rows = DiscountEntity::where(function($query) use($keys,$data,$arrayKeys){
+                    foreach($keys as $key){
+                        if(in_array($key,$arrayKeys)){
+                            $value=strtolower($data[$key]);
+                            $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                                }
+                        else{
+                            throw new Exception();
+                            }
+                            }
+                    })->paginate($pagination ?? config('defaults.default_pagination'));
+
+                return  DiscountEntityResource::collection($rows);
+
         }
         return $this->successResponsePaginated(DiscountEntityResource::class,DiscountEntity::class);
 

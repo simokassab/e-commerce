@@ -5,14 +5,10 @@ namespace App\Http\Controllers\Country;
 use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Countries\StoreCountryRequest;
-use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CountryResource;
-use App\Models\Category\Category;
 use App\Models\Country\Country;
+use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Route;
-use PHPUnit\Framework\Constraint\Count;
 
 class CountryController extends MainController
 {
@@ -32,7 +28,23 @@ class CountryController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(CategoryResource::class,Category::class,$request->data,$request->limit);
+
+            $arrayKeys=['name','iso_code_1','iso_code_2','phone_code'];
+            $data=$request->data;
+            $keys = array_keys($data);
+            $rows = Country::where(function($query) use($keys,$data,$arrayKeys){
+                foreach($keys as $key){
+                    if(in_array($key,$arrayKeys)){
+                        $value=strtolower($data[$key]);
+                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                            }
+                    else{
+                        throw new Exception();
+                         }
+                        }
+                })->paginate($pagination ?? config('defaults.default_pagination'));
+
+            return  CountryResource::collection($rows);
         }
         return $this->successResponsePaginated(CountryResource::class,Country::class);
         }

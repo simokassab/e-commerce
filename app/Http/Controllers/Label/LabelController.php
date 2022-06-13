@@ -7,6 +7,7 @@ use App\Http\Resources\LabelsResource;
 use App\Models\Label\Label;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Labels\StoreLabelRequest;
+use Exception;
 use Illuminate\Http\Request;
 
 class LabelController extends MainController
@@ -27,7 +28,23 @@ class LabelController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(LabelsResource::class,Label::class,$request->data,$request->limit);
+            $arrayKeys=['title','entity','color','image','key'];
+            $data=$request->data;
+            $keys = array_keys($data);
+            $rows = Label::where(function($query) use($keys,$data,$arrayKeys){
+                foreach($keys as $key){
+                    if(in_array($key,$arrayKeys)){
+                        $value=strtolower($data[$key]);
+                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                            }
+                    else{
+                        throw new Exception();
+                         }
+                        }
+                })->paginate($pagination ?? config('defaults.default_pagination'));
+
+            return  LabelsResource::collection($rows);
+
         }
         return $this->successResponsePaginated(LabelsResource::class,Label::class);
 

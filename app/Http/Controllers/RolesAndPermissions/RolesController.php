@@ -8,11 +8,11 @@ use App\Http\Resources\RolesResource;
 use App\Models\RolesAndPermissions\CustomRole;
 use App\Models\RolesAndPermissions\RolePermission;
 use App\Services\RolesAndPermissions\RolesService;
+use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
-
+use Spatie\Permission\Contracts\Role;
 
 class RolesController extends MainController
 {
@@ -27,7 +27,22 @@ class RolesController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(RolesResource::class,CustomRole::class,$request->data,$request->limit);
+            $arrayKeys=['name'];
+            $data=$request->data;
+            $keys = array_keys($data);
+            $rows = CustomRole::where(function($query) use($keys,$data,$arrayKeys){
+                foreach($keys as $key){
+                    if(in_array($key,$arrayKeys)){
+                        $value=strtolower($data[$key]);
+                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                            }
+                    else{
+                        throw new Exception();
+                         }
+                        }
+                })->paginate($pagination ?? config('defaults.default_pagination'));
+
+            return  RolesResource::collection($rows);
         }
         return $this->successResponsePaginated(RolesResource::class,CustomRole::class);
     }

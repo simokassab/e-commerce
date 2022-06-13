@@ -7,10 +7,12 @@ use App\Models\MainModel;
 use App\Models\Label\Label;
 use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
+use Spatie\Translatable\HasTranslations;
 
 class Brand extends MainModel
 {
-    use HasFactory;
+    use HasFactory,HasTranslations;
+    protected $translatable=['name'];
     protected $table='brands';
     protected $guard_name = 'sanctum';
 

@@ -48,11 +48,6 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::customLanguageResource('language',LanguageController::class);
     //End of Routes Macro
 
-    Route::apiResource('attribute',AttributeController::class);
-    Route::post('attribute/all',[AttributeController::class,'index']); // for search
-
-    Route::apiResource('attribute-value',AttributeValueController::class);
-    Route::post('attribute-value/all',[AttributeValueController::class,'index']); // for search
 
     Route::apiResource('country',CountryController::class);
     Route::post('country/all',[CountryController::class,'index']); // for search
@@ -90,4 +85,3 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
 });
 
     Route::get('test',[MainController::class,'test']);
-    Route::get('s',[AttributeController::class,'serachdata']);

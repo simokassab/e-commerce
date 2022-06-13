@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
 use App\Models\Currency\CurrencyHistory;
 use App\Models\Price\Price;
+use Spatie\Translatable\HasTranslations;
 
 class Currency extends MainModel
 {
-    use HasFactory;
+    use HasFactory,HasTranslations;
+
+    protected $translatable=['name'];
     protected $table='currencies';
 
     public function currencyHistory(){

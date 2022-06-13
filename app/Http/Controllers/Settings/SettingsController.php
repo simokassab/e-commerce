@@ -6,6 +6,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Setting\StoreSettingRequest;
 use App\Http\Resources\SettingsResource;
 use App\Models\Settings\Setting;
+use Exception;
 use Illuminate\Http\Request;
 
 
@@ -22,7 +23,23 @@ class SettingsController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(SettingsResource::class,Setting::class,$request->data,$request->limit);
+            $arrayKeys=['key','value','is_developer'];
+            $data=$request->data;
+            $keys = array_keys($data);
+            $rows = Setting::where(function($query) use($keys,$data,$arrayKeys){
+                foreach($keys as $key){
+                    if(in_array($key,$arrayKeys)){
+                        $value=strtolower($data[$key]);
+                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                            }
+                    else{
+                        throw new Exception();
+                         }
+                        }
+                })->paginate($pagination ?? config('defaults.default_pagination'));
+
+            return  SettingsResource::collection($rows);
+
         }
        return $this->successResponsePaginated(SettingsResource::class,Setting::class);
      }

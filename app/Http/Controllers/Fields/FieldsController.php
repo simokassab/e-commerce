@@ -6,6 +6,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Field\StoreFieldRequest;
 use App\Http\Resources\FieldsResource;
 use App\Models\Field\Field;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
@@ -26,21 +27,25 @@ class FieldsController extends MainController
      */
     public function index(Request $request)
     {
-
+        $relations=['fieldValue'];
         if ($request->method()=='POST') {
 
-            $data=$request->data;
-            $keys = array_keys($data);
-            $fields=Field::with('fieldValue')
-            ->where(function($query) use($data,$keys){
-                    foreach($keys as $key)
-                            $query->where($key,'LIKE', '%'.$data[$key].'%');
-                         })
-                ->paginate($request->limit ?? config('defaults.default_pagination'));
+                $arrayKeys=['title','type','entity','is_required'];
+                $data=$request->data;
+                $keys = array_keys($data);
+                $rows = Field::with($relations)->where(function($query) use($keys,$data,$arrayKeys){
+                    foreach($keys as $key){
+                        if(in_array($key,$arrayKeys)){
+                            $value=strtolower($data[$key]);
+                            $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                                }
+                        else{
+                            throw new Exception();
+                             }
+                            }
+                    })->paginate($pagination ?? config('defaults.default_pagination'));
 
-            return FieldsResource::collection($fields);
-
-
+                return  FieldsResource::collection($rows);
         }
         return $this->successResponsePaginated(FieldsResource::class,Field::class,['fieldValue']);
 

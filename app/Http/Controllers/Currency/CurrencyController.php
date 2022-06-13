@@ -11,6 +11,7 @@ use App\Http\Resources\CurrencyResource;
 use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyHistory;
 use App\Services\Currency\CurrencyService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
@@ -26,10 +27,25 @@ class CurrencyController extends MainController
      */
     public function index(Request $request)
     {
-
+        $relations=['currencyHistory'];
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(CurrencyResource::class,Currency::class,$request->data,$request->limit,['currencyHistory']);
-        }
+            $arrayKeys=['name','code','symbol','rate'];
+            $data=$request->data;
+            $keys = array_keys($data);
+            $rows = Currency::with($relations)->where(function($query) use($keys,$data,$arrayKeys){
+                foreach($keys as $key){
+                    if(in_array($key,$arrayKeys)){
+                        $value=strtolower($data[$key]);
+                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                            }
+                    else{
+                        throw new Exception();
+                         }
+                        }
+                })->paginate($pagination ?? config('defaults.default_pagination'));
+
+            return  CurrencyResource::collection($rows);
+                }
         return $this->successResponsePaginated(CurrencyResource::class,Currency::class,['currencyHistory']);
 
     }
@@ -55,7 +71,8 @@ class CurrencyController extends MainController
      * @return \Illuminate\Http\Response
      */
     public function store(StoreCurrencyRequest $request)
-    {
+{
+
         $currency = new Currency();
         $currency->name=json_encode($request->name);
         $currency->code=$request->code;

@@ -10,6 +10,7 @@ use App\Http\Requests\Countries\StoreCountryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category\Category;
 use App\Services\Category\CategoryService;
+use Exception;
 use Illuminate\Bus\Batch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -27,11 +28,27 @@ class CategoryController extends MainController
      */
     public function index(Request $request)
     {
+        $relations=['parent','children','label','fields','fieldValue','tags'];
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(CategoryResource::class,Category::class,$request->data,$request->limit,['parent','children','label','fields','fieldValue','tags']);
-        }
-        return $this->successResponsePaginated(CategoryResource::class,Category::class,['parent','children','label','fields','fieldValue','tags']);
+            $arrayKeys=['name','code','slug','parent_id','meta_title','meta_description','meta_keyword','description'];
+            $data=$request->data;
+            $keys = array_keys($data);
+            $rows = Category::with($relations)->where(function($query) use($keys,$data,$arrayKeys){
+                foreach($keys as $key){
+                    if(in_array($key,$arrayKeys)){
+                        $value=strtolower($data[$key]);
+                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                            }
+                    else{
+                        throw new Exception();
+                         }
+                        }
+                })->paginate($pagination ?? config('defaults.default_pagination'));
+
+            return  CategoryResource::collection($rows);
+          }
+        return $this->successResponsePaginated(CategoryResource::class,Category::class,$relations);
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Field\StoreFieldsValueRequest;
 use App\Http\Resources\FieldsValueResource;
 use App\Models\Field\FieldValue;
+use Exception;
 use Illuminate\Http\Request;
 
 class FieldValueController extends MainController
@@ -21,7 +22,23 @@ class FieldValueController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(FieldsValueResource::class,FieldValue::class,$request->data,$request->limit);
+            $arrayKeys=['field_id','value'];
+            $data=$request->data;
+            $keys = array_keys($data);
+            $rows = FieldValue::where(function($query) use($keys,$data,$arrayKeys){
+                foreach($keys as $key){
+                    if(in_array($key,$arrayKeys)){
+                        $value=strtolower($data[$key]);
+                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                            }
+                    else{
+                        throw new Exception();
+                         }
+                        }
+                })->paginate($pagination ?? config('defaults.default_pagination'));
+
+            return  FieldsValueResource::collection($rows);
+
         }
         return $this->successResponsePaginated(FieldsValueResource::class,FieldValue::class);
     }

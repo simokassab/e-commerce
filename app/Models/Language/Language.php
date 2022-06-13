@@ -5,10 +5,12 @@ namespace App\Models\Language;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
+use Spatie\Translatable\HasTranslations;
 
 class Language extends MainModel
 {
-    use HasFactory;
+    use HasFactory,HasTranslations;
+    protected $translatable=['name'];
     protected $guard_name = 'sanctum';
 
 

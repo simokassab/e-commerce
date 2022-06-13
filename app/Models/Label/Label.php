@@ -7,9 +7,13 @@ use App\Models\MainModel;
 use App\Models\Category\Category;
 use App\Models\Brand\brand;
 use App\Models\Product\Product;
+use Spatie\Translatable\HasTranslations;
+
 class Label extends MainModel
 {
-    use HasFactory;
+    use HasFactory,HasTranslations;
+
+    protected $translatable=['title'];
     protected $table='labels';
     protected $guard_name = 'sanctum';
 

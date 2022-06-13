@@ -7,6 +7,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Language\StoreLanguageRequest;
 use App\Http\Resources\LanguageResource;
 use App\Models\Language\Language;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 
@@ -28,7 +29,22 @@ class LanguageController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(LanguageResource::class,Language::class,$request->data,$request->limit);
+            $arrayKeys=['name','code','is_default','is_disabled'];
+            $data=$request->data;
+            $keys = array_keys($data);
+            $rows = Language::where(function($query) use($keys,$data,$arrayKeys){
+                foreach($keys as $key){
+                    if(in_array($key,$arrayKeys)){
+                        $value=strtolower($data[$key]);
+                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                            }
+                    else{
+                        throw new Exception();
+                         }
+                        }
+                })->paginate($pagination ?? config('defaults.default_pagination'));
+
+            return  LanguageResource::collection($rows);
         }
         return $this->successResponsePaginated(LanguageResource::class,Language::class);
     }
@@ -145,16 +161,16 @@ class LanguageController extends MainController
     }
     public function setLanguage($locale){
 
-
-        session(['locale' => $locale]);
+        $language=Language::where('code',$locale)->first();
+        if(!$language)
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
         App::setLocale($locale);
-
         if(App::getLocale() == $locale){
-            return $this->successResponse([__('objects'),'messages' => __('messages.success.update', ['name' => __('objects.language')] )]);
+            return $this->successResponse([__('objects'),'messages' => __('messages.success.update', ['name' => __(self::OBJECT_NAME)]) ]);
         }
 
-        return $this->errorResponse( [ 'messages' => __('messages.failed.update', ['name' => __('objects.language')] )] );
+        return $this->errorResponse( [ 'messages' => __('messages.failed.update', ['name' => __(self::OBJECT_NAME)]) ]);
 
     }
 public function toggleStatus(Request $request ,$id){

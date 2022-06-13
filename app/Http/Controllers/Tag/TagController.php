@@ -6,6 +6,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Tag\StoreTagRequest;
 use App\Http\Resources\TagResource;
 use App\Models\Tag\Tag;
+use Exception;
 use Illuminate\Http\Request;
 
 class TagController extends MainController
@@ -22,7 +23,22 @@ class TagController extends MainController
     {
 
         if ($request->method()=='POST') {
-            return $this->getSearchPaginated(TagResource::class,Tag::class,$request->data,$request->limit);
+            $arrayKeys=['name'];
+            $data=$request->data;
+            $keys = array_keys($data);
+            $rows = Tag::where(function($query) use($keys,$data,$arrayKeys){
+                foreach($keys as $key){
+                    if(in_array($key,$arrayKeys)){
+                        $value=strtolower($data[$key]);
+                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                            }
+                    else{
+                        throw new Exception();
+                         }
+                        }
+                })->paginate($pagination ?? config('defaults.default_pagination'));
+
+            return  TagResource::collection($rows);
         }
         return $this->successResponsePaginated(TagResource::class,Tag::class);
 
