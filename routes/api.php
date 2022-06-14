@@ -48,13 +48,12 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::customLanguageResource('language',LanguageController::class);
     //End of Routes Macro
 
-
     Route::apiResource('country',CountryController::class);
     Route::post('country/all',[CountryController::class,'index']); // for search
 
+    Route::apiResource('currency',CurrencyController::class);
     Route::patch('currency/set-is-default/{id}',[CurrencyController::class,'setCurrencyIsDefault']);
     Route::post('currency/all',[CurrencyController::class,'index']); // for search
-    Route::apiResource('currency',CurrencyController::class);
 
     Route::apiResource('discount',DiscountController::class);
     Route::post('discount/all',[DiscountController::class,'index']); // for search

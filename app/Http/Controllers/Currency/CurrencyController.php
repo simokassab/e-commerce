@@ -71,9 +71,6 @@ class CurrencyController extends MainController
             $currency->image= $this->imageUpload($request->file('image'),config('image_paths.currency.images'));
         }
 
-            //@todo: remove the function and let it null
-//        $currency->sort = $currency->getMaxSortValue();
-
         if(!$currency->save())
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
@@ -177,8 +174,9 @@ class CurrencyController extends MainController
         $currencyObject = Currency::findOrFail($currency);
         $currencyObject->setIsDefault();
         $currencyObject->save();
+
         return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-        'currency' => new CurrencyResource($currency)
-    ]);
+        'currency' => new CurrencyResource($currencyObject)
+        ]);
     }
 }

@@ -61,7 +61,7 @@ class CountryController extends MainController
         $country->phone_code = $request->phone_code;
         $country->flag = $request->flag;
         if($request->flag){
-            $country->flag= $this->imageUpload($request->file('flag'),config('image_paths.country.images'));
+            $country->flag= $this->imageUpload($request->file('flag'),config('images_paths.country.images'));
         }
         if(!$country->save())
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
@@ -112,7 +112,7 @@ class CountryController extends MainController
             if(!$this->removeImage($country->image) ){
                  throw new FileErrorException();
              }
-            $country->flag= $this->imageUpload($request->file('flag'),config('image_paths.country.images'));
+            $country->flag= $this->imageUpload($request->file('flag'),config('images_paths.country.images'));
 
          }
         if(!$country->save())

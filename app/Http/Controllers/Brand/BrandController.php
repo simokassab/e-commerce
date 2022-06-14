@@ -52,7 +52,7 @@ class BrandController extends MainController
         $brand->name = json_encode($request->name);
         $brand->code = $request->code;
         if($request->image){
-            $brand->image= $this->imageUpload($request->file('image'),config('image_paths.brand.images'));
+            $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brand.images'));
         }
         $brand->meta_title = json_encode($request->meta_title);
         $brand->meta_description = json_encode($request->meta_description);
@@ -98,15 +98,16 @@ class BrandController extends MainController
      * @param  Brand  $brand
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreBrandRequest $request, Brand $brand)
+    public function update(Request $request, Brand $brand)
     {
+
         $brand->name = json_encode($request->name);
         $brand->code = $request->code;
         if($request->image){
             if( !$this->removeImage($brand->image) ){
                  throw new FileErrorException();
              }
-            $brand->image= $this->imageUpload($request->file('image'),config('image_paths.brand.images'));
+            $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brand.images'));
 
          }
         $brand->meta_title = json_encode($request->meta_title);

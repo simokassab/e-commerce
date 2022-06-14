@@ -27,7 +27,7 @@ class StoreLabelRequest extends FormRequest
         return [
             'title' => 'required',
             'entity' => 'required|in:'.config('defaults.validation_default_entities'),
-            'color' => 'required | max:'.config('defaults.string_length'),
+            'color' => 'required | max:'.config('defaults.default_string_length'),
 
             'image' => 'nullable | image
             | mimes:'.config('defaults.default_image_extentions').'
@@ -35,7 +35,7 @@ class StoreLabelRequest extends FormRequest
             | dimensions:min_width='.config('defaults.default_image_minimum_width').',min_height='.config('defaults.default_image_minimum_height').'
                 ,max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
 
-            'key' => 'required | max:'.config('defaults.string_length'),
+            'key' => 'required | max:'.config('defaults.default_string_length'),
         ];
     }
 

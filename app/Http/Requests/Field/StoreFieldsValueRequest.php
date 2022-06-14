@@ -24,7 +24,7 @@ class StoreFieldsValueRequest extends FormRequest
     public function rules()
     {
         return [
-            'field_id' => 'required',
+            'field_id' => 'required | exists:fields,id',
             'value' => 'required'
         ];
     }

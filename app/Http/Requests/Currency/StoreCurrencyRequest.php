@@ -29,7 +29,7 @@ class StoreCurrencyRequest extends FormRequest
             'name' => 'required',
             'code' => 'required | max:'.config('defaults.default_string_length'),
             'symbol' => 'nullable | max:'.config('defaults.default_string_length'),
-            'rate' => 'nullable | numeric',
+            'rate' => 'required | numeric',
             'is_default' => 'nullable | boolean',
 
             'image' => 'nullable | image
@@ -52,6 +52,7 @@ class StoreCurrencyRequest extends FormRequest
 
             'symbol.max' => 'the maximum string length is :max',
 
+            'rate.required' => 'The :attribute field is required.',
             'rate.numeric' => 'The :attribute must be decimal.',
 
             'is_default.boolean' => 'The :attribute field accepts only 0 or 1',
@@ -59,8 +60,7 @@ class StoreCurrencyRequest extends FormRequest
             'image.image' => 'The input is not an image',
             'image.max' => 'The maximum :attribute size is :max.',
             'image.mimes' => 'Invalid extention.',
-            'image.dimensions' => 'Invalid dimentions, minimum('.config('defaults.default_image_minimum_width').'x'.config('defaults.default_image_minimum_height').'),
-                 maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
+            'image.dimensions' => 'Invalid dimentions! maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
 
             'sort.integer' => 'the :attribute should be an integer',
           ];

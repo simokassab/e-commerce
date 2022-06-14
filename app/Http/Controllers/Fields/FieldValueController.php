@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Fields;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Field\StoreFieldsValueRequest;
 use App\Http\Resources\FieldsValueResource;
+use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
 use Exception;
 use Illuminate\Http\Request;
@@ -48,7 +49,7 @@ class FieldValueController extends MainController
     public function store(StoreFieldsValueRequest $request)
     {
         $fieldValue=new FieldValue();
-        $fieldValue->fields_id = $request->fields_id;
+        $fieldValue->field_id = $request->field_id;
         $fieldValue->value = json_encode($request->value);
 
 
@@ -92,7 +93,7 @@ class FieldValueController extends MainController
      */
     public function update(StoreFieldsValueRequest $request, FieldValue $fieldValue)
     {
-        $fieldValue->fields_id = $request->fields_id;
+        $fieldValue->field_id = $request->field_id;
         $fieldValue->value =json_encode($request->value);
 
 

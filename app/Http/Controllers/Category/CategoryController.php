@@ -62,10 +62,10 @@ class CategoryController extends MainController
             $category->code= $request->code;
 
             if($request->image){
-                $category->image= $this->imageUpload($request->file('image'),config('image_paths.category.images'));
+                $category->image= $this->imageUpload($request->file('image'),config('images_paths.category.images'));
             }
             if($request->icon){
-                $category->icon= $this->imageUpload($request->file('icon'),config('image_paths.category.icons'));
+                $category->icon= $this->imageUpload($request->file('icon'),config('images_paths.category.icons'));
             }
             $category->parent_id= $request->parent_id;
             $category->slug= $request->slug;
