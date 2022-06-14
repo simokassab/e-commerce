@@ -23,23 +23,8 @@ class SettingsController extends MainController
     {
 
         if ($request->method()=='POST') {
-            $arrayKeys=['key','value','is_developer'];
-            $data=$request->data;
-            $keys = array_keys($data);
-            $rows = Setting::where(function($query) use($keys,$data,$arrayKeys){
-                foreach($keys as $key){
-                    if(in_array($key,$arrayKeys)){
-                        $value=strtolower($data[$key]);
-                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                            }
-                    else{
-                        throw new Exception();
-                         }
-                        }
-                })->paginate($pagination ?? config('defaults.default_pagination'));
-
-            return  SettingsResource::collection($rows);
-
+            $searchKeys=['key','value','is_developer'];
+            return $this->getSearchPaginated(SettingsResource::class, Setting::class,$request, $searchKeys);
         }
        return $this->successResponsePaginated(SettingsResource::class,Setting::class);
      }

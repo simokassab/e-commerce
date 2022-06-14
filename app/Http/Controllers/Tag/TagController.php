@@ -23,22 +23,8 @@ class TagController extends MainController
     {
 
         if ($request->method()=='POST') {
-            $arrayKeys=['name'];
-            $data=$request->data;
-            $keys = array_keys($data);
-            $rows = Tag::where(function($query) use($keys,$data,$arrayKeys){
-                foreach($keys as $key){
-                    if(in_array($key,$arrayKeys)){
-                        $value=strtolower($data[$key]);
-                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                            }
-                    else{
-                        throw new Exception();
-                         }
-                        }
-                })->paginate($pagination ?? config('defaults.default_pagination'));
-
-            return  TagResource::collection($rows);
+            $searchKeys=['name'];
+            return $this->getSearchPaginated(TagResource::class, Tag::class,$request, $searchKeys);
         }
         return $this->successResponsePaginated(TagResource::class,Tag::class);
 

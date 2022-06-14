@@ -18,6 +18,7 @@ use App\Http\Resources\AttributeResource;
 use App\Http\Resources\CategoryResource;
 use App\Models\Attribute\Attribute;
 use App\Models\Attribute\AttributeValue;
+use Exception;
 use Illuminate\Support\Facades\Cache;
 use PDO;
 
@@ -70,17 +71,24 @@ class MainController extends Controller
         return removeImage($folderpath);
     }
 
-    public function getSearchPaginated($resource,$model,$data,$pagination=null,Array $relations=[]){
-
+    public function getSearchPaginated($resource,$model,Request $request,$searchKeys,Array $relations=[]){
+        $data=$request->data;
         $keys = array_keys($data);
         $rows = $model::with($relations)
-        ->where(function($query) use($keys,$data){
-            foreach($keys as $key)
-                $query->where($key,'LIKE','%'.$data[$key].'%');
-            })
-            ->paginate($pagination ?? config('defaults.default_pagination'));
+            ->where(function($query) use($keys,$data,$searchKeys){
+                foreach($keys as $key){
+                    if(in_array($key,$searchKeys)){
+                        $value=strtolower($data[$key]);
+                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                            }
+                    else{
+                        throw new Exception();
+                        }
+                        }
+                })->paginate($request->limit ?? config('defaults.default_pagination'));
 
         return  $resource::collection($rows);
+
         }
 
         public function getLocaleTranslation($model,$key){

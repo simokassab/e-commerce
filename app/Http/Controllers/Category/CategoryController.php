@@ -31,22 +31,9 @@ class CategoryController extends MainController
         $relations=['parent','children','label','fields','fieldValue','tags'];
 
         if ($request->method()=='POST') {
-            $arrayKeys=['name','code','slug','parent_id','meta_title','meta_description','meta_keyword','description'];
-            $data=$request->data;
-            $keys = array_keys($data);
-            $rows = Category::with($relations)->where(function($query) use($keys,$data,$arrayKeys){
-                foreach($keys as $key){
-                    if(in_array($key,$arrayKeys)){
-                        $value=strtolower($data[$key]);
-                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                            }
-                    else{
-                        throw new Exception();
-                         }
-                        }
-                })->paginate($pagination ?? config('defaults.default_pagination'));
+            $searchKeys=['name','code','slug','parent_id','meta_title','meta_description','meta_keyword','description'];
+            return $this->getSearchPaginated(CategoryResource::class, Category::class,$request, $searchKeys,$relations);
 
-            return  CategoryResource::collection($rows);
           }
         return $this->successResponsePaginated(CategoryResource::class,Category::class,$relations);
     }

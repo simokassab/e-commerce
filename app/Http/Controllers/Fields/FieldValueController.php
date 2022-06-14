@@ -22,22 +22,8 @@ class FieldValueController extends MainController
     {
 
         if ($request->method()=='POST') {
-            $arrayKeys=['field_id','value'];
-            $data=$request->data;
-            $keys = array_keys($data);
-            $rows = FieldValue::where(function($query) use($keys,$data,$arrayKeys){
-                foreach($keys as $key){
-                    if(in_array($key,$arrayKeys)){
-                        $value=strtolower($data[$key]);
-                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                            }
-                    else{
-                        throw new Exception();
-                         }
-                        }
-                })->paginate($pagination ?? config('defaults.default_pagination'));
-
-            return  FieldsValueResource::collection($rows);
+            $searchKeys=['field_id','value'];
+            return $this->getSearchPaginated(FieldsValueResource::class, FieldValue::class,$request, $searchKeys);
 
         }
         return $this->successResponsePaginated(FieldsValueResource::class,FieldValue::class);

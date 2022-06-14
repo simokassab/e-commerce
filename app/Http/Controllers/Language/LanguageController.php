@@ -29,22 +29,8 @@ class LanguageController extends MainController
     {
 
         if ($request->method()=='POST') {
-            $arrayKeys=['name','code','is_default','is_disabled'];
-            $data=$request->data;
-            $keys = array_keys($data);
-            $rows = Language::where(function($query) use($keys,$data,$arrayKeys){
-                foreach($keys as $key){
-                    if(in_array($key,$arrayKeys)){
-                        $value=strtolower($data[$key]);
-                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                            }
-                    else{
-                        throw new Exception();
-                         }
-                        }
-                })->paginate($pagination ?? config('defaults.default_pagination'));
-
-            return  LanguageResource::collection($rows);
+            $searchKeys=['name','code','is_default','is_disabled'];
+            return $this->getSearchPaginated(LanguageResource::class, Language::class,$request, $searchKeys);
         }
         return $this->successResponsePaginated(LanguageResource::class,Language::class);
     }

@@ -29,22 +29,8 @@ class CountryController extends MainController
 
         if ($request->method()=='POST') {
 
-            $arrayKeys=['name','iso_code_1','iso_code_2','phone_code'];
-            $data=$request->data;
-            $keys = array_keys($data);
-            $rows = Country::where(function($query) use($keys,$data,$arrayKeys){
-                foreach($keys as $key){
-                    if(in_array($key,$arrayKeys)){
-                        $value=strtolower($data[$key]);
-                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                            }
-                    else{
-                        throw new Exception();
-                         }
-                        }
-                })->paginate($pagination ?? config('defaults.default_pagination'));
-
-            return  CountryResource::collection($rows);
+            $searchKeys=['name','iso_code_1','iso_code_2','phone_code'];
+            return $this->getSearchPaginated(CountryResource::class, Country::class,$request, $searchKeys);
         }
         return $this->successResponsePaginated(CountryResource::class,Country::class);
         }

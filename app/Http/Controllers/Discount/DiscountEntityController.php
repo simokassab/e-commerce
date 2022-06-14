@@ -23,23 +23,8 @@ class DiscountEntityController extends MainController
 
         if ($request->method()=='POST') {
 
-                $arrayKeys=['discount_id','category_id','brand_id','tag_id'];
-                $data=$request->data;
-                $keys = array_keys($data);
-                $rows = DiscountEntity::where(function($query) use($keys,$data,$arrayKeys){
-                    foreach($keys as $key){
-                        if(in_array($key,$arrayKeys)){
-                            $value=strtolower($data[$key]);
-                            $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                                }
-                        else{
-                            throw new Exception();
-                            }
-                            }
-                    })->paginate($pagination ?? config('defaults.default_pagination'));
-
-                return  DiscountEntityResource::collection($rows);
-
+                $searchKeys=['discount_id','category_id','brand_id','tag_id'];
+                return $this->getSearchPaginated(DiscountEntityResource::class, DiscountEntity::class,$request, $searchKeys);
         }
         return $this->successResponsePaginated(DiscountEntityResource::class,DiscountEntity::class);
 

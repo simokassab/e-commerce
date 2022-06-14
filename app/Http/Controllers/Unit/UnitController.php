@@ -22,22 +22,8 @@ class UnitController extends MainController
     {
 
         if ($request->method()=='POST') {
-            $arrayKeys=['name','code'];
-            $data=$request->data;
-            $keys = array_keys($data);
-            $rows = Unit::where(function($query) use($keys,$data,$arrayKeys){
-                foreach($keys as $key){
-                    if(in_array($key,$arrayKeys)){
-                        $value=strtolower($data[$key]);
-                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                            }
-                    else{
-                        throw new Exception();
-                         }
-                        }
-                })->paginate($pagination ?? config('defaults.default_pagination'));
-
-            return  UnitResource::collection($rows);
+            $searchKeys=['name','code'];
+            return $this->getSearchPaginated(UnitResource::class, Unit::class,$request, $searchKeys);
         }
         return $this->successResponsePaginated(UnitResource::class,Unit::class);
 

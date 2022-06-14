@@ -29,22 +29,8 @@ class CurrencyController extends MainController
     {
         $relations=['currencyHistory'];
         if ($request->method()=='POST') {
-            $arrayKeys=['name','code','symbol','rate'];
-            $data=$request->data;
-            $keys = array_keys($data);
-            $rows = Currency::with($relations)->where(function($query) use($keys,$data,$arrayKeys){
-                foreach($keys as $key){
-                    if(in_array($key,$arrayKeys)){
-                        $value=strtolower($data[$key]);
-                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                            }
-                    else{
-                        throw new Exception();
-                         }
-                        }
-                })->paginate($pagination ?? config('defaults.default_pagination'));
-
-            return  CurrencyResource::collection($rows);
+            $searchKeys=['name','code','symbol','rate'];
+            return $this->getSearchPaginated(CurrencyResource::class, Currency::class,$request, $searchKeys,$relations);
                 }
         return $this->successResponsePaginated(CurrencyResource::class,Currency::class,['currencyHistory']);
 

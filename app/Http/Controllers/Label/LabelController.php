@@ -28,22 +28,8 @@ class LabelController extends MainController
     {
 
         if ($request->method()=='POST') {
-            $arrayKeys=['title','entity','color','image','key'];
-            $data=$request->data;
-            $keys = array_keys($data);
-            $rows = Label::where(function($query) use($keys,$data,$arrayKeys){
-                foreach($keys as $key){
-                    if(in_array($key,$arrayKeys)){
-                        $value=strtolower($data[$key]);
-                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                            }
-                    else{
-                        throw new Exception();
-                         }
-                        }
-                })->paginate($pagination ?? config('defaults.default_pagination'));
-
-            return  LabelsResource::collection($rows);
+            $searchKeys=['title','entity','color','image','key'];
+            return $this->getSearchPaginated(LabelsResource::class, Label::class,$request, $searchKeys);
 
         }
         return $this->successResponsePaginated(LabelsResource::class,Label::class);

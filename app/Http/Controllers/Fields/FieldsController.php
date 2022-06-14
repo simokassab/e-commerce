@@ -29,23 +29,9 @@ class FieldsController extends MainController
     {
         $relations=['fieldValue'];
         if ($request->method()=='POST') {
+            $searchKeys=['title','type','entity','is_required'];
+            return $this->getSearchPaginated(FieldsResource::class, Field::class,$request, $searchKeys,$relations);
 
-                $arrayKeys=['title','type','entity','is_required'];
-                $data=$request->data;
-                $keys = array_keys($data);
-                $rows = Field::with($relations)->where(function($query) use($keys,$data,$arrayKeys){
-                    foreach($keys as $key){
-                        if(in_array($key,$arrayKeys)){
-                            $value=strtolower($data[$key]);
-                            $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                                }
-                        else{
-                            throw new Exception();
-                             }
-                            }
-                    })->paginate($pagination ?? config('defaults.default_pagination'));
-
-                return  FieldsResource::collection($rows);
         }
         return $this->successResponsePaginated(FieldsResource::class,Field::class,['fieldValue']);
 

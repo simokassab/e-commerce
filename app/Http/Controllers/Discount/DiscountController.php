@@ -23,22 +23,8 @@ class DiscountController extends MainController
 
         if ($request->method()=='POST') {
 
-            $arrayKeys=['name','start_date','end_date','discount_percentage'];
-            $data=$request->data;
-            $keys = array_keys($data);
-            $rows = Discount::where(function($query) use($keys,$data,$arrayKeys){
-                foreach($keys as $key){
-                    if(in_array($key,$arrayKeys)){
-                        $value=strtolower($data[$key]);
-                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                            }
-                    else{
-                        throw new Exception();
-                         }
-                        }
-                })->paginate($pagination ?? config('defaults.default_pagination'));
-
-            return  DiscountResource::collection($rows);
+            $searchKeys=['name','start_date','end_date','discount_percentage'];
+            return $this->getSearchPaginated(DiscountResource::class, Discount::class,$request, $searchKeys);
 
         }
         return $this->successResponsePaginated(DiscountResource::class,Discount::class);
