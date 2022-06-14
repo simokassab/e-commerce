@@ -19,4 +19,4 @@ Route::get('/', function () {
 });
 Route::get('test',[TestController::class,'test']);
 
-Route::get('create-token',[TestController::class,'getToken']);
+//Route::get('create-token',[TestController::class,'getToken']);
