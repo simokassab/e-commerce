@@ -20,22 +20,23 @@ use Illuminate\Support\Facades\Storage;
 class CategoryController extends MainController
 {
     const OBJECT_NAME = 'objects.category';
+    const relations=['parent','children','label','fields','fieldValue','tags'];
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index(Request $request)
     {
-        $relations=['parent','children','label','fields','fieldValue','tags'];
 
         if ($request->method()=='POST') {
             $searchKeys=['name','code','slug','parent_id','meta_title','meta_description','meta_keyword','description'];
-            return $this->getSearchPaginated(CategoryResource::class, Category::class,$request, $searchKeys,$relations);
+            return $this->getSearchPaginated(CategoryResource::class, Category::class,$request, $searchKeys,self::relations);
 
           }
-        return $this->successResponsePaginated(CategoryResource::class,Category::class,$relations);
+        return $this->successResponsePaginated(CategoryResource::class,Category::class,self::relations);
     }
 
     /**
@@ -56,7 +57,7 @@ class CategoryController extends MainController
      */
     public function store(StoreCategoryRequest $request)
     {
-        $category=new Category();
+            $category=new Category();
             $category->name= json_encode($request->name);
             $category->code= $request->code;
 
@@ -72,12 +73,11 @@ class CategoryController extends MainController
             $category->meta_description= json_encode($request->meta_description);
             $category->meta_keyword= json_encode($request->meta_keyword);
             $category->description= json_encode($request->description);
-            $category->sort= Category::getMaxSortValue($request->parent_id ? NULL:$request->parent_id);
-
 
             if(!$category->save())
                 return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
-        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+
+            return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             'category' =>  new CategoryResource($category)
         ]);
 
@@ -114,7 +114,7 @@ class CategoryController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreCategoryRequest $request, Category $category)
+    public function update(Request $request, Category $category)
     {
 
         $category->name= json_encode($request->name);
@@ -139,7 +139,7 @@ class CategoryController extends MainController
         $category->meta_description= json_encode($request->meta_description);
         $category->meta_keyword= json_encode($request->meta_keyword);
         $category->description= json_encode($request->description);
-        $category->is_disabled= $request->is_disabled;
+
 
         if(!$category->save())
              return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
@@ -203,15 +203,10 @@ class CategoryController extends MainController
 
     public function updateSortValues(Request $request){
 
-        $category = new Category();
-        $order = $request->order;
-        $index = 'id';
+        batch()->update($category = new Category(),$request->order,'id');
+            return $this->successResponsePaginated(CategoryResource::class,Category::class,self::relations);
 
-        batch()->update($category,$order,$index);
 
-        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-        'category' =>  new CategoryResource($category)
-    ]);
 
     }
 

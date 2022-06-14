@@ -26,14 +26,13 @@ class StoreCountryRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'iso_code_1' => 'required | max:'.config('defaults.string_length'),
-            'iso_code_2' => 'required | max:'.config('defaults.string_length'),
+            'iso_code_1' => 'required | max:'.config('defaults.default_string_length'),
+            'iso_code_2' => 'required | max:'.config('defaults.default_string_length'),
             'phone_code' => ['required' , 'max:6' , 'regex:/^\+\d{1,3}$/'],
-            'flag' => 'required | image
+            'flag' => 'required | file
                 | mimes:'.config('defaults.default_icon_extentions').'
                 | max:'.config('defaults.default_icon_size').'
-                | dimensions:min_width='.config('defaults.default_icon_minimum_width').',min_height='.config('defaults.default_icon_minimum_height').'
-                    ,max_width='.config('defaults.default_icon_maximum_width').',max_height='.config('defaults.default_icon_maximum_height')
+                | dimensions:max_width='.config('defaults.default_icon_maximum_width').',max_height='.config('defaults.default_icon_maximum_height')
 
         ];
     }
@@ -53,11 +52,9 @@ class StoreCountryRequest extends FormRequest
             'phone_code.max' => 'Invalid length for :attribute!',
             'phone_code.regex' => 'Invalid format for :attribute!',
 
-            'flag.image' => 'The input is not an image',
             'flag.max' => 'The maximum :attribute size is :max.',
             'flag.mimes' => 'Invalid extention.',
-            'flag.dimensions' => 'Invalid dimentions! minimum('.config('defaults.default_icon_minimum_width').'x'.config('defaults.default_icon_minimum_height').'),
-                 maximum('.config('defaults.default_icon_maximum_width').'x'.config('defaults.default_icon_maximum_height').')',
+            'flag.dimensions' => 'Invalid dimentions! maximum('.config('defaults.default_icon_maximum_width').'x'.config('defaults.default_icon_maximum_height').')',
 
 
         ];

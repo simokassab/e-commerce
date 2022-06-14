@@ -38,7 +38,6 @@ class StoreBrandRequest extends FormRequest
             'meta_keyword' => 'nullable',
             'description' => 'nullable',
             'sort' => 'nullable | integer',
-
         ];
     }
 
