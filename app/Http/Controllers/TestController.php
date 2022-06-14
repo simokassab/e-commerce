@@ -6,6 +6,7 @@ use App\Models\Currency\Currency;
 use App\Models\RolesAndPermissions\CustomRole;
 use Illuminate\Http\Request;
 use App\Models\User\User;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Arr;
@@ -31,6 +32,7 @@ class TestController extends MainController
 
     public function test(){
 
+        dd( \auth()->check());
         $currency = Currency::find(3)->setIsDefault()->save();
     }
 }

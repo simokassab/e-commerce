@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
-
+use \App\Http\Controllers\AuthenticationController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,4 +19,6 @@ Route::get('/', function () {
 });
 Route::get('test',[TestController::class,'test']);
 
-//Route::get('create-token',[TestController::class,'getToken']);
+Route::get('create-token',[TestController::class,'getToken']);
+
+Route::post('login', [AuthenticationController::class,'login'])->name('login');
