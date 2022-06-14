@@ -18,6 +18,7 @@ use App\Http\Controllers\RolesAndPermissions\PermissionController;
 use App\Http\Controllers\Settings\SettingsController;
 use App\Http\Controllers\Tag\TagController;
 use App\Http\Controllers\Unit\UnitController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -87,6 +88,14 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
 
     Route::apiResource('unit',UnitController::class);
     Route::post('unit/all',[UnitController::class,'index']);// for search
+
+
+    Route::get('/profile', function(Request $request) {
+        return auth()->user();
+    });
+
+    Route::apiResource('user',UserController::class);
+    Route::post('user/all',[UserController::class,'index']);
 });
 
     Route::get('test',[MainController::class,'test']);
