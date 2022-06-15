@@ -8,9 +8,12 @@ use App\Models\Category\Category;
 use App\Models\Discount\Discount;
 use App\Models\Brand\Brand;
 use App\Models\Product\Product;
+use Spatie\Translatable\HasTranslations;
+
 class Tag extends MainModel
 {
-    use HasFactory;
+    use HasFactory,HasTranslations;
+    protected $translatable ='name';
     protected $table='tags';
     protected $guard_name = 'sanctum';
 

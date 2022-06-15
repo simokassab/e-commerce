@@ -8,10 +8,12 @@ use App\Models\Category\Category;
 use App\Models\Product\Product;
 use App\Models\Tax\Tax;
 use App\Models\Brand\Brand;
+use Spatie\Translatable\HasTranslations;
 
 class Unit extends MainModel
 {
-    use HasFactory;
+    use HasFactory,HasTranslations;
+    protected $translatable=['name'];
     protected $table='units';
     protected $guard_name = 'sanctum';
 

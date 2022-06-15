@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->string('key',250)->unique();
+            $table->string('title',250)->unique();
             $table->string('value',250);
             $table->boolean('is_developer')->default(0);
             $table->timestamps();

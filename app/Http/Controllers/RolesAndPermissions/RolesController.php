@@ -28,6 +28,7 @@ class RolesController extends MainController
 
         if ($request->method()=='POST') {
             $searchKeys=['name'];
+            //TODO Search also take time more than usual
             return $this->getSearchPaginated(RolesResource::class, CustomRole::class,$request, $searchKeys);
         }
         return $this->successResponsePaginated(RolesResource::class,CustomRole::class);
@@ -75,7 +76,10 @@ class RolesController extends MainController
 
         }catch (\Exception | QueryException $e){
             DB::rollBack();
-            return response('Error While creating the role please try again later, the error message: '.$e ,500);
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]),
+                'error' => $e->getMessage()
+            ]);
+
         }
     }
 
@@ -123,21 +127,24 @@ class RolesController extends MainController
                 $parentPermissions = CustomRole::findOrFail($request->parent_id)->permissions->pluck('id')->toArray();
                 $permissions = RolesService::filterPermissionsAccordingToParentPermissions($parentPermissions,$request->permissions);
                 $role->givePermissionTo($permissions);
+                //TODO  I replaced this line in the if conditon since $permissions give error since undefined
+                //TODO when updating the parent id the request take 1min
+                //removed the permissions from the children and parent after updating the parent
+                RolePermission::whereIn('role_id' , $role->allChildren($flatten=true))->whereNotIn('permission_id',$permissions)->delete();
             }
 
-            //removed the permissions from the children and parent after updating the parent
-            RolePermission::whereIn('role_id' , $role->allChildren($flatten=true))->whereNotIn('permission_id',$permissions)->delete();
 
             DB::commit();
 
-            return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             'role' => new RolesResource($role)
         ],200);
 
         }catch (\Exception | QueryException $e){
             DB::rollBack();
-            return response('Error While creating the role please try again later, the error message: '.$e ,500);
-        }
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]),
+            'error' => $e->getMessage()
+        ]);        }
     }
 
     /**
@@ -148,15 +155,18 @@ class RolesController extends MainController
      */
     public function destroy(CustomRole $role)
     {
+        //TODO when deleting a role has childern the request take a time more than usual
         $message = '';
         if(!$role->canDeleteRole($message)){
-            return response($message,405);
+            return $this->errorResponse([$message],405);
         }
 
         if($role->delete()){
-            return response('The role was deleted',200);
-        }
-        return response('Error, the role was not deleted',500);
-
+            return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            'role' =>  new RolesResource($role)
+        ]);        }
+        return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]),
+        'role' =>  new RolesResource($role)
+    ]);
     }
 }

@@ -24,9 +24,9 @@ class StoreSettingRequest extends FormRequest
     public function rules()
     {
         return [
-            'value' => 'required | max:'.config('defaults.string_length'),
-            'key' => 'required | max:'.config('defaults.string_length'),
-            'is_developer' => 'nullable | boolean',
+            'title' => 'required | max:'.config('defaults.default_string_length').' | unique:settings,title,'.$this->id,
+            'value' => 'required | max:'.config('defaults.default_string_length'),
+            'is_developer' => 'required | boolean',
 
         ];
     }
@@ -35,12 +35,15 @@ class StoreSettingRequest extends FormRequest
     {
         return [
 
+
+        'title.required' => 'the :attribute field is required',
+        'title.unique' => 'the :attribute field already exist',
+        'title.max' => 'the maximum string length is :max',
+
         'value.required' => 'the :attribute field is required',
         'value.max' => 'the maximum string length is :max',
 
-        'key.required' => 'the :attribute field is required',
-        'key.max' => 'the maximum string length is :max',
-
+        'is_developer.required' => 'the :attribute field is required',
         'is_developer.boolean' => 'the :attribute must be either false or true (0 or 1)',
 
         ];

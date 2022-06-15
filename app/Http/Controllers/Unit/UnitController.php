@@ -66,7 +66,7 @@ class UnitController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(StoreUnitRequest $unit)
+    public function show(Unit $unit)
     {
         return $this->successResponse(['unit' => new UnitResource($unit)]);
 

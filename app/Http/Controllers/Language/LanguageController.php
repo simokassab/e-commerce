@@ -60,9 +60,8 @@ class LanguageController extends MainController
             $language->setIsDefault();
        }
         if($request->image){
-            $language->image= $this->imageUpload($request->file('image'),config('image_paths.language.images'));
+            $language->image= $this->imageUpload($request->file('image'),config('images_paths.language.images'));
         }
-        $language->sort= $language->getMaxSortValue();
 
         if(!$language->save())
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
@@ -115,7 +114,7 @@ class LanguageController extends MainController
             if( !$this->removeImage($language->image) ){
                  throw new FileErrorException();
             }
-            $language->image= $this->imageUpload($request->file('image'),config('image_paths.language.images'));
+            $language->image= $this->imageUpload($request->file('image'),config('images_paths.language.images'));
 
          }
 
@@ -137,6 +136,10 @@ class LanguageController extends MainController
      */
     public function destroy(Language $language)
     {
+        $defaultLanugage=Language::where('is_default',1)->first();
+        if($defaultLanugage)
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+
         if(!$language->delete())
             return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
@@ -187,6 +190,22 @@ public function toggleStatus(Request $request ,$id){
         return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)])]);
 
     }
+    public function setLanguageIsDefault($language){
+
+        $languageObject = Language::findOrFail($language);
+        $languageObject->setIsDefault();
+        $languageObject->save();
+
+        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+        'language' => new LanguageResource($languageObject)
+        ]);
+    }
+    public function getAllLanguagesSorted(){
+        $languages=Language::order()->get();
+        return $this->successResponse(['languages' => $languages ]);
+    }
+
+
 
     }
 

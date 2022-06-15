@@ -16,7 +16,7 @@ class SettingsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'key' => $this->key,
+            'title' => $this->title,
             'value' => $this->value,
             'is_developer' => $this->is_developer
         ];

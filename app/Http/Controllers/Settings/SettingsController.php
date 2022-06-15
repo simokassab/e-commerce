@@ -23,8 +23,24 @@ class SettingsController extends MainController
     {
 
         if ($request->method()=='POST') {
-            $searchKeys=['key','value','is_developer'];
-            return $this->getSearchPaginated(SettingsResource::class, Setting::class,$request, $searchKeys);
+            $searchKeys=['title','value','is_developer'];
+            // return $this->getSearchPaginated(SettingsResource::class, Setting::class,$request, $searchKeys);
+            $data=$request->data;
+            $keys = array_keys($data);
+            $rows = Setting::where(function($query) use($keys,$data,$searchKeys){
+                    foreach($keys as $key){
+                        if(in_array($key,$searchKeys)){
+                            $value=strtolower($data[$key]);
+
+                            $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                                }
+                        else{
+                            throw new Exception();
+                            }
+                            }
+                    })->paginate($request->limit ?? config('defaults.default_pagination'));
+
+            return  SettingsResource::collection($rows);
         }
        return $this->successResponsePaginated(SettingsResource::class,Setting::class);
      }
@@ -48,7 +64,7 @@ class SettingsController extends MainController
     public function store(StoreSettingRequest $request)
     {
         $setting=new Setting();
-        $setting->key = json_encode($request->key);
+        $setting->title = json_encode($request->title);
         $setting->value = $request->value;
         $setting->is_developer = $request->is_developer;
 
@@ -91,10 +107,9 @@ class SettingsController extends MainController
      */
     public function update(StoreSettingRequest $request, Setting $setting)
     {
-        $setting->title = ($request->title);
-        $setting->type = ($request->type);
-        $setting->entity = ($request->entity);
-        $setting->is_required = ($request->is_required);
+        $setting->title = $request->title;
+        $setting->value = $request->value;
+        $setting->is_developer = $request->is_developer;
 
 
         if(!$setting->save())
