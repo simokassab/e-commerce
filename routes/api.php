@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Attribute\AttributeController;
 use App\Http\Controllers\Attribute\AttributeValueController;
+use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\Brand\BrandController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Country\CountryController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\RolesAndPermissions\RolesController;
 use App\Http\Controllers\RolesAndPermissions\PermissionController;
 use App\Http\Controllers\Settings\SettingsController;
 use App\Http\Controllers\Tag\TagController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\Unit\UnitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -36,7 +38,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+    Route::get('test',[TestController::class,'test']);
 
+Route::post('login', [AuthenticationController::class,'login'])->name('login');
+Route::get('logout', [AuthenticationController::class,'logout'])->name('logout');
 
 Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localization'] ],function (){
 
@@ -98,5 +103,4 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::post('user/all',[UserController::class,'index']);
 });
 
-    Route::get('test',[MainController::class,'test']);
     Route::get('s',[AttributeController::class,'serachdata']);

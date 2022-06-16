@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthenticationController extends MainController
 {
@@ -23,6 +24,7 @@ class AuthenticationController extends MainController
 
         session(['user' => auth()->user()]);
 
+
         return $this->successResponse([
             'message' => 'authenticated successfully!',
             'user' => auth()->user(),
@@ -31,6 +33,6 @@ class AuthenticationController extends MainController
 
 
     public function logout(){
-
+        return Auth::logout();
     }
 }

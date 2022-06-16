@@ -9,7 +9,7 @@ class MainModel extends Model
 {
     use HasFactory;
 
-    protected $guard_name = 'sanctum';
+//    protected $guard_name = 'sanctum';
 
 
 

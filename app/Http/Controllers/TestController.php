@@ -13,6 +13,7 @@ use Illuminate\Support\Arr;
 use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\MainController;
 use App\Exceptions\FileErrorException;
+
 class TestController extends MainController
 {
     use HasRoles;
@@ -31,7 +32,7 @@ class TestController extends MainController
     }
 
     public function test(){
-
+//        dd(session('user'));
         dd( \auth()->check());
         $currency = Currency::find(3)->setIsDefault()->save();
     }

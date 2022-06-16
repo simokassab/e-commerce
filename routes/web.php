@@ -17,8 +17,6 @@ use \App\Http\Controllers\AuthenticationController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('test',[TestController::class,'test']);
 
 Route::get('create-token',[TestController::class,'getToken']);
 
-Route::post('login', [AuthenticationController::class,'login'])->name('login');
