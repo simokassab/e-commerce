@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\StoreUserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
