@@ -10,7 +10,7 @@ class MainModel extends Model
 {
     use HasFactory,HasTranslations;
 
-    protected $guard_name = 'sanctum';
+//    protected $guard_name = 'sanctum';
 
 
 

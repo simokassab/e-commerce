@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\AuthenticationController;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +19,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('test',[TestController::class,'test']);
 
-Route::get('create-token',[TestController::class,'getToken']);
+
+if(env('APP_DEBUG')){
+    // for development purposes only -----------------------------------------------------------------
+
+    Route::get('create-token',[TestController::class,'getToken']);
+    Route::get('password', fn () => Hash::make('12345678'));
+    Route::get('test',[TestController::class,'test']);
+
+    // for development purposes only ------------------------------------------------------------
+
+}
+
+
