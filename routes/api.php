@@ -86,9 +86,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::post('unit/all',[UnitController::class,'index']);// for search
 
 
-    Route::get('/profile', function(Request $request) {
-        return auth()->user();
-    });
+    Route::get('/profile', fn() =>  auth()->user());
 
     Route::apiResource('user',UsersController::class);
     Route::post('user/all',[UsersController::class,'index']);//for searching

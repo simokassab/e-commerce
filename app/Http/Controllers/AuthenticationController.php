@@ -20,11 +20,6 @@ class AuthenticationController extends MainController
             ],401);
         }
 
-        $request->session()->regenerate();
-
-        session(['user' => auth()->user()]);
-
-
         return $this->successResponse([
             'message' => 'authenticated successfully!',
             'user' => auth()->user(),
