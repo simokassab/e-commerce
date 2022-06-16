@@ -21,6 +21,7 @@ use App\Http\Controllers\Tag\TagController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Unit\UnitController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Users\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -85,10 +86,12 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::post('unit/all',[UnitController::class,'index']);// for search
 
 
-    Route::get('/profile', fn() => \auth()->user() );
+    Route::get('/profile', function(Request $request) {
+        return auth()->user();
+    });
 
-    Route::apiResource('user',UserController::class);
-    Route::post('user/all',[UserController::class,'index']);
+    Route::apiResource('user',UsersController::class);
+    Route::post('user/all',[UsersController::class,'index']);//for searching
 });
 
 Route::get('s',[AttributeController::class,'serachdata']);
