@@ -32,7 +32,7 @@ class TestController extends MainController
     }
 
     public function test(){
-        return \auth()->user();
+        dd(\auth()->user());
         return ( \auth()->check());
         $currency = Currency::find(3)->setIsDefault()->save();
     }

@@ -20,6 +20,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('create-token',[TestController::class,'getToken']);
-Route::get('password', fn () => Hash::make('123456')) ;
+
+if(env('APP_DEBUG')){
+    // for development purposes only -----------------------------------------------------------------
+
+    Route::get('create-token',[TestController::class,'getToken']);
+    Route::get('password', fn () => Hash::make('123456'));
+    Route::get('test',[TestController::class,'test']);
+
+    // for development purposes only ------------------------------------------------------------
+
+}
+
 
