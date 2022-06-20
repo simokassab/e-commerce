@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\User\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -15,13 +17,43 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
-            'username' => 'user1',
-            'password' => '',
-            'email'    => 'user1@test.com',
-            'first_name' => 'user1',
-            'last_name' => 'test1',
-            
+        User::query()->truncate();
+
+        User::query()->insert([
+
+            [
+                'username' => 'user1',
+                'password' => Hash::make('12345678'),
+                'email'    => 'user1@test.com',
+                'first_name' => 'user1',
+                'last_name' => 'test1',
+
+            ],
+            [
+                'username' => 'user2',
+                'password' => Hash::make('12345678'),
+                'email'    => 'user2@test.com',
+                'first_name' => 'user2',
+                'last_name' => 'test2',
+            ],
+            [
+                'username' => 'user3',
+                'password' => Hash::make('12345678'),
+                'email'    => 'user3@test.com',
+                'first_name' => 'user3',
+                'last_name' => 'test3',
+            ],
+
+            [
+                'username' => 'user4',
+                'password' => Hash::make('12345678'),
+                'email'    => 'user4@test.com',
+                'first_name' => 'user4',
+                'last_name' => 'test4',
+            ],
+
         ]);
+
+
     }
 }
