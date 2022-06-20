@@ -16,17 +16,47 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-//         for ($i = 0; $i < 10; $i++) {
-//             Category::create([
+        Category::query()->truncate();
 
-//                 'name' =>  Str::random(40),
-//                 'code' => Str::random(40),
-//                 'slug' =>   Str::random(40),
-//                 'description' =>  Str::random(40),
-//                 'is_disabled' => 0,
-//                 'parent_id' =>  null
-// ,            ]);
-        // }
+                Category::query()->insert([[
+                    'name' => json_encode(['en' => 'face','ar' => 'وجه']),
+                    'code' => "face",
+                    'slug' =>   "face",
+                    'parent_id' =>  null,
+                    'is_disabled' => 0,
+                ],
+
+                [
+                    'name' => json_encode(['en' => 'hair','ar' => 'شعر']),
+                    'code' => "hair",
+                    'slug' =>   "hair",
+                    'parent_id' =>  null,
+                    'is_disabled' => 0,
+                ],
+                [
+                    'name' => json_encode(['en' => 'cream','ar' => 'كريم']),
+                    'code' => "cream",
+                    'slug' =>   "cream",
+                    'parent_id' =>  null,
+                    'is_disabled' => 0,
+                ],
+                [
+                    'name' => json_encode(['en' => 'white Skin','ar' => 'بشرة بيضاء']),
+                    'code' => "Wskin",
+                    'slug' =>   "Wskin",
+                    'parent_id' =>  null,
+                    'is_disabled' => 0,
+                ],
+                [
+                    'name' => json_encode(['en' => 'black Skin','ar' => 'بشرة غامقة']),
+                    'code' => "black Skin",
+                    'slug' =>   "black Skin",
+                    'parent_id' =>  null,
+                    'is_disabled' => 0,
+                ],
+
+            ]);
+
 
 
 

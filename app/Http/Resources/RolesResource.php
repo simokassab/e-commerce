@@ -18,7 +18,7 @@ class RolesResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'parent_role' => new $this($this->parent),
-//            'children' => self::collection($this->whenLoaded('children')),
+        //    'children' => self::collection($this->whenLoaded('children')),
 
         ];
     }

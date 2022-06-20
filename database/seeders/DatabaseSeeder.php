@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category\Category;
 use App\Models\User\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
@@ -19,6 +20,11 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $this->call([
+
+            BrandSeeder::class,
+            CategorySeeder::class,
+            CountrySeeder::class,
+            CurrencySeeder::class,
             PermissionSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,

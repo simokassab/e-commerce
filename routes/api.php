@@ -90,6 +90,9 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
 
     Route::apiResource('user',UsersController::class);
     Route::post('user/all',[UsersController::class,'index']);//for searching
+
+
+    // Route::get()
 });
 
 Route::get('s',[AttributeController::class,'serachdata']);
