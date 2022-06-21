@@ -27,10 +27,14 @@ class CurrencySeeder extends Seeder
         [
             'name' => json_encode(['en' =>'Lebanon Lera','ar' =>  'ليرة لبنانية']),
             'code' => "USA",
-            'rate' =>   "US",
+            'rate' =>  20000,
         ],
-      
 
+        [
+            'name' => json_encode(['en' =>'Euro','ar' =>  'يورو']),
+            'code' => "euro",
+            'rate' =>  10000,
+        ],
     ]);
     }
 }

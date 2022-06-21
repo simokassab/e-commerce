@@ -2,11 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category\Category;
-use App\Models\User\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 class DatabaseSeeder extends Seeder
@@ -25,6 +22,15 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             CountrySeeder::class,
             CurrencySeeder::class,
+            DiscountEntitySeeder::class,
+            DiscountSeeder::class,
+            FieldSeeder::class,
+            FieldValueSeeder::class,
+            LabelSeeder::class,
+            LanguageSeeder::class,
+            SettingSeeder::class,
+            TagSeeder::class,
+            UnitSeeder::class,
             PermissionSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
