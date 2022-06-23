@@ -58,8 +58,8 @@ class PermissionsServices {
         foreach($allPermissionsID[$parentPermissionId] as $permissionId){
             $permissionId =  is_numeric($permissionId)? ($permissionId) : $permissionId->id;
             if($isMultiLevel){
-                $childpermissions[$permissionId] = ['data' => $allPermissions->find($permissionId), 'children' => []];
-                $childpermissions[$permissionId]['children'] = self::drawPermissionChildren($permissionId, $allPermissionsID, $isMultiLevel,$allPermissions);
+                $childpermissions[$permissionId] = (object)['label' => $allPermissions->find($permissionId)->name ,'id' => $allPermissions->find($permissionId)->name,'checked' => false, 'nodes' => []];
+                $childpermissions[$permissionId]->nodes = self::drawPermissionChildren($permissionId, $allPermissionsID, $isMultiLevel,$allPermissions);
             }
             else{
                 $childpermissions[] = $permissionId;
@@ -84,17 +84,17 @@ class PermissionsServices {
     }
 
     public static function getAllPermissionsNested(Array $permissions){
-
+        $lastResult = [];
         $rootPermissions = self::getRootPermissions($permissions);
-        $result = (object)[];
         foreach ($rootPermissions as $rootPermission){
+            $result = (object)[];
             $result->label = $rootPermission->name;
             $result->nodes = self::getPermissionChildren($rootPermission);
             $result->id= $rootPermission->id;
             $result->checked = false;
-            dd($result);
+            $lastResult[] = $result;
         }
-        return $result;
+        return $lastResult;
 
     }
 
