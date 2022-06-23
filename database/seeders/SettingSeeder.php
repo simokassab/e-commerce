@@ -33,7 +33,7 @@ class SettingSeeder extends Seeder
         ],
 
         [
-            'title' => json_encode(['en' => 'image extentions','ar' => 'أمتدادات الصورة']),
+            'title' => json_encode(['en' => 'image extensions','ar' => 'أمتدادات الصورة']),
             'value' => json_encode(['en' => 'png,jpg,jpeg','ar' => 'png,jpg,jpeg']),
             'is_developer' =>  1,
         ],

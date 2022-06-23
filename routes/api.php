@@ -39,11 +39,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthenticationController::class,'login'])->name('login');
 Route::get('logout', [AuthenticationController::class,'logout'])->name('logout');
+Route::get('get-nested-permissions-for-role/{role}',[RolesController::class,'getNestedPermissionsForRole']);
 
 Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localization'] ],function (){
 
     //Permission
-    Route::get('get-nested-permissions/{permission}',[PermissionController::class,'getNestedPermissions']);
 
     // Routes Macro
     Route::customBrandResource('brand', BrandController::class);

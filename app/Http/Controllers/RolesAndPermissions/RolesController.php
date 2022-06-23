@@ -4,9 +4,12 @@ namespace App\Http\Controllers\RolesAndPermissions;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\RolesAndPermissions\StoreRoleRequest;
+use App\Http\Resources\PermissionAllResource;
 use App\Http\Resources\RolesResource;
+use App\Models\RolesAndPermissions\CustomPermission;
 use App\Models\RolesAndPermissions\CustomRole;
 use App\Models\RolesAndPermissions\RolePermission;
+use App\Services\RolesAndPermissions\PermissionsServices;
 use App\Services\RolesAndPermissions\RolesService;
 use Exception;
 use Illuminate\Database\QueryException;
@@ -48,7 +51,7 @@ class RolesController extends MainController
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
     public function store(StoreRoleRequest $request)
@@ -110,7 +113,7 @@ class RolesController extends MainController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreRoleRequest $request, CustomRole $role)
     {
@@ -151,6 +154,7 @@ class RolesController extends MainController
      * Remove the specified resource from storage.
      *
      * @param  CustomRole  $role
+     * @return \Illuminate\Http\JsonResponse
      * @return \Illuminate\Http\Response
      */
     public function destroy(CustomRole $role)
@@ -163,10 +167,33 @@ class RolesController extends MainController
 
         if($role->delete()){
             return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'role' =>  new RolesResource($role)
-        ]);        }
+                'role' =>  new RolesResource($role)
+            ]);
+        }
         return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]),
-        'role' =>  new RolesResource($role)
-    ]);
+            'role' =>  new RolesResource($role)
+        ]);
+    }
+
+    public function getNestedPermissionsForRole($role){
+        $permissionsOfRole = CustomRole::find($role)->permissions;
+        $permissions = CustomPermission::with('parent')->get();
+        foreach ($permissions as $permission){
+            if($permissionsOfRole->contains($permission)){
+                $permission->checked = true;
+            }else{
+                $permission->checked = false;
+            }
+            $permissionsWithCheck[] = $permission;
+        }
+
+        return PermissionsServices::getAllPermissionsNested($permissionsWithCheck);
+
+
+
+//        $permissionsWithCheck = [];
+
+
+//        return $rootPermissions;
     }
 }

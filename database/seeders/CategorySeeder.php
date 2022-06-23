@@ -49,8 +49,8 @@ class CategorySeeder extends Seeder
                 ],
                 [
                     'name' => json_encode(['en' => 'black Skin','ar' => 'بشرة غامقة']),
-                    'code' => "black Skin",
-                    'slug' =>   "black Skin",
+                    'code' => "black skin",
+                    'slug' =>   "black_skin",
                     'parent_id' =>  null,
                     'is_disabled' => 0,
                 ],
