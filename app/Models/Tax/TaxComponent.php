@@ -5,10 +5,12 @@ namespace App\Models\Tax;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
 use App\Models\Tax\Tax;
+use Spatie\Translatable\HasTranslations;
 
 class TaxComponent extends MainModel
 {
-    use HasFactory;
+    use HasFactory,HasTranslations;
+    protected $translatable=[''];
     protected $table='taxes_components';
     protected $guard_name = 'sanctum';
 

@@ -37,5 +37,10 @@ return [
 
     'default_pagination' => 15,
 
-    'default_cache_time' => 31557600
+    'default_cache_time' => 31557600,
+
+    'default_minimum_tax_percentage' => 0,
+    'default_maximum_tax_percentage' => 100,
+    'validation_default_complex_behavior' => 'combine,after_other',
+
 ];

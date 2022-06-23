@@ -33,7 +33,7 @@ class FieldsController extends MainController
             return $this->getSearchPaginated(FieldsResource::class, Field::class,$request, $searchKeys,$relations);
 
         }
-        return $this->successResponsePaginated(FieldsResource::class,Field::class,['fieldValue']);
+        return $this->successResponsePaginated(FieldsResource::class,Field::class,$relations);
 
     }
 

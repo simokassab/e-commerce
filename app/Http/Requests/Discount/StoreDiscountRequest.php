@@ -27,7 +27,7 @@ class StoreDiscountRequest extends FormRequest
             'name' => 'required',
             'start_date' => 'required | date',
             'end_date' => 'nullable | date | after:start_date',
-            'discount_percentage' => 'required | between:0,100 | doubleval',
+            'discount_percentage' => 'required | between:0,100 | numeric',
         ];
     }
 

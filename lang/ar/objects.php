@@ -19,5 +19,6 @@ return [
     'brand' => 'العلامة التجارية',
     'discount' => 'الخصم',
     'discountEntity' => 'عنوان الخصم',
+    'tax' => 'ضريبة',
 
 ];
