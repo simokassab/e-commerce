@@ -35,13 +35,18 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+$dashboardMiddleware = ['auth:sanctum','localization'];
 
+if( env('APP_DEBUG') ){
+    $key = array_search('auth:sanctum', $dashboardMiddleware);
+    unset( $dashboardMiddleware[$key] );
+}
 
 Route::post('login', [AuthenticationController::class,'login'])->name('login');
 Route::get('logout', [AuthenticationController::class,'logout'])->name('logout');
 Route::get('get-nested-permissions-for-role/{role}',[RolesController::class,'getNestedPermissionsForRole']);
 
-Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localization'] ],function (){
+Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],function (){
 
     //Permission
 

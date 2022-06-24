@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 use App\Models\Currency\Currency;
-
 use App\Models\RolesAndPermissions\CustomRole;
 use Illuminate\Http\Request;
 use App\Models\User\User;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\MainController;
 use App\Exceptions\FileErrorException;
@@ -32,8 +32,20 @@ class TestController extends MainController
     }
 
     public function test(){
-        dd(\auth()->user());
-        return ( \auth()->check());
-        $currency = Currency::find(3)->setIsDefault()->save();
+        $routes = app('router')->getRoutes();
+//        dd($routes[0]);
+//
+
+
+        Artisan::call('route:list');
+
+
+//        $allRoutes = Route::getRoutes()->get();
+//        $routes = [];
+//        foreach($allRoutes as $route) {
+//        $routes[] = $route->getPath();
+//        }
+
+        dd($routes);
     }
 }
