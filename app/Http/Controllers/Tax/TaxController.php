@@ -10,6 +10,7 @@ use App\Http\Resources\TaxResource;
 use App\Models\Tax\Tax;
 use App\Models\Tax\TaxComponent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TaxController extends MainController
 {
@@ -51,34 +52,34 @@ class TaxController extends MainController
     public function store(StoreTaxRequest $request)
     {
 
-        //$request get the array
-        // structire of the array [{'id','sort'},{'id','sort'}]
-        // create the tax (done)
-        // create tax component
+    $tax=new Tax();
+    $tax->name = json_encode($request->name);
+    $tax->is_complex = $request->is_complex;
+    $tax->percentage = $request->percentage;
+    $tax->complex_behavior = $request->complex_behavior;
 
-        $tax=new Tax();
-        $tax->name = json_encode($request->name);
-        $tax->is_complex = $request->is_complex;
-        $tax->percentage = $request->percentage;
-        $tax->complex_behavior = $request->complex_behavior;
+    if($request->is_complex){
 
-        if($request->is_complex){
-
-            $columns = [
-                'tax_id',
-                'component_tax_id',
-                'sort'
-           ];
-           batch()->insert(new TaxComponent(),$columns,$request->components,500);
+        $columns = [
+            'tax_id',
+            'component_tax_id',
+            'sort'
+       ];
+       if($request->components)
+            batch()->insert(new TaxComponent(),$columns,$request->components,500);
+        // return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
         }
 
-        if(!$tax->save())
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+    if(!$tax->save())
+        return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'Taxes' => new TaxResource($tax)
-        ]);
+    return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+        'Taxes' => new TaxResource($tax)
+]);
+
+
+    return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
     }
 
@@ -118,13 +119,28 @@ class TaxController extends MainController
         $tax->percentage = $request->percentage;
         $tax->complex_behavior = $request->complex_behavior;
 
+        if($request->is_complex){
 
+            $columns = [
+                'tax_id',
+                'component_tax_id',
+                'sort'
+           ];
+           if($request->components)
+                batch()->insert(new TaxComponent(),$columns,$request->components,500);
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+
+            }
         if(!$tax->save())
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
         return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             'Taxes' => new TaxResource($tax)
-        ]);
+    ]);
+
+
+        return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+
     }
 
     /**
@@ -133,7 +149,7 @@ class TaxController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tax $tax)
+    public function destroy(Tax $tax,TaxComponent $taxComponent)
     {
         if(!$tax->delete())
             return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);

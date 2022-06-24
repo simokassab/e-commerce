@@ -27,18 +27,20 @@ class StoreTaxRequest extends FormRequest
     public function rules(Request $request)
     {
 
-
-        Validator::make($request->all(),[
-            'tax_id'  => 'required_if:is_complex,1 | integer | exists:taxes,id',
-            'component_tax_id'  => 'required_if:is_complex,1 | integer',
-            'sort'  => 'required_if:is_complex,1 | integer'
+        // Tax Components validation
+        $request->validate([
+            //TODO if we remove exists he can insert tax_id
+            'components.*.tax_id'  => 'required_if:is_complex,1 | integer | exists:taxes,id',
+            'components.*.component_tax_id'  => 'required_if:is_complex,1 | integer',
+            'components.*.sort'  => 'required_if:is_complex,1 | integer'
       ]);
+
         return [
 
             'name' => 'required',
             'is_complex' => 'required | boolean',
             'percentage' => 'required | numeric | between:'.config('defaults.default_minimum_tax_percentage').','.config('defaults.default_maximum_tax_percentage'),
-            'complex_behavior' => 'nullable | in:'.config('defaults.validation_default_complex_behavior'),
+            'complex_behavior' => 'required_if:is_complex,1 | nullable | in:'.config('defaults.validation_default_complex_behavior'),
 
         ];
 
