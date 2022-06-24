@@ -26,22 +26,16 @@ class StoreTaxRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-
-        // Tax Components validation
-        $request->validate([
-            //TODO if we remove exists he can insert tax_id
-            'components.*.tax_id'  => 'required_if:is_complex,1 | integer | exists:taxes,id',
-            'components.*.component_tax_id'  => 'required_if:is_complex,1 | integer',
-            'components.*.sort'  => 'required_if:is_complex,1 | integer'
-      ]);
-
         return [
 
             'name' => 'required',
             'is_complex' => 'required | boolean',
-            'percentage' => 'required | numeric | between:'.config('defaults.default_minimum_tax_percentage').','.config('defaults.default_maximum_tax_percentage'),
+            'percentage' => ['required' , 'numeric' , 'between:'.config('defaults.default_minimum_tax_percentage').','.config('defaults.default_maximum_tax_percentage')],
             'complex_behavior' => 'required_if:is_complex,1 | nullable | in:'.config('defaults.validation_default_complex_behavior'),
 
+            'components' => 'required_if:is_complex,1',
+            'components.*.component_tax_id'  => 'required_if:is_complex,1 | integer | exists:taxes,id',
+            'components.*.sort'  => 'required_if:is_complex,1 | integer',
         ];
 
     }
@@ -56,10 +50,19 @@ class StoreTaxRequest extends FormRequest
 
         'percentage.required' => 'the :attribute field is required.',
         'percentage.numeric' => 'The :attribute must be decimal.',
-        'percentage.between' => 'the :attribute should be between: '.config('defaults.default_minimum_tax_percentage').' & '.config('defaults.default_maximum_tax_percentage'),
+        'percentage.between' => 'the :attribute must be between: '.config('defaults.default_minimum_tax_percentage').' & '.config('defaults.default_maximum_tax_percentage'),
 
         'complex_behavior.in' => 'The :attribute is not a valid type',
 
+
+        'components.required' => 'the :attribute field is required.',
+
+        'components.*.component_tax_id.required_if' => 'the component_tax_id field is required.',
+        'components.*.component_tax_id.integer' =>  'the component_tax_id must be an integer',
+        'components.*.component_tax_id.exists' =>  'the component_tax_id must be exists in taxes',
+
+        'components.*.sort.required_if' => 'the sort field is required.',
+        'components.*.sort.integer' =>  'the sort must be an integer',
 
     ];
 
