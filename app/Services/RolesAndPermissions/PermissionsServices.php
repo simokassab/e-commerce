@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Schema;
 use function PHPUnit\Framework\isNull;
 
 class PermissionsServices {
-    public static function getPermissionChildren(int | Permission $permission, $flatten= false) : Array
+    public static function getPermissionChildren(int | Permission $permission,$permissionsOfRole = [], $flatten= false) : Array
     {
         // got all the roles
         $allPermissions = CustomPermission::all(); //get all roles info
@@ -22,7 +22,7 @@ class PermissionsServices {
         //if the given data was numeric then take it as the roleId if not then take the id of the passed object
         $permissionId = (is_numeric($permission) ? $permission : $permission->id);
 
-        return self::drawPermissionChildren($permissionId, $permissionChildren,!$flatten, $allPermissions);
+        return self::drawPermissionChildren($permissionId, $permissionChildren,!$flatten, $allPermissions,$permissionsOfRole);
     }
 
 
@@ -50,20 +50,21 @@ class PermissionsServices {
      * @param $allPermissions
      * @return Array
      */
-    public static function drawPermissionChildren(Int $parentPermissionId, Array $allPermissionsID , $isMultiLevel = false, $allPermissions): Array{ //with levels
+    public static function drawPermissionChildren(Int $parentPermissionId, Array $allPermissionsID , $isMultiLevel = false, $allPermissions,$permissionsOfRole=[]): Array{ //with levels
         $childpermissions = array();
+        $permissionsOfRoleIds= array_column($permissionsOfRole, 'id');
         if(empty($allPermissionsID[$parentPermissionId])){
             return [];
         }
         foreach($allPermissionsID[$parentPermissionId] as $permissionId){
             $permissionId =  is_numeric($permissionId)? ($permissionId) : $permissionId->id;
             if($isMultiLevel){
-                $childpermissions[$permissionId] = (object)['label' => $allPermissions->find($permissionId)->name ,'id' => $allPermissions->find($permissionId)->name,'checked' => false, 'nodes' => []];
+                $childpermissions[$permissionId] = (object)['label' => $allPermissions->find($permissionId)->name ,'id' => $allPermissions->find($permissionId)->id,'checked' => in_array($allPermissions->find($permissionId)->id, $permissionsOfRoleIds), 'nodes' => []];
                 $childpermissions[$permissionId]->nodes = self::drawPermissionChildren($permissionId, $allPermissionsID, $isMultiLevel,$allPermissions);
             }
             else{
                 $childpermissions[] = $permissionId;
-                $childpermissions = array_merge($childpermissions, self::drawPermissionChildren($permissionId, $allPermissionsID, $isMultiLevel,$allPermissions));
+                $childpermissions = array_merge($childpermissions, self::drawPermissionChildren($permissionId, $allPermissionsID, $isMultiLevel,$allPermissions,$permissionsOfRole));
             }
         }
         return $childpermissions;
@@ -83,20 +84,41 @@ class PermissionsServices {
         return ($arrayOfParents);
     }
 
-    public static function getAllPermissionsNested(Array $permissions){
+    public static function getAllPermissionsNested(Array $permissions,Array $permissionsOfRole=[]){
+        $permissionsOfRoleIds= array_column($permissionsOfRole, 'id');
         $lastResult = [];
         $rootPermissions = self::getRootPermissions($permissions);
         foreach ($rootPermissions as $rootPermission){
             $result = (object)[];
             $result->label = $rootPermission->name;
-            $result->nodes = self::getPermissionChildren($rootPermission);
             $result->id= $rootPermission->id;
-            $result->checked = false;
+            $result->checked = in_array($rootPermission->id ?? 0, $permissionsOfRoleIds);
+            $result->nodes = self::getPermissionChildren($rootPermission,$permissionsOfRole);
             $lastResult[] = $result;
         }
         return $lastResult;
 
     }
+
+//    public static function markRolesPermissionAsChecked(Array $permissionsOfRole,Array &$permissions){
+//
+//
+//        foreach ($permissions as $key => $permission){
+//            //here we will check if the permission exists
+//            // if exists it will convert the checked from false to true
+//            if(){
+//                $permission->checked = true;
+//            }
+//            if(array_key_exists('nodes' ,(array)$permission) && sizeof($permission->nodes )!= 0){
+//                self::markRolesPermissionAsChecked($permissionsOfRole,$permissions);
+//                if($key % 2 == 0)
+//                    dd('d');
+//            }
+//            dd($permissions);
+//        }
+//
+//
+//    }
 
 
 }

@@ -175,25 +175,15 @@ class RolesController extends MainController
         ]);
     }
 
-    public function getNestedPermissionsForRole($role){
-        $permissionsOfRole = CustomRole::find($role)->permissions;
+    public function getNestedPermissionsForRole(CustomRole $role){
+        $permissionsOfRole = $role->permissions->toArray();
         $permissions = CustomPermission::with('parent')->get();
         foreach ($permissions as $permission){
-            if($permissionsOfRole->contains($permission)){
-                $permission->checked = true;
-            }else{
-                $permission->checked = false;
-            }
+
             $permissionsWithCheck[] = $permission;
         }
+        $nestedPermissions = PermissionsServices::getAllPermissionsNested($permissionsWithCheck,$permissionsOfRole);
+        return $this->successResponse($nestedPermissions);
 
-        return PermissionsServices::getAllPermissionsNested($permissionsWithCheck);
-
-
-
-//        $permissionsWithCheck = [];
-
-
-//        return $rootPermissions;
     }
 }

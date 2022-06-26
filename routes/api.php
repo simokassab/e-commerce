@@ -44,7 +44,6 @@ if( env('APP_DEBUG') ){
 
 Route::post('login', [AuthenticationController::class,'login'])->name('login');
 Route::get('logout', [AuthenticationController::class,'logout'])->name('logout');
-Route::get('get-nested-permissions-for-role/{role}',[RolesController::class,'getNestedPermissionsForRole']);
 
 Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],function (){
 
@@ -80,6 +79,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
 
     Route::apiResource('role',RolesController::class);
     Route::post('role/all',[RolesController::class,'index']);// for search
+    Route::get('get-nested-permissions-for-role/{role}',[RolesController::class,'getNestedPermissionsForRole']);
 
     Route::apiResource('setting',SettingsController::class);
     Route::post('setting/all',[SettingsController::class,'index']);// for search
