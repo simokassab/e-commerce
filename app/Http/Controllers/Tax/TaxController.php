@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Tax;
 
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Tax\StoreTaxRequest;
-use App\Http\Resources\TagResource;
 use App\Http\Resources\TaxResource;
 use App\Models\Tax\Tax;
 use App\Models\Tax\TaxComponent;
+use App\Services\Tax\TaxsServices;
 use Illuminate\Http\Request;
+use PHPUnit\Exception;
 use Illuminate\Support\Facades\DB;
-
 class TaxController extends MainController
 {
     const OBJECT_NAME = 'objects.tax';
@@ -23,9 +22,9 @@ class TaxController extends MainController
      */
     public function index(Request $request)
     {
-        $relations=['taxComponent'];
+        $relations=['taxComponents'];
         if ($request->method()=='POST') {
-            $searchKeys=['name','percentage','is_complex','complex_behavior'];
+            $searchKeys=['name','percentage','complex_behavior'];
             return $this->getSearchPaginated(TaxResource::class, Tax::class,$request, $searchKeys,$relations);
 
         }
@@ -47,10 +46,11 @@ class TaxController extends MainController
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreTaxRequest $request)
     {
+
     $check=true;
     $tax=new Tax();
     $tax->name = json_encode($request->name);
@@ -99,7 +99,7 @@ class TaxController extends MainController
      */
     public function show(Tax $tax)
     {
-        return $this->successResponse(['tax' => new TagResource($tax)]);
+        return $this->successResponse(['tax' => new TaxResource($tax)]);
     }
 
     /**
@@ -118,10 +118,12 @@ class TaxController extends MainController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreTaxRequest $request, Tax $tax)
     {
+        TaxsServices::deleteRelatedTaxComponents($tax);
+
         $check=true;
         $tax->name = json_encode($request->name);
         $tax->is_complex = $request->is_complex;
@@ -145,7 +147,7 @@ class TaxController extends MainController
 
 
            if($request->components)
-                $check = batch()->insert(new TaxComponent(),$columns,$componentArray);
+                $check = batch()->insert(new TaxComponents(),$columns,$componentArray);
             }
 
             if(!$check)
@@ -165,25 +167,25 @@ class TaxController extends MainController
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Tax $tax)
     {
-        $componentTaxs=  $tax->taxComponent();
+        DB::beginTransaction();
+        try {
+            TaxsServices::deleteRelatedTaxComponents($tax);
+            $tax->delete();
 
-    $result = 0;
-     if($componentTaxs->exists()){
-       TaxComponent::destroy($componentTaxs->get()->pluck('id'));
-     }
-        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-        'tax' => new TaxResource($tax)
-    ]);
+            DB::commit();
+            return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+                'taxes' => new TaxResource($tax)
+            ]);
 
-    //     if(!$tax->delete())
-    //         return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+        }catch (\Exception $e){
+            DB::rollBack();
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
-    //     return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-    //     'taxes' => new TaxResource($tax)
-    // ]);
+        }
+
     }
 }

@@ -87,6 +87,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::post('unit/all',[UnitController::class,'index']);// for search
 
 
+    // @TODO: make a correct function for the user profile
     Route::get('/profile', fn() =>  auth()->user());
 
     Route::apiResource('user',UsersController::class);
@@ -96,4 +97,5 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
 
 });
 
+// @TODO: check the name of link and why the controller functions are not set
 Route::get('s',[AttributeController::class,'serachdata']);

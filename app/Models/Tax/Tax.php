@@ -18,19 +18,19 @@ class Tax extends MainModel
     protected $table='taxes';
     protected $guard_name = 'sanctum';
 
-    public function taxComponent(){
+    public function taxComponents(){
         return $this->hasMany(TaxComponent::class,'tax_id');
     }
     public function cateogry(){
-        $this->hasMany(Category::class,'category_id');
+        return $this->hasMany(Category::class,'category_id');
     }
     public function product(){
-        $this->hasMany(Product::class,'tax_id');
+        return $this->hasMany(Product::class,'tax_id');
     }
     public function tax(){
-        $this->hasMany(Tax::class,'tax_id');
+        return $this->hasMany(Tax::class,'tax_id');
     }
     public function brand(){
-        $this->hasMany(Brand::class,'brand_id');
+        return $this->hasMany(Brand::class,'brand_id');
     }
 }
