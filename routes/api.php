@@ -18,6 +18,7 @@ use App\Http\Controllers\RolesAndPermissions\RolesController;
 use App\Http\Controllers\RolesAndPermissions\PermissionController;
 use App\Http\Controllers\Settings\SettingsController;
 use App\Http\Controllers\Tag\TagController;
+use App\Http\Controllers\Tax\TaxController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Unit\UnitController;
 use App\Http\Controllers\UserController;
@@ -91,13 +92,15 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::post('unit/all',[UnitController::class,'index']);// for search
 
 
+    // @TODO: make a correct function for the user profile
     Route::get('/profile', fn() =>  auth()->user());
 
     Route::apiResource('user',UsersController::class);
     Route::post('user/all',[UsersController::class,'index']);//for searching
 
+    Route::apiResource('tax',TaxController::class);
 
-    // Route::get()
 });
 
+// @TODO: check the name of link and why the controller functions are not set
 Route::get('s',[AttributeController::class,'serachdata']);

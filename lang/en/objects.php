@@ -19,5 +19,6 @@ return [
     'brand' => 'Brand',
     'discount' => 'Discount',
     'discountEntity' => 'Discount Entity',
+    'tax' => 'Tax',
 
 ];
