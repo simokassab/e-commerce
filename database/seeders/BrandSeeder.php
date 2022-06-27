@@ -16,9 +16,7 @@ class BrandSeeder extends Seeder
      */
     public function run()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Brand::query()->truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         Brand::query()->insert([[
             'name' => json_encode(['en' => 'samsung','ar' => 'سامسونج']),
