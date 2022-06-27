@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
         User::query()->insert([
 
             [
+                'id' => 1,
                 'username' => 'user1',
                 'password' => Hash::make('12345678'),
                 'email'    => 'user1@test.com',
@@ -30,6 +31,7 @@ class UserSeeder extends Seeder
 
             ],
             [
+                'id' => 2,
                 'username' => 'user2',
                 'password' => Hash::make('12345678'),
                 'email'    => 'user2@test.com',
@@ -37,6 +39,7 @@ class UserSeeder extends Seeder
                 'last_name' => 'test2',
             ],
             [
+                'id' => 3,
                 'username' => 'user3',
                 'password' => Hash::make('12345678'),
                 'email'    => 'user3@test.com',
@@ -45,6 +48,7 @@ class UserSeeder extends Seeder
             ],
 
             [
+                'id' => 4,
                 'username' => 'user4',
                 'password' => Hash::make('12345678'),
                 'email'    => 'user4@test.com',
