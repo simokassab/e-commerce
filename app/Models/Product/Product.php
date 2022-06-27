@@ -22,7 +22,7 @@ class Product extends MainModel
 {
     use HasFactory;
     protected $table='products';
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     public function parent(){
         return $this->belongsTo(Product::class,'parent_product_id');

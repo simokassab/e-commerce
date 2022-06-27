@@ -13,7 +13,7 @@ use Spatie\Permission\Models\Role;
 class CustomRole extends Role
 {
     use HasFactory;
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     public function parent(){
         return $this->belongsTo($this,'parent_id','id');

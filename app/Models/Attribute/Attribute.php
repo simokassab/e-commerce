@@ -13,7 +13,7 @@ class Attribute extends MainModel
     use HasFactory;
 
     protected $table='attributes';
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     public $translatable = ['title'];
 

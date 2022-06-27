@@ -11,7 +11,7 @@ class Price extends MainModel
 {
     use HasFactory;
     protected $table='prices';
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     public function currency(){
         return $this->belongsTo(Currency::class,'currency_id');

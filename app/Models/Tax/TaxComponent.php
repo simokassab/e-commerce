@@ -12,7 +12,7 @@ class TaxComponent extends MainModel
     use HasFactory,HasTranslations;
     protected $translatable=[''];
     protected $table='taxes_components';
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     public function tax(){
         return $this->belongsTo(Tax::class,'tax_id');

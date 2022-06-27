@@ -14,7 +14,7 @@ class Brand extends MainModel
     use HasFactory,HasTranslations;
     protected $translatable=['name'];
     protected $table='brands';
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     public function label(){
         return $this->belongsToMany(Label::class,'brands_labels','brand_id');

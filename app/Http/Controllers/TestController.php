@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\MainController;
 use App\Exceptions\FileErrorException;
+use App\Models\RolesAndPermissions\CustomPermission;
 
 class TestController extends MainController
 {
@@ -32,20 +33,22 @@ class TestController extends MainController
     }
 
     public function test(){
-        $routes = app('router')->getRoutes();
-//        dd($routes[0]);
-//
+//         $routes = app('router')->getRoutes();
+// //        dd($routes[0]);
+// //
 
 
-        Artisan::call('route:list');
+//         Artisan::call('route:list');
 
 
-//        $allRoutes = Route::getRoutes()->get();
-//        $routes = [];
-//        foreach($allRoutes as $route) {
-//        $routes[] = $route->getPath();
-//        }
+// //        $allRoutes = Route::getRoutes()->get();
+// //        $routes = [];
+// //        foreach($allRoutes as $route) {
+// //        $routes[] = $route->getPath();
+// //        }
 
-        dd($routes);
+//         dd($routes);
+
+
     }
 }

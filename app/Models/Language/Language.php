@@ -11,7 +11,7 @@ class Language extends MainModel
 {
     use HasFactory,HasTranslations;
     protected $translatable=['name'];
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
 
 }
