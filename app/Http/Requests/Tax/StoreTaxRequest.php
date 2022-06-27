@@ -30,7 +30,7 @@ class StoreTaxRequest extends FormRequest
 
             'name' => 'required',
             'is_complex' => 'required | boolean',
-            'percentage' => ['required' , 'numeric' , 'between:'.config('defaults.default_minimum_tax_percentage').','.config('defaults.default_maximum_tax_percentage')],
+            'percentage' => ['required' , 'numeric' , 'between:'.config('defaults.default_minimum_tax_percentage').','.config('defaults.default_maximum_tax_percentage'),Rule::when(!$request->is_complex, ['required', 'between:'.config('defaults.default_minimum_tax_percentage_when_required').','.config('defaults.default_maximum_tax_percentage','numeric')])],
             'complex_behavior' => 'required_if:is_complex,1 | nullable | in:'.config('defaults.validation_default_complex_behavior'),
 
             'components' => 'required_if:is_complex,1',
@@ -50,7 +50,6 @@ class StoreTaxRequest extends FormRequest
 
         'percentage.required' => 'the :attribute field is required.',
         'percentage.numeric' => 'The :attribute must be decimal.',
-        'percentage.between' => 'the :attribute must be between: '.config('defaults.default_minimum_tax_percentage').' & '.config('defaults.default_maximum_tax_percentage'),
 
         'complex_behavior.in' => 'The :attribute is not a valid type',
 

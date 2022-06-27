@@ -147,7 +147,7 @@ class TaxController extends MainController
 
 
            if($request->components)
-                $check = batch()->insert(new TaxComponents(),$columns,$componentArray);
+                $check = batch()->insert(new TaxComponent,$columns,$componentArray);
             }
 
             if(!$check)
