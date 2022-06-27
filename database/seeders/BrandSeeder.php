@@ -6,7 +6,7 @@ use App\Models\Brand\Brand;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\DB;
 class BrandSeeder extends Seeder
 {
     /**
@@ -16,7 +16,9 @@ class BrandSeeder extends Seeder
      */
     public function run()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Brand::query()->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         Brand::query()->insert([[
             'name' => json_encode(['en' => 'samsung','ar' => 'سامسونج']),
