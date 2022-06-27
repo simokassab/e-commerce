@@ -18,7 +18,7 @@ class Category extends MainModel
     use HasFactory,HasTranslations;
     protected $translatable=['name'];
     // protected $table='categories';
-    // protected $guard_name = 'sanctum';
+    // protected $guard_name = 'web';
 
     public function parent(){
         return $this->belongsTo(Category::class,'parent_id');

@@ -12,4 +12,6 @@ class Setting extends MainModel
 
     protected $translatable=['key','value'];
     protected $fillable = ['key','value','is_developer'];
+    protected $guard_name = 'web';
+
 }

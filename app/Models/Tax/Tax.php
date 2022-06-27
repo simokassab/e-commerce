@@ -16,7 +16,7 @@ class Tax extends MainModel
 
     protected $translatable=['name'];
     protected $table='taxes';
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     public function taxComponents(){
         return $this->hasMany(TaxComponent::class,'tax_id');

@@ -14,7 +14,7 @@ class Discount extends MainModel
     use HasFactory,HasTranslations;
     protected $translatable=['name'];
     protected $table='discounts';
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     public function category(){
         return $this->belongsToMany(Category::class,'discounts_entities','discount_id','category_id');

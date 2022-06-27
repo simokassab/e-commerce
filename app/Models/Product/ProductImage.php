@@ -10,7 +10,7 @@ class ProductImage extends MainModel
 {
     use HasFactory;
     protected $table='products_images';
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     public function productImages(){
         return $this->belongsTo(Product::class,'product_id');

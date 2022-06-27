@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\MainController;
 use App\Exceptions\FileErrorException;
+use App\Models\RolesAndPermissions\CustomPermission;
 
 class TestController extends MainController
 {
@@ -32,15 +33,6 @@ class TestController extends MainController
     }
 
     public function test(){
-        $role = CustomRole::create([
-            'name' => 'testDev',
-            'guard_name' => 'web'
-        ]);
-
-//        $role = CustomRole::find(4);
-        $user = User::find(1);
-
-        $user->assignRole($role);
 
     }
 }

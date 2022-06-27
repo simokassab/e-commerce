@@ -12,7 +12,7 @@ class Country extends MainModel
 
     protected $translatable=['name'];
     protected $table='countries';
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     protected $fillable=[
         'name',

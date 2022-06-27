@@ -17,7 +17,7 @@ class FieldValue extends MainModel
     use HasFactory,HasTranslations;
     protected $translatable=['value'];
     protected $table='fields_values';
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     public function field(){
         return $this->belongsTo(Field::class,'field_id');

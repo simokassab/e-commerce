@@ -76,7 +76,9 @@ class RolesService {
 
         return CustomPermission::create([
             'name' => $name,
-            'parent_id' => $parentId
+            'parent_id' => $parentId,
+            'guard_name' => 'web'
+
         ]);
 
     }
@@ -85,7 +87,8 @@ class RolesService {
 
         return CustomRole::create([
             'name' => $name,
-            'parent_id' => $parentId
+            'parent_id' => $parentId,
+            'guard_name' => 'web'
         ]);
 
     }
@@ -271,6 +274,16 @@ class RolesService {
         self::createSinglePermssion('UnitController@update',$parentUnit->id );
         self::createSinglePermssion('UnitController@destroy',$parentUnit->id );
     //End of Unit Permission
+
+     //Tax Permission
+     $parentTax= self::createSinglePermssion('TaxController');
+     self::createSinglePermssion('TaxController@index',$parentTax->id );
+     self::createSinglePermssion('TaxController@store',$parentTax->id );
+     self::createSinglePermssion('TaxController@show',$parentTax->id );
+     self::createSinglePermssion('TaxController@update',$parentTax->id );
+     self::createSinglePermssion('TaxController@destroy',$parentTax->id );
+    //End of Tax Permission
+
 
     }
 

@@ -15,7 +15,7 @@ class CurrencyHistory extends MainModel
     protected $translatable=[''];
     protected $table='currencies_histories';
     protected $fillable=['currency_id','rate'];
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
 
     public function currency(){

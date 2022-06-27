@@ -15,7 +15,7 @@ class Unit extends MainModel
     use HasFactory,HasTranslations;
     protected $translatable=['name'];
     protected $table='units';
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     public function cateogry(){
         $this->hasMany(Category::class,'category_id');

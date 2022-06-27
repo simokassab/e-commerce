@@ -11,7 +11,7 @@ use Spatie\Permission\Models\Permission;
 class CustomPermission extends Permission
 {
     use HasFactory;
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     public function allChildren($flatten = false){
         //this function will get all of the children and their nested children also

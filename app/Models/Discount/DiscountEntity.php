@@ -9,7 +9,7 @@ class DiscountEntity extends Model
 {
     use HasFactory;
     protected $table='discounts_entities';
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
 
 }

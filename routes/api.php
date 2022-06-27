@@ -100,6 +100,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
 
     Route::apiResource('tax',TaxController::class);
 
+    Route::get('test',[TestController::class,'test']);
+
 });
 
 // @TODO: check the name of link and why the controller functions are not set

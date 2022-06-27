@@ -15,7 +15,7 @@ class Label extends MainModel
 
     protected $translatable=['title'];
     protected $table='labels';
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     public function categories(){
         return $this->belongsToMany(Category::class,'categories_labels','label_id','category_id');

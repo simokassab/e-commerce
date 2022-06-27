@@ -13,7 +13,7 @@ class AttributeValue extends MainModel
     use HasFactory,HasTranslations;
     protected $translatable=['title'];
     protected $table='attributes_values';
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     public function attribute(){
         return $this->belongsTo(Attribute::class,'attribute_id');
