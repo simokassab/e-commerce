@@ -51,31 +51,24 @@ class TaxController extends MainController
     public function store(StoreTaxRequest $request)
     {
 
-    $check=true;
     $tax=new Tax();
     $tax->name = json_encode($request->name);
     $tax->is_complex = $request->is_complex;
     $tax->percentage = $request->percentage;
     $tax->complex_behavior = $request->complex_behavior;
 
+    $check=true;
+
     if(!$tax->save())
         return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
     if($request->is_complex){
-        $componentArray = [];
-        $columns = [
-            'component_tax_id',
-            'sort',
-            'tax_id',
-        ];
-
-       foreach ($request->components as $key => $component) {
-            $component['tax_id'] = $tax->id;
-            $componentArray[] = $component;
-       }
-
        if($request->components)
-            $check = batch()->insert(new TaxComponent(),$columns,$componentArray,500);
+            $check = TaxComponent::insert([
+                'tax_id' => $tax->id,
+                'component_tax_id' => $request->component_tax_id,
+                'sort' => $request->sort
+            ]);
         }
 
         if(!$check)
@@ -122,44 +115,36 @@ class TaxController extends MainController
      */
     public function update(StoreTaxRequest $request, Tax $tax)
     {
-        TaxsServices::deleteRelatedTaxComponents($tax);
+        DB::beginTransaction();
+        try {
 
-        $check=true;
-        $tax->name = json_encode($request->name);
-        $tax->is_complex = $request->is_complex;
-        $tax->percentage = $request->percentage;
-        $tax->complex_behavior = $request->complex_behavior;
+            TaxsServices::deleteRelatedTaxComponents($tax);
 
-        if(!$tax->save())
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            $tax->name = json_encode($request->name);
+            $tax->is_complex = $request->is_complex;
+            $tax->percentage = $request->percentage;
+            $tax->complex_behavior = $request->complex_behavior;
 
-        if($request->is_complex){
-            $componentArray = [];
-            $columns = [
-                'tax_id',
-                'component_tax_id',
-                'sort'
-           ];
-           foreach ($request->components as $key => $component) {
-                $component['tax_id'] = $tax->id;
-                $componentArray[] = $component;
-           }
+            $tax->save();
 
-
-           if($request->components)
-                $check = batch()->insert(new TaxComponent,$columns,$componentArray);
+            if($request->is_complex && $request->components){
+                TaxComponent::insert([
+                    'tax_id' => $tax->id,
+                    'component_tax_id' => $request->component_tax_id,
+                    'sort' => $request->sort
+                ]);
             }
 
-            if(!$check)
-                return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            DB::commit();
+            return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                'Taxes' => new TaxResource($tax)
+        ]);
 
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'Taxes' => new TaxResource($tax)
-    ]);
-
-
-        return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+        }
 
     }
 

@@ -6,10 +6,13 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Field\StoreFieldRequest;
 use App\Http\Resources\FieldsResource;
 use App\Models\Field\Field;
+use App\Models\Field\FieldValue;
 use Exception;
+use FieldService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 
 class FieldsController extends MainController
 {
@@ -55,19 +58,31 @@ class FieldsController extends MainController
      */
     public function store(StoreFieldRequest $request)
     {
-
         $field=new Field();
         $field->title = json_encode($request->title);
         $field->type = $request->type;
         $field->entity = $request->entity;
         $field->is_required = $request->is_required;
 
+        $check=true;
 
         if(!$field->save())
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+          return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+
+        if($request->type=='select'){
+           if($request->field_value)
+                $check=FieldValue::insert([
+                    'field_id' => $field->id,
+                    'value' => json_encode($request->value)
+                ]);
+            }
+
+            if(!$check)
+                return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+
 
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'fields' => new FieldsResource($field)
+            'field' => new FieldsResource($field)
         ]);
 
     }
@@ -104,18 +119,34 @@ class FieldsController extends MainController
      */
     public function update(StoreFieldRequest $request, Field $field)
     {
-        $field->title = json_encode($request->title);
-        $field->type = ($request->type);
-        $field->entity = ($request->entity);
-        $field->is_required = ($request->is_required);
+        FieldService::deleteRelatedfieldValues($field);
 
+        $field->title = json_encode($request->title);
+        $field->type = $request->type;
+        $field->entity = $request->entity;
+        $field->is_required = $request->is_required;
+
+        $check=true;
 
         if(!$field->save())
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+          return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+
+        if($request->type=='select'){
+           if($request->field_value)
+                $check=FieldValue::insert([
+                    'field_id' => $field->id,
+                    'value' => json_encode($request->value)
+                ]);
+            }
+
+            if(!$check)
+                return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+
 
         return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'fields' => new FieldsResource($field)
+            'field' => new FieldsResource($field)
         ]);
+
     }
 
     /**
@@ -126,11 +157,20 @@ class FieldsController extends MainController
      */
     public function destroy(Field $field)
     {
-        if(!$field->delete())
+        DB::beginTransaction();
+        try {
+            FieldService::deleteRelatedfieldValues($field);
+            $field->delete();
+
+            DB::commit();
+            return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+                'field' => new FieldsResource($field)
+            ]);
+
+        }catch (\Exception $e){
+            DB::rollBack();
             return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'fields' => new FieldsResource($field)
-        ]);
+        }
     }
 }
