@@ -56,30 +56,23 @@ class DiscountController extends MainController
             $discount->end_date = $request->end_date;
             $discount->discount_percentage = $request->discount_percentage;
 
-
 //            $discount->save();
-            $tagsProducts =  Tag::findMany($request->tag)->load('products')->pluck('products')->toArray();
-            $brandsProducts = Brand::findMany($request->brand)->load('products')->pluck('products')->toArray();
+            $tagsProducts =  DiscountsServices::extractProductsFromMultiArray( Tag::findMany($request->tag)->load('products')->pluck('products')->toArray() );
+            $brandsProducts =DiscountsServices::extractProductsFromMultiArray( Brand::findMany($request->brand)->load('products')->pluck('products')->toArray() );
 
-//            $categoriesProducts = Category::findMany($request->category);
+            $categorySingleProducts = DiscountsServices::extractProductsFromMultiArray( Category::findMany($request->category)->load('multipleProducts')->pluck('products')->toArray() );
+            $categoryMultipleProducts = DiscountsServices::extractProductsFromMultiArray(Category::findMany($request->category)->load('products')->pluck('products')->toArray());
 
-            $categorySingleProducts = Category::findMany($request->category)->load('multipleProducts')->pluck('products')->toArray();
-            $categoryMultipleProducts = Category::findMany($request->category)->load('products')->pluck('products')->toArray();
-            $mergedArray = array_merge($tagsProducts,$brandsProducts,$categorySingleProducts,$categoryMultipleProducts);
+            $products = DiscountsServices::filterProducts($tagsProducts,$brandsProducts,$categorySingleProducts,$categoryMultipleProducts, $request->filter_type );
 
-            return $allProducts = collect(DiscountsServices::mergeAllProducts($mergedArray))->unique('id');
-
-
-
-
-
-            return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                'discount' => new DiscountResource($discount)
+            return $this->successResponse([
+                'message' => __('messages.success.create',['name' => __(self::OBJECT_NAME),]),
+                'discount' => new DiscountResource($discount),
+                'products' => $products,
             ]);
             DB::commit();
 
         }catch (\Exception $e){
-            dd($e);
             DB::rollBack();
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 

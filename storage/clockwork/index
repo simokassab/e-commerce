@@ -320,3 +320,14 @@
 1656425768-6844-346828768,1656425768.5185,POST,/api/discount,"App\Http\Controllers\Discount\DiscountController@store",200,391.33620262146,request
 1656425878-3783-1621382287,1656425878.2909,POST,/api/discount,"App\Http\Controllers\Discount\DiscountController@store",200,286.38195991516,request
 1656426669-5394-1822246457,1656426667.185,POST,/api/discount,"App\Http\Controllers\Discount\DiscountController@store",200,6809.6709251404,request
+1656429910-3201-148919619,1656429908.2055,POST,/api/discount,"App\Http\Controllers\Discount\DiscountController@store",500,4156.886100769,request
+1656429964-0546-1535386154,1656429963.9303,POST,/api/discount,"App\Http\Controllers\Discount\DiscountController@store",200,976.10712051392,request
+1656430031-2952-1948770886,1656430031.0943,POST,/api/discount,"App\Http\Controllers\Discount\DiscountController@store",200,467.27991104126,request
+1656430488-3348-830469826,1656430485.6887,POST,/api/discount,"App\Http\Controllers\Discount\DiscountController@store",200,6643.2681083679,request
+1656430614-0513-228799553,1656430613.9542,POST,/api/discount,"App\Http\Controllers\Discount\DiscountController@store",200,359.33208465576,request
+1656430738-4400-298110149,1656430738.3076,POST,/api/discount,"App\Http\Controllers\Discount\DiscountController@store",200,383.70800018311,request
+1656430856-0305-230463604,1656430855.8572,POST,/api/discount,"App\Http\Controllers\Discount\DiscountController@store",200,736.85908317566,request
+1656430868-1591-2110935710,1656430867.9935,POST,/api/discount,"App\Http\Controllers\Discount\DiscountController@store",200,428.18403244019,request
+1656432072-4351-512257213,1656432070.6244,POST,/api/discount,"App\Http\Controllers\Discount\DiscountController@store",200,5287.7130508423,request
+1656432083-6786-271494088,1656432083.525,POST,/api/discount,"App\Http\Controllers\Discount\DiscountController@store",500,721.07195854187,request
+1656433226-3700-834391665,1656433226.2154,POST,/api/discount,"App\Http\Controllers\Discount\DiscountController@store",200,489.09378051758,request
