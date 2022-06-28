@@ -2,7 +2,6 @@
 
 namespace App\Services\Tax;
 use App\Models\Tax\Tax;
-use App\Models\Category\Category;
 use App\Models\Tax\TaxComponent;
 
 class TaxsServices{

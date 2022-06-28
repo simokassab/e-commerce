@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Brand;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Validation\Rule;
 class StoreBrandRequest extends FormRequest
 {
     /**
@@ -38,6 +38,11 @@ class StoreBrandRequest extends FormRequest
             'meta_keyword' => 'nullable',
             'description' => 'nullable',
             'sort' => 'nullable | integer',
+
+
+            'fields.*.field_id' =>'integer | exists:fields,id',
+            'fields.*.field_value_id' =>'nullable | integer | exists:fields_values,id',
+            'fields.*.value' =>'nullable',
         ];
     }
 
@@ -54,6 +59,14 @@ class StoreBrandRequest extends FormRequest
             'image.dimensions' => 'Invalid dimentions, minimum('.config('defaults.default_image_minimum_width').'x'.config('defaults.default_image_minimum_height').'),maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
 
             'sort.integer' => 'the :attribute should be an integer',
+
+
+            'fields.*.field_id.integer' =>  'the field_id must be an integer',
+            'fields.*.field_id.exists' =>  'the field_id must be exists in fields',
+
+            'fields.*.field_value_id.integer' =>  'the field_value_id must be an integer',
+            'fields.*.field_value_id.exists' =>  'the field_value_id must be exists in brands',
+
 
         ];
     }

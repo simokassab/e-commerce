@@ -7,11 +7,8 @@ use App\Http\Requests\Field\StoreFieldRequest;
 use App\Http\Resources\FieldsResource;
 use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
-use Exception;
-use FieldService;
+use App\Services\Field\FieldService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
 class FieldsController extends MainController
@@ -47,7 +44,7 @@ class FieldsController extends MainController
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -69,12 +66,13 @@ class FieldsController extends MainController
         if(!$field->save())
           return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        if($request->type=='select'){
-           if($request->field_value)
-                $check=FieldValue::insert([
-                    'field_id' => $field->id,
-                    'value' => json_encode($request->value)
-                ]);
+          if($request->type=='select' && $request->field_value){
+           $fieldValueArray=$request->field_value;
+           foreach ($request->field_value as $fieldValue => $value){
+              $fieldValueArray[$fieldValue]["field_id"] = $field->id;
+              $fieldValueArray[$fieldValue]["value"] = json_encode($request->field_value[$fieldValue]['value']);
+            }
+            $check = FieldValue::insert($fieldValueArray);
             }
 
             if(!$check)
@@ -119,34 +117,34 @@ class FieldsController extends MainController
      */
     public function update(StoreFieldRequest $request, Field $field)
     {
+        DB::beginTransaction();
+        try {
         FieldService::deleteRelatedfieldValues($field);
 
         $field->title = json_encode($request->title);
         $field->type = $request->type;
         $field->entity = $request->entity;
         $field->is_required = $request->is_required;
+        $field->save();
 
-        $check=true;
-
-        if(!$field->save())
-          return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
-
-        if($request->type=='select'){
-           if($request->field_value)
-                $check=FieldValue::insert([
-                    'field_id' => $field->id,
-                    'value' => json_encode($request->value)
-                ]);
+        if($request->type=='select' && $request->field_value){
+            $fieldValueArray=$request->field_value;
+            foreach ($request->field_value as $fieldValue => $value){
+               $fieldValueArray[$fieldValue]["field_id"] = $field->id;
+               $fieldValueArray[$fieldValue]["value"] = json_encode($request->field_value[$fieldValue]['value']);
             }
+            FieldValue::insert($fieldValueArray);
+             }
 
-            if(!$check)
-                return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
-
-
+        DB::commit();
         return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             'field' => new FieldsResource($field)
         ]);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
+    }
     }
 
     /**

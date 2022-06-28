@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Services\Field;
+
 use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
 

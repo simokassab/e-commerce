@@ -10,6 +10,7 @@ use App\Models\Tax\TaxComponent;
 use App\Services\Tax\TaxsServices;
 use Illuminate\Http\Request;
 use PHPUnit\Exception;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 class TaxController extends MainController
 {
@@ -54,7 +55,11 @@ class TaxController extends MainController
     $tax=new Tax();
     $tax->name = json_encode($request->name);
     $tax->is_complex = $request->is_complex;
-    $tax->percentage = $request->percentage;
+    if($request->is_complex){
+        $tax->percentage = 0;
+    }else{
+        $tax->percentage = $request->percentage;
+    }
     $tax->complex_behavior = $request->complex_behavior;
 
     $check=true;
@@ -62,13 +67,12 @@ class TaxController extends MainController
     if(!$tax->save())
         return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-    if($request->is_complex){
-       if($request->components)
-            $check = TaxComponent::insert([
-                'tax_id' => $tax->id,
-                'component_tax_id' => $request->component_tax_id,
-                'sort' => $request->sort
-            ]);
+    if($request->is_complex && $request->components){
+        $componentsArray=$request->components;
+        foreach ($request->components as $component => $value)
+            $componentsArray[$component]["tax_id"] = $tax->id;
+
+        $check = TaxComponent::insert($componentsArray);
         }
 
         if(!$check)
@@ -122,17 +126,20 @@ class TaxController extends MainController
 
             $tax->name = json_encode($request->name);
             $tax->is_complex = $request->is_complex;
-            $tax->percentage = $request->percentage;
-            $tax->complex_behavior = $request->complex_behavior;
+            if($request->is_complex){
+                $tax->percentage = 0;
+            }else{
+                $tax->percentage = $request->percentage;
+            }            $tax->complex_behavior = $request->complex_behavior;
 
             $tax->save();
 
             if($request->is_complex && $request->components){
-                TaxComponent::insert([
-                    'tax_id' => $tax->id,
-                    'component_tax_id' => $request->component_tax_id,
-                    'sort' => $request->sort
-                ]);
+                $componentsArray=$request->components;
+                foreach ($request->components as $component => $value)
+                   $componentsArray[$component]["tax_id"] = $tax->id;
+
+                TaxComponent::insert($componentsArray);
             }
 
             DB::commit();
