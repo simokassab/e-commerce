@@ -16,8 +16,6 @@ use App\Models\Product\Product;
 class Category extends MainModel
 {
     use HasFactory;
-    protected $table='categories';
-    protected $guard_name = 'sanctum';
 
     public function parent(){
         return $this->belongsTo(Category::class,'parent_id');
@@ -51,7 +49,10 @@ class Category extends MainModel
     }
 
     public function products(){
-        return $this->hasMany(Product::class,'id','product_id');
+        return $this->hasMany(Product::class,'category_id','id');
+    }
 
+    public function multipleProducts(){
+        return $this->belongsToMany(Product::class,'products_categories','category_id','product_id');
     }
 }

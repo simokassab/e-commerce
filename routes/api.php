@@ -36,6 +36,7 @@ use App\Http\Controllers\RolesAndPermissions\PermissionController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::apiResource('discount',DiscountController::class);
 
 Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localization'] ],function (){
 
@@ -52,7 +53,6 @@ Route::group([ 'prefix' => 'dashboard','middleware' => ['auth:sanctum','localiza
     Route::apiResource('country',CountryController::class);
     Route::apiResource('category',CategoryController::class);
     Route::apiResource('brand',BrandController::class);
-    Route::apiResource('discount',DiscountController::class);
     Route::apiResource('discount-entity',DiscountEntityController::class);
 
     //change language for dashboard and get the dashborad translated objects

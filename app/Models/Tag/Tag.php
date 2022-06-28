@@ -12,7 +12,6 @@ class Tag extends MainModel
 {
     use HasFactory;
     protected $table='tags';
-    protected $guard_name = 'sanctum';
 
     public function category(){
         return $this->belongsToMany(Category::class,'discounts_entities','tag_id','category_id');
@@ -25,8 +24,8 @@ class Tag extends MainModel
     public function brand(){
         return $this->belongsToMany(Brand::class,'discounts_entities','tag_id','brand_id');
     }
-    public function product(){
-        return $this->hasMany(Product::class,'product_id');
+    public function products(){
+        return $this->belongsToMany(Product::class,'products_tags','product_id','tag_id');
 
     }
 }
