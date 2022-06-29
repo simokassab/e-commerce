@@ -2,6 +2,10 @@
 
 namespace App\Models\Brand;
 
+use App\Models\Category\Category;
+use App\Models\Product\Product;
+use App\Models\Tax\Tax;
+use App\Models\Unit\Unit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
 use App\Models\Label\Label;
@@ -18,7 +22,6 @@ class Brand extends MainModel
 
     public function label(){
         return $this->belongsToMany(Label::class,'brands_labels','brand_id');
-
     }
 
     public function field(){
@@ -26,20 +29,22 @@ class Brand extends MainModel
     }
     public function fieldValue(){
         return $this->belongsToMany(FieldValue::class,'brands_fields','brand_id','field_value_id');
-
-
     }
+
     public function cateogry(){
-        $this->hasMany(Categorie::class,'category_id');
+        return $this->hasMany(Category::class,'category_id');
     }
-    public function product(){
-        $this->hasMany(Product::class,'brand_id');
+
+    public function products(){
+        return $this->hasMany(Product::class,'brand_id','id');
     }
+
     public function tax(){
-        $this->hasMany(Tax::class,'tax_id');
+        return $this->hasMany(Tax::class,'tax_id');
     }
+
     public function unit(){
-        $this->hasMany(Unit::class,'unit_id');
+        return $this->hasMany(Unit::class,'unit_id');
     }
 
 

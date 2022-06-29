@@ -66,6 +66,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::apiResource('discount',DiscountController::class);
     Route::post('discount/all',[DiscountController::class,'index']); // for search
 
+    Route::apiResource('category',CategoryController::class);
+    Route::apiResource('brand',BrandController::class);
     Route::apiResource('discount-entity',DiscountEntityController::class);
     Route::post('discount-entity/all',[DiscountEntityController::class,'index']); // for search
 

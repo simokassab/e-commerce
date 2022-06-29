@@ -17,8 +17,6 @@ class Category extends MainModel
 {
     use HasFactory,HasTranslations;
     protected $translatable=['name'];
-    // protected $table='categories';
-    // protected $guard_name = 'web';
 
     public function parent(){
         return $this->belongsTo(Category::class,'parent_id');
@@ -52,8 +50,11 @@ class Category extends MainModel
     }
 
     public function products(){
-        return $this->hasMany(Product::class,'id','product_id');
+        return $this->hasMany(Product::class,'category_id','id');
+    }
 
+    public function multipleProducts(){
+        return $this->belongsToMany(Product::class,'products_categories','category_id','product_id');
     }
 
     public static function getMaxSortValue($parent_id = null){
