@@ -34,8 +34,9 @@ class StoreUserRequest extends FormRequest
         ];
 
         if($this->has('id')){
-            $array['email'] =  "required|email|unique:users,email,$this->id,id";
-            $array['username'] =  "required|string|unique:users,username,$this->id,id";
+            $array['id'] = 'required|numeric|exists:users,id';
+            $array['email'] =  "required|email|unique:users,email,".$this->id.',id';
+            $array['username'] =  "required|string|unique:users,username,".$this->id.',id';
         }
         return $array;
     }

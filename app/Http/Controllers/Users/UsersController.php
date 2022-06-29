@@ -18,16 +18,17 @@ class UsersController extends MainController
     public function index(Request $request){
 
         if ($request->method()=='POST') {
-
-            $data=$request->data;
+            $data=$request->data ?? [];
             $keys = array_keys($data);
-            $user=User::with('roles')
+            $user=User::with(['roles' => function ($query) {
+                $query->select('name');
+                }])
                 ->where(function($query) use($data,$keys){
                     foreach($keys as $key)
                         $query->where($key,'LIKE', '%'.$data[$key].'%');
                 })
                 ->paginate($request->limit ?? config('defaults.default_pagination'));
-
+//            return $user;
             return UserResource::collection($user);
 
         }
@@ -73,7 +74,7 @@ class UsersController extends MainController
         $user->first_name = $request->first_name;
         $user->last_name =$request->last_name;
         $user->salt = $request->salt;
-        $user->is_disabled=$request->is_disabled;
+        $user->is_disabled=$request->is_disabled ?? $user->is_disabled;
 
         if(!($user->save()))
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)])]);
