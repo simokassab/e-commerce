@@ -24,9 +24,7 @@ class PricesController extends MainController
      */
     public function index(PricesRequest $request)
     {
-
         if ($request->method()=='POST') {
-
             $relations=['currency','products','originalPrice','originalPricesChildren'];
             $searchKeys=['name','original_percent'];
             $data=($request->data);

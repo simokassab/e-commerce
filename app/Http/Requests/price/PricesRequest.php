@@ -30,8 +30,8 @@ class PricesRequest extends FormRequest
             'original_price_id' => 'required_if:is_virtual,1:is_virtual,1|exists:prices,id',
             'original_percent' => 'required_if:is_virtual,1|numeric|min:0|max:100',
             'data' => 'nullable',
-            'data.currency_name' => 'required_with:data',
-            'data.original_price_name' => 'required_with:data',
+            'data.currency_name' => 'nullable',
+            'data.original_price_name' => 'nullable',
 
         ];
     }
