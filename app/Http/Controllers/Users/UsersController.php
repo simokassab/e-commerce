@@ -45,17 +45,15 @@ class UsersController extends MainController
                 'email' => $request->email,
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
-                'salt' => $request->salt,
+                'salt' => $request->salt ?? '',
                 'password' => Hash::make($request->password),
             ]);
             $user->AssignRole($request->role_id);
             DB::commit();
 
-            return $user;
-
-            //     return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            //     'user' => new User($user)
-            // ]);
+                 return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                 'user' => new UserResource($user)
+             ]);
         }catch (\Exception $exception){
             DB::rollBack();
             return $this->errorResponse(['message' => 'user was not created successfully the error message: '.$exception]);
