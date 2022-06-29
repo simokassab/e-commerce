@@ -19,13 +19,14 @@ class UsersController extends MainController
 
         if ($request->method()=='POST') {
             $data=$request->data ?? [];
+            $dataObject = (object)$data;
             $keys = array_keys($data);
-            $user=User::with(['roles' => function ($query) {
-                $query->select('name');
-                }])
-                ->where(function($query) use($data,$keys){
-                    foreach($keys as $key)
-                        $query->where($key,'LIKE', '%'.$data[$key].'%');
+            $searchKey = ['first_name','last_name','email','username'];
+            $user=User::with(['roles' => fn($query) => $query->select('name')])
+                ->whereHas('roles',fn ($query) => $query->whereRaw('lower(name) like (?)',["%$dataObject->role_name%"]))
+                ->where(function($query) use($data,$keys,$searchKey){
+                        foreach($keys as $key) if(in_array($key,$searchKey))
+                            $query->where($key,'LIKE', '%'.$data[$key].'%');
                 })
                 ->paginate($request->limit ?? config('defaults.default_pagination'));
 //            return $user;

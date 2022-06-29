@@ -380,3 +380,9 @@
 1656516023-5706-2085849914,1656516023.491,PUT,/api/dashboard/user/5,"App\Http\Controllers\Users\UsersController@update",422,339.66398239136,request
 1656516033-2243-483567395,1656516033.1228,PUT,/api/dashboard/user/5,"App\Http\Controllers\Users\UsersController@update",200,308.35795402527,request
 1656516042-6390-261432391,1656516042.5554,PUT,/api/dashboard/user/5,"App\Http\Controllers\Users\UsersController@update",200,282.38582611084,request
+1656516960-6578-836727134,1656516960.5544,POST,/api/dashboard/user/all,"App\Http\Controllers\Users\UsersController@index",500,392.34280586243,request
+1656518155-5705-427527569,1656518155.4636,POST,/api/dashboard/user/all,"App\Http\Controllers\Users\UsersController@index",500,497.77412414551,request
+1656518306-4160-1953793780,1656518306.3451,POST,/api/dashboard/user/all,"App\Http\Controllers\Users\UsersController@index",500,390.48290252686,request
+1656518630-5118-1927622159,1656518630.4073,POST,/api/dashboard/user/all,"App\Http\Controllers\Users\UsersController@index",200,312.21699714661,request
+1656518643-1473-721946665,1656518642.9241,POST,/api/dashboard/user/all,"App\Http\Controllers\Users\UsersController@index",200,507.05885887146,request
+1656518669-1197-815543707,1656518669.037,POST,/api/dashboard/user/all,"App\Http\Controllers\Users\UsersController@index",200,241.60289764404,request
