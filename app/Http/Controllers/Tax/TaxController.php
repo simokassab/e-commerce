@@ -128,7 +128,8 @@ class TaxController extends MainController
             $tax->is_complex = $request->is_complex;
             if($request->is_complex){
                 $tax->percentage = 0;
-            }else{
+            }
+            else{
                 $tax->percentage = $request->percentage;
             }            $tax->complex_behavior = $request->complex_behavior;
 

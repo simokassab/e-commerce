@@ -12,4 +12,6 @@ class BrandField extends Model
     protected $table = 'brands_fields';
     protected $fillable = ['brand_id','field_id','field_value_id'];
 
+
+
 }

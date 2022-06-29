@@ -2,8 +2,12 @@
 
 namespace App\Http\Requests\Brand;
 
+
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+
 class StoreBrandRequest extends FormRequest
 {
     /**
@@ -21,8 +25,9 @@ class StoreBrandRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(Request $request)
     {
+
         return [
             'name' => 'required',
             'code' => 'required | max:'.config('defaults.default_string_length'),
@@ -40,9 +45,7 @@ class StoreBrandRequest extends FormRequest
             'sort' => 'nullable | integer',
 
 
-            'fields.*.field_id' =>'integer | exists:fields,id',
-            'fields.*.field_value_id' =>'nullable | integer | exists:fields_values,id',
-            'fields.*.value' =>'nullable',
+
         ];
     }
 
@@ -61,11 +64,11 @@ class StoreBrandRequest extends FormRequest
             'sort.integer' => 'the :attribute should be an integer',
 
 
-            'fields.*.field_id.integer' =>  'the field_id must be an integer',
-            'fields.*.field_id.exists' =>  'the field_id must be exists in fields',
+            // 'fields.*.field_id.integer' =>  'the field_id must be an integer',
+            // 'fields.*.field_id.exists' =>  'the field_id must be exists in fields',
 
-            'fields.*.field_value_id.integer' =>  'the field_value_id must be an integer',
-            'fields.*.field_value_id.exists' =>  'the field_value_id must be exists in brands',
+            // 'fields.*.field_value_id.integer' =>  'the field_value_id must be an integer',
+            // 'fields.*.field_value_id.exists' =>  'the field_value_id must be exists in brands',
 
 
         ];
