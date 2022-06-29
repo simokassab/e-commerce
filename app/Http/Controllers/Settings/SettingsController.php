@@ -33,11 +33,11 @@ class SettingsController extends MainController
                             $value=strtolower($data[$key]);
 
                             $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                                }
+                        }
                         else{
                             throw new Exception();
-                            }
-                            }
+                        }
+                    }
                     })->paginate($request->limit ?? config('defaults.default_pagination'));
 
             return  SettingsResource::collection($rows);
@@ -59,7 +59,7 @@ class SettingsController extends MainController
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreSettingRequest $request)
     {
@@ -71,7 +71,8 @@ class SettingsController extends MainController
         if(!$setting->save())
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+        return $this->successResponse([
+            'message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             'setting' => new SettingsResource($setting)
         ]);
     }

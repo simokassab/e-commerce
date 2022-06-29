@@ -25,7 +25,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Users\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Prices\PricesController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -93,7 +93,6 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::apiResource('unit',UnitController::class);
     Route::post('unit/all',[UnitController::class,'index']);// for search
 
-
     // @TODO: make a correct function for the user profile
     Route::get('/profile', fn() =>  auth()->user());
 
@@ -102,7 +101,9 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
 
     Route::apiResource('tax',TaxController::class);
 
-    Route::get('test',[TestController::class,'test']);
+    Route::post('price/all',[PricesController::class,'index']);// for search
+    Route::get('price/get-original-prices',[PricesController::class,'getOriginalPrices'])->name('get.original.prices');
+    Route::apiResource('price',PricesController::class);
 
 });
 

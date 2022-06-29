@@ -12,13 +12,27 @@ class Price extends MainModel
     use HasFactory;
     protected $table='prices';
     protected $guard_name = 'web';
+    protected $translatable=['name'];
 
-    public function currency(){
+
+    public function currency(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
         return $this->belongsTo(Currency::class,'currency_id');
 
     }
-    public function products(){
-        return $this->hasMany(Product::class,'product_id');
+    public function products(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Product::class,'id' ,'product_id');
+    }
+
+    public function originalPrice(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(self::class,'original_price_id','id');
+    }
+
+    public function originalPricesChildren(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(self::class, 'original_price_id','id');
     }
 
 }
