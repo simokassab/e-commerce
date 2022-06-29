@@ -23,14 +23,20 @@ class StoreUserRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'username' => 'required',
-            'email' => 'required|email',
+        $array = [
+            'username' => 'required|unique:users,username',
+            'email' => 'required|email|unique:users,email',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'salt' => 'nullable',
             'password' => 'required|min:8',
-            'role_id' => 'required|exists:roles, id'
+            'role_id' => 'required|exists:roles,id'
         ];
+
+        if($this->has('id')){
+            $array['email'] =  "required|email|unique:users,email,$this->id,id";
+            $array['username'] =  "required|string|unique:users,username,$this->id,id";
+        }
+        return $array;
     }
 }

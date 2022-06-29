@@ -23,7 +23,9 @@ class User extends Authenticatable
 //    protected $guard_name = 'web';
 
     protected $fillable = [
-        'name',
+        'last_name',
+        'first_name',
+        'username',
         'email',
         'password',
     ];

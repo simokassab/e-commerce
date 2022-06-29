@@ -20,5 +20,6 @@ return [
     'discount' => 'الخصم',
     'discountEntity' => 'عنوان الخصم',
     'tax' => 'ضريبة',
+    'user' => 'المستخدم'
 
 ];
