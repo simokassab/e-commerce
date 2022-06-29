@@ -3,19 +3,15 @@
 namespace App\Http\Controllers\Category;
 
 use App\Exceptions\FileErrorException;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Category\StoreCategoryRequest;
-use App\Http\Requests\Countries\StoreCountryRequest;
 use App\Http\Resources\CategoryResource;
+use App\Models\Category\CategoriesFields;
+use App\Models\Category\CategoriesLabels;
 use App\Models\Category\Category;
 use App\Services\Category\CategoryService;
-use Exception;
-use Illuminate\Bus\Batch;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends MainController
 {
@@ -57,10 +53,13 @@ class CategoryController extends MainController
      */
     public function store(StoreCategoryRequest $request)
     {
+        //TODO validate for fields should be has entity category or brand or product
+        //TODO Check Validation for fields and labels
+        DB::beginTransaction();
+        try {
             $category=new Category();
             $category->name= json_encode($request->name);
             $category->code= $request->code;
-
             if($request->image){
                 $category->image= $this->imageUpload($request->file('image'),config('images_paths.category.images'));
             }
@@ -73,16 +72,63 @@ class CategoryController extends MainController
             $category->meta_description= json_encode($request->meta_description);
             $category->meta_keyword= json_encode($request->meta_keyword);
             $category->description= json_encode($request->description);
+            $category->save();
 
-            if(!$category->save())
-                return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            $typeArray=[];
+            //Fields Store
+            if($request->has('fields')){
+                foreach ($request->fields as $field => $value) {
+                    $typeArray[$field]=$value;
+                    $validatedFields = $request->validate([
+                        'fields.*.field_id' => 'required | exists:fields,id',
+                        // 'fields.*.field_value_id' =>  [Rule::requiredIf($typeArray[$field] == 'select'), 'integer' , 'exists:fields_values,id'],
+                        // 'fields.*.value' => Rule::requiredIf($typeArray[$field] != 'select'),
 
-            return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'category' =>  new CategoryResource($category)
-        ]);
+                    ]);
+                }
+                if($validatedFields){
+                    $fieldsArray=$request->fields;
+                    foreach ($request->fields as $field => $value){
+                        if($fieldsArray[$field]["type"]=='select')
+                            $fieldsArray[$field]["value"] = null;
+                        else{
+                            $fieldsArray[$field]["field_value_id"] = null;
+                            $fieldsArray[$field]["value"] = json_encode($value['value']);
 
+                        }
+                        $fieldsArray[$field]["category_id"] = $category->id;
 
-    }
+                        unset($fieldsArray[$field]['type']);
+
+                    }
+                      CategoriesFields::insert($fieldsArray);
+                }}
+                //End of Fields Store
+
+                 //Labels Store
+                 if ($request->has('labels')) {
+                    $validatedLabels = $request->validate([
+                        'labels.*.label_id' => 'required | exists:labels,id',
+                    ]);
+                    if($validatedLabels){
+                        $labelsArray=$request->labels;
+                        foreach ($request->labels as $label => $value)
+                            $labelsArray[$label]["category_id"] = $category->id;
+
+                        CategoriesLabels::insert($labelsArray);
+                    }}
+                    //End of Labels Store
+                    DB::commit();
+                    return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                    'cateogries' => new CategoryResource($category)
+                ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+
+            }
+     }
+
 
     /**
      * Display the specified resource.
@@ -116,37 +162,80 @@ class CategoryController extends MainController
      */
     public function update(Request $request, Category $category)
     {
+        // DB::beginTransaction();
+        // try {
 
-        $category->name= json_encode($request->name);
-        $category->code= $request->code;
-        if($request->image){
-           if( !$this->removeImage($category->image) ){
-                throw new FileErrorException();
+            CategoryService::deleteRelatedCategoryFieldsAndLabels($category);
+
+            $category->name= json_encode($request->name);
+            $category->code= $request->code;
+            if($request->image){
+                $category->image= $this->imageUpload($request->file('image'),config('images_paths.category.images'));
             }
-           $category->image= $this->imageUpload($request->file('image'),config('image_paths.category.images'));
-
-        }
-        if($request->icon){
-            if( !$this->removeImage($category->icon)){
-                throw new FileErrorException();
+            if($request->icon){
+                $category->icon= $this->imageUpload($request->file('icon'),config('images_paths.category.icons'));
             }
-           $category->icon= $this->imageUpload($request->file('icon'),config('image_paths.category.icons'));
+            $category->parent_id= $request->parent_id;
+            $category->slug= $request->slug;
+            $category->meta_title= json_encode($request->meta_title);
+            $category->meta_description= json_encode($request->meta_description);
+            $category->meta_keyword= json_encode($request->meta_keyword);
+            $category->description= json_encode($request->description);
+            $category->save();
 
-        }
-        $category->parent_id= $request->parent_id;
-        $category->slug= $request->slug;
-        $category->meta_title= json_encode($request->meta_title);
-        $category->meta_description= json_encode($request->meta_description);
-        $category->meta_keyword= json_encode($request->meta_keyword);
-        $category->description= json_encode($request->description);
+            $typeArray=[];
+            //Fields Store
+            if($request->has('fields')){
+                foreach ($request->fields as $field => $value) {
+                    $typeArray[$field]=$value;
+                    $validatedFields = $request->validate([
+                        'fields.*.field_id' => 'required | exists:fields,id',
+                        // 'fields.*.field_value_id' =>  [Rule::requiredIf($typeArray[$field] == 'select'), 'integer' , 'exists:fields_values,id'],
+                        // 'fields.*.value' => Rule::requiredIf($typeArray[$field] != 'select'),
 
+                    ]);
+                }
+                if($validatedFields){
+                    $fieldsArray=$request->fields;
+                    foreach ($request->fields as $field => $value){
+                        if($fieldsArray[$field]["type"]=='select')
+                            $fieldsArray[$field]["value"] = null;
+                        else{
+                            $fieldsArray[$field]["field_value_id"] = null;
+                            $fieldsArray[$field]["value"] = json_encode($value['value']);
 
-        if(!$category->save())
-             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+                        }
+                        $fieldsArray[$field]["category_id"] = $category->id;
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'category' =>  new CategoryResource($category)
-        ]);
+                        unset($fieldsArray[$field]['type']);
+
+                    }
+                      CategoriesFields::insert($fieldsArray);
+                }}
+                //End of Fields Store
+
+                 //Labels Store
+                 if ($request->has('labels')) {
+                    $validatedLabels = $request->validate([
+                        'labels.*.label_id' => 'required | exists:labels,id',
+                    ]);
+                    if($validatedLabels){
+                        $labelsArray=$request->labels;
+                        foreach ($request->labels as $label => $value)
+                            $labelsArray[$label]["category_id"] = $category->id;
+
+                        CategoriesLabels::insert($labelsArray);
+                    }}
+                    //End of Labels Store
+                    DB::commit();
+                    return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+                    'cateogries' => new CategoryResource($category)
+                ]);
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+
+        //     }
 
 
 
@@ -160,12 +249,20 @@ class CategoryController extends MainController
      */
     public function destroy(Category $category)
     {
-        if(!$category->delete())
-          return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+        DB::beginTransaction();
+        try {
+            CategoryService::deleteRelatedCategoryFieldsAndLabels($category);
+            $category->delete();
+            DB::commit();
+            return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            'category' => new CategoryResource($category)
+            ]);
 
-        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'category' =>  new CategoryResource($category)
-        ]);
+        }catch (\Exception $e){
+            DB::rollBack();
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+
+        }
 
 
     }
