@@ -28,9 +28,26 @@ class CategoryController extends MainController
     {
 
         if ($request->method()=='POST') {
-            $searchKeys=['name','code','slug','parent_id','meta_title','meta_description','meta_keyword','description'];
-            return $this->getSearchPaginated(CategoryResource::class, Category::class,$request, $searchKeys,self::relations);
 
+            $relations=['parent'];
+            $searchKeys=['name','code','slug','description'];
+
+            $data=($request->data);
+            $keys = array_keys($data);
+            $dataObject = (object)$data;
+
+            $rows = Category::with($relations)
+                ->whereHas('parent',fn ($query)  => $query->whereRaw('lower(name) like (?)',["%$dataObject->parent_name%"]) )
+                ->where(function($query) use($keys,$data,$searchKeys){
+                    foreach($keys as $key){
+                        if(in_array($key,$searchKeys)){
+                            $value=strtolower($data[$key]);
+                            $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+                        }
+                    }
+                })->paginate($request->limit ?? config('defaults.default_pagination'));
+
+            return  CategoryResource::collection($rows);
           }
         return $this->successResponsePaginated(CategoryResource::class,Category::class,self::relations);
     }
@@ -53,8 +70,6 @@ class CategoryController extends MainController
      */
     public function store(StoreCategoryRequest $request)
     {
-        //TODO validate for fields should be has entity category or brand or product
-        //TODO Check Validation for fields and labels
         DB::beginTransaction();
         try {
             $category=new Category();
