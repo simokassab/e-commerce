@@ -29,7 +29,7 @@ class UsersController extends MainController
                             $query->where($key,'LIKE', '%'.$data[$key].'%');
                 })
                 ->paginate($request->limit ?? config('defaults.default_pagination'));
-//            return $user;
+
             return UserResource::collection($user);
 
         }
