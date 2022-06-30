@@ -20,7 +20,7 @@ class UsersController extends MainController
         if ($request->method()=='POST') {
             $data=$request->data;
             $roleName = $request->data['role_name'] ?? '';
-            $keys = array_keys($data);
+            $keys = array_keys($data ?? []);
             $searchKey = ['first_name','last_name','email','username'];
             $user=User::with(['roles' => fn($query) => $query->select('name')])
                 ->whereHas('roles',fn ($query) => $query->whereRaw('lower(name) like (?)',["%$roleName%"]))
