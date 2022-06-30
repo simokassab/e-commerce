@@ -1,17 +1,14 @@
 <?php
 
-namespace App\Models\Brand;
+namespace App\Models\Category;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
-class BrandField extends Model
+class CategoriesFields extends Model
 {
     use HasFactory,HasTranslations;
-    protected $table = 'brands_fields';
-    protected $fillable = ['brand_id','field_id','field_value_id'];
-
-
-
+    protected $translatable=[''];
+    protected $table='categories_fields';
 }

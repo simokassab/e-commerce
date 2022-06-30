@@ -11,8 +11,11 @@ use App\Models\Brand\BrandField;
 use App\Models\Brand\BrandLabel;
 use App\Models\Field\Field;
 use App\Models\Label\Label;
-use Exception;
+use App\Services\Brand\BrandsService;
+use Error;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class BrandController extends MainController
 {
@@ -56,68 +59,61 @@ class BrandController extends MainController
      */
     public function store(StoreBrandRequest $request)
     {
-        $brand = new Brand();
-        $brand->name = json_encode($request->name);
-        $brand->code = $request->code;
-        if($request->image)
-            $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brand.images'));
+        DB::beginTransaction();
+        try {
 
-        $brand->meta_title = json_encode($request->meta_title);
-        $brand->meta_description = json_encode($request->meta_description);
-        $brand->meta_keyword = json_encode($request->meta_keyword);
-        $brand->description = json_encode($request->description);
-        if(!($brand->save()))
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            //Brand Store
+            $brand = new Brand();
+            $brand->name = json_encode($request->name);
+            $brand->code = $request->code;
+            if($request->image)
+                $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brand.images'));
 
-        $checkfields=true;
-        $checklabels=true;
+            $brand->meta_title = json_encode($request->meta_title);
+            $brand->meta_description = json_encode($request->meta_description);
+            $brand->meta_keyword = json_encode($request->meta_keyword);
+            $brand->description = json_encode($request->description);
+            $brand->save();
+            //End of Brand Store
 
-            //brands_fields validation and store
-        if($request->has('fields')){
-            $validatedFields = $request->validate([
-                'fields.*.field_id' => 'required | exists:fields,id',
-                'fields.*.field_value_id' => 'nullable | integer | exists:fields_values,id',
-                'fields.*.value' => 'nullable',
-
-            ]);
-            if($validatedFields){
-
-                $fieldsArray=$request->fields;
-
-                foreach ($request->fields as $field => $value){
-                    if($fieldsArray[$field]["type"]=='select'){
-                        $fieldsArray[$field]["value"] = null;
+            //Fields Store
+            if($request->has('fields')){
+                    $fieldsArray=$request->fields;
+                    foreach ($request->fields as $field => $value){
+                        if($fieldsArray[$field]["type"]=='select')
+                            $fieldsArray[$field]["value"] = null;
+                        else{
+                            $fieldsArray[$field]["field_value_id"] = null;
+                            $fieldsArray[$field]["value"] = json_encode($value['value']);
+                        }
+                        $fieldsArray[$field]["brand_id"] = $brand->id;
+                        unset($fieldsArray[$field]['type']);
                     }
-                    $fieldsArray[$field]["field_value_id"] = null;
-                    $fieldsArray[$field]["brand_id"] = $brand->id;
-                    $fieldsArray[$field]["value"] = json_encode($request->fields[$field]['value']);
-                    unset($fieldsArray[$field]['type']);
-
+                      BrandField::insert($fieldsArray);
                 }
-                 $checkfields = BrandField::insert($fieldsArray);
-            }}
-            //brands_labels validation and store
-        if ($request->has('labels')) {
-            $validatedLabels = $request->validate([
-                'labels.*.label_id' => 'required | exists:labels,id',
-            ]);
-            if($validatedLabels){
+                //End of Fields Store
 
-                $labelsArray=$request->labels;
+                //Labels Store
+                if ($request->has('labels')) {
+                        $labelsArray=$request->labels;
+                        foreach ($request->labels as $label => $value)
+                            $labelsArray[$label]["brand_id"] = $brand->id;
 
-                foreach ($request->labels as $label => $value){
-                    $labelsArray[$label]["brand_id"] = $brand->id;
-                }
-                $checklabels = BrandLabel::insert($labelsArray);
-            }}
+                        BrandLabel::insert($labelsArray);
+                    }
+                    //End of Labels Store
 
-        if(!$checkfields || !$checklabels)
+                    DB::commit();
+
+                    return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                        'brand' => new BrandResource($brand)
+                    ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'brand' => new BrandResource($brand)
-        ]);
         }
+    }
 
     /**
      * Display the specified resource.
@@ -152,27 +148,69 @@ class BrandController extends MainController
     public function update(Request $request, Brand $brand)
     {
 
-        $brand->name = json_encode($request->name);
-        $brand->code = $request->code;
-        if($request->image){
-            if( !$this->removeImage($brand->image) ){
-                 throw new FileErrorException();
-             }
-            $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brand.images'));
+        DB::beginTransaction();
+        try {
 
-         }
-        $brand->meta_title = json_encode($request->meta_title);
-        $brand->meta_description = json_encode($request->meta_description);
-        $brand->meta_keyword = json_encode($request->meta_keyword);
-        $brand->description = json_encode($request->description);
+            BrandsService::deleteRelatedBrandFieldsAndLabels($brand);
+            //Brand Store
+            $brand = new Brand();
+            $brand->name = json_encode($request->name);
+            $brand->code = $request->code;
+            if($request->image)
+                $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brand.images'));
+            $brand->meta_title = json_encode($request->meta_title);
+            $brand->meta_description = json_encode($request->meta_description);
+            $brand->meta_keyword = json_encode($request->meta_keyword);
+            $brand->description = json_encode($request->description);
+            $brand->save();
+            //End of Brand Store
 
-        if(!($brand->save()))
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)])]);
+            //Fields Store
+            if($request->has('fields')){
+                    $fieldsArray=$request->fields;
+                    foreach ($request->fields as $field => $value){
+                        if($fieldsArray[$field]["type"]=='select')
+                            $fieldsArray[$field]["value"] = null;
+                        else{
+                            $fieldsArray[$field]["field_value_id"] = null;
+                            $fieldsArray[$field]["value"] = json_encode($value['value']);
+                        }
+                        $fieldsArray[$field]["brand_id"] = $brand->id;
+                        unset($fieldsArray[$field]['type']);
+                    }
+                      BrandField::insert($fieldsArray);
+                }
+                //End of Fields Store
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'brand' => new BrandResource($brand)
+                //Labels Store
+                if ($request->has('labels')) {
+                        $labelsArray=$request->labels;
+                        foreach ($request->labels as $label => $value)
+                            $labelsArray[$label]["brand_id"] = $brand->id;
+
+                        BrandLabel::insert($labelsArray);
+                    }
+                    //End of Labels Store
+
+                    DB::commit();
+                    return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                    'brand' => new BrandResource($brand)
+                         ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse([
+                'message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]),
+                'errors' => $e->getMessage(),
         ]);
-    }
+
+        }catch(Error $error){
+            DB::rollBack();
+            return $this->errorResponse([
+                'message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]),
+                'errors' => $error->getMessage(),
+        ]);
+        }
+}
 
     /**
      * Remove the specified resource from storage.
@@ -182,12 +220,21 @@ class BrandController extends MainController
      */
     public function destroy(Brand $brand)
     {
-        if(!$brand->delete())
-           return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])]);
-
-        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+        DB::beginTransaction();
+        try {
+            BrandsService::deleteRelatedBrandFieldsAndLabels($brand);
+            $brand->delete();
+            DB::commit();
+            return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
             'brand' => new BrandResource($brand)
-        ]);
+            ]);
+
+        }catch (\Exception $e){
+            DB::rollBack();
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+
+        }
+
 
 }
 public function toggleStatus(Request $request ,$id){
