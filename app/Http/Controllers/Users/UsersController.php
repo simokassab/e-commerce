@@ -18,12 +18,12 @@ class UsersController extends MainController
     public function index(Request $request){
 
         if ($request->method()=='POST') {
-            $data=$request->data ?? [];
-            $dataObject = (object)$data;
+            $data=$request->data;
+            $roleName = $request->data['role_name'] ?? '';
             $keys = array_keys($data);
             $searchKey = ['first_name','last_name','email','username'];
             $user=User::with(['roles' => fn($query) => $query->select('name')])
-                ->whereHas('roles',fn ($query) => $query->whereRaw('lower(name) like (?)',["%$dataObject->role_name%"]))
+                ->whereHas('roles',fn ($query) => $query->whereRaw('lower(name) like (?)',["%$roleName%"]))
                 ->where(function($query) use($data,$keys,$searchKey){
                         foreach($keys as $key) if(in_array($key,$searchKey))
                             $query->where($key,'LIKE', '%'.$data[$key].'%');
