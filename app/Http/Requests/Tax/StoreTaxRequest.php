@@ -31,7 +31,7 @@ class StoreTaxRequest extends FormRequest
             'name' => 'required',
             'is_complex' => 'required | boolean',
             'percentage' => ['required' , 'numeric' , 'between:'.config('defaults.default_minimum_tax_percentage').','.config('defaults.default_maximum_tax_percentage'),Rule::when(!$request->is_complex, ['required', 'between:'.config('defaults.default_minimum_tax_percentage_when_required').','.config('defaults.default_maximum_tax_percentage','numeric')])],
-            'complex_behavior' => 'required_if:is_complex,1 | nullable | in:'.config('defaults.validation_default_complex_behavior'),
+            'complex_behavior' => 'required_if:is_complex,1  | nullable | in:'.config('defaults.validation_default_complex_behavior'),
 
             'components' => 'required_if:is_complex,1',
             'components.*.component_tax_id'  => 'required_if:is_complex,1 | integer | exists:taxes,id',
@@ -54,7 +54,7 @@ class StoreTaxRequest extends FormRequest
         'complex_behavior.in' => 'The :attribute is not a valid type',
 
 
-        'components.required' => 'the :attribute field is required.',
+        'components.required_if' => 'the :attribute field is required.',
 
         'components.*.component_tax_id.required_if' => 'the component_tax_id field is required.',
         'components.*.component_tax_id.integer' =>  'the component_tax_id must be an integer',

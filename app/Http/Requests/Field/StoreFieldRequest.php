@@ -29,6 +29,11 @@ class StoreFieldRequest extends FormRequest
             'type' => 'required | in:'.config('defaults.validation_default_type'),
             'entity' => 'required | in:'.config('defaults.validation_default_entities'),
             'is_required' => 'required | boolean',
+
+
+            'field_value' => 'required_if:type,select',
+            'field_value.*.field_id'  => 'required_if:type,select | integer | exists:fields,id',
+            'field_value.*.value'  => 'required_if:type,select',
         ];
     }
 
@@ -49,6 +54,12 @@ class StoreFieldRequest extends FormRequest
             'is_required.boolean' =>  'The :attribute field accepts only 0 or 1',
 
 
+            'field_value.required_if' => 'the field_value field is required.',
+            'field_value.*.field_id.required_if' => 'the field_id field is required.',
+            'field_value.*.field_id.integer' =>  'the field_id must be an integer',
+            'field_value.*.field_id.exists' =>  'the field_id must be exists in taxes',
+
+            'field_value.*.value.required_if' => 'the value field is required.',
         ];
     }
 }
