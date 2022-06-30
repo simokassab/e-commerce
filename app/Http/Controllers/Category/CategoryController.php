@@ -74,19 +74,8 @@ class CategoryController extends MainController
             $category->description= json_encode($request->description);
             $category->save();
 
-            $typeArray=[];
             //Fields Store
             if($request->has('fields')){
-                foreach ($request->fields as $field => $value) {
-                    $typeArray[$field]=$value;
-                    $validatedFields = $request->validate([
-                        'fields.*.field_id' => 'required | exists:fields,id',
-                        // 'fields.*.field_value_id' =>  [Rule::requiredIf($typeArray[$field] == 'select'), 'integer' , 'exists:fields_values,id'],
-                        // 'fields.*.value' => Rule::requiredIf($typeArray[$field] != 'select'),
-
-                    ]);
-                }
-                if($validatedFields){
                     $fieldsArray=$request->fields;
                     foreach ($request->fields as $field => $value){
                         if($fieldsArray[$field]["type"]=='select')
@@ -97,26 +86,21 @@ class CategoryController extends MainController
 
                         }
                         $fieldsArray[$field]["category_id"] = $category->id;
-
                         unset($fieldsArray[$field]['type']);
 
                     }
                       CategoriesFields::insert($fieldsArray);
-                }}
+                }
                 //End of Fields Store
 
                  //Labels Store
                  if ($request->has('labels')) {
-                    $validatedLabels = $request->validate([
-                        'labels.*.label_id' => 'required | exists:labels,id',
-                    ]);
-                    if($validatedLabels){
                         $labelsArray=$request->labels;
                         foreach ($request->labels as $label => $value)
                             $labelsArray[$label]["category_id"] = $category->id;
 
                         CategoriesLabels::insert($labelsArray);
-                    }}
+                    }
                     //End of Labels Store
                     DB::commit();
                     return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
@@ -162,8 +146,8 @@ class CategoryController extends MainController
      */
     public function update(Request $request, Category $category)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
 
             CategoryService::deleteRelatedCategoryFieldsAndLabels($category);
 
@@ -183,60 +167,44 @@ class CategoryController extends MainController
             $category->description= json_encode($request->description);
             $category->save();
 
-            $typeArray=[];
-            //Fields Store
-            if($request->has('fields')){
-                foreach ($request->fields as $field => $value) {
-                    $typeArray[$field]=$value;
-                    $validatedFields = $request->validate([
-                        'fields.*.field_id' => 'required | exists:fields,id',
-                        // 'fields.*.field_value_id' =>  [Rule::requiredIf($typeArray[$field] == 'select'), 'integer' , 'exists:fields_values,id'],
-                        // 'fields.*.value' => Rule::requiredIf($typeArray[$field] != 'select'),
-
-                    ]);
-                }
-                if($validatedFields){
-                    $fieldsArray=$request->fields;
-                    foreach ($request->fields as $field => $value){
-                        if($fieldsArray[$field]["type"]=='select')
-                            $fieldsArray[$field]["value"] = null;
-                        else{
-                            $fieldsArray[$field]["field_value_id"] = null;
-                            $fieldsArray[$field]["value"] = json_encode($value['value']);
-
-                        }
-                        $fieldsArray[$field]["category_id"] = $category->id;
-
-                        unset($fieldsArray[$field]['type']);
+             //Fields Store
+             if($request->has('fields')){
+                $fieldsArray=$request->fields;
+                foreach ($request->fields as $field => $value){
+                    if($fieldsArray[$field]["type"]=='select')
+                        $fieldsArray[$field]["value"] = null;
+                    else{
+                        $fieldsArray[$field]["field_value_id"] = null;
+                        $fieldsArray[$field]["value"] = json_encode($value['value']);
 
                     }
-                      CategoriesFields::insert($fieldsArray);
-                }}
-                //End of Fields Store
+                    $fieldsArray[$field]["category_id"] = $category->id;
+                    unset($fieldsArray[$field]['type']);
 
-                 //Labels Store
-                 if ($request->has('labels')) {
-                    $validatedLabels = $request->validate([
-                        'labels.*.label_id' => 'required | exists:labels,id',
-                    ]);
-                    if($validatedLabels){
-                        $labelsArray=$request->labels;
-                        foreach ($request->labels as $label => $value)
-                            $labelsArray[$label]["category_id"] = $category->id;
+                }
+                  CategoriesFields::insert($fieldsArray);
+            }
+            //End of Fields Store
 
-                        CategoriesLabels::insert($labelsArray);
-                    }}
-                    //End of Labels Store
+             //Labels Store
+             if ($request->has('labels')) {
+                    $labelsArray=$request->labels;
+                    foreach ($request->labels as $label => $value)
+                        $labelsArray[$label]["category_id"] = $category->id;
+
+                    CategoriesLabels::insert($labelsArray);
+                }
+                //End of Labels Store
+
                     DB::commit();
                     return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
                     'cateogries' => new CategoryResource($category)
                 ]);
-        // } catch (\Exception $e) {
-        //     DB::rollBack();
-        //     return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
-        //     }
-
+            }
 
 
     }

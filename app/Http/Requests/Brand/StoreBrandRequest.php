@@ -28,6 +28,13 @@ class StoreBrandRequest extends FormRequest
     public function rules(Request $request)
     {
 
+        $validation =$request->validate([
+
+            ],
+            [
+
+            ]);
+
         return [
             'name' => 'required',
             'code' => 'required | max:'.config('defaults.default_string_length'),
@@ -45,6 +52,12 @@ class StoreBrandRequest extends FormRequest
             'sort' => 'nullable | integer',
 
 
+            'fields.*.field_id' => 'required | exists:fields,id,entity,brand',
+            'fields.*.field_value_id' =>  'integer | exists:fields_values,id',
+            'fields.*.value'=> 'nullable',
+
+
+            'labels.*.label_id' => 'required | exists:labels,id',
 
         ];
     }
@@ -64,12 +77,14 @@ class StoreBrandRequest extends FormRequest
             'sort.integer' => 'the :attribute should be an integer',
 
 
-            // 'fields.*.field_id.integer' =>  'the field_id must be an integer',
-            // 'fields.*.field_id.exists' =>  'the field_id must be exists in fields',
+            'fields.*.field_id.required' => 'The field_id is required',
+            'fields.*.field_id.exists' => 'The field_id is not exists or not for brand entity',
+            'fields.*.field_value_id.required' => 'The field_value_id  is required',
+            'fields.*.field_value_id.exists' => 'The field_value_id  is not exists',
+            'fields.*.value.required' => 'The value is required',
 
-            // 'fields.*.field_value_id.integer' =>  'the field_value_id must be an integer',
-            // 'fields.*.field_value_id.exists' =>  'the field_value_id must be exists in brands',
-
+            'labels.*.label_id.required' => 'The label_id is required',
+            'labels.*.label_id.exists' => 'The label_id is not exists',
 
         ];
     }

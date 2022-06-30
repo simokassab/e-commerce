@@ -12,6 +12,7 @@ use App\Models\Brand\BrandLabel;
 use App\Models\Field\Field;
 use App\Models\Label\Label;
 use App\Services\Brand\BrandsService;
+use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -75,22 +76,8 @@ class BrandController extends MainController
             $brand->save();
             //End of Brand Store
 
-            $typeArray=[];
             //Fields Store
-
             if($request->has('fields')){
-                foreach ($request->fields as $field => $value) {
-                    $typeArray[$field]=$value;
-                    $validatedFields = $request->validate([
-                        'fields.*.field_id' => 'required | exists:fields,id',
-                        // 'fields.*.field_value_id' =>  [Rule::requiredIf($typeArray[$field] == 'select'), 'integer' , 'exists:fields_values,id'],
-                        // 'fields.*.value' => Rule::requiredIf($typeArray[$field] != 'select'),
-
-                    ]);
-                }
-
-
-                if($validatedFields){
                     $fieldsArray=$request->fields;
                     foreach ($request->fields as $field => $value){
                         if($fieldsArray[$field]["type"]=='select')
@@ -98,34 +85,29 @@ class BrandController extends MainController
                         else{
                             $fieldsArray[$field]["field_value_id"] = null;
                             $fieldsArray[$field]["value"] = json_encode($value['value']);
-
                         }
                         $fieldsArray[$field]["brand_id"] = $brand->id;
-
                         unset($fieldsArray[$field]['type']);
-
                     }
                       BrandField::insert($fieldsArray);
-                }}
+                }
                 //End of Fields Store
 
                 //Labels Store
                 if ($request->has('labels')) {
-                    $validatedLabels = $request->validate([
-                        'labels.*.label_id' => 'required | exists:labels,id',
-                    ]);
-                    if($validatedLabels){
                         $labelsArray=$request->labels;
                         foreach ($request->labels as $label => $value)
                             $labelsArray[$label]["brand_id"] = $brand->id;
 
                         BrandLabel::insert($labelsArray);
-                    }}
+                    }
                     //End of Labels Store
+
                     DB::commit();
+
                     return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                    'brand' => new BrandResource($brand)
-                ]);
+                        'brand' => new BrandResource($brand)
+                    ]);
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
@@ -166,15 +148,16 @@ class BrandController extends MainController
     public function update(Request $request, Brand $brand)
     {
 
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
+
             BrandsService::deleteRelatedBrandFieldsAndLabels($brand);
             //Brand Store
+            $brand = new Brand();
             $brand->name = json_encode($request->name);
             $brand->code = $request->code;
             if($request->image)
                 $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brand.images'));
-
             $brand->meta_title = json_encode($request->meta_title);
             $brand->meta_description = json_encode($request->meta_description);
             $brand->meta_keyword = json_encode($request->meta_keyword);
@@ -184,56 +167,49 @@ class BrandController extends MainController
 
             //Fields Store
             if($request->has('fields')){
-                foreach ($request->fields as $field => $value) {
-                    $validatedFields = $request->validate([
-                        'fields.*.field_id' => 'required | exists:fields,id',
-                        // 'fields.*.field_value_id' =>  [Rule::requiredIf($value['type'] == 'select'), 'integer' , 'exists:fields_values,id'],
-                        // 'fields.*.value' => Rule::requiredIf($value['type'] != 'select'),
-
-                    ]);
-                }
-
-
-                if($validatedFields){
                     $fieldsArray=$request->fields;
                     foreach ($request->fields as $field => $value){
                         if($fieldsArray[$field]["type"]=='select')
-                        $fieldsArray[$field]["value"] = null;
-                    else{
-                        $fieldsArray[$field]["field_value_id"] = null;
-                        $fieldsArray[$field]["value"] = json_encode($value['value']);
-
-                    }
-                    $fieldsArray[$field]["brand_id"] = $brand->id;
-
-                    unset($fieldsArray[$field]['type']);
+                            $fieldsArray[$field]["value"] = null;
+                        else{
+                            $fieldsArray[$field]["field_value_id"] = null;
+                            $fieldsArray[$field]["value"] = json_encode($value['value']);
+                        }
+                        $fieldsArray[$field]["brand_id"] = $brand->id;
+                        unset($fieldsArray[$field]['type']);
                     }
                       BrandField::insert($fieldsArray);
-                }}
+                }
                 //End of Fields Store
 
                 //Labels Store
                 if ($request->has('labels')) {
-                    $validatedLabels = $request->validate([
-                        'labels.*.label_id' => 'required | exists:labels,id',
-                    ]);
-                    if($validatedLabels){
                         $labelsArray=$request->labels;
                         foreach ($request->labels as $label => $value)
                             $labelsArray[$label]["brand_id"] = $brand->id;
 
                         BrandLabel::insert($labelsArray);
-                    }}
+                    }
                     //End of Labels Store
-                    // DB::commit();
+
+                    DB::commit();
                     return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
                     'brand' => new BrandResource($brand)
-                ]);
-        // } catch (\Exception $e) {
-        //     DB::rollBack();
-        //     return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+                         ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse([
+                'message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]),
+                'errors' => $e->getMessage(),
+        ]);
 
-    // }
+        }catch(Error $error){
+            DB::rollBack();
+            return $this->errorResponse([
+                'message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]),
+                'errors' => $error->getMessage(),
+        ]);
+        }
 }
 
     /**
