@@ -81,9 +81,9 @@ class MainController extends Controller
                         $value=strtolower($data[$key]);
                         $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
                             }
-                    else{
-                        throw new Exception();
-                        }
+//                    else{
+//                        throw new Exception();
+//                        }
                         }
                 })->paginate($request->limit ?? config('defaults.default_pagination'));
 
