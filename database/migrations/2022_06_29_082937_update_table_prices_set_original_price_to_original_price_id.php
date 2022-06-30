@@ -17,7 +17,7 @@ return new class extends Migration
             if(Schema::hasColumn('prices', 'original_price')){
                 $table->dropColumn('original_price');
             }
-
+            $table->double('percentage')->nullable()->change();
             $table->unsignedBigInteger('original_price_id')->nullable()->after('is_virtual');
             $table->foreign('original_price_id')->references('id')->on('prices');
 
@@ -37,7 +37,7 @@ return new class extends Migration
             }
 
             $table->double('original_price')->default(0)->after('is_virtual');
-
+            $table->double('percentage')->change();
 
         });
     }
