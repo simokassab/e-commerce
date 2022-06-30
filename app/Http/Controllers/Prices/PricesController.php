@@ -22,18 +22,21 @@ class PricesController extends MainController
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      * @throws \Exception
      */
-    public function index(PricesRequest $request)
+    public function index(Request $request)
     {
+
         if ($request->method()=='POST') {
             $relations=['currency','products','originalPrice','originalPricesChildren'];
             $searchKeys=['name','original_percent'];
             $data=($request->data);
             $keys = array_keys($data);
-            $dataObject = (object)$data;
+
+            $originalPriceName = $data['original_price_name'] ?? '';
+            $currency = $data['currency_name'] ?? '';
 
             $rows = Price::with($relations)
-                ->whereHas('originalPrice',fn ($query)  => $query->whereRaw('lower(name) like (?)',["%$dataObject->original_price_name%"]) )
-                ->whereHas('currency',fn ($query) => $query->whereRaw('lower(name) like (?)',["%$dataObject->currency%"]))
+                ->whereHas('originalPrice',fn ($query)  => $query->whereRaw('lower(name) like (?)',["%$originalPriceName%"]) )
+                ->whereHas('currency',fn ($query) => $query->whereRaw('lower(name) like (?)',["%$currency%"]))
                 ->where(function($query) use($keys,$data,$searchKeys){
                     foreach($keys as $key){
                         if(in_array($key,$searchKeys)){
@@ -48,7 +51,7 @@ class PricesController extends MainController
 
         }
 
-        return $this->successResponsePaginated(CurrencyResource::class,Currency::class,['currencyHistory']);
+        return $this->successResponsePaginated(PriceResource::class,Price::class,['currency','originalPrice']);
 
 
     }
@@ -115,7 +118,19 @@ class PricesController extends MainController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function edit(Price $price, PricesRequest $request)
+    public function edit(Request $request)
+    {
+
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(PricesRequest $request, Price $price)
     {
 
         $price->name = json_encode($request->name);
@@ -129,24 +144,12 @@ class PricesController extends MainController
 
         if($price->save()){
             return $this->successResponse([
-                'message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                'message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
                 'price' => new PriceResource($price->load(['originalPrice','currency']))
             ]);
         }
 
         return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
-
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
 
     }
 
