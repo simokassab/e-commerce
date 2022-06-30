@@ -20,6 +20,7 @@ return [
     'discount' => 'Discount',
     'discountEntity' => 'Discount Entity',
     'tax' => 'Tax',
-    'user' => 'User'
+    'user' => 'User',
+    'price'=> 'price',
 
 ];
