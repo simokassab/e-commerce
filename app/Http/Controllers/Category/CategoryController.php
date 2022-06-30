@@ -34,10 +34,10 @@ class CategoryController extends MainController
 
             $data=($request->data);
             $keys = array_keys($data);
-            $dataObject = (object)$data;
+            $categoryParent = $data['parent_name'] ?? '';
 
             $rows = Category::with($relations)
-                ->whereHas('parent',fn ($query)  => $query->whereRaw('lower(name) like (?)',["%$dataObject->parent_name%"]) )
+                ->whereHas('parent',fn ($query)  => $query->whereRaw('lower(name) like (?)',["%$categoryParent%"]) )
                 ->where(function($query) use($keys,$data,$searchKeys){
                     foreach($keys as $key){
                         if(in_array($key,$searchKeys)){
