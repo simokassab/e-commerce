@@ -30,8 +30,31 @@ class BrandController extends MainController
 
         if ($request->method()=='POST') {
             $searchKeys=['name','code','meta_title','meta_description','meta_keyword','description'];
-            return $this->getSearchPaginated(BrandResource::class, Brand::class,$request, $searchKeys);
-        }
+            $data= $this->getSearchPaginated(BrandResource::class, Brand::class,$request, $searchKeys);
+            if($data->isEmpty()){
+                 $data=[
+                    'data' => [
+                        [
+                        'name'=>'',
+                        'code'=> '',
+                        'image'=> '',
+                        'meta_title'=> '',
+                        'meta_description'=> '',
+                        'meta_description'=> '',
+                        'meta_keyword'=> '',
+                        'description'=> '',
+                        'is_disabled'=> '',
+
+                    ]
+                    ]
+                ];
+                return response()->json($data);
+                return  BrandResource::collection($data);
+            }
+            return $data;
+
+                }
+
         return $this->successResponsePaginated(BrandResource::class,Brand::class);
     }
 

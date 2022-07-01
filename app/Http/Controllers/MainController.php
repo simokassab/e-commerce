@@ -20,6 +20,8 @@ use App\Models\Attribute\Attribute;
 use App\Models\Attribute\AttributeValue;
 use Exception;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use PDO;
 
 class MainController extends Controller
@@ -81,11 +83,10 @@ class MainController extends Controller
                         $value=strtolower($data[$key]);
                         $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
                             }
-//                    else{
-//                        throw new Exception();
-//                        }
                         }
-                })->paginate($request->limit ?? config('defaults.default_pagination'));
+                })
+                ->paginate($request->limit ?? config('defaults.default_pagination'));
+
 
         return  $resource::collection($rows);
 
