@@ -45,4 +45,7 @@ return [
 
     'validation_default_complex_behavior' => 'combine,after_other',
 
+    'validation_default_types' => 'normal,bundle,service,variable,variable_child',
+    'validation_default_status' => 'draft,pending_review,published',
+
 ];
