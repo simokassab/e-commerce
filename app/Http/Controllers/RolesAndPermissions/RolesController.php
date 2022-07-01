@@ -31,8 +31,23 @@ class RolesController extends MainController
 
         if ($request->method()=='POST') {
             $searchKeys=['name'];
-            //TODO Search also take time more than usual
-            return $this->getSearchPaginated(RolesResource::class, CustomRole::class,$request, $searchKeys);
+            $data= $this->getSearchPaginated(RolesResource::class, CustomRole::class,$request, $searchKeys);
+            if($data->isEmpty()){
+                $data=[
+                   'data' => [
+                       [
+                       'id' => '',
+                       'name'=>'',
+                       'node'=> '',
+
+                   ]
+                   ]
+               ];
+               return response()->json($data);
+               return  RolesResource::collection($data);
+           }
+           return $data;
+
         }
         return $this->successResponsePaginated(RolesResource::class,CustomRole::class);
     }

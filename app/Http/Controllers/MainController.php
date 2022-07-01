@@ -87,7 +87,6 @@ class MainController extends Controller
                 })
                 ->paginate($request->limit ?? config('defaults.default_pagination'));
 
-
         return  $resource::collection($rows);
 
         }

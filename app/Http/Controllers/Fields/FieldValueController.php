@@ -24,8 +24,22 @@ class FieldValueController extends MainController
 
         if ($request->method()=='POST') {
             $searchKeys=['field_id','value'];
-            return $this->getSearchPaginated(FieldsValueResource::class, FieldValue::class,$request, $searchKeys);
+            $data= $this->getSearchPaginated(FieldsValueResource::class, FieldValue::class,$request, $searchKeys);
+            if($data->isEmpty()){
+                $data=[
+                   'data' => [
+                       [
+                       'id' => '',
+                       'field'=>'',
+                       'value'=> '',
 
+                   ]
+                   ]
+               ];
+               return response()->json($data);
+               return  FieldsValueResource::collection($data);
+           }
+           return $data;
         }
         return $this->successResponsePaginated(FieldsValueResource::class,FieldValue::class);
     }

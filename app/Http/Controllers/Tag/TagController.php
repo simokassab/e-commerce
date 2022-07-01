@@ -24,7 +24,21 @@ class TagController extends MainController
 
         if ($request->method()=='POST') {
             $searchKeys=['name'];
-            return $this->getSearchPaginated(TagResource::class, Tag::class,$request, $searchKeys);
+            $data= $this->getSearchPaginated(TagResource::class, Tag::class,$request, $searchKeys);
+            if($data->isEmpty()){
+                $data=[
+                   'data' => [
+                       [
+                       'id' => '',
+                       'name'=>'',
+
+                   ]
+                   ]
+               ];
+               return response()->json($data);
+               return  TagResource::collection($data);
+           }
+           return $data;
         }
         return $this->successResponsePaginated(TagResource::class,Tag::class);
 

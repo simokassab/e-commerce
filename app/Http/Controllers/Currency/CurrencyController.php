@@ -30,8 +30,26 @@ class CurrencyController extends MainController
         $relations=['currencyHistory'];
         if ($request->method()=='POST') {
             $searchKeys=['name','code','symbol','rate'];
-            return $this->getSearchPaginated(CurrencyResource::class, Currency::class,$request, $searchKeys,$relations);
+            $data= $this->getSearchPaginated(CurrencyResource::class, Currency::class,$request, $searchKeys,$relations);
+            if($data->isEmpty()){
+                    $data=[
+                        'data' => [
+                            [
+                            'id' => '',
+                            'name'=>'',
+                            'code'=>'',
+                            'symbol'=> '',
+                            'rate'=> '',
+                            'is_default'=> '',
+                            'is_default'=> '',
+                        ]
+                        ]
+                    ];
+                    return response()->json($data);
+                    return  CurrencyResource::collection($data);
                 }
+                return $data;
+        }
         return $this->successResponsePaginated(CurrencyResource::class,Currency::class,['currencyHistory']);
 
     }

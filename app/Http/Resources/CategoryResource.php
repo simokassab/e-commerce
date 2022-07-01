@@ -28,7 +28,7 @@ class CategoryResource extends JsonResource
             'keyword' => $this->keyword,
             'sort' => $this->sort,
             'is_disabled' => $this->is_disabled,
-            'parent' => new CategoryResource($this->whenLoaded('parent')),
+            'parent' => $this->whenLoaded('parent')->name,
             'children' => self::collection( $this->whenLoaded('children')),
             'labels' => LabelsResource::collection($this->whenLoaded('label')),
             'fields' => FieldsResource::collection($this->whenLoaded('fields')),

@@ -35,6 +35,7 @@ class BrandController extends MainController
                  $data=[
                     'data' => [
                         [
+                        'id' => '',
                         'name'=>'',
                         'code'=> '',
                         'image'=> '',

@@ -30,7 +30,26 @@ class LanguageController extends MainController
 
         if ($request->method()=='POST') {
             $searchKeys=['name','code','is_default','is_disabled'];
-            return $this->getSearchPaginated(LanguageResource::class, Language::class,$request, $searchKeys);
+            $data= $this->getSearchPaginated(LanguageResource::class, Language::class,$request, $searchKeys);
+            if($data->isEmpty()){
+                $data=[
+                   'data' => [
+                       [
+                       'id' => '',
+                       'name'=>'',
+                       'code'=> '',
+                       'is_default'=> '',
+                       'is_disabled'=> '',
+                       'image'=> '',
+                       'sort'=> '',
+
+                   ]
+                   ]
+               ];
+               return response()->json($data);
+               return  LanguageResource::collection($data);
+           }
+           return $data;
         }
         return $this->successResponsePaginated(LanguageResource::class,Language::class);
     }

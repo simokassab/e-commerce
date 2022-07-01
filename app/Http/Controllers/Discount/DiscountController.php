@@ -29,8 +29,23 @@ class DiscountController extends MainController
         if ($request->method()=='POST') {
 
             $searchKeys=['name','start_date','end_date','discount_percentage'];
-            return $this->getSearchPaginated(DiscountResource::class, Discount::class,$request, $searchKeys);
-
+            $data= $this->getSearchPaginated(DiscountResource::class, Discount::class,$request, $searchKeys);
+            if($data->isEmpty()){
+                $data=[
+                    'data' => [
+                        [
+                        'id' => '',
+                        'name' => '',
+                        'start_date'=>'',
+                        'end_date'=> '',
+                        'discount_percentage'=> '',
+                    ]
+                    ]
+                ];
+                return response()->json($data);
+                return  DiscountResource::collection($data);
+            }
+            return $data;
         }
         return $this->successResponsePaginated(DiscountResource::class,Discount::class);
 

@@ -100,6 +100,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::post('user/all',[UsersController::class,'index']);//for searching
 
     Route::apiResource('tax',TaxController::class);
+    Route::post('tax/all',[TaxController::class,'index']);// for search
 
     Route::post('price/all',[PricesController::class,'index']);// for search
     Route::get('price/get-original-prices',[PricesController::class,'getOriginalPrices'])->name('get.original.prices');

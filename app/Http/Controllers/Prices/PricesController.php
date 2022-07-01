@@ -46,8 +46,25 @@ class PricesController extends MainController
                     }
                 })->paginate($request->limit ?? config('defaults.default_pagination'));
 
-            return  PriceResource::collection($rows);
+                if($rows->isEmpty()){
+                    $rows=[
+                       'data' => [
+                           [
+                           'id' => '',
+                           'name'=>'',
+                           'currency'=> '',
+                           'is_virtual'=> '',
+                           'original_price'=> '',
+                           'original_percent'=> '',
 
+
+                       ]
+                       ]
+                   ];
+                   return response()->json($rows);
+                   return  PriceResource::collection($rows);
+               }
+                return  PriceResource::collection($rows);
 
         }
 

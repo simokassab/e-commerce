@@ -29,8 +29,25 @@ class LabelController extends MainController
 
         if ($request->method()=='POST') {
             $searchKeys=['title','entity','color','image','key'];
-            return $this->getSearchPaginated(LabelsResource::class, Label::class,$request, $searchKeys);
+            $data= $this->getSearchPaginated(LabelsResource::class, Label::class,$request, $searchKeys);
+            if($data->isEmpty()){
+                $data=[
+                   'data' => [
+                       [
+                       'id' => '',
+                       'title'=>'',
+                       'entity'=> '',
+                       'color'=> '',
+                       'image'=> '',
+                       'key'=> '',
 
+                   ]
+                   ]
+               ];
+               return response()->json($data);
+               return  LabelsResource::collection($data);
+           }
+           return $data;
         }
         return $this->successResponsePaginated(LabelsResource::class,Label::class);
 

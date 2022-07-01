@@ -26,7 +26,6 @@ class CategoryController extends MainController
 
     public function index(Request $request)
     {
-
         if ($request->method()=='POST') {
 
             $relations=['parent'];
@@ -47,7 +46,31 @@ class CategoryController extends MainController
                     }
                 })->paginate($request->limit ?? config('defaults.default_pagination'));
 
-            return  CategoryResource::collection($rows);
+                if($rows->isEmpty()){
+                    $rows=[
+                       'data' => [
+                           [
+                           'id' => '',
+                           'name'=>'',
+                           'code'=> '',
+                           'image'=> '',
+                           'icon'=> '',
+                           'parent'=> '',
+                           'slug'=> '',
+                           'meta_title'=> '',
+                           'meta_description'=> '',
+                           'meta_description'=> '',
+                           'meta_keyword'=> '',
+                           'description'=> '',
+                           'is_disabled'=> '',
+
+                       ]
+                       ]
+                   ];
+                   return response()->json($rows);
+                   return  CategoryResource::collection($rows);
+               }
+                return  CategoryResource::collection($rows);
           }
         return $this->successResponsePaginated(CategoryResource::class,Category::class,self::relations);
     }

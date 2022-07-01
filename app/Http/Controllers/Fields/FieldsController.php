@@ -30,8 +30,24 @@ class FieldsController extends MainController
         $relations=['fieldValue'];
         if ($request->method()=='POST') {
             $searchKeys=['title','type','entity','is_required'];
-            return $this->getSearchPaginated(FieldsResource::class, Field::class,$request, $searchKeys,$relations);
+            $data= $this->getSearchPaginated(FieldsResource::class, Field::class,$request, $searchKeys,$relations);
+            if($data->isEmpty()){
+                $data=[
+                   'data' => [
+                       [
+                       'id' => '',
+                       'title'=>'',
+                       'type'=> '',
+                       'entity'=> '',
+                       'is_required'=> '',
 
+                   ]
+                   ]
+               ];
+               return response()->json($data);
+               return  FieldsResource::collection($data);
+           }
+           return $data;
         }
         return $this->successResponsePaginated(FieldsResource::class,Field::class,$relations);
 

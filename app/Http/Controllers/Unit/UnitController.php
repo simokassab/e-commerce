@@ -23,7 +23,21 @@ class UnitController extends MainController
 
         if ($request->method()=='POST') {
             $searchKeys=['name','code'];
-            return $this->getSearchPaginated(UnitResource::class, Unit::class,$request, $searchKeys);
+            $data= $this->getSearchPaginated(UnitResource::class, Unit::class,$request, $searchKeys);
+            if($data->isEmpty()){
+                $data=[
+                   'data' => [
+                       [
+                       'id' => '',
+                       'name'=>'',
+                       'code'=> '',
+                   ]
+                   ]
+               ];
+               return response()->json($data);
+               return  UnitResource::collection($data);
+           }
+           return $data;
         }
         return $this->successResponsePaginated(UnitResource::class,Unit::class);
 
