@@ -4,7 +4,7 @@ return [
  //IMAGE
     // image extentions and sistring_lengthze
     'default_image_size'=>10240,
-    'default_image_extentions'=>'jpeg,bmp,png,jpg',
+    'default_image_extentions'=>'jpeg,svg,png,jpg,gif',
 
     //minimum width and height for image
     'default_image_minimum_width' => 100,
