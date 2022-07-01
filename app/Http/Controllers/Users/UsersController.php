@@ -18,7 +18,7 @@ class UsersController extends MainController
     public function index(Request $request){
 
         if ($request->method()=='POST') {
-            $data=$request->data;
+            $data=$request->data ?? [];
             $roleName = $request->data['role_name'] ?? '';
             $keys = array_keys($data ?? []);
             $searchKey = ['first_name','last_name','email','username'];

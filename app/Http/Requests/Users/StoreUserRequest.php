@@ -29,7 +29,8 @@ class StoreUserRequest extends FormRequest
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'salt' => 'nullable',
-            'password' => 'required|min:8',
+            'password' => 'required|confirmed|min:8',
+            'password_confirmed' => 'required',
             'role_id' => 'required|exists:roles,id'
         ];
 

@@ -19,20 +19,15 @@ class PriceResource extends JsonResource
         $arrayForVirtualInfo = [];
 
         if($this->is_virtual == 1){
-            $arrayForVirtualInfo['original_percent'] = $this->original_percent;
-            $arrayForVirtualInfo['original_price'] = new self($this->whenLoaded('originalPrice'));
-
+            $arrayForVirtualInfo['parent_class'] = $this->whenLoaded('originalPrice')->name;
+            $arrayForVirtualInfo['percentage'] = $this->original_percent;
         }
-        $array = [
-            'id' => $this->id,
-            'name' => $this->name,
-            'currency' => new CurrencyResource( $this->whenLoaded('currency')),
-            'is_virtual' => $this->is_virtual,
-
-        ];
+        $arrayForVirtualInfo['id']  =$this->id;
+        $arrayForVirtualInfo['name']  =$this->name;
+        $arrayForVirtualInfo['currency']  =$this->whenLoaded('currency')->code .' - '.$this->whenLoaded('currency')->symbol ;
 
 
-        return array_merge($array,$arrayForVirtualInfo);
+        return $arrayForVirtualInfo;
 
     }
 }

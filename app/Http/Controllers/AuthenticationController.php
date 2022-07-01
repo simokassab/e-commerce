@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Authentication\LoginRequest;
 use App\Models\User\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,7 +10,7 @@ use Spatie\Permission\Models\Role;
 
 class AuthenticationController extends MainController
 {
-    public function login(Request $request){
+    public function login(LoginRequest $request){
 
         $validated = $request->validate([
             'email' => 'required|email',
