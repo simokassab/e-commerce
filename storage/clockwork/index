@@ -492,3 +492,9 @@
 1656932916-1566-467823968,1656932916.0272,GET,/api/dashboard/tag/get-headers,"App\Http\Controllers\Tag\TagController@getHeaders",200,325.78206062317,request
 1656933112-5417-1514632649,1656933112.347,GET,/api/dashboard/headers/tag,,404,604.79998588562,request
 1656933130-0941-1635607769,1656933129.94,GET,/api/dashboard/headers/tag,"App\Http\Controllers\Tag\TagController@getHeaders",200,441.50400161743,request
+1656935144-0805-2064674394,1656935139.1029,POST,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@store",500,12320.12796402,request
+1656935242-4610-1784807128,1656935240.8819,POST,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@store",500,5369.108915329,request
+1656935268-5345-369198657,1656935268.4041,POST,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@store",500,458.52994918823,request
+1656935319-7238-320502121,1656935319.5913,POST,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@store",200,955.27601242065,request
+1656935353-0457-1601211595,1656935352.8832,POST,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@store",200,608.68000984192,request
+1656935362-2322-1899724841,1656935362.1585,POST,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@store",200,291.44501686096,request
