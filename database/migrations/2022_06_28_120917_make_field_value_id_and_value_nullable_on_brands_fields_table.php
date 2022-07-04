@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('brands_fields', function (Blueprint $table) {
             $table->unsignedBigInteger('field_value_id')->nullable()->change();
-            $table->foreign('field_value_id')->references('id')->on('field_values');
+            $table->foreign('field_value_id')->references('id')->on('fields_values');
             $table->string('value')->nullable()->change();
         });
     }
