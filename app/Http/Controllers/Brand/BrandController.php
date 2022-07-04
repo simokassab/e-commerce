@@ -20,6 +20,12 @@ use Illuminate\Validation\Rule;
 class BrandController extends MainController
 {
     const OBJECT_NAME = 'objects.brand';
+
+//    public function __construct($defaultPermissionsFromChild = null)
+//    {
+//        parent::__construct(['BrancController@index' => ]);
+//    }
+
     /**
      * Display a listing of the resource.
      *

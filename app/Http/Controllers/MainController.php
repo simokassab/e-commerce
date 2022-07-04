@@ -26,18 +26,18 @@ use PDO;
 
 class MainController extends Controller
 {
-    protected $mapPermissions = [];
+//    protected $mapPermissions = [];
 
-    public function __construct($defaultPermissionsFromChild = null)
+    public function __construct(/*$defaultPermissionsFromChild = null*/)
     {
         $routeAction = basename(Route::currentRouteAction()); //we got the permission name
 
-        if(isset($defaultPermissionsFromChild[$routeAction])){
-            $routeAction = $defaultPermissionsFromChild[$routeAction];
-        }
-        // if(!auth()->user()->hasPermissionTo($routeAction)){
-        //     $this->errorResponse(['message' => 'you are un authorized for this action'],401);
-        // }
+//        if (isset($defaultPermissionsFromChild[$routeAction])) {
+//            $routeAction = $defaultPermissionsFromChild[$routeAction];
+//        }
+         if(!auth()->user()->hasPermissionTo($routeAction)){
+             $this->errorResponse(['message' => 'you are un authorized for this action'],401);
+         }
 
 //        $this->defaultLocalize = config('app.locale');
 
@@ -48,53 +48,73 @@ class MainController extends Controller
 
     }
 
-    protected function successResponse(Array $data, $statusCode= 200){
+    protected function successResponse(array $data, $statusCode = 200)
+    {
         return successResponse($data, $statusCode);
     }
 
 
-    protected function errorResponse(Array $data, $statusCode= 500){
+    protected function errorResponse(array $data, $statusCode = 500)
+    {
         return errorResponse($data, $statusCode);
     }
-    protected function successResponsePaginated($resource, $model, Array $relation=[],$pagintaion= null){
-        $pagination = $pagintaion ? $pagintaion :  config('defaults.default_pagination');
-        return ($resource::collection( $model::with($relation)->paginate( $pagination ) ));
+
+    protected function successResponsePaginated($resource, $model, array $relation = [], $pagintaion = null)
+    {
+        $pagination = $pagintaion ? $pagintaion : config('defaults.default_pagination');
+        return ($resource::collection($model::with($relation)->paginate($pagination)));
     }
 
-    protected function notFoundResponse(Array $data, $statusCode= 404){
+    protected function notFoundResponse(array $data, $statusCode = 404)
+    {
         return notFoundError($data, $statusCode);
     }
 
-    public function imageUpload($file,$folderpath){
-        return uploadImage($file,$folderpath);
+    public function imageUpload($file, $folderpath)
+    {
+        return uploadImage($file, $folderpath);
     }
 
-    public function removeImage($folderpath){
+    public function removeImage($folderpath)
+    {
         return removeImage($folderpath);
     }
 
-    public function getSearchPaginated($resource,$model,Request $request,$searchKeys,Array $relations=[]){
-        $data=$request->data;
-        $keys = array_keys($data);
-        $rows = $model::with($relations)
-            ->where(function($query) use($keys,$data,$searchKeys){
-                foreach($keys as $key){
-                    if(in_array($key,$searchKeys)){
-                        $value=strtolower($data[$key]);
-                        $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                            }
-                        }
-                })
-                ->paginate($request->limit ?? config('defaults.default_pagination'));
-
-
-        return  $resource::collection($rows);
-
+    public function getSearchPaginated($resource, $model, Request $request, $searchKeys, array $relations = [], array $searchRelationsKeys = [])
+    {
+        $data = $request->data;
+        $relationKeysArr = [];
+        foreach ($searchRelationsKeys as $relation => $searchRelationKeys) {
+            foreach ($searchRelationKeys as $key => $dbColumn)
+                $relationKeysArr[$key] = $relation;
         }
-
-        public function getLocaleTranslation($model,$key){
-            return getLocaleTranslation($model,$key);
+        $model = $model::with($relations);
+        if (is_array($data) && !empty($data)) {
+            $model->where(function ($query) use ($data, $searchKeys, $relationKeysArr, $searchRelationsKeys) {
+                foreach ($data as $key => $value) {
+                    $value = strtolower($value);
+                    if (in_array($key, $searchKeys)) {
+                        $query->whereRaw('lower(' . $key . ') like (?)', ["%$value%"]);
+                    }
+                    elseif (isset($relationKeysArr[$key])) {
+                        $relation = $relationKeysArr[$key];
+                        $dbColumn = $searchRelationsKeys[$relation][$key];
+                        $query->whereHas($relation, fn($query) => $query->whereRaw('lower(' . $dbColumn . ') like (?)', ["%$value%"]));
+                    }
+                }
+            });
         }
+        $rows = $model->paginate($request->limit ?? config('defaults.default_pagination'));
+
+
+        return $resource::collection($rows);
+
     }
+
+    public function getLocaleTranslation($model, $key)
+    {
+        return getLocaleTranslation($model, $key);
+    }
+}
 
 

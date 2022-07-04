@@ -12,7 +12,7 @@ class Price extends MainModel
     use HasFactory;
     protected $table='prices';
     protected $guard_name = 'web';
-    protected $translatable=['name'];
+    // protected $translatable=['name'];
 
 
     public function currency(): \Illuminate\Database\Eloquent\Relations\BelongsTo

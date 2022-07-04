@@ -21,7 +21,7 @@ class CategoryController extends MainController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
 
     public function index(Request $request)
@@ -36,18 +36,22 @@ class CategoryController extends MainController
             $keys = array_keys($data) ?? [];
             $categoryParent = $data['parent_name'] ?? '';
 
-            $rows = Category::with($relations)
-                ->whereHas('parent',fn ($query)  => $query->whereRaw('lower(name) like (?)',["%$categoryParent%"]) )
-                ->where(function($query) use($keys,$data,$searchKeys){
-                    foreach($keys as $key){
-                        if(in_array($key,$searchKeys)){
-                            $value=strtolower($data[$key]);
-                            $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                        }
-                    }
-                })->paginate($request->limit ?? config('defaults.default_pagination'));
+            $searchRelationsKeys = ['parent' => ['parent_name' => 'name', 'parent_code' => 'code']];
+            return $this->getSearchPaginated(CategoryResource::class, Category::class, $request, $searchKeys,$relations,$searchRelationsKeys);
 
-            return  CategoryResource::collection($rows);
+//            $rows = Category::with($relations)
+//                //@TODO: add an if statment to check if the $data has $parent_name
+//                ->whereHas('parent',fn ($query)  => $query->whereRaw('lower(name) like (?)',["%$categoryParent%"]) )
+//                ->where(function($query) use($keys,$data,$searchKeys){
+//                    foreach($keys as $key){
+//                        if(in_array($key,$searchKeys)){
+//                            $value=strtolower($data[$key]);
+//                            $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
+//                        }
+//                    }
+//                })->paginate($request->limit ?? config('defaults.default_pagination'));
+//
+//            return  CategoryResource::collection($rows);
           }
         return $this->successResponsePaginated(CategoryResource::class,Category::class,self::relations);
     }
