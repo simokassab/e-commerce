@@ -17,10 +17,10 @@ return new class extends Migration
 
             if(false){
                 $table->unsignedBigInteger('field_value_id')->nullable()->change();
+                $table->foreign('field_value_id')->references('id')->on('fields_values');
+                $table->string('value')->nullable()->change();
             }
 
-            $table->string('value')->nullable()->change();
-            $table->foreign('field_value_id')->references('id')->on('fields_values');
 
 
         });
