@@ -35,9 +35,9 @@ class MainController extends Controller
 //        if (isset($defaultPermissionsFromChild[$routeAction])) {
 //            $routeAction = $defaultPermissionsFromChild[$routeAction];
 //        }
-         if(!auth()->user()->hasPermissionTo($routeAction)){
-             $this->errorResponse(['message' => 'you are un authorized for this action'],401);
-         }
+        //  if(!auth()->user()->hasPermissionTo($routeAction)){
+        //      $this->errorResponse(['message' => 'you are un authorized for this action'],401);
+        //  }
 
 //        $this->defaultLocalize = config('app.locale');
 
