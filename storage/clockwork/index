@@ -472,3 +472,5 @@
 1656927890-5484-672019472,1656927887.0055,POST,/api/dashboard/price/,"App\Http\Controllers\Prices\PricesController@store",422,8128.3431053162,request
 1656927915-4062-862166176,1656927915.3182,POST,/api/dashboard/price/,"App\Http\Controllers\Prices\PricesController@store",422,604.76398468018,request
 1656927927-0982-758550779,1656927927.0298,POST,/api/dashboard/price/,"App\Http\Controllers\Prices\PricesController@store",200,636.73400878906,request
+1656930149-1474-1207662989,1656930146.1008,POST,/api/dashboard/price/all?page=2,"App\Http\Controllers\Prices\PricesController@index",200,8469.703912735,request
+1656930158-3170-1537267122,1656930158.1679,POST,/api/dashboard/price/all,"App\Http\Controllers\Prices\PricesController@index",200,557.16800689697,request
