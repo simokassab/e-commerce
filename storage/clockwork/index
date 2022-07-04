@@ -456,3 +456,6 @@
 1656754370-0660-301728761,1656754369.8641,POST,/api/dashboard/category/all,"App\Http\Controllers\Category\CategoryController@index",500,3502.9280185699,request
 1656754385-0919-587940218,1656754384.9504,POST,/api/dashboard/category/all,"App\Http\Controllers\Category\CategoryController@index",500,1108.3920001984,request
 1656754397-5035-1417787017,1656754397.3617,POST,/api/dashboard/category/all,"App\Http\Controllers\Category\CategoryController@index",200,604.40516471863,request
+1656917315-4207-804078883,1656917314.8451,GET,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@index",500,8022.2821235657,request
+1656917336-2140-1187061751,1656917336.0099,GET,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@index",200,1210.2310657501,request
+1656917603-8828-1926969068,1656917603.4314,GET,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@index",200,2229.5749187469,request
