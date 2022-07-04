@@ -14,12 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::table('brands_fields', function (Blueprint $table) {
+
             if (false){
                 $table->unsignedBigInteger('field_value_id')->nullable()->change();
+                $table->foreign('field_value_id')->references('id')->on('fields_values');
+                $table->string('value')->nullable()->change();
             }
 
-            $table->foreign('field_value_id')->references('id')->on('fields_values');
-            $table->string('value')->nullable()->change();
         });
     }
 
