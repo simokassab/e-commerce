@@ -64,6 +64,7 @@ class PricesController extends MainController
      */
     public function getOriginalPrices()
     {
+
         $originalPrices = Price::with(['originalPrice','currency'])->where('is_virtual',0)->get();
         return $this->successResponse([
             'prices' => PriceResource::collection($originalPrices)
