@@ -24,7 +24,7 @@ class PricesController extends MainController
      */
     public function index(Request $request)
     {
-
+        dd($request->limit);
         if ($request->method()=='POST') {
             $relations=['currency','products','originalPrice','originalPricesChildren'];
             $searchKeys=['name','original_percent'];
@@ -53,7 +53,6 @@ class PricesController extends MainController
 
 
         }
-
         return $this->successResponsePaginated(PriceResource::class,Price::class,['currency','originalPrice']);
 
 

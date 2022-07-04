@@ -469,3 +469,6 @@
 1656926335-7193-238311752,1656926335.6499,POST,/api/dashboard/price/all,"App\Http\Controllers\Prices\PricesController@index",200,247.60985374451,request
 1656926474-6385-494903857,1656926474.4277,POST,/api/dashboard/price/all,"App\Http\Controllers\Prices\PricesController@index",200,959.73801612854,request
 1656926602-5188-704970669,1656926602.4205,POST,/api/dashboard/price/all,"App\Http\Controllers\Prices\PricesController@index",200,605.17621040344,request
+1656927890-5484-672019472,1656927887.0055,POST,/api/dashboard/price/,"App\Http\Controllers\Prices\PricesController@store",422,8128.3431053162,request
+1656927915-4062-862166176,1656927915.3182,POST,/api/dashboard/price/,"App\Http\Controllers\Prices\PricesController@store",422,604.76398468018,request
+1656927927-0982-758550779,1656927927.0298,POST,/api/dashboard/price/,"App\Http\Controllers\Prices\PricesController@store",200,636.73400878906,request
