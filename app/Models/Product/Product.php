@@ -17,10 +17,12 @@ use App\Models\Attribute\AttributeValue;
 use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
 use App\Models\MainModel;
+use Spatie\Translatable\HasTranslations;
 
 class Product extends MainModel
 {
-    use HasFactory;
+    use HasFactory,HasTranslations;
+    protected $translatable=['name','summary','specification','description','meta_title','meta_description','meta_keywords'];
     protected $table='products';
     protected $guard_name = 'web';
 
@@ -62,7 +64,7 @@ class Product extends MainModel
     }
 
     public function defaultCategory(){
-        return $this->hasMany(Category::class,'category_id');
+        return $this->belongsTo(Category::class,'category_id');
 
     }
 

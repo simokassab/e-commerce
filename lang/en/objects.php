@@ -22,5 +22,6 @@ return [
     'tax' => 'Tax',
     'user' => 'User',
     'price'=> 'price',
+    'product'=> 'product',
 
 ];

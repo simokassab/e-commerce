@@ -26,6 +26,8 @@ use App\Http\Controllers\Users\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Prices\PricesController;
+use App\Http\Controllers\Product\ProductController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -105,6 +107,9 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::post('price/all',[PricesController::class,'index']);// for search
     Route::get('price/get-original-prices',[PricesController::class,'getOriginalPrices'])->name('get.original.prices');
     Route::apiResource('price',PricesController::class);
+
+    Route::apiResource('product',ProductController::class);
+
 
 });
 

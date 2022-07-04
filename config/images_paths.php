@@ -24,5 +24,8 @@ return [
     'country' => [
         'images' => 'countrires/images',
     ],
+    'product' => [
+        'images' => 'products/images',
+    ],
 
  ];

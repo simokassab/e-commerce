@@ -42,11 +42,11 @@ class ProductResource extends JsonResource
             'is_disabled' => $this->is_disabled,
             'sort' => $this->sort,
             'is_default_child' => $this->is_default_child,
-            'parent' =>$this->whenLoaded('parent')->name,
+            'parent' =>$this->whenLoaded('parent')->name ?? "",
             'category_id' => new CategoryResource($this->whenLoaded('defaultCategory')),
-            'unit_id' =>  new UnitResource($this->whenLoaded('unit')),
-            'tax_id' => new TaxResource($this->whenLoaded('tax')),
-            'brand_id' =>  new BrandResource($this->whenLoaded('brand')),
+            // 'unit_id' =>  new UnitResource($this->whenLoaded('unit')),
+            // 'tax_id' => new TaxResource($this->whenLoaded('tax')),
+            // 'brand_id' =>  new BrandResource($this->whenLoaded('brand')),
             // 'products_statuses_id' =>  ProductResource($this->whenLoaded('')),
         ];
     }
