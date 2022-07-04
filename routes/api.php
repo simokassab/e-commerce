@@ -87,8 +87,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::apiResource('setting',SettingsController::class);
     Route::post('setting/all',[SettingsController::class,'index']);// for search
 
-    Route::apiResource('tag',TagController::class);
     Route::post('tag/all',[TagController::class,'index']);// for search
+    Route::apiResource('tag',TagController::class);
 
     Route::apiResource('unit',UnitController::class);
     Route::post('unit/all',[UnitController::class,'index']);// for search
@@ -105,6 +105,10 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::get('price/get-original-prices',[PricesController::class,'getOriginalPrices'])->name('get.original.prices');
     Route::apiResource('price',PricesController::class);
 
+    Route::group(['prefix' => 'headers'], function (){
+        Route::get('tag',[TagController::class,'getHeaders']);
+
+    });
 });
 
 // @TODO: check the name of link and why the controller functions are not set

@@ -44,7 +44,7 @@ class TagController extends MainController
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreTagRequest $request)
     {
@@ -53,7 +53,10 @@ class TagController extends MainController
 
 
         if(!$tag->save())
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse([
+                'message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+
+            ]);
 
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             'tag' => new TagResource($tag)
@@ -117,5 +120,24 @@ class TagController extends MainController
             'tag' => new TagResource($tag)
         ]);
     }
+    public function getHeaders(){
+        return $this->successResponse([
+            'headers' => [
+                'id' => [
+                    'name' => 'ID',
+                    'search' => '',
+                    'type' => 'integer',
+                    'sort' => false
+                ],
+                'name' => [
+                    'name' => 'Name',
+                    'search' => 'text',
+                    'type' => 'string',
+                    'sort' => false
+                ],
+            ]
+        ]);
+    }
+
     }
 
