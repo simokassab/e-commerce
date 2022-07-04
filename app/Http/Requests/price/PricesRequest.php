@@ -28,7 +28,7 @@ class PricesRequest extends FormRequest
             'is_virtual' => 'boolean|required',
             'currency_id' => 'required|exists:currencies,id',
             'original_price_id' => 'nullable|required_if:is_virtual,1|exists:prices,id',
-            'original_percent' => 'nullable|required_if:is_virtual,1|numeric|min:0|max:100',
+            'original_percent' => 'nullable|required_if:is_virtual,1|numeric|min:0',
 
 
             'data' => 'nullable',
