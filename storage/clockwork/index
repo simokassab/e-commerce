@@ -459,3 +459,13 @@
 1656917315-4207-804078883,1656917314.8451,GET,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@index",500,8022.2821235657,request
 1656917336-2140-1187061751,1656917336.0099,GET,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@index",200,1210.2310657501,request
 1656917603-8828-1926969068,1656917603.4314,GET,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@index",200,2229.5749187469,request
+1656925497-5929-29047862,1656925495.7399,POST,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@store",422,7697.4170207977,request
+1656925836-7319-1480153318,1656925835.1797,POST,/api/dashboard/price/all,"App\Http\Controllers\Prices\PricesController@index",500,3984.580039978,request
+1656925851-1670-1693427461,1656925850.959,POST,/api/dashboard/price/all,"App\Http\Controllers\Prices\PricesController@index",200,666.31698608398,request
+1656925883-4418-368599763,1656925883.2354,POST,/api/dashboard/price/all,"App\Http\Controllers\Prices\PricesController@index",200,554.15606498718,request
+1656925918-6010-956524808,1656925918.5196,POST,/api/dashboard/price/all,"App\Http\Controllers\Prices\PricesController@index",200,282.34481811523,request
+1656926075-3734-1207420265,1656926075.282,POST,/api/dashboard/price/all,"App\Http\Controllers\Prices\PricesController@index",200,300.9979724884,request
+1656926324-1482-1244912598,1656926324.0624,POST,/api/dashboard/price/all,"App\Http\Controllers\Prices\PricesController@index",200,274.83916282654,request
+1656926335-7193-238311752,1656926335.6499,POST,/api/dashboard/price/all,"App\Http\Controllers\Prices\PricesController@index",200,247.60985374451,request
+1656926474-6385-494903857,1656926474.4277,POST,/api/dashboard/price/all,"App\Http\Controllers\Prices\PricesController@index",200,959.73801612854,request
+1656926602-5188-704970669,1656926602.4205,POST,/api/dashboard/price/all,"App\Http\Controllers\Prices\PricesController@index",200,605.17621040344,request

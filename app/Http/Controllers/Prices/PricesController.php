@@ -33,10 +33,13 @@ class PricesController extends MainController
 
             $originalPriceName = $data['original_price_name'] ?? '';
             $currency = $data['currency_name'] ?? '';
-
             $rows = Price::with($relations)
-                ->whereHas('originalPrice',fn ($query)  => $query->whereRaw('lower(name) like (?)',["%$originalPriceName%"]) )
-                ->whereHas('currency',fn ($query) => $query->whereRaw('lower(name) like (?)',["%$currency%"]))
+                ->when($request->has('data.original_price_name'),function ($query) use($originalPriceName){
+                    $query->whereHas('originalPrice',fn ($query)  => $query->whereRaw('lower(name) like (?)',["%$originalPriceName%"]) );
+                })
+                ->when($request->has('data.currency_name'), function ($query) use($currency){
+                    $query->whereHas('currency',fn ($query) => $query->whereRaw('lower(name) like (?)',["%$currency%"]));
+                })
                 ->where(function($query) use($keys,$data,$searchKeys){
                     foreach($keys as $key){
                         if(in_array($key,$searchKeys)){
