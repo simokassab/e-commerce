@@ -5,6 +5,7 @@ namespace App\Http\Controllers\RolesAndPermissions;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\RolesAndPermissions\StoreRoleRequest;
 use App\Http\Resources\PermissionAllResource;
+use App\Http\Resources\roles\GetAllRolesResource;
 use App\Http\Resources\RolesResource;
 use App\Models\RolesAndPermissions\CustomPermission;
 use App\Models\RolesAndPermissions\CustomRole;
@@ -188,4 +189,9 @@ class RolesController extends MainController
         return $this->successResponse($nestedPermissions);
 
     }
+
+    public function getAllRoles(){
+        return $this->successResponse([ "roles" => GetAllRolesResource::collection(CustomRole::all()) ]);
+    }
+
 }

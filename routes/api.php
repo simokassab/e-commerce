@@ -80,9 +80,10 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::apiResource('label',LabelController::class);
     Route::post('label/all',[LabelController::class,'index']);// for search
 
-    Route::apiResource('role',RolesController::class);
     Route::post('role/all',[RolesController::class,'index']);// for search
-    Route::get('get-nested-permissions-for-role/{role}',[RolesController::class,'getNestedPermissionsForRole']);
+    Route::get('role/get-nested-permissions-for-role/{role}',[RolesController::class,'getNestedPermissionsForRole']);
+    Route::get('role/get-all-roles',[RolesController::class,'getAllRoles']); //for select box
+    Route::apiResource('role',RolesController::class);
 
     Route::apiResource('setting',SettingsController::class);
     Route::post('setting/all',[SettingsController::class,'index']);// for search
@@ -92,6 +93,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
 
     Route::apiResource('unit',UnitController::class);
     Route::post('unit/all',[UnitController::class,'index']);// for search
+
+
 
     // @TODO: make a correct function for the user profile
     Route::get('/profile', fn() =>  auth()->user());
@@ -105,6 +108,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::get('price/get-original-prices',[PricesController::class,'getOriginalPrices'])->name('get.original.prices');
     Route::apiResource('price',PricesController::class);
 
+    //TODO: move all headers to a new file for apis headers
     Route::group(['prefix' => 'headers'], function (){
         Route::get('tag',[TagController::class,'getHeaders']);
 
