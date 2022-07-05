@@ -19,10 +19,13 @@ function uploadImage($file,$folderpath){
     }
 }
 
-function errorResponse(Array $data, $statusCode= 500){
-    $data['success'] = false;
+function errorResponse(Array $data=[],$message = 'an error occurred please try again later',$returnCode = -1, $statusCode= 500){
+    $return['message'] = $message;
+    $return['data'] = $data;
+    $return['return_code'] = $returnCode;
+
     return response()->json([
-        'data' => $data
+        $return
     ],$statusCode);
 }
 

@@ -21,6 +21,10 @@ class TagController extends MainController
      */
     public function index(Request $request)
     {
+//        app()->setLocale('en');
+//        $tag = Tag::first();
+//        $tag->setTranslation('name', 'en', 'Name in English');
+//
 
         if ($request->method()=='POST') {
             $searchKeys=['name'];

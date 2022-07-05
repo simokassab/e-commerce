@@ -498,3 +498,11 @@
 1656935319-7238-320502121,1656935319.5913,POST,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@store",200,955.27601242065,request
 1656935353-0457-1601211595,1656935352.8832,POST,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@store",200,608.68000984192,request
 1656935362-2322-1899724841,1656935362.1585,POST,/api/dashboard/price,"App\Http\Controllers\Prices\PricesController@store",200,291.44501686096,request
+1657007465-1290-288087115,1657007464.8933,GET,/api/dashboard/tag,"App\Http\Controllers\Tag\TagController@index",200,3580.8038711548,request
+1657007491-7588-103740661,1657007491.6672,GET,/api/dashboard/tag,"App\Http\Controllers\Tag\TagController@index",200,283.51998329163,request
+1657007497-4250-1008547460,1657007497.2888,GET,/api/dashboard/tag,"App\Http\Controllers\Tag\TagController@index",200,441.68591499329,request
+1657007508-7530-576151117,1657007508.6201,GET,/api/dashboard/tag,"App\Http\Controllers\Tag\TagController@index",500,834.46288108826,request
+1657008980-6529-1793833135,1657008980.5309,GET,/api/dashboard/tag,"App\Http\Controllers\Tag\TagController@index",500,402.90999412537,request
+1657009233-1936-760809581,1657009233.0911,GET,/api/dashboard/tag,"App\Http\Controllers\Tag\TagController@index",500,444.96202468872,request
+1657009269-8565-904671587,1657009269.768,GET,/api/dashboard/tag,"App\Http\Controllers\Tag\TagController@index",200,608.10303688049,request
+1657009298-3339-1465243242,1657009298.217,GET,/api/dashboard/tag,"App\Http\Controllers\Tag\TagController@index",200,555.44495582581,request
