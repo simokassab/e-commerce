@@ -29,6 +29,11 @@ class RolesController extends MainController
      */
     public function index(Request $request)
     {
+
+        return response()->json(
+            CustomRole::query()->paginate($request->limit ?? config('defaults.default_pagination'))
+        );
+
         if ($request->method()=='POST') {
 
             $searchKeys=['name'];
@@ -37,6 +42,7 @@ class RolesController extends MainController
             //@TODO: Search also take time more than usual
             return $this->getSearchPaginated(RolesResource::class, CustomRole::class,$request, $searchKeys,$relations,$searchRelationsKeys);
         }
+
         return $this->successResponsePaginated(RolesResource::class,CustomRole::class);
     }
 
@@ -195,7 +201,7 @@ class RolesController extends MainController
 
             $returnArray[] = $tempArray;
         }
-        dd($returnArray);
+
         return $this->successResponse($returnArray);
 
     }
