@@ -532,3 +532,4 @@
 1657014119-0510-1906404494,1657014118.9804,POST,/api/dashboard/role/all,"App\Http\Controllers\RolesAndPermissions\RolesController@index",200,270.51711082458,request
 1657017039-7415-497212348,1657017039.3242,POST,/api/dashboard/role/get-all-roles,,405,2188.4140968323,request
 1657017063-5471-454739237,1657017063.4201,GET,/api/dashboard/role/get-all-roles,"App\Http\Controllers\RolesAndPermissions\RolesController@getAllRoles",200,1261.8780136108,request
+1657026171-4351-1605700538,1657026171.3472,GET,/api/dashboard/role/get-nested-permissions-for-role/1,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",500,5056.5440654755,request

@@ -185,7 +185,17 @@ class RolesController extends MainController
             //@TODO: add check to check if permission is added to parent role
             $permissionsWithCheck[] = $permission;
         }
+        $returnArray = [];
         $nestedPermissions = PermissionsServices::getAllPermissionsNested($permissionsWithCheck,$permissionsOfRole);
+        foreach($nestedPermissions as $rootPermission){
+            $tempArray = [];
+            $tempArray['id'] = uniqid();
+            $tempArray['name'] =$rootPermission->label;
+            $tempArray['tree'] = [$rootPermission];
+
+            $returnArray[] = $tempArray;
+        }
+        dd($returnArray);
         return $this->successResponse($nestedPermissions);
 
     }
