@@ -28,11 +28,13 @@ class RolesController extends MainController
      */
     public function index(Request $request)
     {
-
         if ($request->method()=='POST') {
+
             $searchKeys=['name'];
-            //TODO Search also take time more than usual
-            return $this->getSearchPaginated(RolesResource::class, CustomRole::class,$request, $searchKeys);
+            $relations = ['parent'];
+            $searchRelationsKeys = ['parent' => ['parent_name' => 'name'] ];
+            //@TODO: Search also take time more than usual
+            return $this->getSearchPaginated(RolesResource::class, CustomRole::class,$request, $searchKeys,$relations,$searchRelationsKeys);
         }
         return $this->successResponsePaginated(RolesResource::class,CustomRole::class);
     }

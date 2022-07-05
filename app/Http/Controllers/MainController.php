@@ -82,7 +82,7 @@ class MainController extends Controller
 
     public function getSearchPaginated($resource, $model, Request $request, $searchKeys, array $relations = [], array $searchRelationsKeys = [])
     {
-        $data = $request->data;
+        $data = $request->data ?? [];
         $relationKeysArr = [];
         foreach ($searchRelationsKeys as $relation => $searchRelationKeys) {
             foreach ($searchRelationKeys as $key => $dbColumn)
