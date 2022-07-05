@@ -59,8 +59,8 @@ class PermissionsServices {
         foreach($allPermissionsID[$parentPermissionId] as $permissionId){
             $permissionId =  is_numeric($permissionId)? ($permissionId) : $permissionId->id;
             if($isMultiLevel){
-                $childpermissions[$permissionId] = (object)['id' => $allPermissions->find($permissionId)->id,'label' => $allPermissions->find($permissionId)->name ,'id' => $allPermissions->find($permissionId)->id,'checked' => in_array($allPermissions->find($permissionId)->id,  $permissionsOfRoleIds), 'nodes' => []];
-                $childpermissions[$permissionId]->nodes = self::drawPermissionChildren($permissionId, $allPermissionsID, $isMultiLevel,$allPermissions);
+                $childpermissions[$permissionId] = ['id' => $allPermissions->find($permissionId)->id,'label' => $allPermissions->find($permissionId)->name ,'id' => $allPermissions->find($permissionId)->id,'checked' => in_array($allPermissions->find($permissionId)->id,  $permissionsOfRoleIds), 'nodes' => [] ];
+                $childpermissions[$permissionId]['nodes'] = self::drawPermissionChildren($permissionId, $allPermissionsID, $isMultiLevel,$allPermissions);
             }
             else{
                 $childpermissions[] = $permissionId;
@@ -89,11 +89,12 @@ class PermissionsServices {
         $lastResult = [];
         $rootPermissions = self::getRootPermissions($permissions);
         foreach ($rootPermissions as $rootPermission){
-            $result = (object)[];
-            $result->id = $rootPermission->id;
-            $result->label = $rootPermission->name;
-            $result->checked = in_array($rootPermission->id ?? 0, $permissionsOfRoleIds);
-            $result->nodes = self::getPermissionChildren($rootPermission,$permissionsOfRole);
+            $result = [];
+            $result['id'] = $rootPermission->id;
+            $result['label'] = $rootPermission->name;
+            $result['checked'] = in_array($rootPermission->id ?? 0, $permissionsOfRoleIds);
+            $result['nodes'] =  self::getPermissionChildren($rootPermission,$permissionsOfRole);
+            $result = (array)$result;
             $lastResult[] = $result;
         }
         return $lastResult;

@@ -190,7 +190,7 @@ class RolesController extends MainController
         foreach($nestedPermissions as $rootPermission){
             $tempArray = [];
             $tempArray['id'] = uniqid();
-            $tempArray['name'] =$rootPermission->label;
+            $tempArray['name'] =$rootPermission['label'];
             $tempArray['tree'] = [$rootPermission];
 
             $returnArray[] = $tempArray;
