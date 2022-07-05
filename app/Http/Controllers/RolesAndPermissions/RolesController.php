@@ -195,7 +195,7 @@ class RolesController extends MainController
 
             $returnArray[] = $tempArray;
         }
-
+        dd($returnArray);
         return $this->successResponse($returnArray);
 
     }
