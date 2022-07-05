@@ -11,6 +11,7 @@ class Controller extends BaseController
 {
     public function __construct()
     {
+        app()->setLocale('en');
     }
 
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
