@@ -8,10 +8,10 @@ use Spatie\Translatable\HasTranslations;
 
 class Setting extends MainModel
 {
-    use HasFactory,HasTranslations;
+    use HasFactory, HasTranslations;
 
-    protected $translatable=['key','value'];
-    protected $fillable = ['key','value','is_developer'];
+    protected $translatable=[];
+    protected $fillable = ['title','value','is_developer'];
     protected $guard_name = 'web';
 
 }

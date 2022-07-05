@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Product;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Models\Price\Price;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
 use App\Models\Product\ProductField;
@@ -42,7 +43,17 @@ class ProductController extends MainController
      */
     public function create()
     {
-        //
+        $objectsArray=[];
+
+        $prices=Price::with('currency')->where('is_virtual', 0)->get();
+        foreach ($prices as $price => $value) {
+            $object = (object)[];
+            $object->id=$value['id'];
+            $object->name=$value['name'];
+            $object->currency_code=$value->currency->code;
+            $objectsArray[]=$object;
+        }
+        return $this->successResponse(['prices'=>$objectsArray]);
     }
 
     /**
@@ -51,7 +62,7 @@ class ProductController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
 
         $product = new Product();
@@ -60,9 +71,9 @@ class ProductController extends MainController
         $product->code = $request->code;
         $product->sku = $request->sku;
         $product->type = $request->type;
-        $product->quantity = $request->quantity;
-        $product->reserved_quantity = $request->reserved_quantity;
-        $product->minimum_quantity = $request->minimum_quantity;
+        $product->quantity = $request->quantity ?? 0;
+        $product->reserved_quantity = $request->reserved_quantity ?? 0;
+        $product->minimum_quantity = $request->minimum_quantity ?? 0;
 
         $product->summary = json_encode($request->summary);
         $product->specification = json_encode($request->specification);
@@ -77,9 +88,10 @@ class ProductController extends MainController
         $product->barcode = $request->barcode;
         $product->height = $request->height;
         $product->width = $request->width;
+        $product->is_disabled=0;
         $product->length = $request->length;
         $product->weight = $request->weight;
-        $product->is_default_child = $request->is_default_child;
+        $product->is_default_child = $request->is_default_child ?? 0;
 
         $product->parent_product_id = $request->parent_product_id;
         $product->category_id= $request->category_id;
@@ -165,12 +177,11 @@ class ProductController extends MainController
                 $tagsArray[$tag]["product_id"] = $product->id;
                 $tagsArray[$tag]["created_at"] = Carbon::now()->toDateTimeString();
                 $tagsArray[$tag]["updated_at"] = Carbon::now()->toDateTimeString();
-
-
             }
-
                 ProductTag::insert($tagsArray);
             }
+
+
         }
 
 
