@@ -88,9 +88,9 @@ class ProductController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProductRequest $request)
+    public function store(Request $request)
     {
-        DB::transaction();
+        DB::beginTransaction();
         try {
         $product = new Product();
         $product->name = json_encode($request->name);
