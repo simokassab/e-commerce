@@ -65,7 +65,6 @@ class RolesController extends MainController
      */
     public function store(StoreRoleRequest $request)
     {
-        return $request->permissions;
         DB::beginTransaction();
 
         try {
@@ -74,9 +73,11 @@ class RolesController extends MainController
                 'guard_name' => 'web',
                 'parent_id' => $request->parent_id
             ]);
-
-            $subPermissions = $request->permissions[0]['tree'];
-            $flattenPermissions = PermissionsServices::loopOverMultiDimentionArray($subPermissions) ?? [];
+            $flattenPermissions = [];
+            foreach($request->permissions as $permission ){
+                $innerFlattenPermissions = PermissionsServices::loopOverMultiDimentionArray( $permission['tree']) ?? [];
+                $flattenPermissions= array_merge($innerFlattenPermissions,$flattenPermissions);
+            }
             $approvedPermissions = array_filter($flattenPermissions,fn($value) => $value[1] );
             $approvedPermissions = (collect($approvedPermissions)->pluck(0));
 
