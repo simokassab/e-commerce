@@ -187,3 +187,5 @@
 1657109073-8816-451862418,1657109073.7184,GET,/api/dashboard/headers/brand,"App\Http\Controllers\Brand\BrandController@getTableHeaders",200,563.48609924316,request
 1657110028-5602-1453346698,1657110028.482,POST,/api/dashboard/country/all,"App\Http\Controllers\Country\CountryController@index",200,404.87813949585,request
 1657110078-2637-183951530,1657110078.1879,POST,/api/dashboard/country,"App\Http\Controllers\Country\CountryController@store",422,576.18999481201,request
+1657114151-3171-1382064970,1657114151.1648,POST,/api/dashboard/role/,"App\Http\Controllers\RolesAndPermissions\RolesController@store",201,4240.1838302612,request
+1657114225-5784-1236250557,1657114223.9947,POST,/api/dashboard/role/,"App\Http\Controllers\RolesAndPermissions\RolesController@store",500,3355.9119701385,request
