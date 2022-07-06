@@ -65,6 +65,7 @@ class RolesController extends MainController
      */
     public function store(StoreRoleRequest $request)
     {
+        return $request->permissions;
         DB::beginTransaction();
 
         try {
