@@ -194,7 +194,7 @@ class RolesController extends MainController
         $permissionsOfRole = CustomRole::find($request->role) ? CustomRole::findOrFail($request->role)->permissions->toArray() : []  ;
         $permissionsForParentRoleIds = CustomRole::find($request->parent_role) ? CustomRole::findOrFail($request->parent_role)->permissions->pluck('id')->toArray() : [];
 
-
+        $allPermissionsWithCheck = [];
         $permissions = CustomPermission::with('parent')->get();
         foreach ($permissions as $permission){
             if(in_array($permission->id , $permissionsForParentRoleIds)){
