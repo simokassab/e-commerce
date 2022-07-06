@@ -184,13 +184,20 @@ class RolesController extends MainController
         ]);
     }
 
-    public function getNestedPermissionsForRole(CustomRole $role){
-        $permissionsOfRole = $role->permissions->toArray();
+    public function getNestedPermissionsForRole(Request $request){
+
+        $request->validate([
+            'role' => 'nullable|integer|exists:Spatie\Permission\Models\Role,id',
+            'parent_role' => 'nullable|integer|exists:Spatie\Permission\Models\Role,id'
+        ]);
+        $permissionsForParentRole = $request->parent_role->permissions->toArray();
+        $permissionsOfRole = $request->role->permissions->toArray();
         $permissions = CustomPermission::with('parent')->get();
         foreach ($permissions as $permission){
             //@TODO: add check to check if permission is added to parent role
             $permissionsWithCheck[] = $permission;
         }
+
         $returnArray = [];
         $nestedPermissions = PermissionsServices::getAllPermissionsNested($permissionsWithCheck,$permissionsOfRole);
         foreach($nestedPermissions as $rootPermission){

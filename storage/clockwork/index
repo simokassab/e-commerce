@@ -535,3 +535,13 @@
 1657090429-9840-883881604,1657090428.0228,GET,/api/dashboard/role/get-nested-permissions-for-role/1,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",500,7464.5781517029,request
 1657091119-2707-1751328359,1657091119.1614,GET,/api/dashboard/role/get-nested-permissions-for-role/1,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",200,5171.4890003204,request
 1657091584-7666-1706474953,1657091584.6672,GET,/api/dashboard/role/get-nested-permissions-for-role/1,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",200,6468.1179523468,request
+1657097900-4919-343034152,1657097900.2125,GET,/api/dashboard/role/get-nested-permissions-for-role/1,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",200,6892.3718929291,request
+1657099619-1560-1166007841,1657099619.0019,GET,/api/dashboard/role/get-nested-permissions-for-role/,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",200,620.03207206726,request
+1657099628-6393-1034573964,1657099628.4503,GET,/api/dashboard/role/get-nested-permissions-for-role/,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",200,670.2561378479,request
+1657099635-2120-68158549,1657099635.1216,GET,/api/dashboard/role/get-nested-permissions-for-role/1,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",200,268.61190795898,request
+1657099641-3939-384167208,1657099641.3244,GET,/api/dashboard/role/get-nested-permissions-for-role/,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",200,215.17896652222,request
+1657099657-4124-1536673667,1657099657.2818,GET,/api/dashboard/role/get-nested-permissions-for-role/,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",200,441.39695167542,request
+1657099669-9889-56342080,1657099669.9024,GET,/api/dashboard/role/get-nested-permissions-for-role/1,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",200,272.13907241821,request
+1657100351-3880-113847917,1657100351.3216,POST,/api/dashboard/role/get-nested-permissions-for-role/,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",422,604.62498664856,request
+1657100562-6985-1411869363,1657100562.6105,POST,/api/dashboard/role/get-nested-permissions-for-role/,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",500,447.81184196472,request
+1657100568-9944-2046237809,1657100568.9076,GET,/api/dashboard/role/,"App\Http\Controllers\RolesAndPermissions\RolesController@index",200,301.64384841919,request

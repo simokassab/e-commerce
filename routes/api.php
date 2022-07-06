@@ -81,7 +81,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::post('label/all',[LabelController::class,'index']);// for search
 
     Route::post('role/all',[RolesController::class,'index']);// for search
-    Route::get('role/get-nested-permissions-for-role/{role}',[RolesController::class,'getNestedPermissionsForRole']);
+    Route::post('role/get-nested-permissions-for-role/',[RolesController::class,'getNestedPermissionsForRole']);
     Route::get('role/get-all-roles',[RolesController::class,'getAllRoles']); //for select box
     Route::apiResource('role',RolesController::class);
 
