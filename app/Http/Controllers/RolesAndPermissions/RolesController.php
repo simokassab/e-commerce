@@ -187,19 +187,23 @@ class RolesController extends MainController
     public function getNestedPermissionsForRole(Request $request){
 
         $request->validate([
-            'role' => 'nullable|integer|exists:Spatie\Permission\Models\Role,id',
-            'parent_role' => 'nullable|integer|exists:Spatie\Permission\Models\Role,id'
+            'role' => 'nullable|integer',
+            'parent_role' => 'nullable|integer'
         ]);
-        $permissionsForParentRole = $request->parent_role->permissions->toArray();
-        $permissionsOfRole = $request->role->permissions->toArray();
+
+        $permissionsOfRole = CustomRole::find($request->role) ? CustomRole::findOrFail($request->role)->permissions->toArray() : []  ;
+        $permissionsForParentRoleIds = CustomRole::find($request->parent_role) ? CustomRole::findOrFail($request->parent_role)->permissions->pluck('id')->toArray() : [];
+
+
         $permissions = CustomPermission::with('parent')->get();
         foreach ($permissions as $permission){
-            //@TODO: add check to check if permission is added to parent role
-            $permissionsWithCheck[] = $permission;
+            if(in_array($permission->id , $permissionsForParentRoleIds)){
+                $allPermissionsWithCheck[] = $permission;
+            }
         }
-
+        dd($allPermissionsWithCheck);
         $returnArray = [];
-        $nestedPermissions = PermissionsServices::getAllPermissionsNested($permissionsWithCheck,$permissionsOfRole);
+        $nestedPermissions = PermissionsServices::getAllPermissionsNested($allPermissionsWithCheck,$permissionsOfRole);
         foreach($nestedPermissions as $rootPermission){
             $tempArray = [];
             $tempArray['id'] = uniqid();

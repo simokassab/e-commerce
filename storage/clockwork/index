@@ -545,3 +545,10 @@
 1657100351-3880-113847917,1657100351.3216,POST,/api/dashboard/role/get-nested-permissions-for-role/,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",422,604.62498664856,request
 1657100562-6985-1411869363,1657100562.6105,POST,/api/dashboard/role/get-nested-permissions-for-role/,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",500,447.81184196472,request
 1657100568-9944-2046237809,1657100568.9076,GET,/api/dashboard/role/,"App\Http\Controllers\RolesAndPermissions\RolesController@index",200,301.64384841919,request
+1657100870-3003-1307229911,1657100870.2113,POST,/api/dashboard/role/all,"App\Http\Controllers\RolesAndPermissions\RolesController@index",200,275.52700042725,request
+1657100884-5015-918767339,1657100884.3931,POST,/api/dashboard/role/get-nested-permissions-for-role,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",500,695.62005996704,request
+1657102637-7366-1203978538,1657102637.6399,POST,/api/dashboard/role/get-nested-permissions-for-role,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",404,686.52606010437,request
+1657102706-6954-1476405842,1657102706.5767,POST,/api/dashboard/role/get-nested-permissions-for-role,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",404,516.10589027405,request
+1657102843-0609-1416552231,1657102842.8102,POST,/api/dashboard/role/get-nested-permissions-for-role,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",404,593.13797950745,request
+1657103143-3421-875535680,1657103143.1962,POST,/api/dashboard/role/get-nested-permissions-for-role,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",500,433.99095535278,request
+1657103216-0911-2087666715,1657103215.9308,POST,/api/dashboard/role/get-nested-permissions-for-role,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",500,576.41386985779,request
