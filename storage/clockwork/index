@@ -691,3 +691,5 @@
 1657026421-9550-1894283012,1657026421.7562,POST,/api/dashboard/product/,"App\Http\Controllers\Product\ProductController@store",500,881.81400299072,request
 1657026597-9083-484670600,1657026597.6704,POST,/api/dashboard/product/,"App\Http\Controllers\Product\ProductController@store",500,1526.6761779785,request
 1657026618-5222-334173430,1657026618.2452,POST,/api/dashboard/product/,"App\Http\Controllers\Product\ProductController@store",422,1492.0058250427,request
+1657027850-3797-1500061806,1657027850.2353,POST,/api/dashboard/tax/all,"App\Http\Controllers\Tax\TaxController@index",200,479.07710075378,request
+1657106589-4889-1927543782,1657106589.344,POST,/api/dashboard/product/,"App\Http\Controllers\Product\ProductController@store",422,2271.9521522522,request

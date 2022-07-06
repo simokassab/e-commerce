@@ -32,7 +32,7 @@ class StoreCurrencyRequest extends FormRequest
             'rate' => 'required | numeric',
             'is_default' => 'nullable | boolean',
 
-            'image' => 'nullable | image
+            'image' => 'nullable | image | max:'.config('defaults.default_string_length').'
             | mimes:'.config('defaults.default_image_extentions').'
             | max:'.config('defaults.default_image_size').'
             | dimensions:min_width='.config('defaults.default_image_minimum_width').',min_height='.config('defaults.default_image_minimum_height').'

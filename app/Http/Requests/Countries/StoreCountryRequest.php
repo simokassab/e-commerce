@@ -29,7 +29,7 @@ class StoreCountryRequest extends FormRequest
             'iso_code_1' => 'required | max:'.config('defaults.default_string_length'),
             'iso_code_2' => 'required | max:'.config('defaults.default_string_length'),
             'phone_code' => ['required' , 'max:6' , 'regex:/^\+\d{1,3}$/'],
-            'flag' => 'required | file
+            'flag' => 'required | file | max:'.config('defaults.default_string_length').'
                 | mimes:'.config('defaults.default_icon_extentions').'
                 | max:'.config('defaults.default_icon_size').'
                 | dimensions:max_width='.config('defaults.default_icon_maximum_width').',max_height='.config('defaults.default_icon_maximum_height')

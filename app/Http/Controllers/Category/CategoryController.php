@@ -276,11 +276,8 @@ class CategoryController extends MainController
 
     public function toggleStatus(Request $request ,$id){
 
-        $request->validate([
-            'is_disabled' => 'boolean|required'
-        ]);
-
-            $category = Category::findOrFail($id);
+        $request->validate(['is_disabled' => 'boolean|required']);
+        $category = Category::findOrFail($id);
         $category->is_disabled=$request->is_disabled;
         if(!$category->save())
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
@@ -304,12 +301,10 @@ class CategoryController extends MainController
         return $this->successResponse(['categories' => $categories ]);
     }
 
-    public function updateSortValues(Request $request){
+    public function updateSortValues(StoreCategoryRequest $request){
 
         batch()->update($category = new Category(),$request->order,'id');
             return $this->successResponsePaginated(CategoryResource::class,Category::class,self::relations);
-
-
 
     }
 

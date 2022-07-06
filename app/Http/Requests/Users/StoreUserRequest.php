@@ -24,12 +24,12 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         $array = [
-            'username' => 'required|unique:users,username',
-            'email' => 'required|email|unique:users,email',
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'salt' => 'nullable',
-            'password' => 'required|min:8',
+            'username' => 'required|unique:users,username | max:'.config('defaults.default_string_length_2'),
+            'email' => 'required|email|unique:users,email | max:'.config('defaults.default_string_length_2'),
+            'first_name' => 'required|string | max:'.config('defaults.default_string_length_2'),
+            'last_name' => 'required|string | max:'.config('defaults.default_string_length_2'),
+            'salt' => 'nullable | max:'.config('defaults.default_string_length_2'),
+            'password' => 'required|min:8 | max:'.config('defaults.default_string_length_2'),
             'role_id' => 'required|exists:roles,id'
         ];
 
