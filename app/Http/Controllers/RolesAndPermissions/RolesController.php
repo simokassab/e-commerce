@@ -73,6 +73,7 @@ class RolesController extends MainController
                 'guard_name' => 'web',
                 'parent_id' => $request->parent_id
             ]);
+
             $flattenPermissions = [];
             foreach($request->permissions as $permission ){
                 $innerFlattenPermissions = PermissionsServices::loopOverMultiDimentionArray( $permission['tree']) ?? [];
@@ -81,10 +82,7 @@ class RolesController extends MainController
             $approvedPermissions = array_filter($flattenPermissions,fn($value) => $value[1] );
             $approvedPermissions = (collect($approvedPermissions)->pluck(0));
 
-//            $allPermissions = CustomPermission::all()->pluck('name');
-
             $role->givePermissionTo($approvedPermissions);
-
 
             DB::commit();
             return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
@@ -134,22 +132,34 @@ class RolesController extends MainController
         DB::beginTransaction();
 
         try {
-            $role->update(['name' => $request->name]);
+            $role->update([
+                'name' => $request->name,
+                'parent_id' => $request->parent_id
 
-            if($request->has('parent_id') && isset($request->parent_id) ){
-                $role->setParent($request->parent_id);
+            ]);
+
+            $flattenPermissions = [];
+            foreach($request->permissions as $permission ){
+                $innerFlattenPermissions = PermissionsServices::loopOverMultiDimentionArray( $permission['tree']) ?? [];
+                $flattenPermissions= array_merge($innerFlattenPermissions,$flattenPermissions);
             }
 
-            if($request->has('permissions') && !empty($request->permissions)){
-                $parentPermissions = CustomRole::findOrFail($request->parent_id)->permissions->pluck('id')->toArray();
-                $permissions = RolesService::filterPermissionsAccordingToParentPermissions($parentPermissions,$request->permissions);
-                $role->givePermissionTo($permissions);
-                //TODO  I replaced this line in the if conditon since $permissions give error since undefined
-                //TODO when updating the parent id the request take 1min
-                //removed the permissions from the children and parent after updating the parent
-                RolePermission::whereIn('role_id' , $role->allChildren($flatten=true))->whereNotIn('permission_id',$permissions)->delete();
-            }
 
+            //@TODO: add validation to filter permissions that are added to the role but the role does n't have the rights to do it
+            //plucked the name of flatten permissions
+//            $childPermissions = collect($flattenPermissions)->pluck(0)->toArray();
+//            $parentPermissions = CustomRole::findById($request->parent_id)->permissions->pluck('name')->toArray();
+//
+//            $filteredPermissions = PermissionsServices::filterPermissionsAccordingToParentPermissions($parentPermissions,$childPermissions);
+//
+//            dd($filteredPermissions);
+
+            $allPermissionsNames = CustomPermission::all()->pluck('name')->toArray();
+            $approvedPermissions = array_filter($flattenPermissions,fn($value) => $value[1] );
+            $approvedPermissions = (collect($approvedPermissions)->pluck(0));
+
+            $role->revokePermissionTo($allPermissionsNames);
+            $role->givePermissionTo($approvedPermissions);
 
             DB::commit();
 
@@ -173,7 +183,7 @@ class RolesController extends MainController
      */
     public function destroy(CustomRole $role)
     {
-        //TODO when deleting a role has childern the request take a time more than usual
+        //TODO when deleting a role who has childern the request take a time more than usual
         $message = '';
         if(!$role->canDeleteRole($message)){
             return $this->errorResponse([$message],405);

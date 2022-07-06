@@ -3,10 +3,23 @@
 return [
     'brands' => [
         'id' => [
-            ''
+            'name' => 'الرقم',
+            'search' => '',
+            'type' => 'integer',
+            'sort' => false
         ],
-        'name' => 'الإسم',
-        'code' => 'الشفرة',
+        'name' => [
+            'name' => 'الإسم',
+            'search' => '',
+            'type' => 'integer',
+            'sort' => false
+        ],
+        'code' =>[
+            'name' => 'الرمز',
+            'search' => '',
+            'type' => 'integer',
+            'sort' => false
+        ],
         'image' => 'الصورة',
     ],
     

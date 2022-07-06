@@ -189,3 +189,7 @@
 1657110078-2637-183951530,1657110078.1879,POST,/api/dashboard/country,"App\Http\Controllers\Country\CountryController@store",422,576.18999481201,request
 1657114151-3171-1382064970,1657114151.1648,POST,/api/dashboard/role/,"App\Http\Controllers\RolesAndPermissions\RolesController@store",201,4240.1838302612,request
 1657114225-5784-1236250557,1657114223.9947,POST,/api/dashboard/role/,"App\Http\Controllers\RolesAndPermissions\RolesController@store",500,3355.9119701385,request
+1657129454-0387-1024324626,1657129450.3881,PUT,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@update",422,9352.0691394806,request
+1657130558-9103-1985961359,1657130558.2398,PUT,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@update",200,1998.9771842957,request
+1657130588-4681-216252222,1657130588.3739,PUT,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@update",200,490.31186103821,request
+1657130592-3696-301811774,1657130592.287,PUT,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@update",200,282.73391723633,request

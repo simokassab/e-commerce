@@ -133,6 +133,14 @@ class PermissionsServices {
 
     }
 
+
+    public static function filterPermissionsAccordingToParentPermissions(Array $parentPermissions,Array $permissions): Array {
+        $notAllowedPermissions = array_diff($permissions, $parentPermissions);
+        return collect($permissions)->diff($notAllowedPermissions)->all();
+    }
+
+
+
 //    public static function markRolesPermissionAsChecked(Array $permissionsOfRole,Array &$permissions){
 //
 //
