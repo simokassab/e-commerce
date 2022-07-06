@@ -29,6 +29,11 @@ class RolesController extends MainController
      */
     public function index(Request $request)
     {
+
+        return response()->json(
+            CustomRole::query()->paginate($request->limit ?? config('defaults.default_pagination'))
+        );
+
         if ($request->method()=='POST') {
 
             $searchKeys=['name'];
@@ -37,6 +42,7 @@ class RolesController extends MainController
             //@TODO: Search also take time more than usual
             return $this->getSearchPaginated(RolesResource::class, CustomRole::class,$request, $searchKeys,$relations,$searchRelationsKeys);
         }
+
         return $this->successResponsePaginated(RolesResource::class,CustomRole::class);
     }
 
@@ -185,9 +191,18 @@ class RolesController extends MainController
             //@TODO: add check to check if permission is added to parent role
             $permissionsWithCheck[] = $permission;
         }
+        $returnArray = [];
         $nestedPermissions = PermissionsServices::getAllPermissionsNested($permissionsWithCheck,$permissionsOfRole);
+        foreach($nestedPermissions as $rootPermission){
+            $tempArray = [];
+            $tempArray['id'] = uniqid();
+            $tempArray['name'] =$rootPermission['label'];
+            $tempArray['tree'] = [$rootPermission];
 
-        return $this->successResponse($nestedPermissions);
+            $returnArray[] = $tempArray;
+        }
+
+        return $this->successResponse($returnArray);
 
     }
 
