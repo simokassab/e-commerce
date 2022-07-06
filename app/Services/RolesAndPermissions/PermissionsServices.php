@@ -110,6 +110,29 @@ class PermissionsServices {
 
     }
 
+    public static function loopOverMultiDimentionArray(array $arraysOfNestedPermissions){
+
+        $array = [];
+        $mergedArrays=[];
+        foreach ($arraysOfNestedPermissions as $key => $arrayOfNestedPermissions){
+            $array2 = [];
+            $tempArray = [];
+            $tempArray[] = $arrayOfNestedPermissions['label'];
+            $tempArray[] = $arrayOfNestedPermissions['checked'];
+
+            if(!is_null($arrayOfNestedPermissions['nodes']) && count($arrayOfNestedPermissions['nodes']) > 0){
+                $array2 = self::loopOverMultiDimentionArray($arrayOfNestedPermissions['nodes']);
+            }
+
+            $array[] = $tempArray;
+            $mergedArrays = array_merge($array,$array2);
+
+        }
+        return ($mergedArrays);
+
+
+    }
+
 //    public static function markRolesPermissionAsChecked(Array $permissionsOfRole,Array &$permissions){
 //
 //

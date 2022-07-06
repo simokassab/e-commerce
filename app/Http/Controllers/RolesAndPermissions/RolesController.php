@@ -65,24 +65,27 @@ class RolesController extends MainController
      */
     public function store(StoreRoleRequest $request)
     {
-        print_r($request);
-        die();
-
         DB::beginTransaction();
 
         try {
-            $role = CustomRole::create(['name' => $request->name]);
+            $role = CustomRole::create([
+                'name' => $request->name,
+                'guard_name' => 'web',
+                'parent_id' => $request->parent_id
+            ]);
 
-            if($request->has('parent_id') && isset($request->parent_id) ){
-                $role->setParent($request->parent_id);
-            }
+//            if($request->has('parent_id') && isset($request->parent_id) ){
+//                $role->setParent($request->parent_id);
+//            }
 
-            if($request->has('permissions') && !empty($request->permissions) ){
-                $parentPermissions = CustomRole::findOrFail($request->parent_id)->permissions->pluck('id')->toArray();
-                $permissions = RolesService::filterPermissionsAccordingToParentPermissions($parentPermissions,$request->permissions);
-                $role->givePermissionTo($permissions);
+            $subPermissions = $request->permissions[0]['tree'];
+            $flattenPermissions = PermissionsServices::loopOverMultiDimentionArray($subPermissions) ?? [];
+            $approvedPermissions = array_filter($flattenPermissions,fn($value) => $value[1] );
+            $approvedPermissions = (collect($approvedPermissions)->pluck(0));
 
-            }
+            $allPermissions = CustomPermission::all()->pluck('name');
+
+            return "done";
 
             DB::commit();
             return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
