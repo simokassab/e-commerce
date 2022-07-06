@@ -23,6 +23,10 @@ class ProductController extends MainController
     const OBJECT_NAME = 'objects.product';
     const relations=['parent','children','defaultCategory','unit','tax','brand'];
 
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -122,7 +126,8 @@ class ProductController extends MainController
         $product->tax_id = $request->tax_id;
         $product->products_statuses_id = $request->products_statuses_id;
         $product->save();
-        ProductService::storeAdditionalProductData($request,$product->id);
+
+        $this->productService->storeAdditionalProductData($request,$product->id);
 
         DB::commit();
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),

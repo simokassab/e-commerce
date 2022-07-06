@@ -32,6 +32,7 @@ public $request,$product_id;
     }
 
     private function storeAdditionalCategrories(){
+        dd($this->request);
         if ($this->request->has('categories')) {
             $categoriesArray = $this->request->categories ?? [];
             foreach ($this->request->categories as $category => $value) {
