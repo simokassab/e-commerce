@@ -181,4 +181,8 @@ class TaxController extends MainController
         }
 
     }
+
+    public function getTableHeaders(){
+        return $this->successResponse(['headers' => __('headers.taxes') ]);
+}
 }
