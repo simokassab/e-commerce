@@ -172,4 +172,7 @@ class PricesController extends MainController
         //this module can't be destroyed
     }
 
+    public function getTableHeaders(){
+        return $this->successResponse(['headers' => __('headers.prices') ]);
+}
 }

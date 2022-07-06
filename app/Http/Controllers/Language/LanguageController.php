@@ -205,7 +205,9 @@ public function toggleStatus(Request $request ,$id){
         return $this->successResponse(['languages' => $languages ]);
     }
 
-
+    public function getTableHeaders(){
+        return $this->successResponse(['headers' => __('headers.languages') ]);
+}
 
     }
 

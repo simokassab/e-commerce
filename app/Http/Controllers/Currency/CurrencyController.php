@@ -179,4 +179,7 @@ class CurrencyController extends MainController
         'currency' => new CurrencyResource($currencyObject)
         ]);
     }
+     public function getTableHeaders(){
+        return $this->successResponse(['headers' => __('headers.currencies') ]);
+}
 }

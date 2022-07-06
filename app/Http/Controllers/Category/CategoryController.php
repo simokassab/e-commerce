@@ -289,12 +289,11 @@ class CategoryController extends MainController
 
         batch()->update($category = new Category(),$request->order,'id');
             return $this->successResponsePaginated(CategoryResource::class,Category::class,self::relations);
-
-
-
     }
 
-
+    public function getTableHeaders(){
+        return $this->successResponse(['headers' => __('headers.categories') ]);
+}
 
 }
 

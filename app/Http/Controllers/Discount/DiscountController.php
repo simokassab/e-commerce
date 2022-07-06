@@ -152,4 +152,8 @@ class DiscountController extends MainController
          'discount' => new DiscountResource($discount)
      ]);
     }
+
+    public function getTableHeaders(){
+        return $this->successResponse(['headers' => __('headers.discounts') ]);
+}
 }

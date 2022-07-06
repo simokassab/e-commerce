@@ -14,6 +14,7 @@ use App\Models\Label\Label;
 use App\Services\Brand\BrandsService;
 use Error;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
@@ -295,5 +296,9 @@ public function updateSortValues(Request $request){
 
     return $this->successResponsePaginated(BrandResource::class,Brand::class);
 
+}
+
+public function getTableHeaders(){
+        return $this->successResponse(['headers' => __('headers.brands') ]);
 }
 }
