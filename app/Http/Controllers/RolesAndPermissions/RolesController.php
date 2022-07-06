@@ -186,12 +186,21 @@ class RolesController extends MainController
             $permissionsWithCheck[] = $permission;
         }
         $nestedPermissions = PermissionsServices::getAllPermissionsNested($permissionsWithCheck,$permissionsOfRole);
+
         return $this->successResponse($nestedPermissions);
 
     }
 
     public function getAllRoles(){
         return $this->successResponse([ "roles" => GetAllRolesResource::collection(CustomRole::all()) ]);
+    }
+
+    private function loopOverMultiArray($multiArray){
+        foreach ($multiArray as $array){
+            if(is_array($array)){
+
+            }
+        }
     }
 
 }

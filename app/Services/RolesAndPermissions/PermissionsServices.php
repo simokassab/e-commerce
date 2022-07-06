@@ -92,7 +92,17 @@ class PermissionsServices {
             $result = (object)[];
             $result->label = $rootPermission->name;
             $result->checked = in_array($rootPermission->id ?? 0, $permissionsOfRoleIds);
-            $result->nodes = self::getPermissionChildren($rootPermission,$permissionsOfRole);
+//            $result->nodes = self::getPermissionChildren($rootPermission,$permissionsOfRole);
+            $nodes = self::getPermissionChildren($rootPermission,$permissionsOfRole);
+//            dd(self::getPermissionChildren($rootPermission,$permissionsOfRole));
+            $array= [];
+
+            if(is_array($nodes) && count($nodes)){
+                foreach ($nodes as $node){
+                    $array[] = $node;
+                }
+            }
+            $result->nodes = $array;
             $lastResult[] = $result;
         }
         return $lastResult;
