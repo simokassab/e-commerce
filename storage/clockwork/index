@@ -552,3 +552,5 @@
 1657102843-0609-1416552231,1657102842.8102,POST,/api/dashboard/role/get-nested-permissions-for-role,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",404,593.13797950745,request
 1657103143-3421-875535680,1657103143.1962,POST,/api/dashboard/role/get-nested-permissions-for-role,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",500,433.99095535278,request
 1657103216-0911-2087666715,1657103215.9308,POST,/api/dashboard/role/get-nested-permissions-for-role,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",500,576.41386985779,request
+1657103407-2349-96965687,1657103407.146,GET,/api/dashboard/role/get-nested-permissions-for-role/1,,404,244.14610862732,request
+1657103416-4170-1702283609,1657103416.3298,POST,/api/dashboard/role/get-nested-permissions-for-role/,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",200,1403.8400650024,request

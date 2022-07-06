@@ -201,7 +201,6 @@ class RolesController extends MainController
                 $allPermissionsWithCheck[] = $permission;
             }
         }
-        dd($allPermissionsWithCheck);
         $returnArray = [];
         $nestedPermissions = PermissionsServices::getAllPermissionsNested($allPermissionsWithCheck,$permissionsOfRole);
         foreach($nestedPermissions as $rootPermission){
