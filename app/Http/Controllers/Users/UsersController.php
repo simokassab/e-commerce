@@ -113,6 +113,6 @@ class UsersController extends MainController
 
     }
     public function getTableHeaders(){
-        return $this->successResponse(['headers' => __('headers.units') ]);
+        return $this->successResponse(['headers' => __('headers.user') ]);
 }
 }
