@@ -119,12 +119,14 @@ class PermissionsServices {
             $tempArray = [];
             $tempArray[] = $arrayOfNestedPermissions['label'];
             $tempArray[] = $arrayOfNestedPermissions['checked'];
+            $array[] = $tempArray;
 
             if(!is_null($arrayOfNestedPermissions['nodes']) && count($arrayOfNestedPermissions['nodes']) > 0){
                 $array2 = self::loopOverMultiDimentionArray($arrayOfNestedPermissions['nodes']);
+                $array = array_merge($array,$array2);
+
             }
 
-            $array[] = $tempArray;
             $mergedArrays = array_merge($array,$array2);
 
         }
