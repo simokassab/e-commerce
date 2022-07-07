@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Fields;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Field\StoreFieldRequest;
-use App\Http\Resources\FieldsResource;
+use App\Http\Resources\Field\FieldsResource;
+use App\Http\Resources\Field\SingleFieldResource;
 use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
 use App\Services\Field\FieldService;
@@ -80,7 +81,7 @@ class FieldsController extends MainController
 
 
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'field' => new FieldsResource($field)
+            'field' => new SingleFieldResource($field)
         ]);
 
     }
@@ -138,7 +139,7 @@ class FieldsController extends MainController
 
         DB::commit();
         return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'field' => new FieldsResource($field)
+            'field' => new SingleFieldResource($field)
         ]);
     } catch (\Exception $e) {
         DB::rollBack();
@@ -162,7 +163,7 @@ class FieldsController extends MainController
 
             DB::commit();
             return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-                'field' => new FieldsResource($field)
+                'field' => new SingleFieldResource($field)
             ]);
 
         }catch (\Exception $e){

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Tax;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LanguageResource extends JsonResource
+class SingleTaxResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,15 +14,15 @@ class LanguageResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $taxComponent=$this->whenLoaded('taxComponent');
+
+        return[
             'id' => $this->id,
             'name' => $this->name,
-            'code' => $this->code,
-            // 'is_default' => $this->is_default,
-            // 'is_disabled' => $this->is_disabled,
-            'image' => $this->image,
-            // 'sort' => $this->sort
-
+            'is_complex' => $this->is_complex,
+            'percentage' => $this->percentage,
+            'complex_behavior' => $this->complex_behavior,
+            'tax_component' => TaxComponentResource::collection($taxComponent)
         ];
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Category;
 
-use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Category\StoreCategoryRequest;
-use App\Http\Resources\CategoryResource;
+use App\Http\Resources\Category\CategoryResource;
+use App\Http\Resources\Category\SingleCategoryResource;
 use App\Models\Category\CategoriesFields;
 use App\Models\Category\CategoriesLabels;
 use App\Models\Category\Category;
@@ -123,7 +123,7 @@ class CategoryController extends MainController
                     //End of Labels Store
                     DB::commit();
                     return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                    'cateogries' => new CategoryResource($category)
+                    'cateogries' => new SingleCategoryResource($category)
                 ]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -217,7 +217,7 @@ class CategoryController extends MainController
 
                     DB::commit();
                     return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-                    'cateogries' => new CategoryResource($category)
+                    'cateogries' => new SingleCategoryResource($category)
                 ]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -242,7 +242,7 @@ class CategoryController extends MainController
             $category->delete();
             DB::commit();
             return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'category' => new CategoryResource($category)
+            'category' => new SingleCategoryResource($category)
             ]);
 
         }catch (\Exception $e){

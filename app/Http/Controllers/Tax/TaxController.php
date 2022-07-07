@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Tax;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Tax\StoreTaxRequest;
-use App\Http\Resources\TaxResource;
+use App\Http\Resources\Tax\SingleTaxResource;
+use App\Http\Resources\Tax\TaxResource;
 use App\Models\Tax\Tax;
 use App\Models\Tax\TaxComponent;
 use App\Services\Tax\TaxsServices;
 use Illuminate\Http\Request;
-use PHPUnit\Exception;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 class TaxController extends MainController
 {
@@ -80,7 +79,7 @@ class TaxController extends MainController
 
 
     return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-        'Taxes' => new TaxResource($tax)
+        'Taxes' => new SingleTaxResource($tax)
 ]);
 
 
@@ -145,7 +144,7 @@ class TaxController extends MainController
 
             DB::commit();
             return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                'Taxes' => new TaxResource($tax)
+                'Taxes' => new SingleTaxResource($tax)
         ]);
 
         } catch (\Exception $e) {
@@ -171,7 +170,7 @@ class TaxController extends MainController
 
             DB::commit();
             return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-                'taxes' => new TaxResource($tax)
+                'taxes' => new SingleTaxResource($tax)
             ]);
 
         }catch (\Exception $e){

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Field;
 
 use App\Http\Controllers\Fields\FieldValueController;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -16,7 +16,7 @@ class FieldsResource extends JsonResource
     public function toArray($request)
     {
 
-        $fields_values=$this->whenLoaded('fieldValue');
+        // $fields_values=$this->whenLoaded('fieldValue');
         return [
             'id' =>$this->id,
             'title'=> $this->title,

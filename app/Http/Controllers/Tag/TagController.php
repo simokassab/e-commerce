@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Tag;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Tag\StoreTagRequest;
-use App\Http\Resources\TagResource;
+use App\Http\Resources\Tag\TagResource;
 use App\Models\Tag\Tag;
 use Exception;
 use Illuminate\Http\Request;

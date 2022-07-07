@@ -4,14 +4,12 @@ namespace App\Http\Controllers\Currency;
 
 use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
-use App\Http\Requests\Currency\StoreCurrency;
 use App\Http\Requests\Currency\StoreCurrencyRequest;
-use App\Http\Resources\CurrencyHistoryResource;
-use App\Http\Resources\CurrencyResource;
+use App\Http\Resources\Currency\CurrencyHistoryResource;
+use App\Http\Resources\Currency\CurrencyResource;
+use App\Http\Resources\Currency\SingleCurrencyResource;
 use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyHistory;
-use App\Services\Currency\CurrencyService;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
@@ -75,7 +73,7 @@ class CurrencyController extends MainController
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'currency' => new CurrencyResource($currency)
+            'currency' => new SingleCurrencyResource($currency)
             ]);
 
     }
@@ -131,7 +129,7 @@ class CurrencyController extends MainController
             DB::commit();
 
             return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'currency' => new CurrencyResource($currency)
+            'currency' => new SingleCurrencyResource($currency)
         ]);
 
         }catch(\Exception $exception){

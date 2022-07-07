@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Tax;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-USE App\Http\Resources\CurrencyResource;
-class CurrencyHistoryResource extends JsonResource
+
+class TaxComponentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,11 +15,9 @@ class CurrencyHistoryResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'data' => [
-                'id' => $this->id,
-                'rate' => $this->rate,
-                'currency' => new CurrencyResource($this->currency),
-            ]
+            'id' => $this->id,
+            'component_tax_id' => $this->component_tax_id,
+            'sort' => $this->sort
         ];
     }
 }

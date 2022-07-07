@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Tag;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TaxComponentResource extends JsonResource
+class TagResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +16,7 @@ class TaxComponentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'component_tax_id' => $this->component_tax_id,
-            'sort' => $this->sort
+            'name' => $this->name
         ];
     }
 }

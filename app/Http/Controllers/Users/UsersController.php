@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Users\StoreUserRequest;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\User\SingleUserResource;
+use App\Http\Resources\User\UserResource;
 use App\Models\User\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -54,7 +54,7 @@ class UsersController extends MainController
             DB::commit();
 
                  return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                 'user' => new UserResource($user)
+                 'user' => new SingleUserResource($user)
              ]);
         }catch (\Exception $exception){
             DB::rollBack();
@@ -81,7 +81,7 @@ class UsersController extends MainController
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)])]);
 
         return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'user' => new UserResource($user)
+            'user' => new SingleUserResource($user)
         ]);
     }
 
@@ -91,7 +91,7 @@ class UsersController extends MainController
             return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])]);
 
         return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'user' => new UserResource($user)
+            'user' => new SingleUserResource($user)
         ]);
 
     }

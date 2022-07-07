@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Language;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LabelsResource extends JsonResource
+class SingleLanguageResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,12 @@ class LabelsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'entity' => $this->entity,
-            'color' => $this->color,
+            'name' => $this->name,
+            'code' => $this->code,
+            'is_default' => $this->is_default,
+            'is_disabled' => $this->is_disabled,
             'image' => $this->image,
-            'key' => $this->key,
+            'sort' => $this->sort
         ];
     }
 }

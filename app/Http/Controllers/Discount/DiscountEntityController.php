@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Discount;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Discount\StoreDiscountEntityRequest;
-use App\Http\Resources\DiscountEntityResource;
+use App\Http\Resources\Discount\DiscountEntityResource;
 use App\Models\Discount\DiscountEntity;
 use Exception;
 use Illuminate\Http\Request;

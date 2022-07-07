@@ -4,10 +4,7 @@ namespace App\Http\Controllers\Prices;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\price\PricesRequest;
-use App\Http\Resources\CurrencyResource;
-use App\Http\Resources\PriceResource;
-use App\Http\Resources\SettingsResource;
-use App\Models\Currency\Currency;
+use App\Http\Resources\Price\PriceResource;
 use Illuminate\Http\Request;
 use App\Models\Price\Price;
 

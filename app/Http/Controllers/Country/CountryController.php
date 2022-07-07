@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Country;
 use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Countries\StoreCountryRequest;
-use App\Http\Resources\CountryResource;
+use App\Http\Resources\Country\CountryResource;
 use App\Models\Country\Country;
 use Exception;
 use Illuminate\Http\Request;

@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Currency;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-
-class DiscountResource extends JsonResource
+class CurrencyHistoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,11 +14,11 @@ class DiscountResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-            'discount_percentage' => $this->discount_percentage,
+            'data' => [
+                'id' => $this->id,
+                'rate' => $this->rate,
+                'currency' => new CurrencyResource($this->currency),
+            ]
         ];
     }
 }
