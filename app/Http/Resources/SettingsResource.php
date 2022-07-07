@@ -18,7 +18,7 @@ class SettingsResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'value' => $this->value,
-            'is_developer' => $this->is_developer
+            // 'is_developer' => $this->is_developer
         ];
     }
 }

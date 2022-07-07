@@ -25,10 +25,10 @@ class CurrencyResource extends JsonResource
             'code' => $this->code,
             'symbol'=>$this->symbol,
             'rate'=>$this->rate,
-            'is_default'=>$this->is_default,
+            // 'is_default'=>$this->is_default,
             'image'=>$this->image,
-            'sort'=>$this->sort,
-            'history' => CurrencyHistoryResource::collection($currency_history),
+            // 'sort'=>$this->sort,
+            // 'history' => CurrencyHistoryResource::collection($currency_history),
 
         ];
     }

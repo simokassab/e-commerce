@@ -22,8 +22,8 @@ class PriceResource extends JsonResource
         $arrayForVirtualInfo['id']  =$this->id;
         $arrayForVirtualInfo['name']  =$this->name ?? '-';
         $arrayForVirtualInfo['currency']  =($this->whenLoaded('currency')->code .' - '.$this->whenLoaded('currency')->symbol)  ?? '-';
-        $arrayForVirtualInfo['parent_class'] = ($this->whenLoaded('originalPrice')->name) ?? '-';
-        $arrayForVirtualInfo['percentage'] = ($this->percentage) ?? '-';
+        $arrayForVirtualInfo['original_price_id'] = ($this->whenLoaded('originalPrice')->name) ?? '-';
+        $arrayForVirtualInfo['original_percent'] = ($this->percentage) ?? '-';
 
         return $arrayForVirtualInfo;
 

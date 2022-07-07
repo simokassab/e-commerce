@@ -18,10 +18,10 @@ class LanguageResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
-            'is_default' => $this->is_default,
-            'is_disabled' => $this->is_disabled,
+            // 'is_default' => $this->is_default,
+            // 'is_disabled' => $this->is_disabled,
             'image' => $this->image,
-            'sort' => $this->sort
+            // 'sort' => $this->sort
 
         ];
     }

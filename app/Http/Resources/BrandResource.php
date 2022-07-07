@@ -19,13 +19,13 @@ class BrandResource extends JsonResource
             'name' => $this->name,
             'code' => $this->code,
             'image'=> $this->image,
-            'meta_title' => $this->meta_title,
-            'meta_description' => $this->meta_description,
-            'meta_keyword' => $this->meta_keyword,
-            'description' => $this->description,
-            'keyword' => $this->keyword,
-            'sort' => $this->sort,
-            'is_disabled' => $this->is_disabled,
+            // 'meta_title' => $this->meta_title,
+            // 'meta_description' => $this->meta_description,
+            // 'meta_keyword' => $this->meta_keyword,
+            // 'description' => $this->description,
+            // 'keyword' => $this->keyword,
+            // 'sort' => $this->sort,
+            // 'is_disabled' => $this->is_disabled,
         ];
     }
 }
