@@ -22,11 +22,14 @@ class AuthenticationController extends MainController
                 'message' => 'wrong credentials',
             ],401);
         }
-
+        $permissions = [];
+        if(!is_null(\auth()->user()->roles) && count(\auth()->user()->roles) > 0){
+            $permissions = \auth()->user()->roles[0]->permissions;
+        }
         return $this->successResponse([
             'message' => 'authenticated successfully!',
             'user' => \auth()->user(),
-            'permissions' => \auth()->user()->roles[0]->permissions,
+            'permissions' => $permissions,
         ],201);
     }
 
