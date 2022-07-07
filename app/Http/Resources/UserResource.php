@@ -21,10 +21,8 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'email' => $this->email,
             'first_name' => $this->first_name,
-            'is_disabled' => $this->is_disabled,
-            'role' => $this->roles[0]->name ?? '',
-//            'role' => $role,
-//            'is_confirmed' => $this->is_confirmed,
+            'last_name' => $this->last_name,
+            'role_name' => $this->roles[0]->name ?? '-',
         ];
     }
 }

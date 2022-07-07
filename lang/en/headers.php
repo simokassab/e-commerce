@@ -498,6 +498,12 @@ return [
             'type' => 'string',
             'sort' => true
         ],
+        'role_name' => [
+            'name' => 'Role Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ]
     ],
 
     
