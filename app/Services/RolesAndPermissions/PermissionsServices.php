@@ -72,23 +72,43 @@ class PermissionsServices {
 
     public static function getRootPermissions(Array $permissions){
         $arrayOfParents = [];
-        foreach($permissions as $permission){
-            if(!is_null($permission->parent) || $permission->parent_id ) {
+        $arrayOfParentsNames = [];
+//        foreach($permissions as $permission){
+//            if(!is_null($permission->parent) || $permission->parent_id ) {
+//                continue;
+//            }
+//
+//            if(!in_array($permission,$arrayOfParents)){
+//                $arrayOfParents[] = $permission;
+//            }
+//
+//        }
+
+        foreach ($permissions as $permission){
+            if(is_null($permission->parent)){
                 continue;
             }
-            if(!in_array($permission,$arrayOfParents)){
-                $arrayOfParents[] = $permission;
+            if(array_key_exists($permission->parent->name,$arrayOfParentsNames)){
+                continue;
             }
-
+            if(!is_null($permission->parent)){
+                $arrayOfParents[] = $permission->parent;
+                $arrayOfParentsNames[$permission->parent->name] = $permission->parent->name;
+            }
         }
+
         return ($arrayOfParents);
     }
 
     public static function getAllPermissionsNested(Array $permissions,Array $permissionsOfRole=[]){
         $permissionsOfRoleIds= array_column($permissionsOfRole, 'id');
         $lastResult = [];
+        $addedRootIds = [];
         $rootPermissions = self::getRootPermissions($permissions);
+
         foreach ($rootPermissions as $rootPermission){
+
+
             $result = (object)[];
             $result->label = $rootPermission->name;
             $result->checked = in_array($rootPermission->id ?? 0, $permissionsOfRoleIds);
@@ -106,8 +126,8 @@ class PermissionsServices {
             $result = (array)$result;
             $lastResult[] = $result;
         }
-        return $lastResult;
 
+        return $lastResult;
     }
 
     public static function loopOverMultiDimentionArray(array $arraysOfNestedPermissions){

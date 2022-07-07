@@ -207,7 +207,6 @@ class RolesController extends MainController
             'role' => 'nullable|integer',
             'parent_role' => 'nullable|integer'
         ]);
-
         $permissionsOfRole = CustomRole::find($request->role) ? CustomRole::findOrFail($request->role)->permissions->toArray() : []  ;
         $permissionsForParentRoleIds = CustomRole::find($request->parent_role) ? CustomRole::findOrFail($request->parent_role)->permissions->pluck('id')->toArray() : [];
 
