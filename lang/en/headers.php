@@ -2,27 +2,112 @@
 
 return [
     'brands' => [
-        'id' => 'ID',
-        'name' => 'Name',
-        'code' => 'Code',
-        'image' => 'Image',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'name' => [
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => false
+        ],
+        'code' => [
+            'name' => 'Code',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'image' => [
+            'name' => 'Image',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => false
+        ],
     ],
     'categories' => [
-        'id' => 'ID',
-        'name' => 'Name',
-        'code' => 'Code',
-        'image' => 'Image',
-        'icon' => 'Icon',
-        'parent' => 'Parent Name',
-        'slug' => 'Slug',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'name' => [
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'code' => [
+            'name' => 'Code',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'image' => [
+            'name' => 'Image',
+            'search' => '',
+            'type' => 'image',
+            'sort' => false
+        ],
+        'icon' => [
+            'name' => 'Icon',
+            'search' => '',
+            'type' => 'image',
+            'sort' => false
+        ],
+        'parent' => [
+            'name' => 'Parent Name',
+            'search' => 'string',
+            'type' => 'String',
+            'sort' => true
+        ],
+        'slug' => [
+            'name' => 'Slug',
+            'search' => 'string',
+            'type' => 'String',
+            'sort' => true
+        ],
     ],
     'countries' => [
-        'id' => 'ID',
-        'name' => 'Name',
-        'iso_code_1' => 'Iso Code 1',
-        'iso_code_2' => 'Iso Code 2',
-        'phone_code' => 'Phone Code',
-        'flag' => 'Flag',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'name' => [
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'iso_code_1' => [
+            'name' => 'ISO code one',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'iso_code_2' => [
+            'name' => 'ISO code two',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'phone_code' => [
+            'name' => 'Phone code',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'flag' => [
+            'name' => 'Flag',
+            'search' => '',
+            'type' => 'image',
+            'sort' => false
+        ],
     ],
     'currencies' => [
         'id' => 'ID',

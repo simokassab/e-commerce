@@ -108,7 +108,7 @@ class CustomRole extends Role
         }
 
         if( $this->users()->exists() ){
-            $message = "The role can't be deleted it is attached to users!";
+            $message = "The role can't be deleted it is assigned to users!";
             return false;
         }
         return true;

@@ -20,7 +20,12 @@ return [
             'type' => 'integer',
             'sort' => false
         ],
-        'image' => 'الصورة',
+        'image' => [
+            'name' => 'الصورة',
+            'search' => '',
+            'type' => 'integer',
+            'sort' => false
+        ],
     ],
     
     'categories' => [

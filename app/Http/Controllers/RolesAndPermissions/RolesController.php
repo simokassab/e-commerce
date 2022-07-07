@@ -65,6 +65,7 @@ class RolesController extends MainController
      */
     public function store(StoreRoleRequest $request)
     {
+        return $request;
         DB::beginTransaction();
 
         try {
@@ -233,14 +234,6 @@ class RolesController extends MainController
 
     public function getAllRoles(){
         return $this->successResponse([ "roles" => GetAllRolesResource::collection(CustomRole::all()) ]);
-    }
-
-    private function loopOverMultiArray($multiArray){
-        foreach ($multiArray as $array){
-            if(is_array($array)){
-
-            }
-        }
     }
 
     public function getTableHeaders(){
