@@ -18,6 +18,7 @@ use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
 use App\Models\MainModel;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Spatie\Translatable\HasTranslations;
 
 class Product extends MainModel
@@ -95,10 +96,10 @@ class Product extends MainModel
 
     }
 
-    public function inhertDataFromVariableParent($isInhertPrices = true){
+    public function inhertDataFromVariableParent($isInhertPrices = true,Request $request){
 
+        $parent=Product::find($this->parent_product_id);
 
-         $parent=Product::find($this->parent_product_id);
          if(!$parent->type=='variable'){
             throw new \Exception('Parent product is not variable');
          }
@@ -121,23 +122,11 @@ class Product extends MainModel
             $this->weight=$parent->weight;
             $this->is_disabled=$parent->is_disabled;
             $this->products_statuses_id =$parent->products_statuses_id;
-            $this->save();
+
             if($isInhertPrices){
-                $parentPrices = $parent->price()->get() ?? [];
-            foreach ($parentPrices as $parentPrice => $value) {
-
-                // ProductPrice::insert($pricesArray);
-
-                //     $parentPrices=$parent->price()->get();
-                //     foreach($parentPrices as $parentPrice=>$value){
-                //         $price=new ProductPrice();
-                //         $price->product_id=$this->id;
-                //         $price->price_id=$parentPrice->price_id;
-                //         $price->price=$parentPrice->price;
-                //         $price->discounted_price=$parentPrice->discounted_price;
-                //         $price->save();
-                //     }
+                ProductPrice::inhertPrices($this->parent_product_id , $this->id);
             }
+
             }
         }
-}
+

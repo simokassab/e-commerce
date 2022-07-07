@@ -125,11 +125,12 @@ class ProductController extends MainController
         $product->brand_id = $request->brand_id;
         $product->tax_id = $request->tax_id;
         $product->products_statuses_id = $request->products_statuses_id;
-        $product->save();
 
         if($request->type=='variable_child'){
-            $product->inhertDataFromVariableParent($request->parent_product_id);
+            $product->inhertDataFromVariableParent($request->parent_product_id,$request);
         }
+
+        $product->save();
 
         $this->productService->storeAdditionalProductData($request,$product->id);
 
