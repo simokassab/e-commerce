@@ -193,3 +193,6 @@
 1657130558-9103-1985961359,1657130558.2398,PUT,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@update",200,1998.9771842957,request
 1657130588-4681-216252222,1657130588.3739,PUT,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@update",200,490.31186103821,request
 1657130592-3696-301811774,1657130592.287,PUT,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@update",200,282.73391723633,request
+1657177085-8136-1885596230,1657177085.6616,PUT,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@update",200,2581.1758041382,request
+1657177102-4993-2108323046,1657177102.3947,POST,/api/dashboard/role/2,,405,429.36897277832,request
+1657177107-1955-2099902302,1657177107.1216,POST,/api/dashboard/role/,"App\Http\Controllers\RolesAndPermissions\RolesController@store",200,236.81902885437,request

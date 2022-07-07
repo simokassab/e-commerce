@@ -110,60 +110,241 @@ return [
         ],
     ],
     'currencies' => [
-        'id' => 'ID',
-        'name' => 'Name',
-        'code' => 'Code',
-        'symbol' => 'Symbol',
-        'rate' => 'Rate',
-        'is_default' => 'Is Default?',
-        'image' => 'image',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'name' =>[
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'code' =>[
+            'name' => 'Code',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'symbol' => [
+            'name' => 'Symbol',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'rate' => [
+            'name' => 'Rate',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'image' => [
+            'name' => 'Image',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => false
+        ],
     ],
     'discounts' => [
-        'id' => 'ID',
-        'name' => 'Name',
-        'start_date' => 'Start Date',
-        'end_date' => 'End Date',
-        'discount_percentage' => 'Discount Percentage',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'name' => [
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'start_date' =>[
+            'name' => 'Start Date',
+            'search' => 'date',
+            'type' => 'date',
+            'sort' => true
+        ],
+        'end_date' => [
+            'name' => 'Start Date',
+            'search' => 'date',
+            'type' => 'date',
+            'sort' => true
+        ],
+        'discount_percentage' => [
+            'name' => 'Discount Percentage',
+            'search' => '',
+            'type' => 'date',
+            'sort' => true
+        ],
     ],
     'fields' => [
-        'id' => 'ID',
-        'title' => 'Title',
-        'type' => 'Type',
-        'entity' => 'Entity',
-        'is_required' => 'Is Required?',
-        'value' => 'Value',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'title' => [
+            'name' => 'Title',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'type' => [
+            'name' => 'Type',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'entity' => [
+            'name' => 'Entity',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
     ],
     'labels' => [
-        'id' => 'ID',
-        'title' => 'Title',
-        'entity' => 'Entity',
-        'color' => 'Color',
-        'image' => 'Image',
-        'key' => 'Key',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'title' => [
+            'name' => 'Title',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+
+        ],
+        'entity' => [
+            'name' => 'Entity',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'color' => [
+            'name' => 'Color',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'image' => [
+            'name' => 'Image',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => false
+        ],
+        'key' => [
+            'name' => 'Key',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
     ],
     'languages' => [
-        'id' => 'ID',
-        'name' => 'Name',
-        'code' => 'Code',
-        'is_default' => 'Is Default?',
-        'image' => 'Image',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'name' => [
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'code' => [
+            'name' => 'Code',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'image' => [
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
     ],
     'prices' => [
-        'id' => 'ID',
-        'name' => 'Name',
-        'currency' => 'Currency',
-        'is_virtual' => 'Is Virtual?',
-        'original_price_id ' => 'Original Price',
-        'original_percent ' => 'Original Percentage',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'name' => [
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'currency' => [
+            'name' => 'Currency',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'original_price_id ' => [
+            'name' => 'Original Price',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'original_percent ' => [
+            'name' => 'Original Percentage',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
     ],
     'products' => [
-        'id' => 'ID',
-        'name' => 'Name',
-        'slug' => 'Slug',
-        'category' => 'Category',
-        'code' => 'Code',
-        'sku' => 'Sku',
-        'type' => 'Type',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'name' => [
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'slug' => [
+            'name' => 'Slug',
+            'search' => 'string',
+            'type' => 'String',
+            'sort' => true
+        ],
+        'category' => [
+            'name' => 'Category',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'code' => [
+            'name' => 'Code',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'sku' => [
+            'name' => 'SKU',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'type' => [
+            'name' => 'Type',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
         'unit ' => 'Unit',
         'quantity' => 'Quantity',
         'reserved_quantity' => 'Reserved Quantity',
@@ -184,40 +365,139 @@ return [
         'products_statuses_id' => 'Product Status'
     ],
     'roles' => [
-        'id' => 'ID',
-        'name' => 'Name',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'name' => [
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'parent_role' => [
+            'name' => 'Parent Role',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ]
     ],
     'settings' => [
-        'id' => 'ID',
-        'title' => 'Title',
-        'value' => 'Value',
-        'is_developer' => 'Is Developer?',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'title' => [
+            'name' => 'Title',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'value' => [
+            'name' => 'Value',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
     ],
     'tags' => [
-        'id' => 'ID',
-        'name' => 'Name',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'name' => [
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
     ],
     'taxes' => [
-        'id' => 'ID',
-        'name' => 'Name',
-        'is_complex' => 'IS Complex?',
-        'percentage' => 'Percentage',
-        'complex_behavior' => 'Complex Behavior',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'name' => [
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'percentage' => [
+            'name' => 'Percentage',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'complex_behavior' => [
+            'name' => 'Complex Behavior',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
 
 
     ],
     'units' => [
-        'id' => 'ID',
-        'name' => 'Name',
-        'code' => 'Code',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'name' => [
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'code' => [
+            'name' => 'Code',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
 
     ],
     'users' => [
-        'id' => 'ID',
-        'username ' => 'User Name',
-        'email ' => 'Email',
-        'first_name ' => 'First Name',
-        'last_name ' => 'Last Name',
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'username ' => [
+            'name' => 'User Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'email ' => [
+            'name' => 'Email',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'first_name ' => [
+            'name' => 'First Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'last_name ' => [
+            'name' => 'Last Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
     ],
 
     
