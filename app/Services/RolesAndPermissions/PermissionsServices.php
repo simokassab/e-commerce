@@ -103,12 +103,9 @@ class PermissionsServices {
     public static function getAllPermissionsNested(Array $permissions,Array $permissionsOfRole=[]){
         $permissionsOfRoleIds= array_column($permissionsOfRole, 'id');
         $lastResult = [];
-        $addedRootIds = [];
         $rootPermissions = self::getRootPermissions($permissions);
-
+        dd(collect($rootPermissions)->pluck('name')->toArray());
         foreach ($rootPermissions as $rootPermission){
-
-
             $result = (object)[];
             $result->label = $rootPermission->name;
             $result->checked = in_array($rootPermission->id ?? 0, $permissionsOfRoleIds);

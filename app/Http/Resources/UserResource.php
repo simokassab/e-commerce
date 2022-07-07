@@ -14,8 +14,8 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-//        $role= $this->whenLoaded('roles');
-//        $role = gettype($role)  == 'object' && sizeof($role->all()) > 0 ? $role->all()[0]->name : '';
+
+
         return[
             'id' => $this->id."",
             'username' => $this->username,
