@@ -17,6 +17,7 @@ use App\Models\Attribute\AttributeValue;
 use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
 use App\Models\MainModel;
+use Carbon\Carbon;
 use Spatie\Translatable\HasTranslations;
 
 class Product extends MainModel
@@ -55,7 +56,7 @@ class Product extends MainModel
         return $this->belongsTo(Product::class,'parent_product_id');
 
     }
-    public function productRelatedChilds(){
+    public function productRelatedChildren(){
         return $this->hasMany(Product::class,'child_product_id');
 
     }
@@ -93,4 +94,50 @@ class Product extends MainModel
         return $this->hasMany(FieldValue::class,'field_value_id');
 
     }
+
+    public function inhertDataFromVariableParent($isInhertPrices = true){
+
+
+         $parent=Product::find($this->parent_product_id);
+         if(!$parent->type=='variable'){
+            throw new \Exception('Parent product is not variable');
+         }
+            $this->category_id=$parent->category_id;
+            $this->unit_id=$parent->unit_id;
+            $this->tax_id=$parent->tax_id;
+            $this->brand_id=$parent->brand_id;
+            $this->sku=$parent->sku;
+            $this->summary=$parent->summary;
+            $this->specification=$parent->specification;
+            $this->meta_title=$parent->meta_title;
+            $this->meta_description=$parent->meta_description;
+            $this->meta_keyword=$parent->meta_keyword;
+            $this->meta_description=$parent->meta_description;
+            $this->description=$parent->description;
+            $this->status=$parent->status;
+            $this->height=$parent->height;
+            $this->width=$parent->width;
+            $this->length=$parent->length;
+            $this->weight=$parent->weight;
+            $this->is_disabled=$parent->is_disabled;
+            $this->products_statuses_id =$parent->products_statuses_id;
+            $this->save();
+            if($isInhertPrices){
+                $parentPrices = $parent->price()->get() ?? [];
+            foreach ($parentPrices as $parentPrice => $value) {
+
+                // ProductPrice::insert($pricesArray);
+
+                //     $parentPrices=$parent->price()->get();
+                //     foreach($parentPrices as $parentPrice=>$value){
+                //         $price=new ProductPrice();
+                //         $price->product_id=$this->id;
+                //         $price->price_id=$parentPrice->price_id;
+                //         $price->price=$parentPrice->price;
+                //         $price->discounted_price=$parentPrice->discounted_price;
+                //         $price->save();
+                //     }
+            }
+            }
+        }
 }

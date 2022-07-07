@@ -88,7 +88,7 @@ class ProductController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
         DB::beginTransaction();
         try {
@@ -126,6 +126,10 @@ class ProductController extends MainController
         $product->tax_id = $request->tax_id;
         $product->products_statuses_id = $request->products_statuses_id;
         $product->save();
+
+        if($request->type=='variable_child'){
+            $product->inhertDataFromVariableParent($request->parent_product_id);
+        }
 
         $this->productService->storeAdditionalProductData($request,$product->id);
 
@@ -190,6 +194,14 @@ class ProductController extends MainController
 
         $request->validate(['is_disabled' => 'boolean|required']);
         $product = Product::findOrFail($id);
+        if($product->type=='variable'){
+            $productChildren = $product->children;
+            $productChildrenArray=[];
+            foreach ($productChildren as $productChild => $value) {
+                $productChildrenArray[$productChild]->is_disabled=$request->is_disabled;
+            }
+            batch()->update(new Product(),$productChildrenArray,'id');
+        }
         $product->is_disabled=$request->is_disabled;
         if(!$product->save())
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);

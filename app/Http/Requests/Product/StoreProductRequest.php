@@ -35,12 +35,12 @@ class StoreProductRequest extends FormRequest
 
             'name' => 'required',
             'slug' => 'required | max:'.config('defaults.default_string_length').' | unique:products,slug,'.$this->id ?? null,
-            'code' => 'required | max:'.config('defaults.default_string_length').' | unique:products,code,'.$this->id,
+            'code' => 'required | max:'.config('defaults.default_string_length').' | unique:products,code,'.$this->id ?? null,
             'sku' => [Rule::when(in_array('sku',$titlesArray), 'required','nullable'),' max:'.config('defaults.default_string_length')],
             'type' => 'required | in:'.config('defaults.validation_default_types'),
-            'quantity' => [Rule::when($request->type!='variable',['required','integer' , 'gte:0',],['in:0'])],
-            'reserved_quantity' => [Rule::when($request->type!='variable',['nullable','integer' , 'gte:0',],['in:0'])],
-            'minimum_quantity' => [Rule::when($request->type!='variable',['required','integer' , 'gte:0',],['in:0'])],
+            'quantity' => [Rule::when($request->type=='variable',['in:0'],['required','integer' , 'gte:0'])],
+            'reserved_quantity' => [Rule::when($request->type=='variable',['in:0'],['nullable','integer' , 'gte:0'])],
+            'minimum_quantity' => [Rule::when($request->type=='variable',['in:0'],['required','integer' , 'gte:0'])],
             'summary' => [Rule::when(in_array('summary',$titlesArray), 'required','nullable')],
             'specification' => [Rule::when(in_array('specification',$titlesArray), 'required','nullable')],
 
@@ -61,7 +61,8 @@ class StoreProductRequest extends FormRequest
             'weight' =>  [Rule::when(in_array('weight',$titlesArray), 'required','nullable'),'numeric'],
             'is_disabled' => 'nullable | boolean ',
             'sort' => 'nullable | integer',
-            'is_default_child' => ' boolean ',
+            'is_default_child' => 'boolean',
+            //TODO add validation for the following field when type is variable child
             'parent_product_id'=> 'nullable | integer | exists:products,id',
             'category_id'=> 'required  | integer | exists:categories,id',
             'unit_id'=> 'required | integer | exists:units,id',
@@ -71,7 +72,7 @@ class StoreProductRequest extends FormRequest
 
             'categories.*.category_id' => 'required | integer | exists:categories,id',
 
-            'fields.*.field_id' => 'required | integer | exists:fields,id,entity,brand',
+            'fields.*.field_id' => 'required | integer | exists:fields,id,entity,product',
             'fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
             'fields.*.value'=> 'nullable | max:'.config('defaults.default_string_length_2'),
 
@@ -94,7 +95,7 @@ class StoreProductRequest extends FormRequest
 
             'tags.*.tag_id' => 'required | integer | exists:tags,id',
 
-            'order.*.id' => 'required | integer | exists:categories,id',
+            'order.*.id' => 'required | integer | exists:products,id',
             'order.*.sort' => 'required | integer',
         ];
 
@@ -121,12 +122,18 @@ class StoreProductRequest extends FormRequest
 
             'quantity.required' => 'the :attribute field is required',
             'quantity.integer' => 'The :attribute must be an integer',
+            'quantity.gte' => 'The :attribute must be greater than or equal to :gte',
+            'quantity.in' => 'The :attribute must be 0',
 
             'reserved_quantity.required' => 'the :attribute field is required',
             'reserved_quantity.integer' => 'The :attribute must be an integer',
+            'reserved_quantity.gte' => 'The :attribute must be greater than or equal to :gte',
+            'reserved_quantity.in' => 'The :attribute must be 0',
 
             'minimum_quantity.required' => 'the :attribute field is required',
             'minimum_quantity.integer' => 'The :attribute must be an integer',
+            'minimum_quantity.gte' => 'The :attribute must be greater than or equal to :gte',
+            'minimum_quantity.in' => 'The :attribute must be 0',
 
             'summary.required' => 'the :attribute field is required',
 
