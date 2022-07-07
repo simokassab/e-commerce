@@ -289,13 +289,13 @@ return [
             'type' => 'string',
             'sort' => true
         ],
-        'original_price_id ' => [
+        'original_price_id' => [
             'name' => 'Original Price',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
-        'original_percent ' => [
+        'original_percent' => [
             'name' => 'Original Percentage',
             'search' => 'string',
             'type' => 'string',
@@ -474,25 +474,25 @@ return [
             'type' => 'integer',
             'sort' => true
         ],
-        'username ' => [
+        'username' => [
             'name' => 'User Name',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
-        'email ' => [
+        'email' => [
             'name' => 'Email',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
-        'first_name ' => [
+        'first_name' => [
             'name' => 'First Name',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
-        'last_name ' => [
+        'last_name' => [
             'name' => 'Last Name',
             'search' => 'string',
             'type' => 'string',

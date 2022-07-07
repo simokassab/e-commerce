@@ -19,7 +19,7 @@ class RolesResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'parent_name' => $this->parent->name ?? '-',
+            'parent_role' => $this->parent->name ?? '-',
         //    'children' => self::collection($this->whenLoaded('children')),
 
         ];

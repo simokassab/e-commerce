@@ -22,8 +22,8 @@ class FieldsResource extends JsonResource
             'title'=> $this->title,
             'type'=> $this->type,
             'entity'=> $this->entity,
-            'is_required'=> $this->is_required,
-            'fields_values' => FieldsValueResource::collection($fields_values)
+            // 'is_required'=> $this->is_required,
+            // 'fields_values' => FieldsValueResource::collection($fields_values)
         ];
     }
 }
