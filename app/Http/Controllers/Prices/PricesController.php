@@ -23,7 +23,7 @@ class PricesController extends MainController
     {
         if ($request->method()=='POST') {
             $relations=['currency','products','originalPrice','originalPricesChildren'];
-            $searchKeys=['name','original_percent'];
+            $searchKeys=['name','percentage'];
             $data=($request->data);
             $keys = array_keys($data);
 
