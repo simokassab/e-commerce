@@ -80,9 +80,9 @@ class RolesController extends MainController
                 $innerFlattenPermissions = PermissionsServices::loopOverMultiDimentionArray( $permission['tree']) ?? [];
                 $flattenPermissions= array_merge($innerFlattenPermissions,$flattenPermissions);
             }
-            return (collect($flattenPermissions)->unique());
+            $flattenPermissions = collect($flattenPermissions)->unique();
 
-            $approvedPermissions = array_filter($flattenPermissions,fn($value) => $value[1] );
+            $approvedPermissions = array_filter($flattenPermissions->toArray(),fn($value) => $value[1] );
             $approvedPermissions = (collect($approvedPermissions)->pluck(0));
 
             $role->givePermissionTo($approvedPermissions);
