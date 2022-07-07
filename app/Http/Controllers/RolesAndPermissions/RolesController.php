@@ -84,7 +84,7 @@ class RolesController extends MainController
 
             $approvedPermissions = array_filter($flattenPermissions->toArray(),fn($value) => $value[1] );
             $approvedPermissions = (collect($approvedPermissions)->pluck(0));
-
+            return ($approvedPermissions);
             $role->givePermissionTo($approvedPermissions);
 
             DB::commit();
