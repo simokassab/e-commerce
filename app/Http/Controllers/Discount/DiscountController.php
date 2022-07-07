@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Discount;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Discount\StoreDiscountRequest;
-use App\Http\Resources\DiscountResource;
+use App\Http\Resources\Discount\DiscountResource;
 use App\Models\Brand\Brand;
 use App\Models\Category\Category;
 use App\Models\Discount\Discount;
-use Exception;
 use App\Models\Tag\Tag;
 use App\Services\Discounts\DiscountsServices;
 use Illuminate\Http\Request;

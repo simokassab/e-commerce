@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Setting\StoreSettingRequest;
-use App\Http\Resources\SettingsResource;
+use App\Http\Resources\Setting\SettingsResource;
+use App\Http\Resources\Setting\SingleSettingResource;
 use App\Models\Settings\Setting;
 use Exception;
 use Illuminate\Http\Request;
@@ -73,7 +74,7 @@ class SettingsController extends MainController
 
         return $this->successResponse([
             'message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'setting' => new SettingsResource($setting)
+            'setting' => new SingleSettingResource($setting)
         ]);
     }
 
@@ -117,7 +118,7 @@ class SettingsController extends MainController
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
         return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'setting' => new SettingsResource($setting)
+            'setting' => new SingleSettingResource($setting)
         ]);
     }
 
@@ -133,7 +134,7 @@ class SettingsController extends MainController
             return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
         return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'setting' => new SettingsResource($setting)
+            'setting' => new SingleSettingResource($setting)
         ]);
     }
 

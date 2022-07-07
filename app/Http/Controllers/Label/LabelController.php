@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Label;
 
 use App\Exceptions\FileErrorException;
-use App\Http\Resources\LabelsResource;
+use App\Http\Resources\Label\LabelsResource;
 use App\Models\Label\Label;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Labels\StoreLabelRequest;

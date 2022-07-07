@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Unit;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Unit\StoreUnitRequest;
-use App\Http\Resources\UnitResource;
+use App\Http\Resources\Unit\UnitResource;
 use App\Models\Unit\Unit;
 use Exception;
 use Illuminate\Http\Request;

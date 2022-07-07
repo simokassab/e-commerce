@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Brand;
 use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Brand\StoreBrandRequest;
-use App\Http\Resources\BrandResource;
+use App\Http\Resources\Brand\BrandResource;
+use App\Http\Resources\Brand\SingleBrandResource;
 use App\Models\Brand\Brand;
 use App\Models\Brand\BrandField;
 use App\Models\Brand\BrandLabel;
@@ -136,7 +137,7 @@ class BrandController extends MainController
                     DB::commit();
 
                     return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                        'brand' => new BrandResource($brand)
+                        'brand' => new SingleBrandResource($brand)
                     ]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -224,7 +225,7 @@ class BrandController extends MainController
 
                     DB::commit();
                     return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                    'brand' => new BrandResource($brand)
+                    'brand' => new SingleBrandResource($brand)
                          ]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -256,7 +257,7 @@ class BrandController extends MainController
             $brand->delete();
             DB::commit();
             return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'brand' => new BrandResource($brand)
+            'brand' => new SingleBrandResource($brand)
             ]);
 
         }catch (\Exception $e){

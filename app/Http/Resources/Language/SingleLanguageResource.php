@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Language;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DiscountResource extends JsonResource
+class SingleLanguageResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,9 +17,11 @@ class DiscountResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-            'discount_percentage' => $this->discount_percentage,
+            'code' => $this->code,
+            'is_default' => $this->is_default,
+            'is_disabled' => $this->is_disabled,
+            'image' => $this->image,
+            'sort' => $this->sort
         ];
     }
 }

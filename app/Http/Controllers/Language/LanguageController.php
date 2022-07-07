@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Language;
 use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Language\StoreLanguageRequest;
-use App\Http\Resources\LanguageResource;
+use App\Http\Resources\Language\LanguageResource;
+use App\Http\Resources\Language\SingleLanguageResource;
 use App\Models\Language\Language;
 use Exception;
 use Illuminate\Http\Request;
@@ -67,7 +68,7 @@ class LanguageController extends MainController
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'language' => new LanguageResource($language)
+            'language' => new SingleLanguageResource($language)
         ]);
 
 
@@ -123,7 +124,7 @@ class LanguageController extends MainController
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
         return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'language' => new LanguageResource($language)
+            'language' => new SingleLanguageResource($language)
         ]);
 
     }
@@ -144,7 +145,7 @@ class LanguageController extends MainController
             return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
 
         return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'language' => new LanguageResource($language)
+            'language' => new SingleLanguageResource($language)
         ]);
 
     }

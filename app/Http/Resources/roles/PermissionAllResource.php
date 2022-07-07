@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\roles;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RolesResource extends JsonResource
+class PermissionAllResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,13 +14,10 @@ class RolesResource extends JsonResource
      */
     public function toArray($request)
     {
-        $roles=$this->whenLoaded('roles');
-
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'parent_role' => $this->parent->name ?? '-',
-        //    'children' => self::collection($this->whenLoaded('children')),
+            'label' => $this->name,
+            'nodes' => self::collection($this->whenLoaded('children')),
 
         ];
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Setting;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FieldsValueResource extends JsonResource
+class SettingsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +15,10 @@ class FieldsValueResource extends JsonResource
     public function toArray($request)
     {
         return [
-          'id' => $this->id,
-          'field_id'=> $this->field_id,
-          'value' => $this->value
+            'id' => $this->id,
+            'title' => $this->title,
+            'value' => $this->value,
+            // 'is_developer' => $this->is_developer
         ];
     }
 }

@@ -1,11 +1,8 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Price;
 
-use App\Models\Price\Price;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Models\Currency\Currency;
-use App\Http\Resources\CurrencyResource;
 class PriceResource extends JsonResource
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Currency;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\CurrencyHistoryResource;
@@ -17,7 +17,7 @@ class CurrencyResource extends JsonResource
     public function toArray($request)
     {
 
-        $currency_history=$this->whenLoaded('currencyHistory');
+        // $currency_history=$this->whenLoaded('currencyHistory');
         return [
             'id' => $this->id,
             'name'=>$this->name,

@@ -4,15 +4,12 @@ namespace App\Http\Controllers\RolesAndPermissions;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\RolesAndPermissions\StoreRoleRequest;
-use App\Http\Resources\PermissionAllResource;
 use App\Http\Resources\roles\GetAllRolesResource;
-use App\Http\Resources\RolesResource;
+use App\Http\Resources\roles\RolesResource;
+use App\Http\Resources\roles\SingleRoleResource;
 use App\Models\RolesAndPermissions\CustomPermission;
 use App\Models\RolesAndPermissions\CustomRole;
-use App\Models\RolesAndPermissions\RolePermission;
 use App\Services\RolesAndPermissions\PermissionsServices;
-use App\Services\RolesAndPermissions\RolesService;
-use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -88,7 +85,7 @@ class RolesController extends MainController
 
             DB::commit();
             return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'role' => new RolesResource($role)
+            'role' => new SingleRoleResource($role)
         ],201);
 
         }catch (\Exception | QueryException $e){
@@ -166,7 +163,7 @@ class RolesController extends MainController
             DB::commit();
 
             return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'role' => new RolesResource($role)
+            'role' => new SingleRoleResource($role)
         ],200);
 
         }catch (\Exception | QueryException $e){
@@ -193,11 +190,10 @@ class RolesController extends MainController
 
         if($role->delete()){
             return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-                'role' =>  new RolesResource($role)
+                'role' =>  new SingleRoleResource($role)
             ]);
         }
         return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]),
-            'role' =>  new RolesResource($role)
         ]);
     }
 

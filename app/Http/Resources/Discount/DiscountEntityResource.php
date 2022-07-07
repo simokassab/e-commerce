@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Discount;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PermissionAllResource extends JsonResource
+class DiscountEntityResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +16,10 @@ class PermissionAllResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'label' => $this->name,
-            'nodes' => self::collection($this->whenLoaded('children')),
+            'discount_id' => $this->discount_id,
+            'category_id' => $this->category_id,
+            'brand_id' => $this->brand_id,
+            'tag_id' => $this->tag_id,
 
         ];
     }

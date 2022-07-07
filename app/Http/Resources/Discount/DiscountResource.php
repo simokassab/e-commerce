@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Discount;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LabelsResource extends JsonResource
+class DiscountResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,10 @@ class LabelsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'entity' => $this->entity,
-            'color' => $this->color,
-            'image' => $this->image,
-            'key' => $this->key,
+            'name' => $this->name,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+            'discount_percentage' => $this->discount_percentage,
         ];
     }
 }

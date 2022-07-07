@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Fields;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Field\StoreFieldsValueRequest;
-use App\Http\Resources\FieldsValueResource;
+use App\Http\Resources\Field\FieldsValueResource;
 use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
 use Exception;

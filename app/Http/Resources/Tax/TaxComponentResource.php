@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Tax;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DiscountEntityResource extends JsonResource
+class TaxComponentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,8 @@ class DiscountEntityResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'discount_id' => $this->discount_id,
-            'category_id' => $this->category_id,
-            'brand_id' => $this->brand_id,
-            'tag_id' => $this->tag_id,
-
+            'component_tax_id' => $this->component_tax_id,
+            'sort' => $this->sort
         ];
     }
 }
