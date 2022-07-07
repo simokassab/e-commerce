@@ -12,10 +12,11 @@ use Illuminate\Support\Facades\Schema;
 use function PHPUnit\Framework\isNull;
 
 class PermissionsServices {
-    public static function getPermissionChildren(int | Permission $permission,$permissionsOfRole = [], $flatten= false) : Array
+    public static function getPermissionChildren(int | Permission $permission,$permissionsOfRole = [],$allPermissions = [], $flatten= false) : Array
     {
         // got all the roles
-        $allPermissions = CustomPermission::all(); //get all roles info
+
+        $allPermissions = CustomPermission::query()->whereIn('id',collect($allPermissions)->pluck('id')->toArray())->get();
 
         // we passed the main role that we want to get its children along with the roles and there children
         $permissionChildren = self::generateChildrenForAllPermissions($allPermissions);
@@ -57,7 +58,9 @@ class PermissionsServices {
             return [];
         }
         foreach($allPermissionsID[$parentPermissionId] as $permissionId){
+
             $permissionId =  is_numeric($permissionId)? ($permissionId) : $permissionId->id;
+
             if($isMultiLevel){
                 $childpermissions[$permissionId] = ['id' => $allPermissions->find($permissionId)->id,'label' => $allPermissions->find($permissionId)->name ,'id' => $allPermissions->find($permissionId)->id,'checked' => in_array($allPermissions->find($permissionId)->id,  $permissionsOfRoleIds), 'nodes' => [] ];
                 $childpermissions[$permissionId]['nodes'] = self::drawPermissionChildren($permissionId, $allPermissionsID, $isMultiLevel,$allPermissions);
@@ -100,16 +103,17 @@ class PermissionsServices {
         return ($arrayOfParents);
     }
 
-    public static function getAllPermissionsNested(Array $permissions,Array $permissionsOfRole=[]){
+    public static function getAllPermissionsNested(Array $permissions,Array $permissionsOfRole=[],Array $permissionsOfParentRole){
         $permissionsOfRoleIds= array_column($permissionsOfRole, 'id');
         $lastResult = [];
         $rootPermissions = self::getRootPermissions($permissions);
-        dd(collect($rootPermissions)->pluck('name')->toArray());
+
+        //        dd(collect($rootPermissions)->pluck('name')->toArray());
         foreach ($rootPermissions as $rootPermission){
             $result = (object)[];
             $result->label = $rootPermission->name;
             $result->checked = in_array($rootPermission->id ?? 0, $permissionsOfRoleIds);
-            $nodes = self::getPermissionChildren($rootPermission,$permissionsOfRole);
+            $nodes = self::getPermissionChildren($rootPermission,$permissionsOfRole,$permissions);
             $nodesArray= [];
 
             if(is_array($nodes) && count($nodes) > 0){
@@ -123,7 +127,6 @@ class PermissionsServices {
             $result = (array)$result;
             $lastResult[] = $result;
         }
-
         return $lastResult;
     }
 

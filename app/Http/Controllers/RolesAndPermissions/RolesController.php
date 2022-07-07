@@ -207,7 +207,7 @@ class RolesController extends MainController
             'role' => 'nullable|integer',
             'parent_role' => 'nullable|integer'
         ]);
-        $permissionsOfRole = CustomRole::find($request->role) ? CustomRole::findOrFail($request->role)->permissions->toArray() : []  ;
+        $permissionsOfRole = CustomRole::find($request->role) ? CustomRole::findOrFail($request->role)->permissions->toArray() : [] ;
         $permissionsForParentRoleIds = CustomRole::find($request->parent_role) ? CustomRole::findOrFail($request->parent_role)->permissions->pluck('id')->toArray() : [];
 
         $allPermissionsWithCheck = [];
@@ -217,8 +217,10 @@ class RolesController extends MainController
                 $allPermissionsWithCheck[] = $permission;
             }
         }
+
+        //        print_r(collect($allPermissionsWithCheck)->pluck('name'));
         $returnArray = [];
-        $nestedPermissions = PermissionsServices::getAllPermissionsNested($allPermissionsWithCheck,$permissionsOfRole);
+        $nestedPermissions = PermissionsServices::getAllPermissionsNested($allPermissionsWithCheck,$permissionsOfRole,$permissionsForParentRoleIds);
         foreach($nestedPermissions as $rootPermission){
             $tempArray = [];
             $tempArray['id'] = uniqid();
