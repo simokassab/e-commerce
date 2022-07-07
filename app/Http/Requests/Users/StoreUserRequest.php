@@ -23,22 +23,21 @@ class StoreUserRequest extends FormRequest
      */
     public function rules()
     {
-        $array = [
+        return [
             'username' => 'required|unique:users,username',
             'email' => 'required|email|unique:users,email',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'salt' => 'nullable',
             'password' => 'required|confirmed|min:8',
-            'password_confirmed' => 'required',
+            'password_confirmation' => 'required',
             'role_id' => 'required|exists:roles,id'
         ];
 
-        if($this->has('id')){
-            $array['id'] = 'required|numeric|exists:users,id';
-            $array['email'] =  "required|email|unique:users,email,".$this->id.',id';
-            $array['username'] =  "required|string|unique:users,username,".$this->id.',id';
-        }
-        return $array;
+//        if($this->has('id')){
+//            $array['id'] = 'required|numeric|exists:users,id';
+//            $array['email'] =  "required|email|unique:users,email,".$this->id.',id';
+//            $array['username'] =  "required|string|unique:users,username,".$this->id.',id';
+//        }
     }
 }
