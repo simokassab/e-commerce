@@ -6,6 +6,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class SingleRoleResource extends JsonResource
 {
+    protected $permissions;
+
+    public function permissions($value){
+        $this->permissions = $value;
+        return $this;
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -20,7 +27,8 @@ class SingleRoleResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'parent_role' => $parentId,
-            'children' => self::collection($this->whenLoaded('children')),
+            'permissions' => $this->permissions
+//            'children' => self::collection($this->whenLoaded('children')),
 
         ];
     }

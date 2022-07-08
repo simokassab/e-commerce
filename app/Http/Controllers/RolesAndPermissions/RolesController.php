@@ -40,7 +40,7 @@ class RolesController extends MainController
     }
 
     /**
-     * Show the form for creating a new resource.
+     * `Show` the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
@@ -97,11 +97,38 @@ class RolesController extends MainController
      * Display the specified resource.
      *
      * @param  CustomRole  $role
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show(CustomRole $role)
+    public function show(Request $request, CustomRole $role)
     {
-        return $this->successResponse(['role' => new SingleRoleResource($role)],202);
+
+
+        $permissionsOfRole = CustomRole::find($request->role) ? CustomRole::findOrFail($request->role)->permissions->toArray() : [] ;
+        $permissionsForParentRoleIds = CustomRole::find($request->parent_role) ? CustomRole::findOrFail($request->parent_role)->permissions->pluck('id')->toArray() : [];
+        $allPermissionsWithCheck = [];
+        $permissions = CustomPermission::with('parent')->get();
+        foreach ($permissions as $permission){
+            if(in_array($permission->id , $permissionsForParentRoleIds)){
+                $allPermissionsWithCheck[] = $permission;
+            }
+        }
+
+        //        print_r(collect($allPermissionsWithCheck)->pluck('name'));
+        $permissions = [];
+        $nestedPermissions = PermissionsServices::getAllPermissionsNested($allPermissionsWithCheck,$permissionsOfRole,$permissionsForParentRoleIds);
+        foreach($nestedPermissions as $rootPermission){
+            $tempArray = [];
+            $tempArray['id'] = uniqid();
+            $tempArray['name'] =$rootPermission['label'];
+            $tempArray['tree'] = [$rootPermission];
+
+            $permissions[] = $tempArray;
+        }
+
+
+        return $this->successResponse([
+            'role' => (new SingleRoleResource($role))->permissions($permissions),
+        ],202);
     }
 
     /**
@@ -199,9 +226,9 @@ class RolesController extends MainController
             'role' => 'nullable|integer',
             'parent_role' => 'nullable|integer'
         ]);
+
         $permissionsOfRole = CustomRole::find($request->role) ? CustomRole::findOrFail($request->role)->permissions->toArray() : [] ;
         $permissionsForParentRoleIds = CustomRole::find($request->parent_role) ? CustomRole::findOrFail($request->parent_role)->permissions->pluck('id')->toArray() : [];
-
         $allPermissionsWithCheck = [];
         $permissions = CustomPermission::with('parent')->get();
         foreach ($permissions as $permission){
