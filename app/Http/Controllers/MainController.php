@@ -93,7 +93,7 @@ class MainController extends Controller
             $model->where(function ($query) use ($data, $searchKeys, $relationKeysArr, $searchRelationsKeys) {
                 foreach ($data as $key => $value) {
                     $value = strtolower($value);
-                    if (in_array($key, $searchKeys)) {
+                    if (in_array($key, $searchKeys) && !empty($key)) {
                         $query->whereRaw('lower(' . $key . ') like (?)', ["%$value%"]);
                     }
                     elseif (isset($relationKeysArr[$key])) {
