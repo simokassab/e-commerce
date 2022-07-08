@@ -81,11 +81,13 @@ class UsersController extends MainController
         $user->last_name =$request->last_name;
         $user->salt = $request->salt ?? '123';
 
-        $userOldRoles = $user->roles ? $user->roles->pluck('id') : [];
-        $user->removeRole($userOldRoles);
+        if(count($user->roles) > 0){
+            dd('s');
+            $userOldRoles = $user->roles->pluck('name')->toArray();
+            $user->removeRole($userOldRoles);
+        }
 
-        $role =  CustomRole::findOrFail($request->role_id);
-       dd($user->assignRole($role)) ;
+        CustomRole::findOrFail($request->role_id);
 
         if(!($user->save()))
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)])]);
