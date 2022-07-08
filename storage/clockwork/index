@@ -232,3 +232,5 @@
 1657268340-4676-811069402,1657268340.38,GET,/api/dashboard/price/1,"App\Http\Controllers\Prices\PricesController@show",404,381.97302818298,request
 1657268378-6815-1763415281,1657268378.6091,GET,/api/dashboard/price/1,"App\Http\Controllers\Prices\PricesController@show",404,307.284116745,request
 1657268382-5472-625774847,1657268382.4844,GET,/api/dashboard/price/3,"App\Http\Controllers\Prices\PricesController@show",200,204.33306694031,request
+1657268438-8410-3189775,1657268438.7708,GET,/api/dashboard/price/3,"App\Http\Controllers\Prices\PricesController@show",200,231.80389404297,request
+1657269087-8538-359508140,1657269087.7688,GET,/api/dashboard/price/3,"App\Http\Controllers\Prices\PricesController@show",200,2700.9489536285,request
