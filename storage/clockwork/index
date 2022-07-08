@@ -297,3 +297,8 @@
 1657286593-0337-1251928629,1657286592.9432,POST,/api/dashboard/label/all,"App\Http\Controllers\Label\LabelController@index",200,289.34288024902,request
 1657286614-7142-161816573,1657286614.6456,GET,/api/dashboard/label,"App\Http\Controllers\Label\LabelController@index",200,276.93891525269,request
 1657286641-7547-958161938,1657286641.6354,POST,/api/dashboard/label/all,"App\Http\Controllers\Label\LabelController@index",200,429.98600006104,request
+1657286825-4318-2139348089,1657286825.1697,POST,/api/dashboard/label/all,"App\Http\Controllers\Label\LabelController@index",200,792.61493682861,request
+1657286874-6026-791509318,1657286874.5293,POST,/api/dashboard/label/all?page=2,"App\Http\Controllers\Label\LabelController@index",200,273.69713783264,request
+1657287003-4680-1850424278,1657287003.1666,POST,/api/dashboard/label/all?page=1,"App\Http\Controllers\Label\LabelController@index",200,599.51210021973,request
+1657287035-0835-1469604540,1657287034.9973,POST,/api/dashboard/label/all?page=1,"App\Http\Controllers\Label\LabelController@index",200,348.8130569458,request
+1657287094-1286-1224637616,1657287094.0616,POST,/api/dashboard/label/all?page=1,"App\Http\Controllers\Label\LabelController@index",200,245.72515487671,request
