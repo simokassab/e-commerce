@@ -79,7 +79,7 @@ class PricesController extends MainController
     {
         $price = new Price();
         $price->name = json_encode($request->name);
-        $price->currency_id = $request->currency;
+        $price->currency_id = $request->currency_id;
         $price->is_virtual = $request->is_virtual;
 
         if($request->is_virtual){
@@ -137,7 +137,7 @@ class PricesController extends MainController
     {
 
         $price->name = json_encode($request->name);
-        $price->currency_id = $request->currency;
+        $price->currency_id = $request->currency_id;
         $price->is_virtual = $request->is_virtual;
 
         if($request->is_virtual){
