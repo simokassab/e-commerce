@@ -14,7 +14,6 @@ class ProductPrice extends Model
 
     public static function inhertPrices($parentProductId,$productId){
         $parentPrices = ProductPrice::where('product_id',$parentProductId)->get()->toArray();
-
         if (count($parentPrices) <= 0) {
             return;
         }

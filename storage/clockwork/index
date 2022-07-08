@@ -573,3 +573,11 @@
 1657261688-2177-1310470888,1657261688.133,POST,/api/dashboard/product/,"App\Http\Controllers\Product\ProductController@store",500,339.74194526672,request
 1657261880-6916-522390105,1657261880.3794,POST,/api/dashboard/product/,"App\Http\Controllers\Product\ProductController@store",200,1315.4180049896,request
 1657262062-9546-423220793,1657262062.8788,POST,/api/dashboard/product/,"App\Http\Controllers\Product\ProductController@store",200,317.59405136108,request
+1657263920-7336-173821438,1657263920.6558,POST,/api/dashboard/product/,"App\Http\Controllers\Product\ProductController@store",200,317.55018234253,request
+1657264013-9591-1879938676,1657264013.8856,POST,/api/dashboard/product/,"App\Http\Controllers\Product\ProductController@store",200,325.50191879272,request
+1657264050-8168-1275268116,1657264050.7433,POST,/api/dashboard/product/,"App\Http\Controllers\Product\ProductController@store",200,315.1159286499,request
+1657264099-8314-1996188926,1657264099.764,POST,/api/dashboard/product/,"App\Http\Controllers\Product\ProductController@store",200,309.60416793823,request
+1657264139-0192-736571417,1657264138.9028,POST,/api/dashboard/product/,"App\Http\Controllers\Product\ProductController@store",500,391.13116264343,request
+1657264153-9882-240769763,1657264153.9269,POST,/api/dashboard/product/,"App\Http\Controllers\Product\ProductController@store",500,301.99909210205,request
+1657264184-9268-2057370658,1657264184.7919,POST,/api/dashboard/product/,"App\Http\Controllers\Product\ProductController@store",200,652.25601196289,request
+1657264207-1233-1513545645,1657264207.0487,POST,/api/dashboard/product/,"App\Http\Controllers\Product\ProductController@store",200,330.15704154968,request

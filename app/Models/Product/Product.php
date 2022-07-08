@@ -16,6 +16,7 @@ use App\Models\Attribute\AttributeValue;
 use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
 use App\Models\MainModel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Spatie\Translatable\HasTranslations;
 
@@ -120,8 +121,20 @@ class Product extends MainModel
             $this->is_disabled=$parent->is_disabled;
             $this->products_statuses_id =$parent->products_statuses_id;
 
-            if($request->isSameAsParent){
+            if($request->isSamePriceAsParent){
                 ProductPrice::inhertPrices($this->parent_product_id , $newProductId);
+            }
+            else{
+                if ($request->has('prices')) {
+                    $pricesArray = $request->prices ?? [];
+                    foreach ($request->prices as $price => $value) {
+                        $pricesArray[$price]["product_id"] = $newProductId;
+                        $pricesArray[$price]["created_at"] = Carbon::now()->toDateTimeString();
+                        $pricesArray[$price]["updated_at"] = Carbon::now()->toDateTimeString();
+                    }
+                    ProductPrice::insert($pricesArray);
+                }
+                return $this;
             }
 
             }

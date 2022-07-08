@@ -26,7 +26,7 @@ public $request,$product_id;
             ->storeAdditionalFields()
             ->storeAdditionalImages()
             ->storeAdditionalLabels()
-            ->storeAdditionalPrices()
+            // ->storeAdditionalPrices()
             ->storeAdditionalTags()
             ->storeAdditionalBundle();
     }
@@ -93,16 +93,7 @@ public $request,$product_id;
         return $this;
     }
     private function storeAdditionalPrices(){
-        if ($this->request->has('prices') && $this->request->isSamePriceAsParent) {
-            $pricesArray = $this->request->prices ?? [];
-            foreach ($this->request->prices as $price => $value) {
-                $pricesArray[$price]["product_id"] = $this->product_id;
-                $pricesArray[$price]["created_at"] = Carbon::now()->toDateTimeString();
-                $pricesArray[$price]["updated_at"] = Carbon::now()->toDateTimeString();
-            }
-            ProductPrice::insert($pricesArray);
-        }
-        return $this;
+
     }
     private function storeAdditionalTags(){
         if ($this->request->has('tags')) {
