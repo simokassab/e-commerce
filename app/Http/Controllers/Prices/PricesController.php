@@ -142,10 +142,10 @@ class PricesController extends MainController
 
         if($request->is_virtual){
             $price->original_price_id = $request->original_price_id;
-            $price->percent = $request->percentage;
+            $price->percentage = $request->percentage;
         }else{
             $price->original_price_id = null;
-            $price->percent = null;
+            $price->percentage = null;
         }
 
         if($price->save()){
