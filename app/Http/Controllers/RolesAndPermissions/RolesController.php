@@ -101,7 +101,7 @@ class RolesController extends MainController
      */
     public function show(CustomRole $role)
     {
-        return $this->successResponse(['role' => new RolesResource($role)],202);
+        return $this->successResponse(['role' => new SingleRoleResource($role)],202);
     }
 
     /**
