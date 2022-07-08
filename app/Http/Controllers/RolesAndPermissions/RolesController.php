@@ -134,12 +134,6 @@ class RolesController extends MainController
             ]);
 
             $flattenPermissions = [];
-            foreach($request->permissions as $permission ){
-                $innerFlattenPermissions = PermissionsServices::loopOverMultiDimentionArray( $permission['tree']) ?? [];
-                $flattenPermissions= array_merge($innerFlattenPermissions,$flattenPermissions);
-            }
-
-
             //@TODO: add validation to filter permissions that are added to the role but the role does n't have the rights to do it
             //plucked the name of flatten permissions
 //            $childPermissions = collect($flattenPermissions)->pluck(0)->toArray();
@@ -149,8 +143,14 @@ class RolesController extends MainController
 //
 //            dd($filteredPermissions);
 
+            foreach($request->permissions as $permission ){
+                $innerFlattenPermissions = PermissionsServices::loopOverMultiDimentionArray( $permission['tree']) ?? [];
+                $flattenPermissions= array_merge($innerFlattenPermissions,$flattenPermissions);
+            }
+            $flattenPermissions = collect($flattenPermissions)->unique();
+
             $allPermissionsNames = CustomPermission::all()->pluck('name')->toArray();
-            $approvedPermissions = array_filter($flattenPermissions,fn($value) => $value[1] );
+            $approvedPermissions = array_filter($flattenPermissions->toArray(),fn($value) => $value[1] );
             $approvedPermissions = (collect($approvedPermissions)->pluck(0));
 
             $role->revokePermissionTo($allPermissionsNames);

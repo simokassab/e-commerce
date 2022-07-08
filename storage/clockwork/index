@@ -273,3 +273,6 @@
 1657273025-8454-1189034745,1657273025.755,PATCH,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",200,281.3138961792,request
 1657273055-7422-444687513,1657273055.6581,PATCH,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",200,293.72787475586,request
 1657273078-7427-1515903941,1657273078.6713,PATCH,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",422,447.30186462402,request
+1657273533-7266-1142419908,1657273530.8287,PATCH,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@update",500,7190.6888484955,request
+1657273707-9537-1611567315,1657273707.7955,PATCH,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@update",200,1289.1001701355,request
+1657273716-5082-590489652,1657273716.3978,PATCH,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@update",200,376.72305107117,request
