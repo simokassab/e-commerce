@@ -102,6 +102,8 @@ class RolesController extends MainController
     public function show(Request $request, CustomRole $role)
     {
         $permissionsOfRole = CustomRole::find($role->id) ? CustomRole::findOrFail($role->id)->permissions->toArray() : [] ;
+
+        $parentId = null;
         if ($role->parent){
             $parentId = $role->parent->id ?? null;
         }
