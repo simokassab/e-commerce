@@ -314,3 +314,4 @@
 1657290687-4677-136019598,1657290687.2837,GET,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@show",202,560.20498275757,request
 1657291039-9929-398040636,1657291039.788,GET,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@show",202,1050.5130290985,request
 1657291125-8173-546665664,1657291125.673,GET,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@show",202,708.06503295898,request
+1657292195-8464-1051873318,1657292194.1722,GET,/api/dashboard/role/3,"App\Http\Controllers\RolesAndPermissions\RolesController@show",202,3899.8100757599,request

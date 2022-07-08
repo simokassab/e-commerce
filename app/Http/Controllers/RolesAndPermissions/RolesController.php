@@ -159,7 +159,7 @@ class RolesController extends MainController
         try {
             $role->update([
                 'name' => $request->name,
-                'parent_id' => $request->parent_id
+                'parent_role' => $request->parent_id
 
             ]);
 
