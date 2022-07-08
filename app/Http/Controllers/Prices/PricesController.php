@@ -79,12 +79,12 @@ class PricesController extends MainController
     {
         $price = new Price();
         $price->name = json_encode($request->name);
-        $price->currency_id = $request->currency_id;
+        $price->currency_id = $request->currency;
         $price->is_virtual = $request->is_virtual;
 
         if($request->is_virtual){
             $price->original_price_id = $request->original_price_id;
-            $price->percentage = $request->original_percent;
+            $price->percentage = $request->percentage;
         }else{
             $price->original_price_id = null;
             $price->percentage = null;
@@ -137,12 +137,12 @@ class PricesController extends MainController
     {
 
         $price->name = json_encode($request->name);
-        $price->currency_id = $request->currency_id;
+        $price->currency_id = $request->currency;
         $price->is_virtual = $request->is_virtual;
 
         if($request->is_virtual){
             $price->original_price_id = $request->original_price_id;
-            $price->percent = $request->original_percent;
+            $price->percent = $request->percentage;
         }else{
             $price->original_price_id = null;
             $price->percent = null;
