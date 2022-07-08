@@ -66,12 +66,15 @@ class UsersController extends MainController
 
     public function show(User $user)
     {
+
         return $this->successResponse(['user' => new UserResource($user)]);
 
     }
 
     public function update(UpdateUserRequest $request, User $user)
     {
+        dd('s');
+
         $user->username =  $request->username;
         $user->email = $request->email;
         $user->first_name = $request->first_name;

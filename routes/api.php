@@ -99,8 +99,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     // @TODO: make a correct function for the user profile
     Route::get('/profile', fn() =>  auth()->user());
 
-    Route::post('user/all',[UsersController::class,'index']);//for searching
     Route::apiResource('user',UsersController::class);
+    Route::post('user/all',[UsersController::class,'index']);//for searching
 
     Route::post('tax/all',[TaxController::class,'index']);//for searching
     Route::apiResource('tax',TaxController::class);
