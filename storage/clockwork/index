@@ -312,3 +312,5 @@
 1657290239-3000-882189645,1657290239.2073,GET,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@show",202,535.41111946106,request
 1657290652-2378-658392398,1657290651.4847,GET,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@show",202,2085.8929157257,request
 1657290687-4677-136019598,1657290687.2837,GET,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@show",202,560.20498275757,request
+1657291039-9929-398040636,1657291039.788,GET,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@show",202,1050.5130290985,request
+1657291125-8173-546665664,1657291125.673,GET,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@show",202,708.06503295898,request

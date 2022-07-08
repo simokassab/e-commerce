@@ -101,10 +101,11 @@ class RolesController extends MainController
      */
     public function show(Request $request, CustomRole $role)
     {
-
-
-        $permissionsOfRole = CustomRole::find($request->role) ? CustomRole::findOrFail($request->role)->permissions->toArray() : [] ;
-        $permissionsForParentRoleIds = CustomRole::find($request->parent_role) ? CustomRole::findOrFail($request->parent_role)->permissions->pluck('id')->toArray() : [];
+        $permissionsOfRole = CustomRole::find($role->id) ? CustomRole::findOrFail($role->id)->permissions->toArray() : [] ;
+        if ($role->parent){
+            $parentId = $role->parent->id ?? null;
+        }
+        $permissionsForParentRoleIds = CustomRole::find($parentId) ? CustomRole::findOrFail($parentId)->permissions->pluck('id')->toArray() : [];
         $allPermissionsWithCheck = [];
         $permissions = CustomPermission::with('parent')->get();
         foreach ($permissions as $permission){
