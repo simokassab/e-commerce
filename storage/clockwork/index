@@ -208,3 +208,6 @@
 1657195338-9401-1126921795,1657195338.8524,POST,/api/dashboard/role/get-nested-permissions-for-role/,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",500,375.89597702026,request
 1657195355-6037-1552801370,1657195355.4885,POST,/api/dashboard/role/get-nested-permissions-for-role/,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",500,391.32905006409,request
 1657195429-4108-1104553312,1657195429.296,POST,/api/dashboard/role/get-nested-permissions-for-role/,"App\Http\Controllers\RolesAndPermissions\RolesController@getNestedPermissionsForRole",200,543.79415512085,request
+1657267192-3471-1438348561,1657267192.269,GET,/api/dashboard/price/1,"App\Http\Controllers\Prices\PricesController@show",200,376.60789489746,request
+1657267203-0452-424442609,1657267202.97,GET,/api/dashboard/price/2,"App\Http\Controllers\Prices\PricesController@show",200,234.22598838806,request
+1657267206-4460-242982676,1657267206.3866,GET,/api/dashboard/price/3,"App\Http\Controllers\Prices\PricesController@show",404,340.30914306641,request
