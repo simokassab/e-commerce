@@ -221,3 +221,14 @@
 1657267528-3994-256865651,1657267528.3221,GET,/api/dashboard/price/1,"App\Http\Controllers\Prices\PricesController@show",200,234.63201522827,request
 1657267537-5227-29992064,1657267537.4618,GET,/api/dashboard/price/1,"App\Http\Controllers\Prices\PricesController@show",200,252.89988517761,request
 1657267550-4085-1467936089,1657267550.3316,GET,/api/dashboard/price/1,"App\Http\Controllers\Prices\PricesController@show",200,239.78185653687,request
+1657268128-6514-237261218,1657268128.4741,GET,/api/dashboard/price/1,"App\Http\Controllers\Prices\PricesController@show",200,652.25195884705,request
+1657268143-7288-250438840,1657268143.4995,GET,/api/dashboard/price/1,"App\Http\Controllers\Prices\PricesController@show",200,705.12509346008,request
+1657268147-7492-1966058453,1657268147.6881,GET,/api/dashboard/price/2,"App\Http\Controllers\Prices\PricesController@show",500,622.46417999268,request
+1657268160-3194-357123346,1657268160.2587,GET,/api/dashboard/price/2,"App\Http\Controllers\Prices\PricesController@show",200,227.29706764221,request
+1657268163-5332-779339431,1657268163.4718,GET,/api/dashboard/price/1,"App\Http\Controllers\Prices\PricesController@show",200,195.50800323486,request
+1657268188-6275-280755041,1657268188.5657,GET,/api/dashboard/price/1,"App\Http\Controllers\Prices\PricesController@show",200,216.40515327454,request
+1657268209-5606-1640530348,1657268209.3616,GET,/api/dashboard/price/1,"App\Http\Controllers\Prices\PricesController@show",200,535.23182868958,request
+1657268215-5253-1351540611,1657268215.3384,GET,/api/dashboard/price/1,"App\Http\Controllers\Prices\PricesController@show",200,582.58509635925,request
+1657268340-4676-811069402,1657268340.38,GET,/api/dashboard/price/1,"App\Http\Controllers\Prices\PricesController@show",404,381.97302818298,request
+1657268378-6815-1763415281,1657268378.6091,GET,/api/dashboard/price/1,"App\Http\Controllers\Prices\PricesController@show",404,307.284116745,request
+1657268382-5472-625774847,1657268382.4844,GET,/api/dashboard/price/3,"App\Http\Controllers\Prices\PricesController@show",200,204.33306694031,request
