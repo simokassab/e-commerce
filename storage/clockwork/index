@@ -278,3 +278,9 @@
 1657269373-5766-1713368883,1657269373.5087,GET,/api/dashboard/role,"App\Http\Controllers\RolesAndPermissions\RolesController@index",200,297.82319068909,request
 1657269391-2941-687589453,1657269391.1208,PUT,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",302,541.6841506958,request
 1657269391-7558-2109562280,1657269391.683,GET,/api/dashboard/role,"App\Http\Controllers\RolesAndPermissions\RolesController@index",200,242.09094047546,request
+1657269512-2485-1886476966,1657269512.1524,PUT,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",302,384.1187953949,request
+1657269512-6516-349425476,1657269512.5557,GET,/api/dashboard/role,"App\Http\Controllers\RolesAndPermissions\RolesController@index",200,317.25001335144,request
+1657269523-0955-1590968420,1657269523.0257,PATCH,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",302,321.26116752625,request
+1657269523-4342-1408270843,1657269523.3626,GET,/api/dashboard/role,"App\Http\Controllers\RolesAndPermissions\RolesController@index",200,301.77307128906,request
+1657269598-8028-482091899,1657269598.711,PATCH,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",422,351.06992721558,request
+1657269630-3590-2112885456,1657269630.1991,PATCH,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",200,733.74199867249,request
