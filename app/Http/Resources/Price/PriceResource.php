@@ -13,16 +13,24 @@ class PriceResource extends JsonResource
      */
     public function toArray($request)
     {
-        $arrayForVirtualInfo = [];
+        // $arrayForVirtualInfo = [];
 
 
-        $arrayForVirtualInfo['id']  =$this->id;
-        $arrayForVirtualInfo['name']  =$this->name ?? '-';
-        $arrayForVirtualInfo['currency']  =($this->whenLoaded('currency')->code .' - '.$this->whenLoaded('currency')->symbol)  ?? '-';
-        $arrayForVirtualInfo['original_price_id'] = ($this->whenLoaded('originalPrice')->name) ?? '-';
-        $arrayForVirtualInfo['original_percent'] = ($this->percentage) ?? '-';
+        // $arrayForVirtualInfo['id']  =$this->id;
+        // $arrayForVirtualInfo['name']  =$this->name ?? '-';
+        // $arrayForVirtualInfo['currency']  =($this->whenLoaded('currency')->code .' - '.$this->whenLoaded('currency')->symbol)  ?? '-';
+        // $arrayForVirtualInfo['original_price_id'] = ($this->whenLoaded('originalPrice')->name) ?? '-';
+        // $arrayForVirtualInfo['original_percent'] = ($this->percentage) ?? '-';
 
-        return $arrayForVirtualInfo;
+        // return $arrayForVirtualInfo;
+
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'currency' => ($this->whenLoaded('currency')->code .' - '.$this->whenLoaded('currency')->symbol)  ?? '-',
+            'original_price_id' => ($this->whenLoaded('originalPrice')->name) ?? '-',
+            'percentage' => (round($this->percentage,config('defaults.default_round_percentage'))) ?? '-',
+        ];
 
     }
 }

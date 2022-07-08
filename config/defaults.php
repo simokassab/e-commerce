@@ -45,4 +45,6 @@ return [
 
     'validation_default_complex_behavior' => 'combine,after_other',
 
+    'default_round_percentage'=>2,
+
 ];
