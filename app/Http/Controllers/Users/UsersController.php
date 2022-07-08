@@ -82,8 +82,7 @@ class UsersController extends MainController
         $user->salt = $request->salt ?? '123';
 
         if(count($user->roles) > 0){
-            dd('s');
-            $userOldRoles = $user->roles->pluck('name')->toArray();
+            $userOldRoles = $user->roles->pluck('name')->toArray()[0];
             $user->removeRole($userOldRoles);
         }
 

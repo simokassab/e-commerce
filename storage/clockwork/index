@@ -268,3 +268,8 @@
 1657272309-8987-1338217056,1657272309.7617,PATCH,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",500,492.16914176941,request
 1657272330-4464-376879523,1657272330.3073,PATCH,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",500,780.34806251526,request
 1657272666-0457-1956589940,1657272665.8641,PATCH,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",500,698.11296463013,request
+1657272968-2367-184957175,1657272968.1504,PATCH,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",200,671.37908935547,request
+1657273015-7042-519745549,1657273015.6074,PATCH,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",200,325.79588890076,request
+1657273025-8454-1189034745,1657273025.755,PATCH,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",200,281.3138961792,request
+1657273055-7422-444687513,1657273055.6581,PATCH,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",200,293.72787475586,request
+1657273078-7427-1515903941,1657273078.6713,PATCH,/api/dashboard/user/2,"App\Http\Controllers\Users\UsersController@update",422,447.30186462402,request
