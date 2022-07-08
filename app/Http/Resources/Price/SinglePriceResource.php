@@ -18,7 +18,7 @@ class SinglePriceResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'is_virtual' => (bool)$this->is_virtual,
-            'currency' => $this->whenLoaded('currency')->id ,
+            'currency_id' => $this->whenLoaded('currency')->id ,
             'original_price_id' => ($this->whenLoaded('originalPrice')->id) ?? '',
             'percentage' => (round($this->percentage,config('defaults.default_round_percentage'))) ?? null,
         ];
