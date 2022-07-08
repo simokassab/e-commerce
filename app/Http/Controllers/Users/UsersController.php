@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UsersController extends MainController
 {
+
     const OBJECT_NAME = 'objects.user';
 
     public function index(Request $request){
