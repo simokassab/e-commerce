@@ -12,8 +12,8 @@ class ProductPrice extends Model
     use HasFactory;
     protected $table = 'products_prices';
 
-    public static function inhertPrices( int $parentPriceId, int $productId){
-        $parentPrices = ProductPrice::where('product_id',$parentPriceId)->get()->toArray();
+    public static function inhertPrices($parentProductId,$productId){
+        $parentPrices = ProductPrice::where('product_id',$parentProductId)->get()->toArray();
 
         if (count($parentPrices) <= 0) {
             return;
@@ -30,5 +30,5 @@ class ProductPrice extends Model
 
         ProductPrice::insert($pricesArray);
     }
-    
+
 }

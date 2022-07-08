@@ -9,7 +9,6 @@ use App\Models\Tax\Tax;
 use App\Models\Brand\Brand;
 use App\Models\Price\Price;
 use App\Models\Tag\Tag;
-use PDO;
 use App\Models\Product\ProductImage;
 use App\Models\Label\Label;
 use App\Models\Attribute\Attribute;
@@ -17,7 +16,6 @@ use App\Models\Attribute\AttributeValue;
 use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
 use App\Models\MainModel;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Spatie\Translatable\HasTranslations;
 
@@ -96,10 +94,9 @@ class Product extends MainModel
 
     }
 
-    public function inhertDataFromVariableParent($isInhertPrices = true,Request $request){
+    public function inhertDataFromVariableParent(Request $request,$newProductId){
 
         $parent=Product::find($this->parent_product_id);
-
          if(!$parent->type=='variable'){
             throw new \Exception('Parent product is not variable');
          }
@@ -123,8 +120,8 @@ class Product extends MainModel
             $this->is_disabled=$parent->is_disabled;
             $this->products_statuses_id =$parent->products_statuses_id;
 
-            if($isInhertPrices){
-                ProductPrice::inhertPrices($this->parent_product_id , $this->id);
+            if($request->isSameAsParent){
+                ProductPrice::inhertPrices($this->parent_product_id , $newProductId);
             }
 
             }

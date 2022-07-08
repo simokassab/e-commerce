@@ -93,7 +93,7 @@ public $request,$product_id;
         return $this;
     }
     private function storeAdditionalPrices(){
-        if ($this->request->has('prices')) {
+        if ($this->request->has('prices') && $this->request->isSamePriceAsParent) {
             $pricesArray = $this->request->prices ?? [];
             foreach ($this->request->prices as $price => $value) {
                 $pricesArray[$price]["product_id"] = $this->product_id;
