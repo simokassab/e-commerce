@@ -14,10 +14,12 @@ class SingleRoleResource extends JsonResource
      */
     public function toArray($request)
     {
+        $parentId = $this->parent ? $this->parent->id : '-';
+
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'parent_role' => $this->parent->name ?? '-',
+            'parent_role' => $parentId,
            'children' => self::collection($this->whenLoaded('children')),
 
         ];
