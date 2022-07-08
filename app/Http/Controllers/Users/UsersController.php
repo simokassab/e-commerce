@@ -85,7 +85,7 @@ class UsersController extends MainController
         $user->removeRole($userOldRoles);
 
         $role =  CustomRole::findOrFail($request->role_id);
-        $user->assignRole($role);
+       dd($user->assignRole($role)) ;
 
         if(!($user->save()))
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)])]);
