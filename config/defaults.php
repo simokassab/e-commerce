@@ -41,7 +41,10 @@ return [
 
     'default_minimum_tax_percentage' => 0,
     'default_maximum_tax_percentage' => 100,
-    'default_minimum_tax_percentage_when_required' => 0.1,
+
+    'default_minimum_price_percentage' => 0,
+    'default_maximum_price_percentage' => 100,
+
 
     'validation_default_complex_behavior' => 'combine,after_other',
 
