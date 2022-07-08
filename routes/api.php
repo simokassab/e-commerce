@@ -127,6 +127,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
         Route::get('users',[UsersController::class,'getTableHeaders']);
 
     });
+
 });
 
 // @TODO: check the name of link and why the controller functions are not set

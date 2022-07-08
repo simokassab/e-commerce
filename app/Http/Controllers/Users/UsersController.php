@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Users\StoreUserRequest;
+use App\Http\Requests\Users\UpdateUserRequest;
 use App\Http\Resources\User\SingleUserResource;
 use App\Http\Resources\User\UserResource;
 use App\Models\User\User;
@@ -68,14 +69,14 @@ class UsersController extends MainController
 
     }
 
-    public function update(StoreUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         $user->username =  $request->username;
         $user->email = $request->email;
         $user->first_name = $request->first_name;
         $user->last_name =$request->last_name;
-        $user->salt = $request->salt;
-        $user->is_disabled=$request->is_disabled ?? $user->is_disabled;
+        $user->salt = $request->salt ?? '123';
+//        $user->is_disabled=$request->is_disabled ?? $user->is_disabled;
 
         if(!($user->save()))
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)])]);

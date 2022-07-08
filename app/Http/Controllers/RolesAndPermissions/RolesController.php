@@ -27,10 +27,6 @@ class RolesController extends MainController
     public function index(Request $request)
     {
 
-        return response()->json(
-            CustomRole::query()->paginate($request->limit ?? config('defaults.default_pagination'))
-        );
-
         if ($request->method()=='POST') {
 
             $searchKeys=['name'];
