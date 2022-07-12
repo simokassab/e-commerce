@@ -315,3 +315,10 @@
 1657291039-9929-398040636,1657291039.788,GET,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@show",202,1050.5130290985,request
 1657291125-8173-546665664,1657291125.673,GET,/api/dashboard/role/2,"App\Http\Controllers\RolesAndPermissions\RolesController@show",202,708.06503295898,request
 1657292195-8464-1051873318,1657292194.1722,GET,/api/dashboard/role/3,"App\Http\Controllers\RolesAndPermissions\RolesController@show",202,3899.8100757599,request
+1657619931-4221-1831170157,1657619931.235,POST,/login,,404,3022.8219032288,request
+1657619948-1565-1397935562,1657619948.0725,POST,/api/dashboard/login,,404,261.13200187683,request
+1657619967-6778-1870398225,1657619967.6021,POST,/api/dashboard/login,,404,253.63779067993,request
+1657620007-5756-212155318,1657620007.5068,POST,/api/login,"App\Http\Controllers\AuthenticationController@login",500,2702.7988433838,request
+1657620340-2018-1229146835,1657620339.9712,POST,/api/login,"App\Http\Controllers\AuthenticationController@login",500,660.88390350342,request
+1657620412-1811-1731331093,1657620412.0959,POST,/api/login,"App\Http\Controllers\AuthenticationController@login",401,284.99007225037,request
+1657620425-9743-1505784217,1657620425.81,POST,/api/login,"App\Http\Controllers\AuthenticationController@login",500,667.80090332031,request

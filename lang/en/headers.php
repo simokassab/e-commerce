@@ -264,7 +264,7 @@ return [
             'sort' => true
         ],
         'image' => [
-            'name' => 'Name',
+            'name' => 'Image',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
@@ -289,7 +289,7 @@ return [
             'type' => 'string',
             'sort' => true
         ],
-        'original_price_id' => [
+        'original_price' => [
             'name' => 'Original Price',
             'search' => 'string',
             'type' => 'string',

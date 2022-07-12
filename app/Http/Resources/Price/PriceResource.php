@@ -28,7 +28,7 @@ class PriceResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'currency' => ($this->whenLoaded('currency')->code .' - '.$this->whenLoaded('currency')->symbol)  ?? '-',
-            'original_price_id' => ($this->whenLoaded('originalPrice')->name) ?? '-',
+            'original_price' => ($this->whenLoaded('originalPrice')->name ?? '-') ?? '-',
             'percentage' => (round($this->percentage,config('defaults.default_round_percentage'))) ?? '-',
         ];
 
