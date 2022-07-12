@@ -48,15 +48,15 @@ class MainController extends Controller
 
     }
 
-    protected function successResponse(array $data, $statusCode = 200)
+    protected function successResponse(Array $data=[],$message = 'Success!',$returnCode = 1, $statusCode= 200): \Illuminate\Http\JsonResponse
     {
-        return successResponse($data, $statusCode);
+        return successResponse($data,$message,$returnCode,$statusCode);
     }
 
 
-    protected function errorResponse(array $data, $statusCode = 500)
+    protected function errorResponse(array $data, $message = 'An error occurred please try again later' ,$returnCode = -1, $statusCode = 500): \Illuminate\Http\JsonResponse
     {
-        return errorResponse($data, $statusCode);
+        return errorResponse($data, $message ,$returnCode, $statusCode);
     }
 
     protected function successResponsePaginated($resource, $model, array $relation = [], $pagintaion = null)

@@ -19,21 +19,27 @@ function uploadImage($file,$folderpath){
     }
 }
 
-function errorResponse(Array $data=[],$message = 'an error occurred please try again later',$returnCode = -1, $statusCode= 500){
+function errorResponse(Array $data=[],$message = 'an error occurred please try again later',$returnCode = -1, $statusCode= 500): \Illuminate\Http\JsonResponse
+{
     $return['message'] = $message;
     $return['data'] = $data;
-    $return['return_code'] = $returnCode;
+    $return['code'] = $returnCode;
 
     return response()->json([
         $return
     ],$statusCode);
 }
 
-function successResponse(Array $data, $statusCode= 200){
-//    $data['success'] = true;
+function successResponse(Array $data=[],$message = 'Success!',$returnCode = 1, $statusCode= 200): \Illuminate\Http\JsonResponse
+{
+    $return['message'] = $message;
+    $return['data'] = $data;
+    $return['code'] = $returnCode;
+
     return response()->json([
-        'data' => $data
+        $return
     ],$statusCode);
+
 }
 
 function notFoundError(Array $data, $statusCode= 400){
