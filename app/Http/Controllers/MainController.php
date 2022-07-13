@@ -29,6 +29,7 @@ class MainController extends Controller
 
     public function __construct(/*$defaultPermissionsFromChild = null*/)
     {
+        app()->setLocale('en');
         $routeAction = basename(Route::currentRouteAction()); //we got the permission name
 
 //        if (isset($defaultPermissionsFromChild[$routeAction])) {
