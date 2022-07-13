@@ -20,7 +20,7 @@ function uploadImage($file,$folderpath): bool|string
     }
 }
 
-function errorResponse($message = 'An error occurred please try again later', Array $data=[],$returnCode = -1, $statusCode= 500): \Illuminate\Http\JsonResponse
+function errorResponse($message = 'An error occurred please try again later', Array $data=[],$returnCode = -1, $statusCode= 200): \Illuminate\Http\JsonResponse
 {
     $return['message'] = $message;
     $return['data'] = $data;
