@@ -13,10 +13,6 @@ use Illuminate\Http\Request;
 
 class SettingsController extends MainController
 {
-    public function __construct()
-    {
-        dd(app()->setLocale());
-    }
 
     const OBJECT_NAME = 'objects.setting';
 

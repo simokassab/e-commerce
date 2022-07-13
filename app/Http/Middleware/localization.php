@@ -20,6 +20,7 @@ class localization
     {
 
         app()->setLocale('en');
+        dd(app()->getLocale());
         return $next($request);
 
         if(Session::get('locale')!=null){
