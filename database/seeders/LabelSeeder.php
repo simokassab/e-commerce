@@ -34,7 +34,7 @@ class LabelSeeder extends Seeder
 
         [
             'title' => json_encode(['en' => 'Hot','ar' => 'ناري']),
-            'entity' => "brand",
+            'entity' => "brands",
             'color' =>  "Red",
             'key' =>  "hot",
         ],

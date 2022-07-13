@@ -17,7 +17,7 @@ return [
         'images' => 'labels/images',
     ],
 
-    'brand' => [
+    'brands' => [
         'images' => 'brands/images',
     ],
 

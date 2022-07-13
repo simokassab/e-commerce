@@ -40,7 +40,7 @@ class SingleCategoryResource extends JsonResource
             'fieldsValues' => FieldsValueResource::collection($this->whenLoaded('fieldValue')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'discounts' => new Discount($this->whenLoaded('discount')),
-            'brands' => new CategoryResource($this->whenLoaded('brand')),
+            'brands' => new CategoryResource($this->whenLoaded('brands')),
             'products' => new CategoryResource($this->whenLoaded('products')),
 
         ];
