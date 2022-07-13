@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Brand\Brand;
 use App\Models\Currency\Currency;
 use App\Models\RolesAndPermissions\CustomRole;
 use Illuminate\Http\Request;
@@ -33,6 +34,6 @@ class TestController extends MainController
     }
 
     public function test(){
-
+        return Brand::find(1);
     }
 }

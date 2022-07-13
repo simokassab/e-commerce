@@ -52,7 +52,7 @@ class MainController extends Controller
         return successResponse($message,$data,$returnCode,$statusCode);
     }
 
-    protected function errorResponse($message = 'An error occurred please try again later'  , array $data,  $returnCode = -1, $statusCode = 500): \Illuminate\Http\JsonResponse
+    protected function errorResponse($message = 'An error occurred please try again later'  , array $data=[],  $returnCode = -1, $statusCode = 500): \Illuminate\Http\JsonResponse
     {
         return errorResponse($message, $data ,$returnCode, $statusCode);
     }
