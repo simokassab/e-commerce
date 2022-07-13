@@ -64,9 +64,12 @@ class PricesController extends MainController
     {
 
         $originalPrices = Price::with(['originalPrice','currency'])->where('is_virtual',0)->get();
-        return $this->successResponse([
-            'prices' => PriceResource::collection($originalPrices)
-        ]);
+        return $this->successResponse(
+            'Success!',
+            [
+                'prices' => PriceResource::collection($originalPrices)
+            ]
+        );
     }
 
     /**
@@ -91,13 +94,17 @@ class PricesController extends MainController
         }
 
         if($price->save()){
-            return $this->successResponse([
-                'message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                'price' => new PriceResource($price->load(['originalPrice','currency']))
-            ]);
+            return $this->successResponse(
+                __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'price' => new PriceResource($price->load(['originalPrice','currency']))
+                ]
+            );
         }
 
-        return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+        return $this->errorResponse(
+             __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+        );
 
     }
 
@@ -109,9 +116,12 @@ class PricesController extends MainController
      */
     public function show(Price $price)
     {
-        return $this->successResponse([
-           'price' => new SinglePriceResource($price->load(['originalPrice','currency']))
-        ]);
+        return $this->successResponse(
+            'Success!',
+            [
+                'price' => new SinglePriceResource($price->load(['originalPrice','currency']))
+            ]
+        );
     }
 
     /**
@@ -149,13 +159,17 @@ class PricesController extends MainController
         }
 
         if($price->save()){
-            return $this->successResponse([
-                'message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-                'price' => new PriceResource($price->load(['originalPrice','currency']))
-            ]);
+            return $this->successResponse(
+                __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'price' => new PriceResource($price->load(['originalPrice','currency']))
+                ]
+            );
         }
 
-        return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+        return $this->errorResponse(
+            __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+        );
 
     }
 
@@ -171,6 +185,6 @@ class PricesController extends MainController
     }
 
     public function getTableHeaders(){
-        return $this->successResponse(['headers' => __('headers.prices') ]);
+        return $this->successResponse('Success!', ['headers' => __('headers.prices') ]);
 }
 }

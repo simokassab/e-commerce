@@ -70,12 +70,14 @@ class SettingsController extends MainController
         $setting->is_developer = $request->is_developer;
 
         if(!$setting->save())
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) );
 
-        return $this->successResponse([
-            'message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'setting' => new SingleSettingResource($setting)
-        ]);
+        return $this->successResponse(
+            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            [
+                'setting' => new SingleSettingResource($setting)
+            ]
+        );
     }
 
     /**
@@ -86,7 +88,7 @@ class SettingsController extends MainController
      */
     public function show(Setting $setting)
     {
-        return $this->successResponse(['setting' => new SettingsResource($setting)]);
+        return $this->successResponse('Success!',['setting' => new SettingsResource($setting)]);
     }
 
     /**
@@ -105,7 +107,7 @@ class SettingsController extends MainController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Settings\Setting  $setting
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreSettingRequest $request, Setting $setting)
     {
@@ -115,31 +117,37 @@ class SettingsController extends MainController
 
 
         if(!$setting->save())
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse( __('messages.failed.update',['name' => __(self::OBJECT_NAME)]));
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'setting' => new SingleSettingResource($setting)
-        ]);
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
+                'setting' => new SingleSettingResource($setting)
+            ]
+        );
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Settings\Setting  $setting
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Setting $setting)
     {
         if(!$setting->delete())
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(__('messages.failed.delete',['name' => __(self::OBJECT_NAME)]));
 
-        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'setting' => new SingleSettingResource($setting)
-        ]);
+        return $this->successResponse(
+            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            [
+                'setting' => new SingleSettingResource($setting)
+            ]
+        );
     }
 
 
     public function getTableHeaders(){
-        return $this->successResponse(['headers' => __('headers.settings') ]);
+        return $this->successResponse('Success!' , ['headers' => __('headers.settings') ]);
 }
 }

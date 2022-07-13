@@ -188,15 +188,19 @@ class RolesController extends MainController
 
             DB::commit();
 
-            return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'role' => new SingleRoleResource($role)
-        ],200);
+            return $this->successResponse(
+                __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'role' => new SingleRoleResource($role)
+                ]
+            );
 
         }catch (\Exception | QueryException $e){
             DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]),
-            'error' => $e->getMessage()
-        ]);        }
+            return $this->errorResponse(
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)]),
+            );
+        }
     }
 
     /**
@@ -211,16 +215,19 @@ class RolesController extends MainController
         //TODO when deleting a role who has childern the request take a time more than usual
         $message = '';
         if(!$role->canDeleteRole($message)){
-            return $this->errorResponse([$message],405);
+            return $this->errorResponse($message);
         }
 
+
         if($role->delete()){
-            return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-                'role' =>  new SingleRoleResource($role)
-            ]);
+            return $this->successResponse(
+                __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'role' =>  new SingleRoleResource($role)
+                ]
+            );
         }
-        return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]),
-        ]);
+        return $this->errorResponse(__('messages.failed.delete',['name' => __(self::OBJECT_NAME)]));
     }
 
     public function getNestedPermissionsForRole(Request $request){
@@ -252,15 +259,15 @@ class RolesController extends MainController
             $returnArray[] = $tempArray;
         }
 
-        return $this->successResponse($returnArray);
+        return $this->successResponse('success!',$returnArray);
 
     }
 
     public function getAllRoles(){
-        return $this->successResponse([ "roles" => GetAllRolesResource::collection(CustomRole::all()) ]);
+        return $this->successResponse('Success!' , [ "roles" => GetAllRolesResource::collection(CustomRole::all()) ]);
     }
 
     public function getTableHeaders(){
-        return $this->successResponse(['headers' => __('headers.roles') ]);
+        return $this->successResponse('Success!' ,['headers' => __('headers.roles') ]);
 }
 }
