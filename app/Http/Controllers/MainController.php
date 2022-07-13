@@ -26,7 +26,6 @@ use PDO;
 
 class MainController extends Controller
 {
-//    protected $mapPermissions = [];
 
     public function __construct(/*$defaultPermissionsFromChild = null*/)
     {
@@ -48,15 +47,14 @@ class MainController extends Controller
 
     }
 
-    protected function successResponse(Array $data=[],$message = 'Success!',$returnCode = 1, $statusCode= 200): \Illuminate\Http\JsonResponse
+    protected function successResponse($message = 'Success!', Array $data=[], $returnCode = 1, $statusCode= 200): \Illuminate\Http\JsonResponse
     {
-        return successResponse($data,$message,$returnCode,$statusCode);
+        return successResponse($message,$data,$returnCode,$statusCode);
     }
 
-
-    protected function errorResponse(array $data, $message = 'An error occurred please try again later' ,$returnCode = -1, $statusCode = 500): \Illuminate\Http\JsonResponse
+    protected function errorResponse($message = 'An error occurred please try again later'  , array $data,  $returnCode = -1, $statusCode = 500): \Illuminate\Http\JsonResponse
     {
-        return errorResponse($data, $message ,$returnCode, $statusCode);
+        return errorResponse($message, $data ,$returnCode, $statusCode);
     }
 
     protected function successResponsePaginated($resource, $model, array $relation = [], $pagintaion = null)

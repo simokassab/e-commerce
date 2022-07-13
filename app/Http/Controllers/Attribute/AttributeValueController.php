@@ -43,7 +43,7 @@ class AttributeValueController extends MainController
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreAttributeValueRequest $request)
     {
@@ -53,11 +53,14 @@ class AttributeValueController extends MainController
 
 
         if(!$attributeValue->save())
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(  __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) );
 
-        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+        return $this->successResponse(
+            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            [
                 'attribute_value' => new AttributeValueResource($attributeValue)
-            ]);
+            ]
+            );
     }
 
     /**
@@ -68,7 +71,7 @@ class AttributeValueController extends MainController
      */
     public function show(AttributeValue $attributeValue)
     {
-        return $this->successResponse(['attribute_value' => new AttributeValueResource($attributeValue)]);
+        return $this->successResponse('Success!',['attribute_value' => new AttributeValueResource($attributeValue)]);
 
     }
 
@@ -88,7 +91,7 @@ class AttributeValueController extends MainController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreAttributeValueRequest $request, AttributeValue $attributeValue)
     {
@@ -97,26 +100,32 @@ class AttributeValueController extends MainController
 
 
         if(!$attributeValue->save())
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse( __('messages.failed.update',['name' => __(self::OBJECT_NAME)]));
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
                 'attribute_value' => new AttributeValueResource($attributeValue)
-            ]);
+            ]
+        );
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(AttributeValue $attributeValue)
     {
         if(!$attributeValue->delete())
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse( __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) );
 
-        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+        return $this->successResponse(
+            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            [
                 'attribute_value' => new AttributeValueResource($attributeValue)
-            ]);
+            ]
+        );
     }
 }

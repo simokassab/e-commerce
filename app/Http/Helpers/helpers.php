@@ -4,7 +4,8 @@ use App\Exceptions\FileErrorException;
 use Illuminate\Support\Facades\Storage;
 use phpDocumentor\Reflection\Types\Boolean;
 
-function uploadImage($file,$folderpath){
+function uploadImage($file,$folderpath): bool|string
+{
 
     try {
         $fileName = uniqid().'_'.$file->getClientOriginalName();
@@ -19,34 +20,32 @@ function uploadImage($file,$folderpath){
     }
 }
 
-function errorResponse(Array $data=[],$message = 'an error occurred please try again later',$returnCode = -1, $statusCode= 500): \Illuminate\Http\JsonResponse
+function errorResponse($message = 'An error occurred please try again later', Array $data=[],$returnCode = -1, $statusCode= 500): \Illuminate\Http\JsonResponse
 {
     $return['message'] = $message;
     $return['data'] = $data;
     $return['code'] = $returnCode;
 
-    return response()->json([
-        $return
-    ],$statusCode);
+    return response()->json($return,$statusCode);
 }
 
-function successResponse(Array $data=[],$message = 'Success!',$returnCode = 1, $statusCode= 200): \Illuminate\Http\JsonResponse
+function successResponse($message = 'Success!',Array $data=[],$returnCode = 1, $statusCode= 200): \Illuminate\Http\JsonResponse
 {
     $return['message'] = $message;
     $return['data'] = $data;
     $return['code'] = $returnCode;
 
-    return response()->json([
-        $return
-    ],$statusCode);
+    return response()->json($return,$statusCode);
 
 }
 
-function notFoundError(Array $data, $statusCode= 400){
-    $data['success'] = false;
-    return response()->json([
-        'data' => $data
-    ],$statusCode);
+function notFoundError($message = 'Not found!',Array $data=[],$returnCode = -2, $statusCode= 404): \Illuminate\Http\JsonResponse
+{
+    $return['message'] = $message;
+    $return['data'] = $data;
+    $return['code'] = $returnCode;
+
+    return response()->json($return,$statusCode);
 }
 function removeImage($folderpath)
 {

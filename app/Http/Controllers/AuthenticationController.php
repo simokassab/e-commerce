@@ -20,15 +20,17 @@ class AuthenticationController extends MainController
         if(! auth()->attempt($validated)){
             return $this->errorResponse([],'Sorry, but you entered the wrong credentials!',-1,401);
         }
+
         $permissions = [];
+
         if(!is_null(\auth()->user()->roles) && count(\auth()->user()->roles) > 0){
             $permissions = \auth()->user()->roles[0]->permissions;
         }
+
         return $this->successResponse([
-            'message' => 'Authenticated successfully!',
             'user' => \auth()->user(),
-            'permissions' => $permissions,
-        ],201);
+            'permissions' => $permissions
+        ],'Authenticated Successfully! ',1,202);
 
     }
 
