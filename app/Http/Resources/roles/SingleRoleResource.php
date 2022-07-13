@@ -21,7 +21,7 @@ class SingleRoleResource extends JsonResource
      */
     public function toArray($request)
     {
-        $parentId = $this->parent ? $this->parent->id : '-';
+        $parentId = $this->parent ? $this->parent->id : '';
 
         return [
             'id' => $this->id,

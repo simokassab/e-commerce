@@ -51,7 +51,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     //Permission
 
     // Routes Macro
-    Route::customBrandResource('brands', BrandController::class);
+    Route::customBrandResource('brand', BrandController::class);
     Route::customCategoryResource('category', CategoryController::class);
     Route::customLanguageResource('language',LanguageController::class);
     //End of Routes Macro

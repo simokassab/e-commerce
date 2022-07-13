@@ -36,7 +36,8 @@ class TestController extends MainController
     }
 
     public function test(){
-         $label =  Label::find(1)->image;
+         $label =  Label::find(2)->image;
+
         return (asset('storage/'.$label));
 
     }
