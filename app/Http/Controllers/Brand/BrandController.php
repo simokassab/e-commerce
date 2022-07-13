@@ -299,7 +299,7 @@ public function updateSortValues(Request $request){
 
 public function getTableHeaders(): \Illuminate\Http\JsonResponse
 {
-        return $this->successResponse(['headers' => __('headers.brands') ]);
+        return $this->successResponse( 'success' , ['headers' => __('headers.brands') ]);
 }
 
 }

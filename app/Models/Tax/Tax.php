@@ -14,7 +14,7 @@ class Tax extends MainModel
 {
     use HasFactory,HasTranslations;
 
-    protected $translatable=['name'];
+    protected array $translatable=['name'];
     protected $table='taxes';
     protected $guard_name = 'web';
 
