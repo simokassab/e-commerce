@@ -80,9 +80,12 @@ class RolesController extends MainController
             $role->givePermissionTo($approvedPermissions);
 
             DB::commit();
-            return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'role' => new SingleRoleResource($role)
-        ],201);
+            return $this->successResponse(
+             __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            [
+                'role' => new SingleRoleResource($role)
+            ]
+        );
 
         }catch (\Exception | QueryException $e){
             DB::rollBack();
