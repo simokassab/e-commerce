@@ -19,8 +19,8 @@ class CategoryResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
-            'image' => $this->image,
-            'icon' => $this->icon,
+            'image'=> $this->image ?  asset('storage/'.$this->image) : 'default_image' ,
+            'icon'=> $this->icon ?  asset('storage/'.$this->icon) : 'default_image' ,
             'parent' => new CategoryResource($this->whenLoaded('parent')),
             'slug' => $this->slug,
             // 'parent_id' => $this->parent_id,
@@ -36,7 +36,7 @@ class CategoryResource extends JsonResource
             // 'fieldsValues' => FieldsValueResource::collection($this->whenLoaded('fieldValue')),
             // 'tags' => TagResource::collection($this->whenLoaded('tags')),
             // 'discounts' => new discount($this->whenLoaded('discount')),
-            // 'brands' => new CategoryResource($this->whenLoaded('brand')),
+            // 'brands' => new CategoryResource($this->whenLoaded('brands')),
             // 'products' => new CategoryResource($this->whenLoaded('products')),
 
              ];

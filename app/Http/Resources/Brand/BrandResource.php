@@ -18,7 +18,7 @@ class BrandResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
-            'image'=> $this->image,
+            'image'=> 'storage/'.$this->image ?  asset('storage/'.$this->image) : 'default_image' ,
             // 'meta_title' => $this->meta_title,
             // 'meta_description' => $this->meta_description,
             // 'meta_keyword' => $this->meta_keyword,

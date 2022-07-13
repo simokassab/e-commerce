@@ -20,7 +20,7 @@ class SingleLanguageResource extends JsonResource
             'code' => $this->code,
             'is_default' => $this->is_default,
             'is_disabled' => $this->is_disabled,
-            'image' => $this->image,
+            'image'=> 'storage/'.$this->image ?  asset('storage/'.$this->image) : 'default_image' ,
             'sort' => $this->sort
         ];
     }

@@ -52,7 +52,7 @@ class StoreBrandRequest extends FormRequest
             'sort' => 'nullable | integer',
 
 
-            'fields.*.field_id' => 'required | exists:fields,id,entity,brand',
+            'fields.*.field_id' => 'required | exists:fields,id,entity,brands',
             'fields.*.field_value_id' =>  'integer | exists:fields_values,id',
             'fields.*.value'=> 'nullable',
 
@@ -78,7 +78,7 @@ class StoreBrandRequest extends FormRequest
 
 
             'fields.*.field_id.required' => 'The field_id is required',
-            'fields.*.field_id.exists' => 'The field_id is not exists or not for brand entity',
+            'fields.*.field_id.exists' => 'The field_id is not exists or not for brands entity',
             'fields.*.field_value_id.required' => 'The field_value_id  is required',
             'fields.*.field_value_id.exists' => 'The field_value_id  is not exists',
             'fields.*.value.required' => 'The value is required',

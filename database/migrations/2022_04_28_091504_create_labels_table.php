@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('labels', function (Blueprint $table) {
             $table->id();
             $table->json('title');
-            $table->enum('entity',['category','product','brand']);
+            $table->enum('entity',['category','product','brands']);
             $table->string('color',250);
             $table->string('image',250)->nullable();
             $table->string('key',250)->unique();

@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Controllers\Label\LabelController;
 use App\Models\Brand\Brand;
 use App\Models\Currency\Currency;
+use App\Models\Label\Label;
 use App\Models\RolesAndPermissions\CustomRole;
 use Illuminate\Http\Request;
 use App\Models\User\User;
@@ -34,6 +36,9 @@ class TestController extends MainController
     }
 
     public function test(){
-        return Brand::find(1);
+         $label =  Label::find(2)->image;
+
+        return (asset('storage/'.$label));
+
     }
 }

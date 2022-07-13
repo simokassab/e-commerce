@@ -3,26 +3,23 @@
 return [
 
     'category' => [
-            'images' => 'categories/images',
-            'icons' => 'categories/icons',
-
+        'images' => 'public/categories/images',
+        'icons' => 'public/categories/icons',
     ],
     'currency' => [
-        'images' => 'currencies/images',
+        'images' => 'public/currencies/images',
     ],
     'language' => [
-        'images' => 'languages/images',
+        'images' => 'public/languages/images',
     ],
     'label' => [
-        'images' => 'labels/images',
+        'images' => 'public/labels/images',
     ],
-
-    'brand' => [
-        'images' => 'brands/images',
+    'brands' => [
+        'images' => 'public/brands/images',
     ],
-
     'country' => [
-        'images' => 'countrires/images',
+        'images' => 'public/countries/images',
     ],
 
  ];

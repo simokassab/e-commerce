@@ -16,7 +16,7 @@ return [
     'tag' => 'Tag',
     'unit' => 'Unit',
     'category' => 'Category',
-    'brand' => 'Brand',
+    'brands' => 'Brand',
     'discount' => 'Discount',
     'discountEntity' => 'Discount Entity',
     'tax' => 'Tax',

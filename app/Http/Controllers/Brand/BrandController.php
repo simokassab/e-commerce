@@ -21,7 +21,7 @@ use Illuminate\Validation\Rule;
 
 class BrandController extends MainController
 {
-    const OBJECT_NAME = 'objects.brand';
+    const OBJECT_NAME = 'objects.brands';
 
 //    public function __construct($defaultPermissionsFromChild = null)
 //    {
@@ -52,10 +52,10 @@ class BrandController extends MainController
     public function create()
     {
         $fields= Field::with('fieldValue')
-        ->whereEntity('brand')
+        ->whereEntity('brands')
         ->get();
 
-        $labels= Label::whereEntity('brand')->get();
+        $labels= Label::whereEntity('brands')->get();
 
         return $this->successResponse(
             'Success!',
@@ -81,7 +81,7 @@ class BrandController extends MainController
             $brand->name = json_encode($request->name);
             $brand->code = $request->code;
             if($request->image)
-                $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brand.images'));
+                $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brands.images'));
 
             $brand->meta_title = json_encode($request->meta_title);
             $brand->meta_description = json_encode($request->meta_description);
@@ -122,7 +122,7 @@ class BrandController extends MainController
                     return $this->successResponse(
                         __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
                         [
-                            'brand' => new SingleBrandResource($brand)
+                            'brands' => new SingleBrandResource($brand)
                         ]
                     );
         } catch (\Exception $e) {
@@ -130,7 +130,7 @@ class BrandController extends MainController
             return $this->errorResponse(
                 __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ,
                 [
-                    'brand' => new SingleBrandResource($brand),
+                    'brands' => new SingleBrandResource($brand),
                 ]
             );
 
@@ -145,7 +145,7 @@ class BrandController extends MainController
      */
     public function show(Brand $brand)
     {
-        return $this->successResponse(['brand' => new BrandResource($brand)]);
+        return $this->successResponse(['brands' => new BrandResource($brand)]);
 
     }
 
@@ -179,7 +179,7 @@ class BrandController extends MainController
             $brand->name = json_encode($request->name);
             $brand->code = $request->code;
             if($request->image)
-                $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brand.images'));
+                $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brands.images'));
             $brand->meta_title = json_encode($request->meta_title);
             $brand->meta_description = json_encode($request->meta_description);
             $brand->meta_keyword = json_encode($request->meta_keyword);
@@ -218,7 +218,7 @@ class BrandController extends MainController
                     return $this->successResponse(
                         __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
                         [
-                            'brand' => new SingleBrandResource($brand)
+                            'brands' => new SingleBrandResource($brand)
                         ]
                     );
         } catch (\Exception $e) {
@@ -251,7 +251,7 @@ class BrandController extends MainController
             return $this->successResponse(
                 __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
                 [
-                    'brand' => new SingleBrandResource($brand)
+                    'brands' => new SingleBrandResource($brand)
                 ]
             );
 
@@ -277,7 +277,7 @@ public function toggleStatus(Request $request ,$id){
     return $this->successResponse(
         __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
         [
-            'brand' =>  new BrandResource($brand)
+            'brands' =>  new BrandResource($brand)
         ]
     );
 
