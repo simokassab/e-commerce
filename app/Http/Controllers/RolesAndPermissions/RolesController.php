@@ -129,9 +129,14 @@ class RolesController extends MainController
         }
 
 
-        return $this->successResponse([
-            'role' => (new SingleRoleResource($role))->permissions($permissions),
-        ],202);
+        return $this->successResponse(
+            'Success!',
+            [
+                'role' => (new SingleRoleResource($role))->permissions($permissions),
+            ],
+            202
+
+    );
     }
 
     /**
