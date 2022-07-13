@@ -13,7 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class TaxController extends MainController
 {
+
     const OBJECT_NAME = 'objects.tax';
+
 
     /**
      * Display a listing of the resource.
