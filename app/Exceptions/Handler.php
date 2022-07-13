@@ -96,18 +96,18 @@ class Handler extends ExceptionHandler
                 foreach ($this->exceptions as $currentException){
 
                     if($exception instanceof NotFoundHttpException){
-                        return errorResponse();
+                        return errorResponse($currentException['message'] ?? 'error, please try again later' , [] , -1,500);
                     }
 
                     if($exception instanceof $currentException['class']){
-                        return errorResponse(['message'=>$currentException['message']] ? : 'error, please try again later' );
+                        return errorResponse($currentException['message'] ?? 'error, please try again later' , [] , -1,500 );
                     }
                 }
             }
 
             if(!config('app.debug_code')){
                 if($exception instanceof \Error){
-                    return errorResponse(['message'=>'error, please try again later']);
+                    return errorResponse($currentException['message'] ?? 'error, please try again later' , [] , -1,500);
                 }
             }
         });
