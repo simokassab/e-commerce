@@ -49,7 +49,7 @@ class CountryController extends MainController
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreCountryRequest $request)
     {
@@ -64,22 +64,30 @@ class CountryController extends MainController
             $country->flag= $this->imageUpload($request->file('flag'),config('images_paths.country.images'));
         }
         if(!$country->save())
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]));
 
-        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'country' => new CountryResource($country)
-        ]);
+        return $this->successResponse(
+            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            [
+                'country' => new CountryResource($country)
+            ]
+        );
 
     }
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Country $country)
     {
-        return $this->successResponse(['country' => new CountryResource($country)]);
+        return $this->successResponse(
+            'Success!',
+            [
+                'country' => new CountryResource($country)
+            ]
+        );
 
     }
 
@@ -100,7 +108,7 @@ class CountryController extends MainController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreCountryRequest $request, Country $country)
     {
@@ -116,32 +124,42 @@ class CountryController extends MainController
 
          }
         if(!$country->save())
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'country' => new CountryResource($country)
-        ]);
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
+                'country' => new CountryResource($country)
+            ]
+        );
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Country $country)
     {
         if(!$country->delete())
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'country' => new CountryResource($country)
-        ]);
+        return $this->successResponse(
+            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            [
+                'country' => new CountryResource($country)
+            ]
+    );
 
     }
 
 
     public function getTableHeaders(){
-        return $this->successResponse(['headers' => __('headers.countries') ]);
+        return $this->successResponse('Success!',['headers' => __('headers.countries') ]);
 }
 }

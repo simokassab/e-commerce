@@ -122,12 +122,15 @@ class CategoryController extends MainController
                     }
                     //End of Labels Store
                     DB::commit();
-                    return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                    'cateogries' => new SingleCategoryResource($category)
-                ]);
+                    return $this->successResponse(
+                        __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                        [
+                            'cateogries' => new SingleCategoryResource($category)
+                        ]
+                    );
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) );
 
             }
      }
@@ -137,11 +140,16 @@ class CategoryController extends MainController
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Category $category)
     {
-        return $this->successResponse(['category' =>  new CategoryResource($category)]);
+        return $this->successResponse(
+            'Success!',
+            [
+                'category' =>  new CategoryResource($category)
+            ]
+        );
 
     }
 
@@ -216,12 +224,15 @@ class CategoryController extends MainController
                 //End of Labels Store
 
                     DB::commit();
-                    return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-                    'cateogries' => new SingleCategoryResource($category)
-                ]);
+                    return $this->successResponse(
+                        __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+                        [
+                            'category' => new SingleCategoryResource($category)
+                        ]
+                    );
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse( __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) );
 
             }
 
@@ -232,7 +243,7 @@ class CategoryController extends MainController
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Category $category)
     {
@@ -241,13 +252,16 @@ class CategoryController extends MainController
             CategoryService::deleteRelatedCategoryFieldsAndLabels($category);
             $category->delete();
             DB::commit();
-            return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'category' => new SingleCategoryResource($category)
-            ]);
+            return $this->successResponse(
+                __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'category' => new SingleCategoryResource($category)
+                ]
+            );
 
         }catch (\Exception $e){
             DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse( __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) );
 
         }
 
@@ -264,25 +278,37 @@ class CategoryController extends MainController
             $category = Category::findOrFail($id);
         $category->is_disabled=$request->is_disabled;
         if(!$category->save())
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(__('messages.failed.update',['name' => __(self::OBJECT_NAME)]) );
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'category' =>  new CategoryResource($category)
-        ]);
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
+                'category' =>  new CategoryResource($category)
+            ]
+        );
 
     }
 
     public function getAllParentsSorted(){
 
         $categories=Category::rootParent()->order()->get();
-        return $this->successResponse(['categories' => $categories ]);
+        return $this->successResponse(
+            'Success!',
+            [
+                'categories' => $categories
+            ]
+        );
 
     }
 
     public function getAllChildsSorted($parent_id){
-
         $categories=Category::whereParentId($parent_id)->order()->get();
-        return $this->successResponse(['categories' => $categories ]);
+        return $this->successResponse(
+            'Success!',
+            [
+                'categories' => $categories
+            ]
+        );
     }
 
     public function updateSortValues(Request $request){
@@ -292,7 +318,7 @@ class CategoryController extends MainController
     }
 
     public function getTableHeaders(){
-        return $this->successResponse(['headers' => __('headers.categories') ]);
+        return $this->successResponse('Success!',['headers' => __('headers.categories') ]);
 }
 
 }

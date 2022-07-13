@@ -38,30 +38,8 @@ class BrandController extends MainController
 
         if ($request->method()=='POST') {
             $searchKeys=['name','code','meta_title','meta_description','meta_keyword','description'];
-            $data= $this->getSearchPaginated(BrandResource::class, Brand::class,$request, $searchKeys);
-            if($data->isEmpty()){
-                 $data=[
-                    'data' => [
-                        [
-                        'name'=>'',
-                        'code'=> '',
-                        'image'=> '',
-                        'meta_title'=> '',
-                        'meta_description'=> '',
-                        'meta_description'=> '',
-                        'meta_keyword'=> '',
-                        'description'=> '',
-                        'is_disabled'=> '',
-
-                    ]
-                    ]
-                ];
-                return response()->json($data);
-                return  BrandResource::collection($data);
-            }
-            return $data;
-
-                }
+            return $this->getSearchPaginated(BrandResource::class, Brand::class,$request, $searchKeys);
+        }
 
         return $this->successResponsePaginated(BrandResource::class,Brand::class);
     }
@@ -69,7 +47,7 @@ class BrandController extends MainController
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function create()
     {
@@ -79,14 +57,19 @@ class BrandController extends MainController
 
         $labels= Label::whereEntity('brand')->get();
 
-        return $this->successResponse(['fields'=>$fields,'labels'=>$labels]);
+        return $this->successResponse(
+            'Success!',
+            [
+                'fields'=>$fields,'labels'=>$labels
+            ]
+        );
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreBrandRequest $request)
     {
@@ -136,12 +119,20 @@ class BrandController extends MainController
 
                     DB::commit();
 
-                    return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                        'brand' => new SingleBrandResource($brand)
-                    ]);
+                    return $this->successResponse(
+                        __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                        [
+                            'brand' => new SingleBrandResource($brand)
+                        ]
+                    );
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ,
+                [
+                    'brand' => new SingleBrandResource($brand),
+                ]
+            );
 
         }
     }
@@ -174,7 +165,7 @@ class BrandController extends MainController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  Brand  $brand
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Brand $brand)
     {
@@ -224,22 +215,23 @@ class BrandController extends MainController
                     //End of Labels Store
 
                     DB::commit();
-                    return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                    'brand' => new SingleBrandResource($brand)
-                         ]);
+                    return $this->successResponse(
+                        __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                        [
+                            'brand' => new SingleBrandResource($brand)
+                        ]
+                    );
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse([
-                'message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]),
-                'errors' => $e->getMessage(),
-        ]);
+            return $this->errorResponse(
+                __('messages.failed.create',['name' => __(self::OBJECT_NAME)]),
+            );
 
         }catch(Error $error){
             DB::rollBack();
-            return $this->errorResponse([
-                'message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]),
-                'errors' => $error->getMessage(),
-        ]);
+            return $this->errorResponse(
+                __('messages.failed.create',['name' => __(self::OBJECT_NAME)]),
+            );
         }
 }
 
@@ -247,7 +239,7 @@ class BrandController extends MainController
      * Remove the specified resource from storage.
      *
      * @param  Brand  $brand
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Brand $brand)
     {
@@ -256,13 +248,16 @@ class BrandController extends MainController
             BrandsService::deleteRelatedBrandFieldsAndLabels($brand);
             $brand->delete();
             DB::commit();
-            return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'brand' => new SingleBrandResource($brand)
-            ]);
+            return $this->successResponse(
+                __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'brand' => new SingleBrandResource($brand)
+                ]
+            );
 
         }catch (\Exception $e){
             DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse( __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]));
 
         }
 
@@ -277,17 +272,20 @@ public function toggleStatus(Request $request ,$id){
     $brand = Brand::findOrFail($id);
     $brand->is_disabled = $request->is_disabled;
     if(!$brand->save())
-        return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+        return $this->errorResponse(__('messages.failed.update',['name' => __(self::OBJECT_NAME)]) );
 
-    return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-        'brand' =>  new BrandResource($brand)
-    ]);
+    return $this->successResponse(
+        __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+        [
+            'brand' =>  new BrandResource($brand)
+        ]
+    );
 
 }
 
 public function getAllBrandsSorted(){
     $brands=Brand::order()->get();
-    return $this->successResponse(['brands' => $brands ]);
+    return $this->successResponse('Success!',['brands' => $brands ]);
 }
 
 
@@ -299,7 +297,9 @@ public function updateSortValues(Request $request){
 
 }
 
-public function getTableHeaders(){
+public function getTableHeaders(): \Illuminate\Http\JsonResponse
+{
         return $this->successResponse(['headers' => __('headers.brands') ]);
 }
+
 }
