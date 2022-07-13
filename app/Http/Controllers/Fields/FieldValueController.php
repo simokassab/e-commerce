@@ -44,7 +44,7 @@ class FieldValueController extends MainController
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreFieldsValueRequest $request)
     {
@@ -54,23 +54,33 @@ class FieldValueController extends MainController
 
 
         if(! $fieldValue->save())
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'field_value' => new FieldsValueResource($fieldValue)
-        ]);
+        return $this->successResponse(
+            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            [
+                'field_value' => new FieldsValueResource($fieldValue)
+            ]
+        );
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(FieldValue $fieldValue)
     {
 
-        return $this->successResponse(['field_value' => new FieldsValueResource($fieldValue)]);
+        return $this->successResponse(
+            'Success!',
+            [
+                'field_value' => new FieldsValueResource($fieldValue)
+            ]
+        );
     }
 
     /**
@@ -89,7 +99,7 @@ class FieldValueController extends MainController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  FieldValue  $fieldValue
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreFieldsValueRequest $request, FieldValue $fieldValue)
     {
@@ -98,26 +108,36 @@ class FieldValueController extends MainController
 
 
         if(! $fieldValue->save())
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'field_value' => new FieldsValueResource($fieldValue)
-        ]);
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
+                'field_value' => new FieldsValueResource($fieldValue)
+            ]
+        );
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  FieldValue  $fieldValue
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(FieldValue $fieldValue)
     {
         if(! $fieldValue->delete())
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'field_value' => new FieldsValueResource($fieldValue)
-        ]);
+        return $this->successResponse(
+            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            [
+                'field_value' => new FieldsValueResource($fieldValue)
+            ]
+        );
     }
 }

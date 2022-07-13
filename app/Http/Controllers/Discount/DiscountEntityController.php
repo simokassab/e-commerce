@@ -66,11 +66,17 @@ class DiscountEntityController extends MainController
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(DiscountEntity $discountEntity)
     {
-        return $this->successResponse(['discount_entity' => new DiscountEntityResource($discountEntity)]);
+        return $this->successResponse(
+            'Success!',
+
+            [
+                'discount_entity' => new DiscountEntityResource($discountEntity)
+            ]
+        );
 
     }
 
@@ -90,7 +96,7 @@ class DiscountEntityController extends MainController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreDiscountEntityRequest $request, DiscountEntity $discountEntity)
     {
@@ -100,26 +106,36 @@ class DiscountEntityController extends MainController
         $discountEntity->tag_id = $request->tag_id;
 
         if(!($discountEntity->save()))
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'discount_entity' => new DiscountEntityResource($discountEntity)
-        ]);
+        return $this->successResponse(
+            $message = __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
+                'discount_entity' => new DiscountEntityResource($discountEntity)
+            ]
+        );
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(DiscountEntity $discountEntity)
     {
         if(!$discountEntity->delete())
-        return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])]);
+        return $this->errorResponse(
+            _('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+        );
 
-     return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-         'discount_entity' => new DiscountEntityResource($discountEntity)
-     ]);
+     return $this->successResponse(
+         __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+         [
+            'discount_entity' => new DiscountEntityResource($discountEntity)
+         ]
+     );
     }
 }

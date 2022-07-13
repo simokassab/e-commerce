@@ -52,7 +52,7 @@ class CurrencyController extends MainController
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreCurrencyRequest $request)
 {
@@ -70,11 +70,14 @@ class CurrencyController extends MainController
         }
 
         if(!$currency->save())
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]));
 
-        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'currency' => new SingleCurrencyResource($currency)
-            ]);
+        return $this->successResponse(
+            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            [
+                'currency' => new SingleCurrencyResource($currency)
+            ]
+        );
 
     }
 
@@ -82,11 +85,16 @@ class CurrencyController extends MainController
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Currency $currency)
     {
-        return $this->successResponse(['currency' => new CurrencyResource($currency)]);
+        return $this->successResponse(
+            'Success!',
+            [
+                'currency' => new CurrencyResource($currency)
+            ]
+        );
 
     }
 
@@ -106,7 +114,7 @@ class CurrencyController extends MainController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreCurrencyRequest $request, Currency $currency)
     {
@@ -128,16 +136,22 @@ class CurrencyController extends MainController
              $currency->save();
             DB::commit();
 
-            return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'currency' => new SingleCurrencyResource($currency)
-        ]);
+            return $this->successResponse(
+                __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'currency' => new SingleCurrencyResource($currency)
+                ]
+            );
 
         }catch(\Exception $exception){
             DB::rollBack();
 
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]),[
-                $exception->getMessage()
-            ] ]);
+            return $this->errorResponse(
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)]),
+                [
+                    $exception->getMessage()
+                ]
+            );
 
         }
 
@@ -173,11 +187,19 @@ class CurrencyController extends MainController
         $currencyObject->setIsDefault();
         $currencyObject->save();
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-        'currency' => new CurrencyResource($currencyObject)
-        ]);
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
+                'currency' => new CurrencyResource($currencyObject)
+            ]
+        );
     }
      public function getTableHeaders(){
-        return $this->successResponse(['headers' => __('headers.currencies') ]);
-}
+        return $this->successResponse(
+            'Success!',
+            [
+                'headers' => __('headers.currencies')
+            ]
+        );
+    }
 }

@@ -50,7 +50,7 @@ class LabelController extends MainController
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreLabelRequest $request)
     {
@@ -65,11 +65,16 @@ class LabelController extends MainController
         $label->key = $request->key;
 
         if(!$label->save())
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'label' => new LabelsResource($label)
-        ]);
+        return $this->successResponse(
+            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            [
+                'label' => new LabelsResource($label)
+            ]
+        );
 
     }
 
@@ -77,11 +82,11 @@ class LabelController extends MainController
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Label $label)
     {
-        return $this->successResponse(['label' => new LabelsResource($label)]);
+        return $this->successResponse('Success!',['label' => new LabelsResource($label)]);
 
     }
 
@@ -101,7 +106,7 @@ class LabelController extends MainController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreLabelRequest $request, Label $label)
     {
@@ -118,31 +123,42 @@ class LabelController extends MainController
         $label->key = $request->key;
 
         if(!$label->save())
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'label' => new LabelsResource($label)
-        ]);
+            );
+
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
+                'label' => new LabelsResource($label)
+            ]
+        );
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  Label $label
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Label $label)
     {
         if(!$label->delete())
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'label' => new LabelsResource($label)
-        ]);
+        return $this->successResponse(
+            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            [
+                'label' => new LabelsResource($label)
+            ]
+        );
 
 
 }
 public function getTableHeaders(){
-    return $this->successResponse(['headers' => __('headers.labels') ]);
+    return $this->successResponse('Success!',['headers' => __('headers.labels') ]);
 }
 }

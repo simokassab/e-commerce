@@ -50,7 +50,7 @@ class LanguageController extends MainController
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreLanguageRequest $request)
     {
@@ -65,11 +65,16 @@ class LanguageController extends MainController
         }
 
         if(!$language->save())
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'language' => new SingleLanguageResource($language)
-        ]);
+        return $this->successResponse(
+            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            [
+                'language' => new SingleLanguageResource($language)
+            ]
+        );
 
 
     }
@@ -78,11 +83,11 @@ class LanguageController extends MainController
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Language $language)
     {
-        return $this->successResponse(['language' => new LanguageResource($language)]);
+        return $this->successResponse('Success' , ['language' => new LanguageResource($language)]);
     }
 
     /**
@@ -101,7 +106,7 @@ class LanguageController extends MainController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreLanguageRequest $request, Language $language)
     {
@@ -121,11 +126,16 @@ class LanguageController extends MainController
 
 
         if(!$language->save())
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'language' => new SingleLanguageResource($language)
-        ]);
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
+                'language' => new SingleLanguageResource($language)
+            ]
+        );
 
     }
 
@@ -133,34 +143,47 @@ class LanguageController extends MainController
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Language $language)
     {
         $defaultLanugage=Language::where('is_default',1)->first();
         if($defaultLanugage)
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+            );
 
         if(!$language->delete())
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'language' => new SingleLanguageResource($language)
-        ]);
+        return $this->successResponse(
+            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            [
+                'language' => new SingleLanguageResource($language)
+            ]
+        );
 
     }
     public function setLanguage($locale){
 
         $language=Language::where('code',$locale)->first();
         if(!$language)
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+            );
 
         App::setLocale($locale);
         if(App::getLocale() == $locale){
-            return $this->successResponse([__('objects'),'messages' => __('messages.success.update', ['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->successResponse(
+                __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
+            );
         }
 
-        return $this->errorResponse( [ 'messages' => __('messages.failed.update', ['name' => __(self::OBJECT_NAME)]) ]);
+        return $this->errorResponse(
+            __('messages.failed.update', ['name' => __(self::OBJECT_NAME)])
+        );
 
     }
 public function toggleStatus(Request $request ,$id){
@@ -172,11 +195,16 @@ public function toggleStatus(Request $request ,$id){
         $language = Language::findOrFail($id);
         $language->is_disabled=$request->is_disabled;
         if(!$language->save())
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'language' =>  new LanguageResource($language)
-        ]);
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
+                'language' =>  new LanguageResource($language)
+            ]
+        );
 
     }
 
@@ -188,7 +216,9 @@ public function toggleStatus(Request $request ,$id){
 
         batch()->update($language,$order,$index);
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)])]);
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)])
+        );
 
     }
     public function setLanguageIsDefault($language){
@@ -197,17 +227,30 @@ public function toggleStatus(Request $request ,$id){
         $languageObject->setIsDefault();
         $languageObject->save();
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-        'language' => new LanguageResource($languageObject)
-        ]);
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
+                'language' => new LanguageResource($languageObject)
+            ]
+        );
     }
     public function getAllLanguagesSorted(){
         $languages=Language::order()->get();
-        return $this->successResponse(['languages' => $languages ]);
+        return $this->successResponse(
+            'Success!',
+            [
+                'languages' => $languages
+            ]
+        );
     }
 
     public function getTableHeaders(){
-        return $this->successResponse(['headers' => __('headers.languages') ]);
+        return $this->successResponse(
+            'Success!',
+            [
+                'headers' => __('headers.languages')
+            ]
+        );
 }
 
     }

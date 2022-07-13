@@ -52,7 +52,7 @@ class FieldsController extends MainController
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreFieldRequest $request)
     {
@@ -65,7 +65,9 @@ class FieldsController extends MainController
         $check=true;
 
         if(!$field->save())
-          return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+          return $this->errorResponse(
+              __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+          );
 
           if($request->type=='select' && $request->field_value){
            $fieldValueArray=$request->field_value;
@@ -77,12 +79,17 @@ class FieldsController extends MainController
             }
 
             if(!$check)
-                return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+                return $this->errorResponse(
+                    __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+                );
 
 
-        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'field' => new SingleFieldResource($field)
-        ]);
+        return $this->successResponse(
+            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            [
+                'field' => new SingleFieldResource($field)
+            ]
+        );
 
     }
 
@@ -90,11 +97,16 @@ class FieldsController extends MainController
      * Display the specified resource.
      *
      * @param  Field  $field
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Field $field)
     {
-        return $this->successResponse(['field' => new FieldsResource($field)]);
+        return $this->successResponse(
+            'Success!',
+            [
+                'field' => new FieldsResource($field)
+            ]
+        );
 
     }
 
@@ -114,7 +126,7 @@ class FieldsController extends MainController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  Field  $field
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreFieldRequest $request, Field $field)
     {
@@ -138,12 +150,17 @@ class FieldsController extends MainController
              }
 
         DB::commit();
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'field' => new SingleFieldResource($field)
-        ]);
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
+                'field' => new SingleFieldResource($field)
+            ]
+        );
     } catch (\Exception $e) {
         DB::rollBack();
-        return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+        return $this->errorResponse(
+            __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+        );
 
     }
     }
@@ -152,7 +169,7 @@ class FieldsController extends MainController
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Field $field)
     {
@@ -162,18 +179,23 @@ class FieldsController extends MainController
             $field->delete();
 
             DB::commit();
-            return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-                'field' => new SingleFieldResource($field)
-            ]);
+            return $this->successResponse(
+                __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'field' => new SingleFieldResource($field)
+                ]
+            );
 
         }catch (\Exception $e){
             DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+            );
 
         }
     }
 
     public function getTableHeaders(){
-        return $this->successResponse(['headers' => __('headers.fields') ]);
+        return $this->successResponse('Success!' , ['headers' => __('headers.fields') ]);
 }
 }

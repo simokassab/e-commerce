@@ -73,11 +73,13 @@ class DiscountController extends MainController
 
             $products = DiscountsServices::filterProducts($tagsProducts,$brandsProducts,$categorySingleProducts,$categoryMultipleProducts, $request->filter_type );
 
-            return $this->successResponse([
-                'message' => __('messages.success.create',['name' => __(self::OBJECT_NAME),]),
-                'discount' => new DiscountResource($discount),
-                'products' => $products,
-            ]);
+            return $this->successResponse(
+                __('messages.success.create',['name' => __(self::OBJECT_NAME),]),
+                [
+                    'discount' => new DiscountResource($discount),
+                    'products' => $products,
+                ]
+            );
             DB::commit();
 
         }catch (\Exception $e){
@@ -95,11 +97,16 @@ class DiscountController extends MainController
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Discount $discount)
     {
-        return $this->successResponse(['discount' => new DiscountResource($discount)]);
+        return $this->successResponse(
+            'Success!',
+            [
+                'discount' => new DiscountResource($discount)
+            ]
+        );
 
     }
 
@@ -119,7 +126,7 @@ class DiscountController extends MainController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreDiscountRequest $request, Discount $discount)
     {
@@ -129,30 +136,40 @@ class DiscountController extends MainController
         $discount->discount_percentage = $request->discount_percentage;
 
         if(!($discount->save()))
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+        );
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'discount' => new DiscountResource($discount)
-        ]);
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
+                'discount' => new DiscountResource($discount)
+            ]
+    );
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Discount $discount)
     {
         if(!$discount->delete())
-        return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])]);
+        return $this->errorResponse(
+            __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+        );
 
-     return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-         'discount' => new DiscountResource($discount)
-     ]);
+     return $this->successResponse(
+         __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+         [
+            'discount' => new DiscountResource($discount)
+         ]
+     );
     }
 
     public function getTableHeaders(){
-        return $this->successResponse(['headers' => __('headers.discounts') ]);
+        return $this->successResponse('Success' , ['headers' => __('headers.discounts') ]);
 }
 }
