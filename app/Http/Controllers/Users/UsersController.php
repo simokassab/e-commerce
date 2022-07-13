@@ -37,7 +37,13 @@ class UsersController extends MainController
 
         }
 
-        return $this->successResponse(['user',UserResource::collection(User::with('roles')->paginate(config('defaults.default_pagination')))],200);
+        return $this->successResponse(
+            'Success',
+            [
+                UserResource::collection(User::with('roles')->paginate(config('defaults.default_pagination')))
+            ],
+        );
+
     }
 
     public function store(StoreUserRequest $request){
@@ -56,18 +62,24 @@ class UsersController extends MainController
             $user->AssignRole($request->role_id);
             DB::commit();
 
-                 return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                 'user' => new SingleUserResource($user)
-             ]);
+                 return $this->successResponse(
+                     __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                 [
+                    'user' => new SingleUserResource($user)
+                 ]
+                 );
         }catch (\Exception $exception){
             DB::rollBack();
-            return $this->errorResponse(['message' => 'user was not created successfully the error message: '.$exception]);
+            return $this->errorResponse();
         }
     }
 
     public function show(User $user)
     {
-        return $this->successResponse(['user' => new SingleUserResource($user)]);
+        return $this->successResponse(
+            'Success!',
+            ['user' => new SingleUserResource($user)]
+        );
 
     }
 
@@ -88,21 +100,31 @@ class UsersController extends MainController
         CustomRole::findOrFail($request->role_id);
 
         if(!($user->save()))
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)])]);
+            return $this->errorResponse(
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'user' => new SingleUserResource($user)
-        ]);
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
+                'user' => new SingleUserResource($user)
+            ]
+        );
     }
 
     public function destroy(User $user)
     {
         if(!$user->delete())
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])]);
+            return $this->errorResponse(
+                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'user' => new SingleUserResource($user)
-        ]);
+        return $this->successResponse(
+            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            [
+                'user' => new SingleUserResource($user)
+            ]
+        );
 
     }
 
@@ -115,14 +137,19 @@ class UsersController extends MainController
         $user = User::findOrFail($id);
         $user->is_disabled=$request->is_disabled;
         if(!$user->save())
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'user' =>  new UserResource($user)
-        ]);
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
+                'user' =>  new UserResource($user)
+            ]
+        );
 
     }
     public function getTableHeaders(){
-        return $this->successResponse(['headers' => __('headers.users') ]);
+        return $this->successResponse('Success',['headers' => __('headers.users') ]);
 }
 }

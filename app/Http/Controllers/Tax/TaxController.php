@@ -75,15 +75,19 @@ class TaxController extends MainController
         }
 
         if(!$check)
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+            );
 
 
-    return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-        'Taxes' => new SingleTaxResource($tax)
-]);
+    return $this->successResponse(
+        __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+        [
+            'Taxes' => new SingleTaxResource($tax)
+        ]
+    );
 
-
-    return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+    return $this->errorResponse(__('messages.failed.create',['name' => __(self::OBJECT_NAME)]) );
 
     }
 
@@ -95,7 +99,7 @@ class TaxController extends MainController
      */
     public function show(Tax $tax)
     {
-        return $this->successResponse(['tax' => new TaxResource($tax)]);
+        return $this->successResponse('Success' , ['tax' => new TaxResource($tax)]);
     }
 
     /**
@@ -143,13 +147,18 @@ class TaxController extends MainController
             }
 
             DB::commit();
-            return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                'Taxes' => new SingleTaxResource($tax)
-        ]);
+            return $this->successResponse(
+                __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'Taxes' => new SingleTaxResource($tax)
+                ]
+            );
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+            );
 
         }
 
@@ -169,19 +178,24 @@ class TaxController extends MainController
             $tax->delete();
 
             DB::commit();
-            return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-                'taxes' => new SingleTaxResource($tax)
-            ]);
+            return $this->successResponse(
+                __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'taxes' => new SingleTaxResource($tax)
+                ]
+            );
 
         }catch (\Exception $e){
             DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+            );
 
         }
 
     }
 
     public function getTableHeaders(){
-        return $this->successResponse(['headers' => __('headers.taxes') ]);
+        return $this->successResponse('Success',['headers' => __('headers.taxes') ]);
 }
 }

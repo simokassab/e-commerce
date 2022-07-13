@@ -18,7 +18,7 @@ class AuthenticationController extends MainController
         ]);
 
         if(! auth()->attempt($validated)){
-            return $this->errorResponse([],'Sorry, but you entered the wrong credentials!',-1,401);
+            return $this->errorResponse('Sorry, but you entered the wrong credentials!',[],-1,401);
         }
 
         $permissions = [];
@@ -27,10 +27,13 @@ class AuthenticationController extends MainController
             $permissions = \auth()->user()->roles[0]->permissions;
         }
 
-        return $this->successResponse([
-            'user' => \auth()->user(),
-            'permissions' => $permissions
-        ],'Authenticated Successfully! ',1,202);
+        return $this->successResponse(
+            'Authenticated Successfully! ',
+            [
+                'user' => \auth()->user(),
+                'permissions' => $permissions
+            ]
+            ,1,202);
 
     }
 

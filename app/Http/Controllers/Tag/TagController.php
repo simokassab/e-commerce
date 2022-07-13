@@ -56,25 +56,27 @@ class TagController extends MainController
 
 
         if(!$tag->save())
-            return $this->errorResponse([
-                'message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+            return $this->errorResponse(
+                __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+            );
 
-            ]);
-
-        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            'tag' => new TagResource($tag)
-        ]);
+        return $this->successResponse(
+            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            [
+                'tag' => new TagResource($tag)
+            ]
+        );
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Tag $tag)
     {
-        return $this->successResponse(['tag' => new TagResource($tag)]);
+        return $this->successResponse('Success', ['tag' => new TagResource($tag)]);
     }
 
     /**
@@ -93,7 +95,7 @@ class TagController extends MainController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreTagRequest $request, Tag $tag)
     {
@@ -103,47 +105,37 @@ class TagController extends MainController
         if(!$tag->save())
             return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'tag' => new TagResource($tag)
-        ]);
+        return $this->successResponse(
+            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            [
+                'tag' => new TagResource($tag)
+            ]
+        );
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Tag $tag)
     {
         if(!$tag->delete())
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+            );
 
-        return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            'tag' => new TagResource($tag)
-        ]);
-    }
-    public function getHeaders(){
-        return $this->successResponse([
-            'headers' => [
-                'id' => [
-                    'name' => 'ID',
-                    'search' => '',
-                    'type' => 'integer',
-                    'sort' => false
-                ],
-                'name' => [
-                    'name' => 'Name',
-                    'search' => 'text',
-                    'type' => 'string',
-                    'sort' => false
-                ],
+        return $this->successResponse(
+            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            [
+                'tag' => new TagResource($tag)
             ]
-        ]);
+        );
     }
 
     public function getTableHeaders(){
-        return $this->successResponse(['headers' => __('headers.tags') ]);
-}
+        return $this->successResponse('Success!' ,['headers' => __('headers.tags') ]);
     }
+}
 
