@@ -52,7 +52,6 @@ class TaxController extends MainController
      */
     public function store(StoreTaxRequest $request)
     {
-        dd('s');
 
     $tax=new Tax();
     $tax->name = json_encode($request->name);

@@ -28,6 +28,8 @@ class StoreTaxRequest extends FormRequest
      */
     public function rules(Request $request)
     {
+        dd('s');
+
         return [
 
             'name' => 'required',
