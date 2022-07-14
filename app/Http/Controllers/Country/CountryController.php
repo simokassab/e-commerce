@@ -63,6 +63,7 @@ class CountryController extends MainController
         if($request->flag){
             $country->flag= $this->imageUpload($request->file('flag'),config('images_paths.country.images'));
         }
+        dd($country);
         if(!$country->save())
             return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]));
 
