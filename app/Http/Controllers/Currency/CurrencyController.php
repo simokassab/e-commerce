@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 class CurrencyController extends MainController
 {
     const OBJECT_NAME = 'objects.currency';
-
+    const relations = ['currency_history'];
     /**
      * Display a listing of the resource.
      *
@@ -25,12 +25,11 @@ class CurrencyController extends MainController
      */
     public function index(Request $request)
     {
-        $relations=['currencyHistory'];
         if ($request->method()=='POST') {
             $searchKeys=['name','code','symbol','rate'];
-            return $this->getSearchPaginated(CurrencyResource::class, Currency::class,$request, $searchKeys,$relations);
+            return $this->getSearchPaginated(CurrencyResource::class, Currency::class,$request, $searchKeys,self::relations);
                 }
-        return $this->successResponsePaginated(CurrencyResource::class,Currency::class,['currencyHistory']);
+        return $this->successResponsePaginated(CurrencyResource::class,Currency::class,self::relations);
 
     }
 

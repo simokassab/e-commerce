@@ -37,12 +37,7 @@ class UsersController extends MainController
 
         }
 
-        return $this->successResponse(
-            'Success',
-            [
-                UserResource::collection(User::with('roles')->paginate(config('defaults.default_pagination')))
-            ],
-        );
+        return $this->successResponse('Success',[UserResource::collection(User::with('roles')->paginate(config('defaults.default_pagination')))]);
 
     }
 

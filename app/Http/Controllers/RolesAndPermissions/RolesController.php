@@ -18,7 +18,7 @@ use Spatie\Permission\Contracts\Role;
 class RolesController extends MainController
 {
     const OBJECT_NAME = 'objects.role';
-
+    const relations =['parent'];
     /**
      * Display a listing of the resource.
      *
@@ -30,13 +30,11 @@ class RolesController extends MainController
         if ($request->method()=='POST') {
 
             $searchKeys=['name'];
-            $relations = ['parent'];
             $searchRelationsKeys = ['parent' => ['parent_name' => 'name'] ];
-            //@TODO: Search also take time more than usual
-            return $this->getSearchPaginated(RolesResource::class, CustomRole::class,$request, $searchKeys,$relations,$searchRelationsKeys);
+            return $this->getSearchPaginated(RolesResource::class, CustomRole::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
         }
 
-        return $this->successResponsePaginated(RolesResource::class,CustomRole::class);
+        return $this->successResponsePaginated(RolesResource::class,CustomRole::class,self::relations);
     }
 
     /**
