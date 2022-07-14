@@ -29,29 +29,10 @@ class CategoryController extends MainController
 
         if ($request->method()=='POST') {
 
-            $relations=['parent'];
             $searchKeys=['name','code','slug','description'];
+            $searchRelationsKeys = ['parent' =>['parent_name' => 'name',]];
+            return $this->getSearchPaginated(CategoryResource::class, Category::class, $request, $searchKeys,self::relations,$searchRelationsKeys);
 
-            $data=($request->data);
-            $keys = array_keys($data) ?? [];
-            $categoryParent = $data['parent_name'] ?? '';
-
-            $searchRelationsKeys = ['parent' => ['parent_name' => 'name', 'parent_code' => 'code']];
-            return $this->getSearchPaginated(CategoryResource::class, Category::class, $request, $searchKeys,$relations,$searchRelationsKeys);
-
-//            $rows = Category::with($relations)
-//                //@TODO: add an if statment to check if the $data has $parent_name
-//                ->whereHas('parent',fn ($query)  => $query->whereRaw('lower(name) like (?)',["%$categoryParent%"]) )
-//                ->where(function($query) use($keys,$data,$searchKeys){
-//                    foreach($keys as $key){
-//                        if(in_array($key,$searchKeys)){
-//                            $value=strtolower($data[$key]);
-//                            $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-//                        }
-//                    }
-//                })->paginate($request->limit ?? config('defaults.default_pagination'));
-//
-//            return  CategoryResource::collection($rows);
           }
         return $this->successResponsePaginated(CategoryResource::class,Category::class,self::relations);
     }

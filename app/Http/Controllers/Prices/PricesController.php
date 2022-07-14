@@ -13,7 +13,7 @@ class PricesController extends MainController
 {
 
     const OBJECT_NAME = 'objects.price';
-
+    const relations = ['currency','products','originalPrice','originalPricesChildren'];
     /**
      * Display a listing of the resource.
      *
@@ -23,34 +23,15 @@ class PricesController extends MainController
     public function index(Request $request)
     {
         if ($request->method()=='POST') {
-            $relations=['currency','products','originalPrice','originalPricesChildren'];
+
             $searchKeys=['name','percentage'];
-            $data=($request->data);
-            $keys = array_keys($data);
+            $searchRelationsKeys = ['parent' =>['parent_name' => 'name',]];
+            return $this->getSearchPaginated(PriceResource::class, Price::class, $request, $searchKeys,self::relations,$searchRelationsKeys);
 
-            $originalPriceName = $data['original_price_name'] ?? '';
-            $currency = $data['currency_name'] ?? '';
-            $rows = Price::with($relations)
-                ->when($request->has('data.original_price_name'),function ($query) use($originalPriceName){
-                    $query->whereHas('originalPrice',fn ($query)  => $query->whereRaw('lower(name) like (?)',["%$originalPriceName%"]) );
-                })
-                ->when($request->has('data.currency_name'), function ($query) use($currency){
-                    $query->whereHas('currency',fn ($query) => $query->whereRaw('lower(name) like (?)',["%$currency%"]));
-                })
-                ->where(function($query) use($keys,$data,$searchKeys){
-                    foreach($keys as $key){
-                        if(in_array($key,$searchKeys)){
-                            $value=strtolower($data[$key]);
-                            $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                        }
-                    }
-                })->paginate($request->limit ?? config('defaults.default_pagination'));
-
-            return  PriceResource::collection($rows);
 
 
         }
-        return $this->successResponsePaginated(PriceResource::class,Price::class,['currency','originalPrice']);
+        return $this->successResponsePaginated(PriceResource::class,Price::class,self::relations);
 
 
     }

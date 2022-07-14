@@ -26,23 +26,8 @@ class SettingsController extends MainController
 
         if ($request->method()=='POST') {
             $searchKeys=['title','value','is_developer'];
-            // return $this->getSearchPaginated(SettingsResource::class, Setting::class,$request, $searchKeys);
-            $data=$request->data;
-            $keys = array_keys($data);
-            $rows = Setting::where(function($query) use($keys,$data,$searchKeys){
-                    foreach($keys as $key){
-                        if(in_array($key,$searchKeys)){
-                            $value=strtolower($data[$key]);
+            return $this->getSearchPaginated(SettingsResource::class, Setting::class,$request, $searchKeys);
 
-                            $query->whereRaw('lower('.$key.') like (?)',["%$value%"]);
-                        }
-                        else{
-                            throw new Exception();
-                        }
-                    }
-                    })->paginate($request->limit ?? config('defaults.default_pagination'));
-
-            return  SettingsResource::collection($rows);
         }
        return $this->successResponsePaginated(SettingsResource::class,Setting::class);
      }

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 class FieldsController extends MainController
 {
     const OBJECT_NAME = 'objects.field';
+    const relations = ['fieldValue'];
 
     public function __construct($defaultPermissionsFromChild = null)
     {
@@ -28,13 +29,12 @@ class FieldsController extends MainController
      */
     public function index(Request $request)
     {
-        $relations=['fieldValue'];
         if ($request->method()=='POST') {
             $searchKeys=['title','type','entity','is_required'];
-            return $this->getSearchPaginated(FieldsResource::class, Field::class,$request, $searchKeys,$relations);
+            return $this->getSearchPaginated(FieldsResource::class, Field::class,$request, $searchKeys,self::relations);
 
         }
-        return $this->successResponsePaginated(FieldsResource::class,Field::class,$relations);
+        return $this->successResponsePaginated(FieldsResource::class,Field::class,self::relations);
 
     }
 

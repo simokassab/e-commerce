@@ -65,7 +65,7 @@ class MainController extends Controller
 
     protected function notFoundResponse(array $data, $statusCode = 404)
     {
-        return notFoundError($data, $statusCode);
+        return notFoundError($data, [$statusCode]);
     }
 
     public function imageUpload($file, $folderpath)
