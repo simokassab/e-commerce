@@ -23,12 +23,13 @@ class PricesRequest extends FormRequest
      */
     public function rules()
     {
+
         return [
             'name' => 'required',
             'currency_id' => 'required|exists:currencies,id',
             'is_virtual' => 'boolean|required',
-            'original_price_id' => ' nullable | required_if:is_virtual,1 |exists:prices,id',
-            'percentage' => ' nullable | required_if:is_virtual,1| numeric | min:'.config('defaults.default_minimum_price_percentage'),
+            'original_price_id' => ' nullable | required_if:is_virtual,"true"|exists:prices,id',
+            'percentage' => ' nullable | required_if:is_virtual,"true"| numeric | min:'.config('defaults.default_minimum_price_percentage'),
 
             'data' => 'nullable',
             'data.currency_name' => 'nullable',
