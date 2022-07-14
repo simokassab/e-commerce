@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Labels;
 
-use App\Http\Requests\MainRequest;
+use App\Http\Requests\MainnRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreLabelRequest extends MainRequest
+class StoreLabelRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

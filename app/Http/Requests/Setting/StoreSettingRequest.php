@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Setting;
 
-use App\Http\Requests\MainRequest;
+use App\Http\Requests\MainnRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSettingRequest extends MainRequest
+class StoreSettingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

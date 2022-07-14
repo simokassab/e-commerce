@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Language;
 
-use App\Http\Requests\MainRequest;
+use App\Http\Requests\MainnRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreLanguageRequest extends MainRequest
+class StoreLanguageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

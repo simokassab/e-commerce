@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\RolesAndPermissions;
 
-use App\Http\Requests\MainRequest;
+use App\Http\Requests\MainnRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRoleRequest extends MainRequest
+class StoreRoleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
