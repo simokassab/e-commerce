@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\Attribute;
 
+use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreAttributeRequest extends FormRequest
+class StoreAttributeRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.

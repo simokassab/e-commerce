@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\Unit;
 
+use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreUnitRequest extends FormRequest
+class StoreUnitRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\Field;
 
+use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreFieldsValueRequest extends FormRequest
+class StoreFieldsValueRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.

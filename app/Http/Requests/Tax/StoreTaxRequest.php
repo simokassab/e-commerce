@@ -2,12 +2,13 @@
 
 namespace App\Http\Requests\Tax;
 
+use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class StoreTaxRequest extends FormRequest
+class StoreTaxRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.
