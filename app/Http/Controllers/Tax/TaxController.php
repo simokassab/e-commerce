@@ -22,9 +22,8 @@ class TaxController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(StoreTaxRequest $request)
+    public function index(Request $request)
     {
-        dd('s');
 
         $relations=['taxComponents'];
         if ($request->method()=='POST') {
