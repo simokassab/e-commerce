@@ -22,7 +22,7 @@ class TaxController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(StoreTaxRequest $request)
     {
         dd('s');
 
