@@ -56,8 +56,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::customLanguageResource('language',LanguageController::class);
     //End of Routes Macro
 
-    Route::apiResource('country',CountryController::class);
     Route::post('country/all',[CountryController::class,'index']); // for search
+    Route::apiResource('country',CountryController::class);
 
     Route::apiResource('currency',CurrencyController::class);
     Route::patch('currency/set-is-default/{id}',[CurrencyController::class,'setCurrencyIsDefault']);

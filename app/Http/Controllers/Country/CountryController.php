@@ -28,6 +28,7 @@ class CountryController extends MainController
     {
 
         if ($request->method()=='POST') {
+            dd('countries store');
 
             $searchKeys=['name','iso_code_1','iso_code_2','phone_code'];
             return $this->getSearchPaginated(CountryResource::class, Country::class,$request, $searchKeys);
