@@ -238,7 +238,7 @@ class ProductController extends MainController
     public function destroy(Product $product)
     {
         ProductService::deleteRelatedDataForProduct($product);
-        $product->delete();
+        // $product->delete();
     }
     public function toggleStatus(Request $request ,$id){
 
