@@ -25,10 +25,10 @@ class PricesRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'is_virtual' => 'boolean|required',
             'currency_id' => 'required|exists:currencies,id',
-            'original_price_id' => 'nullable|required_if:is_virtual,1|exists:prices,id',
-            'percentage' => 'nullable|required_if:is_virtual,1|numeric|min:'.config('defaults.default_minimum_price_percentage'),
+            'is_virtual' => 'boolean|required',
+            'original_price_id' => ' nullable | required_if:is_virtual,1 |exists:prices,id',
+            'percentage' => ' nullable | required_if:is_virtual,1| numeric | min:'.config('defaults.default_minimum_price_percentage'),
 
             'data' => 'nullable',
             'data.currency_name' => 'nullable',
