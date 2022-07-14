@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 class CurrencyController extends MainController
 {
     const OBJECT_NAME = 'objects.currency';
-    const relations = ['currency_history'];
+    const relations = ['currencyHistory'];
     /**
      * Display a listing of the resource.
      *
