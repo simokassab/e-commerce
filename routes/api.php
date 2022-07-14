@@ -56,8 +56,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::customLanguageResource('language',LanguageController::class);
     //End of Routes Macro
 
-    Route::post('country/all',[CountryController::class,'index']); // for search
     Route::apiResource('country',CountryController::class);
+    Route::post('country/all',[CountryController::class,'index']); // for search
 
     Route::apiResource('currency',CurrencyController::class);
     Route::patch('currency/set-is-default/{id}',[CurrencyController::class,'setCurrencyIsDefault']);
@@ -102,8 +102,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::apiResource('user',UsersController::class);
     Route::post('user/all',[UsersController::class,'index']);//for searching
 
-    Route::post('tax/all',[TaxController::class,'index']);//for searching
     Route::apiResource('tax',TaxController::class);
+    Route::post('tax/all',[TaxController::class,'index']);//for searching
 
     Route::post('price/all',[PricesController::class,'index']);// for search
     Route::get('price/get-original-prices',[PricesController::class,'getOriginalPrices'])->name('get.original.prices');

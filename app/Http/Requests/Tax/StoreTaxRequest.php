@@ -4,11 +4,12 @@ namespace App\Http\Requests\Tax;
 
 use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class StoreTaxRequest extends MainRequest
+class StoreTaxRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -66,5 +67,16 @@ class StoreTaxRequest extends MainRequest
 
     ];
 
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator) {
+        throw new HttpResponseException(response()->json(
+            [
+                'code' => -1 ,
+                'errors'=>$validator->errors()->messages() ,
+            ],
+            200)
+
+        );
     }
 }
