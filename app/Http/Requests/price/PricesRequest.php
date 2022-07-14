@@ -47,11 +47,11 @@ class PricesRequest extends MainRequest
             'is_virtual.boolean' => 'the :attribute field must be a boolean',
             'is_virtual.required' => 'the :attribute field is required',
 
-            'currency_id.required' => 'the :attribute field is required',
-            'currency_id.exists' => 'the :attribute field is invalid',
+            'currency_id.required' => 'the currency field is required',
+            'currency_id.exists' => 'the currency field is invalid',
 
-            'original_price_id.required_if' => 'the :attribute field is required',
-            'original_price_id.exists' => 'the :attribute field is invalid',
+            'original_price_id.required_if' => 'the parent class field is required',
+            'original_price_id.exists' => 'the parent class field is invalid',
 
             'percentage.required_if' => 'the :attribute field is required',
             'percentage.numeric' => 'the :attribute field must be a numeric',
