@@ -2,6 +2,7 @@
 
 namespace App\Services\Product;
 
+use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
 use App\Models\Product\ProductField;
 use App\Models\Product\ProductImage;
@@ -11,6 +12,7 @@ use App\Models\Product\ProductRelated;
 use App\Models\Product\ProductTag;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductService
 {
@@ -26,9 +28,13 @@ public $request,$product_id;
             ->storeAdditionalFields()
             ->storeAdditionalImages()
             ->storeAdditionalLabels()
-            // ->storeAdditionalPrices()
             ->storeAdditionalTags()
             ->storeAdditionalBundle();
+
+            if(!$request->isSamePriceAsParent){
+                self::storeAdditionalPrices();
+            }
+
     }
 
     private function storeAdditionalCategrories(){
@@ -93,7 +99,16 @@ public $request,$product_id;
         return $this;
     }
     private function storeAdditionalPrices(){
-
+        if ( $this->request ->has('prices')) {
+            $pricesArray =  $this->request ->prices ?? [];
+            foreach ( $this->request ->prices as $price => $value) {
+                $pricesArray[$price]["product_id"] = $this->product_id;
+                $pricesArray[$price]["created_at"] = Carbon::now()->toDateTimeString();
+                $pricesArray[$price]["updated_at"] = Carbon::now()->toDateTimeString();
+            }
+            ProductPrice::insert($pricesArray);
+        }
+        return $this;
     }
     private function storeAdditionalTags(){
         if ($this->request->has('tags')) {
@@ -120,5 +135,45 @@ public $request,$product_id;
         }
 
         return $this;
+    }
+
+    public static function deleteRelatedDataForProduct(Product $product){
+        if($product->type=='variable'){
+            $Productchildren = $product->children();
+            if(!$Productchildren->exists()){
+                return;
+            }
+            if(!Product::where('parent_product_id',$product->id)->delete()){
+                return;
+            }
+
+        }else{
+            ProductCategory::where('product_id',$product->id)->delete();
+            ProductField::where('product_id',$product->id)->delete();
+            ProductImage::where('product_id',$product->id)->delete();
+            ProductLabel::where('product_id',$product->id)->delete();
+            ProductPrice::where('product_id',$product->id)->delete();
+            ProductRelated::where('parent_product_id',$product->id)->delete();
+            ProductTag::where('product_id',$product->id)->delete();
+        }
+        // if(!ProductCategory::where('product_id',$product->id)->delete()
+        //         || !ProductField::where('product_id',$product->id)->delete()
+        //         || !ProductImage::where('product_id',$product->id)->delete()
+        //         || !ProductLabel::where('product_id',$product->id)->delete()
+        //         || !ProductPrice::where('product_id',$product->id)->delete()
+        //         || !ProductRelated::where('parent_product_id',$product->id)->delete()
+        //         || !ProductTag::where('product_id',$product->id)->delete())
+        //         {
+        //     return;
+        //     }
+        // DB::beginTransaction();
+        // try {
+
+            // DB::commit();
+        // } catch (\Exception $th) {
+        //     DB::rollBack();
+        //     return $th->getMessage();
+        // }
+
     }
 }

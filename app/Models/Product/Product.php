@@ -124,18 +124,6 @@ class Product extends MainModel
             if($request->isSamePriceAsParent){
                 ProductPrice::inhertPrices($this->parent_product_id , $newProductId);
             }
-            else{
-                if ($request->has('prices')) {
-                    $pricesArray = $request->prices ?? [];
-                    foreach ($request->prices as $price => $value) {
-                        $pricesArray[$price]["product_id"] = $newProductId;
-                        $pricesArray[$price]["created_at"] = Carbon::now()->toDateTimeString();
-                        $pricesArray[$price]["updated_at"] = Carbon::now()->toDateTimeString();
-                    }
-                    ProductPrice::insert($pricesArray);
-                }
-                return $this;
-            }
 
             }
         }
