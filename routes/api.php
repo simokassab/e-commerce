@@ -56,6 +56,9 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::customLanguageResource('language',LanguageController::class);
     //End of Routes Macro
 
+    Route::post('user/all',[UsersController::class,'index']);//for searching
+    Route::apiResource('user',UsersController::class);
+
     Route::apiResource('country',CountryController::class);
     Route::post('country/all',[CountryController::class,'index']); // for search
 
@@ -99,8 +102,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     // @TODO: make a correct function for the user profile
     Route::get('/profile', fn() =>  auth()->user());
 
-    Route::post('user/all',[UsersController::class,'index']);//for searching
-    Route::apiResource('user',UsersController::class);
+
 
     Route::post('tax/all',[TaxController::class,'index']);//for searching
     Route::apiResource('tax',TaxController::class);
