@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests\Discount;
 
-use App\Http\Requests\MainnRequest;
+use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\RequiredIf;
 
-class StoreDiscountEntityRequest extends FormRequest
+class StoreDiscountEntityRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.

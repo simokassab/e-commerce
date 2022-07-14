@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Authentication;
 
-use App\Http\Requests\MainnRequest;
+use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class LoginRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -3,13 +3,13 @@
 namespace App\Http\Requests\Brand;
 
 
-use App\Http\Requests\MainnRequest;
+use App\Http\Requests\MainRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class StoreBrandRequest extends FormRequest
+class StoreBrandRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests\Users;
 
-use App\Http\Requests\MainnRequest;
+use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateUserRequest extends FormRequest
+class UpdateUserRequest extends MainRequest
 {
 
     /**
