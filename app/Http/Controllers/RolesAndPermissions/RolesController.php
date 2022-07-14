@@ -64,7 +64,7 @@ class RolesController extends MainController
             $role = CustomRole::create([
                 'name' => $request->name,
                 'guard_name' => 'web',
-                'parent_id' => $request->parent_id
+                'parent_id' => $request->parent_role
             ]);
 
             $flattenPermissions = [];
