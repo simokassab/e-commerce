@@ -22,7 +22,7 @@ class TaxController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function insdex(Request $request)
     {
 
         $relations=['taxComponents'];
