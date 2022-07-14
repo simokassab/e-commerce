@@ -33,7 +33,7 @@ class MainRequest extends FormRequest
         throw new HttpResponseException(response()->json(
             [
                 'code' => -1 ,
-                'message'=>$validator->errors()->messages() ,
+                'errors'=>$validator->errors()->messages() ,
             ],
             200)
 
