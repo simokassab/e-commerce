@@ -24,6 +24,8 @@ class TaxController extends MainController
      */
     public function index(Request $request)
     {
+        dd('s');
+
         $relations=['taxComponents'];
         if ($request->method()=='POST') {
 
