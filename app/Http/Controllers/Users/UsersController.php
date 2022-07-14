@@ -97,7 +97,9 @@ class UsersController extends MainController
             $user->removeRole($userOldRoles);
         }
 
-        CustomRole::findOrFail($request->role_id);
+        $role = CustomRole::findOrFail($request->role_id);
+        $user->assignRole($role);
+
 
         if(!($user->save()))
             return $this->errorResponse(
