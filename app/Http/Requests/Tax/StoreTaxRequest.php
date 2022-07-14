@@ -70,14 +70,14 @@ class StoreTaxRequest extends FormRequest
 
     }
 
-//    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator) {
-//        throw new HttpResponseException(response()->json(
-//            [
-//                'code' => -1 ,
-//                'errors'=>$validator->errors()->messages() ,
-//            ],
-//            200)
-//
-//        );
-//    }
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator) {
+        throw new HttpResponseException(response()->json(
+            [
+                'code' => -1 ,
+                'errors'=>$validator->errors()->messages() ,
+            ],
+            200)
+
+        );
+    }
 }
