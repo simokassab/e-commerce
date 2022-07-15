@@ -27,7 +27,9 @@ class CurrencyController extends MainController
     {
         if ($request->method()=='POST') {
             $searchKeys=['name','code','symbol','rate'];
-            return $this->getSearchPaginated(CurrencyResource::class, Currency::class,$request, $searchKeys,self::relations);
+            $searchRelationsKeys = [ 'parent' =>['parent_name' => 'name'] ];
+
+            return $this->getSearchPaginated(CurrencyResource::class, Currency::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
                 }
         return $this->successResponsePaginated(CurrencyResource::class,Currency::class,self::relations);
 

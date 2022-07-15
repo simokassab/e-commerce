@@ -86,12 +86,29 @@ class MainController extends Controller
             foreach ($searchRelationKeys as $key => $dbColumn)
                 $relationKeysArr[$key] = $relation;
         }
+
         $model = $model::with($relations);
+        $model->when($request->has('general') && $request->general != null, function ($query)use($searchKeys,$request,$searchRelationsKeys) {
+            $value = strtolower($request->general_search);
+
+            foreach ($searchKeys as $key => $attribute){
+                $query->oRwhereRaw('lower('.$attribute.') like (?)', ["%$value%"]);
+            }
+
+            foreach ($searchRelationsKeys as $relation => $relationKeys){
+                foreach ($relationKeys as $dbColumn){
+                    $query->oRwhereHas($relation, fn($query) => $query->oRwhereRaw('lower(' . $dbColumn . ') like (?)', ["%$value%"]));
+                }
+
+            }
+        });
+
+
         if (is_array($data) && !empty($data)) {
-            $model->where(function ($query) use ($data, $searchKeys, $relationKeysArr, $searchRelationsKeys) {
+            $model->where(function ($query) use ($data, $searchKeys, $relationKeysArr, $searchRelationsKeys,) {
                 foreach ($data as $key => $value) {
                     $value = strtolower($value);
-                    if (in_array($key, $searchKeys) && !empty($value)) {
+                    if ((in_array($key, $searchKeys) && !empty($value))) {
                         $query->whereRaw('lower(' . $key . ') like (?)', ["%$value%"]);
                     }
                     elseif (isset($relationKeysArr[$key])) {
@@ -102,6 +119,7 @@ class MainController extends Controller
                 }
             });
         }
+
         $rows = $model->paginate($request->limit ?? config('defaults.default_pagination'));
 
         return $resource::collection($rows);

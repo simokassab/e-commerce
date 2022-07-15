@@ -28,9 +28,8 @@ class CategoryController extends MainController
     {
 
         if ($request->method()=='POST') {
-
             $searchKeys=['name','code','slug','description'];
-            $searchRelationsKeys = ['parent' =>['parent_name' => 'name',]];
+            $searchRelationsKeys = [ 'parent' =>['parent_name' => 'name',] ];
             return $this->getSearchPaginated(CategoryResource::class, Category::class, $request, $searchKeys,self::relations,$searchRelationsKeys);
 
           }

@@ -16,12 +16,12 @@ class CustomRole extends Role
     protected $guard_name = 'web';
 
     public function parent(){
-        return $this->belongsTo($this,'parent_id','id');
+        return $this->belongsTo(self::class,'parent_id','id');
     }
 
     // this function only returns the nearst children and dones'nt dig deeper into the relation
     public function children(){
-        return $this->hasMany($this,'parent_id','id');
+        return $this->hasMany(self::class,'parent_id','id');
     }
 
     public function allChildren($flatten = false){
