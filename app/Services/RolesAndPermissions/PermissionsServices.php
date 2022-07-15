@@ -62,7 +62,13 @@ class PermissionsServices {
             $permissionId =  is_numeric($permissionId)? ($permissionId) : $permissionId->id;
 
             if($isMultiLevel){
-                $childpermissions[$permissionId] = ['id' => $allPermissions->find($permissionId)->id,'label' => $allPermissions->find($permissionId)->name ,'id' => $allPermissions->find($permissionId)->id,'checked' => in_array($allPermissions->find($permissionId)->id,  $permissionsOfRoleIds), 'nodes' => [] ];
+                $childpermissions[$permissionId] = [
+                    'id' => $allPermissions->find($permissionId)->id,
+                    'label' => $allPermissions->find($permissionId)->name,
+                    'checked' => in_array($allPermissions->find($permissionId)->id,  $permissionsOfRoleIds),
+                    'expanded' => true,
+                    'nodes' => [],
+                ];
                 $childpermissions[$permissionId]['nodes'] = self::drawPermissionChildren($permissionId, $allPermissionsID, $isMultiLevel,$allPermissions);
             }
             else{
