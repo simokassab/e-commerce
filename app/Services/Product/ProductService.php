@@ -139,25 +139,42 @@ public $request,$product_id;
 
     public static function deleteRelatedDataForProduct(Product $product){
 
-        $productType=Product::where('id',$product->id)->get()->pluck('type');
+        $productType=Product::find($product->id)->type ?? '';
 
-        if($productType[0]=='variable'){
+        if($productType=='variable'){
 
-            $Productchildren = Product::where('parent_product_id',$product->id)->pluck('id');
-            foreach ($Productchildren as $product => $value) {
-                if(!Product::where('id',$Productchildren[$product])->delete()
-                  || !ProductCategory::where('product_id',$Productchildren[$product])->delete()
-                  || !ProductField::where('product_id',$Productchildren[$product])->delete()
-                  || !ProductImage::where('product_id',$Productchildren[$product])->delete()
-                  || !ProductLabel::where('product_id',$Productchildren[$product])->delete()
-                  || !ProductPrice::where('product_id',$Productchildren[$product])->delete()
-                  || !ProductTag::where('product_id',$Productchildren[$product])->delete()
-                  ){
-                      return;
-                  }
-          }
+            // $productchildren = Product::where('parent_product_id',$product->id)->pluck('id');
+            $productchildren = $product->children->pluck('id');
+
+            // $productchildren => [1,6,5,9,,3]
+
+        //     foreach ($productchildren as $product => $value) {
+        //         if(!Product::where('id',$productchildren[$product])->delete()
+        //           || !ProductCategory::where('product_id',$productchildren[$product])->delete()
+        //           || !ProductField::where('product_id',$productchildren[$product])->delete()
+        //           || !ProductImage::where('product_id',$productchildren[$product])->delete()
+        //           || !ProductLabel::where('product_id',$productchildren[$product])->delete()
+        //           || !ProductPrice::where('product_id',$productchildren[$product])->delete()
+        //           || !ProductTag::where('product_id',$productchildren[$product])->delete()
+        //           ){
+        //               return;
+        //           }
+        //   }
+
+        if(!Product::whereIn('id',$productchildren)->delete()
+            || !ProductCategory::where('product_id',$productchildren)->delete()
+            || !ProductField::where('product_id',$productchildren)->delete()
+            || !ProductImage::where('product_id',$productchildren)->delete()
+            || !ProductLabel::where('product_id',$productchildren)->delete()
+            || !ProductPrice::where('product_id',$productchildren)->delete()
+            || !ProductTag::where('product_id',$productchildren)->delete()
+            ){
+                return;
+            }
+
+
         }
-        elseif($productType[0]=='bundle'){
+        elseif($productType=='bundle'){
 
             $Productchildren = Product::where('parent_product_id',$product->id)->pluck('id');
             foreach ($Productchildren as $product => $value) {
@@ -174,7 +191,7 @@ public $request,$product_id;
                     }
             }
         }
-        else{
+
             ProductCategory::where('product_id',$product->id)->delete();
             ProductField::where('product_id',$product->id)->delete();
             ProductImage::where('product_id',$product->id)->delete();
@@ -182,7 +199,7 @@ public $request,$product_id;
             ProductPrice::where('product_id',$product->id)->delete();
             ProductTag::where('product_id',$product->id)->delete();
 
-        }
+
 
     }
 }

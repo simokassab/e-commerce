@@ -59,7 +59,7 @@ class ProductController extends MainController
         }
 
         $fields= Field::with('fieldValue')
-        ->whereEntity('brand')
+        ->whereEntity('product')
         ->get();
 
         $labels= Label::whereEntity('product')->get();
