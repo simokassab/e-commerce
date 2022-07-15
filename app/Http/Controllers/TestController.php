@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Label\LabelController;
 use App\Models\Brand\Brand;
+use App\Models\Country\Country;
 use App\Models\Currency\Currency;
 use App\Models\Label\Label;
 use App\Models\RolesAndPermissions\CustomRole;
 use Illuminate\Http\Request;
 use App\Models\User\User;
 use Illuminate\Support\Facades\Auth;
+use PHPUnit\Framework\Constraint\Count;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Role;
@@ -17,6 +19,7 @@ use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\MainController;
 use App\Exceptions\FileErrorException;
 use App\Models\RolesAndPermissions\CustomPermission;
+use Illuminate\Support\Facades\Storage;
 
 class TestController extends MainController
 {
@@ -36,9 +39,8 @@ class TestController extends MainController
     }
 
     public function test(){
-         $label =  Label::find(2)->image;
-
-        return (asset('storage/'.$label));
+        $flag =  Country::find(14)->flag;
+        return (asset('storage/'.$flag));
 
     }
 }

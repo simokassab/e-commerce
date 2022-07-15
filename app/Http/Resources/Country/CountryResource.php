@@ -20,7 +20,7 @@ class CountryResource extends JsonResource
             'iso_code_1'=>$this->iso_code_1,
             'iso_code_2'=>$this->iso_code_2,
             'phone_code'=>$this->phone_code,
-             'flag'=> $this->flag ?  asset('storage/'.$this->flag) : 'default_image' ,
+             'flag'=> $this->flag && !empty($this->flag) ?  getAssetsLink('storage/'.$this->flag): 'default_image' ,
 
         ];
     }

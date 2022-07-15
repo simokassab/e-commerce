@@ -6,11 +6,10 @@ use phpDocumentor\Reflection\Types\Boolean;
 
 function uploadImage($file,$folderpath): bool|string
 {
-
     try {
         $fileName = uniqid().'_'.$file->getClientOriginalName();
-        $path = Storage::putFileAs($folderpath, $file, $fileName);
-        return $path;
+        $path = Storage::putFileAs('public/'.$folderpath, $file, $fileName);
+
     }catch (\App\Exceptions\FileErrorException $exception) {
         throw new FileErrorException();
     }catch(ValueError $exception){
@@ -18,6 +17,13 @@ function uploadImage($file,$folderpath): bool|string
     }catch(ErrorException $exception){
         throw new FileErrorException();
     }
+
+    return $realPath = $folderpath .'/'.$fileName;
+
+}
+
+function getAssetsLink($path){
+    return asset($path);
 }
 
 function errorResponse($message = 'An error occurred please try again later', Array $data=[],$returnCode = -1, $statusCode= 200): \Illuminate\Http\JsonResponse
@@ -47,6 +53,7 @@ function notFoundError($message = 'Not found!',Array $data=[],$returnCode = -2, 
 
     return response()->json($return,$statusCode);
 }
+
 function removeImage($folderpath)
 {
         if(Storage::exists($folderpath)){
@@ -54,11 +61,11 @@ function removeImage($folderpath)
         }
 
         return true;
-  }
+}
 
-  function getLocaleTranslation($model,$key)
+function getLocaleTranslation($model,$key)
 {
     return $model->getTranslation($key);
 
-  }
+}
 
