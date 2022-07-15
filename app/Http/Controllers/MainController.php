@@ -88,7 +88,7 @@ class MainController extends Controller
         }
 
         $model = $model::with($relations);
-        $model->when($request->has('general') && $request->general != null, function ($query)use($searchKeys,$request,$searchRelationsKeys) {
+        $model->when($request->has('general_search') && $request->general_search != null, function ($query)use($searchKeys,$request,$searchRelationsKeys) {
             $value = strtolower($request->general_search);
 
             foreach ($searchKeys as $key => $attribute){
@@ -96,10 +96,10 @@ class MainController extends Controller
             }
 
             foreach ($searchRelationsKeys as $relation => $relationKeys){
-                foreach ($relationKeys as $dbColumn){
-                    $query->oRwhereHas($relation, fn($query) => $query->oRwhereRaw('lower(' . $dbColumn . ') like (?)', ["%$value%"]));
-                }
 
+                foreach ($relationKeys as $dbColumn){
+                    $query->oRwhereHas($relation, fn($query) => $query->whereRaw('lower(' . $dbColumn . ') like (?)', ["%$value%"]));
+                }
             }
         });
 
