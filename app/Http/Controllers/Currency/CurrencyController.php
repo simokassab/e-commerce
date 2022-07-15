@@ -54,7 +54,7 @@ class CurrencyController extends MainController
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreCurrencyRequest $request)
-{
+    {
 
         $currency = new Currency();
         $currency->name=json_encode($request->name);

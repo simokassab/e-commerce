@@ -18,7 +18,7 @@ class SingleBrandResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
-            'image'=> 'storage/'.$this->image ?  asset('storage/'.$this->image) : 'default_image' ,
+            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
             'meta_title' => $this->meta_title,
             'meta_description' => $this->meta_description,
             'meta_keyword' => $this->meta_keyword,

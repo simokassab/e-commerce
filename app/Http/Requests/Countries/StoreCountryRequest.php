@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests\Countries;
 
-use App\Http\Requests\MainnRequest;
+use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 
-class StoreCountryRequest extends MainnRequest
+class StoreCountryRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.

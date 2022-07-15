@@ -131,6 +131,3 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     });
 
 });
-
-// @TODO: check the name of link and why the controller functions are not set
-Route::get('test',[TestController::class,'test']);

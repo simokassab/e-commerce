@@ -19,7 +19,8 @@ class LabelsResource extends JsonResource
             'title' => $this->title,
             'entity' => $this->entity,
             'color' => $this->color,
-            'image'=> 'storage/'.$this->image ?  asset('storage/'.$this->image) : 'default_image' ,
+            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
+
             'key' => $this->key,
         ];
     }

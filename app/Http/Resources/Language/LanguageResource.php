@@ -20,7 +20,7 @@ class LanguageResource extends JsonResource
             'code' => $this->code,
             // 'is_default' => $this->is_default,
             // 'is_disabled' => $this->is_disabled,
-            'image'=> 'storage/'.$this->image ?  asset('storage/'.$this->image) : 'default_image' ,
+            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
             // 'sort' => $this->sort
 
         ];

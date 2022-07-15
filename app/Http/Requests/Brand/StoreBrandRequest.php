@@ -3,13 +3,12 @@
 namespace App\Http\Requests\Brand;
 
 
-use App\Http\Requests\MainRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class StoreBrandRequest extends FormRequest
+class StoreBrandRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,16 +25,8 @@ class StoreBrandRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(Request $request)
+    public function rules()
     {
-
-        $validation =$request->validate([
-
-            ],
-            [
-
-            ]);
-
         return [
             'name' => 'required',
             'code' => 'required | max:'.config('defaults.default_string_length'),
