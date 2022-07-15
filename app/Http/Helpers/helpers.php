@@ -6,7 +6,6 @@ use phpDocumentor\Reflection\Types\Boolean;
 
 function uploadImage($file,$folderpath): bool|string
 {
-
     try {
         $fileName = uniqid().'_'.$file->getClientOriginalName();
         $path = Storage::putFileAs($folderpath, $file, $fileName);

@@ -17,6 +17,7 @@ use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\MainController;
 use App\Exceptions\FileErrorException;
 use App\Models\RolesAndPermissions\CustomPermission;
+use Illuminate\Support\Facades\Storage;
 
 class TestController extends MainController
 {
@@ -36,9 +37,12 @@ class TestController extends MainController
     }
 
     public function test(){
-         $label =  Label::find(2)->image;
+         $brand =  Brand::find(1)->image;
+         $url = Storage::url('62d1675e3ae60_13649274151.jpg');
 
-        return (asset('storage/'.$label));
+
+        return (asset('storage/images/62d1675e3ae60_13649274151.jpg'));
+        // return $url;
 
     }
 }
