@@ -138,67 +138,51 @@ public $request,$product_id;
     }
 
     public static function deleteRelatedDataForProduct(Product $product){
-
+    
+        DB::beginTransaction();
+        try {
+            //code...
+      
         $productType=Product::find($product->id)->type ?? '';
 
         if($productType=='variable'){
+         
+            $productChildren = $product->children->pluck('id');
 
-            // $productchildren = Product::where('parent_product_id',$product->id)->pluck('id');
-            $productchildren = $product->children->pluck('id');
-
-            // $productchildren => [1,6,5,9,,3]
-
-        //     foreach ($productchildren as $product => $value) {
-        //         if(!Product::where('id',$productchildren[$product])->delete()
-        //           || !ProductCategory::where('product_id',$productchildren[$product])->delete()
-        //           || !ProductField::where('product_id',$productchildren[$product])->delete()
-        //           || !ProductImage::where('product_id',$productchildren[$product])->delete()
-        //           || !ProductLabel::where('product_id',$productchildren[$product])->delete()
-        //           || !ProductPrice::where('product_id',$productchildren[$product])->delete()
-        //           || !ProductTag::where('product_id',$productchildren[$product])->delete()
-        //           ){
-        //               return;
-        //           }
-        //   }
-
-        if(!Product::whereIn('id',$productchildren)->delete()
-            || !ProductCategory::where('product_id',$productchildren)->delete()
-            || !ProductField::where('product_id',$productchildren)->delete()
-            || !ProductImage::where('product_id',$productchildren)->delete()
-            || !ProductLabel::where('product_id',$productchildren)->delete()
-            || !ProductPrice::where('product_id',$productchildren)->delete()
-            || !ProductTag::where('product_id',$productchildren)->delete()
-            ){
-                return;
-            }
-
-
+                Product::whereIn('id',$productChildren)->delete();
+                ProductCategory::whereIn('product_id',$productChildren)->delete();
+                ProductField::whereIn('product_id',$productChildren)->delete();
+                ProductImage::whereIn('product_id',$productChildren)->delete();
+                ProductLabel::whereIn('product_id',$productChildren)->delete();
+                ProductPrice::whereIn('product_id',$productChildren)->delete();
+                ProductTag::whereIn('product_id',$productChildren)->delete();
+                
         }
         elseif($productType=='bundle'){
 
-            $Productchildren = Product::where('parent_product_id',$product->id)->pluck('id');
-            foreach ($Productchildren as $product => $value) {
-                  if(!Product::where('id',$Productchildren[$product])->delete()
-                    || !ProductCategory::where('product_id',$Productchildren[$product])->delete()
-                    || !ProductField::where('product_id',$Productchildren[$product])->delete()
-                    || ! ProductImage::where('product_id',$Productchildren[$product])->delete()
-                    || !ProductLabel::where('product_id',$Productchildren[$product])->delete()
-                    || !ProductPrice::where('product_id',$Productchildren[$product])->delete()
-                    || !ProductTag::where('product_id',$Productchildren[$product])->delete()
-                    || !ProductRelated::where('parent_product_id',$Productchildren[$product])->delete()
-                    ){
-                        return;
-                    }
-            }
+            $productChildren =$product->productRelatedChildren->pluck('id');
+
+            Product::whereIn('id',$productChildren)->delete();
+            ProductCategory::whereIn('product_id',$productChildren)->delete();
+            ProductField::whereIn('product_id',$productChildren)->delete();
+            ProductImage::whereIn('product_id',$productChildren)->delete();
+            ProductLabel::whereIn('product_id',$productChildren)->delete();
+            ProductPrice::whereIn('product_id',$productChildren)->delete();
+            ProductTag::whereIn('product_id',$productChildren)->delete();
+            ProductRelated::whereIn('parent_product_id',$productChildren)->delete();
+        
         }
 
             ProductCategory::where('product_id',$product->id)->delete();
             ProductField::where('product_id',$product->id)->delete();
-            ProductImage::where('product_id',$product->id)->delete();
+            ProductImage::whereIn('product_id',$product->id)->delete();
             ProductLabel::where('product_id',$product->id)->delete();
             ProductPrice::where('product_id',$product->id)->delete();
             ProductTag::where('product_id',$product->id)->delete();
-
+            DB::commit();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
 
 
     }

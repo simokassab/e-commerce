@@ -71,9 +71,9 @@ class ProductController extends MainController
         $statuses=ProductStatus::all();
 
         return $this->successResponse([
+            'prices'=>$PriceArray,
             'fields'=>$fields,
             'labels'=>$labels,
-            'prices'=>$PriceArray,
             'brands'=>$brands,
             'units'=>$units,
             'taxes'=> $taxes,
@@ -237,8 +237,16 @@ class ProductController extends MainController
      */
     public function destroy(Product $product)
     {
-        ProductService::deleteRelatedDataForProduct($product);
-        // $product->delete();
+        DB::beginTransaction();
+        try {
+            ProductService::deleteRelatedDataForProduct($product);
+            $product->delete();
+            return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)])]);
+            DB::commit();
+        } catch (\Exception $ex) {
+            DB::rollback();
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME),])]);
+        }
     }
     public function toggleStatus(Request $request ,$id){
 
