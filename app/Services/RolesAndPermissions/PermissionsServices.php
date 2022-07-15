@@ -66,7 +66,6 @@ class PermissionsServices {
                     'id' => $allPermissions->find($permissionId)->id,
                     'label' => $allPermissions->find($permissionId)->name,
                     'checked' => in_array($allPermissions->find($permissionId)->id,  $permissionsOfRoleIds),
-                    'expanded' => true,
                     'nodes' => [],
                 ];
                 $childpermissions[$permissionId]['nodes'] = self::drawPermissionChildren($permissionId, $allPermissionsID, $isMultiLevel,$allPermissions);
@@ -118,6 +117,7 @@ class PermissionsServices {
         foreach ($rootPermissions as $rootPermission){
             $result = (object)[];
             $result->label = $rootPermission->name;
+            $result->expanded = true;
             $result->checked = in_array($rootPermission->id ?? 0, $permissionsOfRoleIds);
             $nodes = self::getPermissionChildren($rootPermission,$permissionsOfRole,$permissions);
             $nodesArray= [];
