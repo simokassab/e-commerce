@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Language;
 
+use App\Models\Language\Language;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SingleLanguageResource extends JsonResource
@@ -14,9 +15,17 @@ class SingleLanguageResource extends JsonResource
      */
     public function toArray($request)
     {
+        $languages = Language::all()->pluck('code');
+        $translatable = [];
+
+        foreach ($languages as $language){
+            $nameTranslatable[$language] = $this->getTranslation('name',$language);
+        }
+
+
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'name' => $nameTranslatable,
             'code' => $this->code,
             'is_default' => $this->is_default,
             'is_disabled' => $this->is_disabled,

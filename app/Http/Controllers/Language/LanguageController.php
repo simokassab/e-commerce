@@ -55,9 +55,9 @@ class LanguageController extends MainController
     public function store(StoreLanguageRequest $request)
     {
         $language=new Language();
-        $language->name=json_encode($request->name);
+        $language->name = (array)json_decode($request->name);
         $language->code=$request->code;
-       if($request->is_default){
+       if((bool)$request->is_default){
             $language->setIsDefault();
        }
         if($request->image){
@@ -87,7 +87,7 @@ class LanguageController extends MainController
      */
     public function show(Language $language)
     {
-        return $this->successResponse('Success' , ['language' => new LanguageResource($language)]);
+        return $this->successResponse('Success' , ['language' => new SingleLanguageResource($language)]);
     }
 
     /**
@@ -110,7 +110,7 @@ class LanguageController extends MainController
      */
     public function update(StoreLanguageRequest $request, Language $language)
     {
-        $language->name=$request->name;
+        $language->name =  (array) json_decode($request->name);
         $language->code=$request->code;
         if($request->is_default){
             $language->setIsDefault();
@@ -193,7 +193,7 @@ public function toggleStatus(Request $request ,$id){
         ]);
 
         $language = Language::findOrFail($id);
-        $language->is_disabled=$request->is_disabled;
+        $language->is_disabled= (bool) $request->is_disabled;
         if(!$language->save())
             return $this->errorResponse(
                 __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
@@ -202,7 +202,7 @@ public function toggleStatus(Request $request ,$id){
         return $this->successResponse(
             __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             [
-                'language' =>  new LanguageResource($language)
+                'language' =>  new SingleLanguageResource($language)
             ]
         );
 
@@ -230,7 +230,7 @@ public function toggleStatus(Request $request ,$id){
         return $this->successResponse(
             __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             [
-                'language' => new LanguageResource($languageObject)
+                'language' => new SingleLanguageResource($languageObject)
             ]
         );
     }
