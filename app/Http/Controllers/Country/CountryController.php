@@ -55,7 +55,7 @@ class CountryController extends MainController
     {
 
         $country = new Country();
-        $country->name = ($request->name);
+        $country->name = json_decode($request->name);
         $country->iso_code_1 = $request->iso_code_1;
         $country->iso_code_2 = $request->iso_code_2;
         $country->phone_code = $request->phone_code;
