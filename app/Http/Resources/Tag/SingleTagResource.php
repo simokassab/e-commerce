@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Setting;
+namespace App\Http\Resources\Tag;
 
 use App\Models\Language\Language;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SingleSettingResource extends JsonResource
+class SingleTagResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -21,15 +21,12 @@ class SingleSettingResource extends JsonResource
         $translatable = [];
 
         foreach ($languages as $language){
-            $translatable[$language] = $this->getTranslation('title',$language);
+            $translatable[$language] = $this->getTranslation('name',$language);
         }
-
 
         return [
             'id' => $this->id,
-            'title' => $translatable,
-            'value' => $this->value,
-            'is_developer' => $this->is_developer
+            'name' => $translatable,
         ];
     }
 }

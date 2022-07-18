@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Tag;
 
+use App\Models\Language\Language;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TagResource extends JsonResource

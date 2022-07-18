@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Unit;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Unit\StoreUnitRequest;
+use App\Http\Resources\Unit\SingleUnitResource;
 use App\Http\Resources\Unit\UnitResource;
 use App\Models\Unit\Unit;
 use Exception;
@@ -57,7 +58,7 @@ class UnitController extends MainController
         return $this->successResponse(
             __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             [
-                'unit' => new UnitResource($unit)
+                'unit' => new SingleUnitResource($unit)
             ]
         );
     }
@@ -70,7 +71,7 @@ class UnitController extends MainController
      */
     public function show(Unit $unit)
     {
-        return $this->successResponse('Success' , ['unit' => new UnitResource($unit)]);
+        return $this->successResponse('Success!' , ['unit' => new SingleUnitResource($unit)]);
     }
 
     /**
@@ -105,7 +106,7 @@ class UnitController extends MainController
         return $this->successResponse(
             __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             [
-                'unit' => new UnitResource($unit)
+                'unit' => new SingleUnitResource($unit)
             ]
         );
     }
@@ -126,7 +127,7 @@ class UnitController extends MainController
         return $this->successResponse(
             __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
             [
-                'unit' => new UnitResource($unit)
+                'unit' => new SingleUnitResource($unit)
             ]
         );
 

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Resources\Setting;
+namespace App\Http\Resources\Unit;
 
 use App\Models\Language\Language;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SingleSettingResource extends JsonResource
+
+class SingleUnitResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,21 +16,18 @@ class SingleSettingResource extends JsonResource
      */
     public function toArray($request)
     {
-
         $languages = Language::all()->pluck('code');
 
         $translatable = [];
 
         foreach ($languages as $language){
-            $translatable[$language] = $this->getTranslation('title',$language);
+            $translatable[$language] = $this->getTranslation('name',$language);
         }
-
 
         return [
             'id' => $this->id,
-            'title' => $translatable,
-            'value' => $this->value,
-            'is_developer' => $this->is_developer
+            'name' => $translatable,
+            'code' => $this->code
         ];
     }
 }

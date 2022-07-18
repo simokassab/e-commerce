@@ -99,8 +99,7 @@ class SettingsController extends MainController
     {
         $setting->title = $request->title;
         $setting->value = $request->value;
-        $setting->is_developer = $request->is_developer;
-
+        $setting->is_developer = (bool)$request->is_developer;
 
         if(!$setting->save())
             return $this->errorResponse( __('messages.failed.update',['name' => __(self::OBJECT_NAME)]));
