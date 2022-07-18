@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Tax;
 
+use App\Models\Language\Language;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SingleTaxResource extends JsonResource
@@ -16,9 +17,19 @@ class SingleTaxResource extends JsonResource
     {
         $taxComponent=$this->whenLoaded('taxComponent');
 
+        $languages = Language::all()->pluck('code');
+
+        $translatable = [];
+
+        foreach ($languages as $language){
+            $nameTranslatable[$language] = $this->getTranslation('name',$language);
+        }
+
+
+
         return[
             'id' => $this->id,
-            'name' => $this->name,
+            'name' => $nameTranslatable,
             'is_complex' => $this->is_complex,
             'percentage' => $this->percentage,
             'complex_behavior' => $this->complex_behavior,

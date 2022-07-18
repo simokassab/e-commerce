@@ -9,7 +9,7 @@ use App\Http\Resources\Country\CountryResource;
 use App\Models\Country\Country;
 use Exception;
 use Illuminate\Http\Request;
-
+use App\Http\Resources\Country\CoutnrySingleResource;
 class CountryController extends MainController
 {
     const OBJECT_NAME = 'objects.country';
@@ -55,7 +55,8 @@ class CountryController extends MainController
     {
 
         $country = new Country();
-        $country->name = json_encode($request->name);
+        $dataTranslatable = (array)json_decode($request->name);
+        $country->name =  ($dataTranslatable);
         $country->iso_code_1 = $request->iso_code_1;
         $country->iso_code_2 = $request->iso_code_2;
         $country->phone_code = $request->phone_code;
@@ -69,7 +70,7 @@ class CountryController extends MainController
         return $this->successResponse(
             __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             [
-                'country' => new CountryResource($country)
+                'country' => new CoutnrySingleResource($country)
             ]
         );
 
@@ -85,7 +86,7 @@ class CountryController extends MainController
         return $this->successResponse(
             'Success!',
             [
-                'country' => new CountryResource($country)
+                'country' => new CoutnrySingleResource($country)
             ]
         );
 
@@ -112,8 +113,8 @@ class CountryController extends MainController
      */
     public function update(StoreCountryRequest $request, Country $country)
     {
-        $country->name = json_encode($request->name);
-        $country->iso_code_1 = $request->iso_code_1;
+        $dataTranslatable = (array)json_decode($request->name);
+        $country->name =  ($dataTranslatable);
         $country->iso_code_2 = $request->iso_code_2;
         $country->phone_code = $request->phone_code;
         if($request->flag){
@@ -131,7 +132,7 @@ class CountryController extends MainController
         return $this->successResponse(
             __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             [
-                'country' => new CountryResource($country)
+                'country' => new CoutnrySingleResource($country)
             ]
         );
     }
@@ -152,7 +153,7 @@ class CountryController extends MainController
         return $this->successResponse(
             __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
             [
-                'country' => new CountryResource($country)
+                'country' => new CoutnrySingleResource($country)
             ]
     );
 

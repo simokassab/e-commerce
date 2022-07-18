@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Price;
 
+use App\Models\Language\Language;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SinglePriceResource extends JsonResource
@@ -14,9 +15,17 @@ class SinglePriceResource extends JsonResource
      */
     public function toArray($request)
     {
-         return [
+        $languages = Language::all()->pluck('code');
+
+        $nameTranslatable = [];
+
+        foreach ($languages as $language){
+            $nameTranslatable[$language] = $this->getTranslation('name',$language);
+        }
+
+        return [
             'id' => $this->id,
-            'name' => $this->name,
+            'name' => $nameTranslatable,
             'is_virtual' => (bool)$this->is_virtual,
             'currency_id' => $this->whenLoaded('currency')->id ,
             'original_price_id' => ($this->whenLoaded('originalPrice')->id) ?? '',

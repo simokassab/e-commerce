@@ -4,13 +4,12 @@ namespace App\Models\Settings;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
-use Spatie\Translatable\HasTranslations;
 
 class Setting extends MainModel
 {
-    use HasFactory,HasTranslations;
+    use HasFactory;
 
-    protected $translatable=['key','value'];
-    protected $fillable = ['key','value','is_developer'];
+    protected $translatable=[];
+    protected $fillable = ['title','value','is_developer'];
 
 }

@@ -56,7 +56,7 @@ class TaxController extends MainController
     {
 
     $tax=new Tax();
-    $tax->name = json_encode($request->name);
+    $tax->name = ($request->name);
     $tax->is_complex = $request->is_complex;
     if($request->is_complex){
         $tax->percentage = 0;
@@ -131,7 +131,7 @@ class TaxController extends MainController
 
             TaxsServices::deleteRelatedTaxComponents($tax);
 
-            $tax->name = json_encode($request->name);
+            $tax->name = ($request->name);
             $tax->is_complex = $request->is_complex;
             if($request->is_complex){
                 $tax->percentage = 0;

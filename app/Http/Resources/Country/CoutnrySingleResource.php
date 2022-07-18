@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Language;
+namespace App\Http\Resources\Country;
 
 use App\Models\Language\Language;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SingleLanguageResource extends JsonResource
+class CoutnrySingleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,20 +17,18 @@ class SingleLanguageResource extends JsonResource
     {
         $languages = Language::all()->pluck('code');
         $translatable = [];
-
         foreach ($languages as $language){
             $nameTranslatable[$language] = $this->getTranslation('name',$language);
         }
 
-
         return [
             'id' => $this->id,
-            'name' => $nameTranslatable,
-            'code' => $this->code,
-            'is_default' => $this->is_default,
-            'is_disabled' => $this->is_disabled,
-            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
-            'sort' => $this->sort
+            'name'=> $nameTranslatable,
+            'iso_code_1'=>$this->iso_code_1,
+            'iso_code_2'=>$this->iso_code_2,
+            'phone_code'=>$this->phone_code,
+            'flag'=> $this->flag && !empty($this->flag) ?  getAssetsLink('storage/'.$this->flag): 'default_image' ,
+
         ];
     }
 }

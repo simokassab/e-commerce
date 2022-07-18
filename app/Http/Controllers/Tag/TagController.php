@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Tag;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Tag\StoreTagRequest;
+use App\Http\Resources\Tag\SingleTagResource;
 use App\Http\Resources\Tag\TagResource;
 use App\Models\Tag\Tag;
 use Exception;
@@ -63,7 +64,7 @@ class TagController extends MainController
         return $this->successResponse(
             __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             [
-                'tag' => new TagResource($tag)
+                'tag' => new SingleTagResource($tag)
             ]
         );
     }
@@ -76,7 +77,12 @@ class TagController extends MainController
      */
     public function show(Tag $tag)
     {
-        return $this->successResponse('Success', ['tag' => new TagResource($tag)]);
+         return $this->successResponse(
+             'Success!',
+             [
+                 'tag' => new SingleTagResource($tag)
+             ]
+         );
     }
 
     /**
@@ -109,7 +115,7 @@ class TagController extends MainController
         return $this->successResponse(
             __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             [
-                'tag' => new TagResource($tag)
+                'tag' => new SingleTagResource($tag)
             ]
         );
     }
@@ -130,7 +136,7 @@ class TagController extends MainController
         return $this->successResponse(
             __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
             [
-                'tag' => new TagResource($tag)
+                'tag' => new SingleTagResource($tag)
             ]
         );
     }

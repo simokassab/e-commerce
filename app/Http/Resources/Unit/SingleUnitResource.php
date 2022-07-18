@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Resources\Tag;
+namespace App\Http\Resources\Unit;
 
 use App\Models\Language\Language;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TagResource extends JsonResource
+
+class SingleUnitResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +16,18 @@ class TagResource extends JsonResource
      */
     public function toArray($request)
     {
+        $languages = Language::all()->pluck('code');
+
+        $translatable = [];
+
+        foreach ($languages as $language){
+            $translatable[$language] = $this->getTranslation('name',$language);
+        }
+
         return [
             'id' => $this->id,
-            'name' => $this->name
+            'name' => $translatable,
+            'code' => $this->code
         ];
     }
 }
