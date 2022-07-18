@@ -29,15 +29,15 @@ class StoreProductRequest extends FormRequest
             $QuantityValue=0;
             $priceValue=0;
 
-            $productsRequiredSettings= Setting::where('title','products_fields_required')->first();
+            $productsRequiredSettings= Setting::where('title','products_fields_required(sku,summary,specification,barcode,length,width,height,weight,brand_id,tax_id)')->first();
             $productQuantities=Setting::where('title','products_all_quantities_greater_than_or_equal')->first();
             $productprices=Setting::where('title','products_prices_and_discounted_price_greater_than_or_equal')->first();
 
             if($productsRequiredSettings)
                 $productsRequiredSettingsArray=explode(',', $productsRequiredSettings->value);
-            
+
             if($productQuantities)
-                $value=(int)$productQuantities->value;
+                $QuantityValue=(int)$productQuantities->value;
 
             if($productprices)
                 $priceValue=(int)$productprices->value;

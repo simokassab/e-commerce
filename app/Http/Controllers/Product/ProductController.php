@@ -127,42 +127,10 @@ class ProductController extends MainController
             $product->tax_id = $request->tax_id;
             $product->products_statuses_id = $request->products_statuses_id;
             $product->save();
+
             if($request->type=='variable'){
-                // $product->inhertDataFromVariableParent($request,$product->id);
-
-                $productVariationsArray=[];
-                foreach ($request->product_variations as $key => $variation) {
-                            $productVariationsArray['name']=  json_encode($request->name);
-                            $productVariationsArray['slug'] = $variation['slug'];
-                            $productVariationsArray['code'] = $variation['code'];
-                            $productVariationsArray['type'] ='variable_child';
-                            $productVariationsArray['sku']= $variation['sku'];
-                            $productVariationsArray['quantity'] = $variation['quantity'];
-                            $productVariationsArray['reserved_quantity']= $variation['reserved_quantity'];
-                            $productVariationsArray['minimum_quantity'] = $variation['minimum_quantity'];
-                            $productVariationsArray['height'] = $variation['height'];
-                            $productVariationsArray['width']= $variation['width'];
-                            $productVariationsArray['length']= $variation['length'];
-                            $productVariationsArray['weight'] = $variation['weight'];
-                            $productVariationsArray['barcode'] = $variation['barcode'];
-                            $productVariationsArray['category_id'] = $request->category_id;
-                            $productVariationsArray['unit_id'] = $request->unit_id;
-                            $productVariationsArray['tax_id'] = $request->tax_id;
-                            $productVariationsArray['brand_id'] = $request->brand_id;
-                            $productVariationsArray['summary'] = json_encode($request->summary);
-                            $productVariationsArray['specification'] = json_encode($request->specification);
-                            $productVariationsArray['meta_title'] = json_encode($request->meta_title);
-                            $productVariationsArray['meta_description'] = json_encode($request->meta_description);
-                            $productVariationsArray['description'] = json_encode($request->description);
-                            $productVariationsArray['status'] = $request->status;
-                            $productVariationsArray['products_statuses_id'] = $request->products_statuses_id;
-
-                            if($request->isSamePriceAsParent){
-                                ProductPrice::inhertPrices($product->id, $product->id+1);
-                            }
-
-                }
-                Product::insert($productVariationsArray);
+               $this->productService->storeVariations($request,$product->id);
+            //    $this->productService->storeAdditionalProductData($request,$product->id);
             }
             $this->productService->storeAdditionalProductData($request,$product->id);
 
@@ -213,61 +181,44 @@ class ProductController extends MainController
     {
         // DB::beginTransaction();
         // try {
-        $product->name = json_encode($request->name);
-        $product->slug = $request->slug;
-        $product->code = $request->code;
-        $product->sku = $request->sku;
-        $product->type = $request->type;
-        $product->quantity = $request->quantity ?? 0;
-        $product->reserved_quantity = $request->reserved_quantity ?? 0;
-        $product->minimum_quantity = $request->minimum_quantity ?? 0;
+            $product->name = json_encode($request->name);
+            $product->slug = $request->slug;
+            $product->code = $request->code;
+            $product->sku = $request->sku;
+            $product->type = $request->type;
+            $product->quantity = $request->quantity ?? 0;
+            $product->reserved_quantity = $request->reserved_quantity ?? 0;
+            $product->minimum_quantity = $request->minimum_quantity ?? 0;
 
-        $product->summary = json_encode($request->summary);
-        $product->specification = json_encode($request->specification);
-        if($request->image)
-            $product->image= $this->imageUpload($request->file('image'),config('images_paths.product.images'));
+            $product->summary = json_encode($request->summary);
+            $product->specification = json_encode($request->specification);
+            if($request->image)
+                $product->image= $this->imageUpload($request->file('image'),config('images_paths.product.images'));
 
-        $product->meta_title = json_encode($request->meta_title);
-        $product->meta_description = json_encode($request->meta_description);
-        $product->meta_keyword = json_encode($request->meta_keyword);
-        $product->description = json_encode($request->description);
-        $product->status = $request->status;
-        $product->barcode = $request->barcode;
-        $product->height = $request->height;
-        $product->width = $request->width;
-        $product->is_disabled=0;
-        $product->length = $request->length;
-        $product->weight = $request->weight;
-        $product->is_default_child = $request->is_default_child ?? 0;
-        $product->parent_product_id = $request->parent_product_id;
-        $product->category_id= $request->category_id;
-        $product->unit_id = $request->unit_id;
-        $product->brand_id = $request->brand_id;
-        $product->tax_id = $request->tax_id;
-        $product->products_statuses_id = $request->products_statuses_id;
-        $product->save();
+            $product->meta_title = json_encode($request->meta_title);
+            $product->meta_description = json_encode($request->meta_description);
+            $product->meta_keyword = json_encode($request->meta_keyword);
+            $product->description = json_encode($request->description);
+            $product->status = $request->status;
+            $product->barcode = $request->barcode;
+            $product->height = $request->height;
+            $product->width = $request->width;
+            $product->is_disabled=0;
+            $product->length = $request->length;
+            $product->weight = $request->weight;
+            $product->is_default_child = $request->is_default_child ?? 0;
+            $product->parent_product_id = "";
+            $product->category_id= $request->category_id;
+            $product->unit_id = $request->unit_id;
+            $product->brand_id = $request->brand_id;
+            $product->tax_id = $request->tax_id;
+            $product->products_statuses_id = $request->products_statuses_id;
+            $product->save();
 
-        if($request->type=='variable'){
-            $product->inhertDataFromVariableParent($request,$product->id);
-            $productVariationsArray=[];
-            foreach ($request->product_variations as $key => $variation) {
-                        $productVariationsArray[$key]["type"] ='variable_child';
-                        $productVariationsArray[$key]["sku"] = $variation['sku'];
-                        $productVariationsArray[$key]["quantity"] = $variation['quantity'];
-                        $productVariationsArray[$key]["reserved_quantity"] = $variation['reserved_quantity'];
-                        $productVariationsArray[$key]["minimum_quantity"] = $variation['minimum_quantity'];
-                        $productVariationsArray[$key]["height"] = $variation['height'];
-                        $productVariationsArray[$key]["width"] = $variation['width'];
-                        $productVariationsArray[$key]["length"] = $variation['length'];
-                        $productVariationsArray[$key]["weight"] = $variation['weight'];
-                        $productVariationsArray[$key]["barcode"] = $variation['barcode'];
-                        $productVariationsArray[$key]["is_default_child"] = $variation['is_default_child'];
-
+            if($request->type=='variable'){
+               $this->productService->storeVariations($request,$product->id);
             }
-            Product::insert($productVariationsArray);
-        }
-        $this->productService->storeAdditionalProductData($request,$product->id);
-
+            $this->productService->storeAdditionalProductData($request,$product->id);
         // DB::commit();
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
         'product' =>  new ProductResource($product)

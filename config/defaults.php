@@ -22,8 +22,7 @@ return [
 //END ICON
 
     'validation_default_entities' => 'category,product,brand',
-    '
-    validation_default_type' => 'checkbox,text,select,textarea,date',
+    'validation_default_type' => 'checkbox,text,select,textarea,date',
 
     'default_string_length' => 250,
     'default_string_length_2' => 125,

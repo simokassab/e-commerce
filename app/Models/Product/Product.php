@@ -96,33 +96,7 @@ class Product extends MainModel
 
     }
 
-    public function inhertDataFromVariableParent(Request $request,$newProductId){
+}
 
-        $parent=Product::find($this->id);
 
-        if(!$parent->type=='variable'){
-            throw new \Exception('Parent product is not variable');
-         }
-            $this->name=$parent->name;
-            $this->category_id=$parent->category_id;
-            $this->unit_id=$parent->unit_id;
-            $this->tax_id=$parent->tax_id;
-            $this->brand_id=$parent->brand_id;
-            $this->summary=$parent->summary;
-            $this->specification=$parent->specification;
-            $this->meta_title=$parent->meta_title;
-            $this->meta_description=$parent->meta_description;
-            $this->meta_keyword=$parent->meta_keyword;
-            $this->meta_description=$parent->meta_description;
-            $this->description=$parent->description;
-            $this->status=$parent->status;
-            $this->is_disabled=$parent->is_disabled;
-            $this->products_statuses_id =$parent->products_statuses_id;
-
-            if($request->isSamePriceAsParent){
-                ProductPrice::inhertPrices($this->parent_product_id , $newProductId);
-            }
-
-            }
-        }
 

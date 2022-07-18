@@ -41,12 +41,18 @@ public $request,$product_id;
     private function storeAdditionalCategrories(){
         if ($this->request->has('categories')) {
             $categoriesArray = $this->request->categories ?? [];
+            $categoriesChildrenArray = $this->request->categories ?? [];
             foreach ($this->request->categories as $category => $value) {
                 $categoriesArray[$category]["product_id"] = $this->product_id;
                 $categoriesArray[$category]["created_at"] = Carbon::now()->toDateTimeString();
                 $categoriesArray[$category]["updated_at"] = Carbon::now()->toDateTimeString();
+
+                $categoriesChildrenArray[$category]["product_id"] = $this->product_id+1;
+                $categoriesChildrenArray[$category]["created_at"] = Carbon::now()->toDateTimeString();
+                $categoriesChildrenArray[$category]["updated_at"] = Carbon::now()->toDateTimeString();
             }
-            ProductCategory::insert($categoriesArray);
+            $categoiresArrayMixed=array_merge($categoriesArray,$categoriesChildrenArray);
+            ProductCategory::insert($categoiresArrayMixed);
         }
 
         return $this;
@@ -109,14 +115,14 @@ public $request,$product_id;
             }
             ProductPrice::insert($pricesArray);
         }
-
         return $this;
         }
+
     private function storeChildPrices(){
         if($this->request->has('child_prices')){
             $childPricesArray = $this->request->child_prices ?? [];
             foreach ($this->request->child_prices as $childPrice => $value) {
-                $childPricesArray[$childPrice]["product_id"] = $this->product_id;
+                $childPricesArray[$childPrice]["product_id"] = $this->product_id+1;
                 $childPricesArray[$childPrice]["created_at"] = Carbon::now()->toDateTimeString();
                 $childPricesArray[$childPrice]["updated_at"] = Carbon::now()->toDateTimeString();
             }
@@ -124,6 +130,7 @@ public $request,$product_id;
         }
         return $this;
         }
+
     private function storeAdditionalTags(){
         if ($this->request->has('tags')) {
             $tagsArray = $this->request->tags ?? [];
@@ -135,7 +142,6 @@ public $request,$product_id;
             ProductTag::insert($tagsArray);
         }
         return $this;
-
     }
     private function storeAdditionalBundle(){
         if ($this->request->type == 'bundle') {
@@ -153,17 +159,16 @@ public $request,$product_id;
 
     public static function deleteRelatedDataForProduct(Product $product){
 
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             //code...
 
         // $productType=Product::find($product->id)->type ?? '';
          $productType=$product->type ?? '';
-            dd($productType);
         if($productType=='variable'){
 
             $productChildren = $product->children->pluck('id');
-
+            dd($productChildren);
                 Product::whereIn('id',$productChildren)->delete();
                 ProductCategory::whereIn('product_id',$productChildren)->delete();
                 ProductField::whereIn('product_id',$productChildren)->delete();
@@ -173,33 +178,61 @@ public $request,$product_id;
                 ProductTag::whereIn('product_id',$productChildren)->delete();
 
         }
-        // elseif($productType=='bundle'){
 
-        //     $productChildren =$product->productRelatedChildren->pluck('id');
-
-        //     // Product::whereIn('id',$productChildren)->delete();
-        //     // ProductCategory::whereIn('product_id',$productChildren)->delete();
-        //     // ProductField::whereIn('product_id',$productChildren)->delete();
-        //     // ProductImage::whereIn('product_id',$productChildren)->delete();
-        //     // ProductLabel::whereIn('product_id',$productChildren)->delete();
-        //     // ProductPrice::whereIn('product_id',$productChildren)->delete();
-        //     // ProductTag::whereIn('product_id',$productChildren)->delete();
-        //     ProductRelated::whereIn('parent_product_id',$productChildren)->delete();
-
-        // }
-        ProductRelated::whereIn('parent_product_id',$product->id)->delete();
-
+            ProductRelated::whereIn('parent_product_id',$product->id)->delete();
             ProductCategory::where('product_id',$product->id)->delete();
             ProductField::where('product_id',$product->id)->delete();
             ProductImage::whereIn('product_id',$product->id)->delete();
             ProductLabel::where('product_id',$product->id)->delete();
             ProductPrice::where('product_id',$product->id)->delete();
             ProductTag::where('product_id',$product->id)->delete();
-            DB::commit();
-        } catch (\Throwable $th) {
-            //throw $th;
+        //     DB::commit();
+        // } catch (\Throwable $th) {
+        //     //throw $th;
+        // }
+
+
+    }
+
+    public function storeVariations(Request $request, $productId){
+        $productVariationsArray=[];
+        foreach ($request->product_variations as $key => $variation) {
+                    $productVariationsArray[$key]['name']=  json_encode($request->name);
+                    $productVariationsArray[$key]['slug'] = $variation['slug'];
+                    $productVariationsArray[$key]['code'] = $variation['code'];
+                    $productVariationsArray[$key]['type'] ='variable_child';
+                    $productVariationsArray[$key]['sku']= $variation['sku'];
+                    $productVariationsArray[$key]['quantity'] = $variation['quantity'];
+                    $productVariationsArray[$key]['reserved_quantity']= $variation['reserved_quantity'];
+                    $productVariationsArray[$key]['minimum_quantity'] = $variation['minimum_quantity'];
+                    $productVariationsArray[$key]['height'] = $variation['height'];
+                    $productVariationsArray[$key]['width']= $variation['width'];
+                    $productVariationsArray[$key]['length']= $variation['length'];
+                    $productVariationsArray[$key]['weight'] = $variation['weight'];
+                    $productVariationsArray[$key]['barcode'] = $variation['barcode'];
+                    $productVariationsArray[$key]['category_id'] = $request->category_id;
+                    $productVariationsArray[$key]['unit_id'] = $request->unit_id;
+                    $productVariationsArray[$key]['tax_id'] = $request->tax_id;
+                    $productVariationsArray[$key]['brand_id'] = $request->brand_id;
+                    $productVariationsArray[$key]['summary'] = json_encode($request->summary);
+                    $productVariationsArray[$key]['specification'] = json_encode($request->specification);
+                    $productVariationsArray[$key]['meta_title'] = json_encode($request->meta_title);
+                    $productVariationsArray[$key]['meta_description'] = json_encode($request->meta_description);
+                    $productVariationsArray[$key]['description'] = json_encode($request->description);
+                    $productVariationsArray[$key]['status'] = $request->status;
+                    $productVariationsArray[$key]['parent_product_id'] = $productId;
+                    $productVariationsArray[$key]['products_statuses_id'] = $request->products_statuses_id;
+
+                    // if($request->isSamePriceAsParent){
+                    //     ProductPrice::inhertPrices($request, $productId+1);
+                    // }
         }
-
-
+        $newChildrenProducts = Product::insert($productVariationsArray);
+        if($newChildrenProducts){
+            $childrenIds=Product::where('parent_product_id',$productId)->pluck('id');
+                if($request->isSamePriceAsParent){
+                        ProductPrice::inhertPrices($request, $childrenIds);
+                    }
+        }
     }
 }
