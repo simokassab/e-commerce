@@ -18,17 +18,19 @@ class SingleSettingResource extends JsonResource
 
         $languages = Language::all()->pluck('code');
 
-        $translatable = [];
+        $titleTranslatable = [];
+        $valueTranslatable = [];
 
         foreach ($languages as $language){
-            $translatable[$language] = $this->getTranslation('title',$language);
+//            $titleTranslatable[$language] = $this->getTranslation('title',$language);
+            $valueTranslatable[$language] = $this->getTranslation('value',$language);
         }
 
 
         return [
             'id' => $this->id,
-            'title' => $translatable,
-            'value' => $this->value,
+            'title' => $this->title,
+            'value' => $valueTranslatable,
             'is_developer' => $this->is_developer
         ];
     }

@@ -29,7 +29,8 @@ class SettingsController extends MainController
             return $this->getSearchPaginated(SettingsResource::class, Setting::class,$request, $searchKeys);
 
         }
-       return $this->successResponsePaginated(SettingsResource::class,Setting::class);
+
+        return $this->successResponsePaginated(SettingsResource::class,Setting::class);
      }
 
     /**
@@ -51,7 +52,7 @@ class SettingsController extends MainController
     public function store(StoreSettingRequest $request)
     {
         $setting=new Setting();
-        $setting->title = json_encode($request->title);
+        $setting->title = $request->title;
         $setting->value = $request->value;
         $setting->is_developer = $request->is_developer;
 
@@ -74,7 +75,7 @@ class SettingsController extends MainController
      */
     public function show(Setting $setting)
     {
-        return $this->successResponse('Success!',['setting' => new SettingsResource($setting)]);
+        return $this->successResponse('Success!',['setting' => new SingleSettingResource($setting)]);
     }
 
     /**

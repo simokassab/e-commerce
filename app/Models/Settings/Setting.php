@@ -10,7 +10,7 @@ class Setting extends MainModel
 {
     use HasFactory,HasTranslations;
 
-    protected $translatable=['key','value'];
-    protected $fillable = ['key','value','is_developer'];
+    protected $translatable=['value'];
+    protected $fillable = ['title','value','is_developer'];
 
 }
