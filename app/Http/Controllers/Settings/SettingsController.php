@@ -62,7 +62,7 @@ class SettingsController extends MainController
         return $this->successResponse(
             __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             [
-                'setting' => new SingleSettingResource($setting)
+                'setting' => new SettingsResource($setting)
             ]
         );
     }
@@ -75,7 +75,7 @@ class SettingsController extends MainController
      */
     public function show(Setting $setting)
     {
-        return $this->successResponse('Success!',['setting' => new SingleSettingResource($setting)]);
+        return $this->successResponse('Success!',['setting' => new SettingsResource($setting)]);
     }
 
     /**
@@ -108,7 +108,7 @@ class SettingsController extends MainController
         return $this->successResponse(
             __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             [
-                'setting' => new SingleSettingResource($setting)
+                'setting' => new SettingsResource($setting)
             ]
         );
     }
@@ -127,7 +127,7 @@ class SettingsController extends MainController
         return $this->successResponse(
             __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
             [
-                'setting' => new SingleSettingResource($setting)
+                'setting' => new SettingsResource($setting)
             ]
         );
     }

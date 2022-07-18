@@ -16,20 +16,20 @@ class SingleSettingResource extends JsonResource
     public function toArray($request)
     {
 
-        $languages = Language::all()->pluck('code');
-
-        $titleTranslatable = [];
-        $valueTranslatable = [];
-
-        foreach ($languages as $language){
-//            $titleTranslatable[$language] = $this->getTranslation('title',$language);
-            $valueTranslatable[$language] = $this->getTranslation('value',$language);
-        }
+//        $languages = Language::all()->pluck('code');
+//
+//        $titleTranslatable = [];
+//        $valueTranslatable = [];
+//
+//        foreach ($languages as $language){
+////            $titleTranslatable[$language] = $this->getTranslation('title',$language);
+//            $valueTranslatable[$language] = $this->getTranslation('value',$language);
+//        }
 
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'value' => $valueTranslatable,
+            'value' => $this->value,
             'is_developer' => $this->is_developer
         ];
     }
