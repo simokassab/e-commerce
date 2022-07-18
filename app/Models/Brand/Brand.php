@@ -23,9 +23,8 @@ class Brand extends MainModel
     public function label(){
         return $this->belongsToMany(Label::class,'brands_labels','brand_id');
     }
-
     public function field(){
-        return $this->belongsToMany(field::class,'brands_fields','field_id','brand_id');
+        return $this->belongsToMany(field::class,'brands_fields','brand_id','field_id');
     }
     public function fieldValue(){
         return $this->belongsToMany(FieldValue::class,'brands_fields','brand_id','field_value_id');

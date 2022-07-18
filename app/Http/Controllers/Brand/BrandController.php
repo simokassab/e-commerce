@@ -51,16 +51,15 @@ class BrandController extends MainController
      */
     public function create()
     {
-        $fields= Field::with('fieldValue')
-        ->whereEntity('brands')
-        ->get();
+        $fields= Field::with('fieldValue')->whereEntity('brands')->get();
 
         $labels= Label::whereEntity('brands')->get();
 
         return $this->successResponse(
             'Success!',
             [
-                'fields'=>$fields,'labels'=>$labels
+                'fields'=>$fields,
+                'labels'=>$labels
             ]
         );
     }
@@ -167,23 +166,24 @@ class BrandController extends MainController
      * @param  Brand  $brand
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Brand $brand)
+    public function update(StoreBrandRequest $request, Brand $brand)
     {
-
         DB::beginTransaction();
         try {
 
             BrandsService::deleteRelatedBrandFieldsAndLabels($brand);
             //Brand Store
-            $brand = new Brand();
             $brand->name = json_encode($request->name);
             $brand->code = $request->code;
+
             if($request->image)
                 $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brands.images'));
+
             $brand->meta_title = json_encode($request->meta_title);
             $brand->meta_description = json_encode($request->meta_description);
             $brand->meta_keyword = json_encode($request->meta_keyword);
             $brand->description = json_encode($request->description);
+            $brand->is_disabled = 0;
             $brand->save();
             //End of Brand Store
 
@@ -216,7 +216,7 @@ class BrandController extends MainController
 
                     DB::commit();
                     return $this->successResponse(
-                        __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                        __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
                         [
                             'brands' => new SingleBrandResource($brand)
                         ]
@@ -224,7 +224,7 @@ class BrandController extends MainController
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse(
-                __('messages.failed.create',['name' => __(self::OBJECT_NAME)]),
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)]). "th error message: $e",
             );
 
         }catch(Error $error){

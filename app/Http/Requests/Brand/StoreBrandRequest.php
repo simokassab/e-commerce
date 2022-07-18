@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Brand;
 
 
+use App\Http\Requests\MainRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
@@ -28,6 +29,7 @@ class StoreBrandRequest extends MainRequest
     public function rules()
     {
         return [
+
             'name' => 'required',
             'code' => 'required | max:'.config('defaults.default_string_length'),
 
@@ -36,18 +38,15 @@ class StoreBrandRequest extends MainRequest
             | max:'.config('defaults.default_image_size').'
             | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
 
-
             'meta_title' => 'nullable',
             'meta_description' => 'nullable',
             'meta_keyword' => 'nullable',
             'description' => 'nullable',
             'sort' => 'nullable | integer',
 
-
             'fields.*.field_id' => 'required | exists:fields,id,entity,brands',
             'fields.*.field_value_id' =>  'integer | exists:fields_values,id',
             'fields.*.value'=> 'nullable',
-
 
             'labels.*.label_id' => 'required | exists:labels,id',
 
@@ -63,8 +62,8 @@ class StoreBrandRequest extends MainRequest
 
             'image.file' => 'The input is not an image',
             'image.max' => 'The maximum :attribute size is :max.',
-            'image.mimes' => 'Invalid extention.',
-            'image.dimensions' => 'Invalid dimentions, minimum('.config('defaults.default_image_minimum_width').'x'.config('defaults.default_image_minimum_height').'),maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
+            'image.mimes' => 'Invalid extension.',
+            'image.dimensions' => 'Invalid dimensions, minimum('.config('defaults.default_image_minimum_width').'x'.config('defaults.default_image_minimum_height').'),maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
 
             'sort.integer' => 'the :attribute should be an integer',
 

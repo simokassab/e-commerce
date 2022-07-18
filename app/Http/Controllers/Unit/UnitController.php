@@ -48,7 +48,7 @@ class UnitController extends MainController
     public function store(StoreUnitRequest $request)
     {
         $unit=new Unit();
-        $unit->name=json_encode($request->name);
+        $unit->name = $request->name;
         $unit->code=$request->code;
 
 
