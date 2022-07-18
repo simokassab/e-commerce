@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Field;
 
+use App\Models\Language\Language;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SingleFieldResource extends JsonResource
@@ -14,15 +15,22 @@ class SingleFieldResource extends JsonResource
      */
     public function toArray($request)
     {
-        $fields_values=$this->whenLoaded('fieldValue');
+        $fieldValues=$this->whenLoaded('fieldValue');
+
+        $languages = Language::all()->pluck('code');
+        $translatable = [];
+
+        foreach ($languages as $language){
+            $nameTranslatable[$language] = $this->getTranslation('title',$language);
+        }
 
         return [
             'id' =>$this->id,
-            'title'=> $this->title,
+            'title'=> $nameTranslatable,
             'type'=> $this->type,
             'entity'=> $this->entity,
             'is_required'=> $this->is_required,
-            'fields_values' => FieldsValueResource::collection($fields_values)
+            'field_values' => FieldsValueResource::collection($fieldValues)
         ];
     }
 }

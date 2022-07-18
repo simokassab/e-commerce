@@ -16,7 +16,6 @@ class Field extends MainModel
 
     protected $translatable=['title'];
     protected $table='fields';
-    protected $guard_name = 'web';
 
 
     public function fieldValue(){

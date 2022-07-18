@@ -56,7 +56,7 @@ function notFoundError($message = 'Not found!',Array $data=[],$returnCode = -2, 
 
 function removeImage($folderpath)
 {
-        if(Storage::exists($folderpath)){
+        if(Storage::exists($folderpath ?? '')){
            return Storage::delete($folderpath);
         }
 

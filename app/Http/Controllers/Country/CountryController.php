@@ -118,9 +118,12 @@ class CountryController extends MainController
         $country->iso_code_2 = $request->iso_code_2;
         $country->phone_code = $request->phone_code;
         if($request->flag){
-            if(!$this->removeImage($country->image) ){
-                 throw new FileErrorException();
-             }
+
+            if($country->image){
+                if(!$this->removeImage($country->image ) ){
+                    throw new FileErrorException();
+                }
+            }
             $country->flag= $this->imageUpload($request->file('flag'),config('images_paths.country.images'));
 
          }

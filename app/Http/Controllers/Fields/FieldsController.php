@@ -57,37 +57,28 @@ class FieldsController extends MainController
     public function store(StoreFieldRequest $request)
     {
         $field=new Field();
-        $field->title = json_encode($request->title);
+        $field->title = ($request->title);
         $field->type = $request->type;
         $field->entity = $request->entity;
         $field->is_required = $request->is_required;
 
+        if(!$field->save())
+          return $this->errorResponse(__('messages.failed.create',['name' => __(self::OBJECT_NAME)]));
+
         $check=true;
 
-        if(!$field->save())
-          return $this->errorResponse(
-              __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
-          );
-
           if($request->type=='select' && $request->field_value){
-           $fieldValueArray=$request->field_value;
-           foreach ($request->field_value as $fieldValue => $value){
-              $fieldValueArray[$fieldValue]["field_id"] = $field->id;
-              $fieldValueArray[$fieldValue]["value"] = json_encode($request->field_value[$fieldValue]['value']);
-            }
-            $check = FieldValue::insert($fieldValueArray);
-            }
+              $check = FieldService::addFieldValuesToField($request->field_value,$field);
+          }
 
             if(!$check)
-                return $this->errorResponse(
-                    __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
-                );
+                return $this->errorResponse(__('messages.failed.create',['name' => __(self::OBJECT_NAME)]));
 
 
         return $this->successResponse(
             __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             [
-                'field' => new SingleFieldResource($field)
+                'field' => new SingleFieldResource($field->load('fieldValue'))
             ]
         );
 
@@ -104,7 +95,7 @@ class FieldsController extends MainController
         return $this->successResponse(
             'Success!',
             [
-                'field' => new FieldsResource($field)
+                'field' => new SingleFieldResource($field->load('fieldValue'))
             ]
         );
 
@@ -132,37 +123,34 @@ class FieldsController extends MainController
     {
         DB::beginTransaction();
         try {
-        FieldService::deleteRelatedfieldValues($field);
+            FieldService::deleteRelatedfieldValues($field);
 
-        $field->title = json_encode($request->title);
-        $field->type = $request->type;
-        $field->entity = $request->entity;
-        $field->is_required = $request->is_required;
-        $field->save();
+            $field->title = ($request->title);
+            $field->type = $request->type;
+            $field->entity = $request->entity;
+            $field->is_required = $request->is_required;
+            $field->save();
 
-        if($request->type=='select' && $request->field_value){
-            $fieldValueArray=$request->field_value;
-            foreach ($request->field_value as $fieldValue => $value){
-               $fieldValueArray[$fieldValue]["field_id"] = $field->id;
-               $fieldValueArray[$fieldValue]["value"] = json_encode($request->field_value[$fieldValue]['value']);
+            if ($request->type == 'select' && $request->field_value) {
+                FieldService::addFieldValuesToField($request->field_value, $field);
             }
-            FieldValue::insert($fieldValueArray);
-             }
 
-        DB::commit();
-        return $this->successResponse(
-            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            [
-                'field' => new SingleFieldResource($field)
-            ]
-        );
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return $this->errorResponse(
-            __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
-        );
+                DB::commit();
+                return $this->successResponse(
+                    __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
+                    [
+                        'field' => new SingleFieldResource($field->load('fieldValue'))
+                    ]
+                );
+            }
+        catch(\Exception $e) {
+                DB::rollBack();
+                return $this->errorResponse(
+                    __('messages.failed.update', ['name' => __(self::OBJECT_NAME)])
+                );
 
-    }
+            }
+
     }
 
     /**
@@ -182,7 +170,7 @@ class FieldsController extends MainController
             return $this->successResponse(
                 __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
                 [
-                    'field' => new SingleFieldResource($field)
+                    'field' => new SingleFieldResource($field->load('fieldValue'))
                 ]
             );
 
@@ -197,5 +185,5 @@ class FieldsController extends MainController
 
     public function getTableHeaders(){
         return $this->successResponse('Success!' , ['headers' => __('headers.fields') ]);
-}
+    }
 }

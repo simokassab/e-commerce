@@ -17,6 +17,17 @@ class FieldService{
 
     }
 
+    public static function addFieldValuesToField(array $fieldValues, Field $field){
+            $fieldsValuesArray = [];
+            foreach ($fieldValues as $key => $value){
+                $fieldsValuesArray[$key]['field_id'] = $field->id;
+                $fieldsValuesArray[$key]['value'] = json_encode($value);
+            }
+            return $check = FieldValue::insert($fieldsValuesArray);
+
+
+    }
+
 }
 
 
