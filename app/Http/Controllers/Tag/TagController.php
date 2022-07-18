@@ -52,7 +52,7 @@ class TagController extends MainController
     public function store(StoreTagRequest $request)
     {
         $tag=new Tag();
-        $tag->name=json_encode($request->name);
+        $tag->name= ($request->name);
 
 
         if(!$tag->save())
@@ -99,7 +99,7 @@ class TagController extends MainController
      */
     public function update(StoreTagRequest $request, Tag $tag)
     {
-        $tag->name=json_encode($request->name);
+        $tag->name= ($request->name);
 
 
         if(!$tag->save())
