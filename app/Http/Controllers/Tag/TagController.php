@@ -101,9 +101,10 @@ class TagController extends MainController
     {
         $tag->name= ($request->name);
 
-
         if(!$tag->save())
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)]),
+            );
 
         return $this->successResponse(
             __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
