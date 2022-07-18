@@ -26,6 +26,7 @@ class Product extends MainModel
     protected $translatable=['name','summary','specification','description','meta_title','meta_description','meta_keywords'];
     protected $table='products';
     protected $guard_name = 'web';
+    protected $fillable=['type'];
 
     public function parent(){
         return $this->belongsTo(Product::class,'parent_product_id');
@@ -97,15 +98,16 @@ class Product extends MainModel
 
     public function inhertDataFromVariableParent(Request $request,$newProductId){
 
-        $parent=Product::find($this->parent_product_id);
-         if(!$parent->type=='variable'){
+        $parent=Product::find($this->id);
+
+        if(!$parent->type=='variable'){
             throw new \Exception('Parent product is not variable');
          }
+            $this->name=$parent->name;
             $this->category_id=$parent->category_id;
             $this->unit_id=$parent->unit_id;
             $this->tax_id=$parent->tax_id;
             $this->brand_id=$parent->brand_id;
-            $this->sku=$parent->sku;
             $this->summary=$parent->summary;
             $this->specification=$parent->specification;
             $this->meta_title=$parent->meta_title;
@@ -114,10 +116,6 @@ class Product extends MainModel
             $this->meta_description=$parent->meta_description;
             $this->description=$parent->description;
             $this->status=$parent->status;
-            $this->height=$parent->height;
-            $this->width=$parent->width;
-            $this->length=$parent->length;
-            $this->weight=$parent->weight;
             $this->is_disabled=$parent->is_disabled;
             $this->products_statuses_id =$parent->products_statuses_id;
 

@@ -29,10 +29,11 @@ public $request,$product_id;
             ->storeAdditionalImages()
             ->storeAdditionalLabels()
             ->storeAdditionalTags()
-            ->storeAdditionalBundle();
+            ->storeAdditionalBundle()
+            ->storeAdditionalPrices();
 
             if(!$request->isSamePriceAsParent){
-                self::storeAdditionalPrices();
+                self::storeChildPrices();
             }
 
     }
@@ -108,8 +109,21 @@ public $request,$product_id;
             }
             ProductPrice::insert($pricesArray);
         }
+
         return $this;
-    }
+        }
+    private function storeChildPrices(){
+        if($this->request->has('child_prices')){
+            $childPricesArray = $this->request->child_prices ?? [];
+            foreach ($this->request->child_prices as $childPrice => $value) {
+                $childPricesArray[$childPrice]["product_id"] = $this->product_id;
+                $childPricesArray[$childPrice]["created_at"] = Carbon::now()->toDateTimeString();
+                $childPricesArray[$childPrice]["updated_at"] = Carbon::now()->toDateTimeString();
+            }
+            ProductPrice::insert($childPricesArray);
+        }
+        return $this;
+        }
     private function storeAdditionalTags(){
         if ($this->request->has('tags')) {
             $tagsArray = $this->request->tags ?? [];
@@ -138,15 +152,16 @@ public $request,$product_id;
     }
 
     public static function deleteRelatedDataForProduct(Product $product){
-    
+
         DB::beginTransaction();
         try {
             //code...
-      
-        $productType=Product::find($product->id)->type ?? '';
 
+        // $productType=Product::find($product->id)->type ?? '';
+         $productType=$product->type ?? '';
+            dd($productType);
         if($productType=='variable'){
-         
+
             $productChildren = $product->children->pluck('id');
 
                 Product::whereIn('id',$productChildren)->delete();
@@ -156,22 +171,23 @@ public $request,$product_id;
                 ProductLabel::whereIn('product_id',$productChildren)->delete();
                 ProductPrice::whereIn('product_id',$productChildren)->delete();
                 ProductTag::whereIn('product_id',$productChildren)->delete();
-                
-        }
-        elseif($productType=='bundle'){
 
-            $productChildren =$product->productRelatedChildren->pluck('id');
-
-            Product::whereIn('id',$productChildren)->delete();
-            ProductCategory::whereIn('product_id',$productChildren)->delete();
-            ProductField::whereIn('product_id',$productChildren)->delete();
-            ProductImage::whereIn('product_id',$productChildren)->delete();
-            ProductLabel::whereIn('product_id',$productChildren)->delete();
-            ProductPrice::whereIn('product_id',$productChildren)->delete();
-            ProductTag::whereIn('product_id',$productChildren)->delete();
-            ProductRelated::whereIn('parent_product_id',$productChildren)->delete();
-        
         }
+        // elseif($productType=='bundle'){
+
+        //     $productChildren =$product->productRelatedChildren->pluck('id');
+
+        //     // Product::whereIn('id',$productChildren)->delete();
+        //     // ProductCategory::whereIn('product_id',$productChildren)->delete();
+        //     // ProductField::whereIn('product_id',$productChildren)->delete();
+        //     // ProductImage::whereIn('product_id',$productChildren)->delete();
+        //     // ProductLabel::whereIn('product_id',$productChildren)->delete();
+        //     // ProductPrice::whereIn('product_id',$productChildren)->delete();
+        //     // ProductTag::whereIn('product_id',$productChildren)->delete();
+        //     ProductRelated::whereIn('parent_product_id',$productChildren)->delete();
+
+        // }
+        ProductRelated::whereIn('parent_product_id',$product->id)->delete();
 
             ProductCategory::where('product_id',$product->id)->delete();
             ProductField::where('product_id',$product->id)->delete();
