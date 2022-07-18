@@ -51,7 +51,6 @@ class UnitController extends MainController
         $unit->name = $request->name;
         $unit->code=$request->code;
 
-
         if(!$unit->save())
             return $this->errorResponse(__('messages.failed.create',['name' => __(self::OBJECT_NAME)]));
 
@@ -94,7 +93,7 @@ class UnitController extends MainController
      */
     public function update(StoreUnitRequest $request, Unit $unit)
     {
-        $unit->name=json_encode($request->name);
+        $unit->name=($request->name);
         $unit->code=$request->code;
 
 
