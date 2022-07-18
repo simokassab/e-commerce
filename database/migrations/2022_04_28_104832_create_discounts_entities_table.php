@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('discount_id')->nullable();
-            $table->foreign('discount_id')->references('id')->on('discount')->nullOnDelete();
+            $table->foreign('discount_id')->references('id')->on('discounts')->nullOnDelete();
 
             $table->unsignedBigInteger('category_id')->nullable();
             $table->foreign('category_id')->references('id')->on('categories')->nullOnDelete();

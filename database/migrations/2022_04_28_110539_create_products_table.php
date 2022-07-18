@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->json('name');
             $table->string('slug',250)->unique();
-            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->foreign('category_id')->references('id')->on('categories')->nullOnDelete()->cascadeOnUpdate();
             $table->string('code',250);
             $table->string('sku',250);
@@ -32,7 +32,7 @@ return new class extends Migration
             $table->string('image',250)->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->foreign('brand_id')->references('id')->on('brands')->nullOnDelete()->cascadeOnUpdate();
-            $table->unsignedBigInteger('tax_id');
+            $table->unsignedBigInteger('tax_id')->nullable();
             $table->foreign('tax_id')->references('id')->on('taxes')->nullOnDelete()->cascadeOnUpdate();
             $table->json('meta_title')->nullable();
             $table->json('meta_description')->nullable();
