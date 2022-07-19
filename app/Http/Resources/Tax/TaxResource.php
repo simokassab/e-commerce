@@ -15,7 +15,7 @@ class   TaxResource extends JsonResource
     public function toArray($request)
     {
 
-        $taxComponent=$this->whenLoaded('taxComponent');
+//        $taxComponent=$this->whenLoaded('taxComponent');
 
         return[
             'id' => $this->id,

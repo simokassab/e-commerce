@@ -16,7 +16,6 @@ class TaxController extends MainController
 
     const OBJECT_NAME = 'objects.tax';
 
-
     /**
      * Display a listing of the resource.
      *
@@ -41,7 +40,10 @@ class TaxController extends MainController
      */
     public function create()
     {
-        //
+        $taxes = Tax::all();
+        return $this->successResponse('success!',[
+            'components' =>  TaxResource::collection($taxes)
+        ]);
     }
 
     /**
