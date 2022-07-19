@@ -93,14 +93,18 @@ class ProductController extends MainController
     {
         DB::beginTransaction();
         try {
+
             $product = $this->productService->createProduct($request->all());
-            if($request->type=='variable' && $request->product_variations){
-               $this->productService->storeVariationsAndPrices($request,$product);
+
+            $childrenIds=[];
+            if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
+               $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
             }
 
-            // $this->productService->storeAdditionalProductData($request,$product->id);
+            $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
 
         DB::commit();
+        dd('stop');
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
         'product' =>  new ProductResource($product)
           ]);
@@ -208,7 +212,7 @@ class ProductController extends MainController
     {
         DB::beginTransaction();
         try {
-            ProductService::deleteRelatedDataForProduct($product);
+            // ProductService::deleteRelatedDataForProduct($product);
             $product->delete();
             return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)])]);
             DB::commit();

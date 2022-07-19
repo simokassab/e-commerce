@@ -88,11 +88,11 @@ class StoreProductRequest extends FormRequest
             'fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
             'fields.*.value'=> 'nullable | max:'.config('defaults.default_string_length_2'),
 
-            'images.*.image' => 'required | file
+            'images.*.image' => 'required 
             | mimes:'.config('defaults.default_image_extentions').'
             | max:'.config('defaults.default_image_size').'
             | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
-            'images.*.title' => 'required | string | max:'.config('defaults.default_string_length'),
+            'images.*.title' => 'required ',
             'images.*.sort' => 'required | integer',
 
             'labels.*.label_id' => 'required | integer | exists:labels,id',

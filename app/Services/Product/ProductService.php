@@ -20,40 +20,49 @@ class ProductService
 {
 public $request,$product_id;
 
-    public function storeAdditionalProductData(Request $request, $product_id)
+    public function storeAdditionalProductData(Request $request, $product_id,$childrenIds)
     {
 
         $this->request = $request;
         $this->product_id = $product_id;
+        $this->childrenIds = $childrenIds ?? [];
 
         self::storeAdditionalCategrories()
-            ->storeAdditionalFields()
-            ->storeAdditionalImages()
+            // ->storeAdditionalFields();
+            // ->storeAdditionalImages()
             ->storeAdditionalLabels()
             ->storeAdditionalTags()
-            ->storeAdditionalBundle()
+            // ->storeAdditionalBundle()
             ->storeAdditionalPrices();
 
     }
 
-    private function storeAdditionalCategrories(){
-        if ($this->request->has('categories')) {
-            $categoriesArray = $this->request->categories ?? [];
-            $categoriesChildrenArray = $this->request->categories ?? [];
-            foreach ($this->request->categories as $category => $value) {
-                $categoriesArray[$category]["product_id"] = $this->product_id;
-                $categoriesArray[$category]["created_at"] = Carbon::now()->toDateTimeString();
-                $categoriesArray[$category]["updated_at"] = Carbon::now()->toDateTimeString();
+    //DONE
+    private function storeAdditionalCategrories(){ 
+        if (!$this->request->has('categories')) 
+            return $this;
+        
+        $childrenIdsArray=$this->childrenIds;
+        $childrenIdsArray[]=$this->product_id;
 
-                $categoriesChildrenArray[$category]["product_id"] = $this->product_id+1;
-                $categoriesChildrenArray[$category]["created_at"] = Carbon::now()->toDateTimeString();
-                $categoriesChildrenArray[$category]["updated_at"] = Carbon::now()->toDateTimeString();
+        $data = [];
+        foreach($childrenIdsArray as $key => $child){
+            foreach ($this->request->categories as $index => $category) {
+                $data[] = [
+                        'product_id' => $child,
+                        'category_id' => $category['category_id'],
+                        'created_at'  => Carbon::now()->toDateTimeString(),
+                        'updated_at' => Carbon::now()->toDateTimeString(),
+                ];
             }
-            $categoiresArrayMixed=array_merge($categoriesArray,$categoriesChildrenArray);
-            ProductCategory::insert($categoiresArrayMixed);
+        }
+            
+        if(ProductCategory::insert($data)){
+            return $this;
         }
 
-        return $this;
+        throw new Exception('Error while storing product categories');
+        
     }
     private function storeAdditionalFields(){
         if ($this->request->has('fields')) {
@@ -68,14 +77,6 @@ public $request,$product_id;
 
 
             foreach ($this->request->fields as $field => $value) {
-
-                // $fieldsArray[$field]["value"] = [
-                //     'select' => null,
-                //     'default' => json_encode($value['value']),
-                // ][$fieldsArray[$field]["type"]];
-
-                // $fieldsArray[$field]["field_value_id"] = $fieldsArray[$field]["type"] != 'select' ? null : ;
-
 
                 if ($fieldsArray[$field]["type"] == 'select')
                     $fieldsArray[$field]["value"] =  null;
@@ -96,31 +97,71 @@ public $request,$product_id;
     }
     private function storeAdditionalImages(){
         if ($this->request->has('images')) {
-            $imagesArray = $this->request->images ?? [];
-            foreach ($this->request->images as $image => $value) {
-                $imagesArray[$image]["product_id"] = $this->product_id;
-                $imagesArray[$image]["title"] = json_encode($value['title']);
-                $imagesArray[$image]["created_at"] = Carbon::now()->toDateTimeString();
-                $imagesArray[$image]["updated_at"] = Carbon::now()->toDateTimeString();
+
+        $childrenIdsArray=$this->childrenIds;
+        $childrenIdsArray[]=$this->product_id;
+
+            $data = [];
+            foreach($childrenIdsArray as $key => $child){
+                foreach ($this->request->images as $index => $image) {
+                    $data [$key][$index] = [
+                        'product_id' => $child,
+                        'title' => json_encode($image['title']),
+                        'created_at'  => today()->toDateString(),
+                        'updated_at' => today()->toDateString(),
+                    ];
+                }
             }
-            ProductImage::insert($imagesArray);
+            $finalImagesData=collect($data)->collapse()->toArray();
+            ProductImage::insert($finalImagesData);
         }
+        // if ($this->request->has('images')) {
+        //     $imagesArray = $this->request->images ?? [];
+        //     foreach ($this->request->images as $image => $value) {
+        //         $imagesArray[$image]["product_id"] = $this->product_id;
+        //         $imagesArray[$image]["title"] = json_encode($value['title']);
+        //         $imagesArray[$image]["created_at"] = Carbon::now()->toDateTimeString();
+        //         $imagesArray[$image]["updated_at"] = Carbon::now()->toDateTimeString();
+        //     }
+        //     ProductImage::insert($imagesArray);
+        // }
 
         return $this;
     }
-    private function storeAdditionalLabels(){
+
+    //DONE
+    private function storeAdditionalLabels(){   
         if ($this->request->has('labels')) {
-            $labelsArray = $this->request->labels ?? [];
-            foreach ($this->request->labels as $label => $value) {
-                $labelsArray[$label]["product_id"] = $this->product_id;
-                $labelsArray[$label]["created_at"] = Carbon::now()->toDateTimeString();
-                $labelsArray[$label]["updated_at"] = Carbon::now()->toDateTimeString();
+            $childrenIdsArray=$this->childrenIds;
+            $childrenIdsArray[]=$this->product_id;
+            $data = [];
+            foreach($childrenIdsArray as $key => $child){
+                foreach ($this->request->labels as $index => $label) {
+                    $data [$key][$index] = [
+                        'product_id' => $child,
+                        'label_id' => $label['label_id'],
+                        'created_at'  => Carbon::now()->toDateTimeString(),
+                        'updated_at' => Carbon::now()->toDateTimeString(),
+                    ];
+                }
             }
-            ProductLabel::insert($labelsArray);
+            $finalLabelsData=collect($data)->collapse()->toArray();
+            ProductLabel::insert($finalLabelsData);
+        }
+        return $this;
         }
 
-        return $this;
-    }
+        // if ($this->request->has('labels')) {
+        //     $labelsArray = $this->request->labels ?? [];
+        //     foreach ($this->request->labels as $label => $value) {
+        //         $labelsArray[$label]["product_id"] = $this->product_id;
+        //         $labelsArray[$label]["created_at"] = Carbon::now()->toDateTimeString();
+        //         $labelsArray[$label]["updated_at"] = Carbon::now()->toDateTimeString();
+        //     }
+        //     ProductLabel::insert($labelsArray);
+        // }
+
+    
     private function storeAdditionalPrices(){
         if ( $this->request ->has('prices')) {
             $pricesArray =  $this->request ->prices ?? [];
@@ -134,20 +175,30 @@ public $request,$product_id;
         return $this;
         }
 
-
-
-    private function storeAdditionalTags(){
-        if ($this->request->has('tags')) {
-            $tagsArray = $this->request->tags ?? [];
-            foreach ($this->request->tags as $tag => $value) {
-                $tagsArray[$tag]["product_id"] = $this->product_id;
-                $tagsArray[$tag]["created_at"] = Carbon::now()->toDateTimeString();
-                $tagsArray[$tag]["updated_at"] = Carbon::now()->toDateTimeString();
+  
+        //DONE
+        private function storeAdditionalTags(){
+         if ($this->request->has('tags')) {
+            $childrenIdsArray=$this->childrenIds;
+            $childrenIdsArray[]=$this->product_id;
+            $data = [];
+            foreach($childrenIdsArray as $key => $child){
+                foreach ($this->request->tags as $index => $tag) {
+                    $data [$key][$index] = [
+                        'product_id' => $child,
+                        'tag_id' => $tag['tag_id'],
+                        'created_at'  => Carbon::now()->toDateTimeString(),
+                        'updated_at' => Carbon::now()->toDateTimeString(),
+                    ];
+                }
             }
-            ProductTag::insert($tagsArray);
+            $finalLabelsData=collect($data)->collapse()->toArray();
+            ProductTag::insert($finalLabelsData);
         }
         return $this;
-    }
+        }
+
+   
     private function storeAdditionalBundle(){
         if ($this->request->type == 'bundle') {
             $relatedProductsArray = $this->request->related_products ?? [];
@@ -202,9 +253,11 @@ public $request,$product_id;
     public function storeVariationsAndPrices(Request $request,$product){
 
         try{
+            $childrenIds = [];
             $data = [];
             throw_if(!$request->product_variations, Exception::class, 'No variations found');
             foreach ($request->product_variations as $variation) {
+
                 $productVariationsArray = [
                             'name' => json_encode($request->name),
                             'slug' => $variation['slug'],
@@ -231,22 +284,30 @@ public $request,$product_id;
                             'status' => $request->status,
                             'parent_product_id' => $product->id,
                             'products_statuses_id' => $request->products_statuses_id,
+
                         ];
+
                         $productVariation = Product::create($productVariationsArray);
 
-                        $pricesInfo = $request->isSameAsParent ? $request->prices : $variation['child_prices'];
-                        
-                        foreach ($pricesInfo as $key => $price) {
+                        $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
+                        foreach ($pricesInfo as $key => $price) {   
                             $pricesInfo[$key]['product_id'] = $productVariation->id;
+                            
                         }
+
+                        $childrenIds[] = $productVariation->id;  
+
                         $data[] = $pricesInfo;
-
-
             }   
             $finalPricesCollect=collect($data)->collapse()->toArray();
-
             ProductPrice::insert($finalPricesCollect);
+            
 
+            if(count($childrenIds)> 0){
+                return $childrenIds;
+            }
+
+            throw new Exception('No variations found');
         }catch(Exception $e){
             throw new Exception($e->getMessage());
         }
@@ -255,8 +316,6 @@ public $request,$product_id;
 
     public function createProduct($data){
         try{
-
-            $mainController = new MainController();
 
             $product=new Product();
             $product->name = json_encode($data['name']);
@@ -267,11 +326,10 @@ public $request,$product_id;
             $product->quantity = $data['quantity'] ?? 0;
             $product->reserved_quantity = $data['reserved_quantity'] ?? 0;
             $product->minimum_quantity = $data['minimum_quantity'] ?? 0;
-
             $product->summary = json_encode($data['summary']);
             $product->specification = json_encode($data['specification']);
             if($data['image'])
-                $product->image= $mainController->imageUpload($data['file']('image'),config('images_paths.product.images'));
+                $product->image= uploadImage($data['file']('image'),config('images_paths.product.images'));
 
             $product->meta_title = json_encode($data['meta_title']);
             $product->meta_description = json_encode($data['meta_description']);
@@ -292,6 +350,7 @@ public $request,$product_id;
             $product->tax_id = $data['tax_id'];
             $product->products_statuses_id = $data['products_statuses_id'];
             $product->save();
+
         }catch(Exception $e){
             throw new Exception($e->getMessage());
         }
@@ -300,21 +359,6 @@ public $request,$product_id;
     }
 
 
-    public function inhertPrices($prices,$childrenIds){
-        if ($prices) {
-            dd($prices);
-            $childrenArray = [];
-            foreach ($childrenIds as $childId => $value) {
-                $childrenArray[$childId]["price_id"] =$prices[0]["price_id"];
-                $childrenArray[$childId]["price"] =  $prices[0]["price"];
-                $childrenArray[$childId]["discounted_price"] = $prices[0]["discounted_price"];
-                $childrenArray[$childId]["product_id"] = $childrenIds[$childId];
-                $childrenArray[$childId]["created_at"] = Carbon::now()->toDateTimeString();
-                $childrenArray[$childId]["updated_at"] = Carbon::now()->toDateTimeString();
-            }
-            ProductPrice::insert($childrenArray);
-        }
-    }
 
     
 }
