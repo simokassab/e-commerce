@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('products_related', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('parent_product_id');
-            $table->unsignedBigInteger('child_product_id');
+            $table->unsignedBigInteger('parent_product_id')->nullable();
+            $table->unsignedBigInteger('child_product_id')->nullable();
 
             $table->foreign('parent_product_id')->references('id')->on('products')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('child_product_id')->references('id')->on('products')->nullOnDelete()->cascadeOnUpdate();

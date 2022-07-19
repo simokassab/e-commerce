@@ -26,7 +26,8 @@ class Product extends MainModel
     protected $translatable=['name','summary','specification','description','meta_title','meta_description','meta_keywords'];
     protected $table='products';
     protected $guard_name = 'web';
-    protected $fillable=['type'];
+    protected $guarded=[];
+
 
     public function parent(){
         return $this->belongsTo(Product::class,'parent_product_id');

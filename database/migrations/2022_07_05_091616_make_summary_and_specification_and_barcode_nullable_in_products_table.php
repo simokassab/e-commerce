@@ -18,7 +18,6 @@ return new class extends Migration
             $table->json('specification')->nullable()->change();
             $table->string('barcode',250)->nullable()->change();
             $table->string('sku',250)->nullable()->change();
-            $table->unsignedBigInteger('tax_id')->nullable()->change();
         });
     }
 

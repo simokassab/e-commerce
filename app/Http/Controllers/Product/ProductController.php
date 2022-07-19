@@ -91,27 +91,26 @@ class ProductController extends MainController
      */
     public function store(StoreProductRequest $request)
     {
-        // DB::beginTransaction();
-        // try {
-            $product = $this->productService->createProduct($request->validated());
-
+        DB::beginTransaction();
+        try {
+            $product = $this->productService->createProduct($request->all());
             if($request->type=='variable' && $request->product_variations){
-               $this->productService->storeVariations($request,$product->id);
+               $this->productService->storeVariationsAndPrices($request,$product);
             }
-            
-            $this->productService->storeAdditionalProductData($request,$product->id);
 
-        // DB::commit();
+            // $this->productService->storeAdditionalProductData($request,$product->id);
+
+        DB::commit();
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
         'product' =>  new ProductResource($product)
           ]);
-        // }catch (\Exception $ex) {
-        //     DB::rollBack();
-        //     return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
-        //     'message' => $ex->getMessage()
-        //      ]);
+        }catch (\Exception $ex) {
+            DB::rollBack();
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
+            'message' => $ex->getMessage()
+             ]);
 
-        // }
+        }
     }
 
     /**

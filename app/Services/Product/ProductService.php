@@ -12,6 +12,7 @@ use App\Models\Product\ProductPrice;
 use App\Models\Product\ProductRelated;
 use App\Models\Product\ProductTag;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -32,10 +33,6 @@ public $request,$product_id;
             ->storeAdditionalTags()
             ->storeAdditionalBundle()
             ->storeAdditionalPrices();
-
-            if(!$request->isSamePriceAsParent){
-                self::storeChildPrices();
-            }
 
     }
 
@@ -61,12 +58,30 @@ public $request,$product_id;
     private function storeAdditionalFields(){
         if ($this->request->has('fields')) {
             $fieldsArray = $this->request->fields ?? [];
+
+            $data = collect($this->request->fields);
+            $data->each(function ($item, $key) {
+                $item['product_id'] = $this->product_id;
+                $item['created_at'] = Carbon::now()->toDateTimeString();
+                $item['updated_at'] = Carbon::now()->toDateTimeString();
+            });
+
+
             foreach ($this->request->fields as $field => $value) {
+
+                // $fieldsArray[$field]["value"] = [
+                //     'select' => null,
+                //     'default' => json_encode($value['value']),
+                // ][$fieldsArray[$field]["type"]];
+
+                // $fieldsArray[$field]["field_value_id"] = $fieldsArray[$field]["type"] != 'select' ? null : ;
+
+
                 if ($fieldsArray[$field]["type"] == 'select')
-                    $fieldsArray[$field]["value"] = null;
+                    $fieldsArray[$field]["value"] =  null;
                 else {
-                    $fieldsArray[$field]["field_value_id"] = null;
                     $fieldsArray[$field]["value"] = json_encode($value['value']);
+                    $fieldsArray[$field]["field_value_id"] = null;
                 }
 
                 $fieldsArray[$field]["product_id"] = $this->product_id;
@@ -119,18 +134,7 @@ public $request,$product_id;
         return $this;
         }
 
-    private function storeChildPrices(){
-        if($this->request->has('child_prices')){
-            $childPricesArray = $this->request->child_prices ?? [];
-            foreach ($this->request->child_prices as $childPrice => $value) {
-                $childPricesArray[$childPrice]["product_id"] = $this->product_id+1;
-                $childPricesArray[$childPrice]["created_at"] = Carbon::now()->toDateTimeString();
-                $childPricesArray[$childPrice]["updated_at"] = Carbon::now()->toDateTimeString();
-            }
-            ProductPrice::insert($childPricesArray);
-        }
-        return $this;
-        }
+
 
     private function storeAdditionalTags(){
         if ($this->request->has('tags')) {
@@ -195,86 +199,122 @@ public $request,$product_id;
 
     }
 
-    public function storeVariations(Request $request, $productId){
-        $productVariationsArray=[];
-        foreach ($request->product_variations as $key => $variation) {
-                    $productVariationsArray[$key]['name']=  json_encode($request->name);
-                    $productVariationsArray[$key]['slug'] = $variation['slug'];
-                    $productVariationsArray[$key]['code'] = $variation['code'];
-                    $productVariationsArray[$key]['type'] ='variable_child';
-                    $productVariationsArray[$key]['sku']= $variation['sku'];
-                    $productVariationsArray[$key]['quantity'] = $variation['quantity'];
-                    $productVariationsArray[$key]['reserved_quantity']= $variation['reserved_quantity'];
-                    $productVariationsArray[$key]['minimum_quantity'] = $variation['minimum_quantity'];
-                    $productVariationsArray[$key]['height'] = $variation['height'];
-                    $productVariationsArray[$key]['width']= $variation['width'];
-                    $productVariationsArray[$key]['length']= $variation['length'];
-                    $productVariationsArray[$key]['weight'] = $variation['weight'];
-                    $productVariationsArray[$key]['barcode'] = $variation['barcode'];
-                    $productVariationsArray[$key]['category_id'] = $request->category_id;
-                    $productVariationsArray[$key]['unit_id'] = $request->unit_id;
-                    $productVariationsArray[$key]['tax_id'] = $request->tax_id;
-                    $productVariationsArray[$key]['brand_id'] = $request->brand_id;
-                    $productVariationsArray[$key]['summary'] = json_encode($request->summary);
-                    $productVariationsArray[$key]['specification'] = json_encode($request->specification);
-                    $productVariationsArray[$key]['meta_title'] = json_encode($request->meta_title);
-                    $productVariationsArray[$key]['meta_description'] = json_encode($request->meta_description);
-                    $productVariationsArray[$key]['description'] = json_encode($request->description);
-                    $productVariationsArray[$key]['status'] = $request->status;
-                    $productVariationsArray[$key]['parent_product_id'] = $productId;
-                    $productVariationsArray[$key]['products_statuses_id'] = $request->products_statuses_id;
+    public function storeVariationsAndPrices(Request $request,$product){
 
-                    // if($request->isSamePriceAsParent){
-                    //     ProductPrice::inhertPrices($request, $productId+1);
-                    // }
+        try{
+            $data = [];
+            throw_if(!$request->product_variations, Exception::class, 'No variations found');
+            foreach ($request->product_variations as $variation) {
+                $productVariationsArray = [
+                            'name' => json_encode($request->name),
+                            'slug' => $variation['slug'],
+                            'code' => $variation['code'],
+                            'type' =>'variable_child',
+                            'sku'=> $variation['sku'],
+                            'quantity' => $variation['quantity'],
+                            'reserved_quantity'=> $variation['reserved_quantity'],
+                            'minimum_quantity' => $variation['minimum_quantity'],
+                            'height' => $variation['height'],
+                            'width'=> $variation['width'],
+                            'length'=> $variation['length'],
+                            'weight' => $variation['weight'],
+                            'barcode' => $variation['barcode'],
+                            'category_id' => $request->category_id,
+                            'unit_id' => $request->unit_id,
+                            'tax_id' => $request->tax_id,
+                            'brand_id' => $request->brand_id,
+                            'summary' => json_encode($request->summary),
+                            'specification' => json_encode($request->specification),
+                            'meta_title' => json_encode($request->meta_title),
+                            'meta_description' => json_encode($request->meta_description),
+                            'description' => json_encode($request->description),
+                            'status' => $request->status,
+                            'parent_product_id' => $product->id,
+                            'products_statuses_id' => $request->products_statuses_id,
+                        ];
+                        $productVariation = Product::create($productVariationsArray);
+
+                        $pricesInfo = $request->isSameAsParent ? $request->prices : $variation['child_prices'];
+                        
+                        foreach ($pricesInfo as $key => $price) {
+                            $pricesInfo[$key]['product_id'] = $productVariation->id;
+                        }
+                        $data[] = $pricesInfo;
+
+
+            }   
+            $finalPricesCollect=collect($data)->collapse()->toArray();
+
+            ProductPrice::insert($finalPricesCollect);
+
+        }catch(Exception $e){
+            throw new Exception($e->getMessage());
         }
-        $newChildrenProducts = Product::insert($productVariationsArray);
-        if($newChildrenProducts){
-            $childrenIds=Product::where('parent_product_id',$productId)->pluck('id');
-                if($request->isSamePriceAsParent){
-                        ProductPrice::inhertPrices($request, $childrenIds);
-                    }
-        }
+
     }
 
-    public function createProduct($data, MainController $mainController)
-    {
-        dd($data);
-        $product=new Product();
-        $product->name = json_encode($data->name);
-        $product->slug = $data->slug;
-        $product->code = $data->code;
-        $product->sku = $data->sku;
-        $product->type = $data->type;
-        $product->quantity = $data->quantity ?? 0;
-        $product->reserved_quantity = $data->reserved_quantity ?? 0;
-        $product->minimum_quantity = $data->minimum_quantity ?? 0;
+    public function createProduct($data){
+        try{
 
-        $product->summary = json_encode($data->summary);
-        $product->specification = json_encode($data->specification);
-        if($data->image)
-            $product->image= $mainController->imageUpload($data->file('image'),config('images_paths.product.images'));
+            $mainController = new MainController();
 
-        $product->meta_title = json_encode($data->meta_title);
-        $product->meta_description = json_encode($data->meta_description);
-        $product->meta_keyword = json_encode($data->meta_keyword);
-        $product->description = json_encode($data->description);
-        $product->status = $data->status;
-        $product->barcode = $data->barcode;
-        $product->height = $data->height;
-        $product->width = $data->width;
-        $product->is_disabled=0;
-        $product->length = $data->length;
-        $product->weight = $data->weight;
-        $product->is_default_child = $data->is_default_child ?? 0;
-        $product->parent_product_id = $data->parent_product_id;
-        $product->category_id= $data->category_id;
-        $product->unit_id = $data->unit_id;
-        $product->brand_id = $data->brand_id;
-        $product->tax_id = $data->tax_id;
-        $product->products_statuses_id = $data->products_statuses_id;
-        $product->save();
+            $product=new Product();
+            $product->name = json_encode($data['name']);
+            $product->slug = $data['slug'];
+            $product->code = $data['code'];
+            $product->sku = $data['sku'];
+            $product->type = $data['type'];
+            $product->quantity = $data['quantity'] ?? 0;
+            $product->reserved_quantity = $data['reserved_quantity'] ?? 0;
+            $product->minimum_quantity = $data['minimum_quantity'] ?? 0;
+
+            $product->summary = json_encode($data['summary']);
+            $product->specification = json_encode($data['specification']);
+            if($data['image'])
+                $product->image= $mainController->imageUpload($data['file']('image'),config('images_paths.product.images'));
+
+            $product->meta_title = json_encode($data['meta_title']);
+            $product->meta_description = json_encode($data['meta_description']);
+            $product->meta_keyword = json_encode($data['meta_keyword']);
+            $product->description = json_encode($data['description']);
+            $product->status = $data['status'];
+            $product->barcode = $data['barcode'];
+            $product->height = $data['height'];
+            $product->width = $data['width'];
+            $product->is_disabled=0;
+            $product->length = $data['length'];
+            $product->weight = $data['weight'];
+            $product->is_default_child = $data['is_default_child'] ?? 0;
+            $product->parent_product_id = $data['parent_product_id'] ?? null;
+            $product->category_id= $data['category_id'];
+            $product->unit_id = $data['unit_id'];
+            $product->brand_id = $data['brand_id'];
+            $product->tax_id = $data['tax_id'];
+            $product->products_statuses_id = $data['products_statuses_id'];
+            $product->save();
+        }catch(Exception $e){
+            throw new Exception($e->getMessage());
+        }
 
         return $product;
     }
+
+
+    public function inhertPrices($prices,$childrenIds){
+        if ($prices) {
+            dd($prices);
+            $childrenArray = [];
+            foreach ($childrenIds as $childId => $value) {
+                $childrenArray[$childId]["price_id"] =$prices[0]["price_id"];
+                $childrenArray[$childId]["price"] =  $prices[0]["price"];
+                $childrenArray[$childId]["discounted_price"] = $prices[0]["discounted_price"];
+                $childrenArray[$childId]["product_id"] = $childrenIds[$childId];
+                $childrenArray[$childId]["created_at"] = Carbon::now()->toDateTimeString();
+                $childrenArray[$childId]["updated_at"] = Carbon::now()->toDateTimeString();
+            }
+            ProductPrice::insert($childrenArray);
+        }
+    }
+
+    
 }
