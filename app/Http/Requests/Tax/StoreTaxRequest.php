@@ -36,7 +36,7 @@ class StoreTaxRequest extends FormRequest
             'complex_behavior' => 'required_if:is_complex,true  | nullable | in:'.config('defaults.validation_default_complex_behavior'),
 
             'components' => 'required_if:is_complex,true',
-            'components.*'  => 'required_if:is_complex,1 | integer | exists:taxes,id',
+            'components.*'  => 'required_if:is_complex,true | integer | exists:taxes,id',
 
         ];
 
