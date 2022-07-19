@@ -37,7 +37,7 @@ class StoreTaxRequest extends FormRequest
             'is_complex' => 'required | boolean',
             'percentage' => ['required_if:is_complex,false' ,'nullable', 'numeric' , 'between:'.config('defaults.default_minimum_tax_percentage').','.config('defaults.default_maximum_tax_percentage')],
 //            'complex_behavior' => 'required_if:is_complex,true | in:'.config('defaults.validation_default_complex_behavior'),
-            'complex_behavior' => ['required_if:is_complex,true' ,Rule::when(!$request->is_complex,'in:'.config('defaults.validation_default_complex_behavior'))],
+            'complex_behavior' => ['required_if:is_complex,true' ,Rule::when($request->is_complex,'in:'.config('defaults.validation_default_complex_behavior'))],
 
             'components' => 'required_if:is_complex,true',
             'components.*'  => 'required_if:is_complex,true | integer | exists:taxes,id',
