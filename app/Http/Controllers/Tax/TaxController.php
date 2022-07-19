@@ -142,7 +142,7 @@ class TaxController extends MainController
 
             $tax->save();
 
-            if($request->is_complex &&  ($request->components != null || count($request->components) > 0)){
+            if($request->is_complex && ($request->components != null || count($request->components) > 0)){
                 TaxsServices::createComponentsForTax($request->components, $tax);
             }
 
