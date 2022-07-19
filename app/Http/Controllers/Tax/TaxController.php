@@ -84,7 +84,7 @@ class TaxController extends MainController
     return $this->successResponse(
         __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
         [
-            'Taxes' => new SingleTaxResource($tax)
+            'Taxes' => new SingleTaxResource($tax->load('taxComponents'))
         ]
     );
 
@@ -100,7 +100,7 @@ class TaxController extends MainController
      */
     public function show(Tax $tax)
     {
-        return $this->successResponse('Success' , ['tax' => new TaxResource($tax)]);
+        return $this->successResponse('Success' , ['tax' => new SingleTaxResource($tax->load('taxComponents'))]);
     }
 
     /**
@@ -149,7 +149,7 @@ class TaxController extends MainController
             return $this->successResponse(
                 __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
                 [
-                    'Taxes' => new SingleTaxResource($tax)
+                    'Taxes' => new SingleTaxResource($tax->load('taxComponents'))
                 ]
             );
 
@@ -180,7 +180,7 @@ class TaxController extends MainController
             return $this->successResponse(
                 __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
                 [
-                    'taxes' => new SingleTaxResource($tax)
+                    'taxes' => new SingleTaxResource($tax->load('taxComponents'))
                 ]
             );
 

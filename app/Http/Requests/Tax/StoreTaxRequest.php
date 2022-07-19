@@ -30,10 +30,9 @@ class StoreTaxRequest extends FormRequest
     {
 
         return [
-
             'name' => 'required',
             'is_complex' => 'required | boolean',
-            'percentage' => ['required_if:is_complex,true', 'nullable' , 'numeric' , 'between:'.config('defaults.default_minimum_tax_percentage').','.config('defaults.default_maximum_tax_percentage')],
+            'percentage' => ['required_if:is_complex,false' , 'numeric' , 'between:'.config('defaults.default_minimum_tax_percentage').','.config('defaults.default_maximum_tax_percentage')],
             'complex_behavior' => 'required_if:is_complex,true  | nullable | in:'.config('defaults.validation_default_complex_behavior'),
 
             'components' => 'required_if:is_complex,true',
