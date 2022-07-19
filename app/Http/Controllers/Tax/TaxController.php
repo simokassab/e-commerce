@@ -57,7 +57,8 @@ class TaxController extends MainController
 
     $tax=new Tax();
     $tax->name = ($request->name);
-    $tax->is_complex = (boolean)$request->complex_behavior;
+        $tax->is_complex = (boolean)$request->is_complex;
+        $tax->complex_behavior = $request->complex_behavior;
 
     if($request->is_complex){
         $tax->percentage = 0;
@@ -129,7 +130,7 @@ class TaxController extends MainController
             TaxsServices::deleteRelatedTaxComponents($tax);
 
             $tax->name = ($request->name);
-            $tax->is_complex = $request->is_complex;
+            $tax->is_complex = (boolean)$request->is_complex;
             if($request->is_complex){
                 $tax->percentage = 0;
                 $tax->complex_behavior = $request->complex_behavior;
