@@ -431,12 +431,6 @@ return [
             'type' => 'string',
             'sort' => true
         ],
-        'is_complex' => [
-            'name' => 'Is Complex',
-            'search' => 'string',
-            'type' => 'string',
-            'sort' => true
-        ],
         'percentage' => [
             'name' => 'Percentage',
             'search' => 'string',
