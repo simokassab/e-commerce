@@ -14,7 +14,7 @@ class Field extends MainModel
 {
     use HasFactory,HasTranslations;
 
-    protected $translatable=['title'];
+    protected array $translatable=['title'];
     protected $table='fields';
 
 

@@ -106,7 +106,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
 
 
     Route::post('tax/all',[TaxController::class,'index']);//for searching
-        Route::get('tax/create' , [TaxController::class,'create']);
+    Route::get('tax/create' , [TaxController::class,'create']);
     Route::apiResource('tax',TaxController::class);
 
     Route::post('price/all',[PricesController::class,'index']);// for search

@@ -7,6 +7,8 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Brand\StoreBrandRequest;
 use App\Http\Resources\Brand\BrandResource;
 use App\Http\Resources\Brand\SingleBrandResource;
+use App\Http\Resources\Field\FieldsResource;
+use App\Http\Resources\Label\LabelsResource;
 use App\Models\Brand\Brand;
 use App\Models\Brand\BrandField;
 use App\Models\Brand\BrandLabel;
@@ -52,14 +54,13 @@ class BrandController extends MainController
     public function create()
     {
         $fields= Field::with('fieldValue')->whereEntity('brand')->get();
-
         $labels= Label::whereEntity('brand')->get();
 
         return $this->successResponse(
             'Success!',
             [
-                'fields'=>$fields,
-                'labels'=>$labels
+                'fields'=>  FieldsResource::collection($fields),
+                'labels'=>LabelsResource::collection($labels)
             ]
         );
     }
