@@ -74,6 +74,7 @@ class BrandController extends MainController
     {
         DB::beginTransaction();
         try {
+
             //Brand Store
             $brand = new Brand();
             $brand->name = json_encode($request->name);
@@ -115,7 +116,7 @@ class BrandController extends MainController
                     }
                     //End of Labels Store
 
-                    DB::commit();
+                    // DB::commit();
 
                     return $this->successResponse(
                         __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
