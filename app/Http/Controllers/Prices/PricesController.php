@@ -49,7 +49,7 @@ class PricesController extends MainController
         return $this->successResponse(
             'Success!',
             [
-                'prices' => SinglePriceResource::collection($originalPrices)
+                'prices' => PriceResource::collection($originalPrices)
             ]
         );
     }
