@@ -51,9 +51,9 @@ class BrandController extends MainController
      */
     public function create()
     {
-        $fields= Field::with('fieldValue')->whereEntity('brands')->get();
+        $fields= Field::with('fieldValue')->whereEntity('brand')->get();
 
-        $labels= Label::whereEntity('brands')->get();
+        $labels= Label::whereEntity('brand')->get();
 
         return $this->successResponse(
             'Success!',
@@ -72,8 +72,8 @@ class BrandController extends MainController
      */
     public function store(StoreBrandRequest $request)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
 
             //Brand Store
             $brand = new Brand();
@@ -116,7 +116,7 @@ class BrandController extends MainController
                     }
                     //End of Labels Store
 
-                    DB::commit();
+                    // DB::commit();
 
                     return $this->successResponse(
                         __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
@@ -124,16 +124,16 @@ class BrandController extends MainController
                             'brands' => new SingleBrandResource($brand)
                         ]
                     );
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return $this->errorResponse(
-                __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ,
-                [
-                    'brands' => new SingleBrandResource($brand),
-                ]
-            );
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return $this->errorResponse(
+        //         __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ,
+        //         [
+        //             'brands' => new SingleBrandResource($brand),
+        //         ]
+        //     );
 
-        }
+        // }
     }
 
     /**

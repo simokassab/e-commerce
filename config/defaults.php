@@ -29,7 +29,7 @@ return [
      'default_icon_maximum_height' => 1000,
 //END ICON
 
-    'validation_default_entities' => 'category,product,brands',
+    'validation_default_entities' => 'category,product,brand',
 
     'validation_default_type' => 'checkbox,text,select,textarea,date',
 
