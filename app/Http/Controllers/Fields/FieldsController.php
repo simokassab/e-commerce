@@ -67,8 +67,8 @@ class FieldsController extends MainController
 
         $check=true;
 
-          if($request->type=='select' && $request->field_value){
-              $check = FieldService::addFieldValuesToField($request->field_value,$field);
+          if($request->type=='select' && $request->field_values){
+              $check = FieldService::addFieldValuesToField($request->field_values,$field);
           }
 
             if(!$check)
@@ -131,8 +131,8 @@ class FieldsController extends MainController
             $field->is_required = $request->is_required;
             $field->save();
 
-            if ($request->type == 'select' && $request->field_value) {
-                FieldService::addFieldValuesToField($request->field_value, $field);
+            if ($request->type == 'select' && $request->field_values) {
+                FieldService::addFieldValuesToField($request->field_values, $field);
             }
 
                 DB::commit();
