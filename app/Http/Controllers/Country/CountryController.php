@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Country;
 use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Countries\StoreCountryRequest;
+use App\Http\Requests\Countries\UpdateCountryRequest;
 use App\Http\Resources\Country\CountryResource;
 use App\Models\Country\Country;
 use Exception;
@@ -111,7 +112,7 @@ class CountryController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(StoreCountryRequest $request, Country $country)
+    public function update(UpdateCountryRequest $request, Country $country)
     {
         $dataTranslatable = (array)json_decode($request->name);
         $country->name =  ($dataTranslatable);
