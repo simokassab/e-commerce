@@ -17,6 +17,7 @@ class PricesController extends MainController
     /**
      * Display a listing of the resource.
      *
+     *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      * @throws \Exception
      */
@@ -62,7 +63,7 @@ class PricesController extends MainController
     public function store(PricesRequest $request)
     {
         $price = new Price();
-        $price->name = json_encode($request->name);
+        $price->name = ($request->name);
         $price->currency_id = $request->currency_id;
         $price->is_virtual = (bool)$request->is_virtual;
 
@@ -78,7 +79,7 @@ class PricesController extends MainController
             return $this->successResponse(
                 __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
                 [
-                    'price' => new PriceResource($price->load(['originalPrice','currency']))
+                    'price' => new SinglePriceResource($price->load(['originalPrice','currency']))
                 ]
             );
         }
@@ -127,7 +128,7 @@ class PricesController extends MainController
     public function update(PricesRequest $request, Price $price)
     {
 
-        $price->name = json_encode($request->name);
+        $price->name = ($request->name);
         $price->currency_id = $request->currency_id;
         $price->is_virtual = (bool)$request->is_virtual;
 
@@ -143,7 +144,7 @@ class PricesController extends MainController
             return $this->successResponse(
                 __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
                 [
-                    'price' => new PriceResource($price->load(['originalPrice','currency']))
+                    'price' => new SinglePriceResource($price->load(['originalPrice','currency']))
                 ]
             );
         }

@@ -56,11 +56,14 @@ function notFoundError($message = 'Not found!',Array $data=[],$returnCode = -2, 
 
 function removeImage($folderpath)
 {
-        if(Storage::exists($folderpath)){
-           return Storage::delete($folderpath);
-        }
+    if( (empty($folderpath)) || $folderpath == null){
+        return true ;
+    }
+    if(Storage::exists($folderpath ?? '')){
+        return Storage::delete($folderpath);
+    }
 
-        return true;
+    return true;
 }
 
 function getLocaleTranslation($model,$key)

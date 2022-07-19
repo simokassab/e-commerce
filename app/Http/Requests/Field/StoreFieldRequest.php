@@ -32,9 +32,8 @@ class StoreFieldRequest extends MainRequest
             'is_required' => 'required | boolean',
 
 
-            'field_value' => 'required_if:type,select',
-            'field_value.*.field_id'  => 'required_if:type,select | integer | exists:fields,id',
-            'field_value.*.value'  => 'required_if:type,select',
+            'field_values' => 'required_if:type,select',
+            'field_values.*'  => 'required_if:type,select',
         ];
     }
 

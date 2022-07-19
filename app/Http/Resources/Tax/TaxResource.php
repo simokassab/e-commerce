@@ -22,7 +22,7 @@ class   TaxResource extends JsonResource
             'name' => $this->name,
             // 'is_complex' => $this->is_complex,
             'percentage' => $this->percentage,
-            'complex_behavior' => $this->complex_behavior,
+            'complex_behavior' => (boolean)$this->complex_behavior,
             // 'tax_component' => TaxComponentResource::collection($taxComponent)
         ];
     }

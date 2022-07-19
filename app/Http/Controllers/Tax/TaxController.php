@@ -27,10 +27,8 @@ class TaxController extends MainController
 
         $relations=['taxComponents'];
         if ($request->method()=='POST') {
-
             $searchKeys=['name','percentage','complex_behavior'];
             return $this->getSearchPaginated(TaxResource::class, Tax::class,$request, $searchKeys,$relations);
-
         }
         return $this->successResponsePaginated(TaxResource::class,Tax::class,$relations);
 
@@ -57,20 +55,20 @@ class TaxController extends MainController
 
     $tax=new Tax();
     $tax->name = ($request->name);
-    $tax->is_complex = $request->is_complex;
-    if($request->is_complex){
+    $tax->is_complex = (boolean)$request->complex_behavior;
+
+    if(!$request->is_complex){
         $tax->percentage = 0;
     }else{
         $tax->percentage = $request->percentage;
     }
-    $tax->complex_behavior = $request->complex_behavior;
 
     $check=true;
 
     if(!$tax->save())
         return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-    if($request->is_complex && $request->components){
+    if($request->is_complex && $request->components != null){
         $componentsArray=$request->components;
         foreach ($request->components as $component => $value)
             $componentsArray[$component]["tax_id"] = $tax->id;

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Country;
 use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Countries\StoreCountryRequest;
+use App\Http\Requests\Countries\UpdateCountryRequest;
 use App\Http\Resources\Country\CountryResource;
 use App\Models\Country\Country;
 use Exception;
@@ -111,16 +112,19 @@ class CountryController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(StoreCountryRequest $request, Country $country)
+    public function update(UpdateCountryRequest $request, Country $country)
     {
         $dataTranslatable = (array)json_decode($request->name);
         $country->name =  ($dataTranslatable);
         $country->iso_code_2 = $request->iso_code_2;
         $country->phone_code = $request->phone_code;
         if($request->flag){
-            if(!$this->removeImage($country->image) ){
-                 throw new FileErrorException();
-             }
+
+            if($country->image){
+                if(!$this->removeImage($country->image ) ){
+                    throw new FileErrorException();
+                }
+            }
             $country->flag= $this->imageUpload($request->file('flag'),config('images_paths.country.images'));
 
          }

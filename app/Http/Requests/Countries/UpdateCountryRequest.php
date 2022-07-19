@@ -4,9 +4,8 @@ namespace App\Http\Requests\Countries;
 
 use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
 
-class   StoreCountryRequest extends FormRequest
+class UpdateCountryRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,14 +22,14 @@ class   StoreCountryRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(Request $request)
+    public function rules()
     {
         return [
             'name' => 'required',
             'iso_code_1' => 'required | max:'.config('defaults.default_string_length'),
             'iso_code_2' => 'required | max:'.config('defaults.default_string_length'),
             'phone_code' => ['required' , 'max:6' , 'regex:/^\+\d{1,3}$/'],
-            'flag' => 'required | file
+            'flag' => 'nullable | file
                 | mimes:'.config('defaults.default_icon_extentions').'
                 | max:'.config('defaults.default_icon_size').'
                 | dimensions:max_width='.config('defaults.default_icon_maximum_width').',max_height='.config('defaults.default_icon_maximum_height')

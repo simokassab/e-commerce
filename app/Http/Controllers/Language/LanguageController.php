@@ -54,6 +54,7 @@ class LanguageController extends MainController
      */
     public function store(StoreLanguageRequest $request)
     {
+        return ;
         $language=new Language();
         $language->name = (array)json_decode($request->name);
         $language->code=$request->code;
@@ -110,6 +111,7 @@ class LanguageController extends MainController
      */
     public function update(StoreLanguageRequest $request, Language $language)
     {
+
         $language->name =  (array) json_decode($request->name);
         $language->code=$request->code;
         if($request->is_default){

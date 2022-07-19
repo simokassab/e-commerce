@@ -25,14 +25,12 @@ class SingleTaxResource extends JsonResource
             $nameTranslatable[$language] = $this->getTranslation('name',$language);
         }
 
-
-
         return[
             'id' => $this->id,
             'name' => $nameTranslatable,
-            'is_complex' => $this->is_complex,
+            'is_complex' => (boolean)$this->is_complex,
             'percentage' => $this->percentage,
-            'complex_behavior' => $this->complex_behavior,
+            'complex_behavior' => $this->is_complex,
             'tax_component' => TaxComponentResource::collection($taxComponent)
         ];
     }
