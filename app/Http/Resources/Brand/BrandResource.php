@@ -19,7 +19,7 @@ class BrandResource extends JsonResource
             'name' => $this->name,
             'code' => $this->code,
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
-            'is_disabled' => (boolean)$this->is_disabled,
+//            'is_disabled' => (boolean)$this->is_disabled,
 
             // 'meta_title' => $this->meta_title,
             // 'meta_description' => $this->meta_description,

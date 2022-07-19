@@ -23,10 +23,6 @@ class FieldsValueResource extends JsonResource
             $valueTranslatable[$language] = $this->getTranslation('value',$language);
         }
 
-        return [
-          'id' => $this->id,
-          'field_id'=> $this->field_id,
-          'value' => $valueTranslatable
-        ];
+        return $valueTranslatable;
     }
 }
