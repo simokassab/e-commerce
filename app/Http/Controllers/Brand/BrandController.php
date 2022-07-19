@@ -51,9 +51,9 @@ class BrandController extends MainController
      */
     public function create()
     {
-        $fields= Field::with('fieldValue')->whereEntity('brands')->get();
+        $fields= Field::with('fieldValue')->whereEntity('brand')->get();
 
-        $labels= Label::whereEntity('brands')->get();
+        $labels= Label::whereEntity('brand')->get();
 
         return $this->successResponse(
             'Success!',
@@ -74,7 +74,6 @@ class BrandController extends MainController
     {
         DB::beginTransaction();
         try {
-
             //Brand Store
             $brand = new Brand();
             $brand->name = json_encode($request->name);

@@ -57,7 +57,7 @@ class TaxController extends MainController
     $tax->name = ($request->name);
     $tax->is_complex = (boolean)$request->complex_behavior;
 
-    if(!$request->is_complex){
+    if($request->is_complex){
         $tax->percentage = 0;
     }else{
         $tax->percentage = $request->percentage;
@@ -68,12 +68,9 @@ class TaxController extends MainController
     if(!$tax->save())
         return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
 
-    if($request->is_complex && $request->components != null){
-        $componentsArray=$request->components;
-        foreach ($request->components as $component => $value)
-            $componentsArray[$component]["tax_id"] = $tax->id;
+    if($request->is_complex && ($request->components != null || count($request->components) > 0)){
+        TaxsServices::createComponentsForTax($request->components, $tax);
 
-        $check = TaxComponent::insert($componentsArray);
         }
 
         if(!$check)
@@ -133,19 +130,17 @@ class TaxController extends MainController
             $tax->is_complex = $request->is_complex;
             if($request->is_complex){
                 $tax->percentage = 0;
+                $tax->complex_behavior = $request->complex_behavior;
             }
             else{
+                $tax->complex_behavior = null;
                 $tax->percentage = $request->percentage;
-            }            $tax->complex_behavior = $request->complex_behavior;
+            }
 
             $tax->save();
 
-            if($request->is_complex && $request->components){
-                $componentsArray=$request->components;
-                foreach ($request->components as $component => $value)
-                   $componentsArray[$component]["tax_id"] = $tax->id;
-
-                TaxComponent::insert($componentsArray);
+            if($request->is_complex &&  ($request->components != null || count($request->components) > 0)){
+                TaxsServices::createComponentsForTax($request->components, $tax);
             }
 
             DB::commit();

@@ -16,6 +16,14 @@ class TaxsServices{
 
     }
 
+    public static function createComponentsForTax($components, $tax){
+        $componentsArray=$components;
+        foreach ($components as $component => $value)
+            $componentsArray[$component]["tax_id"] = $tax->id;
+
+        TaxComponent::insert($componentsArray);
+    }
+
 }
 
 
