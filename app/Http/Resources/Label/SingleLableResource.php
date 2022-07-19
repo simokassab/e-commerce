@@ -22,7 +22,6 @@ class SingleLableResource extends JsonResource
         foreach ($languages as $language){
             $titleTranslatable[$language] = $this->getTranslation('title',$language);
         }
-
         return [
             'id' => $this->id,
             'title' => $titleTranslatable,

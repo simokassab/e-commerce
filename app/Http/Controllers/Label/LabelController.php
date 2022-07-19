@@ -31,7 +31,6 @@ class LabelController extends MainController
         if ($request->method()=='POST') {
             $searchKeys=['title','entity','color','image',];
             return $this->getSearchPaginated(LabelsResource::class, Label::class,$request, $searchKeys);
-
         }
         return $this->successResponsePaginated(LabelsResource::class,Label::class);
 
@@ -89,7 +88,7 @@ class LabelController extends MainController
      */
     public function show(Label $label)
     {
-        return $this->successResponse('Success!',['label' => new LabelsResource($label)]);
+        return $this->successResponse('Success!',['label' => new SingleLableResource($label)]);
 
     }
 
@@ -118,14 +117,14 @@ class LabelController extends MainController
         $label->title =  ($dataTranslatable);
         $label->entity =$request->entity;
         $label->color = $request->color;
+        $label->key = $request->key;
+
         if($request->image){
             if( !$this->removeImage($label->image) ){
                  throw new FileErrorException();
              }
             $label->image= $this->imageUpload($request->file('image'),config('images_paths.label.images'));
-
          }
-        $label->key = $request->key;
 
         if(!$label->save())
             return $this->errorResponse(
@@ -161,8 +160,7 @@ class LabelController extends MainController
             ]
         );
 
-
-}
+    }
     public function getTableHeaders(){
         return $this->successResponse('Success!',['headers' => __('headers.labels') ]);
     }
