@@ -30,7 +30,7 @@ class SingleTaxResource extends JsonResource
             'name' => $nameTranslatable,
             'is_complex' => (boolean)$this->is_complex,
             'percentage' => $this->percentage,
-            'complex_behavior' => $this->is_complex,
+            'complex_behavior' => $this->complex_behavior,
             'components' =>$taxComponent,
         ];
     }
