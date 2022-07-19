@@ -59,7 +59,7 @@ class CurrencyController extends MainController
     {
 
         $currency = new Currency();
-        $currency->name=json_encode($request->name);
+        $currency->name=($request->name);
         $currency->code=$request->code;
         $currency->symbol=$request->symbol;
         $currency->rate=$request->rate;

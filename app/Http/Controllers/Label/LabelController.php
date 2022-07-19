@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Label;
 
 use App\Exceptions\FileErrorException;
 use App\Http\Resources\Label\LabelsResource;
+use App\Http\Resources\Label\SingleLableResource;
 use App\Models\Label\Label;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Labels\StoreLabelRequest;
@@ -56,9 +57,11 @@ class LabelController extends MainController
     {
         $label = new Label();
 
-        $label->title = json_encode($request->title);
+        $dataTranslatable = (array)json_decode($request->title);
+        $label->title =  ($dataTranslatable);
         $label->entity = $request->entity;
         $label->color = $request->color;
+
         if($request->image){
             $label->image= $this->imageUpload($request->file('image'),config('images_paths.label.images'));
         }
@@ -72,7 +75,7 @@ class LabelController extends MainController
         return $this->successResponse(
             __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             [
-                'label' => new LabelsResource($label)
+                'label' => new SingleLableResource($label)
             ]
         );
 
@@ -110,7 +113,9 @@ class LabelController extends MainController
      */
     public function update(StoreLabelRequest $request, Label $label)
     {
-        $label->title = json_encode($request->title);
+
+        $dataTranslatable = (array)json_decode($request->title);
+        $label->title =  ($dataTranslatable);
         $label->entity =$request->entity;
         $label->color = $request->color;
         if($request->image){
@@ -131,7 +136,7 @@ class LabelController extends MainController
         return $this->successResponse(
             __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             [
-                'label' => new LabelsResource($label)
+                'label' => new SingleLableResource($label)
             ]
         );
     }
@@ -152,13 +157,13 @@ class LabelController extends MainController
         return $this->successResponse(
             __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
             [
-                'label' => new LabelsResource($label)
+                'label' => new SingleLableResource($label)
             ]
         );
 
 
 }
-public function getTableHeaders(){
-    return $this->successResponse('Success!',['headers' => __('headers.labels') ]);
-}
+    public function getTableHeaders(){
+        return $this->successResponse('Success!',['headers' => __('headers.labels') ]);
+    }
 }
