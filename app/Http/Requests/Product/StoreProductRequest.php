@@ -41,7 +41,11 @@ class StoreProductRequest extends FormRequest
             'products_discounted_price_greater_than_or_equal',
         ];
 
-        $productSettings = Setting::whereIn('title', $titlesArray)->get();
+        $productSettings = Setting::whereIn('title', $titlesArray)->get()->groupBy('title')->toArray();
+
+        $this->productsRequiredSettingsArray = $productSettings['products_required_fields'][0]['value'];
+        dd($this->productsRequiredSettingsArray);
+
         if ($productSettings) {
             foreach ($productSettings as $key => $value) {
                 if ($value->title == 'products_required_fields')
