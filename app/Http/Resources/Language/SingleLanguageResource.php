@@ -16,7 +16,7 @@ class SingleLanguageResource extends JsonResource
     public function toArray($request)
     {
         $languages = Language::all()->pluck('code');
-        $translatable = [];
+        $nameTranslatable = [];
 
         foreach ($languages as $language){
             $nameTranslatable[$language] = $this->getTranslation('name',$language);
