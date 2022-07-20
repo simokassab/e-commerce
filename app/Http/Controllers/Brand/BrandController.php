@@ -59,8 +59,8 @@ class BrandController extends MainController
         return $this->successResponse(
             'Success!',
             [
-                'fields'=>  FieldsResource::collection($fields),
-                'labels'=>LabelsResource::collection($labels)
+                'fields' =>  FieldsResource::collection($fields),
+                'labels' => LabelsResource::collection($labels)
             ]
         );
     }
