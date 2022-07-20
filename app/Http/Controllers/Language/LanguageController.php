@@ -58,9 +58,11 @@ class LanguageController extends MainController
         $language=new Language();
         $language->name = (array)json_decode($request->name);
         $language->code=$request->code;
-       if((bool)$request->is_default){
+
+        $language->is_default=false;
+        if((bool)$request->is_default)
             $language->setIsDefault();
-       }
+
         if($request->image){
             $language->image= $this->imageUpload($request->file('image'),config('images_paths.language.images'));
         }
@@ -114,9 +116,9 @@ class LanguageController extends MainController
 
         $language->name =  (array) json_decode($request->name);
         $language->code=$request->code;
-        if($request->is_default){
+        $language->is_default=false;
+        if((bool)$request->is_default)
             $language->setIsDefault();
-           }
 
         if($request->image){
             if( !$this->removeImage($language->image) ){

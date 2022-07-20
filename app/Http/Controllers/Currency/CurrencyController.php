@@ -64,9 +64,9 @@ class CurrencyController extends MainController
         $currency->symbol=$request->symbol;
         $currency->rate=$request->rate;
         $currency->is_default=false;
-        if($request->is_default){
+        if((bool)$request->is_default)
             $currency->setIsDefault();
-        }
+
         if($request->image){
             $currency->image= $this->imageUpload($request->file('image'),config('image_paths.currency.images'));
         }
@@ -128,7 +128,7 @@ class CurrencyController extends MainController
             $currency->symbol=$request->symbol;
             $currency->rate=$request->rate;
             $currency->is_default=false;
-            if($request->is_default)
+            if((bool)$request->is_default)
              $currency->setIsDefault();
 
             if($request->image){

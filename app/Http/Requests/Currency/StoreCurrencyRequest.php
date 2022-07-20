@@ -56,7 +56,7 @@ class StoreCurrencyRequest extends MainRequest
             'rate.required' => 'The :attribute field is required.',
             'rate.numeric' => 'The :attribute must be decimal.',
 
-            'is_default.boolean' => 'The :attribute field accepts only 0 or 1',
+            'is_default.boolean' => 'The :attribute field accepts only boolean data',
 
             'image.image' => 'The input is not an image',
             'image.max' => 'The maximum :attribute size is :max.',

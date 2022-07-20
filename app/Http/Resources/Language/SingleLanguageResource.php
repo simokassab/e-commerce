@@ -27,8 +27,8 @@ class SingleLanguageResource extends JsonResource
             'id' => $this->id,
             'name' => $nameTranslatable,
             'code' => $this->code,
-            'is_default' => $this->is_default,
-            'is_disabled' => $this->is_disabled,
+            'is_default' => (bool)$this->is_default,
+            'is_disabled' => (bool)$this->is_disabled,
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
             'sort' => $this->sort
         ];
