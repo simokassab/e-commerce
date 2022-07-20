@@ -31,7 +31,7 @@ class StoreBrandRequest extends MainRequest
         return [
 
             'name' => 'required',
-            'code' => 'required | max:'.config('defaults.default_string_length'),
+//            'code' => 'required | max:'.config('defaults.default_string_length'),
 
             'image' => 'nullable | file
             | mimes:'.config('defaults.default_image_extentions').'
@@ -68,7 +68,7 @@ class StoreBrandRequest extends MainRequest
             'sort.integer' => 'the :attribute should be an integer',
 
 
-            'fields.*.field_id.required' => 'The field_id is required',
+//            'fields.*.field_id.required' => 'The field_id is required',
             'fields.*.field_id.exists' => 'The field_id does not exists or is not a brand entity',
             'fields.*.field_value_id.required' => 'The field_value_id  is required',
             'fields.*.field_value_id.exists' => 'The field_value_id  is not exists',
