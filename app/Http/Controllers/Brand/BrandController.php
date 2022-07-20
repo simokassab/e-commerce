@@ -129,7 +129,7 @@ class BrandController extends MainController
                 return $this->successResponse(
                     __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
                     [
-                        'brands' => new SingleBrandResource($brand)
+                        'brands' => new SingleBrandResource($brand->load(['label','field','fieldValue']))
                     ]
                 );
         } catch (\Exception $e) {
@@ -145,11 +145,11 @@ class BrandController extends MainController
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Brand $brand)
     {
-        return $this->successResponse(['brands' => new BrandResource($brand)]);
+        return $this->successResponse("success!",['brands' => new SingleBrandResource($brand->load(['field','label','fieldValue']))]);
 
     }
 
