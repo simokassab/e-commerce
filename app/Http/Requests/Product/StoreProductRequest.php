@@ -6,8 +6,14 @@ use App\Models\Settings\Setting;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+
 class StoreProductRequest extends FormRequest
 {
+    private $productsRequiredSettingsArray = [];
+    private $QuantityValue = 0;
+    private $minimumAndReservedQuantityValue = 0;
+    private $priceValue = 0;
+    private $discountedPriceValue = 0;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -25,74 +31,81 @@ class StoreProductRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-            $productsRequiredSettingsArray=[];
-            $QuantityValue=0;
-            $priceValue=0;
-
-            $productsRequiredSettings= Setting::where('title','products_fields_required(sku,summary,specification,barcode,length,width,height,weight,brand_id,tax_id)')->first();
-            $productQuantities=Setting::where('title','products_all_quantities_greater_than_or_equal')->first();
-            $productprices=Setting::where('title','products_prices_and_discounted_price_greater_than_or_equal')->first();
-
-            if($productsRequiredSettings)
-                $productsRequiredSettingsArray=explode(',', $productsRequiredSettings->value);
-
-            if($productQuantities)
-                $QuantityValue=(int)$productQuantities->value;
-
-            if($productprices)
-                $priceValue=(int)$productprices->value;
 
 
-            return [
+        $titlesArray = [
+            'products_required_fields',
+            'products_quantity_greater_than_or_equal',
+            'products_minimum_and_reserved_quantity_greater_than_or_equal',
+            'products_prices_greater_than_or_equal',
+            'products_discounted_price_greater_than_or_equal',
+        ];
 
+        $productSettings = Setting::whereIn('title', $titlesArray)->get();
+        if ($productSettings) {
+            foreach ($productSettings as $key => $value) {
+                if ($value->title == 'products_required_fields')
+                  $this->productsRequiredSettingsArray = explode(',', $value->value);
+                if ($value->title == 'products_quantity_greater_than_or_equal')
+                  $this->QuantityValue = (int)$value->value;
+                if ($value->title == 'products_minimum_and_reserved_quantity_greater_than_or_equal')
+                $this->minimumAndReservedQuantityValue = (int)$value->value;
+                if ($value->title == 'products_prices_greater_than_or_equal')
+                $this->priceValue = (int)$value->value;
+                if ($value->title == 'products_discounted_price_greater_than_or_equal')
+                $this->discountedPriceValue = (int)$value->value;
+            }
+        }
+
+        return [
             'name' => 'required',
-            'slug' => 'required | max:'.config('defaults.default_string_length').' | unique:products,slug,'.$this->id ?? null,
-            'code' => 'required | max:'.config('defaults.default_string_length').' | unique:products,code,'.$this->id ?? null,
-            'sku' => [Rule::when(in_array('sku',$productsRequiredSettingsArray), 'required','nullable'),' max:'.config('defaults.default_string_length')],
-            'type' => 'required | in:'.config('defaults.validation_default_types'),
-            'quantity' => [Rule::when($request->type=='variable',['in:0'],['required','integer','gte:'.$QuantityValue])],
-            'reserved_quantity' => [Rule::when($request->type=='variable',['in:0'],['nullable','integer' , 'gte:'.$QuantityValue])],
-            'minimum_quantity' => [Rule::when($request->type=='variable',['in:0'],['required','integer' , 'gte:'.$QuantityValue])],
-            'summary' => [Rule::when(in_array('summary',$productsRequiredSettingsArray), 'required','nullable')],
-            'specification' => [Rule::when(in_array('specification',$productsRequiredSettingsArray), 'required','nullable')],
+            'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
+            'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
+            'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
+            'type' => 'required | in:' . config('defaults.validation_default_types'),
+            'quantity' => [Rule::when($request->type == 'variable', ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
+            'reserved_quantity' => [Rule::when($request->type == 'variable', ['in:0'], 'nullable'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
+            'minimum_quantity' => [Rule::when($request->type == 'variable', ['in:0'], 'required'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
+            'summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
+            'specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
 
             'image' => 'nullable | file
-            | mimes:'.config('defaults.default_image_extentions').'
-            | max:'.config('defaults.default_image_size').'
-            | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
+            | mimes:' . config('defaults.default_image_extentions') . '
+            | max:' . config('defaults.default_image_size') . '
+            | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
 
             'meta_title' => 'nullable',
             'meta_description' => 'nullable',
             'meta_keyword' => 'nullable',
             'description' => 'nullable',
-            'status' => 'required | in:'.config('defaults.validation_default_status'),
-            'barcode' =>[Rule::when(in_array('barcode',$productsRequiredSettingsArray), 'required','nullable'), 'max:'.config('defaults.default_string_length')],
-            'height' => [Rule::when(in_array('height',$productsRequiredSettingsArray), 'required','nullable'),'numeric'],
-            'width' =>  [Rule::when(in_array('width',$productsRequiredSettingsArray), 'required','nullable'),'numeric'],
-            'length' =>  [Rule::when(in_array('length',$productsRequiredSettingsArray), 'required','nullable'),'numeric'],
-            'weight' =>  [Rule::when(in_array('weight',$productsRequiredSettingsArray), 'required','nullable'),'numeric'],
+            'status' => 'required | in:' . config('defaults.validation_default_status'),
+            'barcode' => [Rule::when(in_array('barcode',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'max:' . config('defaults.default_string_length')],
+            'height' => [Rule::when(in_array('height',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
+            'width' =>  [Rule::when(in_array('width',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
+            'length' =>  [Rule::when(in_array('length',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
+            'weight' =>  [Rule::when(in_array('weight',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
             'is_disabled' => 'nullable | boolean ',
             'sort' => 'nullable | integer',
             'is_default_child' => 'boolean',
 
-            'parent_product_id'=> [Rule::when($request->isSamePriceAsParent && $request->type=='variable_child','required',['nullable', 'integer','exists:products,id'])],
-            'category_id'=> 'required  | integer | exists:categories,id',
-            'unit_id'=> 'required | integer | exists:units,id',
-            'brand_id'=> [Rule::when(in_array('brand_id',$productsRequiredSettingsArray), 'required','nullable'),'nullable' ,'integer ',' exists:brands,id'],
-            'tax_id'=> [Rule::when(in_array('tax_id',$productsRequiredSettingsArray), 'required','nullable'),'nullable' ,'integer ',' exists:brands,id'],
-            'products_statuses_id'=> 'required | integer | exists:products_statuses,id',
+            'parent_product_id' => [Rule::when($request->isSamePriceAsParent && $request->type == 'variable_child', 'required', 'nullable'), 'integer', 'exists:products,id'],
+            'category_id' => 'required  | integer | exists:categories,id',
+            'unit_id' => 'required | integer | exists:units,id',
+            'brand_id' => [Rule::when(in_array('brand_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:brands,id'],
+            'tax_id' => [Rule::when(in_array('tax_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:brands,id'],
+            'products_statuses_id' => 'required | integer | exists:products_statuses,id',
 
             'categories' => 'required | array',
             'categories.*' => 'exists:categories,id',
 
             'fields.*.field_id' => 'required | integer | exists:fields,id,entity,product',
             'fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
-            'fields.*.value'=> 'nullable | max:'.config('defaults.default_string_length_2'),
+            'fields.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
 
-            'images.*.image' => 'required
-            | mimes:'.config('defaults.default_image_extentions').'
-            | max:'.config('defaults.default_image_size').'
-            | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
+            'images.*.image' => 'required | file
+            | mimes:' . config('defaults.default_image_extentions') . '
+            | max:' . config('defaults.default_image_size') . '
+            | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
             'images.*.title' => 'required ',
             'images.*.sort' => 'required | integer',
 
@@ -100,19 +113,18 @@ class StoreProductRequest extends FormRequest
             'labels.*' => 'exists:labels,id',
 
             'prices.*.price_id' => 'required | integer | exists:prices,id',
-            'prices.*.price' => 'required | numeric | gte:'.$priceValue,
-            'prices.*.discounted_price' => 'nullable | numeric | gte:'.$priceValue,
+            'prices.*.price' => 'required | numeric | gte:' .$this->priceValue,
+            'prices.*.discounted_price' => 'nullable | numeric | gte:' .$this->discountedPriceValue,
 
-            'related_products.*.parent_product_id' => 'required | integer | exists:products,id',
-            'related_products.*.child_product_id' => 'required | integer | exists:products,id',
-            'related_products.*.child_quantity' => 'required | integer | gte:'.$QuantityValue,
+            'related_products.*.child_product_id' => [Rule::when($request->type == 'bundle', 'required'), 'integer', 'exists:products,id'],
+            'related_products.*.child_quantity' => [Rule::when($request->type == 'bundle', 'required'), 'integer', 'gte:' . $this->QuantityValue],
 
-            'tags.*.tag_id' => 'required | integer | exists:tags,id',
+            'tags' => 'required | array',
+            'tags.*' => 'exists:tags,id',
 
             'order.*.id' => 'required | integer | exists:products,id',
             'order.*.sort' => 'required | integer',
         ];
-
     }
 
     public function messages()
@@ -136,17 +148,17 @@ class StoreProductRequest extends FormRequest
 
             'quantity.required' => 'the :attribute field is required',
             'quantity.integer' => 'The :attribute must be an integer',
-            'quantity.gte' => 'The :attribute must be greater than or equal to :gte',
+            'quantity.gte' => 'The :attribute must be greater than or equal to '.$this->QuantityValue,
             'quantity.in' => 'The :attribute must be 0',
 
             'reserved_quantity.required' => 'the :attribute field is required',
             'reserved_quantity.integer' => 'The :attribute must be an integer',
-            'reserved_quantity.gte' => 'The :attribute must be greater than or equal to :gte',
+            'reserved_quantity.gte' => 'The :attribute must be greater than or equal to '.$this->minimumAndReservedQuantityValue,
             'reserved_quantity.in' => 'The :attribute must be 0',
 
             'minimum_quantity.required' => 'the :attribute field is required',
             'minimum_quantity.integer' => 'The :attribute must be an integer',
-            'minimum_quantity.gte' => 'The :attribute must be greater than or equal to :gte',
+            'minimum_quantity.gte' => 'The :attribute must be greater than or equal to '.$this->minimumAndReservedQuantityValue,
             'minimum_quantity.in' => 'The :attribute must be 0',
 
             'summary.required' => 'the :attribute field is required',
@@ -156,7 +168,7 @@ class StoreProductRequest extends FormRequest
             'image.file' => 'The input is not an image',
             'image.max' => 'The maximum :attribute size is :max.',
             'image.mimes' => 'Invalid extention.',
-            'image.dimensions' => 'Invalid dimentions! maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
+            'image.dimensions' => 'Invalid dimentions! maximum(' . config('defaults.default_image_maximum_width') . 'x' . config('defaults.default_image_maximum_height') . ')',
 
             'status.required' => 'the :attribute field is required',
             'status.in' => 'The :attribute is not a valid status',
@@ -213,7 +225,7 @@ class StoreProductRequest extends FormRequest
             'images.*.image.file' => 'The input is not an image',
             'images.*.image.max' => 'The maximum image size is :max.',
             'images.*.image.mimes' => 'Invalid extention.',
-            'images.*.image.dimensions' => 'Invalid dimentions! maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
+            'images.*.image.dimensions' => 'Invalid dimentions! maximum(' . config('defaults.default_image_maximum_width') . 'x' . config('defaults.default_image_maximum_height') . ')',
             'images.*.title.required' => 'the title field is required',
             'images.*.title.max' => 'the maximum string length is :max',
             'images.*.title.string' => 'The title must be a string',

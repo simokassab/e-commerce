@@ -30,7 +30,6 @@ class ProductService
             // ->storeAdditionalImages()
             ->storeAdditionalLabels()
             ->storeAdditionalTags()
-            // ->storeAdditionalBundle()
             ->storeAdditionalPrices();
     }
 
@@ -105,18 +104,23 @@ class ProductService
             $data = [];
             foreach ($childrenIdsArray as $key => $child) {
                 foreach ($this->request->images as $index => $image) {
-                    $data[$key][$index] = [
+                    $imagePath = uploadImage($image['image'],  config('images_paths.product.images'));
+
+                    $data[] = [
                         'product_id' => $child,
-                        'title' => json_encode($image['title']),
+                        'image' => $imagePath,
+                        'title' => (array)json_decode($image['title']),
                         'created_at'  => today()->toDateString(),
                         'updated_at' => today()->toDateString(),
                     ];
                 }
             }
-            $finalImagesData = collect($data)->collapse()->toArray();
-            ProductImage::insert($finalImagesData);
         }
-        return $this;
+        if (ProductImage::insert($data)) {
+            return $this;
+        }
+
+        throw new Exception('Error while storing product images');
     }
 
     private function storeAdditionalLabels()
@@ -126,22 +130,25 @@ class ProductService
 
         $childrenIdsArray = $this->childrenIds;
         $childrenIdsArray[] = $this->product_id;
+
         $data = [];
+
         foreach ($childrenIdsArray as $key => $child) {
             foreach ($this->request->labels as $index => $label) {
-                $data[$key][$index] = [
+                $data[] = [
                     'product_id' => $child,
                     'label_id' => $label,
-                    'created_at'  => Carbon::now()->toDateTimeString(),
-                    'updated_at' => Carbon::now()->toDateTimeString(),
+                    'created_at' => Carbon::now()->toDateTimeString(),
+                    'updated_at' => Carbon::now()->toDateTimeString()
                 ];
             }
         }
-        if (ProductCategory::insert($data)) {
+
+        if (ProductLabel::insert($data)) {
             return $this;
         }
 
-        throw new Exception('Error while storing product tags');
+        throw new Exception('Error while storing product categories');
     }
 
     private function storeAdditionalTags()
@@ -151,28 +158,32 @@ class ProductService
 
         $childrenIdsArray = $this->childrenIds;
         $childrenIdsArray[] = $this->product_id;
+
         $data = [];
+
         foreach ($childrenIdsArray as $key => $child) {
             foreach ($this->request->tags as $index => $tag) {
-                $data[$key][$index] = [
+                $data[] = [
                     'product_id' => $child,
                     'tag_id' => $tag,
-                    'created_at'  => Carbon::now()->toDateTimeString(),
-                    'updated_at' => Carbon::now()->toDateTimeString(),
+                    'created_at' => Carbon::now()->toDateTimeString(),
+                    'updated_at' => Carbon::now()->toDateTimeString()
                 ];
             }
         }
-        if (ProductCategory::insert($data)) {
+
+        if (ProductTag::insert($data)) {
             return $this;
         }
+
         throw new Exception('Error while storing product tags');
     }
 
-    private function storeAdditionalBundle()
+    public function storeAdditionalBundle(Request $request)
     {
-        if ($this->request->type == 'bundle') {
-            $relatedProductsArray = $this->request->related_products ?? [];
-            foreach ($this->request->related_products as $related_product => $value) {
+            if ($request->type == 'bundle') {
+            $relatedProductsArray = $request->related_products ?? [];
+            foreach ($request->related_products as $related_product => $value) {
                 $relatedProductsArray[$related_product]["parent_product_id"] = $this->product_id;
                 $relatedProductsArray[$related_product]["created_at"] = Carbon::now()->toDateTimeString();
                 $relatedProductsArray[$related_product]["updated_at"] = Carbon::now()->toDateTimeString();
@@ -244,6 +255,7 @@ class ProductService
             $data = [];
             throw_if(!$request->product_variations, Exception::class, 'No variations found');
             foreach ($request->product_variations as $variation) {
+                $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
 
                 $productVariationsArray = [
                     'name' => json_encode($request->name),
@@ -271,8 +283,10 @@ class ProductService
                     'status' => $request->status,
                     'parent_product_id' => $product->id,
                     'products_statuses_id' => $request->products_statuses_id,
+                    'image' => $imagePath,
 
                 ];
+
 
                 $productVariation = Product::create($productVariationsArray);
 
