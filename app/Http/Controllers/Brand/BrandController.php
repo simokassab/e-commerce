@@ -73,7 +73,6 @@ class BrandController extends MainController
      */
     public function store(StoreBrandRequest $request)
     {
-        return (array)json_decode($request->fields[0]);
 
         DB::beginTransaction();
         try {
@@ -124,7 +123,7 @@ class BrandController extends MainController
 
             //Fields Store
             if($request->has('fields')){
-                BrandsService::addFieldsToBrands($brand,$request->fields);
+                BrandsService::addFieldsToBrands($brand,(array)json_decode($request->fields));
                 }
 
                 if ($request->has('labels')) {
@@ -227,7 +226,7 @@ class BrandController extends MainController
 
 
             if($request->has('fields')){
-                BrandsService::addFieldsToBrands($brand,$request->fields);
+                BrandsService::addFieldsToBrands($brand,(array)json_decode($request->fields));
             }
 
             if ($request->has('labels')) {
