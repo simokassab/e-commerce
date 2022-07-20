@@ -24,7 +24,39 @@ class BrandsService {
 
 
     }
+
+    public static function addFieldsToBrands(Brand $brand, array $fields){
+        $fieldsArray = $fields;
+        foreach ($fields as $key => $field){
+            if($fieldsArray[$key]["type"]=='select' && array_key_exists('field_value_id',$field))
+                $fieldsArray[$key]["value"] = null;
+            else if($fieldsArray[$key]["type"] != 'select' && !array_key_exists('field_value_id',$field)){
+                $fieldsArray[$key]["field_value_id"] = null;
+                $fieldsArray[$key]["value"] = ($field['value']);
+            }
+            $fieldsArray[$key]["brand_id"] = $brand->id;
+            unset($fieldsArray[$key]['type']);
+        }
+
+        return BrandField::insert($fieldsArray);
+
+
+
+    }
+
+    public static function addLabelsToBrands(Brand $brand, array $labels){
+        $labelsArray=[];
+        foreach ($labels as $label => $value){
+            $labelsArray[$label]["brand_id"] = $brand->id;
+            $labelsArray[$label]["label_id"] = $value;
+        }
+
+        return BrandLabel::insert($labelsArray);
+    }
+
 }
+
+
 
 
 

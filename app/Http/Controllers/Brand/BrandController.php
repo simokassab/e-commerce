@@ -78,60 +78,64 @@ class BrandController extends MainController
 
             //Brand Store
             $brand = new Brand();
-            $brand->name = json_encode($request->name);
+
+            if( gettype($request->name) != 'array'){
+                $brand->name =(array)json_decode($request->name);
+            }else{
+                $brand->name = $request->name;
+            }
+
             $brand->code = $request->code;
             if($request->image)
                 $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brands.images'));
 
-            $brand->meta_title = json_encode($request->meta_title);
-            $brand->meta_description = json_encode($request->meta_description);
-            $brand->meta_keyword = json_encode($request->meta_keyword);
-            $brand->description = json_encode($request->description);
+            if( gettype($request->meta_title) != 'array'){
+                $brand->meta_title =(array)json_decode($request->meta_title);
+            }else{
+                $brand->meta_title = $request->meta_title;
+            }
+
+            if( gettype($request->meta_description) != 'array'){
+                $brand->meta_description =(array)json_decode($request->meta_description);
+            }else{
+                $brand->meta_description = $request->meta_description;
+            }
+
+            if( gettype($request->meta_keyword) != 'array'){
+                $brand->meta_keyword =(array)json_decode($request->meta_keyword);
+            }else{
+                $brand->meta_keyword = $request->meta_keyword;
+            }
+
+            if( gettype($request->description) != 'array'){
+                $brand->description =(array)json_decode($request->description);
+            }else{
+                $brand->description = $request->description;
+            }
+
             $brand->save();
             //End of Brand Store
 
             //Fields Store
             if($request->has('fields')){
-                    $fieldsArray=$request->fields;
-                    foreach ($request->fields as $field => $value){
-                        if($fieldsArray[$field]["type"]=='select')
-                            $fieldsArray[$field]["value"] = null;
-                        else{
-                            $fieldsArray[$field]["field_value_id"] = null;
-                            $fieldsArray[$field]["value"] = json_encode($value['value']);
-                        }
-                        $fieldsArray[$field]["brand_id"] = $brand->id;
-                        unset($fieldsArray[$field]['type']);
-                    }
-                      BrandField::insert($fieldsArray);
+                BrandsService::addFieldsToBrands($brand,$request->fields);
                 }
-                //End of Fields Store
 
-                //Labels Store
                 if ($request->has('labels')) {
-                        $labelsArray=$request->labels;
-                        foreach ($request->labels as $label => $value)
-                            $labelsArray[$label]["brand_id"] = $brand->id;
+                    BrandsService::addLabelsToBrands($brand,$request->labels);
+                }
 
-                        BrandLabel::insert($labelsArray);
-                    }
-                    //End of Labels Store
-
-                    // DB::commit();
-
-                    return $this->successResponse(
-                        __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                        [
-                            'brands' => new SingleBrandResource($brand)
-                        ]
-                    );
+                DB::commit();
+                return $this->successResponse(
+                    __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                    [
+                        'brands' => new SingleBrandResource($brand)
+                    ]
+                );
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse(
                 __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ,
-                [
-                    'brands' => new SingleBrandResource($brand),
-                ]
             );
 
         }
@@ -173,55 +177,65 @@ class BrandController extends MainController
         try {
 
             BrandsService::deleteRelatedBrandFieldsAndLabels($brand);
-            //Brand Store
-            $brand->name = json_encode($request->name);
+
+            if( gettype($request->name) != 'array'){
+                $brand->name =(array)json_decode($request->name);
+            }else{
+                $brand->name = $request->name;
+            }
+
             $brand->code = $request->code;
 
-            if($request->image)
+            if($request->image){
+                if(!$this->removeImage($brand->image ) ){
+                    throw new FileErrorException();
+                }
                 $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brands.images'));
 
-            $brand->meta_title = json_encode($request->meta_title);
-            $brand->meta_description = json_encode($request->meta_description);
-            $brand->meta_keyword = json_encode($request->meta_keyword);
-            $brand->description = json_encode($request->description);
-            $brand->is_disabled = 0;
+            }
+
+            if( gettype($request->meta_title) != 'array'){
+                $brand->meta_title =(array)json_decode($request->meta_title);
+            }else{
+                $brand->meta_title = $request->meta_title;
+            }
+
+            if( gettype($request->meta_description) != 'array'){
+                $brand->meta_description =(array)json_decode($request->meta_description);
+            }else{
+                $brand->meta_description = $request->meta_description;
+            }
+
+            if( gettype($request->meta_keyword) != 'array'){
+                $brand->meta_keyword =(array)json_decode($request->meta_keyword);
+            }else{
+                $brand->meta_keyword = $request->meta_keyword;
+            }
+
+            if( gettype($request->description) != 'array'){
+                $brand->description =(array)json_decode($request->description);
+            }else{
+                $brand->description = $request->description;
+            }
+
             $brand->save();
             //End of Brand Store
 
-            //Fields Store
             if($request->has('fields')){
-                    $fieldsArray=$request->fields;
-                    foreach ($request->fields as $field => $value){
-                        if($fieldsArray[$field]["type"]=='select')
-                            $fieldsArray[$field]["value"] = null;
-                        else{
-                            $fieldsArray[$field]["field_value_id"] = null;
-                            $fieldsArray[$field]["value"] = json_encode($value['value']);
-                        }
-                        $fieldsArray[$field]["brand_id"] = $brand->id;
-                        unset($fieldsArray[$field]['type']);
-                    }
-                      BrandField::insert($fieldsArray);
-                }
-                //End of Fields Store
+                BrandsService::addFieldsToBrands($brand,$request->fields);
+            }
 
-                //Labels Store
-                if ($request->has('labels')) {
-                        $labelsArray=$request->labels;
-                        foreach ($request->labels as $label => $value)
-                            $labelsArray[$label]["brand_id"] = $brand->id;
+            if ($request->has('labels')) {
+                BrandsService::addLabelsToBrands($brand,$request->labels);
+            }
 
-                        BrandLabel::insert($labelsArray);
-                    }
-                    //End of Labels Store
-
-                    DB::commit();
-                    return $this->successResponse(
-                        __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-                        [
-                            'brands' => new SingleBrandResource($brand)
-                        ]
-                    );
+            DB::commit();
+            return $this->successResponse(
+                __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'brands' => new SingleBrandResource($brand)
+                ]
+            );
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse(

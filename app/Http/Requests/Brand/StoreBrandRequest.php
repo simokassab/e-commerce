@@ -48,7 +48,7 @@ class StoreBrandRequest extends MainRequest
             'fields.*.field_value_id' =>  'integer | exists:fields_values,id',
             'fields.*.value'=> 'nullable',
 
-            'labels.*.label_id' => 'required | exists:labels,id',
+            'labels.*' => 'required | exists:labels,id',
 
         ];
     }
@@ -69,7 +69,7 @@ class StoreBrandRequest extends MainRequest
 
 
             'fields.*.field_id.required' => 'The field_id is required',
-            'fields.*.field_id.exists' => 'The field_id is not exists or not for brands entity',
+            'fields.*.field_id.exists' => 'The field_id does not exists or is not a brand entity',
             'fields.*.field_value_id.required' => 'The field_value_id  is required',
             'fields.*.field_value_id.exists' => 'The field_value_id  is not exists',
             'fields.*.value.required' => 'The value is required',

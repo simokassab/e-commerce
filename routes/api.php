@@ -118,6 +118,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
         Route::get('brands',[BrandController::class,'getTableHeaders']);
         Route::get('categories',[CategoryController::class,'getTableHeaders']);
         Route::get('countries',[CountryController::class,'getTableHeaders']);
+        Route::get('currencies',[CurrencyController::class,'getTableHeaders']);
         Route::get('discounts',[DiscountController::class,'getTableHeaders']);
         Route::get('fields',[FieldsController::class,'getTableHeaders']);
         Route::get('labels',[LabelController::class,'getTableHeaders']);
