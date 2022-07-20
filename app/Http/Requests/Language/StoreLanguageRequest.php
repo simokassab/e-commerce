@@ -50,8 +50,8 @@ class StoreLanguageRequest extends MainRequest
             'code.required' => 'The code is required.',
             'code.max' => 'the maximum string length is :max',
 
-            'is_default.boolean' => 'The :attribute field accepts only 0 or 1',
-            'is_disabled.boolean' => 'The :attribute field accepts only 0 or 1',
+            'is_default.boolean' => 'The :attribute field accepts only boolean data',
+            'is_disabled.boolean' => 'The :attribute field accepts only boolean data',
 
             'image.image' => 'The input is not an image',
             'image.max' => 'The maximum :attribute size is :max.',
@@ -62,5 +62,24 @@ class StoreLanguageRequest extends MainRequest
 
            'sort.integer' => 'the :attribute should be an integer',
                 ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'is_default' => $this->toBoolean($this->is_default),
+            'is_disabled' => $this->toBoolean($this->is_disabled),
+        ]);
+    }
+
+    /**
+     * Convert to boolean
+     *
+     * @param $booleable
+     * @return boolean
+     */
+    private function toBoolean($booleable)
+    {
+        return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 }
