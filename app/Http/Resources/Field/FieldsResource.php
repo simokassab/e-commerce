@@ -16,14 +16,21 @@ class FieldsResource extends JsonResource
     public function toArray($request)
     {
 
-         $fields_values=$this->whenLoaded('fieldValue');
-        return [
+        $toBeReturned =  [
             'id' =>$this->id,
             'title'=> $this->title,
             'type'=> $this->type,
             'entity'=> $this->entity,
             // 'is_required'=> $this->is_required,
-             'select_options' => FieldsValueResource::collection($fields_values)
         ];
+
+        if($this->type == 'select'){
+            $fields_values=$this->whenLoaded('fieldValue');
+            $toBeReturned['select_options'] = FieldsValueResource::collection($fields_values);
+        }
+
+        return $toBeReturned;
+
+
     }
 }
