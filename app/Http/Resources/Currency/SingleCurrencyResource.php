@@ -22,7 +22,7 @@ class SingleCurrencyResource extends JsonResource
             'code' => $this->code,
             'symbol'=>$this->symbol,
             'rate'=>$this->rate,
-            'is_default'=>$this->is_default,
+            'is_default'=>(bool)$this->is_default,
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
             'sort'=>$this->sort,
             'history' => CurrencyHistoryResource::collection($currency_history),

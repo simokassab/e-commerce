@@ -93,7 +93,7 @@ class CurrencyController extends MainController
         return $this->successResponse(
             'Success!',
             [
-                'currency' => new CurrencyResource($currency)
+                'currency' => new SingleCurrencyResource($currency)
             ]
         );
 

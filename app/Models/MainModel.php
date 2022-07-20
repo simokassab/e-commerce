@@ -16,11 +16,11 @@ class MainModel extends Model
 
     public function setIsDefault(){
         $this->query()
-            ->where('is_default' , 1)
+            ->where('is_default' , true)
             ->whereNot('id',$this->id)
-            ->update(['is_default' => 0]);
+            ->update(['is_default' => false]);
 
-        $this->is_default = 1;
+        $this->is_default = true;
 
         return $this;
     }
