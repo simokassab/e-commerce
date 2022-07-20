@@ -28,19 +28,19 @@ class BrandsService {
     public static function addFieldsToBrands(Brand $brand, array $fields){
         $fieldsArray = $fields;
         foreach ($fields as $key => $field){
-            if($fieldsArray[$key]["type"]=='select' && array_key_exists('field_value_id',$field))
+            if($fieldsArray[$key]["type"]=='select' && gettype($field['value']) == 'integer' ){
                 $fieldsArray[$key]["value"] = null;
-            else if($fieldsArray[$key]["type"] != 'select' && !array_key_exists('field_value_id',$field)){
+                $fieldsArray[$key]["field_value_id"] = $field["value"];
+            }
+            else if($fieldsArray[$key]["type"] != 'select'){
                 $fieldsArray[$key]["field_value_id"] = null;
                 $fieldsArray[$key]["value"] = ($field['value']);
             }
             $fieldsArray[$key]["brand_id"] = $brand->id;
+
             unset($fieldsArray[$key]['type']);
         }
-
         return BrandField::insert($fieldsArray);
-
-
 
     }
 

@@ -73,6 +73,7 @@ class BrandController extends MainController
      */
     public function store(StoreBrandRequest $request)
     {
+
         DB::beginTransaction();
         try {
 
@@ -84,8 +85,8 @@ class BrandController extends MainController
             }else{
                 $brand->name = $request->name;
             }
+            $brand->code = '0';
 
-            $brand->code = $request->code;
             if($request->image)
                 $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brands.images'));
 
@@ -116,6 +117,10 @@ class BrandController extends MainController
             $brand->save();
             //End of Brand Store
 
+            $brand->code = $brand->id;
+
+            $brand->save();
+
             //Fields Store
             if($request->has('fields')){
                 BrandsService::addFieldsToBrands($brand,$request->fields);
@@ -135,7 +140,7 @@ class BrandController extends MainController
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse(
-                __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ,
+                __('messages.failed.create',['name' => __(self::OBJECT_NAME)])  ,
             );
 
         }
@@ -173,6 +178,7 @@ class BrandController extends MainController
      */
     public function update(StoreBrandRequest $request, Brand $brand)
     {
+
         DB::beginTransaction();
         try {
 
@@ -183,8 +189,6 @@ class BrandController extends MainController
             }else{
                 $brand->name = $request->name;
             }
-
-            $brand->code = $request->code;
 
             if($request->image){
                 if(!$this->removeImage($brand->image ) ){
@@ -219,7 +223,7 @@ class BrandController extends MainController
             }
 
             $brand->save();
-            //End of Brand Store
+
 
             if($request->has('fields')){
                 BrandsService::addFieldsToBrands($brand,$request->fields);
@@ -230,12 +234,14 @@ class BrandController extends MainController
             }
 
             DB::commit();
+
             return $this->successResponse(
-                __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+                __('messages.success.update',['name' => __(self::OBJECT_NAME)]) ,
                 [
-                    'brands' => new SingleBrandResource($brand)
+                    'brands' => new SingleBrandResource($brand->load(['label','field','fieldValue']))
                 ]
             );
+
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse(

@@ -2,8 +2,10 @@
 
 namespace App\Http\Resources\Brand;
 
+use App\Http\Resources\Field\FieldResourceEntity;
 use App\Http\Resources\Field\FieldsResource;
 use App\Http\Resources\Field\FieldsValueResource;
+use App\Http\Resources\Label\SingleLableResource;
 use App\Models\Language\Language;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,11 +19,9 @@ class SingleBrandResource extends JsonResource
      */
     public function toArray($request)
     {
+
         $labels = $this->whenLoaded('label')->pluck('id');
-        $fields = $this->whenLoaded('field');
-        $fieldsValues = $this->whenLoaded('fieldValue')->toArray();
-        dd(($fieldsValues));
-        dd($fieldsValues);
+        $fieldsValues = $this->whenLoaded('fieldValue');
         $languages = Language::all()->pluck('code');
         $nameTranslatable = [];
         $metaTitleTranslatable = [];
@@ -50,9 +50,9 @@ class SingleBrandResource extends JsonResource
             'keyword' => $this->keyword,
             'sort' => $this->sort,
             'is_disabled' => $this->is_disabled,
-            'labels' => $labels,
-            'fields' => FieldsResource::collection($fields),
-            'fields_values' => FieldsValueResource::collection($fieldsValues),
+            'labels' => ($labels),
+            'fields' => FieldResourceEntity::collection($fieldsValues),
+
 
         ];
     }

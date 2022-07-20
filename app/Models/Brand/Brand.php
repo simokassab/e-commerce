@@ -26,22 +26,20 @@ class Brand extends MainModel
     public function field(){
         return $this->belongsToMany(field::class,'brands_fields','brand_id','field_id');
     }
-    public function fieldValue(){
-        return $this->belongsToMany(FieldValue::class,'brands_fields','brand_id','field_value_id');
+    public function fieldValue(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(BrandField::class,'brand_id','id');
     }
-
-    public function cateogry(){
+    public function cateogry(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
         return $this->hasMany(Category::class,'category_id');
     }
-
     public function products(){
         return $this->hasMany(Product::class,'brand_id','id');
     }
-
     public function tax(){
         return $this->hasMany(Tax::class,'tax_id');
     }
-
     public function unit(){
         return $this->hasMany(Unit::class,'unit_id');
     }
