@@ -59,10 +59,11 @@ class CurrencyController extends MainController
     {
 
         $currency = new Currency();
-        $currency->name=($request->name);
+        $currency->name=(array)json_decode($request->name);
         $currency->code=$request->code;
         $currency->symbol=$request->symbol;
         $currency->rate=$request->rate;
+        $currency->is_default=false;
         if($request->is_default){
             $currency->setIsDefault();
         }
@@ -122,11 +123,13 @@ class CurrencyController extends MainController
         DB::beginTransaction();
 
         try {
-            $currency->name=json_encode($request->name);
+            $currency->name=(array)json_decode($request->name);
             $currency->code=$request->code;
             $currency->symbol=$request->symbol;
             $currency->rate=$request->rate;
-
+            $currency->is_default=false;
+            if($request->is_default)
+             $currency->setIsDefault();
 
             if($request->image){
                 if( !$this->removeImage($currency->image) ){
@@ -134,6 +137,7 @@ class CurrencyController extends MainController
                  }
                 $currency->image= $this->imageUpload($request->file('image'),config('image_paths.currency.images'));
              }
+
              $currency->save();
             DB::commit();
 
