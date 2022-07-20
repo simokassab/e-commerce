@@ -66,4 +66,21 @@ class StoreCurrencyRequest extends MainRequest
             'sort.integer' => 'the :attribute should be an integer',
           ];
     }
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'is_default' => $this->toBoolean($this->is_default),
+        ]);
+    }
+
+    /**
+     * Convert to boolean
+     *
+     * @param $booleable
+     * @return boolean
+     */
+    private function toBoolean($booleable)
+    {
+        return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+    }
 }
