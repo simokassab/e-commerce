@@ -9,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class StoreBrandRequest extends MainRequest
+class StoreBrandRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,8 +26,9 @@ class StoreBrandRequest extends MainRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(Request $request)
     {
+        dd($request);
         return [
 
             'name' => 'required',
@@ -70,8 +71,8 @@ class StoreBrandRequest extends MainRequest
 
 //            'fields.*.field_id.required' => 'The field_id is required',
             'fields.*.field_id.exists' => 'The field_id does not exists or is not a brand entity',
-            'fields.*.field_value_id.required' => 'The field_value_id  is required',
-            'fields.*.field_value_id.exists' => 'The field_value_id  is not exists',
+//            'fields.*.field_value_id.required' => 'The field_value_id  is required',
+//            'fields.*.field_value_id.exists' => 'The field_value_id  is not exists',
             'fields.*.value.required' => 'The value is required',
 
             'labels.*.label_id.required' => 'The label_id is required',
