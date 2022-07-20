@@ -82,20 +82,22 @@ class StoreProductRequest extends FormRequest
             'tax_id'=> [Rule::when(in_array('tax_id',$productsRequiredSettingsArray), 'required','nullable'),'nullable' ,'integer ',' exists:brands,id'],
             'products_statuses_id'=> 'required | integer | exists:products_statuses,id',
 
-            'categories.*.category_id' => 'required | integer | exists:categories,id',
+            'categories' => 'required | array',
+            'categories.*' => 'exists:categories,id',
 
             'fields.*.field_id' => 'required | integer | exists:fields,id,entity,product',
             'fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
             'fields.*.value'=> 'nullable | max:'.config('defaults.default_string_length_2'),
 
-            'images.*.image' => 'required 
+            'images.*.image' => 'required
             | mimes:'.config('defaults.default_image_extentions').'
             | max:'.config('defaults.default_image_size').'
             | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
             'images.*.title' => 'required ',
             'images.*.sort' => 'required | integer',
 
-            'labels.*.label_id' => 'required | integer | exists:labels,id',
+            'labels' => 'required | array',
+            'labels.*' => 'exists:labels,id',
 
             'prices.*.price_id' => 'required | integer | exists:prices,id',
             'prices.*.price' => 'required | numeric | gte:'.$priceValue,

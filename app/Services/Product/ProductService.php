@@ -38,32 +38,34 @@ public $request,$product_id;
     }
 
     //DONE
-    private function storeAdditionalCategrories(){ 
-        if (!$this->request->has('categories')) 
+    private function storeAdditionalCategrories(){
+        if (!$this->request->has('categories'))
             return $this;
-        
+
         $childrenIdsArray=$this->childrenIds;
         $childrenIdsArray[]=$this->product_id;
 
         $data = [];
+
         foreach($childrenIdsArray as $key => $child){
             foreach ($this->request->categories as $index => $category) {
-                $data[] = [
-                        'product_id' => $child,
-                        'category_id' => $category['category_id'],
-                        'created_at'  => Carbon::now()->toDateTimeString(),
-                        'updated_at' => Carbon::now()->toDateTimeString(),
-                ];
-            }
-        }
-            
+            $data[] = [
+                'product_id' => $child,
+                'category_id' => $category,
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString()
+            ];
+
+        }}
+
         if(ProductCategory::insert($data)){
             return $this;
         }
 
         throw new Exception('Error while storing product categories');
-        
+
     }
+
     private function storeAdditionalFields(){
         if ($this->request->has('fields')) {
             $fieldsArray = $this->request->fields ?? [];
@@ -95,6 +97,7 @@ public $request,$product_id;
 
         return $this;
     }
+
     private function storeAdditionalImages(){
         if ($this->request->has('images')) {
 
@@ -129,8 +132,10 @@ public $request,$product_id;
         return $this;
     }
 
+
     //DONE
-    private function storeAdditionalLabels(){   
+    private function storeAdditionalLabels(){
+
         if ($this->request->has('labels')) {
             $childrenIdsArray=$this->childrenIds;
             $childrenIdsArray[]=$this->product_id;
@@ -151,18 +156,9 @@ public $request,$product_id;
         return $this;
         }
 
-        // if ($this->request->has('labels')) {
-        //     $labelsArray = $this->request->labels ?? [];
-        //     foreach ($this->request->labels as $label => $value) {
-        //         $labelsArray[$label]["product_id"] = $this->product_id;
-        //         $labelsArray[$label]["created_at"] = Carbon::now()->toDateTimeString();
-        //         $labelsArray[$label]["updated_at"] = Carbon::now()->toDateTimeString();
-        //     }
-        //     ProductLabel::insert($labelsArray);
-        // }
 
-    
-    private function storeAdditionalPrices(){
+
+        private function storeAdditionalPrices(){
         if ( $this->request ->has('prices')) {
             $pricesArray =  $this->request ->prices ?? [];
             foreach ( $this->request->prices as $price => $value) {
@@ -175,7 +171,7 @@ public $request,$product_id;
         return $this;
         }
 
-  
+
         //DONE
         private function storeAdditionalTags(){
          if ($this->request->has('tags')) {
@@ -198,7 +194,7 @@ public $request,$product_id;
         return $this;
         }
 
-   
+
     private function storeAdditionalBundle(){
         if ($this->request->type == 'bundle') {
             $relatedProductsArray = $this->request->related_products ?? [];
@@ -290,18 +286,18 @@ public $request,$product_id;
                         $productVariation = Product::create($productVariationsArray);
 
                         $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
-                        foreach ($pricesInfo as $key => $price) {   
+                        foreach ($pricesInfo as $key => $price) {
                             $pricesInfo[$key]['product_id'] = $productVariation->id;
-                            
+
                         }
 
-                        $childrenIds[] = $productVariation->id;  
+                        $childrenIds[] = $productVariation->id;
 
                         $data[] = $pricesInfo;
-            }   
+            }
             $finalPricesCollect=collect($data)->collapse()->toArray();
             ProductPrice::insert($finalPricesCollect);
-            
+
 
             if(count($childrenIds)> 0){
                 return $childrenIds;
@@ -360,5 +356,5 @@ public $request,$product_id;
 
 
 
-    
+
 }
