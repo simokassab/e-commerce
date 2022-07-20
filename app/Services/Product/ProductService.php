@@ -116,17 +116,6 @@ class ProductService
             $finalImagesData = collect($data)->collapse()->toArray();
             ProductImage::insert($finalImagesData);
         }
-        // if ($this->request->has('images')) {
-        //     $imagesArray = $this->request->images ?? [];
-        //     foreach ($this->request->images as $image => $value) {
-        //         $imagesArray[$image]["product_id"] = $this->product_id;
-        //         $imagesArray[$image]["title"] = json_encode($value['title']);
-        //         $imagesArray[$image]["created_at"] = Carbon::now()->toDateTimeString();
-        //         $imagesArray[$image]["updated_at"] = Carbon::now()->toDateTimeString();
-        //     }
-        //     ProductImage::insert($imagesArray);
-        // }
-
         return $this;
     }
 
