@@ -44,9 +44,9 @@ class StoreBrandRequest extends MainRequest
             'description' => 'nullable',
             'sort' => 'nullable | integer',
 
-            'fields.*.field_id' => 'required | exists:fields,id,entity,brand',
+//            'fields.*.field_id' => 'required | exists:fields,id,entity,brand',
 //            'fields.*.field_value_id' =>  'integer | exists:fields_values,id',
-            'fields.*.value'=> 'nullable',
+//            'fields.*.value'=> 'nullable',
 
             'labels.*' => 'required | exists:labels,id',
 
