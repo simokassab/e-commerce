@@ -9,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class StoreBrandRequest extends FormRequest
+class StoreBrandRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +26,8 @@ class StoreBrandRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(Request $request)
+    public function rules()
     {
-        dd($request);
         return [
 
             'name' => 'required',
@@ -46,7 +45,7 @@ class StoreBrandRequest extends FormRequest
             'sort' => 'nullable | integer',
 
             'fields.*.field_id' => 'required | exists:fields,id,entity,brand',
-            'fields.*.field_value_id' =>  'integer | exists:fields_values,id',
+//            'fields.*.field_value_id' =>  'integer | exists:fields_values,id',
             'fields.*.value'=> 'nullable',
 
             'labels.*' => 'required | exists:labels,id',
@@ -59,7 +58,7 @@ class StoreBrandRequest extends FormRequest
         return [
 
             'name.required' => 'the :attribute field is required',
-            'code.required' => 'the :attribute field is required',
+//            'code.required' => 'the :attribute field is required',
 
             'image.file' => 'The input is not an image',
             'image.max' => 'The maximum :attribute size is :max.',
@@ -69,10 +68,10 @@ class StoreBrandRequest extends FormRequest
             'sort.integer' => 'the :attribute should be an integer',
 
 
-//            'fields.*.field_id.required' => 'The field_id is required',
+            'fields.*.field_id.required' => 'The field_id is required',
             'fields.*.field_id.exists' => 'The field_id does not exists or is not a brand entity',
-//            'fields.*.field_value_id.required' => 'The field_value_id  is required',
-//            'fields.*.field_value_id.exists' => 'The field_value_id  is not exists',
+            'fields.*.field_value_id.required' => 'The field_value_id  is required',
+            'fields.*.field_value_id.exists' => 'The field_value_id  is not exists',
             'fields.*.value.required' => 'The value is required',
 
             'labels.*.label_id.required' => 'The label_id is required',
