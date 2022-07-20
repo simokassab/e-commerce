@@ -54,7 +54,6 @@ class LanguageController extends MainController
      */
     public function store(StoreLanguageRequest $request)
     {
-        return ;
         $language=new Language();
         $language->name = (array)json_decode($request->name);
         $language->code=$request->code;
@@ -232,7 +231,7 @@ public function toggleStatus(Request $request ,$id){
         $languageObject->save();
 
         return $this->successResponse(
-            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+__('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             [
                 'language' => new SingleLanguageResource($languageObject)
             ]

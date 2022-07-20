@@ -30,7 +30,7 @@ class StoreLanguageRequest extends MainRequest
             'is_default' => 'nullable | boolean',
             'is_disabled' => 'nullable | boolean',
 
-            'image' => 'nullable | image
+            'image' => 'nullable | file
             | mimes:'.config('defaults.default_image_extentions').'
             | max:'.config('defaults.default_image_size').'
             | dimensions:min_width='.config('defaults.default_image_minimum_width').',min_height='.config('defaults.default_image_minimum_height').'
@@ -53,7 +53,7 @@ class StoreLanguageRequest extends MainRequest
             'is_default.boolean' => 'The :attribute field accepts only boolean data',
             'is_disabled.boolean' => 'The :attribute field accepts only boolean data',
 
-            'image.image' => 'The input is not an image',
+            'image.file' => 'The input is not an image',
             'image.max' => 'The maximum :attribute size is :max.',
             'image.mimes' => 'Invalid extention.',
             'image.dimensions' => 'Invalid dimentions, minimum('.config('defaults.default_image_minimum_width').'x'.config('defaults.default_image_minimum_height').'),
