@@ -178,6 +178,7 @@ class BrandController extends MainController
      */
     public function update(StoreBrandRequest $request, Brand $brand)
     {
+        return $request->fields;
 
         DB::beginTransaction();
         try {
