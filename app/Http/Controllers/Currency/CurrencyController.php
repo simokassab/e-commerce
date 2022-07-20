@@ -93,7 +93,7 @@ class CurrencyController extends MainController
         return $this->successResponse(
             'Success!',
             [
-                'currency' => new CurrencyResource($currency)
+                'currency' => new SingleCurrencyResource($currency)
             ]
         );
 
@@ -191,7 +191,7 @@ class CurrencyController extends MainController
         return $this->successResponse(
             __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             [
-                'currency' => new CurrencyResource($currencyObject)
+                'currency' => new SingleCurrencyResource($currencyObject)
             ]
         );
     }
