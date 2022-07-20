@@ -73,7 +73,7 @@ class BrandController extends MainController
      */
     public function store(StoreBrandRequest $request)
     {
-        return (array)json_decode($request->fields);
+        return (array)json_decode($request->fields[0]);
 
         DB::beginTransaction();
         try {
