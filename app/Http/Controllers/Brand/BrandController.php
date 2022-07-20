@@ -73,6 +73,7 @@ class BrandController extends MainController
      */
     public function store(StoreBrandRequest $request)
     {
+        return (array)$request->fields;
 
         DB::beginTransaction();
         try {
@@ -178,7 +179,6 @@ class BrandController extends MainController
      */
     public function update(StoreBrandRequest $request, Brand $brand)
     {
-        return $request;
 
         DB::beginTransaction();
         try {
