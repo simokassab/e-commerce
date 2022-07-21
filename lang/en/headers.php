@@ -392,7 +392,7 @@ return [
             'type' => 'string',
             'isShow' => true
         ],
-        'variable_name' => [
+        'title' => [
             'key' => 'title',
             'name' => 'Variable Name',
             'search' => 'string',
