@@ -24,14 +24,13 @@ class SettingsController extends MainController
     public function index(Request $request)
     {
 
-        if ($request->method()=='POST') {
-            $searchKeys=['title','value'];
-            return $this->getSearchPaginated(SettingsResource::class, Setting::class,$request, $searchKeys);
-
+        if ($request->method() == 'POST') {
+            $searchKeys = ['title', 'value'];
+            return $this->getSearchPaginated(SettingsResource::class, Setting::class, $request, $searchKeys);
         }
 
-        return $this->successResponsePaginated(SettingsResource::class,Setting::class);
-     }
+        return $this->successResponsePaginated(SettingsResource::class, Setting::class);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -51,7 +50,6 @@ class SettingsController extends MainController
      */
     public function store(StoreSettingRequest $request)
     {
-
     }
 
     /**
@@ -84,15 +82,20 @@ class SettingsController extends MainController
      */
     public function update(StoreSettingRequest $request, Setting $setting)
     {
-        $setting->title = $request->title;
-        $setting->value = $request->value;
-        $setting->is_developer = true;
-
-        if(!$setting->save())
-            return $this->errorResponse( __('messages.failed.update',['name' => __(self::OBJECT_NAME)]));
+        $finalValues="";
+        if(gettype($request->value)=="array"){
+        foreach ($request->value as $key => $value) {
+            $finalValues.=$value.",";
+        }
+        $setting->value = $finalValues;
+    }else{
+        $setting->value=$request->value;
+    }
+        if (!$setting->save())
+            return $this->errorResponse(__('messages.failed.update', ['name' => __(self::OBJECT_NAME)]));
 
         return $this->successResponse(
-            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
             [
                 'setting' => new SettingsResource($setting)
             ]
@@ -107,11 +110,11 @@ class SettingsController extends MainController
      */
     public function destroy(Setting $setting)
     {
-
     }
 
 
-    public function getTableHeaders(){
-        return $this->successResponse('Success!' , ['headers' => __('headers.settings') ]);
-}
+    public function getTableHeaders()
+    {
+        return $this->successResponse('Success!', ['headers' => __('headers.settings')]);
+    }
 }

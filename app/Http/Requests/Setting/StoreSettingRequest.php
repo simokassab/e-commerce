@@ -25,9 +25,8 @@ class StoreSettingRequest extends MainRequest
     public function rules()
     {
         return [
-            'title' => 'required | max:'.config('defaults.default_string_length').' | unique:settings,title,'.$this->id,
+            // 'key' => 'required | max:'.config('defaults.default_string_length'),
             'value' => 'required | max:'.config('defaults.default_string_length'),
-            'is_developer' => 'required | boolean',
 
         ];
     }
@@ -36,17 +35,8 @@ class StoreSettingRequest extends MainRequest
     {
         return [
 
-
-        'title.required' => 'the :attribute field is required',
-        'title.unique' => 'the :attribute field already exist',
-        'title.max' => 'the maximum string length is :max',
-
         'value.required' => 'the :attribute field is required',
         'value.max' => 'the maximum string length is :max',
-
-        'is_developer.required' => 'the :attribute field is required',
-        'is_developer.boolean' => 'the :attribute must be either false or true (0 or 1)',
-
         ];
     }
 }
