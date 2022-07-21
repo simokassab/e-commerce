@@ -32,14 +32,14 @@ class BrandsService {
             if(gettype($field) == 'string' ){
                 $field = (array)json_decode($field);
             }
-            if(gettype($fieldsArray[$key]) == 'string'){
+            if(gettype($field) == 'string'){
                 $fieldsArray = (array)json_decode($fieldsArray[$key]);
             }
-            if($fieldsArray[$key]["type"]=='select' && gettype($field['value']) == 'integer' ){
+            if($field["type"]=='select' && gettype($field['value']) == 'integer' ){
                 $tobeSavedArray[$key]["value"] = null;
                 $tobeSavedArray[$key]["field_value_id"] = $field["value"];
             }
-            else if($fieldsArray[$key]["type"] != 'select'){
+            else if($field["type"] != 'select'){
                 $tobeSavedArray[$key]["field_value_id"] = null;
                 $tobeSavedArray[$key]["value"] = ($field['value']);
             }
