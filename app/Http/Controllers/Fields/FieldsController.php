@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Fields;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Field\StoreFieldRequest;
+use App\Http\Resources\Field\FieldHeaderResource;
 use App\Http\Resources\Field\FieldsResource;
 use App\Http\Resources\Field\SingleFieldResource;
 use App\Models\Field\Field;
@@ -31,10 +32,10 @@ class FieldsController extends MainController
     {
         if ($request->method()=='POST') {
             $searchKeys=['title','type','entity','is_required'];
-            return $this->getSearchPaginated(FieldsResource::class, Field::class,$request, $searchKeys,self::relations);
+            return $this->getSearchPaginated(FieldHeaderResource::class, Field::class,$request, $searchKeys,self::relations);
 
         }
-        return $this->successResponsePaginated(FieldsResource::class,Field::class,self::relations);
+        return $this->successResponsePaginated(FieldHeaderResource::class,Field::class,self::relations);
 
     }
 
