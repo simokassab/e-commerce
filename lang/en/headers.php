@@ -387,6 +387,13 @@ return [
     'settings' => [
         'key' => [
             'key' => 'key',
+            'name' => '#',
+            'search' => 'string',
+            'type' => 'string',
+            'isShow' => true
+        ],
+        'variable_name' => [
+            'key' => 'variable_name',
             'name' => 'Variable Name',
             'search' => 'string',
             'type' => 'string',

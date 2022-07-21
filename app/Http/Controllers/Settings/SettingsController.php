@@ -119,8 +119,9 @@ class SettingsController extends MainController
             'headers' => __('headers.settings'),
             'column_data' => [
                     'key',
+                    'variable_name',
                     'name',
-                    'value'
+                    'value',
             ]
         ]);
     }
