@@ -155,7 +155,29 @@ return [
         'first_name ' => 'الاسم الأول',
         'last_name ' => 'الاسم الأخير',
     ],
-
+    'settings' => [
+        'key' => [
+            'key' => 'key',
+            'name' => 'Variable Name',
+            'search' => 'string',
+            'type' => 'string',
+            'isShow' => true
+        ],
+        'name' => [
+            'key' => 'name',
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'isShow' => true
+        ],
+        'value' => [
+            'key' => 'Value',
+            'name' => 'Values',
+            'search' => 'string',
+            'type' => 'string',
+            'isShow' => true
+        ],
+    ],
 
 
 ];
