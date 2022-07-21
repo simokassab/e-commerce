@@ -27,7 +27,7 @@ class BrandsService {
 
     public static function addFieldsToBrands(Brand $brand, array $fields){
         $fieldsArray = $fields;
-        return (array)($fieldsArray);
+        return $fieldsArray = json_decode($fieldsArray);
 
         foreach ($fields as $key => $field){
             $field = (array)json_decode($field);
