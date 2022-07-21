@@ -81,6 +81,8 @@ class BrandController extends MainController
             $brand = new Brand();
 
             if( gettype($request->name) != 'array'){
+                dd($request->name,);
+
                 $brand->name =(array)json_decode($request->name);
             }else{
                 $brand->name = $request->name;
