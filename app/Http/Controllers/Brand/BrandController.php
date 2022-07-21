@@ -123,8 +123,8 @@ class BrandController extends MainController
 
             //Fields Store
             if($request->has('fields')){
-                    return BrandsService::addFieldsToBrands($brand,($request->fields));
-                }
+                BrandsService::addFieldsToBrands($brand,($request->fields));
+            }
 
                 if ($request->has('labels')) {
                     if(gettype($request->labels) == 'string'){

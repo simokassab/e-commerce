@@ -50,7 +50,6 @@ class BrandsService {
 
 //            unset($fieldsArray[$key]['type']);
         }
-        return $tobeSavedArray;
         return BrandField::insert($tobeSavedArray);
 
     }
