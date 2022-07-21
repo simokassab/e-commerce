@@ -7,7 +7,7 @@ use phpDocumentor\Reflection\Types\Boolean;
 function uploadImage($file,$folderpath){
 
     try {
-        $fileName = uniqid().'_'.$file->getClientOriginalName();
+        $fileName = uniqid().'_'.$file->getClientOriginalName() ;
         $path = Storage::putFileAs($folderpath, $file, $fileName);
         return $path;
     }catch (\App\Exceptions\FileErrorException $exception) {

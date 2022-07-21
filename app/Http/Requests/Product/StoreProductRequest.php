@@ -32,7 +32,6 @@ class StoreProductRequest extends FormRequest
     public function rules(Request $request)
     {
 
-
         $titlesArray = [
             'products_required_fields',
             'products_quantity_greater_than_or_equal',
@@ -43,23 +42,12 @@ class StoreProductRequest extends FormRequest
 
         $productSettings = Setting::whereIn('title', $titlesArray)->get()->groupBy('title')->toArray();
 
-        $this->productsRequiredSettingsArray = $productSettings['products_required_fields'][0]['value'];
-        dd($this->productsRequiredSettingsArray);
+        $this->productsRequiredSettingsArray = explode(',',$productSettings['products_required_fields'][0]['value']) ?? [];
+        $this->QuantityValue= $productSettings['products_quantity_greater_than_or_equal'][0]['value'] ?? 0;
+        $this->minimumAndReservedQuantityValue= $productSettings['products_minimum_and_reserved_quantity_greater_than_or_equal'][0]['value'] ?? 0;
+        $this->priceValue= $productSettings['products_prices_greater_than_or_equal'][0]['value'] ?? 0;
+        $this->discountedPriceValue= $productSettings['products_discounted_price_greater_than_or_equal'][0]['value'] ?? 0;
 
-        if ($productSettings) {
-            foreach ($productSettings as $key => $value) {
-                if ($value->title == 'products_required_fields')
-                  $this->productsRequiredSettingsArray = explode(',', $value->value);
-                if ($value->title == 'products_quantity_greater_than_or_equal')
-                  $this->QuantityValue = (int)$value->value;
-                if ($value->title == 'products_minimum_and_reserved_quantity_greater_than_or_equal')
-                $this->minimumAndReservedQuantityValue = (int)$value->value;
-                if ($value->title == 'products_prices_greater_than_or_equal')
-                $this->priceValue = (int)$value->value;
-                if ($value->title == 'products_discounted_price_greater_than_or_equal')
-                $this->discountedPriceValue = (int)$value->value;
-            }
-        }
 
         return [
             'name' => 'required',
@@ -67,9 +55,9 @@ class StoreProductRequest extends FormRequest
             'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
             'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'type' => 'required | in:' . config('defaults.validation_default_types'),
-            'quantity' => [Rule::when($request->type == 'variable', ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
-            'reserved_quantity' => [Rule::when($request->type == 'variable', ['in:0'], 'nullable'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
-            'minimum_quantity' => [Rule::when($request->type == 'variable', ['in:0'], 'required'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
+            'quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
+            'reserved_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'nullable'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
+            'minimum_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
             'summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
             'specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
 
@@ -128,6 +116,29 @@ class StoreProductRequest extends FormRequest
 
             'order.*.id' => 'required | integer | exists:products,id',
             'order.*.sort' => 'required | integer',
+
+            'product_variations' => [Rule::when($request->type == 'variable', 'required'), 'array'],
+            'product_variations.*.slug' => ['required' ,'max:' . config('defaults.default_string_length'),'unique:products,slug,'. $this->id ?? null],
+            'product_variations.*.code' => ['required' , 'max:' . config('defaults.default_string_length'),'unique:products,code,'. $this->id ?? null],
+            'product_variations.*.sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
+            'product_variations.*.quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
+            'product_variations.*.reserved_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'nullable'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
+            'product_variations.*.minimum_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
+            'product_variations.*.barcode' => [Rule::when(in_array('barcode',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'max:' . config('defaults.default_string_length')],
+            'product_variations.*.height' => [Rule::when(in_array('height',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
+            'product_variations.*.width' =>  [Rule::when(in_array('width',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
+            'product_variations.*.length' =>  [Rule::when(in_array('length',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
+            'product_variations.*.weight' =>  [Rule::when(in_array('weight',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
+            'product_variations.*.is_default_child' => 'boolean',
+            'product_variations.*.prices.*.price_id' => 'required | integer | exists:prices,id',
+            'product_variations.*.prices.*.price' => 'required | numeric | gte:' .$this->priceValue,
+            'product_variations.*.prices.*.discounted_price' => 'nullable | numeric | gte:' .$this->discountedPriceValue,
+            'product_variations.*.isSamePriceAsParent' => 'boolean',
+            'product_variations.*.images.*.image' => 'required | file
+                | mimes:' . config('defaults.default_image_extentions') . '
+                | max:' . config('defaults.default_image_size') . '
+                | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
+
         ];
     }
 

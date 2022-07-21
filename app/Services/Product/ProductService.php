@@ -13,6 +13,7 @@ use App\Models\Product\ProductTag;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductService
 {
@@ -179,12 +180,12 @@ class ProductService
         throw new Exception('Error while storing product tags');
     }
 
-    public function storeAdditionalBundle(Request $request)
+    public function storeAdditionalBundle(Request $request, Product $product)
     {
-            if ($request->type == 'bundle') {
+        if ($request->type == 'bundle') {
             $relatedProductsArray = $request->related_products ?? [];
             foreach ($request->related_products as $related_product => $value) {
-                $relatedProductsArray[$related_product]["parent_product_id"] = $this->product_id;
+                $relatedProductsArray[$related_product]["parent_product_id"] = $product->id;
                 $relatedProductsArray[$related_product]["created_at"] = Carbon::now()->toDateTimeString();
                 $relatedProductsArray[$related_product]["updated_at"] = Carbon::now()->toDateTimeString();
             }
@@ -213,38 +214,40 @@ class ProductService
     public static function deleteRelatedDataForProduct(Product $product)
     {
 
-        // DB::beginTransaction();
-        // try {
-        //code...
+        DB::beginTransaction();
+        try {
+            $data = [
+                ProductCategory::class,
+                ProductField::class,
+                ProductImage::class,
+                ProductLabel::class,
+                ProductPrice::class,
+                ProductTag::class
+            ];
 
-        // $productType=Product::find($product->id)->type ?? '';
-        $productType = $product->type ?? '';
-        if ($productType == 'variable') {
+            $productType = $product->type ?? '';
+            if ($productType == 'variable') {
 
-            $productChildren = $product->children->pluck('id');
-            dd($productChildren);
-            Product::whereIn('id', $productChildren)->delete();
-            ProductCategory::whereIn('product_id', $productChildren)->delete();
-            ProductField::whereIn('product_id', $productChildren)->delete();
-            ProductImage::whereIn('product_id', $productChildren)->delete();
-            ProductLabel::whereIn('product_id', $productChildren)->delete();
-            ProductPrice::whereIn('product_id', $productChildren)->delete();
-            ProductTag::whereIn('product_id', $productChildren)->delete();
+                if (!$product->has('children'))
+                    return;
+
+                $productChildren = $product->children->pluck('id');
+                foreach ($data as $table) {
+                    $table::whereIn('product_id', $productChildren)->delete();
+                }
+                Product::whereIn('id', $productChildren)->delete();
+            }
+
+            ProductRelated::where('parent_product_id', $product->id)->delete();
+            foreach ($data as $table) {
+                $table::where('product_id', $product->id)->delete();
+            }
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
         }
-
-        ProductRelated::whereIn('parent_product_id', $product->id)->delete();
-        ProductCategory::where('product_id', $product->id)->delete();
-        ProductField::where('product_id', $product->id)->delete();
-        ProductImage::whereIn('product_id', $product->id)->delete();
-        ProductLabel::where('product_id', $product->id)->delete();
-        ProductPrice::where('product_id', $product->id)->delete();
-        ProductTag::where('product_id', $product->id)->delete();
-        //     DB::commit();
-        // } catch (\Throwable $th) {
-        //     //throw $th;
-        // }
-
-
     }
 
     public function storeVariationsAndPrices(Request $request, $product)
@@ -255,8 +258,11 @@ class ProductService
             $data = [];
             throw_if(!$request->product_variations, Exception::class, 'No variations found');
             foreach ($request->product_variations as $variation) {
-                $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
-
+                if ($variation['image'] == null)
+                    $imagePath = "";
+                else {
+                    $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
+                }
                 $productVariationsArray = [
                     'name' => json_encode($request->name),
                     'slug' => $variation['slug'],

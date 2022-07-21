@@ -100,7 +100,7 @@ class ProductController extends MainController
                $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
             }
             elseif($request->type=='bundle')
-                $this->productService->storeAdditionalBundle($request);
+                $this->productService->storeAdditionalBundle($request,$product);
 
             $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
 
@@ -211,16 +211,16 @@ class ProductController extends MainController
      */
     public function destroy(Product $product)
     {
-        DB::beginTransaction();
-        try {
-            // ProductService::deleteRelatedDataForProduct($product);
+        // DB::beginTransaction();
+        // try {
+            $this->productService->deleteRelatedDataForProduct($product);
             $product->delete();
-            return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)])]);
-            DB::commit();
-        } catch (\Exception $ex) {
-            DB::rollback();
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME),])]);
-        }
+            // return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)])]);
+            // DB::commit();
+        // } catch (\Exception $ex) {
+        //     DB::rollback();
+        //     return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME),])]);
+        // }
     }
     public function toggleStatus(Request $request ,$id){
 
