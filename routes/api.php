@@ -130,6 +130,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
         Route::get('taxes',[TaxController::class,'getTableHeaders']);
         Route::get('units',[UnitController::class,'getTableHeaders']);
         Route::get('users',[UsersController::class,'getTableHeaders']);
+        Route::get('setting',[SettingsController::class,'getTableHeaders']);
+
 
     });
 

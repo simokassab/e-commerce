@@ -25,7 +25,7 @@ class SettingsController extends MainController
     {
 
         if ($request->method()=='POST') {
-            $searchKeys=['title','value','is_developer'];
+            $searchKeys=['title','value'];
             return $this->getSearchPaginated(SettingsResource::class, Setting::class,$request, $searchKeys);
 
         }
@@ -51,20 +51,7 @@ class SettingsController extends MainController
      */
     public function store(StoreSettingRequest $request)
     {
-        $setting=new Setting();
-        $setting->title = $request->title;
-        $setting->value = $request->value;
-        $setting->is_developer = $request->is_developer;
 
-        if(!$setting->save())
-            return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) );
-
-        return $this->successResponse(
-            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            [
-                'setting' => new SettingsResource($setting)
-            ]
-        );
     }
 
     /**
@@ -75,7 +62,6 @@ class SettingsController extends MainController
      */
     public function show(Setting $setting)
     {
-        return $this->successResponse('Success!',['setting' => new SettingsResource($setting)]);
     }
 
     /**
@@ -100,7 +86,7 @@ class SettingsController extends MainController
     {
         $setting->title = $request->title;
         $setting->value = $request->value;
-        $setting->is_developer = (bool)$request->is_developer;
+        $setting->is_developer = true;
 
         if(!$setting->save())
             return $this->errorResponse( __('messages.failed.update',['name' => __(self::OBJECT_NAME)]));
@@ -121,15 +107,7 @@ class SettingsController extends MainController
      */
     public function destroy(Setting $setting)
     {
-        if(!$setting->delete())
-            return $this->errorResponse(__('messages.failed.delete',['name' => __(self::OBJECT_NAME)]));
 
-        return $this->successResponse(
-            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            [
-                'setting' => new SettingsResource($setting)
-            ]
-        );
     }
 
 

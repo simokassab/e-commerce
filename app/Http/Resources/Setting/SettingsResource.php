@@ -15,8 +15,9 @@ class SettingsResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'title' => $this->title,
+            'key' => $this->title,
+            'name' => ucwords(str_replace("_"," ",$this->title)),
+            'type' =>
             'value' => $this->value,
         ];
     }

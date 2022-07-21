@@ -385,23 +385,33 @@ return [
         ]
     ],
     'settings' => [
-        'id' => [
-            'name' => 'ID',
-            'search' => 'integer',
-            'type' => 'integer',
-            'sort' => true
-        ],
-        'title' => [
-            'name' => 'Title',
+        'key' => [
+            'key' => 'key',
+            'name' => 'Variable Name',
             'search' => 'string',
             'type' => 'string',
-            'sort' => true
+            'isShow' => true
+        ],
+        'name' => [
+            'key' => 'name',
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'isShow' => true
+        ],
+        'options' => [
+            'key' => 'options',
+            'name' => 'options',
+            'search' => 'string',
+            'type' => 'string',
+            'isShow' => true
         ],
         'value' => [
-            'name' => 'Value',
+            'key' => 'Value',
+            'name' => 'Values',
             'search' => 'string',
             'type' => 'string',
-            'sort' => true
+            'isShow' => true
         ],
     ],
     'tags' => [
