@@ -127,7 +127,7 @@ class BrandController extends MainController
                 }
 
                 if ($request->has('labels')) {
-                    return gettype($request->labels);
+                    return (array)json_decode($request->labels);
                     BrandsService::addLabelsToBrands($brand,$request->labels);
                 }
 
