@@ -408,14 +408,14 @@ return [
         ],
         'options' => [
             'key' => 'options',
-            'name' => 'options',
+            'name' => 'Options',
             'search' => 'string',
             'type' => 'string',
             'isShow' => true
         ],
         'value' => [
-            'key' => 'Value',
-            'name' => 'Values',
+            'key' => 'value',
+            'name' => 'Value',
             'search' => 'string',
             'type' => 'string',
             'isShow' => true
