@@ -29,15 +29,17 @@ class BrandsService {
         $fieldsArray = $fields;
         $tobeSavedArray = [];
         foreach ($fields as $key => $field){
+
             if(gettype($field) == 'string' ){
                 $field = (array)json_decode($field);
             }
             if(gettype($field) == 'string'){
                 $fieldsArray = (array)json_decode($fieldsArray[$key]);
             }
-            if($field["type"]=='select' && gettype($field['value']) == 'integer' ){
+
+            if($field["type"]=='select'){
                 $tobeSavedArray[$key]["value"] = null;
-                $tobeSavedArray[$key]["field_value_id"] = $field["value"];
+                $tobeSavedArray[$key]["field_value_id"] = $field["value"][0];
             }
             else if($field["type"] != 'select'){
                 $tobeSavedArray[$key]["field_value_id"] = null;
