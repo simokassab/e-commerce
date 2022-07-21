@@ -14,6 +14,7 @@ class FieldResourceEntity extends JsonResource
      */
     public function toArray($request)
     {
+
         $arrayToBeReturned = [
             'field_id' => $this->field_id,
             'value' => $this->value,
@@ -22,7 +23,7 @@ class FieldResourceEntity extends JsonResource
 
 
         if($this->field->type == 'select'){
-            $arrayToBeReturned['value'] =$this->id;
+            $arrayToBeReturned['value'] =$this->field_value_id;
         }
 
         return $arrayToBeReturned;
