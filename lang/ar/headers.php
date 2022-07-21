@@ -170,6 +170,13 @@ return [
             'type' => 'string',
             'isShow' => true
         ],
+        'options' => [
+            'key' => 'options',
+            'name' => 'options',
+            'search' => 'string',
+            'type' => 'string',
+            'isShow' => true
+        ],
         'value' => [
             'key' => 'Value',
             'name' => 'Values',
@@ -178,6 +185,5 @@ return [
             'isShow' => true
         ],
     ],
-
 
 ];
