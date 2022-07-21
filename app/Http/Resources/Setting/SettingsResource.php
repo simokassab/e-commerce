@@ -19,6 +19,7 @@ class SettingsResource extends JsonResource
 
         return [
             'key' =>$this->id,
+            'variable_name'=>$title,
             'name' => ucwords(str_replace("_"," ",$title)),
             'type' =>Setting::$titlesTypes[array_search($this->title,Setting::$titlesArray)],
             'options' =>Setting::$titlesOptions[array_search($this->title,Setting::$titlesArray)],
