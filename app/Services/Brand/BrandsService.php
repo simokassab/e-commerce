@@ -27,7 +27,7 @@ class BrandsService {
 
     public static function addFieldsToBrands(Brand $brand, array $fields){
         $fieldsArray = $fields;
-
+        $tobeSavedArray = [];
         foreach ($fields as $key => $field){
             if(gettype($field) == 'string' ){
                 $field = (array)json_decode($field);
@@ -36,18 +36,19 @@ class BrandsService {
                 $fieldsArray = (array)json_decode($fieldsArray[$key]);
             }
             if($fieldsArray[$key]["type"]=='select' && gettype($field['value']) == 'integer' ){
-                $fieldsArray[$key]["value"] = null;
-                $fieldsArray[$key]["field_value_id"] = $field["value"];
+                $tobeSavedArray[$key]["value"] = null;
+                $tobeSavedArray[$key]["field_value_id"] = $field["value"];
             }
             else if($fieldsArray[$key]["type"] != 'select'){
-                $fieldsArray[$key]["field_value_id"] = null;
-                $fieldsArray[$key]["value"] = ($field['value']);
+                $tobeSavedArray[$key]["field_value_id"] = null;
+                $tobeSavedArray[$key]["value"] = ($field['value']);
             }
-            $fieldsArray[$key]["brand_id"] = $brand->id;
+            $tobeSavedArray[$key]["brand_id"] = $brand->id;
+            $tobeSavedArray[$key]["field_id"] = $field['field_id'];
 
-            unset($fieldsArray[$key]['type']);
+//            unset($fieldsArray[$key]['type']);
         }
-        return BrandField::insert($fieldsArray);
+        return BrandField::insert($tobeSavedArray);
 
     }
 
