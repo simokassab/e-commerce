@@ -126,11 +126,10 @@ class BrandController extends MainController
                  BrandsService::addFieldsToBrands($brand,($request->fields));
                 }
 
-                if ($request->has('labels')) {
+                if ($request->has('labels') && count($request->labels) > 0) {
                     if(gettype($request->labels) == 'string'){
                         $request->labels = explode(",",$request->labels);
                     }
-                    return $request->labels;
                     BrandsService::addLabelsToBrands($brand,$request->labels);
                 }
 

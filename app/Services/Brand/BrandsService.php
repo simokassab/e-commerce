@@ -54,9 +54,9 @@ class BrandsService {
 
     public static function addLabelsToBrands(Brand $brand, array $labels){
         $labelsArray=[];
-        foreach ($labels as $label => $value){
-            $labelsArray[$label]["brand_id"] = $brand->id;
-            $labelsArray[$label]["label_id"] = $value;
+        foreach ($labels as $key => $label){
+            $labelsArray[$key]["brand_id"] = $brand->id;
+            $labelsArray[$key]["label_id"] = $label;
         }
 
         return BrandLabel::insert($labelsArray);
