@@ -29,6 +29,7 @@ class BrandsService {
         $fieldsArray = $fields;
 
         foreach ($fields as $key => $field){
+            return (gettype($field));
             $field = (array)json_decode($field);
             $fieldsArray = (array)json_decode($fieldsArray[$key]);
             if($fieldsArray[$key]["type"]=='select' && gettype($field['value']) == 'integer' ){
