@@ -115,6 +115,13 @@ class SettingsController extends MainController
 
     public function getTableHeaders()
     {
-        return $this->successResponse('Success!', ['headers' => __('headers.settings')]);
+        return $this->successResponse('Success!', [
+            'headers' => __('headers.settings'),
+            'column_data' => [
+                    'key',
+                    'name',
+                    'value'
+            ]
+        ]);
     }
 }
