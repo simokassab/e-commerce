@@ -24,7 +24,6 @@ class SingleBrandResource extends JsonResource
         $fieldsValues = $this->whenLoaded('fieldValue');
 
         $languages = Language::all()->pluck('code');
-        dd($languages);
         $nameTranslatable = [];
         $metaTitleTranslatable = [];
         $metaDescriptionTranslatable = [];
