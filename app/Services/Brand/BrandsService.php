@@ -54,6 +54,9 @@ class BrandsService {
 
     public static function addLabelsToBrands(Brand $brand, array $labels){
         $labelsArray=[];
+        if(count($labels) <= 0){
+            return true;
+        }
         foreach ($labels as $key => $label){
             $labelsArray[$key]["brand_id"] = $brand->id;
             $labelsArray[$key]["label_id"] = $label;
