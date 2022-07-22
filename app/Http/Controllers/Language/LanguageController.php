@@ -54,29 +54,29 @@ class LanguageController extends MainController
      */
     public function store(StoreLanguageRequest $request)
     {
-        $language=new Language();
-        $language->name = (array)json_decode($request->name);
-        $language->code=$request->code;
-
-        $language->is_default=false;
-        if((bool)$request->is_default)
-            $language->setIsDefault();
-
-        if($request->image){
-            $language->image= $this->imageUpload($request->file('image'),config('images_paths.language.images'));
-        }
-
-        if(!$language->save())
-            return $this->errorResponse(
-                __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
-            );
-
-        return $this->successResponse(
-            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-            [
-                'language' => new SingleLanguageResource($language)
-            ]
-        );
+//        $language=new Language();
+//        $language->name = (array)json_decode($request->name);
+//        $language->code=$request->code;
+//
+//        $language->is_default=false;
+//        if((bool)$request->is_default)
+//            $language->setIsDefault();
+//
+//        if($request->image){
+//            $language->image= $this->imageUpload($request->file('image'),config('images_paths.language.images'));
+//        }
+//
+//        if(!$language->save())
+//            return $this->errorResponse(
+//                __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+//            );
+//
+//        return $this->successResponse(
+//            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+//            [
+//                'language' => new SingleLanguageResource($language)
+//            ]
+//        );
 
 
     }
