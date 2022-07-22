@@ -38,7 +38,11 @@ class BrandsService {
             return $field["value"];
             if($field["type"]=='select'){
                 $tobeSavedArray[$key]["value"] = null;
+                if(gettype($field["value"]) == 'array'){
                 $tobeSavedArray[$key]["field_value_id"] = $field["value"][0];
+                }elseif(gettype($field["value"]) == 'integer'){
+                    $tobeSavedArray[$key]["field_value_id"] = $field["value"];
+                }
             }
             else if($field["type"] != 'select'){
                 $tobeSavedArray[$key]["field_value_id"] = null;
