@@ -233,7 +233,7 @@ class BrandController extends MainController
 
 
             if($request->has('fields')){
-                BrandsService::addFieldsToBrands($brand,(array)json_decode($request->fields));
+                BrandsService::addFieldsToBrands($brand, $request->fields);
             }
             $oldLabel = $request->labels;
 
