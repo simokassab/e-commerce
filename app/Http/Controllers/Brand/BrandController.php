@@ -285,9 +285,7 @@ class BrandController extends MainController
             DB::commit();
             return $this->successResponse(
                 __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-                [
-                    'brands' => new SingleBrandResource($brand)
-                ]
+
             );
 
         }catch (\Exception $e){
