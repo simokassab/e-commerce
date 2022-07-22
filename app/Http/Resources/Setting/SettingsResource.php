@@ -5,6 +5,7 @@ namespace App\Http\Resources\Setting;
 use App\Models\Settings\Setting;
 use App\Services\Setting\SettingService;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Cache;
 
 class SettingsResource extends JsonResource
 {
@@ -16,31 +17,41 @@ class SettingsResource extends JsonResource
      */
     public function toArray($request)
     {
-        dd(SettingService::getSetting());
-        $title= Setting::$titlesArray[array_search($this->title,Setting::$titlesArray)] ?? $this->title;
-        dd(Setting::getAttributeType());
-        $value=0;
+        $titlesArray = [];
+        $typesArray = [];
+        $valuesArray = [];
+
+         Cache::get('settings')->map(function ($setting) use (&$titlesArray,&$typesArray,&$valuesArray) {
+            $titlesArray[] = $setting->title;
+            $typesArray[] = $setting->type;
+            $valuesArray[] = $setting->value;
+             });
+
+        $title= $titlesArray[array_search($this->title,$titlesArray)];
+        $type= $typesArray[array_search($this->title,$titlesArray)];
+        $value= $valuesArray[array_search($this->title,$titlesArray)];
+
         switch ($this->type) {
             case 'number':
-                $value = (int)$this->value ?? 0;
+                $value = (int)$value ?? 0;
                 break;
             case 'checkbox':
-                $value = (bool)$this->value ?? false;
+                $value = (bool)$value ?? false;
                 break;
             case 'multi-select':
-                $value = $this->value ?? [];
+                $value = $value ?? [];
                 break;
             default:
-                $value = $this->value ?? "";
+                $value = $value ?? "";
                 break;
         }
 
         return [
-            'key' =>$this->id,
-            'title'=>$title,
+            'key' => $this->id,
+            'title'=> $title,
             'name' => ucwords(str_replace("_"," ",$title)),
-            'type' => $this->type,
-            'options' =>Setting::$titlesOptions[array_search($this->title,Setting::$titlesArray)],
+            'type' => $type,
+            'options' => Setting::$titlesOptions[array_search($this->title,$titlesArray)],
             'value' => $value
         ];
     }

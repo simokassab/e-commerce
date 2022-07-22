@@ -6,11 +6,11 @@ use App\Models\Settings\Setting;
 
 class SettingService
 {
-    public static function getSetting($title)
+    public static function getSetting()
     {
         $setting = Setting::all('title');
         if ($setting) {
-            return $setting->value;
+            return $setting;
         }
         return null;
     }
