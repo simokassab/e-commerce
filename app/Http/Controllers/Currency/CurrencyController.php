@@ -7,6 +7,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Currency\StoreCurrencyRequest;
 use App\Http\Resources\Currency\CurrencyHistoryResource;
 use App\Http\Resources\Currency\CurrencyResource;
+use App\Http\Resources\Currency\IndexCurrencyResource;
 use App\Http\Resources\Currency\SingleCurrencyResource;
 use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyHistory;
@@ -29,9 +30,9 @@ class CurrencyController extends MainController
             $searchKeys=['name','code','symbol','rate'];
             $searchRelationsKeys = [ 'parent' =>['parent_name' => 'name'] ];
 
-            return $this->getSearchPaginated(CurrencyResource::class, Currency::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
+            return $this->getSearchPaginated(IndexCurrencyResource::class, Currency::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
                 }
-        return $this->successResponsePaginated(CurrencyResource::class,Currency::class,self::relations);
+        return $this->successResponsePaginated(IndexCurrencyResource::class,Currency::class,self::relations);
 
     }
 
