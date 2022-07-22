@@ -31,6 +31,7 @@ class BrandsService {
     public static function addFieldsToBrands(Brand $brand, array $fields){
         $fieldsArray = $fields;
         $tobeSavedArray = [];
+        return $fields;
         foreach ($fields as $key => $field){
 
             if(gettype($field) == 'string' ){
@@ -42,7 +43,6 @@ class BrandsService {
 
             if($field["type"]=='select'){
                 $tobeSavedArray[$key]["value"] = null;
-                return $key;
                 $tobeSavedArray[$key]["field_value_id"] = $field["value"][0];
             }
             else if($field["type"] != 'select'){
