@@ -82,15 +82,48 @@ class SettingsController extends MainController
      */
     public function update(StoreSettingRequest $request, Setting $setting)
     {
-        $finalValues="";
-        if(gettype($request->value)=="array"){
-        foreach ($request->value as $key => $value) {
-            $finalValues.=$value.",";
+
+        $findedSetting = Setting::find($request->key);
+        if($findedSetting){
+            if($request->type==$findedSetting->type){
+                if(gettype($request->value)=='array'){
+                    $finalValues="";
+                    foreach ($request->value as $key => $value)
+                        $finalValues=implode(',',$request->value);
+
+                    $setting->value=$finalValues;
+                }else{
+
+                    $setting->value = $request->value;
+                }
+
+                $setting->save();
+                return $this->successResponse(
+                    __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
+                    [
+                        'setting' => new SettingsResource($setting)
+                    ]
+                );
+
+            }
+            else{
+                return $this->errorResponse(
+                    __('messages.error.update', ['name' => __(self::OBJECT_NAME)]),
+                    [
+                        'setting' => new SettingsResource($setting)
+                    ]
+                );
+            }
         }
-        $setting->value = $finalValues;
-    }else{
-        $setting->value=$request->value;
-    }
+    //     $finalValues="";
+    //     if(gettype($request->value)=="array"){
+    //     foreach ($request->value as $key => $value) {
+    //         $finalValues.=$value.",";
+    //     }
+    //     $setting->value = $finalValues;
+    // }else{
+    //     $setting->value=$request->value;
+    // }
         if (!$setting->save())
             return $this->errorResponse(__('messages.failed.update', ['name' => __(self::OBJECT_NAME)]));
 

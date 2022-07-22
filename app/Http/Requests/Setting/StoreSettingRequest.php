@@ -4,8 +4,9 @@ namespace App\Http\Requests\Setting;
 
 use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
-class StoreSettingRequest extends MainRequest
+class StoreSettingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +24,12 @@ class StoreSettingRequest extends MainRequest
      * @return array<string, mixed>
      */
     public function rules()
-    {
+{
         return [
-            'value' => 'required | max:'.config('defaults.default_string_length'),
-
+            'value' => 'required | max:'.config('defaults.default_string_length')
         ];
+
+
     }
 
     public function messages()
