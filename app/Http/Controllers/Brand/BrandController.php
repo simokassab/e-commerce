@@ -265,7 +265,7 @@ class BrandController extends MainController
         }catch(Error $error){
             DB::rollBack();
             return $this->errorResponse(
-                __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) . "the error message: $e" ,
+                __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) . "the error message: $error" ,
             );
         }
 }
