@@ -8,6 +8,9 @@ use App\Models\Brand\BrandLabel;
 
 class BrandsService {
 
+    /**
+     * @throws \Exception
+     */
     public static function deleteRelatedBrandFieldsAndLabels(Brand $brand){
         $deletedFields = true;
         $deletedLabels = true;
