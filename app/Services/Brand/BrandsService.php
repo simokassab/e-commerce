@@ -40,7 +40,7 @@ class BrandsService {
             if(gettype($field) == 'string'){
                 $fieldsArray = (array)json_decode($fieldsArray[$key]);
             }
-
+            return $fieldsArray;
             if($field["type"]=='select'){
                 $tobeSavedArray[$key]["value"] = null;
                 $tobeSavedArray[$key]["field_value_id"] = $field["value"][0];
