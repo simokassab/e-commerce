@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('settings', function (Blueprint $table) {
             $table->enum('type', ['number', 'text','checkbox','select','multi-select'])->after('title')	;
+            $table->string('value')->nullable()->change();
         });
     }
 
@@ -25,8 +26,13 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('settings', function (Blueprint $table) {
-            $table->dropColumn('type');
-        });
+        if (Schema::hasColumn('type', 'value')) {
+            Schema::table('settings', function (Blueprint $table) {
+                $table->dropColumn('type');
+                $table->string('value')->change();
+
+            });
+        }
     }
+
 };

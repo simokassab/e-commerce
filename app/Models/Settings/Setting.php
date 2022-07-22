@@ -4,13 +4,14 @@ namespace App\Models\Settings;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Setting extends MainModel
 {
     use HasFactory;
 
     protected $translatable=[];
-    protected $fillable = ['title','value','is_developer'];
+    protected $fillable = ['title','value','type','is_developer'];
 
     public static $titlesArray=[
         'products_required_fields',
@@ -19,6 +20,7 @@ class Setting extends MainModel
         'products_prices_greater_than_or_equal',
         'products_discounted_price_greater_than_or_equal',
     ];
+
     public static $titlesTypes = [
         'multi-select',
         'number',

@@ -21,7 +21,7 @@ class SettingSeeder extends Seeder
             [
             'title' => "products_required_fields",
             'type' => 'multi-select',
-            'value' => '',
+            'value' => null,
             'is_developer'=> 1,
             'created_at' => Carbon::now()->toDateString(),
             'updated_at' => Carbon::now()->toDateString(),

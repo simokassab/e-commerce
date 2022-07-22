@@ -25,7 +25,6 @@ class StoreSettingRequest extends MainRequest
     public function rules()
     {
         return [
-            // 'key' => 'required | max:'.config('defaults.default_string_length'),
             'value' => 'required | max:'.config('defaults.default_string_length'),
 
         ];
