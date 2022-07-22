@@ -46,6 +46,7 @@ class BrandsService {
             else if($field["type"] != 'select'){
                 $tobeSavedArray[$key]["field_value_id"] = null;
                 $tobeSavedArray[$key]["value"] = ($field['value']);
+                return $field['value'];
             }
             $tobeSavedArray[$key]["brand_id"] = $brand->id;
             $tobeSavedArray[$key]["field_id"] = $field['field_id'];
