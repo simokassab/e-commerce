@@ -14,7 +14,6 @@ class FieldResourceEntity extends JsonResource
      */
     public function toArray($request)
     {
-
         $arrayToBeReturned = [
             'field_id' => $this->field_id,
             'value' => $this->value,

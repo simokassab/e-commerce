@@ -2,6 +2,7 @@
 
 namespace App\Models\Category;
 
+use App\Models\Brand\BrandField;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
 use App\Models\Label\Label;
@@ -16,7 +17,7 @@ use Spatie\Translatable\HasTranslations;
 class Category extends MainModel
 {
     use HasFactory,HasTranslations;
-    protected $translatable=['name'];
+    protected array $translatable=['name','meta_title','meta_description','meta_keyword','description'];
 
     public function parent(){
         return $this->belongsTo(Category::class,'parent_id');
@@ -30,13 +31,12 @@ class Category extends MainModel
     }
 
     public function fields(){
-        return $this->belongsToMany(Field::class,'categories_fields','category_id');
+        return $this->belongsToMany(field::class,'categories_fields','category_id','field_id');
     }
-
-    public function fieldValue(){
-        return $this->belongsToMany(FieldValue::class,'categories_fields','category_id');
+    public function fieldValue(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(CategoriesFields::class,'category_id','id');
     }
-
     public function tags(){
         return $this->belongsToMany(Tag::class,'discounts_entities','category_id','tag_id');
     }

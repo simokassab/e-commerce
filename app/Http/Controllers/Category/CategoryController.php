@@ -6,9 +6,13 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Resources\Category\CategoryResource;
 use App\Http\Resources\Category\SingleCategoryResource;
+use App\Http\Resources\Field\FieldsResource;
+use App\Http\Resources\Label\LabelsResource;
 use App\Models\Category\CategoriesFields;
 use App\Models\Category\CategoriesLabels;
 use App\Models\Category\Category;
+use App\Models\Field\Field;
+use App\Models\Label\Label;
 use App\Services\Category\CategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -39,11 +43,20 @@ class CategoryController extends MainController
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function create()
     {
-        //
+        $fields= Field::with('fieldValue')->whereEntity('brand')->get();
+        $labels= Label::whereEntity('brand')->get();
+
+        return $this->successResponse(
+            'Success!',
+            [
+                'fields' =>  FieldsResource::collection($fields),
+                'labels' => LabelsResource::collection($labels)
+            ]
+        );
     }
 
     /**
@@ -57,57 +70,61 @@ class CategoryController extends MainController
         DB::beginTransaction();
         try {
             $category=new Category();
-            $category->name= json_encode($request->name);
-            $category->code= $request->code;
+            $category->name= ($request->name);
+            $category->code= 0;
             if($request->image){
                 $category->image= $this->imageUpload($request->file('image'),config('images_paths.category.images'));
             }
             if($request->icon){
                 $category->icon= $this->imageUpload($request->file('icon'),config('images_paths.category.icons'));
             }
+
             $category->parent_id= $request->parent_id;
             $category->slug= $request->slug;
-            $category->meta_title= json_encode($request->meta_title);
-            $category->meta_description= json_encode($request->meta_description);
-            $category->meta_keyword= json_encode($request->meta_keyword);
-            $category->description= json_encode($request->description);
+
+            if( gettype($request->meta_title) != 'array'){
+                $category->meta_title =(array)json_decode($request->meta_title);
+            }else{
+                $category->meta_title = $request->meta_title;
+            }
+
+            if( gettype($request->meta_description) != 'array'){
+                $category->meta_description =(array)json_decode($request->meta_description);
+            }else{
+                $category->meta_description = $request->meta_description;
+            }
+
+            if( gettype($request->meta_keyword) != 'array'){
+                $category->meta_keyword =(array)json_decode($request->meta_keyword);
+            }else{
+                $category->meta_keyword = $request->meta_keyword;
+            }
+
+            if( gettype($request->description) != 'array'){
+                $category->description =(array)json_decode($request->description);
+            }else{
+                $category->description = $request->description;
+            }
+
+            $category->save();
+            $category->code= $category->id;
             $category->save();
 
-            //Fields Store
             if($request->has('fields')){
-                    $fieldsArray=$request->fields;
-                    foreach ($request->fields as $field => $value){
-                        if($fieldsArray[$field]["type"]=='select')
-                            $fieldsArray[$field]["value"] = null;
-                        else{
-                            $fieldsArray[$field]["field_value_id"] = null;
-                            $fieldsArray[$field]["value"] = json_encode($value['value']);
+                CategoryService::addFieldsToCategory($category,$request->fields);
+            }
 
-                        }
-                        $fieldsArray[$field]["category_id"] = $category->id;
-                        unset($fieldsArray[$field]['type']);
+            if ($request->has('labels')) {
+                CategoryService::addLabelsToCategory($category,$request->fields);
+            }
 
-                    }
-                      CategoriesFields::insert($fieldsArray);
-                }
-                //End of Fields Store
-
-                 //Labels Store
-                 if ($request->has('labels')) {
-                        $labelsArray=$request->labels;
-                        foreach ($request->labels as $label => $value)
-                            $labelsArray[$label]["category_id"] = $category->id;
-
-                        CategoriesLabels::insert($labelsArray);
-                    }
-                    //End of Labels Store
-                    DB::commit();
-                    return $this->successResponse(
-                        __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                        [
-                            'cateogries' => new SingleCategoryResource($category)
-                        ]
-                    );
+            DB::commit();
+            return $this->successResponse(
+                __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'category' => new SingleCategoryResource($category)
+                ]
+            );
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) );
@@ -127,7 +144,7 @@ class CategoryController extends MainController
         return $this->successResponse(
             'Success!',
             [
-                'category' =>  new CategoryResource($category)
+                'category' =>  new SingleCategoryResource($category->load(['fields','fieldValue','label','parent']))
             ]
         );
 
@@ -174,34 +191,13 @@ class CategoryController extends MainController
             $category->description= json_encode($request->description);
             $category->save();
 
-             //Fields Store
-             if($request->has('fields')){
-                $fieldsArray=$request->fields;
-                foreach ($request->fields as $field => $value){
-                    if($fieldsArray[$field]["type"]=='select')
-                        $fieldsArray[$field]["value"] = null;
-                    else{
-                        $fieldsArray[$field]["field_value_id"] = null;
-                        $fieldsArray[$field]["value"] = json_encode($value['value']);
-
-                    }
-                    $fieldsArray[$field]["category_id"] = $category->id;
-                    unset($fieldsArray[$field]['type']);
-
-                }
-                  CategoriesFields::insert($fieldsArray);
+            if($request->has('fields')){
+                CategoryService::addFieldsToCategory($category,$request->fields);
             }
-            //End of Fields Store
 
-             //Labels Store
-             if ($request->has('labels')) {
-                    $labelsArray=$request->labels;
-                    foreach ($request->labels as $label => $value)
-                        $labelsArray[$label]["category_id"] = $category->id;
-
-                    CategoriesLabels::insert($labelsArray);
-                }
-                //End of Labels Store
+            if ($request->has('labels')) {
+                CategoryService::addLabelsToCategory($category,$request->fields);
+            }
 
                     DB::commit();
                     return $this->successResponse(
@@ -234,9 +230,6 @@ class CategoryController extends MainController
             DB::commit();
             return $this->successResponse(
                 __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-                [
-                    'category' => new SingleCategoryResource($category)
-                ]
             );
 
         }catch (\Exception $e){

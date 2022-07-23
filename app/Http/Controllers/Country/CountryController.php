@@ -117,6 +117,7 @@ class CountryController extends MainController
         $dataTranslatable = (array)json_decode($request->name);
         $country->name =  ($dataTranslatable);
         $country->iso_code_2 = $request->iso_code_2;
+        $country->iso_code_1 = $request->iso_code_1;
         $country->phone_code = $request->phone_code;
         if($request->flag){
 

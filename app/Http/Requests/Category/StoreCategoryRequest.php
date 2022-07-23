@@ -47,13 +47,11 @@ class StoreCategoryRequest extends MainRequest
             'description' => 'nullable',
             'sort' => 'nullable | integer',
 
-
             'fields.*.field_id' => 'required | exists:fields,id,entity,brands',
             'fields.*.field_value_id' =>  'integer | exists:fields_values,id',
             'fields.*.value'=> 'nullable',
 
-
-            'labels.*.label_id' => 'required | exists:labels,id',
+            'labels.*' => 'required | exists:labels,id',
         ];
     }
 
