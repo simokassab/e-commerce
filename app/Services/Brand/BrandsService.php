@@ -43,14 +43,13 @@ class BrandsService {
                     $tobeSavedArray[$key]["field_value_id"] = $field["value"];
                 }
             }
-            else if($field["type"] != 'select'){
+            else{
                 $tobeSavedArray[$key]["field_value_id"] = null;
                 $tobeSavedArray[$key]["value"] = ($field['value']);
             }
             $tobeSavedArray[$key]["brand_id"] = $brand->id;
             $tobeSavedArray[$key]["field_id"] = $field['field_id'];
 
-//            unset($fieldsArray[$key]['type']);
         }
         return BrandField::insert($tobeSavedArray);
 
