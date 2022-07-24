@@ -2,19 +2,28 @@
 
 namespace App\Services\Category;
 
-use App\Models\Brand\Brand;
-use App\Models\Brand\BrandField;
-use App\Models\Brand\BrandLabel;
 use App\Models\Category\CategoriesFields;
 use App\Models\Category\CategoriesLabels;
 use App\Models\Category\Category;
 
 class CategoryService {
 
+    /**
+     * @throws \Exception
+     */
     public static function deleteRelatedCategoryFieldsAndLabels(Category $category){
-        if(!CategoriesFields::where('category_id',$category->id)->delete() || CategoriesLabels::where('category_id',$category->id)->delete()){
-            return;
-        }
+        $deletedFields = true;
+        $deletedLabels = true;
+
+        if($category->fields()->exists())
+            $deletedFields= CategoriesFields::where('category_id',$category->id)->delete();
+
+        if($category->label()->exists())
+            $deletedLabels =  CategoriesLabels::where('category_id',$category->id)->delete();
+
+        if(!( $deletedFields || $deletedLabels)) throw new \Exception('delete category fields and labels failed');
+
+
     }
 
     public static function addFieldsToCategory(Category $category, array $fields){
@@ -25,22 +34,23 @@ class CategoryService {
                 $field = (array)json_decode($field);
             }
             if($field["type"]=='select'){
-                $tobeSavedArray[$key]["value"] = null;
                 if(gettype($field["value"]) == 'array'){
                     $tobeSavedArray[$key]["field_value_id"] = $field["value"][0];
                 }elseif(gettype($field["value"]) == 'integer'){
                     $tobeSavedArray[$key]["field_value_id"] = $field["value"];
                 }
+                $tobeSavedArray[$key]["value"] =null;
+
             }
-            else if($field["type"] != 'select'){
+            else{
+                $tobeSavedArray[$key]["value"] = $field['value'];
                 $tobeSavedArray[$key]["field_value_id"] = null;
-                $tobeSavedArray[$key]["value"] = ($field['value']);
             }
-            $tobeSavedArray[$key]["brand_id"] = $category->id;
+            $tobeSavedArray[$key]["category_id"] = $category->id;
             $tobeSavedArray[$key]["field_id"] = $field['field_id'];
 
-//            unset($fieldsArray[$key]['type']);
         }
+
         return CategoriesFields::insert($tobeSavedArray);
 
     }
@@ -51,10 +61,9 @@ class CategoryService {
             return true;
         }
         foreach ($labels as $key => $label){
-            $labelsArray[$key]["brand_id"] = $category->id;
+            $labelsArray[$key]["category_id"] = $category->id;
             $labelsArray[$key]["label_id"] = $label;
         }
-
         return CategoriesLabels::insert($labelsArray);
     }
 

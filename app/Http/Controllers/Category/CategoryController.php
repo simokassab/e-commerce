@@ -70,7 +70,11 @@ class CategoryController extends MainController
         DB::beginTransaction();
         try {
             $category=new Category();
-            $category->name= ($request->name);
+            if( gettype($request->name) != 'array'){
+                $category->name =(array)json_decode($request->name);
+            }else{
+                $category->name = $request->name;
+            }
             $category->code= 0;
             if($request->image){
                 $category->image= $this->imageUpload($request->file('image'),config('images_paths.category.images'));
@@ -115,19 +119,20 @@ class CategoryController extends MainController
             }
 
             if ($request->has('labels')) {
-                CategoryService::addLabelsToCategory($category,$request->fields);
+                CategoryService::addLabelsToCategory($category,$request->labels);
             }
 
             DB::commit();
             return $this->successResponse(
                 __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
                 [
-                    'category' => new SingleCategoryResource($category)
+                    'category' => new SingleCategoryResource($category->load(['fieldValue','label','parent']))
                 ]
             );
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) );
+            return ($e);
+            return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) . ' error message: '.$e );
 
             }
      }
@@ -175,20 +180,45 @@ class CategoryController extends MainController
 
             CategoryService::deleteRelatedCategoryFieldsAndLabels($category);
 
-            $category->name= json_encode($request->name);
-            $category->code= $request->code;
+            if( gettype($request->name) != 'array'){
+                $category->name =(array)json_decode($request->name);
+            }else{
+                $category->name = $request->name;
+            }
             if($request->image){
                 $category->image= $this->imageUpload($request->file('image'),config('images_paths.category.images'));
             }
             if($request->icon){
                 $category->icon= $this->imageUpload($request->file('icon'),config('images_paths.category.icons'));
             }
+
             $category->parent_id= $request->parent_id;
             $category->slug= $request->slug;
-            $category->meta_title= json_encode($request->meta_title);
-            $category->meta_description= json_encode($request->meta_description);
-            $category->meta_keyword= json_encode($request->meta_keyword);
-            $category->description= json_encode($request->description);
+
+            if( gettype($request->meta_title) != 'array'){
+                $category->meta_title =(array)json_decode($request->meta_title);
+            }else{
+                $category->meta_title = $request->meta_title;
+            }
+
+            if( gettype($request->meta_description) != 'array'){
+                $category->meta_description =(array)json_decode($request->meta_description);
+            }else{
+                $category->meta_description = $request->meta_description;
+            }
+
+            if( gettype($request->meta_keyword) != 'array'){
+                $category->meta_keyword =(array)json_decode($request->meta_keyword);
+            }else{
+                $category->meta_keyword = $request->meta_keyword;
+            }
+
+            if( gettype($request->description) != 'array'){
+                $category->description =(array)json_decode($request->description);
+            }else{
+                $category->description = $request->description;
+            }
+
             $category->save();
 
             if($request->has('fields')){
@@ -196,21 +226,21 @@ class CategoryController extends MainController
             }
 
             if ($request->has('labels')) {
-                CategoryService::addLabelsToCategory($category,$request->fields);
+                CategoryService::addLabelsToCategory($category,$request->labels);
             }
 
-                    DB::commit();
-                    return $this->successResponse(
-                        __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-                        [
-                            'category' => new SingleCategoryResource($category)
-                        ]
-                    );
+            DB::commit();
+            return $this->successResponse(
+                __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'category' => new SingleCategoryResource($category->load(['label','fieldValue','parent','brand']))
+                ]
+            );
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse( __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) );
+            return $this->errorResponse( __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) . ' error: '.$e );
 
-            }
+        }
 
 
     }
