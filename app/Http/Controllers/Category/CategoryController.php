@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Category;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Resources\Category\CategoryResource;
+use App\Http\Resources\Category\SelectCategoryResource;
 use App\Http\Resources\Category\SingleCategoryResource;
 use App\Http\Resources\Field\FieldsResource;
 use App\Http\Resources\Label\LabelsResource;
@@ -47,14 +48,15 @@ class CategoryController extends MainController
      */
     public function create()
     {
-        $fields= Field::with('fieldValue')->whereEntity('brand')->get();
+        $fields= Field::with('fieldValue')->whereEntity('category')->get();
         $labels= Label::whereEntity('brand')->get();
-
+        $parentCategories = Category::all();
         return $this->successResponse(
             'Success!',
-            [
+            data: [
                 'fields' =>  FieldsResource::collection($fields),
-                'labels' => LabelsResource::collection($labels)
+                'labels' => LabelsResource::collection($labels),
+                'categories' => SelectCategoryResource::collection($parentCategories)
             ]
         );
     }
@@ -149,7 +151,7 @@ class CategoryController extends MainController
         return $this->successResponse(
             'Success!',
             [
-                'category' =>  new SingleCategoryResource($category->load(['fields','fieldValue','label','parent']))
+                'category' =>  new SingleCategoryResource($category->load(['fields','fieldValue','label']))
             ]
         );
 
@@ -233,7 +235,7 @@ class CategoryController extends MainController
             return $this->successResponse(
                 __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
                 [
-                    'category' => new SingleCategoryResource($category->load(['label','fieldValue','parent','brand']))
+                    'category' => new SingleCategoryResource($category->load(['label','fieldValue','brand']))
                 ]
             );
         } catch (\Exception $e) {

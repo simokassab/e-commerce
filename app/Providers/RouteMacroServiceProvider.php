@@ -40,6 +40,7 @@ class RouteMacroServiceProvider extends ServiceProvider
             Route::patch("$uri/toggle-status/{id}",[$controller,'toggleStatus']);
             Route::get("$uri/update-order",[$controller,'updateSortValues']);
             Route::post("$uri/all",[$controller,'index']);
+            Route::get("$uri/create",[$controller,'create']);
 
             Route::apiResource($uri, $controller);
         });

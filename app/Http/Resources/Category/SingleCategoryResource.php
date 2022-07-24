@@ -41,8 +41,6 @@ class SingleCategoryResource extends JsonResource
             $descriptionTranslatable[$language] = $this->getTranslation('description',$language);
         }
 
-        $parentId = $this->whenLoaded('parent') ? $this->whenLoaded('parent')->id : null ;
-
         return [
             'id' => $this->id,
             'name' => $nameTranslatable,
@@ -55,17 +53,9 @@ class SingleCategoryResource extends JsonResource
             'meta_description' => $metaDescriptionTranslatable,
             'meta_keyword' => $metaKeyWordTranslatable,
             'description' => $descriptionTranslatable,
-//            'sort' => $this->sort,
-//            'is_disabled' => $this->is_disabled,
-            'parent_category_id' => $parentId,
-//            'children' => self::collection( $this->whenLoaded('children')),
             'labels' => $labels,
             'fields' => FieldResourceEntity::collection($fieldsValues),
-
-//            'tags' => TagResource::collection($this->whenLoaded('tags')),
-//            'discounts' => new Discount($this->whenLoaded('discount')),
             'brands' => new CategoryResource($this->whenLoaded('brands')),
-//            'products' => new CategoryResource($this->whenLoaded('products')),
 
         ];
     }
