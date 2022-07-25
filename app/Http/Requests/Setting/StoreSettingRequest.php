@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Setting;
 
 use App\Http\Requests\MainRequest;
-use App\Rules\SettingRule;
+use App\Rules\SettingValueRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
@@ -24,11 +24,11 @@ class StoreSettingRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(Request $request)
 {
         return [
-            'value' => ['required','max:'.config('defaults.default_string_length'), new SettingRule()],
-
+            'value' => ['required','max:'.config('defaults.default_string_length'), new SettingValueRule($request->type,$request->key)],
+            // 'type' => [new SettingTypeRule()],
         ];
 
 
