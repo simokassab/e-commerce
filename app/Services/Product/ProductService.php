@@ -27,8 +27,8 @@ class ProductService
         $this->childrenIds = $childrenIds ?? [];
 
         self::storeAdditionalCategrories()
-            // ->storeAdditionalFields()
-            // ->storeAdditionalImages()
+            // ->storeAdditionalFields() // different than parent
+            // ->storeAdditionalImages() // different than parent
             ->storeAdditionalLabels()
             ->storeAdditionalTags()
             ->storeAdditionalPrices();
@@ -257,6 +257,7 @@ class ProductService
             $childrenIds = [];
             $data = [];
             throw_if(!$request->product_variations, Exception::class, 'No variations found');
+
             foreach ($request->product_variations as $variation) {
                 if ($variation['image'] == null)
                     $imagePath = "";
