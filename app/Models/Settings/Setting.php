@@ -14,28 +14,22 @@ class Setting extends MainModel
     protected $translatable=[];
     protected $fillable = ['title','value','type','is_developer'];
 
-    // public static $titlesArray=[
-    //     'products_required_fields',
-    //     'products_quantity_greater_than_or_equal',
-    //     'products_minimum_and_reserved_quantity_greater_than_or_equal',
-    //     'products_prices_greater_than_or_equal',
-    //     'products_discounted_price_greater_than_or_equal',
-    // ];
-
-    // public static $titlesTypes = [
-    //     'multi-select',
-    //     'number',
-    //     'number',
-    //     'number',
-    //     'number',
-    // ];
     public static $titlesOptions = [
-        ['sku','summary','specification','barcode','length','height','width','weight','brand_id','tax_id'],
-        [],
-        [],
-        [],
-        [],
+        'products_required_fields' =>  ['sku','summary','specification','barcode','length','height','width','weight','brand_id','tax_id'],
+        'products_quantity_greater_than_or_equal'=>[],
+        'products_minimum_and_reserved_quantity_greater_than_or_equal'=>[],
+        'products_prices_greater_than_or_equal'=>[],
+        'products_discounted_price_greater_than_or_equal'=>[],
     ];
+
+    public static function validateOptionsByTitle($keyTitle,$givenOptions){
+        $returnBool = true; //1. if the title is not in the array of titlesOptions, return true
+        foreach ($givenOptions as $option)
+            $returnBool &= in_array($option, Setting::$titlesOptions[$keyTitle]);
+
+        return $returnBool;
+    }
+
 
 
 }

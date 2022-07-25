@@ -9,7 +9,8 @@ use App\Http\Resources\Setting\SingleSettingResource;
 use App\Models\Settings\Setting;
 use Exception;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class SettingsController extends MainController
 {
@@ -82,19 +83,32 @@ class SettingsController extends MainController
      */
     public function update(StoreSettingRequest $request, Setting $setting)
     {
-        $settingValue="";
-        $findedSetting=Setting::find($request->key);
-
-        if($findedSetting){
-            $setting->value=$settingValue;
+        DB::beginTransaction();
+        try {
+            $value="";
+            if($request->type=='multi-select' && gettype($request->value)=='array'){
+                $value=convertFromArrayToString($request->value,',');
+            }else{
+                $value=$request->value;
+            }
+            $setting->value=$value;
             $setting->save();
+            Cache::rememberForever('settings', function () {
+                return Setting::all(['id','title','type','value']);
+            });
+            DB::commit();
+            return $this->successResponse(
+                __('messages.success.update', ['name' => __(self::OBJECT_NAME)],
+                
+            ),
+            );
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            return $this->errorResponse(
+                __('messages.failed.update', ['name' => __(self::OBJECT_NAME)]). " The error message is : ". $ex->getMessage(),
+            );
+
         }
-
-        else{
-           return $this->errorResponse('The value type must be the same as the setting type');
-        }
-
-
 
     }
     /**

@@ -27,8 +27,9 @@ class StoreSettingRequest extends FormRequest
     public function rules(Request $request)
 {
         return [
-            'value' => ['required','max:'.config('defaults.default_string_length'), new SettingValueRule($request->type,$request->key)],
-            // 'type' => [new SettingTypeRule()],
+
+            'type' => 'required | string',
+            'value' => ['required','max:'.config('defaults.default_string_length'), new SettingValueRule($request->type,$this->setting->id)],
         ];
 
 

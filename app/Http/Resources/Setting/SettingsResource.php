@@ -17,21 +17,24 @@ class SettingsResource extends JsonResource
      */
     public function toArray($request)
     {
+        $idsArray = [];
         $titlesArray = [];
         $typesArray = [];
         $valuesArray = [];
 
-         Cache::get('settings')->map(function ($setting) use (&$titlesArray,&$typesArray,&$valuesArray) {
+         Cache::get('settings')->map(function ($setting) use (&$idsArray,&$titlesArray,&$typesArray,&$valuesArray) {
+            $idsArray[] = $setting->id;
             $titlesArray[] = $setting->title;
             $typesArray[] = $setting->type;
             $valuesArray[] = $setting->value;
              });
 
+        $id= $idsArray[array_search($this->title,$titlesArray)];
         $title= $titlesArray[array_search($this->title,$titlesArray)];
         $type= $typesArray[array_search($this->title,$titlesArray)];
         $value= $valuesArray[array_search($this->title,$titlesArray)];
 
-        switch ($this->type) {
+        switch ($type) {
             case 'number':
                 $value = (int)$value ?? 0;
                 break;
@@ -47,11 +50,11 @@ class SettingsResource extends JsonResource
         }
 
         return [
-            'key' => $this->id,
+            'key' => $id,
             'title'=> $title,
             'name' => ucwords(str_replace("_"," ",$title)),
             'type' => $type,
-            'options' => Setting::$titlesOptions[array_search($this->title,$titlesArray)],
+            'options' => Setting::$titlesOptions[$title],
             'value' => $value
         ];
     }

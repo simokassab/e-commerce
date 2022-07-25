@@ -26,21 +26,9 @@ class SettingsServiceProvider extends ServiceProvider
     public function boot()
     {
         Cache::rememberForever('settings', function () {
-            $setting=Setting::all(['title','type','value']);
+            $setting=Setting::all(['id','title','type','value']);
             return $setting;
         });
-
-        // dd($titlesArray);
-        // Cache::forever('settingTitles', data_get($setting,'*.title'));
-        // Cache::forever('settingTypes', data_get($setting,'*.type'));
-
-        // dd(Cache::get('settingTypes'));
-
-        // Cache::rememberForever('settingsData', function ($setting) {
-        //     data_get($setting,'*.title');
-        // });
-        // config()->set('setting.title',data_get($setting,'*.title'));
-        // config()->set('setting.type',data_get($setting,'*.type'));
 
     }
 }

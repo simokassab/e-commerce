@@ -72,3 +72,7 @@ function getLocaleTranslation($model,$key)
 
 }
 
+function convertFromArrayToString($array,$separator=',')
+{
+    return implode($separator,$array);
+}
