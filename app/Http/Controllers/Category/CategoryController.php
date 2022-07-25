@@ -52,7 +52,7 @@ class CategoryController extends MainController
         $labels= Label::whereEntity('brand')->get();
         $parentCategories = Category::all();
         return $this->successResponse(
-            'Success!',
+            message:'Success!',
             data: [
                 'fields' =>  FieldsResource::collection($fields),
                 'labels' => LabelsResource::collection($labels),
@@ -148,9 +148,10 @@ class CategoryController extends MainController
      */
     public function show(Category $category)
     {
+
         return $this->successResponse(
             'Success!',
-            [
+            data: [
                 'category' =>  new SingleCategoryResource($category->load(['fields','fieldValue','label']))
             ]
         );

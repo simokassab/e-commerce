@@ -26,23 +26,33 @@ class CategoryService {
 
     }
 
-    public static function addFieldsToCategory(Category $category, array $fields){
+    public static function addFieldsToCategory(Category $category, array $fields)
+    {
         $tobeSavedArray = [];
-        foreach ($fields as $key => $field){
+        foreach ($fields as $key => $field) {
 
-            if(gettype($field) == 'string' ){
+            if (gettype($field) == 'string') {
                 $field = (array)json_decode($field);
             }
-            if($field["type"]=='select'){
-                if(gettype($field["value"]) == 'array'){
+
+            if ($field["type"] == 'select') {
+                if (gettype($field["value"]) == 'array') {
                     $tobeSavedArray[$key]["field_value_id"] = $field["value"][0];
-                }elseif(gettype($field["value"]) == 'integer'){
+                } elseif (gettype($field["value"]) == 'integer') {
                     $tobeSavedArray[$key]["field_value_id"] = $field["value"];
                 }
-                $tobeSavedArray[$key]["value"] =null;
+                $tobeSavedArray[$key]["value"] = null;
 
-            }
-            else{
+            } elseif ($field["type"] == 'text') {
+                if (gettype($field["value"]) == 'array') {
+                    $tobeSavedArray[$key]["value"] = json_encode($field['value']);
+                }
+                if (gettype($field) == 'string') {
+                    $tobeSavedArray[$key]["value"] = ($field['value']);
+                }
+                $tobeSavedArray[$key]["field_value_id"] = null;
+
+            } else {
                 $tobeSavedArray[$key]["value"] = $field['value'];
                 $tobeSavedArray[$key]["field_value_id"] = null;
             }
@@ -50,9 +60,7 @@ class CategoryService {
             $tobeSavedArray[$key]["field_id"] = $field['field_id'];
 
         }
-
         return CategoriesFields::insert($tobeSavedArray);
-
     }
 
     public static function addLabelsToCategory(Category $category, array $labels){
