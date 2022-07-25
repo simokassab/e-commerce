@@ -84,48 +84,18 @@ class SettingsController extends MainController
     {
         $settingValue="";
         $findedSetting=Setting::find($request->key);
+
         if($findedSetting){
-            if($request->type==$findedSetting->type){
-                dd($setting->value,$findedSetting->value);
-            // if(gettype($request->value)=='array'){
-            //     $settingValue=implode(',',$request->value);
-            // }
+            $setting->value=$settingValue;
+            $setting->save();
         }
+
         else{
            return $this->errorResponse('The value type must be the same as the setting type');
         }
-        }
-        $setting->value=$settingValue;
-        $setting->save();
-            // if($request->type=='multi-select'){
-            // if(gettype($request->value)=='array'){
-            //         $finalValues="";
-            //         foreach ($request->value as $key => $value)
-            //             $finalValues=implode(',',$request->value);
-
-            //         $setting->value=$finalValues;
-            //     }}
-            //     else{
-            //         $setting->value=$request->value;
-            //     }
-            //     $setting->save();
-            //     return $this->successResponse(
-            //         __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
-            //         [
-            //             'setting' => new SettingsResource($setting)
-            //         ]
-            //     );
 
 
-    //     $finalValues="";
-    //     if(gettype($request->value)=="array"){
-    //     foreach ($request->value as $key => $value) {
-    //         $finalValues.=$value.",";
-    //     }
-    //     $setting->value = $finalValues;
-    // }else{
-    //     $setting->value=$request->value;
-    // }
+
     }
     /**
      * Remove the specified resource from storage.
