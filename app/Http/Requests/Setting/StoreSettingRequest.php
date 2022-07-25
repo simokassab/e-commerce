@@ -27,6 +27,7 @@ class StoreSettingRequest extends FormRequest
 {
         return [
             'value' => 'required | max:'.config('defaults.default_string_length')
+             
         ];
 
 
