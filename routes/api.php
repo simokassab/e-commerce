@@ -116,7 +116,6 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::get('price/get-original-prices',[PricesController::class,'getOriginalPrices'])->name('get.original.prices');
     Route::apiResource('price',PricesController::class);
 
-<<<<<<< HEAD
     //TODO: move all headers to a new file for apis headers
     Route::group(['prefix' => 'headers'], function (){
         Route::get('brands',[BrandController::class,'getTableHeaders']);
@@ -135,15 +134,12 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
         Route::get('units',[UnitController::class,'getTableHeaders']);
         Route::get('users',[UsersController::class,'getTableHeaders']);
         Route::get('settings',[SettingsController::class,'getTableHeaders']);
-=======
     Route::get('product/create',[ProductController::class,'create']);
     Route::apiResource('product',ProductController::class);
 
 
 });
->>>>>>> product-v2
 
 
     });
 
-});

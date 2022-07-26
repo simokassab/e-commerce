@@ -22,10 +22,6 @@ return [
     'tax' => 'Tax',
     'user' => 'User',
     'price'=> 'price',
-<<<<<<< HEAD
-    'product'=> 'Product',
-=======
     'product'=> 'product',
->>>>>>> product-v2
 
 ];

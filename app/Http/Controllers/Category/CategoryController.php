@@ -316,10 +316,6 @@ class CategoryController extends MainController
 
         batch()->update($category = new Category(),$request->order,'id');
             return $this->successResponsePaginated(CategoryResource::class,Category::class,self::relations);
-<<<<<<< HEAD
-=======
-
->>>>>>> product-v2
     }
 
     public function getTableHeaders(){
