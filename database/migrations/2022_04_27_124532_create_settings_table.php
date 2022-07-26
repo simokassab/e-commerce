@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->string('title',250)->unique();
-            $table->string('value',250);
+            $table->text('value')->nullable();
+            $table->enum('type', ['number', 'text','checkbox','select','multi-select']);
             $table->boolean('is_developer')->default(0);
             $table->timestamps();
         });
