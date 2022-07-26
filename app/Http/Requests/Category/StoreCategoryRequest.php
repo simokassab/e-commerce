@@ -29,7 +29,7 @@ class StoreCategoryRequest extends MainRequest
             'name' => 'required',
             'code' => 'required | max:'.config('defaults.default_string_length'),
 
-            'image' => 'nullable | file
+            'image' => 'nullable | file | max:'.config('defaults.default_string_length').'
             | mimes:'.config('defaults.default_image_extentions').'
             | max:'.config('defaults.default_image_size').'
             | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
@@ -40,7 +40,7 @@ class StoreCategoryRequest extends MainRequest
             | dimensions:max_width='.config('defaults.default_icon_maximum_width').',max_height='.config('defaults.default_icon_maximum_height'),
 
             'parent_id' => 'nullable | integer',
-            'slug' => 'required | max:'.config('defaults.default_string_length').'| unique:categories,slug,'.$this->id,
+            'slug' => 'required | max:'.config('defaults.default_string_length_2').'| unique:categories,slug,'.$this->id,
             'meta_title' => 'nullable',
             'meta_description' => 'nullable',
             'meta_keyword' => 'nullable',
@@ -49,7 +49,13 @@ class StoreCategoryRequest extends MainRequest
 
             'fields.*.field_id' => 'required | exists:fields,id,entity,category',
             'fields.*.field_value_id' =>  'integer | exists:fields_values,id',
-            'fields.*.value'=> 'nullable',
+            'fields.*.value'=> 'nullable | max:'.config('defaults.default_string_length_2'),
+
+
+            'labels.*.label_id' => 'required | integer | exists:labels,id',
+
+            'order.*.id' => 'required | integer | exists:categories,id',
+            'order.*.sort' => 'required | integer',
 
             'labels.*' => 'required | exists:labels,id',
         ];
@@ -84,13 +90,22 @@ class StoreCategoryRequest extends MainRequest
             'sort.integer' => 'the :attribute should be an integer',
 
             'fields.*.field_id.required' => 'The field_id is required',
-            'fields.*.field_id.exists' => 'The field_id is not exists or not for categories entity',
+            'fields.*.field_id.integer' => 'The field_id should be an integer',
+            'fields.*.field_id.exists' => 'The field_id is not exists or not for brand entity',
             'fields.*.field_value_id.required' => 'The field_value_id  is required',
             'fields.*.field_value_id.exists' => 'The field_value_id  is not exists',
             'fields.*.value.required' => 'The value is required',
 
             'labels.*.label_id.required' => 'The label_id is required',
+            'labels.*.label_id.integer' => 'The label_id should be an integer',
             'labels.*.label_id.exists' => 'The label_id is not exists',
+
+            'order.*.id.required' => 'The id is required',
+            'order.*.id.integer' => 'The id should be an integer',
+            'order.*.id.exists' => 'The id is not exists',
+            'order.*.sort.required' => 'The sort is required',
+            'order.*.sort.integer' => 'The sort should be an integer',
+
         ];
 
     }

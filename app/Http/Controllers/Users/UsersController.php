@@ -25,7 +25,7 @@ class UsersController extends MainController
             $roleName = $request->data['role_name'] ?? '';
             $keys = array_keys($data ?? []);
             $searchKey = ['first_name','last_name','email','username'];
-            $user=User::with(['roles' => fn($query) => $query->select('name')])
+            $rows=User::with(['roles' => fn($query) => $query->select('name')])
                 ->whereHas('roles',fn ($query) => $query->whereRaw('lower(name) like (?)',["%$roleName%"]))
                 ->where(function($query) use($data,$keys,$searchKey){
                         foreach($keys as $key) if(in_array($key,$searchKey))
@@ -33,7 +33,25 @@ class UsersController extends MainController
                 })
                 ->paginate($request->limit ?? config('defaults.default_pagination'));
 
-            return UserResource::collection($user);
+                if($rows->isEmpty()){
+                    $rows=[
+                       'data' => [
+                           [
+                           'id' => '',
+                           'username'=>'',
+                           'email'=> '',
+                           'first_name'=> '',
+                           'is_confirmed'=> '',
+                           'is_disabled'=> '',
+                           'role'=> '',
+
+                       ]
+                       ]
+                   ];
+                   return response()->json($rows);
+                   return  UserResource::collection($rows);
+               }
+                return  UserResource::collection($rows);
 
         }
 

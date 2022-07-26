@@ -9,7 +9,6 @@ use App\Models\Tax\Tax;
 use App\Models\Brand\Brand;
 use App\Models\Price\Price;
 use App\Models\Tag\Tag;
-use PDO;
 use App\Models\Product\ProductImage;
 use App\Models\Label\Label;
 use App\Models\Attribute\Attribute;
@@ -17,12 +16,18 @@ use App\Models\Attribute\AttributeValue;
 use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
 use App\Models\MainModel;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Spatie\Translatable\HasTranslations;
 
 class Product extends MainModel
 {
-    use HasFactory;
+    use HasFactory,HasTranslations;
+    protected $translatable=['name','summary','specification','description','meta_title','meta_description','meta_keywords'];
     protected $table='products';
     protected $guard_name = 'web';
+    protected $guarded=[];
+
 
     public function parent(){
         return $this->belongsTo(Product::class,'parent_product_id');
@@ -53,7 +58,7 @@ class Product extends MainModel
         return $this->belongsTo(Product::class,'parent_product_id');
 
     }
-    public function productRelatedChilds(){
+    public function productRelatedChildren(){
         return $this->hasMany(Product::class,'child_product_id');
 
     }
@@ -62,7 +67,7 @@ class Product extends MainModel
     }
 
     public function defaultCategory(){
-        return $this->hasMany(Category::class,'category_id');
+        return $this->belongsTo(Category::class,'category_id');
 
     }
 
@@ -91,4 +96,8 @@ class Product extends MainModel
         return $this->hasMany(FieldValue::class,'field_value_id');
 
     }
+
 }
+
+
+

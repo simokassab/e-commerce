@@ -31,7 +31,25 @@ class CountryController extends MainController
         if ($request->method()=='POST') {
 
             $searchKeys=['name','iso_code_1','iso_code_2','phone_code'];
-            return $this->getSearchPaginated(CountryResource::class, Country::class,$request, $searchKeys);
+            $data= $this->getSearchPaginated(CountryResource::class, Country::class,$request, $searchKeys);
+            if($data->isEmpty()){
+                $data=[
+                   'data' => [
+                       [
+                       'id' => '',
+                       'name'=>'',
+                       'iso_code_1'=> '',
+                       'iso_code_2'=> '',
+                       'phone_code'=> '',
+                       'flag'=> '',
+                   ]
+                   ]
+               ];
+               return response()->json($data);
+               return  CountryResource::collection($data);
+           }
+           return $data;
+
         }
         return $this->successResponsePaginated(CountryResource::class,Country::class);
         }

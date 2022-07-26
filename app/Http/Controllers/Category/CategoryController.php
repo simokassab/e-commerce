@@ -31,12 +31,10 @@ class CategoryController extends MainController
 
     public function index(Request $request)
     {
-
         if ($request->method()=='POST') {
             $searchKeys=['name','code','slug','description'];
             $searchRelationsKeys = [ 'parent' =>['parent_name' => 'name',] ];
             return $this->getSearchPaginated(CategoryResource::class, Category::class, $request, $searchKeys,self::relations,$searchRelationsKeys);
-
           }
         return $this->successResponsePaginated(CategoryResource::class,Category::class,self::relations);
     }
@@ -277,11 +275,8 @@ class CategoryController extends MainController
 
     public function toggleStatus(Request $request ,$id){
 
-        $request->validate([
-            'is_disabled' => 'boolean|required'
-        ]);
-
-            $category = Category::findOrFail($id);
+        $request->validate(['is_disabled' => 'boolean|required']);
+        $category = Category::findOrFail($id);
         $category->is_disabled=$request->is_disabled;
         if(!$category->save())
             return $this->errorResponse(__('messages.failed.update',['name' => __(self::OBJECT_NAME)]) );
@@ -317,10 +312,14 @@ class CategoryController extends MainController
         );
     }
 
-    public function updateSortValues(Request $request){
+    public function updateSortValues(StoreCategoryRequest $request){
 
         batch()->update($category = new Category(),$request->order,'id');
             return $this->successResponsePaginated(CategoryResource::class,Category::class,self::relations);
+<<<<<<< HEAD
+=======
+
+>>>>>>> product-v2
     }
 
     public function getTableHeaders(){

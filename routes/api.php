@@ -26,6 +26,8 @@ use App\Http\Controllers\Users\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Prices\PricesController;
+use App\Http\Controllers\Product\ProductController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -108,11 +110,13 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::post('tax/all',[TaxController::class,'index']);//for searching
     Route::get('tax/create' , [TaxController::class,'create']);
     Route::apiResource('tax',TaxController::class);
+    Route::post('tax/all',[TaxController::class,'index']);// for search
 
     Route::post('price/all',[PricesController::class,'index']);// for search
     Route::get('price/get-original-prices',[PricesController::class,'getOriginalPrices'])->name('get.original.prices');
     Route::apiResource('price',PricesController::class);
 
+<<<<<<< HEAD
     //TODO: move all headers to a new file for apis headers
     Route::group(['prefix' => 'headers'], function (){
         Route::get('brands',[BrandController::class,'getTableHeaders']);
@@ -131,6 +135,13 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
         Route::get('units',[UnitController::class,'getTableHeaders']);
         Route::get('users',[UsersController::class,'getTableHeaders']);
         Route::get('settings',[SettingsController::class,'getTableHeaders']);
+=======
+    Route::get('product/create',[ProductController::class,'create']);
+    Route::apiResource('product',ProductController::class);
+
+
+});
+>>>>>>> product-v2
 
 
     });

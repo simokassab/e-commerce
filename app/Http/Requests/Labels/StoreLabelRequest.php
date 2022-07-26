@@ -30,7 +30,7 @@ class StoreLabelRequest extends MainRequest
             'entity' => 'required|in:'.config('defaults.validation_default_entities'),
             'color' => 'required | max:'.config('defaults.default_string_length'),
 
-            'image' => 'nullable | image
+            'image' => 'nullable | image | max:'.config('defaults.default_string_length').'
             | mimes:'.config('defaults.default_image_extentions').'
             | max:'.config('defaults.default_image_size').'
             | dimensions:min_width='.config('defaults.default_image_minimum_width').',min_height='.config('defaults.default_image_minimum_height').'

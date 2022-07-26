@@ -33,7 +33,7 @@ class StoreBrandRequest extends MainRequest
             'name' => 'required',
 //            'code' => 'required | max:'.config('defaults.default_string_length'),
 
-            'image' => 'nullable | file
+            'image' => 'nullable | file | max:'.config('defaults.default_string_length_2').'
             | mimes:'.config('defaults.default_image_extentions').'
             | max:'.config('defaults.default_image_size').'
             | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
@@ -44,11 +44,12 @@ class StoreBrandRequest extends MainRequest
             'description' => 'nullable',
             'sort' => 'nullable | integer',
 
-//            'fields.*.field_id' => 'required | exists:fields,id,entity,brand',
-//            'fields.*.field_value_id' =>  'integer | exists:fields_values,id',
-//            'fields.*.value'=> 'nullable',
+            'fields.*.field_id' => 'required | exists:fields,id,entity,brand',
+            'fields.*.field_value_id' =>  'integer | exists:fields_values,id',
+            'fields.*.value'=> 'nullable | max:'.config('defaults.default_string_length_2'),
 
-            'labels.*' => 'required | exists:labels,id',
+
+            'labels.*.label_id' => 'required | exists:labels,id',
 
         ];
     }
