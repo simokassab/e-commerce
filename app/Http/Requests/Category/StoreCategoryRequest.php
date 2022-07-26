@@ -47,9 +47,9 @@ class StoreCategoryRequest extends MainRequest
             'description' => 'nullable',
             'sort' => 'nullable | integer',
 
-            'fields.*.field_id' => 'required | exists:fields,id,entity,category',
-            'fields.*.field_value_id' =>  'integer | exists:fields_values,id',
-            'fields.*.value'=> 'nullable | max:'.config('defaults.default_string_length_2'),
+//            'fields.*.field_id' => 'required | exists:fields,id,entity,category',
+//            'fields.*.field_value_id' =>  'integer | exists:fields_values,id',
+//            'fields.*.value'=> 'nullable | max:'.config('defaults.default_string_length_2'),
 
 
             'labels.*.label_id' => 'required | integer | exists:labels,id',
