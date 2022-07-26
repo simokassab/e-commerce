@@ -3,7 +3,9 @@
 namespace App\Http\Resources\Setting;
 
 use App\Models\Settings\Setting;
+use App\Services\Setting\SettingService;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Cache;
 
 class SettingsResource extends JsonResource
 {
@@ -15,33 +17,45 @@ class SettingsResource extends JsonResource
      */
     public function toArray($request)
     {
-        $title= Setting::$titlesArray[array_search($this->title,Setting::$titlesArray)] ?? $this->title;
+        $idsArray = [];
+        $titlesArray = [];
+        $typesArray = [];
+        $valuesArray = [];
 
-        // $integerField =((int)($this->title));
-        // if($this->value!=null){
+         Cache::get('settings')->map(function ($setting) use (&$idsArray,&$titlesArray,&$typesArray,&$valuesArray) {
+            $idsArray[] = $setting->id;
+            $titlesArray[] = $setting->title;
+            $typesArray[] = $setting->type;
+            $valuesArray[] = $setting->value;
+             });
 
-        // if(gettype($this->value)=='string'){
-        //         $value = $this->value;
-        //     }
-        //     else{
-        //         $value = [];
-        //     }
-        // }
-        // elseif(gettype($this->value)=='integer'){
-        //     $value = (int)$this->value;
-        // }
+        $id= $idsArray[array_search($this->title,$titlesArray)];
+        $title= $titlesArray[array_search($this->title,$titlesArray)];
+        $type= $typesArray[array_search($this->title,$titlesArray)];
+        $value= $valuesArray[array_search($this->title,$titlesArray)];
 
-        // else{
-        //     $value=$this->value;
-        // }
+        switch ($type) {
+            case 'number':
+                $value = (int)$value ?? 0;
+                break;
+            case 'checkbox':
+                $value = (bool)$value ?? false;
+                break;
+            case 'multi-select':
+                $value = $value ?? [];
+                break;
+            default:
+                $value = $value ?? "";
+                break;
+        }
 
         return [
-            'key' =>$this->id,
-            'title'=>$title,
+            'key' => $id,
+            'title'=> $title,
             'name' => ucwords(str_replace("_"," ",$title)),
-            'type' =>Setting::$titlesTypes[array_search($this->title,Setting::$titlesArray)],
-            'options' =>Setting::$titlesOptions[array_search($this->title,Setting::$titlesArray)],
-            'value' => (int)$this->value
+            'type' => $type,
+            'options' => Setting::$titlesOptions[$title],
+            'value' => $value
         ];
     }
 }

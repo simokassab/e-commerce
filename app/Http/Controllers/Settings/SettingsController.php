@@ -9,7 +9,8 @@ use App\Http\Resources\Setting\SingleSettingResource;
 use App\Models\Settings\Setting;
 use Exception;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class SettingsController extends MainController
 {
@@ -82,26 +83,34 @@ class SettingsController extends MainController
      */
     public function update(StoreSettingRequest $request, Setting $setting)
     {
-        $finalValues="";
-        if(gettype($request->value)=="array"){
-        foreach ($request->value as $key => $value) {
-            $finalValues.=$value.",";
+        DB::beginTransaction();
+        try {
+            $value="";
+            if($request->type=='multi-select' && gettype($request->value)=='array'){
+                $value=convertFromArrayToString($request->value,',');
+            }else{
+                $value=$request->value;
+            }
+            $setting->value=$value;
+            $setting->save();
+            Cache::rememberForever('settings', function () {
+                return Setting::all(['id','title','type','value']);
+            });
+            DB::commit();
+            return $this->successResponse(
+                __('messages.success.update', ['name' => __(self::OBJECT_NAME)],
+                
+            ),
+            );
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            return $this->errorResponse(
+                __('messages.failed.update', ['name' => __(self::OBJECT_NAME)]). " The error message is : ". $ex->getMessage(),
+            );
+
         }
-        $setting->value = $finalValues;
-    }else{
-        $setting->value=$request->value;
-    }
-        if (!$setting->save())
-            return $this->errorResponse(__('messages.failed.update', ['name' => __(self::OBJECT_NAME)]));
 
-        return $this->successResponse(
-            __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
-            [
-                'setting' => new SettingsResource($setting)
-            ]
-        );
     }
-
     /**
      * Remove the specified resource from storage.
      *

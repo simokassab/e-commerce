@@ -3,10 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Settings\Setting;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-
-use function Ramsey\Uuid\v1;
 
 class SettingSeeder extends Seeder
 {
@@ -21,21 +19,50 @@ class SettingSeeder extends Seeder
 
         Setting::query()->insert([
             [
-            'title' => json_encode(['en' => 'Image size','ar' => 'حجم الصورة']),
-            'value' => json_encode(['en' => '10000','ar' => '10000']),
-            'is_developer' =>  1,
+            'title' => "products_required_fields",
+            'type' => 'multi-select',
+            'value' => null,
+            'is_developer'=> 1,
+            'created_at' => Carbon::now()->toDateString(),
+            'updated_at' => Carbon::now()->toDateString(),
         ],
 
         [
-            'title' => json_encode(['en' => 'string length','ar' => 'طول السلسلة']),
-            'value' => json_encode(['en' => '250','ar' => '250']),
-            'is_developer' =>  0,
+            'title' => "products_quantity_greater_than_or_equal",
+            'type' => 'number',
+            'value' => 0,
+            'is_developer'=> 1,
+            'created_at' => Carbon::now()->toDateString(),
+            'updated_at' => Carbon::now()->toDateString(),
+
         ],
 
         [
-            'title' => json_encode(['en' => 'image extensions','ar' => 'أمتدادات الصورة']),
-            'value' => json_encode(['en' => 'png,jpg,jpeg','ar' => 'png,jpg,jpeg']),
-            'is_developer' =>  1,
+            'title' => "products_minimum_and_reserved_quantity_greater_than_or_equal",
+            'type' => 'number',
+            'value' => 0,
+            'is_developer'=> 1,
+            'created_at' => Carbon::now()->toDateString(),
+            'updated_at' => Carbon::now()->toDateString(),
+
+        ],
+        [
+            'title' => "products_prices_greater_than_or_equal",
+            'type' => 'number',
+            'value' => 0,
+            'is_developer'=> 1,
+            'created_at' => Carbon::now()->toDateString(),
+            'updated_at' => Carbon::now()->toDateString(),
+
+        ],
+        [
+            'title' => "products_discounted_price_greater_than_or_equal",
+            'type' => 'number',
+            'value' => 0,
+            'is_developer'=> 1,
+            'created_at' => Carbon::now()->toDateString(),
+            'updated_at' => Carbon::now()->toDateString(),
+
         ],
     ]);
     }

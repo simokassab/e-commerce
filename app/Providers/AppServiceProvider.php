@@ -28,6 +28,6 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Schema::defaultStringLength(125);
-//        Setting::observe(SettingObserver::class);
+       Setting::observe(SettingObserver::class);
     }
 }
