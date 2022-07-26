@@ -119,6 +119,13 @@ class CategoryController extends MainController
             }
 
             if ($request->has('labels')) {
+                $oldLabel = $request->labels;
+                if(gettype($request->labels) == 'string'){
+                    $request->labels = explode(",",$request->labels);
+                    if(count($request->labels) <= 0){
+                        $request->labels = $oldLabel;
+                    }
+                }
                 CategoryService::addLabelsToCategory($category,$request->labels);
             }
 
@@ -222,11 +229,18 @@ class CategoryController extends MainController
 
             $category->save();
 
-            if($request->has('fields')){
+            if($request->has('fields') && count($request->fields) > 0){
                 CategoryService::addFieldsToCategory($category,$request->fields);
             }
 
-            if ($request->has('labels')) {
+            if ($request->has('labels') && count($request->labels) > 0) {
+                $oldLabel = $request->labels;
+                if(gettype($request->labels) == 'string'){
+                    $request->labels = explode(",",$request->labels);
+                    if(count($request->labels) <= 0){
+                        $request->labels = $oldLabel;
+                    }
+                }
                 CategoryService::addLabelsToCategory($category,$request->labels);
             }
 
