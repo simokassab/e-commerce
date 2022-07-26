@@ -105,7 +105,6 @@ class ProductController extends MainController
             $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
 
         DB::commit();
-        // dd('stop');
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
         'product' =>  new ProductResource($product)
           ]);
