@@ -71,13 +71,11 @@ class BrandController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(StoreBrandRequest $request)
     {
-        return $request;
         DB::beginTransaction();
         try {
 
-            //Brand Store
             $brand = new Brand();
 
             if( gettype($request->name) != 'array'){

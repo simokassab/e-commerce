@@ -7,7 +7,7 @@ use App\Rules\SettingValueRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
-class StoreSettingRequest extends FormRequest
+class StoreSettingRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.
