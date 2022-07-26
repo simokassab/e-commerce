@@ -62,38 +62,75 @@ class ProductService
         throw new Exception('Error while storing product categories');
     }
 
+
+
     private function storeAdditionalFields()
     {
-        if ($this->request->has('fields')) {
-            $fieldsArray = $this->request->fields ?? [];
+        if (!$this->request->has('fields'))
+            return $this;
 
-            $data = collect($this->request->fields);
-            $data->each(function ($item, $key) {
-                $item['product_id'] = $this->product_id;
-                $item['created_at'] = Carbon::now()->toDateTimeString();
-                $item['updated_at'] = Carbon::now()->toDateTimeString();
-            });
+        $childrenIdsArray = $this->childrenIds;
+        $childrenIdsArray[] = $this->product_id;
 
+        $data = [];
 
-            foreach ($this->request->fields as $field => $value) {
-
-                if ($fieldsArray[$field]["type"] == 'select')
-                    $fieldsArray[$field]["value"] =  null;
-                else {
-                    $fieldsArray[$field]["value"] = json_encode($value['value']);
-                    $fieldsArray[$field]["field_value_id"] = null;
+        foreach ($childrenIdsArray as $key => $child) {
+            foreach ($this->request->fields as $index => $field) {
+                if (gettype($field) == 'string') {
+                    $field = (array)json_decode($field);
                 }
-
-                $fieldsArray[$field]["product_id"] = $this->product_id;
-                $fieldsArray[$field]["created_at"] = Carbon::now()->toDateTimeString();
-                $fieldsArray[$field]["updated_at"] = Carbon::now()->toDateTimeString();
-                unset($fieldsArray[$field]['type']);
+                if ($field["type"] == 'select') {
+                    $data[$key]["value"] = null;
+                    if (gettype($field["value"]) == 'array') {
+                        $data[$key]["field_value_id"] = $field["value"][0];
+                    } elseif (gettype($field["value"]) == 'integer') {
+                        $data[$key]["field_value_id"] = $field["value"];
+                    }
+                } else {
+                    $data[$key]["field_value_id"] = null;
+                    $data[$key]["value"] = ($field['value']);
+                }
+                $data[$key]["product_id"] = $child;
+                $data[$key]["field_id"] = $field['field_id'];
             }
-            ProductField::insert($fieldsArray);
+        }
+        if (ProductField::insert($data)) {
+            return $this;
         }
 
-        return $this;
+        throw new Exception('Error while storing product fields');
     }
+
+    // if ($this->request->has('fields')) {
+    //     $fieldsArray = $this->request->fields ?? [];
+
+    //     $data = collect($this->request->fields);
+    //     $data->each(function ($item, $key) {
+    //         $item['product_id'] = $this->product_id;
+    //         $item['created_at'] = Carbon::now()->toDateTimeString();
+    //         $item['updated_at'] = Carbon::now()->toDateTimeString();
+    //     });
+
+
+    //     foreach ($this->request->fields as $field => $value) {
+
+    //         if ($fieldsArray[$field]["type"] == 'select')
+    //             $fieldsArray[$field]["value"] =  null;
+    //         else {
+    //             $fieldsArray[$field]["value"] = json_encode($value['value']);
+    //             $fieldsArray[$field]["field_value_id"] = null;
+    //         }
+
+    //         $fieldsArray[$field]["product_id"] = $this->product_id;
+    //         $fieldsArray[$field]["created_at"] = Carbon::now()->toDateTimeString();
+    //         $fieldsArray[$field]["updated_at"] = Carbon::now()->toDateTimeString();
+    //         unset($fieldsArray[$field]['type']);
+    //     }
+    //     ProductField::insert($fieldsArray);
+    // }
+
+    // return $this;
+    // }
 
     private function storeAdditionalImages()
     {
@@ -323,9 +360,8 @@ class ProductService
     public function createProduct($data)
     {
         try {
-
             $product = new Product();
-            $product->name = json_encode($data['name']);
+            $product->name = ($data['name']);
             $product->slug = $data['slug'];
             $product->code = $data['code'];
             $product->sku = $data['sku'];
@@ -358,6 +394,7 @@ class ProductService
             $product->products_statuses_id = $data['products_statuses_id'];
             $product->save();
         } catch (Exception $e) {
+
             throw new Exception($e->getMessage());
         }
 

@@ -72,7 +72,7 @@ class StoreProductRequest extends FormRequest
             'weight' =>  [Rule::when(in_array('weight',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
             'is_disabled' => 'nullable | boolean ',
             'sort' => 'nullable | integer',
-            'is_default_child' => 'boolean',
+            'is_default_child' => 'required | boolean',
 
             'parent_product_id' => [Rule::when($request->isSamePriceAsParent && $request->type == 'variable_child', 'required', 'nullable'), 'integer', 'exists:products,id'],
             'category_id' => 'required  | integer | exists:categories,id',
@@ -81,7 +81,6 @@ class StoreProductRequest extends FormRequest
             'tax_id' => [Rule::when(in_array('tax_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:brands,id'],
             'products_statuses_id' => 'required | integer | exists:products_statuses,id',
 
-            'categories' => 'required | array',
             'categories.*' => 'exists:categories,id',
 
             'fields.*.field_id' => 'required | integer | exists:fields,id,entity,product',
@@ -95,43 +94,57 @@ class StoreProductRequest extends FormRequest
             'images.*.title' => 'required ',
             'images.*.sort' => 'required | integer',
 
-            'labels' => 'required | array',
             'labels.*' => 'exists:labels,id',
 
             'prices.*.price_id' => 'required | integer | exists:prices,id',
             'prices.*.price' => 'required | numeric | gte:' .$this->priceValue,
             'prices.*.discounted_price' => 'nullable | numeric | gte:' .$this->discountedPriceValue,
 
-            'related_products.*.child_product_id' => [Rule::when($request->type == 'bundle', 'required'), 'integer', 'exists:products,id'],
-            'related_products.*.child_quantity' => [Rule::when($request->type == 'bundle', 'required'), 'integer', 'gte:' . $this->QuantityValue],
+            'related_products.*.child_product_id' => [Rule::when($request->type == 'bundle', ['required', 'integer', 'exists:products,id'])],
+            'related_products.*.child_quantity' => [Rule::when($request->type == 'bundle', ['required','integer', 'gte:' . $this->QuantityValue])],
 
-            'tags' => 'required | array',
             'tags.*' => 'exists:tags,id',
 
             'order.*.id' => 'required | integer | exists:products,id',
             'order.*.sort' => 'required | integer',
 
-            'product_variations' => [Rule::when($request->type == 'variable', 'required'), 'array'],
-            'product_variations.*.slug' => ['required' ,'max:' . config('defaults.default_string_length'),'unique:products,slug,'. $this->id ?? null],
-            'product_variations.*.code' => ['required' , 'max:' . config('defaults.default_string_length'),'unique:products,code,'. $this->id ?? null],
+            'product_variations'=> [Rule::when($request->type == 'variable', 'required', 'nullable')],
+            'product_variations.*.slug' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
+            'product_variations.*.code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
             'product_variations.*.sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
-            'product_variations.*.quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
-            'product_variations.*.reserved_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'nullable'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
-            'product_variations.*.minimum_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
+            
+            'product_variations.*.quantity' => ['required', 'integer', 'gte:' . $this->QuantityValue],
+            'product_variations.*.reserved_quantity' => ['nullable' , 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
+            'product_variations.*.minimum_quantity' => ['required', 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
+          
+            'product_variations.*.summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
+            'product_variations.*.specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
+            'product_variations.*.meta_title' => 'nullable',
+            'product_variations.*.meta_description' => 'nullable',
+            'product_variations.*.meta_keyword' => 'nullable',
+            'product_variations.*.description' => 'nullable',
             'product_variations.*.barcode' => [Rule::when(in_array('barcode',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'max:' . config('defaults.default_string_length')],
             'product_variations.*.height' => [Rule::when(in_array('height',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
             'product_variations.*.width' =>  [Rule::when(in_array('width',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
             'product_variations.*.length' =>  [Rule::when(in_array('length',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
             'product_variations.*.weight' =>  [Rule::when(in_array('weight',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
-            'product_variations.*.is_default_child' => 'boolean',
+            'product_variations.*.is_default_child' => 'required | boolean',
+            'product_variations.*.isSamePriceAsParent' =>'required | boolean',
+
             'product_variations.*.prices.*.price_id' => 'required | integer | exists:prices,id',
             'product_variations.*.prices.*.price' => 'required | numeric | gte:' .$this->priceValue,
             'product_variations.*.prices.*.discounted_price' => 'nullable | numeric | gte:' .$this->discountedPriceValue,
-            'product_variations.*.isSamePriceAsParent' => 'boolean',
+            
             'product_variations.*.images.*.image' => 'required | file
-                | mimes:' . config('defaults.default_image_extentions') . '
-                | max:' . config('defaults.default_image_size') . '
-                | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
+            | mimes:' . config('defaults.default_image_extentions') . '
+            | max:' . config('defaults.default_image_size') . '
+            | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
+            'product_variations.*.images.*.title' => 'required ',
+            'product_variations.*.images.*.sort' => 'required | integer',
+
+            'product_variations.*.fields.*.field_id' => 'required | integer | exists:fields,id,entity,product',
+            'product_variations.*.fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
+            'product_variations.*.fields.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
 
         ];
     }

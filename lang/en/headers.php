@@ -315,54 +315,74 @@ return [
             'type' => 'string',
             'sort' => true
         ],
-        'slug' => [
-            'name' => 'Slug',
-            'search' => 'string',
-            'type' => 'String',
-            'sort' => true
-        ],
-        'category' => [
-            'name' => 'Category',
+        'sku' => [
+            'name' => 'Sku',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
-        'code' => [
-            'name' => 'Code',
+        'quantity' => [
+            'name' => 'Quantity',
             'search' => 'integer',
             'type' => 'integer',
             'sort' => true
         ],
-        'sku' => [
-            'name' => 'SKU',
+        'status' => [
+            'name' => 'Status',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
-        'type' => [
-            'name' => 'Type',
+        // 'stock' => [
+        //     'name' => 'Stock',
+        //     'search' => 'string',
+        //     'type' => 'string',
+        //     'sort' => true
+        // ],
+        'category' => [
+            'name' => 'Main Category',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
-        'unit ' => 'Unit',
-        'quantity' => 'Quantity',
-        'reserved_quantity' => 'Reserved Quantity',
-        'minimum_quantity' => 'Minimum Quantity',
-        'summary' => 'Summary',
-        'specification' => 'Specification',
-        'image' => 'Image',
-        'brand_id' => 'Brand',
-        'tax_id' => 'Tax',
-        'status' => 'Status',
-        'barcode' => 'Barcode',
-        'height' => 'Height',
-        'width' => 'Width',
-        'length' => 'Length',
-        'weight' => 'Weight',
-        'parent_product_id ' => 'Parent',
-        'is_default_child' => 'Is Default Child?',
-        'products_statuses_id' => 'Product Status'
+        'categories' => [
+            'name' => 'Additional Categories',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+       
+        'tags' => [
+            'name' => 'Tags',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'brands' => [
+            'name' => 'Brands',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+
+        // 'unit ' => 'Unit',
+        // 'quantity' => 'Quantity',
+        // 'reserved_quantity' => 'Reserved Quantity',
+        // 'minimum_quantity' => 'Minimum Quantity',
+        // 'summary' => 'Summary',
+        // 'specification' => 'Specification',
+        // 'image' => 'Image',
+        // 'brand_id' => 'Brand',
+        // 'tax_id' => 'Tax',
+        // 'status' => 'Status',
+        // 'barcode' => 'Barcode',
+        // 'height' => 'Height',
+        // 'width' => 'Width',
+        // 'length' => 'Length',
+        // 'weight' => 'Weight',
+        // 'parent_product_id ' => 'Parent',
+        // 'is_default_child' => 'Is Default Child?',
+        // 'products_statuses_id' => 'Product Status'
     ],
     'roles' => [
         'id' => [

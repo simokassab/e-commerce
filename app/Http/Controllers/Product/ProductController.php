@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Product\StoreProductRequest;
-use App\Http\Resources\ProductResource;
+use App\Http\Resources\Product\ProductResource;
 use App\Models\Brand\Brand;
 use App\Models\Category\Category;
 use App\Models\Field\Field;
@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends MainController
 {
     const OBJECT_NAME = 'objects.product';
-    const relations=['parent','children','defaultCategory','unit','tax','brand'];
+    const relations=['parent','children','defaultCategory','unit','tax','brand','category'];
 
     public function __construct(ProductService $productService)
     {
@@ -38,6 +38,7 @@ class ProductController extends MainController
         if($request->method()=='POST'){
 
         }
+
         return $this->successResponsePaginated(ProductResource::class,Product::class,self::relations);
 
     }
@@ -106,7 +107,7 @@ class ProductController extends MainController
 
         DB::commit();
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-        'product' =>  new ProductResource($product)
+        'product' =>  new ProductResource($product->load(['defaultCategory','brand','category']))
           ]);
         }catch (\Exception $ex) {
             DB::rollBack();
@@ -249,5 +250,7 @@ class ProductController extends MainController
     }
 
 
-
+    public function getTableHeaders(){
+        return $this->successResponse('Success!',['headers' => __('headers.products') ]);
+}
 }

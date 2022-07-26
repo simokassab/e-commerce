@@ -37,7 +37,7 @@ class Product extends MainModel
         return $this->hasMany(Product::class,'parent_product_id');
     }
 
-    public function cateogry(){
+    public function category(){
         return $this->hasMany(Category::class,'category_id');
     }
     public function unit(){

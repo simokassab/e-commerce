@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Expr\FuncCall;
 use App\Exceptions\FileErrorException;
 use App\Http\Resources\AttributeResource;
-use App\Http\Resources\CategoryResource;
 use App\Models\Attribute\Attribute;
 use App\Models\Attribute\AttributeValue;
 use Exception;
