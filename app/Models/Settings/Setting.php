@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Cache;
 
 class Setting extends MainModel
 {
-<<<<<<< HEAD
     use HasFactory;
 
     protected $translatable=[];
@@ -32,12 +31,5 @@ class Setting extends MainModel
     }
 
 
-=======
-    use HasFactory, HasTranslations;
-
-    protected $translatable=[];
-    protected $fillable = ['title','value','is_developer'];
-    protected $guard_name = 'web';
->>>>>>> product-v2
 
 }
