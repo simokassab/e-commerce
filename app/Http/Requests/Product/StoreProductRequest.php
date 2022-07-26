@@ -5,6 +5,7 @@ namespace App\Http\Requests\Product;
 use App\Models\Settings\Setting;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 
 class StoreProductRequest extends FormRequest
@@ -32,15 +33,8 @@ class StoreProductRequest extends FormRequest
     public function rules(Request $request)
     {
 
-        $titlesArray = [
-            'products_required_fields',
-            'products_quantity_greater_than_or_equal',
-            'products_minimum_and_reserved_quantity_greater_than_or_equal',
-            'products_prices_greater_than_or_equal',
-            'products_discounted_price_greater_than_or_equal',
-        ];
-
-        $productSettings = Setting::whereIn('title', $titlesArray)->get()->groupBy('title')->toArray();
+        $settingsTitles = Cache::get('settings')->pluck('title')->toArray();
+        $productSettings = Cache::get('settings')->whereIn('title',$settingsTitles)->groupBy('title')->toArray();
 
         $this->productsRequiredSettingsArray = explode(',',$productSettings['products_required_fields'][0]['value']) ?? [];
         $this->QuantityValue= $productSettings['products_quantity_greater_than_or_equal'][0]['value'] ?? 0;
