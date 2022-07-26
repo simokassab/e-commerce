@@ -22,10 +22,10 @@ return new class extends Migration
             $table->unsignedBigInteger('field_id');
             $table->foreign('field_id')->references('id')->on('fields')->cascadeOnDelete();
 
-            $table->unsignedBigInteger('field_value_id');
-            $table->foreign('field_value_id')->references('id')->on('fields_value')->nullOnDelete();
+            $table->unsignedBigInteger('field_value_id')->nullable();
+            $table->foreign('field_value_id')->references('id')->on('fields_values')->nullOnDelete();
 
-            $table->json('value');
+            $table->text('value')->nullable();
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('permissions', function (Blueprint $table) {
             $table->unsignedBigInteger('parent_id')->nullable();
-            $table->foreign('parent_id')->references('id')->on('permissions')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreign('parent_id','parent_id_permissions')->references('id')->on('permissions')->nullOnDelete()->cascadeOnUpdate();
         });
     }
 
@@ -28,6 +28,7 @@ return new class extends Migration
     {
         if (Schema::hasColumn('permissions', 'parent_id')) {
             Schema::table('permissions', function (Blueprint $table) {
+                $table->dropForeign('parent_id_permissions');
                 $table->dropColumn('parent_id');
             });
         }

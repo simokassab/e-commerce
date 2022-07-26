@@ -16,7 +16,7 @@ return new class extends Migration
         //
         Schema::table('categories', function (Blueprint $table) {
 
-            $table->foreign('parent_id')->references('id')->on('categories')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreign('parent_id','parent_id_categories')->references('id')->on('categories')->nullOnDelete()->cascadeOnUpdate();
 
         });
     }
@@ -28,7 +28,12 @@ return new class extends Migration
      */
     public function down()
     {
-        //
-        Schema::dropIfExists('categories');
+        if (Schema::hasColumn('categories', 'parent_id')) {
+            Schema::table('categories', function (Blueprint $table) {
+                $table->dropForeign('parent_id_categories');
+                $table->dropColumn('parent_id');
+            });
+        }
+
     }
 };

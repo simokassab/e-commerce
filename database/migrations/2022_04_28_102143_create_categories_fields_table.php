@@ -17,14 +17,14 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('category_id')->references('id')->on('categories')->cascadeOnUpdate();
 
             $table->unsignedBigInteger('field_id');
-            $table->foreign('field_id')->references('id')->on('fields')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('field_id')->references('id')->on('fields')->cascadeOnUpdate();
 
-            $table->json('value')->nullable();
+            $table->text('value')->nullable();
 
-            $table->unsignedBigInteger('field_value_id');
+            $table->unsignedBigInteger('field_value_id')->nullable();
             $table->foreign('field_value_id')->references('id')->on('fields_values')->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->timestamps();

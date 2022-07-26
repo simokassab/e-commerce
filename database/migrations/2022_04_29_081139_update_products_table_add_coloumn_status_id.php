@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('products',function (Blueprint $table){
             $table->unsignedBigInteger('products_statuses_id');
-            $table->foreign('products_statuses_id')->references('id')->on('products_statuses')->cascadeOnDelete();
+            $table->foreign('products_statuses_id','products_statuses_id_products_statuses')->references('id')->on('products_statuses')->cascadeOnDelete();
         });
     }
 
@@ -28,6 +28,7 @@ return new class extends Migration
     {
         if(Schema::hasColumn('products' , 'products_statuses_id')) {
             Schema::table('products', function (Blueprint $table) {
+                $table->dropForeign('products_statuses_id_products_statuses');
                 $table->dropColumn('products_statuses_id');
             });
         }

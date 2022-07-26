@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('field_id');
             $table->foreign('field_id')->references('id')->on('fields')->cascadeOnDelete()->cascadeOnUpdate();
 
-            $table->json('value');
+            $table->text('value')->nullable();
             $table->unsignedBigInteger('field_value_id');
             $table->foreign('field_value_id')->references('id')->on('fields_values')->cascadeOnDelete()->cascadeOnUpdate();
 

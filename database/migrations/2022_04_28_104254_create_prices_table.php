@@ -15,12 +15,13 @@ return new class extends Migration
     {
         Schema::create('prices', function (Blueprint $table) {
             $table->id();
-            $table->json('name');
+            $table->string('name',250);
             $table->unsignedBigInteger('currency_id');
             $table->foreign('currency_id')->references('id')->on('currencies');
             $table->boolean('is_virtual')->default(0);
-            $table->double('original_price')->default(0);
-            $table->double('original_percent')->default(0);
+            $table->unsignedBigInteger('original_price_id')->nullable();
+            $table->foreign('original_price_id')->references('id')->on('prices');
+            $table->double('percentage',19,4)->default(0);
             $table->timestamps();
         });
     }

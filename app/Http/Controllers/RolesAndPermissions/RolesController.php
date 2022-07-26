@@ -217,7 +217,6 @@ class RolesController extends MainController
      */
     public function destroy(CustomRole $role)
     {
-        //TODO when deleting a role who has childern the request take a time more than usual
         $message = '';
         if(!$role->canDeleteRole($message)){
             return $this->errorResponse($message);

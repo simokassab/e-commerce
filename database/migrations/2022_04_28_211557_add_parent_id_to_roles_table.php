@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('roles', function (Blueprint $table) {
             $table->unsignedBigInteger('parent_id')->nullable();
-            $table->foreign('parent_id')->references('id')->on('roles')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreign('parent_id','parent_id_roles')->references('id')->on('roles')->nullOnDelete()->cascadeOnUpdate();
         });
     }
 
@@ -28,6 +28,7 @@ return new class extends Migration
     {
         if(Schema::hasColumn('roles' , 'parent_id')){
             Schema::table('roles', function (Blueprint $table) {
+                $table->dropForeign('parent_id_roles');
                 $table->dropColumn('parent_id');
             });
         }
