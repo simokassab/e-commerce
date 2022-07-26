@@ -250,7 +250,7 @@ class CategoryController extends MainController
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return string
      */
     public function destroy(Category $category)
     {
@@ -260,12 +260,12 @@ class CategoryController extends MainController
             $category->delete();
             DB::commit();
             return $this->successResponse(
-                __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+                __('messages.success.delete',['name' => __(self::OBJECT_NAME)]) ,
             );
 
         }catch (\Exception $e){
             DB::rollBack();
-            return $this->errorResponse( __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) );
+            return $this->errorResponse( __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ). ' error: '.$e;
 
         }
 
