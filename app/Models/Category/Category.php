@@ -12,6 +12,7 @@ use App\Models\Tag\Tag;
 use App\Models\Discount\Discount;
 use App\Models\Brand\Brand;
 use App\Models\Product\Product;
+use phpDocumentor\Reflection\Types\Boolean;
 use Spatie\Translatable\HasTranslations;
 
 class Category extends MainModel
@@ -19,37 +20,45 @@ class Category extends MainModel
     use HasFactory,HasTranslations;
     protected array $translatable=['name','meta_title','meta_description','meta_keyword','description'];
 
-    public function parent(){
-        return $this->belongsTo(Category::class,'parent_id');
+    public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(self::class,'parent_id');
     }
-    public function children(){
-        return $this->hasMany(Category::class,'parent_id');
+    public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(self::class,'parent_id','id');
     }
 
-    public function label(){
+    public function label(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany(Label::class,'categories_labels','category_id');
     }
 
-    public function fields(){
+    public function fields(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany(field::class,'categories_fields','category_id','field_id');
     }
     public function fieldValue(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(CategoriesFields::class,'category_id','id');
     }
-    public function tags(){
+    public function tags(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany(Tag::class,'discounts_entities','category_id','tag_id');
     }
 
-    public function discount(){
+    public function discount(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany(Discount::class,'discounts_entities','category_id','discount_id');
     }
 
-    public function brand(){
+    public function brand(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany(Brand::class,'discounts_entities','category_id','brand_id');
     }
 
-    public function products(){
+    public function products(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
         return $this->hasMany(Product::class,'category_id','id');
     }
 
@@ -64,7 +73,19 @@ class Category extends MainModel
             return self::whereNull('parent_id')->max('sort') + 1;// get the max sort between parents
 
     }
+    public function canDelete(&$message): bool{
+        if($this->children()->exists()){
+            $message = 'Sorry but this category is a parent for sub categories!';
+            return false;
+        }
 
+        if($this->products()->exists()){
+            $message = 'Sorry but this category is used by products!';
+            return false;
+        }
+
+        return true;
+    }
     public function scopeRootParent($query)
     {
         $query->whereNull('parent_id');

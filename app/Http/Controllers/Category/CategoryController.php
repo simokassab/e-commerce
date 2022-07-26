@@ -256,6 +256,10 @@ class CategoryController extends MainController
     {
         DB::beginTransaction();
         try {
+            $message = '';
+            if(!$category->canDelete($message)){
+                return $this->errorResponse( $message );
+            }
             CategoryService::deleteRelatedCategoryFieldsAndLabels($category);
             $category->delete();
             DB::commit();
@@ -268,7 +272,6 @@ class CategoryController extends MainController
             return $this->errorResponse( __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]) ). ' error: '.$e;
 
         }
-
 
     }
 
