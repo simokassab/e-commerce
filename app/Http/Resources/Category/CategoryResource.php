@@ -21,8 +21,9 @@ class CategoryResource extends JsonResource
             'code' => $this->code,
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
             'icon'=> $this->icon && !empty($this->icon) ?  getAssetsLink('storage/'.$this->icon): 'default_icon' ,
-            'slug' => $this->slug,
             'parent' => new CategoryResource($this->whenLoaded('parent')),
+            'slug' => $this->slug,
+
             // 'parent_id' => $this->parent_id,
             // 'meta_title' => $this->meta_title,
             // 'meta_description' => $this->meta_description,
