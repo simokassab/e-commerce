@@ -138,7 +138,6 @@ class CategoryController extends MainController
             );
         } catch (\Exception $e) {
             DB::rollBack();
-            return ($e);
             return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) . ' error message: '.$e );
 
             }

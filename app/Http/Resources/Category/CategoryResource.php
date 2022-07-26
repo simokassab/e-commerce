@@ -15,13 +15,14 @@ class CategoryResource extends JsonResource
     public function toArray($request)
 
 {
+    $parentName = $this->whenLoaded('parent') ? $this->whenLoaded('parent')->name : '-';
         return [
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
             'icon'=> $this->icon && !empty($this->icon) ?  getAssetsLink('storage/'.$this->icon): 'default_icon' ,
-            'parent' => new CategoryResource($this->whenLoaded('parent')),
+            'parent' => $parentName,
             'slug' => $this->slug,
 
             // 'parent_id' => $this->parent_id,
