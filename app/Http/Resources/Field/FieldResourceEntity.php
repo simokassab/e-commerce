@@ -26,7 +26,7 @@ class FieldResourceEntity extends JsonResource
         }
 
         if($this->field->type == 'checkbox'){
-            (bool) $this->value = (bool)$this->value;
+            $arrayToBeReturned['value'] = (bool)$this->value;
         }
 
 
