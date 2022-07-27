@@ -321,6 +321,12 @@ return [
             'type' => 'string',
             'sort' => true
         ],
+        'type' => [
+            'name' => 'Type',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
         'quantity' => [
             'name' => 'Quantity',
             'search' => 'integer',
@@ -339,14 +345,14 @@ return [
         //     'type' => 'string',
         //     'sort' => true
         // ],
-        'category' => [
-            'name' => 'Main Category',
-            'search' => 'string',
-            'type' => 'string',
-            'sort' => true
-        ],
+        // 'category' => [
+        //     'name' => 'Main Category',
+        //     'search' => 'string',
+        //     'type' => 'string',
+        //     'sort' => true
+        // ],
         'categories' => [
-            'name' => 'Additional Categories',
+            'name' => 'Categories',
             'search' => 'string',
             'type' => 'string',
             'sort' => true

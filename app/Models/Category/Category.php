@@ -50,7 +50,7 @@ class Category extends MainModel
     }
 
     public function products(){
-        return $this->hasMany(Product::class,'category_id','id');
+        return $this->belongsToMany(Product::class,'products_categories','category_id','product_id');
     }
 
     public function multipleProducts(){

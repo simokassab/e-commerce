@@ -5,6 +5,9 @@ namespace App\Http\Resources\Product;
 use App\Http\Resources\Brand\BrandResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Category\CategoryResource;
+
+use function PHPSTORM_META\map;
+
 class ProductResource extends JsonResource
 {
     /**
@@ -15,40 +18,43 @@ class ProductResource extends JsonResource
      */
     public function toArray($request)
     {
-        dd($this->whenLoaded('category'));
+
+
+        $data[0]['name'] = $this->whenLoaded('defaultCategory')->name;
+        $data[0]['isMain'] = true;
+        $categories = [];
+        $categories = $this->whenLoaded('category')->map(
+            function ($category) {
+                $categoriesArray = [];
+                $categoriesArray['name'] = $category->name;
+                $categoriesArray['isMain'] = false;
+
+                return $categoriesArray;
+            }
+        );
+
+
+        $categories = array_merge($categories->toArray(), $data);
+
+        $tags = $this->whenLoaded('tags')->map(
+            function ($tag) {
+                $tagsArray = [];
+                $tagsArray['name'] = $tag->name;
+                return $tagsArray;
+            }
+        );
         return [
+
             'id' => $this->id,
             'name' => $this->name,
-            // 'slug' => $this->slug,
-            // 'code' => $this->code,
             'sku' => $this->sku,
-            // 'type' => $this->type,
+            'type' => $this->type,
             'quantity' => $this->quantity,
-            // 'reserved_quantity' => $this->reserved_quantity,
-            // 'minimum_quantity' => $this->minimum_quantity,
-            // 'summary' => $this->summary,
-            // 'specification' => $this->specification,
             'image' => $this->image,
-            // 'meta_title' => $this->meta_title,
-            // 'meta_description' => $this->meta_description,
-            // 'meta_keyword' => $this->meta_keyword,
-            // 'description' => $this->description,
             'status' => $this->status,
-            // 'barcode' => $this->barcode,
-            // 'height' => $this->height,
-            // 'width' => $this->width,
-            // 'length' => $this->length,
-            // 'weight' => $this->weight,
-            // 'is_disabled' => $this->is_disabled,
-            // 'sort' => $this->sort,
-            // 'is_default_child' => $this->is_default_child,
-            // 'parent' =>$this->whenLoaded('parent')->name ?? "",
-            'category' => $this->whenLoaded('defaultCategory') ? $this->whenLoaded('defaultCategory')->name : '-',
-            // 'categories' => $this->whenLoaded('category') ? $this->whenLoaded('category')->name : '-',
-            // 'unit_id' =>  new UnitResource($this->whenLoaded('unit')),
-            // 'tax_id' => new TaxResource($this->whenLoaded('tax')),
-            'brand_id' =>  $this->whenLoaded('brand') ? $this->whenLoaded('brand')->name : '-',
-            'products_statuses_id' => $this->products_statuses_id,
+            'categories' => $categories ?? "-",
+            'tags' => $tags ?? "-",
+            'brands' =>  $this->whenLoaded('brand') ? $this->whenLoaded('brand')->name : '-',
         ];
     }
 }

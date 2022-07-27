@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends MainController
 {
     const OBJECT_NAME = 'objects.product';
-    const relations=['parent','children','defaultCategory','unit','tax','brand','category'];
+    const relations=['parent','children','defaultCategory','unit','tax','brand','category','tags'];
 
     public function __construct(ProductService $productService)
     {
@@ -107,7 +107,7 @@ class ProductController extends MainController
 
         DB::commit();
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-        'product' =>  new ProductResource($product->load(['defaultCategory','brand','category']))
+        'product' =>  new ProductResource($product->load(['defaultCategory','brand','category','tags']))
           ]);
         }catch (\Exception $ex) {
             DB::rollBack();
