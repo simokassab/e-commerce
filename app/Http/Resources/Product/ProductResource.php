@@ -15,6 +15,7 @@ class ProductResource extends JsonResource
      */
     public function toArray($request)
     {
+        dd($this->whenLoaded('category'));
         return [
             'id' => $this->id,
             'name' => $this->name,
