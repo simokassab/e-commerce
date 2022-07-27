@@ -50,7 +50,7 @@ class SingleBrandResource extends JsonResource
             'description' => $descriptionTranslatable,
             'keyword' => $this->keyword,
             'sort' => $this->sort,
-            'is_disabled' => $this->is_disabled,
+            'is_disabled' => (bool)$this->is_disabled,
             'labels' => ($labels),
             'fields' => FieldResourceEntity::collection($fieldsValues),
 
