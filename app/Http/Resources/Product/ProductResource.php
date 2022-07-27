@@ -34,7 +34,7 @@ class ProductResource extends JsonResource
         );
 
 
-        $categories = array_merge($categories->toArray(), $data);
+        $categories = array_merge($data,$categories->toArray());
 
         $tags = $this->whenLoaded('tags')->map(
             function ($tag) {
@@ -53,7 +53,7 @@ class ProductResource extends JsonResource
             'image' => $this->image,
             'status' => $this->status,
             'categories' => $categories ?? "-",
-            'tags' => $tags ?? "-",
+            'tags' => $tags->toArray() ?? "-",
             'brands' =>  $this->whenLoaded('brand') ? $this->whenLoaded('brand')->name : '-',
         ];
     }
