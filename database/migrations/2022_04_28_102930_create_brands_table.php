@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('brands', function (Blueprint $table) {
             $table->id();
             $table->json('name');
-            $table->string('code',250);
-            $table->string('image')->nullable();
+            $table->string('code',250)->unique();
+            $table->text('image')->nullable();
             $table->json('meta_title')->nullable();
             $table->json('meta_description')->nullable();
             $table->json('meta_keyword')->nullable();
