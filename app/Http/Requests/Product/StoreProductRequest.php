@@ -112,11 +112,11 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.slug' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'product_variations.*.code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
             'product_variations.*.sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
-            
+
             'product_variations.*.quantity' => ['required', 'integer', 'gte:' . $this->QuantityValue],
             'product_variations.*.reserved_quantity' => ['nullable' , 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
             'product_variations.*.minimum_quantity' => ['required', 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
-          
+
             'product_variations.*.summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
             'product_variations.*.specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
             'product_variations.*.meta_title' => 'nullable',
@@ -134,7 +134,7 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.prices.*.price_id' => 'required | integer | exists:prices,id',
             'product_variations.*.prices.*.price' => 'required | numeric | gte:' .$this->priceValue,
             'product_variations.*.prices.*.discounted_price' => 'nullable | numeric | gte:' .$this->discountedPriceValue,
-            
+
             'product_variations.*.images.*.image' => 'required | file
             | mimes:' . config('defaults.default_image_extentions') . '
             | max:' . config('defaults.default_image_size') . '

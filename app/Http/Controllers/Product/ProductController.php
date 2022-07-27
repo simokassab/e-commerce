@@ -38,7 +38,6 @@ class ProductController extends MainController
     {
         if($request->method()=='POST'){
             $searchKeys=['id','name','sku','type','quantity','status','categories','tags','brands'];
-
             return $this->getSearchPaginated(ProductResource::class, Product::class,$request, $searchKeys,self::relations);
         }
 
