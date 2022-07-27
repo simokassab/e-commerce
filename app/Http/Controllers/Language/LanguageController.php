@@ -28,29 +28,9 @@ class LanguageController extends MainController
      */
     public function index(Request $request)
     {
-
         if ($request->method()=='POST') {
-            $searchKeys=['name','code','is_default','is_disabled'];
-            $data= $this->getSearchPaginated(LanguageResource::class, Language::class,$request, $searchKeys);
-            if($data->isEmpty()){
-                $data=[
-                   'data' => [
-                       [
-                       'id' => '',
-                       'name'=>'',
-                       'code'=> '',
-                       'is_default'=> '',
-                       'is_disabled'=> '',
-                       'image'=> '',
-                       'sort'=> '',
-
-                   ]
-                   ]
-               ];
-               return response()->json($data);
-               return  LanguageResource::collection($data);
-           }
-           return $data;
+            $searchKeys=['name','code'];
+            return $this->getSearchPaginated(LanguageResource::class, Language::class,$request, $searchKeys);
         }
         return $this->successResponsePaginated(LanguageResource::class,Language::class);
     }
@@ -131,33 +111,33 @@ class LanguageController extends MainController
      */
     public function update(StoreLanguageRequest $request, Language $language)
     {
-
-        $language->name =  (array) json_decode($request->name);
-        $language->code=$request->code;
-        $language->is_default=false;
-        if((bool)$request->is_default)
-            $language->setIsDefault();
-
-        if($request->image){
-            if( !$this->removeImage($language->image) ){
-                 throw new FileErrorException();
-            }
-            $language->image= $this->imageUpload($request->file('image'),config('images_paths.language.images'));
-
-         }
-
-
-        if(!$language->save())
-            return $this->errorResponse(
-                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
-            );
-
-        return $this->successResponse(
-            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            [
-                'language' => new SingleLanguageResource($language)
-            ]
-        );
+//
+//        $language->name =  (array) json_decode($request->name);
+//        $language->code=$request->code;
+//        $language->is_default=false;
+//        if((bool)$request->is_default)
+//            $language->setIsDefault();
+//
+//        if($request->image){
+//            if( !$this->removeImage($language->image) ){
+//                 throw new FileErrorException();
+//            }
+//            $language->image= $this->imageUpload($request->file('image'),config('images_paths.language.images'));
+//
+//         }
+//
+//
+//        if(!$language->save())
+//            return $this->errorResponse(
+//                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+//            );
+//
+//        return $this->successResponse(
+//            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+//            [
+//                'language' => new SingleLanguageResource($language)
+//            ]
+//        );
 
     }
 
@@ -169,23 +149,23 @@ class LanguageController extends MainController
      */
     public function destroy(Language $language)
     {
-        $defaultLanugage=Language::where('is_default',1)->first();
-        if($defaultLanugage)
-            return $this->errorResponse(
-                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
-            );
-
-        if(!$language->delete())
-            return $this->errorResponse(
-                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
-            );
-
-        return $this->successResponse(
-            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-            [
-                'language' => new SingleLanguageResource($language)
-            ]
-        );
+//        $defaultLanugage=Language::where('is_default',1)->first();
+//        if($defaultLanugage)
+//            return $this->errorResponse(
+//                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+//            );
+//
+//        if(!$language->delete())
+//            return $this->errorResponse(
+//                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+//            );
+//
+//        return $this->successResponse(
+//            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+//            [
+//                'language' => new SingleLanguageResource($language)
+//            ]
+//        );
 
     }
     public function setLanguage($locale){
