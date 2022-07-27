@@ -142,8 +142,8 @@ return [
         ],
         'image' => [
             'name' => 'Image',
-            'search' => 'integer',
-            'type' => 'integer',
+            'search' => '',
+            'type' => 'image',
             'sort' => false
         ],
     ],
@@ -233,8 +233,8 @@ return [
         ],
         'image' => [
             'name' => 'Image',
-            'search' => 'integer',
-            'type' => 'integer',
+            'search' => '',
+            'type' => 'image',
             'sort' => false
         ],
         'key' => [
@@ -265,8 +265,8 @@ return [
         ],
         'image' => [
             'name' => 'Image',
-            'search' => 'string',
-            'type' => 'string',
+            'search' => '',
+            'type' => 'image',
             'sort' => true
         ],
     ],
@@ -331,6 +331,12 @@ return [
             'name' => 'Quantity',
             'search' => 'integer',
             'type' => 'integer',
+            'sort' => true
+        ],
+        'image' => [
+            'name' => 'Image',
+            'search' => '',
+            'type' => 'image',
             'sort' => true
         ],
         'status' => [
