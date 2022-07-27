@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('code',250);
             $table->boolean('is_default')->default(0);
             $table->boolean('is_disabled')->default(0);
-            $table->string('image',250)->nullable();
+            $table->text('image',250)->nullable();
             $table->integer('sort')->nullable();
             $table->timestamps();
         });
