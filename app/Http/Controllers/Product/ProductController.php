@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Resources\Label\LabelsResource;
 use App\Http\Resources\Product\ProductResource;
 use App\Models\Brand\Brand;
 use App\Models\Category\Category;
@@ -36,7 +37,9 @@ class ProductController extends MainController
     public function index(Request $request)
     {
         if($request->method()=='POST'){
+            $searchKeys=['id','name','sku','type','quantity','status','categories','tags','brands'];
 
+            return $this->getSearchPaginated(ProductResource::class, Product::class,$request, $searchKeys,self::relations);
         }
 
         return $this->successResponsePaginated(ProductResource::class,Product::class,self::relations);
@@ -64,13 +67,13 @@ class ProductController extends MainController
         ->whereEntity('product')
         ->get();
 
-        $labels= Label::whereEntity('product')->get();
+        $labels=LabelsResource::collection(Label::whereEntity('product')->get());
+        $brands = Brand::query()->take(['id','name'])->get();
+        $units = Unit::all('id','name'); // same result as query()->take(['id','name'])->get
+        $taxes= Tax::all('id','name');
+        $catgories = Category::all('id','name');
+        $statuses=ProductStatus::all('id','name');
 
-        $brands = Brand::all();
-        $units = Unit::all();
-        $taxes= Tax::all();
-        $catgories = Category::all();
-        $statuses=ProductStatus::all();
 
         return $this->successResponse([
             'prices'=>$PriceArray,

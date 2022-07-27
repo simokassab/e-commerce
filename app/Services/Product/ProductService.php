@@ -27,7 +27,7 @@ class ProductService
         $this->childrenIds = $childrenIds ?? [];
 
         self::storeAdditionalCategrories()
-            // ->storeAdditionalFields() // different than parent
+            ->storeAdditionalFields() // different than parent
             // ->storeAdditionalImages() // different than parent
             ->storeAdditionalLabels()
             ->storeAdditionalTags()
@@ -87,14 +87,19 @@ class ProductService
                         $data[$key]["field_value_id"] = $field["value"];
                     }
                 } else {
-                    $data[$key]["field_value_id"] = null;
                     $data[$key]["value"] = ($field['value']);
+                    $data[$key]["field_value_id"] = null;
+                    if(gettype($field['value']) == 'array'){
+                        $data[$key]["value"] = json_encode($field['value']);
+                    }
+
                 }
                 $data[$key]["product_id"] = $child;
                 $data[$key]["field_id"] = $field['field_id'];
             }
         }
         if (ProductField::insert($data)) {
+
             return $this;
         }
 
