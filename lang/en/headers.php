@@ -359,42 +359,25 @@ return [
         // ],
         'categories' => [
             'name' => 'Categories',
-            'search' => 'string',
+            'search' => '',
             'type' => 'string',
             'sort' => true
         ],
        
         'tags' => [
             'name' => 'Tags',
-            'search' => 'string',
+            'search' => '',
             'type' => 'string',
             'sort' => true
         ],
         'brands' => [
             'name' => 'Brands',
-            'search' => 'string',
+            'search' => '',
             'type' => 'string',
             'sort' => true
         ],
 
-        // 'unit ' => 'Unit',
-        // 'quantity' => 'Quantity',
-        // 'reserved_quantity' => 'Reserved Quantity',
-        // 'minimum_quantity' => 'Minimum Quantity',
-        // 'summary' => 'Summary',
-        // 'specification' => 'Specification',
-        // 'image' => 'Image',
-        // 'brand_id' => 'Brand',
-        // 'tax_id' => 'Tax',
-        // 'status' => 'Status',
-        // 'barcode' => 'Barcode',
-        // 'height' => 'Height',
-        // 'width' => 'Width',
-        // 'length' => 'Length',
-        // 'weight' => 'Weight',
-        // 'parent_product_id ' => 'Parent',
-        // 'is_default_child' => 'Is Default Child?',
-        // 'products_statuses_id' => 'Product Status'
+       
     ],
     'roles' => [
         'id' => [
