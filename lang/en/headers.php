@@ -351,28 +351,23 @@ return [
         //     'type' => 'string',
         //     'sort' => true
         // ],
-        // 'category' => [
-        //     'name' => 'Main Category',
-        //     'search' => 'string',
-        //     'type' => 'string',
-        //     'sort' => true
-        // ],
+       
         'categories' => [
             'name' => 'Categories',
-            'search' => '',
+            'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
        
         'tags' => [
             'name' => 'Tags',
-            'search' => '',
+            'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
         'brands' => [
             'name' => 'Brands',
-            'search' => '',
+            'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
