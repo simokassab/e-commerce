@@ -21,6 +21,7 @@ use App\Models\Field\Field;
 use App\Models\Label\Label;
 use App\Models\Price\Price;
 use App\Models\Product\Product;
+use App\Models\Product\ProductCategory;
 use App\Models\Product\ProductPrice;
 use App\Models\Product\ProductStatus;
 use App\Models\Tax\Tax;
@@ -47,11 +48,21 @@ class ProductController extends MainController
     {
         if($request->method()=='POST'){
             $searchKeys=['id','name','sku','type','quantity','status','category_id','tag_id','brand_id'];
-            $searchRelationsKeys = [
-                'category' => ['categories' => 'name'],
-                'tags' => ['tags' => 'name'],
-                'brand' => ['brands' => 'name'],
-         ];
+            $searchRelationsKeys = ['category' => ['categories' => 'name'] ];
+
+            // $category= ProductCategory:
+            // $brand= (bool)Product::has('brand');
+            // $tag=(bool)Product::has('tags');
+            
+            
+            // if($category)
+            //     $searchRelationsKeys['category'] = ['categories' => 'name'];
+            // if($tag)
+            //     $searchRelationsKeys['tags'] = ['tags' => 'name'];
+            // if($brand)
+            //     $searchRelationsKeys['brand'] = ['brands' => 'name'];
+            // dd($searchRelationsKeys);
+
             return $this->getSearchPaginated(ProductResource::class, Product::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
         }
 
@@ -83,8 +94,8 @@ class ProductController extends MainController
         $brands = SelectBrandResource::collection(Brand::all('id','name'));
         $units = SelectUnitResource::collection(Unit::all('id','name')); // same result as query()->take(['id','name'])->get
         $taxes= SelectTaxResource::collection(Tax::all('id','name'));
-        $catgories = SelectCategoryResource::collection(Category::all('id','name'));
-        $catgoriesTree = SelectCategoryResource::collection(Category::all('id','name'));
+        $categories = SelectCategoryResource::collection(Category::all('id','name'));
+        $categoriesTree = SelectCategoryResource::collection(Category::all('id','name'));
         $statuses = SelectProductStatusResource::collection(ProductStatus::all('id','name'));
 
 
@@ -95,8 +106,8 @@ class ProductController extends MainController
             'brands'=> count($brands) != 0 ? $brands : "-",
             'units'=> count($units) != 0 ? $units : "-",
             'taxes'=> count($taxes) != 0 ? $taxes : "-",
-            'catgories'=> count($catgories) != 0 ? $catgories : "-",
-            'catgories_tree'=> count($catgoriesTree) != 0 ? $catgoriesTree : "-",
+            'categories'=> count($categories) != 0 ? $categories : "-",
+            'categories_tree'=> count($categoriesTree) != 0 ? $categoriesTree : "-",
             'statuses'=>count($statuses) != 0 ? $statuses : "-",
         ]);
     }
