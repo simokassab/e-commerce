@@ -120,10 +120,11 @@ class ProductController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProductRequest $request)
+    public function store(Request $request)
     {
         // DB::beginTransaction();
         // try {
+            return $request;
             $product = $this->productService->createProduct($request->all());
             $childrenIds=[];
             if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
