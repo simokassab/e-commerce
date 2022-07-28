@@ -30,5 +30,6 @@ class SettingsServiceProvider extends ServiceProvider
            return $setting;
        });
 
+
     }
 }

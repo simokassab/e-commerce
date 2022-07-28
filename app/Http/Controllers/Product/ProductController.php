@@ -48,8 +48,10 @@ class ProductController extends MainController
     {
         if($request->method()=='POST'){
             $searchKeys=['id','name','sku','type','quantity','status','category_id','tag_id','brand_id'];
-            $searchRelationsKeys = ['category' => ['categories' => 'name'] ];
-
+            // $searchRelationsKeys['defaultCategory'] = [['categories' => 'name'] ];
+            $searchRelationsKeys['category'] = ['categories' => 'name'];
+            $searchRelationsKeys['tags'] = ['tags' => 'name'];
+            $searchRelationsKeys['brand'] = ['brands' => 'name'];
             // $category= ProductCategory:
             // $brand= (bool)Product::has('brand');
             // $tag=(bool)Product::has('tags');
@@ -118,8 +120,9 @@ class ProductController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProductRequest $request)
+    public function store(Request $request)
     {
+        return $request;
         DB::beginTransaction();
         try {
 
