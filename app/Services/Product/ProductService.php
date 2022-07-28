@@ -378,7 +378,7 @@ class ProductService
            
             $product->specification = json_encode($data['specification'] ?? "");
             if (array_key_exists('image', $data)) 
-                $product->image = uploadImage($data['file']('image'), config('images_paths.product.images'));
+                $product->image = uploadImage($data['image'], config('images_paths.product.images'));
 
             $product->meta_title = json_encode($data['meta_title'] ?? "");
             $product->meta_description = json_encode($data['meta_description'] ?? "");
