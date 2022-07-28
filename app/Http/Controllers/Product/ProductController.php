@@ -4,8 +4,17 @@ namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Resources\Brand\SelectBrandResource;
+use App\Http\Resources\Category\SelectCategoryResource;
+use App\Http\Resources\Field\SelectFieldResource;
 use App\Http\Resources\Label\LabelsResource;
+use App\Http\Resources\Label\SelectLabelResource;
+use App\Http\Resources\Price\SelectPriceResource;
+use App\Http\Resources\Price\SinglePriceResource;
 use App\Http\Resources\Product\ProductResource;
+use App\Http\Resources\Product\SelectProductStatusResource;
+use App\Http\Resources\Tax\SelectTaxResource;
+use App\Http\Resources\Unit\SelectUnitResource;
 use App\Models\Brand\Brand;
 use App\Models\Category\Category;
 use App\Models\Field\Field;
@@ -60,28 +69,27 @@ class ProductController extends MainController
     public function create()
     {
         $PriceArray=[];
-        $prices=Price::with('currency')->where('is_virtual', 0)->get();
+        $prices= SelectPriceResource::collection(Price::with('currency')->where('is_virtual', 0)->select('id','name','currency_id')->get());
+
         foreach ($prices as $price => $value) {
             $object = (object)[];
             $object->id=$value['id'];
             $object->name=$value['name'];
-            $object->currency_code=$value->currency->code;
+            $object->currency=$value->currency->code .'-'.$value->currency->symbol;
             $PriceArray[]=$object;
         }
 
-        $fields= Field::with('fieldValue')
-        ->whereEntity('product')
-        ->get();
+        $fields= SelectFieldResource::collection(Field::with('fieldValue')->whereEntity('product')->select('id','title')->get());
 
-        $labels=LabelsResource::collection(Label::whereEntity('product')->get());
-        $brands = Brand::query()->take(['id','name'])->get();
-        $units = Unit::all('id','name'); // same result as query()->take(['id','name'])->get
-        $taxes= Tax::all('id','name');
-        $catgories = Category::all('id','name');
-        $statuses=ProductStatus::all('id','name');
+        $labels = SelectLabelResource::collection(Label::whereEntity('product')->select('id','title')->get());
+        $brands = SelectBrandResource::collection(Brand::all('id','name'));
+        $units = SelectUnitResource::collection(Unit::all('id','name')); // same result as query()->take(['id','name'])->get
+        $taxes= SelectTaxResource::collection(Tax::all('id','name'));
+        $catgories = SelectCategoryResource::collection(Category::all('id','name'));
+        $statuses = SelectProductStatusResource::collection(ProductStatus::all('id','name'));
 
 
-        return $this->successResponse([
+        return $this->successResponse('Success!',[
             'prices'=>$PriceArray,
             'fields'=>$fields,
             'labels'=>$labels,

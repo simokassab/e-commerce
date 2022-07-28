@@ -53,7 +53,7 @@ class ProductResource extends JsonResource
             'image' => $this->image,
             'status' => $this->status,
             'categories' => $categories ?? "-",
-            'tags' => $tags->toArray() ?? "-",
+            'tags' => count($tags) != 0 ? $tags : '-',
             'brands' =>  $this->whenLoaded('brand') ? $this->whenLoaded('brand')->name : '-',
         ];
     }
