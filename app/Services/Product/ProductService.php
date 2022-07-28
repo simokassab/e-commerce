@@ -364,9 +364,9 @@ class ProductService
 
     public function createProduct($data)
     {
-        try {
+        // try {
             $product = new Product();
-            $product->name = ($data['name']);
+            $product->name = json_encode($data['name'] ?? "");
             $product->slug = $data['slug'];
             $product->code = $data['code'];
             $product->sku = $data['sku'];
@@ -374,15 +374,16 @@ class ProductService
             $product->quantity = $data['quantity'] ?? 0;
             $product->reserved_quantity = $data['reserved_quantity'] ?? 0;
             $product->minimum_quantity = $data['minimum_quantity'] ?? 0;
-            $product->summary = json_encode($data['summary']);
-            $product->specification = json_encode($data['specification']);
+            $product->summary = json_encode($data['summary'] ?? "");
+           
+            $product->specification = json_encode($data['specification'] ?? "");
             if ($data['image'])
                 $product->image = uploadImage($data['file']('image'), config('images_paths.product.images'));
 
-            $product->meta_title = json_encode($data['meta_title']);
-            $product->meta_description = json_encode($data['meta_description']);
-            $product->meta_keyword = json_encode($data['meta_keyword']);
-            $product->description = json_encode($data['description']);
+            $product->meta_title = json_encode($data['meta_title'] ?? "");
+            $product->meta_description = json_encode($data['meta_description'] ?? "");
+            $product->meta_keyword = json_encode($data['meta_keyword'] ?? "");
+            $product->description = json_encode($data['description'] ?? "");
             $product->status = $data['status'];
             $product->barcode = $data['barcode'];
             $product->height = $data['height'];
@@ -397,11 +398,11 @@ class ProductService
             $product->brand_id = $data['brand_id'];
             $product->tax_id = $data['tax_id'];
             $product->products_statuses_id = $data['products_statuses_id'];
-            $product->save();
-        } catch (Exception $e) {
+    $product->save();
+        // } catch (Exception $e) {
 
-            throw new Exception($e->getMessage());
-        }
+        //     throw new Exception($e->getMessage());
+        // }
 
         return $product;
     }

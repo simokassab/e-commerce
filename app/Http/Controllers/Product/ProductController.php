@@ -120,10 +120,10 @@ class ProductController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
 
             $product = $this->productService->createProduct($request->all());
             $childrenIds=[];
@@ -135,17 +135,17 @@ class ProductController extends MainController
 
             $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
 
-        DB::commit();
+        // DB::commit();
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
         'product' =>  new ProductResource($product->load(['defaultCategory','brand','category','tags']))
           ]);
-        }catch (\Exception $ex) {
-            DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
-            'message' => $ex->getMessage()
-             ]);
+        // }catch (\Exception $ex) {
+        //     DB::rollBack();
+        //     return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
+        //     'message' => $ex->getMessage()
+        //      ]);
 
-        }
+        // }
     }
 
     /**
