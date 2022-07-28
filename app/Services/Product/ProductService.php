@@ -377,7 +377,7 @@ class ProductService
             $product->summary = json_encode($data['summary'] ?? "");
            
             $product->specification = json_encode($data['specification'] ?? "");
-            if ($data['image'])
+            if (array_key_exists('image', $data)) 
                 $product->image = uploadImage($data['file']('image'), config('images_paths.product.images'));
 
             $product->meta_title = json_encode($data['meta_title'] ?? "");
@@ -398,7 +398,7 @@ class ProductService
             $product->brand_id = $data['brand_id']?? null;
             $product->tax_id = $data['tax_id'] ?? null;
             $product->products_statuses_id = $data['products_statuses_id'];
-    $product->save();
+            $product->save();
         // } catch (Exception $e) {
 
         //     throw new Exception($e->getMessage());
