@@ -32,12 +32,7 @@ class LanguageSeeder extends Seeder
             'is_disabled' => 0,
         ],
 
-        [
-            'name' => json_encode(['en' => 'France','ar' => 'فرنسي']),
-            'code' => "fr",
-            'is_default' =>  0,
-            'is_disabled' => 0,
-        ],
+
     ]);
     }
 }

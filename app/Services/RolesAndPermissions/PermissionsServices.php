@@ -81,16 +81,6 @@ class PermissionsServices {
     public static function getRootPermissions(Array $permissions){
         $arrayOfParents = [];
         $arrayOfParentsNames = [];
-//        foreach($permissions as $permission){
-//            if(!is_null($permission->parent) || $permission->parent_id ) {
-//                continue;
-//            }
-//
-//            if(!in_array($permission,$arrayOfParents)){
-//                $arrayOfParents[] = $permission;
-//            }
-//
-//        }
 
         foreach ($permissions as $permission){
             if(is_null($permission->parent)){
@@ -136,7 +126,8 @@ class PermissionsServices {
         return $lastResult;
     }
 
-    public static function loopOverMultiDimentionArray(array $arraysOfNestedPermissions){
+    public static function loopOverMultiDimentionArray(array $arraysOfNestedPermissions): array
+    {
 
         $array = [];
         $mergedArrays=[];
