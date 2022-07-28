@@ -385,18 +385,18 @@ class ProductService
             $product->meta_keyword = json_encode($data['meta_keyword'] ?? "");
             $product->description = json_encode($data['description'] ?? "");
             $product->status = $data['status'];
-            $product->barcode = $data['barcode'];
-            $product->height = $data['height'];
-            $product->width = $data['width'];
+            $product->barcode = $data['barcode'] ?? "";
+            $product->height = $data['height'] ?? null;
+            $product->width = $data['width'] ?? null;
             $product->is_disabled = 0;
-            $product->length = $data['length'];
-            $product->weight = $data['weight'];
+            $product->length = $data['length'] ?? null;
+            $product->weight = $data['weight'] ?? null;
             $product->is_default_child = $data['is_default_child'] ?? 0;
             $product->parent_product_id = $data['parent_product_id'] ?? null;
             $product->category_id = $data['category_id'];
-            $product->unit_id = $data['unit_id'];
-            $product->brand_id = $data['brand_id'];
-            $product->tax_id = $data['tax_id'];
+            $product->unit_id = $data['unit_id'] ?? null;
+            $product->brand_id = $data['brand_id']?? null;
+            $product->tax_id = $data['tax_id'] ?? null;
             $product->products_statuses_id = $data['products_statuses_id'];
     $product->save();
         // } catch (Exception $e) {
