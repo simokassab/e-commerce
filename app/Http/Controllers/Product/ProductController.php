@@ -143,7 +143,7 @@ class ProductController extends MainController
             elseif($request->type=='bundle')
                 $this->productService->storeAdditionalBundle($request,$product);
 
-            $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
+            // $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
 
         // DB::commit();
         return $this->successResponse( __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
