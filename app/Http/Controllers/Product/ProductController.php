@@ -51,7 +51,7 @@ class ProductController extends MainController
     {
         if($request->method()=='POST'){
             $searchKeys=['id','name','sku','type','quantity','status'];
-            
+
             $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
 
             $categoriesCount = Product::has('category')->count();
@@ -101,8 +101,8 @@ class ProductController extends MainController
         $statuses = SelectProductStatusResource::collection(ProductStatus::all('id','name'));
 
         $nestedCategory = [];
-        $categories = Category::with('parent')->get();
-        $nestedCategories = ProductService::getAllCategoriesNested($categories);
+        $categoriesForNested = Category::with('parent')->get();
+        $nestedCategories = ProductService::getAllCategoriesNested($categoriesForNested);
 
         return $this->successResponse('Success!',[
             'prices'=>  count($PriceArray) != 0 ? $PriceArray : "-",
