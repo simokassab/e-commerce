@@ -351,7 +351,7 @@ return [
         //     'type' => 'string',
         //     'sort' => true
         // ],
-       
+
         'categories' => [
             'name' => 'Categories',
             'search' => 'string',

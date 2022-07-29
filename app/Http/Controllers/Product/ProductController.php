@@ -50,20 +50,19 @@ class ProductController extends MainController
     public function index(Request $request)
     {
         if($request->method()=='POST'){
-            $searchKeys=['id','name','sku','type','quantity','status','category_id','tag_id','brand_id'];
+            $searchKeys=['id','name','sku','type','quantity','status'];
 
-            $defaultCategory = Product::has('defaultCategory')->get();
-            $categories = Product::has('category')->get();
-            $tags = Product::has('tags')->get();
-            $brands = Product::has('brand')->get();
+            $searchRelationsKey['defaultCategory'] = ['categories' => 'name'];
 
-            if($defaultCategory->count()>0)
-                $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
-            if($categories->count()>0)
+            $categoriesCount = Product::has('category')->count();
+            $tagsCount = Product::has('tags')->count();
+            $brandsCount = Product::has('brand')->count();
+
+            if($categoriesCount>0)
                 $searchRelationsKeys['category'] = ['categories' => 'name'];
-            if($tags->count()>0)
+            if($tagsCount>0)
                 $searchRelationsKeys['tags'] = ['tags' => 'name'];
-            if($brands->count()>0)
+            if($brandsCount>0)
                 $searchRelationsKeys['brand'] = ['brands' => 'name'];
 
             return $this->getSearchPaginated(ProductResource::class, Product::class,$request, $searchKeys,self::relations,$searchRelationsKeys);

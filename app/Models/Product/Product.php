@@ -30,7 +30,7 @@ class Product extends MainModel
 
 
     public function parent(){
-        return $this->belongsTo(Product::class,'parent_product_id');
+        return $this->belongsTo(Product::class,'parent_product_id','id');
     }
 
     public function children(){
