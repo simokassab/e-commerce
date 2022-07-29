@@ -368,7 +368,6 @@ class ProductService
     public function createProduct($data)
     {
         // try {
-            return $data;
             $product = new Product();
             $product->name = json_encode($data['name'] ?? "");
             $product->slug = $data['slug'] ?? "";
