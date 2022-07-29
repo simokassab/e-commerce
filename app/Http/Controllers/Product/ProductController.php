@@ -147,7 +147,7 @@ class ProductController extends MainController
 
         // DB::commit();
         return $this->successResponse( __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-        ['product' =>  new ProductResource($product->load(['defaultCategory','brand','category','tags']))]);
+        ['product' =>  new ProductResource($product->load('defaultCategory','brand','category','tags'))]);
 
         // }catch (\Exception $ex) {
         //     DB::rollBack();
