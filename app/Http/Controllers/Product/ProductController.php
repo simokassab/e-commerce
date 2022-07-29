@@ -5,14 +5,24 @@ namespace App\Http\Controllers\Product;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Resources\Brand\SelectBrandResource;
+use App\Http\Resources\Category\SelectCategoryResource;
+use App\Http\Resources\Field\SelectFieldResource;
 use App\Http\Resources\Label\LabelsResource;
+use App\Http\Resources\Label\SelectLabelResource;
+use App\Http\Resources\Price\SelectPriceResource;
+use App\Http\Resources\Price\SinglePriceResource;
 use App\Http\Resources\Product\ProductResource;
+use App\Http\Resources\Product\SelectProductStatusResource;
+use App\Http\Resources\Tax\SelectTaxResource;
+use App\Http\Resources\Unit\SelectUnitResource;
 use App\Models\Brand\Brand;
 use App\Models\Category\Category;
 use App\Models\Field\Field;
 use App\Models\Label\Label;
 use App\Models\Price\Price;
 use App\Models\Product\Product;
+use App\Models\Product\ProductCategory;
 use App\Models\Product\ProductPrice;
 use App\Models\Product\ProductStatus;
 use App\Models\Tax\Tax;
@@ -40,15 +50,41 @@ class ProductController extends MainController
     public function index(Request $request)
     {
         if($request->method()=='POST'){
-            $searchKeys=['id','name','sku','type','quantity','status','categories','tags','brands'];
-        //     $searchRelationsKeys = [
-        //         'category' => ['categories_name' => 'name'],
-        //         'tags' => ['tags' => 'name'],
-        //         'brand' => ['brands' => 'name'],
-        //  ];
+            $searchKeys=['id','name','sku','type','quantity','status','category_id','tag_id','brand_id'];
 
-            // return $this->getSearchPaginated(ProductResource::class, Product::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
-            return $this->getSearchPaginated(ProductResource::class, Product::class,$request, $searchKeys,self::relations);
+            // $searchRelationsKeys['category'] = ['categories' => 'name'];
+            // $searchRelationsKeys['tags'] = ['tags' => 'name'];
+            // $searchRelationsKeys['brand'] = ['brands' => 'name'];
+
+            $defaultCategory = Product::has('defaultCategory')->get();
+            $categories = Product::has('category')->get();
+            $tags = Product::has('tags')->get();
+            $brands = Product::has('brand')->get();
+
+            if($defaultCategory->count()>0)
+                $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
+            if($categories->count()>0)
+                $searchRelationsKeys['category'] = ['categories' => 'name'];
+            if($tags->count()>0)
+                $searchRelationsKeys['tags'] = ['tags' => 'name'];
+            if($brands->count()>0)
+                $searchRelationsKeys['brand'] = ['brands' => 'name'];
+
+
+            // $category= ProductCategory:
+            // $brand= (bool)Product::has('brand');
+            // $tag=(bool)Product::has('tags');
+
+
+            // if($category)
+            //     $searchRelationsKeys['category'] = ['categories' => 'name'];
+            // if($tag)
+            //     $searchRelationsKeys['tags'] = ['tags' => 'name'];
+            // if($brand)
+            //     $searchRelationsKeys['brand'] = ['brands' => 'name'];
+            // dd($searchRelationsKeys);
+
+            return $this->getSearchPaginated(ProductResource::class, Product::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
         }
 
         return $this->successResponsePaginated(ProductResource::class,Product::class,self::relations);
@@ -63,40 +99,41 @@ class ProductController extends MainController
     public function create()
     {
         $PriceArray=[];
-        $prices=Price::with('currency')->where('is_virtual', 0)->get();
+        $prices= SelectPriceResource::collection(Price::with('currency')->where('is_virtual', 0)->select('id','name','currency_id')->get());
+
         foreach ($prices as $price => $value) {
             $object = (object)[];
             $object->id=$value['id'];
             $object->name=$value['name'];
-            $object->currency_code=$value->currency->code;
+            $object->currency=$value->currency->code .'-'.$value->currency->symbol;
             $PriceArray[]=$object;
         }
 
-        $fields= Field::with('fieldValue')
-        ->whereEntity('product')
-        ->get();
+        $fields= SelectFieldResource::collection(Field::with('fieldValue')->whereEntity('product')->select('id','title')->get());
 
-        $labels=LabelsResource::collection(Label::whereEntity('product')->get());
-        $brands = Brand::query()->take(['id','name'])->get();
-        $units = Unit::all('id','name'); // same result as query()->take(['id','name'])->get
-        $taxes= Tax::all('id','name');
-        $catgories = Category::all('id','name');
-        $statuses=ProductStatus::all('id','name');
+        $labels = SelectLabelResource::collection(Label::whereEntity('product')->select('id','title')->get());
+        $brands = SelectBrandResource::collection(Brand::all('id','name'));
+        $units = SelectUnitResource::collection(Unit::all('id','name')); // same result as query()->take(['id','name'])->get
+        $taxes= SelectTaxResource::collection(Tax::all('id','name'));
+        $categories = SelectCategoryResource::collection(Category::all('id','name'));
+        $categoriesTree = SelectCategoryResource::collection(Category::all('id','name'));
+        $statuses = SelectProductStatusResource::collection(ProductStatus::all('id','name'));
 
         $nestedCategory = [];
         $categories = Category::with('parent')->get();
         $nestedCategories = ProductService::getAllCategoriesNested($categories);
 
-        return $this->successResponse([
-            'prices'=>$PriceArray,
-            'fields'=>$fields,
-            'labels'=>$labels,
-            'brands'=>$brands,
-            'units'=>$units,
-            'taxes'=> $taxes,
-            'categories'=> $catgories,
-            'statuses'=> $statuses,
+        return $this->successResponse('Success!',[
+            'prices'=>  count($PriceArray) != 0 ? $PriceArray : "-",
+            'fields'=> count($fields) != 0 ? $fields : "-",
+            'labels'=> count($labels) != 0 ? $labels : "-",
+            'brands'=> count($brands) != 0 ? $brands : "-",
+            'units'=> count($units) != 0 ? $units : "-",
+            'taxes'=> count($taxes) != 0 ? $taxes : "-",
+            'categories'=> count($categories) != 0 ? $categories : "-",
+            'statuses'=>count($statuses) != 0 ? $statuses : "-",
             'nested_categories' => $nestedCategories
+
         ]);
     }
 
@@ -106,11 +143,17 @@ class ProductController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    public function addproduct(Request $request){
+        $product = $this->productService->createProduct($request->all());
+        return $product;
+    }
+
+
     public function store(StoreProductRequest $request)
     {
-        DB::beginTransaction();
-        try {
-
+        // DB::beginTransaction();
+        // try {
             $product = $this->productService->createProduct($request->all());
             $childrenIds=[];
             if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
@@ -121,17 +164,17 @@ class ProductController extends MainController
 
             $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
 
-        DB::commit();
-        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-        'product' =>  new ProductResource($product->load(['defaultCategory','brand','category','tags']))
-          ]);
-        }catch (\Exception $ex) {
-            DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
-            'message' => $ex->getMessage()
-             ]);
+        // DB::commit();
+        return $this->successResponse( __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+        ['product' =>  new ProductResource($product->load(['defaultCategory','brand','category','tags']))]);
 
-        }
+        // }catch (\Exception $ex) {
+        //     DB::rollBack();
+        //     return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
+        //     'message' => $ex->getMessage()
+        //      ]);
+
+        // }
     }
 
     /**
@@ -227,16 +270,16 @@ class ProductController extends MainController
      */
     public function destroy(Product $product)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             $this->productService->deleteRelatedDataForProduct($product);
             $product->delete();
-            // return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)])]);
-            // DB::commit();
-        // } catch (\Exception $ex) {
-        //     DB::rollback();
-        //     return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME),])]);
-        // }
+            return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)])]);
+            DB::commit();
+    } catch (\Exception $ex) {
+            DB::rollback();
+            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME),])]);
+        }
     }
     public function toggleStatus(Request $request ,$id){
 

@@ -18,6 +18,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 
+use function PHPUnit\Framework\isEmpty;
+
 class ProductService
 {
     public $request, $product_id;
@@ -31,7 +33,7 @@ class ProductService
 
         self::storeAdditionalCategrories()
             ->storeAdditionalFields() // different than parent
-            // ->storeAdditionalImages() // different than parent
+            ->storeAdditionalImages() // different than parent
             ->storeAdditionalLabels()
             ->storeAdditionalTags()
             ->storeAdditionalPrices();
@@ -153,7 +155,7 @@ class ProductService
                     $data[] = [
                         'product_id' => $child,
                         'image' => $imagePath,
-                        'title' => (array)json_decode($image['title']),
+                        'title' => json_encode($image['title']),
                         'created_at'  => today()->toDateString(),
                         'updated_at' => today()->toDateString(),
                     ];
@@ -365,44 +367,44 @@ class ProductService
 
     public function createProduct($data)
     {
-        try {
+        // try {
             $product = new Product();
-            $product->name = ($data['name']);
-            $product->slug = $data['slug'];
-            $product->code = $data['code'];
-            $product->sku = $data['sku'];
-            $product->type = $data['type'];
+            $product->name = json_encode($data['name'] ?? "");
+            $product->slug = $data['slug'] ?? "";
+            $product->code = $data['code'] ?? "";
+            $product->sku = $data['sku'] ?? "";
+            $product->type = $data['type'] ?? "normal";
             $product->quantity = $data['quantity'] ?? 0;
             $product->reserved_quantity = $data['reserved_quantity'] ?? 0;
             $product->minimum_quantity = $data['minimum_quantity'] ?? 0;
-            $product->summary = json_encode($data['summary']);
-            $product->specification = json_encode($data['specification']);
-            if ($data['image'])
-                $product->image = uploadImage($data['file']('image'), config('images_paths.product.images'));
+            $product->summary = json_encode($data['summary'] ?? "");
+            $product->specification = json_encode($data['specification'] ?? "");
+            if (array_key_exists('image', $data)  && !empty($data['image']))
+                $product->image = uploadImage($data['image'], config('images_paths.product.images'));
 
-            $product->meta_title = json_encode($data['meta_title']);
-            $product->meta_description = json_encode($data['meta_description']);
-            $product->meta_keyword = json_encode($data['meta_keyword']);
-            $product->description = json_encode($data['description']);
-            $product->status = $data['status'];
-            $product->barcode = $data['barcode'];
-            $product->height = $data['height'];
-            $product->width = $data['width'];
+            $product->meta_title = json_encode($data['meta_title'] ?? "");
+            $product->meta_description = json_encode($data['meta_description'] ?? "");
+            $product->meta_keyword = json_encode($data['meta_keyword'] ?? "");
+            $product->description = json_encode($data['description'] ?? "");
+            $product->status = $data['status'] ?? "draft";
+            $product->barcode = $data['barcode'] ?? "";
+            $product->height = $data['height'] ?? null;
+            $product->width = $data['width'] ?? null;
             $product->is_disabled = 0;
-            $product->length = $data['length'];
-            $product->weight = $data['weight'];
+            $product->length = $data['length'] ?? null;
+            $product->weight = $data['weight'] ?? null;
             $product->is_default_child = $data['is_default_child'] ?? 0;
             $product->parent_product_id = $data['parent_product_id'] ?? null;
-            $product->category_id = $data['category_id'];
-            $product->unit_id = $data['unit_id'];
-            $product->brand_id = $data['brand_id'];
-            $product->tax_id = $data['tax_id'];
-            $product->products_statuses_id = $data['products_statuses_id'];
+            $product->category_id = $data['category_id'] ?? null;
+            $product->unit_id = $data['unit_id'] ?? null;
+            $product->brand_id = $data['brand_id']?? null;
+            $product->tax_id = $data['tax_id'] ?? null;
+            $product->products_statuses_id = $data['products_statuses_id'] ?? null;
             $product->save();
-        } catch (Exception $e) {
+        // } catch (Exception $e) {
 
-            throw new Exception($e->getMessage());
-        }
+        //     throw new Exception($e->getMessage());
+        // }
 
         return $product;
     }

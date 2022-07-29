@@ -32,7 +32,6 @@ class StoreProductRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-
         $settingsTitles = Cache::get('settings')->pluck('title')->toArray();
         $productSettings = Cache::get('settings')->whereIn('title',$settingsTitles)->groupBy('title')->toArray();
 

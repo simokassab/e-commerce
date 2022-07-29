@@ -50,10 +50,10 @@ class ProductResource extends JsonResource
             'sku' => $this->sku,
             'type' => $this->type,
             'quantity' => $this->quantity,
-            'image' => $this->image,
+            'image' => $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
             'status' => $this->status,
             'categories' => $categories ?? "-",
-            'tags' => $tags->toArray() ?? "-",
+            'tags' => count($tags) != 0 ? $tags : '-',
             'brands' =>  $this->whenLoaded('brand') ? $this->whenLoaded('brand')->name : '-',
         ];
     }
