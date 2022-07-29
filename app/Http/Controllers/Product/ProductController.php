@@ -55,8 +55,8 @@ class ProductController extends MainController
             // $category= ProductCategory:
             // $brand= (bool)Product::has('brand');
             // $tag=(bool)Product::has('tags');
-            
-            
+
+
             // if($category)
             //     $searchRelationsKeys['category'] = ['categories' => 'name'];
             // if($tag)
@@ -126,12 +126,11 @@ class ProductController extends MainController
         return $product;
     }
 
- 
-    public function store(Request $request)
+
+    public function store(StoreProductRequest $request)
     {
         // DB::beginTransaction();
         // try {
-return $request;
             $product = $this->productService->createProduct($request->all());
             $childrenIds=[];
             if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){

@@ -30,7 +30,7 @@ class ProductService
 
         self::storeAdditionalCategrories()
             ->storeAdditionalFields() // different than parent
-            // ->storeAdditionalImages() // different than parent
+            ->storeAdditionalImages() // different than parent
             ->storeAdditionalLabels()
             ->storeAdditionalTags()
             ->storeAdditionalPrices();
