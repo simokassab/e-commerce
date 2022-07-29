@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Product;
 
+use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Resources\Brand\SelectBrandResource;
@@ -26,7 +27,9 @@ use App\Models\Product\ProductPrice;
 use App\Models\Product\ProductStatus;
 use App\Models\Tax\Tax;
 use App\Models\Unit\Unit;
+use App\Services\Category\CategoryService;
 use App\Services\Product\ProductService;
+use App\Services\RolesAndPermissions\PermissionsServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -98,6 +101,9 @@ class ProductController extends MainController
         $categoriesTree = SelectCategoryResource::collection(Category::all('id','name'));
         $statuses = SelectProductStatusResource::collection(ProductStatus::all('id','name'));
 
+        $nestedCategory = [];
+        $categories = Category::with('parent')->get();
+        $nestedCategories = ProductService::getAllCategoriesNested($categories);
 
         return $this->successResponse('Success!',[
             'prices'=>  count($PriceArray) != 0 ? $PriceArray : "-",
@@ -107,8 +113,9 @@ class ProductController extends MainController
             'units'=> count($units) != 0 ? $units : "-",
             'taxes'=> count($taxes) != 0 ? $taxes : "-",
             'categories'=> count($categories) != 0 ? $categories : "-",
-            'categories_tree'=> count($categoriesTree) != 0 ? $categoriesTree : "-",
             'statuses'=>count($statuses) != 0 ? $statuses : "-",
+            'nested_categories' => $nestedCategories
+
         ]);
     }
 
@@ -284,7 +291,9 @@ class ProductController extends MainController
     }
 
 
+
     public function getTableHeaders(){
         return $this->successResponse('Success!',['headers' => __('headers.products') ]);
 }
+
 }

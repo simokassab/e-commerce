@@ -14,7 +14,6 @@ use function PHPUnit\Framework\isNull;
 class PermissionsServices {
     public static function getPermissionChildren(int | Permission $permission,$permissionsOfRole = [],$allPermissions = [], $flatten= false) : Array
     {
-        // got all the roles
 
         $allPermissions = CustomPermission::query()->whereIn('id',collect($allPermissions)->pluck('id')->toArray())->get();
 
@@ -50,7 +49,7 @@ class PermissionsServices {
      * @param $isMultiLevel
      * @param $allPermissions
      * @return Array
-     */
+     */                                                 //parentCategoryId        //all categories      // true
     public static function drawPermissionChildren(Int $parentPermissionId, Array $allPermissionsID , $isMultiLevel = false, $allPermissions,$permissionsOfRole=[]): Array{ //with levels
         $childpermissions = array();
         $permissionsOfRoleIds= array_column($permissionsOfRole, 'id');
@@ -81,16 +80,6 @@ class PermissionsServices {
     public static function getRootPermissions(Array $permissions){
         $arrayOfParents = [];
         $arrayOfParentsNames = [];
-//        foreach($permissions as $permission){
-//            if(!is_null($permission->parent) || $permission->parent_id ) {
-//                continue;
-//            }
-//
-//            if(!in_array($permission,$arrayOfParents)){
-//                $arrayOfParents[] = $permission;
-//            }
-//
-//        }
 
         foreach ($permissions as $permission){
             if(is_null($permission->parent)){

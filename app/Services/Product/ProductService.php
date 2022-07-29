@@ -2,6 +2,7 @@
 
 namespace App\Services\Product;
 
+use App\Models\Category\Category;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
 use App\Models\Product\ProductField;
@@ -10,10 +11,12 @@ use App\Models\Product\ProductLabel;
 use App\Models\Product\ProductPrice;
 use App\Models\Product\ProductRelated;
 use App\Models\Product\ProductTag;
+use App\Models\RolesAndPermissions\CustomPermission;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -63,8 +66,6 @@ class ProductService
 
         throw new Exception('Error while storing product categories');
     }
-
-
 
     private function storeAdditionalFields()
     {
@@ -407,4 +408,101 @@ class ProductService
 
         return $product;
     }
+
+    public static function getAllCategoriesNested($categories){
+        $rootCategories = self::getRootCategories($categories);
+        $lastResult = [];
+        foreach ($rootCategories as $rootCategory){
+            $result = (object)[];
+            $result->id = $rootCategory->id;
+            $result->label = $rootCategory->name;
+            $result->expanded = true;
+            $nodes = self::getCategoryChildren($rootCategory,$categories);
+            $nodesArray= [];
+
+            if(is_array($nodes) && count($nodes) > 0){
+                foreach ($nodes as $node){
+                    $nodesArray[] = $node;
+                }
+            }
+
+            $result->nodes = $nodesArray;
+
+            $result = (array)$result;
+            $lastResult[] = $result;
+        }
+        return $lastResult;
+    }
+
+    private static function getRootCategories($categories){
+        $arrayOfParents = [];
+        $arrayOfParentsCodes = [];
+
+        foreach ($categories as $category){
+            if(!is_null($category->parent_id)){
+                continue;
+            }
+            if(is_null($category->parent_id)){
+                $arrayOfParents[] = $category;
+            }
+        }
+
+        return ($arrayOfParents);
+    }
+
+    private static function getCategoryChildren(int | Category $category,$allCategories){
+
+        $categoriesChildren = self::generateChildrenForAllCategories($allCategories);
+        $categoryId = (is_numeric($category) ? $category : $category->id);
+
+        return self::drawCategoryChildren($categoryId, $categoriesChildren,true, $allCategories);
+    }
+
+    private static function drawCategoryChildren($parentCategoryId, $allCategoryIDs,$isMultiLevel = false, $allCategories): array
+    {
+        //with levels
+        $childCategory = array();
+        if(empty($allCategoryIDs[$parentCategoryId])){
+            return [];
+        }
+        foreach($allCategoryIDs[$parentCategoryId] as $categoryID){
+
+            $categoryID =  is_numeric($categoryID)? ($categoryID) : $categoryID->id;
+
+            if($isMultiLevel){
+                $childCategory[$categoryID] = [
+                    'id' => $allCategories->find($categoryID)->id,
+                    'label' => $allCategories->find($categoryID)->name,
+                    'nodes' => [],
+                ];
+                $childCategory[$categoryID]['nodes'] = self::drawCategoryChildren($categoryID, $allCategoryIDs, $isMultiLevel,$allCategories);
+            }
+            else{
+                $childCategory[] = $categoryID;
+                $childCategory = array_merge($childCategory, self::drawCategoryChildren($categoryID, $allCategoryIDs, $isMultiLevel,$allCategories));
+            }
+        }
+        return $childCategory;
+
+    }
+
+
+    private static function generateChildrenForAllCategories($allCategories) {
+        $categoryChildren = [];
+        foreach($allCategories as $key => $currentCategory){
+            $parentId = ($currentCategory->parent_id ?? 0);
+
+            if(!isset($categoryChildren[$parentId])){
+                $categoryChildren[$parentId] = [];
+            }
+            $categoryChildren[$parentId][] = Category::find($currentCategory->id);
+
+        }
+
+
+        return $categoryChildren;
+    }
+
+
+
 }
