@@ -379,8 +379,8 @@ class ProductService
             $product->minimum_quantity = $data['minimum_quantity'] ?? 0;
             $product->summary = json_encode($data['summary'] ?? "");
             $product->specification = json_encode($data['specification'] ?? "");
-            if (array_key_exists('image', $data)  && !empty($data['image']))
-                $product->image = uploadImage($data['image'], config('images_paths.product.images'));
+            // if (array_key_exists('image', $data)  && !empty($data['image']))
+            //     $product->image = uploadImage($data['image'], config('images_paths.product.images'));
 
             $product->meta_title = json_encode($data['meta_title'] ?? "");
             $product->meta_description = json_encode($data['meta_description'] ?? "");
