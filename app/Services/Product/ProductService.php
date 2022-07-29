@@ -15,6 +15,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use function PHPUnit\Framework\isEmpty;
+
 class ProductService
 {
     public $request, $product_id;
@@ -375,9 +377,9 @@ class ProductService
             $product->reserved_quantity = $data['reserved_quantity'] ?? 0;
             $product->minimum_quantity = $data['minimum_quantity'] ?? 0;
             $product->summary = json_encode($data['summary'] ?? "");
-           
+
             $product->specification = json_encode($data['specification'] ?? "");
-            if (array_key_exists('image', $data)) 
+            if (array_key_exists('image', $data)  && !isEmpty($data['image']))
                 $product->image = uploadImage($data['image'], config('images_paths.product.images'));
 
             $product->meta_title = json_encode($data['meta_title'] ?? "");
