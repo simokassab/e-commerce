@@ -320,7 +320,7 @@ class ProductService
                     'minimum_quantity' => $variation['minimum_quantity'],
                     'height' => $variation['height'],
                     'width' => $variation['width'],
-                    'length' => $variation['length'],
+                    'length' => $variation['p_length'],
                     'weight' => $variation['weight'],
                     'barcode' => $variation['barcode'],
                     'category_id' => $request->category_id,
@@ -391,7 +391,7 @@ class ProductService
             $product->height = $data['height'] ?? null;
             $product->width = $data['width'] ?? null;
             $product->is_disabled = 0;
-            $product->length = $data['length'] ?? null;
+            $product->length = $data['p_length'] ?? null;
             $product->weight = $data['weight'] ?? null;
             $product->is_default_child = $data['is_default_child'] ?? 0;
             $product->parent_product_id = $data['parent_product_id'] ?? null;
