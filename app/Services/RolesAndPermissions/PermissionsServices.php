@@ -14,7 +14,6 @@ use function PHPUnit\Framework\isNull;
 class PermissionsServices {
     public static function getPermissionChildren(int | Permission $permission,$permissionsOfRole = [],$allPermissions = [], $flatten= false) : Array
     {
-        // got all the roles
 
         $allPermissions = CustomPermission::query()->whereIn('id',collect($allPermissions)->pluck('id')->toArray())->get();
 

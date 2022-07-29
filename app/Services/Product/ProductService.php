@@ -412,9 +412,10 @@ class ProductService
         $lastResult = [];
         foreach ($rootCategories as $rootCategory){
             $result = (object)[];
+            $result->id = $rootCategory->id;
             $result->label = $rootCategory->name;
             $result->expanded = true;
-            return $nodes = self::getCategoryChildren($rootCategory,$categories);
+            $nodes = self::getCategoryChildren($rootCategory,$categories);
             $nodesArray= [];
 
             if(is_array($nodes) && count($nodes) > 0){
@@ -433,36 +434,56 @@ class ProductService
 
     private static function getRootCategories($categories){
         $arrayOfParents = [];
-        $arrayOfParentsNames = [];
+        $arrayOfParentsCodes = [];
 
         foreach ($categories as $category){
-            if(is_null($category->parent)){
+            if(!is_null($category->parent_id)){
                 continue;
             }
-            if(array_key_exists($category->parent->name,$arrayOfParentsNames)){
-                continue;
-            }
-            if(!is_null($category->parent)){
-                $arrayOfParents[] = $category->parent;
-                $arrayOfParentsNames[$category->parent->name] = $category->parent->name;
+            if(is_null($category->parent_id)){
+                $arrayOfParents[] = $category;
             }
         }
 
         return ($arrayOfParents);
     }
 
-    private static function getCategoryChildren($category,$categories){
-        // got all the roles
+    private static function getCategoryChildren(int | Category $category,$allCategories){
 
-//        $allPermissions = CustomPermission::query()->whereIn('id',collect($categories)->pluck('id')->toArray())->get();
-
-        // we passed the main role that we want to get its children along with the roles and there children
-        $categoriesChildren = self::generateChildrenForAllCategories($categories);
-        //if the given data was numeric then take it as the roleId if not then take the id of the passed object
+        $categoriesChildren = self::generateChildrenForAllCategories($allCategories);
         $categoryId = (is_numeric($category) ? $category : $category->id);
 
-        return self::drawCategoryChildren($categoryId, $categoriesChildren,false, $categories);
+        return self::drawCategoryChildren($categoryId, $categoriesChildren,true, $allCategories);
     }
+
+    private static function drawCategoryChildren($parentCategoryId, $allCategoryIDs,$isMultiLevel = false, $allCategories): array
+    {
+        //with levels
+        $childCategory = array();
+        if(empty($allCategoryIDs[$parentCategoryId])){
+            return [];
+        }
+        foreach($allCategoryIDs[$parentCategoryId] as $categoryID){
+
+            $categoryID =  is_numeric($categoryID)? ($categoryID) : $categoryID->id;
+
+            if($isMultiLevel){
+                $childCategory[$categoryID] = [
+                    'id' => $allCategories->find($categoryID)->id,
+                    'label' => $allCategories->find($categoryID)->name,
+                    'nodes' => [],
+                ];
+                $childCategory[$categoryID]['nodes'] = self::drawCategoryChildren($categoryID, $allCategoryIDs, $isMultiLevel,$allCategories);
+            }
+            else{
+                $childCategory[] = $categoryID;
+                $childCategory = array_merge($childCategory, self::drawCategoryChildren($categoryID, $allCategoryIDs, $isMultiLevel,$allCategories));
+            }
+        }
+        return $childCategory;
+
+    }
+
 
     private static function generateChildrenForAllCategories($allCategories) {
         $categoryChildren = [];
@@ -479,35 +500,7 @@ class ProductService
 
         return $categoryChildren;
     }
-//
-//    private static function drawCategoryChildren($categoryId, $categoriesChildren,false, $categories){
-//        //with levels
-//        $childpermissions = array();
-//        $permissionsOfRoleIds= array_column($permissionsOfRole, 'id');
-//        if(empty($allPermissionsID[$parentPermissionId])){
-//            return [];
-//        }
-//        foreach($allPermissionsID[$parentPermissionId] as $permissionId){
-//
-//            $permissionId =  is_numeric($permissionId)? ($permissionId) : $permissionId->id;
-//
-//            if($isMultiLevel){
-//                $childpermissions[$permissionId] = [
-//                    'id' => $allPermissions->find($permissionId)->id,
-//                    'label' => $allPermissions->find($permissionId)->name,
-//                    'checked' => in_array($allPermissions->find($permissionId)->id,  $permissionsOfRoleIds),
-//                    'nodes' => [],
-//                ];
-//                $childpermissions[$permissionId]['nodes'] = self::drawPermissionChildren($permissionId, $allPermissionsID, $isMultiLevel,$allPermissions);
-//            }
-//            else{
-//                $childpermissions[] = $permissionId;
-//                $childpermissions = array_merge($childpermissions, self::drawPermissionChildren($permissionId, $allPermissionsID, $isMultiLevel,$allPermissions,$permissionsOfRole));
-//            }
-//        }
-//        return $childpermissions;
-//
-//    }
+
 
 
 }

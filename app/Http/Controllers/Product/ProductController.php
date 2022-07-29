@@ -85,8 +85,7 @@ class ProductController extends MainController
 
         $nestedCategory = [];
         $categories = Category::with('parent')->get();
-//        $nestedCategories = ProductService::getAllCategoriesNested($categories);
-
+        $nestedCategories = ProductService::getAllCategoriesNested($categories);
 
         return $this->successResponse([
             'prices'=>$PriceArray,
@@ -97,7 +96,7 @@ class ProductController extends MainController
             'taxes'=> $taxes,
             'categories'=> $catgories,
             'statuses'=> $statuses,
-            'nested_categories' => $categories
+            'nested_categories' => $nestedCategories
         ]);
     }
 
