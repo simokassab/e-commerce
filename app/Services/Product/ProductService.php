@@ -154,7 +154,7 @@ class ProductService
                     $data[] = [
                         'product_id' => $child,
                         'image' => $imagePath,
-                        'title' => (array)json_decode($image['title']),
+                        'title' => json_encode($image['title']),
                         'created_at'  => today()->toDateString(),
                         'updated_at' => today()->toDateString(),
                     ];
@@ -369,24 +369,23 @@ class ProductService
         // try {
             $product = new Product();
             $product->name = json_encode($data['name'] ?? "");
-            $product->slug = $data['slug'];
-            $product->code = $data['code'];
-            $product->sku = $data['sku'];
-            $product->type = $data['type'];
+            $product->slug = $data['slug'] ?? "";
+            $product->code = $data['code'] ?? "";
+            $product->sku = $data['sku'] ?? "";
+            $product->type = $data['type'] ?? "normal";
             $product->quantity = $data['quantity'] ?? 0;
             $product->reserved_quantity = $data['reserved_quantity'] ?? 0;
             $product->minimum_quantity = $data['minimum_quantity'] ?? 0;
             $product->summary = json_encode($data['summary'] ?? "");
-
             $product->specification = json_encode($data['specification'] ?? "");
-            if (array_key_exists('image', $data)  && !isEmpty($data['image']))
+            if (array_key_exists('image', $data)  && !empty($data['image']))
                 $product->image = uploadImage($data['image'], config('images_paths.product.images'));
 
             $product->meta_title = json_encode($data['meta_title'] ?? "");
             $product->meta_description = json_encode($data['meta_description'] ?? "");
             $product->meta_keyword = json_encode($data['meta_keyword'] ?? "");
             $product->description = json_encode($data['description'] ?? "");
-            $product->status = $data['status'];
+            $product->status = $data['status'] ?? "draft";
             $product->barcode = $data['barcode'] ?? "";
             $product->height = $data['height'] ?? null;
             $product->width = $data['width'] ?? null;
@@ -399,7 +398,7 @@ class ProductService
             $product->unit_id = $data['unit_id'] ?? null;
             $product->brand_id = $data['brand_id']?? null;
             $product->tax_id = $data['tax_id'] ?? null;
-            $product->products_statuses_id = $data['products_statuses_id'];
+            $product->products_statuses_id = $data['products_statuses_id'] ?? null;
             $product->save();
         // } catch (Exception $e) {
 

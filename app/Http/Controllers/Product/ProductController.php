@@ -48,10 +48,26 @@ class ProductController extends MainController
     {
         if($request->method()=='POST'){
             $searchKeys=['id','name','sku','type','quantity','status','category_id','tag_id','brand_id'];
-            // $searchRelationsKeys['defaultCategory'] = [['categories' => 'name'] ];
-            $searchRelationsKeys['category'] = ['categories' => 'name'];
-            $searchRelationsKeys['tags'] = ['tags' => 'name'];
-            $searchRelationsKeys['brand'] = ['brands' => 'name'];
+
+            // $searchRelationsKeys['category'] = ['categories' => 'name'];
+            // $searchRelationsKeys['tags'] = ['tags' => 'name'];
+            // $searchRelationsKeys['brand'] = ['brands' => 'name'];
+
+            $defaultCategory = Product::has('defaultCategory')->get();
+            $categories = Product::has('category')->get();
+            $tags = Product::has('tags')->get();
+            $brands = Product::has('brand')->get();
+
+            if($defaultCategory->count()>0)
+                $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
+            if($categories->count()>0)
+                $searchRelationsKeys['category'] = ['categories' => 'name'];
+            if($tags->count()>0)
+                $searchRelationsKeys['tags'] = ['tags' => 'name'];
+            if($brands->count()>0)
+                $searchRelationsKeys['brand'] = ['brands' => 'name'];
+
+
             // $category= ProductCategory:
             // $brand= (bool)Product::has('brand');
             // $tag=(bool)Product::has('tags');
