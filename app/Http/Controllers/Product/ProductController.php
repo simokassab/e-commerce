@@ -49,10 +49,6 @@ class ProductController extends MainController
         if($request->method()=='POST'){
             $searchKeys=['id','name','sku','type','quantity','status','category_id','tag_id','brand_id'];
 
-            // $searchRelationsKeys['category'] = ['categories' => 'name'];
-            // $searchRelationsKeys['tags'] = ['tags' => 'name'];
-            // $searchRelationsKeys['brand'] = ['brands' => 'name'];
-
             $defaultCategory = Product::has('defaultCategory')->get();
             $categories = Product::has('category')->get();
             $tags = Product::has('tags')->get();
@@ -66,20 +62,6 @@ class ProductController extends MainController
                 $searchRelationsKeys['tags'] = ['tags' => 'name'];
             if($brands->count()>0)
                 $searchRelationsKeys['brand'] = ['brands' => 'name'];
-
-
-            // $category= ProductCategory:
-            // $brand= (bool)Product::has('brand');
-            // $tag=(bool)Product::has('tags');
-
-
-            // if($category)
-            //     $searchRelationsKeys['category'] = ['categories' => 'name'];
-            // if($tag)
-            //     $searchRelationsKeys['tags'] = ['tags' => 'name'];
-            // if($brand)
-            //     $searchRelationsKeys['brand'] = ['brands' => 'name'];
-            // dd($searchRelationsKeys);
 
             return $this->getSearchPaginated(ProductResource::class, Product::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
         }
