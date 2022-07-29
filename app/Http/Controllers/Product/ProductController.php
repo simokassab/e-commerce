@@ -14,6 +14,8 @@ use App\Http\Resources\Price\SelectPriceResource;
 use App\Http\Resources\Price\SinglePriceResource;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Product\SelectProductStatusResource;
+use App\Http\Resources\SelectTagResource;
+use App\Http\Resources\Tag\TagResource;
 use App\Http\Resources\Tax\SelectTaxResource;
 use App\Http\Resources\Unit\SelectUnitResource;
 use App\Models\Brand\Brand;
@@ -25,6 +27,7 @@ use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
 use App\Models\Product\ProductPrice;
 use App\Models\Product\ProductStatus;
+use App\Models\Tag\Tag;
 use App\Models\Tax\Tax;
 use App\Models\Unit\Unit;
 use App\Services\Category\CategoryService;
@@ -91,7 +94,7 @@ class ProductController extends MainController
         }
 
         $fields= SelectFieldResource::collection(Field::with('fieldValue')->whereEntity('product')->select('id','title')->get());
-
+        $tags = TagResource::collection(Tag::all('id','name'));
         $labels = SelectLabelResource::collection(Label::whereEntity('product')->select('id','title')->get());
         $brands = SelectBrandResource::collection(Brand::all('id','name'));
         $units = SelectUnitResource::collection(Unit::all('id','name')); // same result as query()->take(['id','name'])->get
@@ -108,6 +111,7 @@ class ProductController extends MainController
             'prices'=>  count($PriceArray) != 0 ? $PriceArray : "-",
             'fields'=> count($fields) != 0 ? $fields : "-",
             'labels'=> count($labels) != 0 ? $labels : "-",
+            'tags'=> count($tags) != 0 ? $tags : "-",
             'brands'=> count($brands) != 0 ? $brands : "-",
             'units'=> count($units) != 0 ? $units : "-",
             'taxes'=> count($taxes) != 0 ? $taxes : "-",
@@ -143,7 +147,7 @@ class ProductController extends MainController
             elseif($request->type=='bundle')
                 $this->productService->storeAdditionalBundle($request,$product);
 
-            // $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
+            $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
             return $this->successResponse('Success!',['product'=>$product]);
 
         // DB::commit();

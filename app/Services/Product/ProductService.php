@@ -92,10 +92,9 @@ class ProductService
                 } else {
                     $data[$key]["value"] = ($field['value']);
                     $data[$key]["field_value_id"] = null;
-                    if(gettype($field['value']) == 'array'){
+                    if (gettype($field['value']) == 'array') {
                         $data[$key]["value"] = json_encode($field['value']);
                     }
-
                 }
                 $data[$key]["product_id"] = $child;
                 $data[$key]["field_id"] = $field['field_id'];
@@ -368,39 +367,39 @@ class ProductService
     public function createProduct($data)
     {
         // try {
-            $product = new Product();
-            $product->name = json_encode($data['name'] ?? "");
-            $product->slug = $data['slug'] ?? "";
-            $product->code = $data['code'] ?? "";
-            $product->sku = $data['sku'] ?? "";
-            $product->type = $data['type'] ?? "normal";
-            $product->quantity = $data['quantity'] ?? 0;
-            $product->reserved_quantity = $data['reserved_quantity'] ?? 0;
-            $product->minimum_quantity = $data['minimum_quantity'] ?? 0;
-            $product->summary = json_encode($data['summary'] ?? "");
-            $product->specification = json_encode($data['specification'] ?? "");
-            if (array_key_exists('image', $data)  && !empty($data['image']))
-                $product->image = uploadImage($data['image'], config('images_paths.product.images'));
+        $product = new Product();
+        $product->name = json_encode($data['name'] ?? "");
+        $product->slug = $data['slug'] ?? "";
+        $product->code = $data['code'] ?? "";
+        $product->sku = $data['sku'] ?? "";
+        $product->type = $data['type'] ?? "normal";
+        $product->quantity = $data['quantity'] ?? 0;
+        $product->reserved_quantity = $data['reserved_quantity'] ?? 0;
+        $product->minimum_quantity = $data['minimum_quantity'] ?? 0;
+        $product->summary = json_encode($data['summary'] ?? "");
+        $product->specification = json_encode($data['specification'] ?? "");
+        if (array_key_exists('image', $data)  && !empty($data['image']))
+            $product->image = uploadImage($data['image'], config('images_paths.product.images'));
 
-            $product->meta_title = json_encode($data['meta_title'] ?? "");
-            $product->meta_description = json_encode($data['meta_description'] ?? "");
-            $product->meta_keyword = json_encode($data['meta_keyword'] ?? "");
-            $product->description = json_encode($data['description'] ?? "");
-            $product->status = $data['status'] ?? "draft";
-            $product->barcode = $data['barcode'] ?? "";
-            $product->height = $data['height'] ?? null;
-            $product->width = $data['width'] ?? null;
-            $product->is_disabled = 0;
-            $product->length = $data['p_length'] ?? null;
-            $product->weight = $data['weight'] ?? null;
-            $product->is_default_child = $data['is_default_child'] ?? 0;
-            $product->parent_product_id = $data['parent_product_id'] ?? null;
-            $product->category_id = $data['category_id'] ?? null;
-            $product->unit_id = $data['unit_id'] ?? null;
-            $product->brand_id = $data['brand_id']?? null;
-            $product->tax_id = $data['tax_id'] ?? null;
-            $product->products_statuses_id = $data['products_statuses_id'] ?? null;
-            $product->save();
+        $product->meta_title = json_encode($data['meta_title'] ?? "");
+        $product->meta_description = json_encode($data['meta_description'] ?? "");
+        $product->meta_keyword = json_encode($data['meta_keyword'] ?? "");
+        $product->description = json_encode($data['description'] ?? "");
+        $product->status = $data['status'] ?? "draft";
+        $product->barcode = $data['barcode'] ?? "";
+        $product->height = $data['height'] ?? null;
+        $product->width = $data['width'] ?? null;
+        $product->is_disabled = 0;
+        $product->length = $data['p_length'] ?? null;
+        $product->weight = $data['weight'] ?? null;
+        $product->is_default_child = $data['is_default_child'] ?? 0;
+        $product->parent_product_id = $data['parent_product_id'] ?? null;
+        $product->category_id = $data['category_id'] ?? null;
+        $product->unit_id = $data['unit_id'] ?? null;
+        $product->brand_id = $data['brand_id'] ?? null;
+        $product->tax_id = $data['tax_id'] ?? null;
+        $product->products_statuses_id = $data['products_statuses_id'] ?? null;
+        $product->save();
         // } catch (Exception $e) {
 
         //     throw new Exception($e->getMessage());
@@ -409,19 +408,20 @@ class ProductService
         return $product;
     }
 
-    public static function getAllCategoriesNested($categories){
+    public static function getAllCategoriesNested($categories)
+    {
         $rootCategories = self::getRootCategories($categories);
         $lastResult = [];
-        foreach ($rootCategories as $rootCategory){
+        foreach ($rootCategories as $rootCategory) {
             $result = (object)[];
             $result->id = $rootCategory->id;
             $result->label = $rootCategory->name;
             $result->expanded = true;
-            $nodes = self::getCategoryChildren($rootCategory,$categories);
-            $nodesArray= [];
+            $nodes = self::getCategoryChildren($rootCategory, $categories);
+            $nodesArray = [];
 
-            if(is_array($nodes) && count($nodes) > 0){
-                foreach ($nodes as $node){
+            if (is_array($nodes) && count($nodes) > 0) {
+                foreach ($nodes as $node) {
                     $nodesArray[] = $node;
                 }
             }
@@ -434,15 +434,16 @@ class ProductService
         return $lastResult;
     }
 
-    private static function getRootCategories($categories){
+    private static function getRootCategories($categories)
+    {
         $arrayOfParents = [];
         $arrayOfParentsCodes = [];
 
-        foreach ($categories as $category){
-            if(!is_null($category->parent_id)){
+        foreach ($categories as $category) {
+            if (!is_null($category->parent_id)) {
                 continue;
             }
-            if(is_null($category->parent_id)){
+            if (is_null($category->parent_id)) {
                 $arrayOfParents[] = $category;
             }
         }
@@ -450,59 +451,55 @@ class ProductService
         return ($arrayOfParents);
     }
 
-    private static function getCategoryChildren(int | Category $category,$allCategories){
+    private static function getCategoryChildren(int | Category $category, $allCategories)
+    {
 
         $categoriesChildren = self::generateChildrenForAllCategories($allCategories);
         $categoryId = (is_numeric($category) ? $category : $category->id);
 
-        return self::drawCategoryChildren($categoryId, $categoriesChildren,true, $allCategories);
+        return self::drawCategoryChildren($categoryId, $categoriesChildren, true, $allCategories);
     }
 
-    private static function drawCategoryChildren($parentCategoryId, $allCategoryIDs,$isMultiLevel = false, $allCategories): array
+    private static function drawCategoryChildren($parentCategoryId, $allCategoryIDs, $isMultiLevel = false, $allCategories): array
     {
         //with levels
         $childCategory = array();
-        if(empty($allCategoryIDs[$parentCategoryId])){
+        if (empty($allCategoryIDs[$parentCategoryId])) {
             return [];
         }
-        foreach($allCategoryIDs[$parentCategoryId] as $categoryID){
+        foreach ($allCategoryIDs[$parentCategoryId] as $categoryID) {
 
-            $categoryID =  is_numeric($categoryID)? ($categoryID) : $categoryID->id;
+            $categoryID =  is_numeric($categoryID) ? ($categoryID) : $categoryID->id;
 
-            if($isMultiLevel){
+            if ($isMultiLevel) {
                 $childCategory[$categoryID] = [
                     'id' => $allCategories->find($categoryID)->id,
                     'label' => $allCategories->find($categoryID)->name,
                     'nodes' => [],
                 ];
-                $childCategory[$categoryID]['nodes'] = self::drawCategoryChildren($categoryID, $allCategoryIDs, $isMultiLevel,$allCategories);
-            }
-            else{
+                $childCategory[$categoryID]['nodes'] = self::drawCategoryChildren($categoryID, $allCategoryIDs, $isMultiLevel, $allCategories);
+            } else {
                 $childCategory[] = $categoryID;
-                $childCategory = array_merge($childCategory, self::drawCategoryChildren($categoryID, $allCategoryIDs, $isMultiLevel,$allCategories));
+                $childCategory = array_merge($childCategory, self::drawCategoryChildren($categoryID, $allCategoryIDs, $isMultiLevel, $allCategories));
             }
         }
         return $childCategory;
-
     }
 
 
-    private static function generateChildrenForAllCategories($allCategories) {
+    private static function generateChildrenForAllCategories($allCategories)
+    {
         $categoryChildren = [];
-        foreach($allCategories as $key => $currentCategory){
+        foreach ($allCategories as $key => $currentCategory) {
             $parentId = ($currentCategory->parent_id ?? 0);
 
-            if(!isset($categoryChildren[$parentId])){
+            if (!isset($categoryChildren[$parentId])) {
                 $categoryChildren[$parentId] = [];
             }
             $categoryChildren[$parentId][] = Category::find($currentCategory->id);
-
         }
 
 
         return $categoryChildren;
     }
-
-
-
 }
