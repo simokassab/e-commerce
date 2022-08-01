@@ -19,6 +19,8 @@ return new class extends Migration
             $table->enum('type',['checkbox','text','select','textarea','date']);
             $table->enum('entity',['category','product','brand']);
             $table->boolean('is_required')->default(0);
+            $table->boolean('is_attribute')->default(0);
+
             $table->timestamps();
         });
     }
