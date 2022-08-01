@@ -30,15 +30,15 @@ class Product extends MainModel
 
 
     public function parent(){
-        return $this->belongsTo(Product::class,'parent_product_id');
+        return $this->belongsTo(Product::class,'parent_product_id','id');
     }
 
     public function children(){
         return $this->hasMany(Product::class,'parent_product_id');
     }
 
-    public function cateogry(){
-        return $this->hasMany(Category::class,'category_id');
+    public function category(){
+        return $this->belongsToMany(Category::class,'products_categories','product_id','category_id');
     }
     public function unit(){
         return $this->belongsTo(Unit::class,'unit_id');
@@ -72,7 +72,8 @@ class Product extends MainModel
     }
 
     public function tags(){
-        return $this->hasMany(Tag::class,'tag_id');
+        return $this->belongsToMany(Tag::class,'products_tags','product_id','tag_id');
+
 
     }
     public function labels(){

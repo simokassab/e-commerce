@@ -30,7 +30,7 @@ class StoreFieldRequest extends MainRequest
             'type' => 'required | in:'.config('defaults.validation_default_type'),
             'entity' => 'required | in:'.config('defaults.validation_default_entities'),
             'is_required' => 'required | boolean',
-
+            'is_attribute' => 'nullable | boolean',
 
             'field_values' => 'required_if:type,select',
             'field_values.*'  => 'required_if:type,select',

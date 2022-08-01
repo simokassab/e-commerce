@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Expr\FuncCall;
 use App\Exceptions\FileErrorException;
 use App\Http\Resources\AttributeResource;
-use App\Http\Resources\CategoryResource;
 use App\Models\Attribute\Attribute;
 use App\Models\Attribute\AttributeValue;
 use Exception;
@@ -90,7 +89,6 @@ class MainController extends Controller
         $model = $model::with($relations);
         $model->when($request->has('general_search') && $request->general_search != null, function ($query)use($searchKeys,$request,$searchRelationsKeys) {
             $value = strtolower($request->general_search);
-
             foreach ($searchKeys as $key => $attribute){
                 $query->oRwhereRaw('lower('.$attribute.') like (?)', ["%$value%"]);
             }

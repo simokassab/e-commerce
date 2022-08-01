@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Attribute\AttributeController;
-use App\Http\Controllers\Attribute\AttributeValueController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\Brand\BrandController;
 use App\Http\Controllers\Category\CategoryController;
@@ -13,17 +11,12 @@ use App\Http\Controllers\Fields\FieldsController;
 use App\Http\Controllers\Fields\FieldValueController;
 use App\Http\Controllers\Label\LabelController;
 use App\Http\Controllers\Language\LanguageController;
-use App\Http\Controllers\MainController;
 use App\Http\Controllers\RolesAndPermissions\RolesController;
-use App\Http\Controllers\RolesAndPermissions\PermissionController;
 use App\Http\Controllers\Settings\SettingsController;
 use App\Http\Controllers\Tag\TagController;
 use App\Http\Controllers\Tax\TaxController;
-use App\Http\Controllers\TestController;
 use App\Http\Controllers\Unit\UnitController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\Users\UsersController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Prices\PricesController;
 use App\Http\Controllers\Product\ProductController;
@@ -116,6 +109,11 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::get('price/get-original-prices',[PricesController::class,'getOriginalPrices'])->name('get.original.prices');
     Route::apiResource('price',PricesController::class);
 
+    Route::post('product/all',[ProductController::class,'index']);// for search
+    Route::post('product/add',[ProductController::class,'addproduct']);// for search
+    Route::get('product/create',[ProductController::class,'create']);
+    Route::apiResource('product',ProductController::class);
+
     //TODO: move all headers to a new file for apis headers
     Route::group(['prefix' => 'headers'], function (){
         Route::get('brands',[BrandController::class,'getTableHeaders']);
@@ -134,8 +132,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
         Route::get('units',[UnitController::class,'getTableHeaders']);
         Route::get('users',[UsersController::class,'getTableHeaders']);
         Route::get('settings',[SettingsController::class,'getTableHeaders']);
-    Route::get('product/create',[ProductController::class,'create']);
-    Route::apiResource('product',ProductController::class);
+        Route::get('products',[ProductController::class,'getTableHeaders']);
+
 
 
 });

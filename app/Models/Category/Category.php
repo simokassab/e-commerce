@@ -57,9 +57,8 @@ class Category extends MainModel
         return $this->belongsToMany(Brand::class,'discounts_entities','category_id','brand_id');
     }
 
-    public function products(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Product::class,'category_id','id');
+    public function products(){
+        return $this->belongsToMany(Product::class,'products_categories','category_id','product_id');
     }
 
     public function multipleProducts(){

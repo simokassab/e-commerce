@@ -61,7 +61,8 @@ class FieldsController extends MainController
         $field->title = ($request->title);
         $field->type = $request->type;
         $field->entity = $request->entity;
-        $field->is_required = $request->is_required;
+        $field->is_required =  (bool)$request->is_required;
+        $field->is_attribute =  (bool)$request->is_attribute;
 
         if(!$field->save())
           return $this->errorResponse(__('messages.failed.create',['name' => __(self::OBJECT_NAME)]));
@@ -129,7 +130,8 @@ class FieldsController extends MainController
             $field->title = ($request->title);
             $field->type = $request->type;
             $field->entity = $request->entity;
-            $field->is_required = $request->is_required;
+            $field->is_required =  (bool)$request->is_required;
+            $field->is_attribute =  (bool)$request->is_attribute;
             $field->save();
 
             if ($request->type == 'select' && $request->field_values) {

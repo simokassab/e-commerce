@@ -142,8 +142,8 @@ return [
         ],
         'image' => [
             'name' => 'Image',
-            'search' => 'integer',
-            'type' => 'integer',
+            'search' => '',
+            'type' => 'image',
             'sort' => false
         ],
     ],
@@ -233,8 +233,8 @@ return [
         ],
         'image' => [
             'name' => 'Image',
-            'search' => 'integer',
-            'type' => 'integer',
+            'search' => '',
+            'type' => 'image',
             'sort' => false
         ],
         'key' => [
@@ -265,8 +265,8 @@ return [
         ],
         'image' => [
             'name' => 'Image',
-            'search' => 'string',
-            'type' => 'string',
+            'search' => '',
+            'type' => 'image',
             'sort' => true
         ],
     ],
@@ -315,26 +315,8 @@ return [
             'type' => 'string',
             'sort' => true
         ],
-        'slug' => [
-            'name' => 'Slug',
-            'search' => 'string',
-            'type' => 'String',
-            'sort' => true
-        ],
-        'category' => [
-            'name' => 'Category',
-            'search' => 'string',
-            'type' => 'string',
-            'sort' => true
-        ],
-        'code' => [
-            'name' => 'Code',
-            'search' => 'integer',
-            'type' => 'integer',
-            'sort' => true
-        ],
         'sku' => [
-            'name' => 'SKU',
+            'name' => 'Sku',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
@@ -345,24 +327,52 @@ return [
             'type' => 'string',
             'sort' => true
         ],
-        'unit ' => 'Unit',
-        'quantity' => 'Quantity',
-        'reserved_quantity' => 'Reserved Quantity',
-        'minimum_quantity' => 'Minimum Quantity',
-        'summary' => 'Summary',
-        'specification' => 'Specification',
-        'image' => 'Image',
-        'brand_id' => 'Brand',
-        'tax_id' => 'Tax',
-        'status' => 'Status',
-        'barcode' => 'Barcode',
-        'height' => 'Height',
-        'width' => 'Width',
-        'length' => 'Length',
-        'weight' => 'Weight',
-        'parent_product_id ' => 'Parent',
-        'is_default_child' => 'Is Default Child?',
-        'products_statuses_id' => 'Product Status'
+        'quantity' => [
+            'name' => 'Quantity',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'image' => [
+            'name' => 'Image',
+            'search' => '',
+            'type' => 'image',
+            'sort' => true
+        ],
+        'status' => [
+            'name' => 'Status',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        // 'stock' => [
+        //     'name' => 'Stock',
+        //     'search' => 'string',
+        //     'type' => 'string',
+        //     'sort' => true
+        // ],
+
+        'categories' => [
+            'name' => 'Categories',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+       
+        'tags' => [
+            'name' => 'Tags',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'brands' => [
+            'name' => 'Brands',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+
+       
     ],
     'roles' => [
         'id' => [
