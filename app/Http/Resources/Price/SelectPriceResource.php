@@ -15,7 +15,7 @@ class SelectPriceResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'price_id' => $this->id,
+            'id' => $this->id,
             'name' => $this->name,
             'currency' => ($this->whenLoaded('currency')->code .' - '.$this->whenLoaded('currency')->symbol)  ?? '-',
         ];
