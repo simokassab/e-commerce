@@ -44,8 +44,10 @@ class StoreProductRequest extends FormRequest
 
         return [
             'name' => 'required',
-            'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
-            'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
+            // 'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
+            'slug' => 'required | max:' . config('defaults.default_string_length') ,
+            // 'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
+            'code' => 'required | max:' . config('defaults.default_string_length'),
             'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'type' => 'required | in:' . config('defaults.validation_default_types'),
             'quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
@@ -77,7 +79,7 @@ class StoreProductRequest extends FormRequest
             'category_id' => 'required  | integer | exists:categories,id',
             'unit_id' => 'required | integer | exists:units,id',
             'brand_id' => [Rule::when(in_array('brand_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:brands,id'],
-            'tax_id' => [Rule::when(in_array('tax_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:brands,id'],
+            'tax_id' => [Rule::when(in_array('tax_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:taxes,id'],
             'products_statuses_id' => 'required | integer | exists:products_statuses,id',
 
             'categories.*' => 'exists:categories,id',
