@@ -12,6 +12,7 @@ use App\Models\Product\ProductPrice;
 use App\Models\Product\ProductRelated;
 use App\Models\Product\ProductTag;
 use App\Models\RolesAndPermissions\CustomPermission;
+use App\Services\Category\CategoryService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -66,6 +67,21 @@ class ProductService
 
     //     throw new Exception('Error while storing product categories');
     // }
+    private function storeAdditionalCategrories()
+    {
+        $categoriesIdsArray = [];
+        $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($this->request->categories);
+        foreach ($oneLevelCategoryArray as $key => $category) {
+            if ($category['checked']) {
+                $categoriesIdsArray[] = $category['id'];
+                $categoriesIdsArra[] = $this->product_id;
+            }
+        }
+        if (ProductCategory::insert($categoriesIdsArray))
+            return $this;
+
+        return throw new Exception('Error while storing product images');
+    }
 
     private function storeAdditionalFields()
     {
@@ -142,7 +158,7 @@ class ProductService
     private function storeAdditionalImages()
     {
         if ($this->request->has('images')) {
-            if($this->request->image->count() != $this->request->images_data->count())
+            if ($this->request->image->count() != $this->request->images_data->count())
                 return throw new Exception('Images and images_data count is not equal');
 
             $childrenIdsArray = $this->childrenIds;
@@ -506,8 +522,5 @@ class ProductService
         return $categoryChildren;
     }
 
-    private function storeAdditionalCategrories(){
 
-        return $this;
-    }
 }

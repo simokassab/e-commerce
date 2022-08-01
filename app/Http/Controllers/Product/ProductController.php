@@ -93,14 +93,14 @@ class ProductController extends MainController
             $PriceArray[]=$object;
         }
 
-        $fields= SelectFieldResource::collection(Field::with('fieldValue')->whereEntity('product')->select('id','title')->get());
+        $fields= SelectFieldResource::collection(Field::with('fieldValue')->whereEntity('product')->get());
         $tags = TagResource::collection(Tag::all('id','name'));
         $labels = SelectLabelResource::collection(Label::whereEntity('product')->select('id','title')->get());
         $brands = SelectBrandResource::collection(Brand::all('id','name'));
         $units = SelectUnitResource::collection(Unit::all('id','name')); // same result as query()->take(['id','name'])->get
         $taxes= SelectTaxResource::collection(Tax::all('id','name'));
         $categories = SelectCategoryResource::collection(Category::all('id','name'));
-        $categoriesTree = SelectCategoryResource::collection(Category::all('id','name'));
+        // $categoriesTree = SelectCategoryResource::collection(Category::all('id','name'));
         $statuses = SelectProductStatusResource::collection(ProductStatus::all('id','name'));
 
         $nestedCategory = [];
@@ -120,6 +120,7 @@ class ProductController extends MainController
             'nested_categories' => $nestedCategories
 
         ]);
+
     }
 
     /**

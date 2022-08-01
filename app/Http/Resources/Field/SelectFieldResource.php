@@ -17,6 +17,9 @@ class SelectFieldResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->title,
+            'type' => $this->type,
+            'is_required' => $this->is_required,
+
         ];
     }
 }
