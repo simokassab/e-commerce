@@ -149,7 +149,11 @@ class ProductController extends MainController
                 $this->productService->storeAdditionalBundle($request,$product);
 
             $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
-            return $this->successResponse('Success!',['product'=>$product]);
+            // return $this->successResponse('Success!',['product'=>$product]);
+            return $this->successResponse( __('messages.success.create',
+            ['name' => __(self::OBJECT_NAME)]),
+            ['country' => new ProductResource($product)]
+            );
 
         // DB::commit();
 
