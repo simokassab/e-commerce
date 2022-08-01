@@ -18,7 +18,7 @@ class SelectFieldResource extends JsonResource
             'id' => $this->id,
             'name' => $this->title,
             'type' => $this->type,
-            'is_required' => $this->is_required,
+            'is_required' => (bool)$this->is_required,
 
         ];
     }
