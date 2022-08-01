@@ -144,14 +144,14 @@ class ProductController extends MainController
         // DB::beginTransaction();
         // try {
             $product = $this->productService->createProduct($request->all());
-            $childrenIds=[];
-            if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
-               $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
-            }
-            elseif($request->type=='bundle')
-                $this->productService->storeAdditionalBundle($request,$product);
+            // $childrenIds=[];
+            // if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
+            //    $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
+            // }
+            // elseif($request->type=='bundle')
+            //     $this->productService->storeAdditionalBundle($request,$product);
 
-            $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
+            // $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
             // return $this->successResponse('Success!',['product'=>$product]);
             return $this->successResponse( __('messages.success.create',
             ['name' => __(self::OBJECT_NAME)]),
