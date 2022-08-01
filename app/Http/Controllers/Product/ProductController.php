@@ -7,6 +7,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Resources\Brand\SelectBrandResource;
 use App\Http\Resources\Category\SelectCategoryResource;
+use App\Http\Resources\Field\FieldsResource;
 use App\Http\Resources\Field\SelectFieldResource;
 use App\Http\Resources\Field\SingleFieldResource;
 use App\Http\Resources\Label\LabelsResource;
@@ -94,7 +95,7 @@ class ProductController extends MainController
             $PriceArray[]=$object;
         }
 
-        $fields= SingleFieldResource::collection(Field::with('fieldValue')->whereEntity('product')->get());
+        $fields= FieldsResource::collection(Field::with('fieldValue')->whereEntity('product')->get());
         $tags = TagResource::collection(Tag::all('id','name'));
         $labels = SelectLabelResource::collection(Label::whereEntity('product')->select('id','title')->get());
         $brands = SelectBrandResource::collection(Brand::all('id','name'));
