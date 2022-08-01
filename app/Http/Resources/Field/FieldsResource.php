@@ -21,7 +21,7 @@ class FieldsResource extends JsonResource
             'title'=> $this->title,
             'type'=> $this->type,
             'entity'=> $this->entity,
-            // 'is_required'=> $this->is_required,
+            'is_required'=> (bool)$this->is_required,
         ];
 
         if($this->type == 'select'){
