@@ -95,14 +95,14 @@ class ProductController extends MainController
             $PriceArray[]=$object;
         }
 
-        $fields= FieldsResource::collection(Field::with('fieldValue')->whereEntity('product')->get());
+        $fields= FieldsResource::collection(Field::with('fieldValue')->whereEntity('product')->where('is_attribute',0)->get());
+        $attributes= FieldsResource::collection(Field::with('fieldValue')->whereEntity('product')->where('is_attribute',1)->get());
         $tags = TagResource::collection(Tag::all('id','name'));
         $labels = SelectLabelResource::collection(Label::whereEntity('product')->select('id','title')->get());
         $brands = SelectBrandResource::collection(Brand::all('id','name'));
         $units = SelectUnitResource::collection(Unit::all('id','name')); // same result as query()->take(['id','name'])->get
         $taxes= SelectTaxResource::collection(Tax::all('id','name'));
         $categories = SelectCategoryResource::collection(Category::all('id','name'));
-        // $categoriesTree = SelectCategoryResource::collection(Category::all('id','name'));
         $statuses = SelectProductStatusResource::collection(ProductStatus::all('id','name'));
 
         $nestedCategory = [];
@@ -112,6 +112,7 @@ class ProductController extends MainController
         return $this->successResponse('Success!',[
             'prices'=>  count($PriceArray) != 0 ? $PriceArray : "-",
             'fields'=> count($fields) != 0 ? $fields : "-",
+            'attributes'=> count($attributes) != 0 ? $attributes : "-",
             'labels'=> count($labels) != 0 ? $labels : "-",
             'tags'=> count($tags) != 0 ? $tags : "-",
             'brands'=> count($brands) != 0 ? $brands : "-",
