@@ -22,12 +22,12 @@ use function PHPUnit\Framework\isEmpty;
 
 class ProductService
 {
-    public $request, $product_id;
+    private $request, $product_id;
 
     public function storeAdditionalProductData(Request $request, $product_id, $childrenIds)
     {
 
-        $this->request = $request;
+        $this->request = $request->toArray();
         $this->product_id = $product_id;
         $this->childrenIds = $childrenIds ?? [];
 
@@ -39,33 +39,33 @@ class ProductService
             ->storeAdditionalPrices();
     }
 
-    private function storeAdditionalCategrories()
-    {
-        if (!$this->request->has('categories'))
-            return $this;
+    // private function storeAdditionalCategrories()
+    // {
+    //     if (!$this->request->has('categories'))
+    //         return $this;
 
-        $childrenIdsArray = $this->childrenIds;
-        $childrenIdsArray[] = $this->product_id;
+    //     $childrenIdsArray = $this->childrenIds;
+    //     $childrenIdsArray[] = $this->product_id;
 
-        $data = [];
+    //     $data = [];
 
-        foreach ($childrenIdsArray as $key => $child) {
-            foreach ($this->request->categories as $index => $category) {
-                $data[] = [
-                    'product_id' => $child,
-                    'category_id' => $category,
-                    'created_at' => Carbon::now()->toDateTimeString(),
-                    'updated_at' => Carbon::now()->toDateTimeString()
-                ];
-            }
-        }
+    //     foreach ($childrenIdsArray as $key => $child) {
+    //         foreach ($this->request->categories as $index => $category) {
+    //             $data[] = [
+    //                 'product_id' => $child,
+    //                 'category_id' => $category,
+    //                 'created_at' => Carbon::now()->toDateTimeString(),
+    //                 'updated_at' => Carbon::now()->toDateTimeString()
+    //             ];
+    //         }
+    //     }
 
-        if (ProductCategory::insert($data)) {
-            return $this;
-        }
+    //     if (ProductCategory::insert($data)) {
+    //         return $this;
+    //     }
 
-        throw new Exception('Error while storing product categories');
-    }
+    //     throw new Exception('Error while storing product categories');
+    // }
 
     private function storeAdditionalFields()
     {
@@ -142,6 +142,8 @@ class ProductService
     private function storeAdditionalImages()
     {
         if ($this->request->has('images')) {
+            if($this->request->image->count() != $this->request->images_data->count())
+                return throw new Exception('Images and images_data count is not equal');
 
             $childrenIdsArray = $this->childrenIds;
             $childrenIdsArray[] = $this->product_id;
@@ -154,7 +156,8 @@ class ProductService
                     $data[] = [
                         'product_id' => $child,
                         'image' => $imagePath,
-                        'title' => json_encode($image['title']),
+                        'title' => json_encode($this->request->images_data[$index]['title']),
+                        'sort' => $this->request->images_data[$index]['sort'],
                         'created_at'  => today()->toDateString(),
                         'updated_at' => today()->toDateString(),
                     ];
@@ -165,7 +168,7 @@ class ProductService
             return $this;
         }
 
-        throw new Exception('Error while storing product images');
+        return throw new Exception('Error while storing product images');
     }
 
     private function storeAdditionalLabels()
@@ -490,7 +493,7 @@ class ProductService
     private static function generateChildrenForAllCategories($allCategories)
     {
         $categoryChildren = [];
-        foreach ($allCategories as $key => $currentCategory) {
+        foreach ($allCategories as $currentCategory) {
             $parentId = ($currentCategory->parent_id ?? 0);
 
             if (!isset($categoryChildren[$parentId])) {
@@ -501,5 +504,10 @@ class ProductService
 
 
         return $categoryChildren;
+    }
+
+    private function storeAdditionalCategrories(){
+
+        return $this;
     }
 }

@@ -232,6 +232,7 @@ class ProductController extends MainController
             $product->products_statuses_id = $request->products_statuses_id;
             $product->save();
 
+
             if($request->type=='variable'){
                $this->productService->storeVariations($request,$product->id);
             }
