@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('fields', function (Blueprint $table) {
-            $table->boolean('is_attribute')->default(0)->nullable();
+            $table->boolean('is_attribute')->after('is_required')->default(0);
         });
     }
 
