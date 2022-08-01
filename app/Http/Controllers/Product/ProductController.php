@@ -152,7 +152,7 @@ class ProductController extends MainController
             // return $this->successResponse('Success!',['product'=>$product]);
             return $this->successResponse( __('messages.success.create',
             ['name' => __(self::OBJECT_NAME)]),
-            ['country' => new ProductResource($product)]
+            ['product' => new ProductResource($product)]
             );
 
         // DB::commit();
