@@ -82,8 +82,8 @@ class CategoryService {
         foreach ($arraysOfNestedCategories as $key => $arrayOfNestedCategory){
             $array2 = [];
             $tempArray = [];
-            $tempArray[] = $arrayOfNestedCategory['label'];
-            $tempArray[] = $arrayOfNestedCategory['checked'];
+            $tempArray['label'] = $arrayOfNestedCategory['label'];
+            $tempArray['checked'] = $arrayOfNestedCategory['checked'];
             $array[] = $tempArray;
 
             if(array_key_exists("nodes",$arrayOfNestedCategory) ){
