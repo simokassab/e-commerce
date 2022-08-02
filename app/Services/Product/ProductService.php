@@ -33,14 +33,16 @@ class ProductService
         // $productId = $product_id;
         // $childrenIds = $childrenIds ?? [];
 
-       return  $this->storeAdditionalCategrories($request, $productId, $childrenIds)
+       return  $this->storeAdditionalCategrories($request, $productId, $childrenIds);
         // $this->storeAdditionalFields($request, $productId, $childrenIds) // different than parent
-            ->storeAdditionalFields($request, $productId, $childrenIds) // different than parent
-            // ->storeAdditionalImages($request, $productId, $childrenIds) // different than parent
-            ->storeAdditionalLabels($request, $productId, $childrenIds)
-            ->storeAdditionalTags($request, $productId, $childrenIds)
-            ->storeAdditionalPrices($request, $productId, $childrenIds);
+//            ->storeAdditionalFields($request, $productId, $childrenIds) // different than parent
+//            // ->storeAdditionalImages($request, $productId, $childrenIds) // different than parent
+//            ->storeAdditionalLabels($request, $productId, $childrenIds)
+//            ->storeAdditionalTags($request, $productId, $childrenIds)
+//            ->storeAdditionalPrices($request, $productId, $childrenIds);
+//
     }
+
 
 
     public function storeAdditionalCategrories(Request $request, $productId, $childrenIds)
