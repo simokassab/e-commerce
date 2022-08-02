@@ -388,6 +388,7 @@ class ProductService
         // try {
         $product = new Product();
         // $product->name = $data['name'];
+        return $data['name'];
         $product->name = [
             'en' => "bilal",
             'ar' => "bilal"
