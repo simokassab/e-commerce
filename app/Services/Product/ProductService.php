@@ -124,7 +124,6 @@ class ProductService
         $data = [];
         foreach ($childrenIdsArray as $key => $child) {
             foreach ($request->images as $index => $image) {
-                return json_decode($request->images_data[$index]['title']);
 
                 $imagePath = uploadImage($image, config('images_paths.product.images'));
                 $data[] = [
@@ -137,6 +136,7 @@ class ProductService
                 ];
             }
             if (ProductImage::insert($data)) {
+                return "sss";
                 return $this;
             }
         }
