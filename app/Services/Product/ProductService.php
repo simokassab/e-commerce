@@ -68,21 +68,21 @@ class ProductService
 
     //     throw new Exception('Error while storing product categories');
     // }
-    private function storeAdditionalCategrories()
-    {
-        $categoriesIdsArray = [];
-        $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($this->request->categories);
-        foreach ($oneLevelCategoryArray as $key => $category) {
-            if ($category['checked']) {
-                $categoriesIdsArray[] = $category['id'];
-                $categoriesIdsArra[] = $this->product_id;
-            }
-        }
-        if (ProductCategory::insert($categoriesIdsArray))
-            return $this;
+    // private function storeAdditionalCategrories()
+    // {
+    //     $categoriesIdsArray = [];
+    //     $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($this->request->categories);
+    //     foreach ($oneLevelCategoryArray as $key => $category) {
+    //         if ($category['checked']) {
+    //             $categoriesIdsArray[] = $category['id'];
+    //             $categoriesIdsArra[] = $this->product_id;
+    //         }
+    //     }
+    //     if (ProductCategory::insert($categoriesIdsArray))
+    //         return $this;
 
-        throw new Exception('Error while storing product images');
-    }
+    //     throw new Exception('Error while storing product images');
+    // }
 
     private function storeAdditionalFields()
     {
