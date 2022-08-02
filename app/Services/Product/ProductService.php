@@ -29,12 +29,12 @@ class ProductService
     public function storeAdditionalProductData(Request $request, $product_id, $childrenIds)
     {
 
-        $this->request = $request->toArray();
+        $this->request = $request;
         $this->product_id = $product_id;
         $this->childrenIds = $childrenIds ?? [];
 
-        // self::storeAdditionalCategrories()
-           self::storeAdditionalFields() // different than parent
+        self::storeAdditionalCategrories()
+            ->storeAdditionalFields() // different than parent
             ->storeAdditionalImages() // different than parent
             ->storeAdditionalLabels()
             ->storeAdditionalTags()
@@ -68,21 +68,24 @@ class ProductService
 
     //     throw new Exception('Error while storing product categories');
     // }
-    // private function storeAdditionalCategrories()
-    // {
-    //     $categoriesIdsArray = [];
-    //     $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($this->request->categories);
-    //     foreach ($oneLevelCategoryArray as $key => $category) {
-    //         if ($category['checked']) {
-    //             $categoriesIdsArray[] = $category['id'];
-    //             $categoriesIdsArra[] = $this->product_id;
-    //         }
-    //     }
-    //     if (ProductCategory::insert($categoriesIdsArray))
-    //         return $this;
+    private function storeAdditionalCategrories()
+    {
+        if(!$this->request->has('categories'))
+            return $this;
 
-    //     throw new Exception('Error while storing product images');
-    // }
+        $categoriesIdsArray = [];
+        $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($this->request->categories);
+        foreach ($oneLevelCategoryArray as $key => $category) {
+            if ($category['checked']) {
+                $categoriesIdsArray[] = $category['id'];
+                $categoriesIdsArra[] = $this->product_id;
+            }
+        }
+        if (ProductCategory::insert($categoriesIdsArray))
+            return $this;
+
+        throw new Exception('Error while storing product images');
+    }
 
     private function storeAdditionalFields()
     {
@@ -110,7 +113,7 @@ class ProductService
                     $data[$key]["value"] = ($field['value']);
                     $data[$key]["field_value_id"] = null;
                     if (gettype($field['value']) == 'array') {
-                        $data[$key]["value"] = json_encode($field['value']);
+                        $data[$key]["value"] = ($field['value']);
                     }
                 }
                 $data[$key]["product_id"] = $child;
@@ -158,7 +161,9 @@ class ProductService
 
     private function storeAdditionalImages()
     {
-        if ($this->request->has('images')) {
+        if (!$this->request->has('images'))
+            return $this;
+
             if ($this->request->image->count() != $this->request->images_data->count())
                 throw new Exception('Images and images_data count is not equal');
 
@@ -180,7 +185,6 @@ class ProductService
                     ];
                 }
             }
-        }
         if (ProductImage::insert($data)) {
             return $this;
         }
