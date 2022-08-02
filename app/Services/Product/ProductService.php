@@ -387,12 +387,7 @@ class ProductService
     {
         // try {
         $product = new Product();
-        // $product->name = $data['name'];
-        return json_encode($data['name']);
-        $product->name = [
-            'en' => "bilal",
-            'ar' => "bilal"
-        ];
+        $product->name = $data['name'];
         $product->slug = $data['slug'];
         $product->code = $data['code'];
         // $product->sku = $data['sku'] ?? null;
@@ -419,7 +414,7 @@ class ProductService
         $product->is_default_child = $data['is_default_child'] ?? 0;
         // $product->parent_product_id = $data['parent_product_id'] ?? null;
         $product->category_id = $data['category_id'];
-        // $product->unit_id = $data['unit_id'] ?? null;
+        $product->unit_id = $data['unit_id'];
         // $product->brand_id = $data['brand_id'] ?? null;
         // $product->tax_id = $data['tax_id'] ?? null;
         $product->products_statuses_id = $data['products_statuses_id'];
