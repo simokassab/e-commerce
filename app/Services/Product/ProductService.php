@@ -121,15 +121,16 @@ class ProductService
 
         $childrenIdsArray = $childrenIds;
         $childrenIdsArray[] = $productId;
-
         $data = [];
         foreach ($childrenIdsArray as $key => $child) {
             foreach ($request->images as $index => $image) {
+                return json_decode($request->images_data[$index]['title']);
+
                 $imagePath = uploadImage($image, config('images_paths.product.images'));
                 $data[] = [
                     'product_id' => $child,
                     'image' => $imagePath,
-                    'title' => (array)($request->images_data[$index]['title']),
+                    'title' => json_decode($request->images_data[$index]['title']),
                     'sort' => $request->images_data[$index]['sort'],
                     'created_at'  => Carbon::now()->toDateString(),
                     'updated_at' => Carbon::now()->toDateString(),
