@@ -115,7 +115,7 @@ class ProductService
         if (!$request->has('images'))
             return $this;
 
-        return $request->images->count() . ' ' .$request->images_data->count();
+        return $request->images->count();
          if ($request->images->count() == $request->images_data->count()){
              throw new Exception('Images and images_data count is not equal');
          }
