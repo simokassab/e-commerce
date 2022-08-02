@@ -121,11 +121,10 @@ class ProductService
 
         $childrenIdsArray = array();
         $childrenIdsArray[] = $childrenIds;
-        $childrenIdsArray[] = $productId;
+       return $childrenIdsArray[] = $productId;
 
         $data = [];
         foreach ($childrenIdsArray as $key => $child) {
-            return $childrenIdsArray;
             foreach ($request->images as $index => $image) {
                 $imagePath = uploadImage($image, config('images_paths.product.images'));
                 $data[] = [
