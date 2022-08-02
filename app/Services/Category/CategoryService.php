@@ -86,7 +86,7 @@ class CategoryService {
             $tempArray[] = $arrayOfNestedCategory['checked'];
             $array[] = $tempArray;
 
-            if($arrayOfNestedCategory['nodes']->isEmpty()==false && count($arrayOfNestedCategory['nodes']) > 0){
+            if (count($arrayOfNestedCategory['nodes']) > 0){
                 $array2 = self::loopOverMultiDimentionArray($arrayOfNestedCategory['nodes']);
                 $array = array_merge($array,$array2);
 
