@@ -24,62 +24,35 @@ use function PHPUnit\Framework\isEmpty;
 
 class ProductService
 {
-    private $request, $product_id;
+    // private $request, $product_id;
 
-    public function storeAdditionalProductData(Request $request, $product_id, $childrenIds)
+    public function storeAdditionalProductData(Request $request, $productId, $childrenIds)
     {
 
-        $this->request = $request;
-        $this->product_id = $product_id;
-        $this->childrenIds = $childrenIds ?? [];
+        // $request = $request;
+        // $productId = $product_id;
+        // $childrenIds = $childrenIds ?? [];
 
-        self::storeAdditionalCategrories()
-        // self::storeAdditionalFields() // different than parent
-            ->storeAdditionalFields() // different than parent
-            ->storeAdditionalImages() // different than parent
-            ->storeAdditionalLabels()
-            ->storeAdditionalTags()
-            ->storeAdditionalPrices();
+        // $this->storeAdditionalCategrories()
+        $this->storeAdditionalFields($request, $productId, $childrenIds) // different than parent
+            // ->storeAdditionalImages($request, $productId, $childrenIds) // different than parent
+            ->storeAdditionalLabels($request, $productId, $childrenIds);
+            // ->storeAdditionalTags($request, $productId, $childrenIds)
+            // ->storeAdditionalPrices($request, $productId, $childrenIds);
     }
 
-    // private function storeAdditionalCategrories()
-    // {
-    //     if (!$this->request->has('categories'))
-    //         return $this;
 
-    //     $childrenIdsArray = $this->childrenIds;
-    //     $childrenIdsArray[] = $this->product_id;
-
-    //     $data = [];
-
-    //     foreach ($childrenIdsArray as $key => $child) {
-    //         foreach ($this->request->categories as $index => $category) {
-    //             $data[] = [
-    //                 'product_id' => $child,
-    //                 'category_id' => $category,
-    //                 'created_at' => Carbon::now()->toDateTimeString(),
-    //                 'updated_at' => Carbon::now()->toDateTimeString()
-    //             ];
-    //         }
-    //     }
-
-    //     if (ProductCategory::insert($data)) {
-    //         return $this;
-    //     }
-
-    //     throw new Exception('Error while storing product categories');
-    // }
-    private function storeAdditionalCategrories()
+    public function storeAdditionalCategrories(Request $request, $productId, $childrenIds)
     {
-        if(!$this->request->has('categories'))
+        if (!$request->has('categories'))
             return $this;
 
         $categoriesIdsArray = [];
-        $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($this->request->categories);
+        $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($request->categories);
         foreach ($oneLevelCategoryArray as $key => $category) {
             if ($category['checked']) {
                 $categoriesIdsArray[] = $category['id'];
-                $categoriesIdsArra[] = $this->product_id;
+                $categoriesIdsArra[] = $productId;
             }
         }
         if (ProductCategory::insert($categoriesIdsArray))
@@ -88,18 +61,18 @@ class ProductService
         throw new Exception('Error while storing product images');
     }
 
-    private function storeAdditionalFields()
+    public function storeAdditionalFields(Request $request, $productId, $childrenIds)
     {
-        if (!$this->request->has('fields'))
+        if (!$request->has('fields'))
             return $this;
 
-        $childrenIdsArray = $this->childrenIds;
-        $childrenIdsArray[] = $this->product_id;
+        $childrenIdsArray = $childrenIds;
+        $childrenIdsArray[] = $productId;
 
         $data = [];
 
         foreach ($childrenIdsArray as $key => $child) {
-            foreach ($this->request->fields as $index => $field) {
+            foreach ($request->fields as $index => $field) {
                 if (gettype($field) == 'string') {
                     $field = (array)json_decode($field);
                 }
@@ -129,82 +102,50 @@ class ProductService
         throw new Exception('Error while storing product fields');
     }
 
-    // if ($this->request->has('fields')) {
-    //     $fieldsArray = $this->request->fields ?? [];
 
-    //     $data = collect($this->request->fields);
-    //     $data->each(function ($item, $key) {
-    //         $item['product_id'] = $this->product_id;
-    //         $item['created_at'] = Carbon::now()->toDateTimeString();
-    //         $item['updated_at'] = Carbon::now()->toDateTimeString();
-    //     });
-
-
-    //     foreach ($this->request->fields as $field => $value) {
-
-    //         if ($fieldsArray[$field]["type"] == 'select')
-    //             $fieldsArray[$field]["value"] =  null;
-    //         else {
-    //             $fieldsArray[$field]["value"] = json_encode($value['value']);
-    //             $fieldsArray[$field]["field_value_id"] = null;
-    //         }
-
-    //         $fieldsArray[$field]["product_id"] = $this->product_id;
-    //         $fieldsArray[$field]["created_at"] = Carbon::now()->toDateTimeString();
-    //         $fieldsArray[$field]["updated_at"] = Carbon::now()->toDateTimeString();
-    //         unset($fieldsArray[$field]['type']);
-    //     }
-    //     ProductField::insert($fieldsArray);
-    // }
-
-    // return $this;
-    // }
-
-    private function storeAdditionalImages()
+    public function storeAdditionalImages(Request $request, $productId, $childrenIds)
     {
-        if (!$this->request->has('images'))
+        if (!$request->has('images'))
             return $this;
 
-        // if ($this->request->image->count() != $this->request->images_data->count())
+        // if ($request->image->count() != $request->images_data->count())
         //     throw new Exception('Images and images_data count is not equal');
 
-        $childrenIdsArray = $this->childrenIds;
-        $childrenIdsArray[] = $this->product_id;
+        $childrenIdsArray = $childrenIds;
+        $childrenIdsArray[] = $productId;
 
         $data = [];
         foreach ($childrenIdsArray as $key => $child) {
-            foreach ($this->request->images as $index => $image) {
+            foreach ($request->images as $index => $image) {
                 $imagePath = uploadImage($image['image'], config('images_paths.product.images'));
-
                 $data[] = [
                     'product_id' => $child,
                     'image' => $imagePath,
-                    'title' => ($this->request->images_data[$index]['title']),
-                    'sort' => $this->request->images_data[$index]['sort'],
+                    'title' => $request->images_data[$index]['title'],
+                    'sort' => $request->images_data[$index]['sort'],
                     'created_at'  => today()->toDateString(),
                     'updated_at' => today()->toDateString(),
                 ];
             }
+            if (ProductImage::insert($data)) {
+                return $this;
+            }
         }
-        if (ProductImage::insert($data)) {
-            return $this;
-        }
-
         throw new Exception('Error while storing product images');
     }
 
-    private function storeAdditionalLabels()
+    public function storeAdditionalLabels(Request $request,$productId,$childrenIds)
     {
-        if (!$this->request->has('labels'))
+        if (!$request->has('labels'))
             return $this;
 
-        $childrenIdsArray = $this->childrenIds;
-        $childrenIdsArray[] = $this->product_id;
+        $childrenIdsArray = $childrenIds;
+        $childrenIdsArray[] = $productId;
 
         $data = [];
 
         foreach ($childrenIdsArray as $key => $child) {
-            foreach ($this->request->labels as $index => $label) {
+            foreach ($request->labels as $index => $label) {
                 $data[] = [
                     'product_id' => $child,
                     'label_id' => $label,
@@ -221,18 +162,18 @@ class ProductService
         throw new Exception('Error while storing product categories');
     }
 
-    private function storeAdditionalTags()
+    public function storeAdditionalTags(Request $request,$productId,$childrenIds)
     {
-        if (!$this->request->has('tags'))
+        if (!$request->has('tags'))
             return $this;
 
-        $childrenIdsArray = $this->childrenIds;
-        $childrenIdsArray[] = $this->product_id;
+        $childrenIdsArray = $childrenIds;
+        $childrenIdsArray[] = $productId;
 
         $data = [];
 
         foreach ($childrenIdsArray as $key => $child) {
-            foreach ($this->request->tags as $index => $tag) {
+            foreach ($request->tags as $index => $tag) {
                 $data[] = [
                     'product_id' => $child,
                     'tag_id' => $tag,
@@ -264,13 +205,13 @@ class ProductService
         return $this;
     }
 
-    private function storeAdditionalPrices()
+    public function storeAdditionalPrices(Request $request,$productId,$childrenIds)
     {
 
-        if ($this->request->has('prices')) {
+        if ($request->has('prices')) {
             $pricesArray =  [];
-            foreach ($this->request->prices as $price => $value) {
-                $pricesArray[$price]["product_id"] = $this->product_id;
+            foreach ($request->prices as $price => $value) {
+                $pricesArray[$price]["product_id"] = $productId;
                 $pricesArray[$price]["price_id"] = $value['price_id'];
                 $pricesArray[$price]["price"] = $value['price'];
                 $pricesArray[$price]["discounted_price"] = $value['discounted_price'];
@@ -394,47 +335,48 @@ class ProductService
 
     public function createProduct(Request $request)
     {
-        // try {
-        $product = new Product();
-        $product->name = $request->name;
-        $product->slug = $request->slug;
-        $product->code = $request->code;
-        $product->sku = $request->sku;
-        $product->type = $request->type;
-        $product->quantity = $request->quantity;
-        $product->reserved_quantity = $request['reserved_quantity'] ?? 0;
-        $product->minimum_quantity = $request->minimum_quantity;
-        $product->summary = $request['summary'] ?? null;
-        $product->specification = $request['specification'] ?? null;
-        if ($request->has('image') && !empty($request->image))
-            $product->image = uploadImage($request->image, config('images_paths.product.images'));
+        DB::beginTransaction();
+        try {
+            $product = new Product();
+            $product->name = $request->name;
+            $product->slug = $request->slug;
+            $product->code = $request->code;
+            $product->sku = $request->sku;
+            $product->type = $request->type;
+            $product->quantity = $request->quantity;
+            $product->reserved_quantity = $request['reserved_quantity'] ?? 0;
+            $product->minimum_quantity = $request->minimum_quantity;
+            $product->summary = $request['summary'] ?? null;
+            $product->specification = $request['specification'] ?? null;
+            if ($request->has('image') && !empty($request->image))
+                $product->image = uploadImage($request->image, config('images_paths.product.images'));
 
-        $product->meta_title = $request['meta_title'] ?? null;
-        $product->meta_description = $request['meta_description'] ?? null;
-        $product->meta_keyword = $request['meta_keyword'] ?? null;
-        $product->description = $request['description'] ?? null;
-        $product->status = $request->status;
-        $product->barcode = $request['barcode'] ?? null;
-        $product->height = $request['height'] ?? null;
-        $product->width = $request['width'] ?? null;
-        $product->is_disabled = 0;
-        $product->length = $request['p_length'] ?? null;
-        $product->weight = $request['weight'] ?? null;
-        $product->is_default_child = $request->is_default_child ?? 0;
-        $product->parent_product_id = $request['parent_product_id'] ?? null;
-        $product->category_id = $request->category_id;
-        $product->unit_id = $request->unit_id;
-        $product->brand_id = $request['brand_id'] ?? null;
-        $product->tax_id = $request['tax_id'] ?? null;
-        $product->products_statuses_id = $request->products_statuses_id;
-        $product->is_show_related_product = $request['is_show_related_product'] ?? 0;
-        $product->save();
-        // } catch (Exception $e) {
-
-        //     throw new Exception($e->getMessage());
-        // }
-
-        return $product;
+            $product->meta_title = $request['meta_title'] ?? null;
+            $product->meta_description = $request['meta_description'] ?? null;
+            $product->meta_keyword = $request['meta_keyword'] ?? null;
+            $product->description = $request['description'] ?? null;
+            $product->status = $request->status;
+            $product->barcode = $request['barcode'] ?? null;
+            $product->height = $request['height'] ?? null;
+            $product->width = $request['width'] ?? null;
+            $product->is_disabled = 0;
+            $product->length = $request['p_length'] ?? null;
+            $product->weight = $request['weight'] ?? null;
+            $product->is_default_child = $request->is_default_child ?? 0;
+            $product->parent_product_id = $request['parent_product_id'] ?? null;
+            $product->category_id = $request->category_id;
+            $product->unit_id = $request->unit_id;
+            $product->brand_id = $request['brand_id'] ?? null;
+            $product->tax_id = $request['tax_id'] ?? null;
+            $product->products_statuses_id = $request->products_statuses_id;
+            $product->is_show_related_product = $request['is_show_related_product'] ?? 0;
+            $product->save();
+            DB::commit();
+            return $product;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
     }
 
     public static function getAllCategoriesNested($categories)
