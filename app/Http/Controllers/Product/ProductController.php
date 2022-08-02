@@ -130,7 +130,7 @@ class ProductController extends MainController
     }
 
 
-    public function store(StoreProductRequest $request)
+    public function store(Request $request)
     {
         // DB::beginTransaction();
         // try {
@@ -144,10 +144,10 @@ class ProductController extends MainController
 
             // $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
             // return $this->successResponse('Success!',['product'=>$product]);
-            // return $this->successResponse( __('messages.success.create',
-            // ['name' => __(self::OBJECT_NAME)]),
-            // ['product' => new ProductResource($product)]
-            // );
+            return $this->successResponse( __('messages.success.create',
+            ['name' => __(self::OBJECT_NAME)]),
+            ['product' => new ProductResource($product)]
+            );
 
 
         // DB::commit();
