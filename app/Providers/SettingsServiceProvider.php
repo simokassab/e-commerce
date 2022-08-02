@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Settings\Setting;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 
 class SettingsServiceProvider extends ServiceProvider
 {
@@ -25,10 +26,13 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-       Cache::rememberForever('settings', function () {
-           $setting=Setting::all(['id','title','type','value']);
-           return $setting;
-       });
+        if(Schema::hasTable('settings')){
+            Cache::rememberForever('settings', function () {
+                $setting=Setting::all(['id','title','type','value']);
+                return $setting;
+            });
+        }
+
 
 
     }
