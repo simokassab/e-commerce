@@ -122,8 +122,12 @@ class ProductService
                 $data[] = [
                     'product_id' => $child,
                     'image' => $imagePath,
-                    'title' => $request->images_data[$index]['title'],
-                    'sort' => $request->images_data[$index]['sort'],
+                    // 'title' => $request->images_data[$index]['title'],
+                    'title' => json_encode([
+                        "en"=>"bilAL"
+                    ]),
+                    // 'sort' => $request->images_data[$index]['sort'],
+                    'sort' => "1",
                     'created_at'  => today()->toDateString(),
                     'updated_at' => today()->toDateString(),
                 ];
