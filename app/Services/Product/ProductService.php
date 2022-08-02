@@ -404,7 +404,7 @@ class ProductService
         // $product->meta_description = $data['meta_description'] ?? null;
         // $product->meta_keyword = $data['meta_keyword'] ?? null;
         // $product->description = $data['description'] ?? null;
-        // $product->status = $data['status'] ?? "draft";
+        $product->status = $data['status'] ?? "draft";
         // $product->barcode = $data['barcode'] ?? null;
         // $product->height = $data['height'] ?? null;
         // $product->width = $data['width'] ?? null;
