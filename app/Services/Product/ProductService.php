@@ -178,7 +178,7 @@ class ProductService
                 $data[] = [
                     'product_id' => $child,
                     'image' => $imagePath,
-                    'title' => json_encode($this->request->images_data[$index]['title']),
+                    'title' => ($this->request->images_data[$index]['title']),
                     'sort' => $this->request->images_data[$index]['sort'],
                     'created_at'  => today()->toDateString(),
                     'updated_at' => today()->toDateString(),
