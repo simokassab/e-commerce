@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Prices;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\price\PricesRequest;
 use App\Http\Resources\Price\PriceResource;
+use App\Http\Resources\Price\SelectPriceResource;
 use App\Http\Resources\Price\SinglePriceResource;
 use Illuminate\Http\Request;
 use App\Models\Price\Price;
@@ -161,6 +162,12 @@ class PricesController extends MainController
     public function destroy(Price $id)
     {
         //this module can't be destroyed
+    }
+
+    public function getPricesList(){
+         $prices = Price::with('currency')->take(['id','currency_id','name'])->get();
+         return SelectPriceResource::collection($prices);
+
     }
 
     public function getTableHeaders(){
