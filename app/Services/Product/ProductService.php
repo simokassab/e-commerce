@@ -119,9 +119,7 @@ class ProductService
              throw new Exception('Images and images_data count is not equal');
          }
 
-        $childrenIdsArray = array();
-
-        $childrenIdsArray[] = $childrenIds;
+        $childrenIdsArray = $childrenIds;
         $childrenIdsArray[] = $productId;
 
         $data = [];
