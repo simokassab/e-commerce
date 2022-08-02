@@ -33,8 +33,8 @@ class ProductService
         $this->product_id = $product_id;
         $this->childrenIds = $childrenIds ?? [];
 
-        self::storeAdditionalCategrories()
-            ->storeAdditionalFields() // different than parent
+        // self::storeAdditionalCategrories()
+           self::storeAdditionalFields() // different than parent
             ->storeAdditionalImages() // different than parent
             ->storeAdditionalLabels()
             ->storeAdditionalTags()
