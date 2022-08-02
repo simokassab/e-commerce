@@ -539,6 +539,40 @@ return [
             'sort' => true
         ]
     ],
+    'prices_list' => [
+        'code' => [
+            'name' => 'Code',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'item' => [
+            'name' => 'Item',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'uom' => [
+            'name' => 'UOM',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'price_1' => [
+            'name' => 'Price 1',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'price_2' => [
+            'name' => 'Price 2',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ]
+
+
+    ],
 
     
 ];

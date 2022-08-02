@@ -9,7 +9,6 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use function PHPUnit\Framework\isNull;
 
 class PermissionsServices {
     public static function getPermissionChildren(int | Permission $permission,$permissionsOfRole = [],$allPermissions = [], $flatten= false) : Array

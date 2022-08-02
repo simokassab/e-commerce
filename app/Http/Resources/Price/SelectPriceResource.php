@@ -18,6 +18,7 @@ class SelectPriceResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'currency' => ($this->whenLoaded('currency')->code .' - '.$this->whenLoaded('currency')->symbol)  ?? '-',
-        ];
+            'title_price_currency' => $this->name . ' - ' . ($this->whenLoaded('currency')->symbol)  ?? 'NA',
+            ];
     }
 }
