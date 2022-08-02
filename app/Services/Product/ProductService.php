@@ -388,10 +388,10 @@ class ProductService
         // try {
         $product = new Product();
         // $product->name = $data['name'];
-        $product->name = [
+        $product->name = json_encode([
             'en' => "bilal",
             'ar' => "bilal"
-        ];
+        ]);
         $product->slug = $data['slug'];
         $product->code = $data['code'];
         // $product->sku = $data['sku'] ?? null;
