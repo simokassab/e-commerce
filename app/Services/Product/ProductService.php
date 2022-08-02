@@ -344,6 +344,7 @@ class ProductService
 
     public function createProduct(Request $request)
     {
+        return $request->toArray();
         DB::beginTransaction();
         try {
             $product = new Product();
