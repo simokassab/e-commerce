@@ -419,14 +419,13 @@ class ProductService
         // $product->tax_id = $data['tax_id'] ?? null;
         $product->products_statuses_id = $data['products_statuses_id'];
         // $product->is_show_related_product = $data['is_show_related_product'] ?? 0;
-        return $data;
-        // $product->save();
+        $product->save();
         // } catch (Exception $e) {
 
         //     throw new Exception($e->getMessage());
         // }
 
-        // return $product;
+        return $product;
     }
 
     public static function getAllCategoriesNested($categories)
