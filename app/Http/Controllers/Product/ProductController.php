@@ -133,7 +133,6 @@ class ProductController extends MainController
 
     public function store(Request $request)
     {
-        return $request->toArray();
         // DB::beginTransaction();
         // try {
             $product = $this->productService->createProduct($request);
