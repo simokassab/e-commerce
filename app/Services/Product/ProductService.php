@@ -33,8 +33,9 @@ class ProductService
         $this->product_id = $product_id;
         $this->childrenIds = $childrenIds ?? [];
 
-        // self::storeAdditionalCategrories()
-        self::storeAdditionalFields() // different than parent
+        self::storeAdditionalCategrories()
+        // self::storeAdditionalFields() // different than parent
+            ->storeAdditionalFields() // different than parent
             ->storeAdditionalImages() // different than parent
             ->storeAdditionalLabels()
             ->storeAdditionalTags()
@@ -68,24 +69,24 @@ class ProductService
 
     //     throw new Exception('Error while storing product categories');
     // }
-    // private function storeAdditionalCategrories()
-    // {
-    //     if(!$this->request->has('categories'))
-    //         return $this;
+    private function storeAdditionalCategrories()
+    {
+        if(!$this->request->has('categories'))
+            return $this;
 
-    //     $categoriesIdsArray = [];
-    //     $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($this->request->categories);
-    //     foreach ($oneLevelCategoryArray as $key => $category) {
-    //         if ($category['checked']) {
-    //             $categoriesIdsArray[] = $category['id'];
-    //             $categoriesIdsArra[] = $this->product_id;
-    //         }
-    //     }
-    //     if (ProductCategory::insert($categoriesIdsArray))
-    //         return $this;
+        $categoriesIdsArray = [];
+        $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($this->request->categories);
+        foreach ($oneLevelCategoryArray as $key => $category) {
+            if ($category['checked']) {
+                $categoriesIdsArray[] = $category['id'];
+                $categoriesIdsArra[] = $this->product_id;
+            }
+        }
+        if (ProductCategory::insert($categoriesIdsArray))
+            return $this;
 
-    //     throw new Exception('Error while storing product images');
-    // }
+        throw new Exception('Error while storing product images');
+    }
 
     private function storeAdditionalFields()
     {
