@@ -106,13 +106,19 @@ class ProductService
     }
 
 
+    /**
+     * @throws \App\Exceptions\FileErrorException
+     * @throws Exception
+     */
     public function storeAdditionalImages(Request $request, $productId, $childrenIds)
     {
         if (!$request->has('images'))
             return $this;
 
-        // if ($request->image->count() != $request->images_data->count())
-        //     throw new Exception('Images and images_data count is not equal');
+         if ($request->images->count() == $request->images_data->count()){
+             throw new Exception('Images and images_data count is not equal');
+         }
+
 
         $childrenIdsArray[] = $childrenIds;
         $childrenIdsArray[] = $productId;
