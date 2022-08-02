@@ -83,6 +83,7 @@ class CategoryService {
             $array2 = [];
             $tempArray = [];
             $tempArray['label'] = $arrayOfNestedCategory['label'];
+            $tempArray['id'] = $arrayOfNestedCategory['id'];
             $tempArray['checked'] = $arrayOfNestedCategory['checked'];
             $array[] = $tempArray;
 
