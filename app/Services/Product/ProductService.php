@@ -36,6 +36,7 @@ class ProductService
         //  $this->storeAdditionalCategrories($request, $productId, $childrenIds)
 //         $this->storeAdditionalFields($request, $productId, $childrenIds) // different than parent
             // ->storeAdditionalFields($request, $productId, $childrenIds) // different than parent
+        return "ds";
             $this->storeAdditionalImages($request, $productId, $childrenIds);// different than parent
             // ->storeAdditionalLabels($request, $productId, $childrenIds)
             // ->storeAdditionalTags($request, $productId, $childrenIds)
