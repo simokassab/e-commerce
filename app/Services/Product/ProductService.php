@@ -135,7 +135,7 @@ class ProductService
                     'updated_at' => Carbon::now()->toDateString(),
                 ];
             }
-
+            return $data;
             if (ProductImage::insert($data)) {
                 return $this;
             }
