@@ -2,6 +2,7 @@
 
 namespace App\Services\Product;
 
+use App\Http\Requests\Product\StoreProductRequest;
 use App\Models\Category\Category;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
@@ -383,42 +384,42 @@ class ProductService
         }
     }
 
-    public function createProduct($data)
+    public function createProduct(StoreProductRequest $request)
     {
         // try {
         $product = new Product();
-        $product->name = $data->name;
-        $product->slug = $data->slug;
-        $product->code = $data->code;
-        $product->sku = $data->sku;
-        $product->type = $data->type;
-        $product->quantity = $data->quantity;
-        // $product->reserved_quantity = $data['reserved_quantity'] ?? 0;
-        $product->minimum_quantity = $data->minimum_quantity;
-        // $product->summary = $data['summary'] ?? null;
-        // $product->specification = $data['specification'] ?? null;
-        // if (array_key_exists('image', $data)  && !empty($data['image']))
-        //     $product->image = uploadImage($data['image'], config('images_paths.product.images'));
+        $product->name = $request->name;
+        $product->slug = $request->slug;
+        $product->code = $request->code;
+        $product->sku = $request->sku;
+        $product->type = $request->type;
+        $product->quantity = $request->quantity;
+        // $product->reserved_quantity = $request['reserved_quantity'] ?? 0;
+        $product->minimum_quantity = $request->minimum_quantity;
+        // $product->summary = $request['summary'] ?? null;
+        // $product->specification = $request['specification'] ?? null;
+        // if (array_key_exists('image', $request)  && !empty($request['image']))
+        //     $product->image = uploadImage($request['image'], config('images_paths.product.images'));
 
-        // $product->meta_title = $data['meta_title'] ?? null;
-        // $product->meta_description = $data['meta_description'] ?? null;
-        // $product->meta_keyword = $data['meta_keyword'] ?? null;
-        // $product->description = $data['description'] ?? null;
-        $product->status = $data->status ?? "draft";
-        // $product->barcode = $data['barcode'] ?? null;
-        // $product->height = $data['height'] ?? null;
-        // $product->width = $data['width'] ?? null;
+        // $product->meta_title = $request['meta_title'] ?? null;
+        // $product->meta_description = $request['meta_description'] ?? null;
+        // $product->meta_keyword = $request['meta_keyword'] ?? null;
+        // $product->description = $request['description'] ?? null;
+        $product->status = $request->status;
+        // $product->barcode = $request['barcode'] ?? null;
+        // $product->height = $request['height'] ?? null;
+        // $product->width = $request['width'] ?? null;
         $product->is_disabled = 0;
-        // $product->length = $data['p_length'] ?? null;
-        // $product->weight = $data['weight'] ?? null;
-        $product->is_default_child = $data->is_default_child ?? 0;
-        // $product->parent_product_id = $data['parent_product_id'] ?? null;
-        $product->category_id = $data->category_id;
-        $product->unit_id = $data->unit_id;
-        // $product->brand_id = $data['brand_id'] ?? null;
-        // $product->tax_id = $data['tax_id'] ?? null;
-        $product->products_statuses_id = $data->products_statuses_id;
-        // $product->is_show_related_product = $data['is_show_related_product'] ?? 0;
+        // $product->length = $request['p_length'] ?? null;
+        // $product->weight = $request['weight'] ?? null;
+        $product->is_default_child = $request->is_default_child ?? 0;
+        // $product->parent_product_id = $request['parent_product_id'] ?? null;
+        $product->category_id = $request->category_id;
+        $product->unit_id = $request->unit_id;
+        // $product->brand_id = $request['brand_id'] ?? null;
+        // $product->tax_id = $request['tax_id'] ?? null;
+        $product->products_statuses_id = $request->products_statuses_id;
+        // $product->is_show_related_product = $request['is_show_related_product'] ?? 0;
         $product->save();
         // } catch (Exception $e) {
 
