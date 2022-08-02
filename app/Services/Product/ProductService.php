@@ -267,12 +267,12 @@ class ProductService
     {
 
         if ($this->request->has('prices')) {
-            $this->request->request->remove('currency'); // to remove property from $request
-            $this->request->request->remove('name'); // to remove property from $request
-
-            $pricesArray =  $this->request->prices ?? [];
+            $pricesArray =  [];
             foreach ($this->request->prices as $price => $value) {
                 $pricesArray[$price]["product_id"] = $this->product_id;
+                $pricesArray[$price]["price_id"] = $value['price_id'];
+                $pricesArray[$price]["price"] = $value['price'];
+                $pricesArray[$price]["discounted_price"] = $value['discounted_price'];
                 $pricesArray[$price]["created_at"] = Carbon::now()->toDateTimeString();
                 $pricesArray[$price]["updated_at"] = Carbon::now()->toDateTimeString();
             }
