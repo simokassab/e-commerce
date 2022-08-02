@@ -99,7 +99,7 @@ class ProductController extends MainController
 
         $nestedCategory = [];
         $categoriesForNested = Category::with('parent')->get();
-        return $nestedCategories = CategoryService::getAllCategoriesNested($categoriesForNested);
+        $nestedCategories = CategoryService::getAllCategoriesNested($categoriesForNested);
 
         return $this->successResponse('Success!',[
             'prices'=>  count($PriceArray) != 0 ? $PriceArray : "-",
