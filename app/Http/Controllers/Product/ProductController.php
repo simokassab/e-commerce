@@ -25,6 +25,7 @@ use App\Models\Product\ProductStatus;
 use App\Models\Tag\Tag;
 use App\Models\Tax\Tax;
 use App\Models\Unit\Unit;
+use App\Services\Category\CategoryService;
 use App\Services\Product\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -98,7 +99,7 @@ class ProductController extends MainController
 
         $nestedCategory = [];
         $categoriesForNested = Category::with('parent')->get();
-        $nestedCategories = ProductService::getAllCategoriesNested($categoriesForNested);
+        return $nestedCategories = CategoryService::getAllCategoriesNested($categoriesForNested);
 
         return $this->successResponse('Success!',[
             'prices'=>  count($PriceArray) != 0 ? $PriceArray : "-",
