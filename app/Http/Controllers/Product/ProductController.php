@@ -2,21 +2,15 @@
 
 namespace App\Http\Controllers\Product;
 
-use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Resources\Brand\SelectBrandResource;
 use App\Http\Resources\Category\SelectCategoryResource;
 use App\Http\Resources\Field\FieldsResource;
-use App\Http\Resources\Field\SelectFieldResource;
-use App\Http\Resources\Field\SingleFieldResource;
-use App\Http\Resources\Label\LabelsResource;
 use App\Http\Resources\Label\SelectLabelResource;
 use App\Http\Resources\Price\SelectPriceResource;
-use App\Http\Resources\Price\SinglePriceResource;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Product\SelectProductStatusResource;
-use App\Http\Resources\SelectTagResource;
 use App\Http\Resources\Tag\TagResource;
 use App\Http\Resources\Tax\SelectTaxResource;
 use App\Http\Resources\Unit\SelectUnitResource;
@@ -27,14 +21,11 @@ use App\Models\Label\Label;
 use App\Models\Price\Price;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
-use App\Models\Product\ProductPrice;
 use App\Models\Product\ProductStatus;
 use App\Models\Tag\Tag;
 use App\Models\Tax\Tax;
 use App\Models\Unit\Unit;
-use App\Services\Category\CategoryService;
 use App\Services\Product\ProductService;
-use App\Services\RolesAndPermissions\PermissionsServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -152,11 +143,12 @@ class ProductController extends MainController
             //     $this->productService->storeAdditionalBundle($request,$product);
 
             // $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
-            // return $this->successResponse('Success!',['product'=>$product]);
-            return $this->successResponse( __('messages.success.create',
-            ['name' => __(self::OBJECT_NAME)]),
-            ['product' => new ProductResource($product)]
-            );
+            return $this->successResponse('Success!',['product'=>$product]);
+            // return $this->successResponse( __('messages.success.create',
+            // ['name' => __(self::OBJECT_NAME)]),
+            // ['product' => new ProductResource($product)]
+            // );
+
 
         // DB::commit();
 

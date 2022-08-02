@@ -387,37 +387,38 @@ class ProductService
     {
         // try {
         $product = new Product();
-        $product->name = json_encode($data['name'] ?? "");
-        $product->slug = $data['slug'] ?? "";
-        $product->code = $data['code'] ?? "";
-        $product->sku = $data['sku'] ?? "";
-        $product->type = $data['type'] ?? "normal";
-        $product->quantity = $data['quantity'] ?? 0;
+        $product->name = ($data['name']);
+        $product->slug = $data['slug'];
+        $product->code = $data['code'];
+        $product->sku = $data['sku'] ?? null;
+        $product->type = $data['type'];
+        $product->quantity = $data['quantity'];
         $product->reserved_quantity = $data['reserved_quantity'] ?? 0;
-        $product->minimum_quantity = $data['minimum_quantity'] ?? 0;
-        $product->summary = json_encode($data['summary'] ?? "");
-        $product->specification = json_encode($data['specification'] ?? "");
+        $product->minimum_quantity = $data['minimum_quantity'];
+        $product->summary = ($data['summary'] ?? null);
+        $product->specification = ($data['specification'] ?? null);
         if (array_key_exists('image', $data)  && !empty($data['image']))
             $product->image = uploadImage($data['image'], config('images_paths.product.images'));
 
-        $product->meta_title = json_encode($data['meta_title'] ?? "");
-        $product->meta_description = json_encode($data['meta_description'] ?? "");
-        $product->meta_keyword = json_encode($data['meta_keyword'] ?? "");
-        $product->description = json_encode($data['description'] ?? "");
+        $product->meta_title = ($data['meta_title'] ?? null);
+        $product->meta_description = ($data['meta_description'] ?? null);
+        $product->meta_keyword = ($data['meta_keyword'] ?? null);
+        $product->description = ($data['description'] ?? null);
         $product->status = $data['status'] ?? "draft";
-        $product->barcode = $data['barcode'] ?? "";
+        $product->barcode = $data['barcode'] ?? null;
         $product->height = $data['height'] ?? null;
         $product->width = $data['width'] ?? null;
         $product->is_disabled = 0;
         $product->length = $data['p_length'] ?? null;
         $product->weight = $data['weight'] ?? null;
-        $product->is_default_child = $data['is_default_child'] ?? 0;
+        $product->is_default_child = $data['is_default_child'];
         $product->parent_product_id = $data['parent_product_id'] ?? null;
-        $product->category_id = $data['category_id'] ?? null;
+        $product->category_id = $data['category_id'];
         $product->unit_id = $data['unit_id'] ?? null;
         $product->brand_id = $data['brand_id'] ?? null;
         $product->tax_id = $data['tax_id'] ?? null;
-        $product->products_statuses_id = $data['products_statuses_id'] ?? null;
+        $product->products_statuses_id = $data['products_statuses_id'];
+        $product->is_show_related_product = $data['is_show_related_product'] ?? 0;
         $product->save();
         // } catch (Exception $e) {
 
