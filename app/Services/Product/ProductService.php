@@ -136,8 +136,6 @@ class ProductService
                 ];
             }
 
-            return $data;
-
             if (ProductImage::insert($data)) {
                 return $this;
             }
