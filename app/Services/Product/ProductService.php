@@ -390,7 +390,7 @@ class ProductService
         $product->name = $data['name'];
         $product->slug = $data['slug'];
         $product->code = $data['code'];
-        // $product->sku = $data['sku'] ?? null;
+        $product->sku = $data['sku'];
         $product->type = $data['type'];
         $product->quantity = $data['quantity'];
         // $product->reserved_quantity = $data['reserved_quantity'] ?? 0;
