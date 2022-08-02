@@ -126,19 +126,21 @@ class ProductService
             foreach ($request->images as $index => $image) {
 
                 $imagePath = uploadImage($image, config('images_paths.product.images'));
-                $data[] = [
+                ProductImage::create([
                     'product_id' => $child,
                     'image' => $imagePath,
                     'title' => ($request->images_data[$index]['title']),
                     'sort' => $request->images_data[$index]['sort'],
                     'created_at'  => Carbon::now()->toDateString(),
                     'updated_at' => Carbon::now()->toDateString(),
-                ];
+                ]);
             }
 
-            if (ProductImage::insert($data)) {
-                return $this;
-            }
+//            if (ProductImage::insert($data)) {
+//                return $this;
+//            }
+
+            return $this;
         }
         throw new Exception('Error while storing product images');
     }
