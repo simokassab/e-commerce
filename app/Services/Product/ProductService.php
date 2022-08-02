@@ -267,6 +267,9 @@ class ProductService
     {
 
         if ($this->request->has('prices')) {
+            $this->request->remove('currency'); // to remove property from $request
+            $this->request->remove('name'); // to remove property from $request
+
             $pricesArray =  $this->request->prices ?? [];
             foreach ($this->request->prices as $price => $value) {
                 $pricesArray[$price]["product_id"] = $this->product_id;
