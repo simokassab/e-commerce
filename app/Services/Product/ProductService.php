@@ -129,7 +129,7 @@ class ProductService
                 $data[] = [
                     'product_id' => $child,
                     'image' => $imagePath,
-                    'title' => json_decode($request->images_data[$index]['title']),
+                    'title' => ($request->images_data[$index]['title']),
                     'sort' => $request->images_data[$index]['sort'],
                     'created_at'  => Carbon::now()->toDateString(),
                     'updated_at' => Carbon::now()->toDateString(),
