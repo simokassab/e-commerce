@@ -118,7 +118,7 @@ class ProductService
         $data = [];
         foreach ($childrenIdsArray as $key => $child) {
             foreach ($request->images as $index => $image) {
-                $imagePath = uploadImage($image['image'], config('images_paths.product.images'));
+                $imagePath = uploadImage($image, config('images_paths.product.images'));
                 $data[] = [
                     'product_id' => $child,
                     'image' => $imagePath,
