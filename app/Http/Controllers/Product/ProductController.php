@@ -125,7 +125,7 @@ class ProductController extends MainController
      */
 
     public function addproduct(Request $request){
-        $product = $this->productService->createProduct($request->all());
+        $product = $this->productService->createProduct($request);
         return $product;
     }
 
