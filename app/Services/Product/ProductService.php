@@ -33,10 +33,10 @@ class ProductService
         // $productId = $product_id;
         // $childrenIds = $childrenIds ?? [];
 
-        // $this->storeAdditionalCategrories($request, $productId, $childrenIds)
-        $this->storeAdditionalFields($request, $productId, $childrenIds) // different than parent
-            // ->storeAdditionalFields($request, $productId, $childrenIds) // different than parent
-            ->storeAdditionalImages($request, $productId, $childrenIds) // different than parent
+        $this->storeAdditionalCategrories($request, $productId, $childrenIds)
+        // $this->storeAdditionalFields($request, $productId, $childrenIds) // different than parent
+            ->storeAdditionalFields($request, $productId, $childrenIds) // different than parent
+            // ->storeAdditionalImages($request, $productId, $childrenIds) // different than parent
             ->storeAdditionalLabels($request, $productId, $childrenIds)
             ->storeAdditionalTags($request, $productId, $childrenIds)
             ->storeAdditionalPrices($request, $productId, $childrenIds);
@@ -122,14 +122,10 @@ class ProductService
                 $data[] = [
                     'product_id' => $child,
                     'image' => $imagePath,
-                    // 'title' => $request->images_data[$index]['title'],
-                    'title' => json_encode([
-                        "en"=>"bilAL"
-                    ]),
-                    // 'sort' => $request->images_data[$index]['sort'],
-                    'sort' => "1",
-                    'created_at'  => today()->toDateString(),
-                    'updated_at' => today()->toDateString(),
+                    'title' => $request->images_data[$index]['title'],
+                    'sort' => $request->images_data[$index]['sort'],
+                    'created_at'  => Carbon::now()->toDateString(),
+                    'updated_at' => Carbon::now()->toDateString(),
                 ];
             }
             if (ProductImage::insert($data)) {
