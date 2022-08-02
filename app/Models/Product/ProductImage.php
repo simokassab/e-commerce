@@ -11,7 +11,6 @@ class ProductImage extends MainModel
 {
     use HasFactory,HasTranslations;
     protected $table='products_images';
-    protected $guard_name = 'web';
     protected array $translatable = ['title'];
 
     public function productImages(){
