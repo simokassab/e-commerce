@@ -164,27 +164,27 @@ class ProductService
         if (!$this->request->has('images'))
             return $this;
 
-            if ($this->request->image->count() != $this->request->images_data->count())
-                throw new Exception('Images and images_data count is not equal');
+        // if ($this->request->image->count() != $this->request->images_data->count())
+        //     throw new Exception('Images and images_data count is not equal');
 
-            $childrenIdsArray = $this->childrenIds;
-            $childrenIdsArray[] = $this->product_id;
+        $childrenIdsArray = $this->childrenIds;
+        $childrenIdsArray[] = $this->product_id;
 
-            $data = [];
-            foreach ($childrenIdsArray as $key => $child) {
-                foreach ($this->request->images as $index => $image) {
-                    $imagePath = uploadImage($image['image'],  config('images_paths.product.images'));
+        $data = [];
+        foreach ($childrenIdsArray as $key => $child) {
+            foreach ($this->request->images as $index => $image) {
+                $imagePath = uploadImage($image['image'], config('images_paths.product.images'));
 
-                    $data[] = [
-                        'product_id' => $child,
-                        'image' => $imagePath,
-                        'title' => json_encode($this->request->images_data[$index]['title']),
-                        'sort' => $this->request->images_data[$index]['sort'],
-                        'created_at'  => today()->toDateString(),
-                        'updated_at' => today()->toDateString(),
-                    ];
-                }
+                $data[] = [
+                    'product_id' => $child,
+                    'image' => $imagePath,
+                    'title' => json_encode($this->request->images_data[$index]['title']),
+                    'sort' => $this->request->images_data[$index]['sort'],
+                    'created_at'  => today()->toDateString(),
+                    'updated_at' => today()->toDateString(),
+                ];
             }
+        }
         if (ProductImage::insert($data)) {
             return $this;
         }
@@ -527,6 +527,4 @@ class ProductService
 
         return $categoryChildren;
     }
-
-
 }
