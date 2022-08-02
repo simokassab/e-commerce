@@ -387,14 +387,14 @@ class ProductService
     {
         // try {
         $product = new Product();
-        $product->name = $data['name'];
-        $product->slug = $data['slug'];
-        $product->code = $data['code'];
-        $product->sku = $data['sku'];
-        $product->type = $data['type'];
-        $product->quantity = $data['quantity'];
+        $product->name = $data->name;
+        $product->slug = $data->slug;
+        $product->code = $data->code;
+        $product->sku = $data->sku;
+        $product->type = $data->type;
+        $product->quantity = $data->quantity;
         // $product->reserved_quantity = $data['reserved_quantity'] ?? 0;
-        $product->minimum_quantity = $data['minimum_quantity'];
+        $product->minimum_quantity = $data->minimum_quantity;
         // $product->summary = $data['summary'] ?? null;
         // $product->specification = $data['specification'] ?? null;
         // if (array_key_exists('image', $data)  && !empty($data['image']))
@@ -404,20 +404,20 @@ class ProductService
         // $product->meta_description = $data['meta_description'] ?? null;
         // $product->meta_keyword = $data['meta_keyword'] ?? null;
         // $product->description = $data['description'] ?? null;
-        $product->status = $data['status'] ?? "draft";
+        $product->status = $data->status ?? "draft";
         // $product->barcode = $data['barcode'] ?? null;
         // $product->height = $data['height'] ?? null;
         // $product->width = $data['width'] ?? null;
         $product->is_disabled = 0;
         // $product->length = $data['p_length'] ?? null;
         // $product->weight = $data['weight'] ?? null;
-        $product->is_default_child = $data['is_default_child'] ?? 0;
+        $product->is_default_child = $data->is_default_child ?? 0;
         // $product->parent_product_id = $data['parent_product_id'] ?? null;
-        $product->category_id = $data['category_id'];
-        $product->unit_id = $data['unit_id'];
+        $product->category_id = $data->category_id;
+        $product->unit_id = $data->unit_id;
         // $product->brand_id = $data['brand_id'] ?? null;
         // $product->tax_id = $data['tax_id'] ?? null;
-        $product->products_statuses_id = $data['products_statuses_id'];
+        $product->products_statuses_id = $data->products_statuses_id;
         // $product->is_show_related_product = $data['is_show_related_product'] ?? 0;
         $product->save();
         // } catch (Exception $e) {
