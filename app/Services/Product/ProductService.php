@@ -384,7 +384,7 @@ class ProductService
         }
     }
 
-    public function createProduct(StoreProductRequest $request)
+    public function createProduct(Request $request)
     {
         // try {
         $product = new Product();
