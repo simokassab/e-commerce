@@ -11,6 +11,7 @@ use App\Http\Controllers\Fields\FieldsController;
 use App\Http\Controllers\Fields\FieldValueController;
 use App\Http\Controllers\Label\LabelController;
 use App\Http\Controllers\Language\LanguageController;
+use App\Http\Controllers\Prices\PricesListController;
 use App\Http\Controllers\RolesAndPermissions\RolesController;
 use App\Http\Controllers\Settings\SettingsController;
 use App\Http\Controllers\Tag\TagController;
@@ -125,6 +126,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
         Route::get('labels',[LabelController::class,'getTableHeaders']);
         Route::get('languages',[LanguageController::class,'getTableHeaders']);
         Route::get('prices',[PricesController::class,'getTableHeaders']);
+        Route::get('prices_list',[PricesListController::class,'getTableHeaders']);
         Route::get('roles',[RolesController::class,'getTableHeaders']);
         Route::get('settings',[SettingsController::class,'getTableHeaders']);
         Route::get('tags',[TagController::class,'getTableHeaders']);
