@@ -135,7 +135,7 @@ class ProductController extends MainController
     {
         // DB::beginTransaction();
         // try {
-            $product = $this->productService->createProduct($request);
+            return $product = $this->productService->createProduct($request);
             $childrenIds=[];
             // if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
             //    $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
