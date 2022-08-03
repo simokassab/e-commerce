@@ -42,7 +42,6 @@ class StoreProductRequest extends FormRequest
             $this->discountedPriceValue= $productSettings['products_discounted_price_greater_than_or_equal'][0]['value'] ?? 0;
         }
 
-        return $this->productsRequiredSettingsArray;
         return [
             'name' => 'required',
             // 'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
