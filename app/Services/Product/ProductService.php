@@ -2,7 +2,6 @@
 
 namespace App\Services\Product;
 
-use App\Http\Requests\Product\StoreProductRequest;
 use App\Models\Category\Category;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
@@ -15,6 +14,7 @@ use App\Models\Product\ProductTag;
 use App\Models\RolesAndPermissions\CustomPermission;
 use App\Services\Category\CategoryService;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
@@ -25,7 +25,7 @@ class ProductService
 {
     // private $request, $product_id;
 
-    public function storeAdditionalProductData(StoreProductRequest $request, $productId, $childrenIds)
+    public function storeAdditionalProductData(Request $request, $productId, $childrenIds)
     {
 
         // $request = $request;
@@ -43,7 +43,7 @@ class ProductService
 
 
 
-    public function storeAdditionalCategrories(StoreProductRequest $request, $productId, $childrenIds)
+    public function storeAdditionalCategrories(Request $request, $productId, $childrenIds)
     {
         if (!$request->has('categories'))
             return $this;
@@ -62,7 +62,7 @@ class ProductService
         throw new Exception('Error while storing product images');
     }
 
-    public function storeAdditionalFields(StoreProductRequest $request, $productId, $childrenIds)
+    public function storeAdditionalFields(Request $request, $productId, $childrenIds)
     {
         if (!$request->has('fields'))
             return $this;
@@ -108,7 +108,7 @@ class ProductService
      * @throws \App\Exceptions\FileErrorException
      * @throws Exception
      */
-    public function storeAdditionalImages(StoreProductRequest $request, $productId, $childrenIds)
+    public function storeAdditionalImages(Request $request, $productId, $childrenIds)
     {
         if (!$request->has('images'))
             return $this;
@@ -141,7 +141,7 @@ class ProductService
         throw new Exception('Error while storing product images');
     }
 
-    public function storeAdditionalLabels(StoreProductRequest $request,$productId,$childrenIds)
+    public function storeAdditionalLabels(Request $request,$productId,$childrenIds)
     {
         if (!$request->has('labels'))
             return $this;
@@ -169,7 +169,7 @@ class ProductService
         throw new Exception('Error while storing product categories');
     }
 
-    public function storeAdditionalTags(StoreProductRequest $request,$productId,$childrenIds)
+    public function storeAdditionalTags(Request $request,$productId,$childrenIds)
     {
         if (!$request->has('tags'))
             return $this;
@@ -197,7 +197,7 @@ class ProductService
         throw new Exception('Error while storing product tags');
     }
 
-    public function storeAdditionalBundle(StoreProductRequest $request, Product $product)
+    public function storeAdditionalBundle(Request $request, Product $product)
     {
         if ($request->type == 'bundle') {
             $relatedProductsArray = $request->related_products ?? [];
@@ -212,7 +212,7 @@ class ProductService
         return $this;
     }
 
-    public function storeAdditionalPrices(StoreProductRequest $request,$productId,$childrenIds)
+    public function storeAdditionalPrices(Request $request,$productId,$childrenIds)
     {
 
         if ($request->has('prices')) {
@@ -270,7 +270,7 @@ class ProductService
         }
     }
 
-    public function storeVariationsAndPrices(StoreProductRequest $request, $product)
+    public function storeVariationsAndPrices(Request $request, $product)
     {
 
         try {
@@ -340,7 +340,7 @@ class ProductService
         }
     }
 
-    public function createProduct(StoreProductRequest $request)
+    public function createProduct(Request $request)
     {
         DB::beginTransaction();
         try {

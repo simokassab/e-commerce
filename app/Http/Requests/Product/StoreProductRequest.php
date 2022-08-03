@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Product;
 
-use App\Http\Requests\MainRequest;
 use App\Models\Settings\Setting;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
@@ -11,7 +10,7 @@ use Illuminate\Validation\Rule;
 
 class StoreProductRequest extends FormRequest
 {
-    private $productsRequiredSettingsArray = [];
+    private $productsRequiredSettingsArray = array();
     private $QuantityValue = 0;
     private $minimumAndReservedQuantityValue = 0;
     private $priceValue = 0;
@@ -33,29 +32,31 @@ class StoreProductRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-        // $settingsTitles = Cache::get('settings')->pluck('title')->toArray();
-        // $productSettings = Cache::get('settings')->whereIn('title',$settingsTitles)->groupBy('title')->toArray();
-        // if($productSettings){
-        //     $this->productsRequiredSettingsArray = explode(',',$productSettings['products_required_fields'][0]['value']) ?? [];
-        //     $this->QuantityValue= $productSettings['products_quantity_greater_than_or_equal'][0]['value'] ?? 0;
-        //     $this->minimumAndReservedQuantityValue= $productSettings['products_minimum_and_reserved_quantity_greater_than_or_equal'][0]['value'] ?? 0;
-        //     $this->priceValue= $productSettings['products_prices_greater_than_or_equal'][0]['value'] ?? 0;
-        //     $this->discountedPriceValue= $productSettings['products_discounted_price_greater_than_or_equal'][0]['value'] ?? 0;
-        // }
+        $settingsTitles = Cache::get('settings')->pluck('title')->toArray();
+        $productSettings = Cache::get('settings')->whereIn('title',$settingsTitles)->groupBy('title')->toArray();
+        if($productSettings){
+            $this->productsRequiredSettingsArray = explode(',',$productSettings['products_required_fields'][0]['value']) ?? "";
+            $this->QuantityValue= $productSettings['products_quantity_greater_than_or_equal'][0]['value'] ?? 0;
+            $this->minimumAndReservedQuantityValue= $productSettings['products_minimum_and_reserved_quantity_greater_than_or_equal'][0]['value'] ?? 0;
+            $this->priceValue= $productSettings['products_prices_greater_than_or_equal'][0]['value'] ?? 0;
+            $this->discountedPriceValue= $productSettings['products_discounted_price_greater_than_or_equal'][0]['value'] ?? 0;
+
+        }
+
 
         return [
             'name' => 'required',
-            'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
-            // 'slug' => 'required | max:' . config('defaults.default_string_length') ,
-            'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
-            // 'code' => 'required | max:' . config('defaults.default_string_length'),
-            // 'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
+            // 'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
+            'slug' => 'required | max:' . config('defaults.default_string_length') ,
+            // 'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
+            'code' => 'required | max:' . config('defaults.default_string_length'),
+            'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'type' => 'required | in:' . config('defaults.validation_default_types'),
-            // 'quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
-            // 'reserved_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'nullable'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
-            // 'minimum_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
-            // 'summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
-            // 'specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
+            'quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
+            'reserved_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'nullable'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
+            'minimum_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
+            'summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
+            'specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
 
             'image' => 'nullable | file
             | mimes:' . config('defaults.default_image_extentions') . '
@@ -67,11 +68,11 @@ class StoreProductRequest extends FormRequest
             'meta_keyword' => 'nullable',
             'description' => 'nullable',
             'status' => 'required | in:' . config('defaults.validation_default_status'),
-            // 'barcode' => [Rule::when(in_array('barcode',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'max:' . config('defaults.default_string_length')],
-            // 'height' => [Rule::when(in_array('height',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
-            // 'width' =>  [Rule::when(in_array('width',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
-            // 'length' =>  [Rule::when(in_array('length',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
-            // 'weight' =>  [Rule::when(in_array('weight',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
+            'barcode' => [Rule::when(in_array('barcode',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'max:' . config('defaults.default_string_length')],
+            'height' => [Rule::when(in_array('height',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
+            'width' =>  [Rule::when(in_array('width',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
+            'length' =>  [Rule::when(in_array('length',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
+            'weight' =>  [Rule::when(in_array('weight',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
             'is_disabled' => 'nullable | boolean ',
             'sort' => 'nullable | integer',
             'is_default_child' => 'required | boolean',
@@ -79,8 +80,8 @@ class StoreProductRequest extends FormRequest
             'parent_product_id' => [Rule::when($request->isSamePriceAsParent && $request->type == 'variable_child', 'required', 'nullable'), 'integer', 'exists:products,id'],
             'category_id' => 'required  | integer | exists:categories,id',
             'unit_id' => 'required | integer | exists:units,id',
-            // 'brand_id' => [Rule::when(in_array('brand_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:brands,id'],
-            // 'tax_id' => [Rule::when(in_array('tax_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:taxes,id'],
+            'brand_id' => [Rule::when(in_array('brand_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:brands,id'],
+            'tax_id' => [Rule::when(in_array('tax_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:taxes,id'],
             'products_statuses_id' => 'required | integer | exists:products_statuses,id',
 
             'categories.*' => 'exists:categories,id',
@@ -111,25 +112,25 @@ class StoreProductRequest extends FormRequest
             'order.*.sort' => 'required | integer',
 
             'product_variations'=> [Rule::when($request->type == 'variable', 'required', 'nullable')],
-            // 'product_variations.*.slug' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
+            'product_variations.*.slug' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'product_variations.*.code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
-            // 'product_variations.*.sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
+            'product_variations.*.sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
 
             'product_variations.*.quantity' => ['required', 'integer', 'gte:' . $this->QuantityValue],
             'product_variations.*.reserved_quantity' => ['nullable' , 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
             'product_variations.*.minimum_quantity' => ['required', 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
 
-            // 'product_variations.*.summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
-            // 'product_variations.*.specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
+            'product_variations.*.summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
+            'product_variations.*.specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
             'product_variations.*.meta_title' => 'nullable',
             'product_variations.*.meta_description' => 'nullable',
             'product_variations.*.meta_keyword' => 'nullable',
             'product_variations.*.description' => 'nullable',
-            // 'product_variations.*.barcode' => [Rule::when(in_array('barcode',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'max:' . config('defaults.default_string_length')],
-            // 'product_variations.*.height' => [Rule::when(in_array('height',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
-            // 'product_variations.*.width' =>  [Rule::when(in_array('width',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
-            // 'product_variations.*.length' =>  [Rule::when(in_array('length',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
-            // 'product_variations.*.weight' =>  [Rule::when(in_array('weight',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
+            'product_variations.*.barcode' => [Rule::when(in_array('barcode',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'max:' . config('defaults.default_string_length')],
+            'product_variations.*.height' => [Rule::when(in_array('height',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
+            'product_variations.*.width' =>  [Rule::when(in_array('width',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
+            'product_variations.*.length' =>  [Rule::when(in_array('length',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
+            'product_variations.*.weight' =>  [Rule::when(in_array('weight',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
             'product_variations.*.is_default_child' => 'required | boolean',
             'product_variations.*.isSamePriceAsParent' =>'required | boolean',
 
