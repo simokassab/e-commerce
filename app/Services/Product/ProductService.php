@@ -33,13 +33,12 @@ class ProductService
         // $productId = $product_id;
         // $childrenIds = $childrenIds ?? [];
 
-        //  $this->storeAdditionalCategrories($request, $productId, $childrenIds)
-//         $this->storeAdditionalFields($request, $productId, $childrenIds) // different than parent
-            // ->storeAdditionalFields($request, $productId, $childrenIds) // different than parent
-            $this->storeAdditionalImages($request, $productId, $childrenIds);// different than parent
-            // ->storeAdditionalLabels($request, $productId, $childrenIds)
-            // ->storeAdditionalTags($request, $productId, $childrenIds)
-            // ->storeAdditionalPrices($request, $productId, $childrenIds);
+         $this->storeAdditionalCategrories($request, $productId, $childrenIds)
+            ->storeAdditionalFields($request, $productId, $childrenIds) // different than parent
+            ->storeAdditionalImages($request, $productId, $childrenIds)// different than parent
+            ->storeAdditionalLabels($request, $productId, $childrenIds)
+            ->storeAdditionalTags($request, $productId, $childrenIds)
+            ->storeAdditionalPrices($request, $productId, $childrenIds);
 
     }
 
@@ -112,8 +111,8 @@ class ProductService
      */
     public function storeAdditionalImages(Request $request, $productId, $childrenIds)
     {
-        // if (!$request->has('images'))
-        //     return $this;
+        if (!$request->has('images'))
+            return $this;
 
          if (count($request->images) != count($request->images_data)){
              throw new Exception('Images and images_data count is not equal');
@@ -131,18 +130,15 @@ class ProductService
                     'image' => $imagePath,
                     'title' => ($request->images_data[$index]['title']),
                     'sort' => $request->images_data[$index]['sort'],
-                    'created_at'  => Carbon::now()->toDateString(),
-                    'updated_at' => Carbon::now()->toDateString(),
+                    'created_at'  => today()->toDateString(),
+                    'updated_at' => today()->toDateString(),
                 ]);
             }
         }
 
-            // return $data;
            if (ProductImage::insert($data)) {
                return $this;
            }
-
-            // return $this;
         throw new Exception('Error while storing product images');
     }
 
