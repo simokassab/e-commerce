@@ -11,4 +11,8 @@ class PricesListController extends MainController
     public function getTableHeaders(){
         return $this->successResponse('Success!', ['headers' => __('headers.prices_list') ]);
     }
+
+    public function store(Request $request){
+
+    }
 }
