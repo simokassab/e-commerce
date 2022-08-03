@@ -121,7 +121,7 @@ class ProductController extends MainController
 
     public function getAllProductsAndPrices(){
 
-        $settings=
+        // $settings=
         $products = Product::with('price')->whereNotIn('type',['variable','bundle'])->select('id','name','image')->get();
         return $this->successResponse('Success!',['products'=> ProductBundleResource::collection($products)]);
     }
