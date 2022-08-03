@@ -164,10 +164,10 @@ class ProductController extends MainController
             // if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
             //    $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
             // }
-            // elseif($request->type=='bundle')
-            //     $this->productService->storeAdditionalBundle($request,$product);
+            if($request->type=='bundle')
+                $this->productService->storeAdditionalBundle($request,$product->id);
 
-            $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
+            // $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
 
 
 

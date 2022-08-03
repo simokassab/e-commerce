@@ -9,4 +9,6 @@ class ProductRelated extends Model
 {
     use HasFactory;
     protected $table = 'products_related';
+
+    protected $guarded = [];
 }
