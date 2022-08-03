@@ -135,13 +135,14 @@ class ProductService
                     'updated_at' => Carbon::now()->toDateString(),
                 ]);
             }
-            return $data;
-//            if (ProductImage::insert($data)) {
-//                return $this;
-//            }
-
-            return $this;
         }
+
+            // return $data;
+           if (ProductImage::insert($data)) {
+               return $this;
+           }
+
+            // return $this;
         throw new Exception('Error while storing product images');
     }
 
