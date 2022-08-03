@@ -9,6 +9,7 @@ use App\Http\Resources\Category\SelectCategoryResource;
 use App\Http\Resources\Field\FieldsResource;
 use App\Http\Resources\Label\SelectLabelResource;
 use App\Http\Resources\Price\SelectPriceResource;
+use App\Http\Resources\Product\ProductBundleResource;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Product\SelectProductStatusResource;
 use App\Http\Resources\Tag\TagResource;
@@ -118,6 +119,13 @@ class ProductController extends MainController
 
     }
 
+    public function getAllProductsAndPrices(){
+
+        $settings=
+        $products = Product::with('price')->whereNotIn('type',['variable','bundle'])->select('id','name','image')->get();
+        return $this->successResponse('Success!',['products'=> ProductBundleResource::collection($products)]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -125,10 +133,12 @@ class ProductController extends MainController
      * @return \Illuminate\Http\Response
      */
 
-    public function addproduct(Request $request){
-        $product = $this->productService->createProduct($request);
-        return $product;
-    }
+    // public function addproduct(Request $request){
+    //     $product = $this->productService->createProduct($request);
+    //     return $product;
+    // }
+
+
 
 
     public function store(Request $request)

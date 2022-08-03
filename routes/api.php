@@ -110,8 +110,9 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::apiResource('price',PricesController::class);
 
     Route::post('product/all',[ProductController::class,'index']);// for search
-    Route::post('product/add',[ProductController::class,'addproduct']);// for search
+    // Route::post('product/add',[ProductController::class,'addproduct']);// for search
     Route::get('product/create',[ProductController::class,'create']);
+    Route::get('product/bundle',[ProductController::class,'getAllProductsAndPrices']);
     Route::apiResource('product',ProductController::class);
 
     //TODO: move all headers to a new file for apis headers

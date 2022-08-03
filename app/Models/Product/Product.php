@@ -27,7 +27,7 @@ class Product extends MainModel
     protected $table='products';
     protected $guard_name = 'web';
     protected $guarded=[];
-    
+
 
     public function parent(){
         return $this->belongsTo(Product::class,'parent_product_id','id');
@@ -50,9 +50,14 @@ class Product extends MainModel
         return $this->belongsTo(Brand::class,'brand_id');
     }
 
-    public function price(){
-        return $this->belongsTo(Price::class,'price_id');
+    public function priceClass(){
+        return $this->belongsToMany(Price::class,'products_prices','product_id','price_id');
     }
+
+    public function price(){
+        return $this->hasMany(ProductPrice::class,'product_id','id');
+    }
+
 
     public function productRelatedParent(){
         return $this->belongsTo(Product::class,'parent_product_id');
