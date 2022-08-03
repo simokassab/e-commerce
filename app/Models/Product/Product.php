@@ -27,7 +27,7 @@ class Product extends MainModel
     protected $table='products';
     protected $guard_name = 'web';
     protected $guarded=[];
-
+    
 
     public function parent(){
         return $this->belongsTo(Product::class,'parent_product_id','id');

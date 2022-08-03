@@ -34,14 +34,15 @@ class StoreProductRequest extends FormRequest
     {
         $settingsTitles = Cache::get('settings')->pluck('title')->toArray();
         $productSettings = Cache::get('settings')->whereIn('title',$settingsTitles)->groupBy('title')->toArray();
+        if($productSettings){
+            $this->productsRequiredSettingsArray = explode(',',$productSettings['products_required_fields'][0]['value']) ?? [];
+            $this->QuantityValue= $productSettings['products_quantity_greater_than_or_equal'][0]['value'] ?? 0;
+            $this->minimumAndReservedQuantityValue= $productSettings['products_minimum_and_reserved_quantity_greater_than_or_equal'][0]['value'] ?? 0;
+            $this->priceValue= $productSettings['products_prices_greater_than_or_equal'][0]['value'] ?? 0;
+            $this->discountedPriceValue= $productSettings['products_discounted_price_greater_than_or_equal'][0]['value'] ?? 0;
+        }
 
-        $this->productsRequiredSettingsArray = explode(',',$productSettings['products_required_fields'][0]['value']) ?? [];
-        $this->QuantityValue= $productSettings['products_quantity_greater_than_or_equal'][0]['value'] ?? 0;
-        $this->minimumAndReservedQuantityValue= $productSettings['products_minimum_and_reserved_quantity_greater_than_or_equal'][0]['value'] ?? 0;
-        $this->priceValue= $productSettings['products_prices_greater_than_or_equal'][0]['value'] ?? 0;
-        $this->discountedPriceValue= $productSettings['products_discounted_price_greater_than_or_equal'][0]['value'] ?? 0;
-
-
+        return $this->productsRequiredSettingsArray;
         return [
             'name' => 'required',
             // 'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
