@@ -103,6 +103,10 @@ class Product extends MainModel
 
     }
 
+    public function getPrice(){
+        return $this->price();
+    }
+
 }
 
 

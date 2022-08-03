@@ -122,10 +122,11 @@ class ProductController extends MainController
 
     public function getAllProductsAndPrices(){
 
-        $defaultPriceId = Cache::get('settings')->where('title','website_pricing')->pluck('value','title')->toArray();
 
-        // $products = Product::with('priceClass','price')->whereNotIn('type',['variable','bundle'])->orWhereHas('',fn($query) => $query->wehre('','')  )->select('id','name','image')->get();
-        $products = Product::with('priceClass','price')->whereNotIn('type',['variable','bundle'])->select('id','name','image')->get();
+          $products = Product::with('priceClass','price')
+                ->whereNotIn('type',['variable','bundle'])
+                ->select('id','name','image')->get();
+                // $products = Product::with('priceClass','price')->whereNotIn('type',['variable','bundle'])->select('id','name','image')->get();
         return $this->successResponse('Success!',['products'=> ProductBundleResource::collection($products)]);
     }
 

@@ -4,7 +4,7 @@ namespace App\Http\Resources\Price;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PriceBundleResource extends JsonResource
+class DefaultBundlePrice extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,10 +14,12 @@ class PriceBundleResource extends JsonResource
      */
     public function toArray($request)
     {
+             $currency = $this->prices->currency->symbol;
 
-       return [
+        return [
             'id' => $this->price_id,
             'price'=> $this->price,
+            'currency' => $currency,
         ];
     }
 }
