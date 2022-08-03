@@ -112,8 +112,8 @@ class ProductService
      */
     public function storeAdditionalImages(Request $request, $productId, $childrenIds)
     {
-        if (!$request->has('images'))
-            return $this;
+        // if (!$request->has('images'))
+        //     return $this;
 
          if (count($request->images) != count($request->images_data)){
              throw new Exception('Images and images_data count is not equal');
