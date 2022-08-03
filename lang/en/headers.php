@@ -541,30 +541,35 @@ return [
     ],
     'prices_list' => [
         'code' => [
+            'is_show' => true,
             'name' => 'Code',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
         'item' => [
+            'is_show' => true,
             'name' => 'Item',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
         'uom' => [
+            'is_show' => true,
             'name' => 'UOM',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
         'price_1' => [
+            'is_show' => true,
             'name' => 'Price 1',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
         'price_2' => [
+            'is_show' => true,
             'name' => 'Price 2',
             'search' => 'string',
             'type' => 'string',

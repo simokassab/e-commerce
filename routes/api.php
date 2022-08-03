@@ -44,7 +44,6 @@ Route::get('logout', [AuthenticationController::class,'logout'])->name('logout')
 
 Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],function (){
 
-    //Permission
 
     // Routes Macro
     Route::customBrandResource('brand', BrandController::class);
@@ -106,6 +105,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::apiResource('tax',TaxController::class);
     Route::post('tax/all',[TaxController::class,'index']);// for search
 
+    Route::get('price/get-list',[PricesController::class,'getPricesList']);
     Route::post('price/all',[PricesController::class,'index']);// for search
     Route::get('price/get-original-prices',[PricesController::class,'getOriginalPrices'])->name('get.original.prices');
     Route::apiResource('price',PricesController::class);

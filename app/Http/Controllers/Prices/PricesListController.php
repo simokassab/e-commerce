@@ -13,6 +13,6 @@ class PricesListController extends MainController
     }
 
     public function store(Request $request){
-
+        
     }
 }

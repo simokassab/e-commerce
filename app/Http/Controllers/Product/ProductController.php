@@ -2,21 +2,15 @@
 
 namespace App\Http\Controllers\Product;
 
-use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Resources\Brand\SelectBrandResource;
 use App\Http\Resources\Category\SelectCategoryResource;
 use App\Http\Resources\Field\FieldsResource;
-use App\Http\Resources\Field\SelectFieldResource;
-use App\Http\Resources\Field\SingleFieldResource;
-use App\Http\Resources\Label\LabelsResource;
 use App\Http\Resources\Label\SelectLabelResource;
 use App\Http\Resources\Price\SelectPriceResource;
-use App\Http\Resources\Price\SinglePriceResource;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Product\SelectProductStatusResource;
-use App\Http\Resources\SelectTagResource;
 use App\Http\Resources\Tag\TagResource;
 use App\Http\Resources\Tax\SelectTaxResource;
 use App\Http\Resources\Unit\SelectUnitResource;
@@ -27,14 +21,12 @@ use App\Models\Label\Label;
 use App\Models\Price\Price;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
-use App\Models\Product\ProductPrice;
 use App\Models\Product\ProductStatus;
 use App\Models\Tag\Tag;
 use App\Models\Tax\Tax;
 use App\Models\Unit\Unit;
 use App\Services\Category\CategoryService;
 use App\Services\Product\ProductService;
-use App\Services\RolesAndPermissions\PermissionsServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -107,7 +99,7 @@ class ProductController extends MainController
 
         $nestedCategory = [];
         $categoriesForNested = Category::with('parent')->get();
-        $nestedCategories = ProductService::getAllCategoriesNested($categoriesForNested);
+        $nestedCategories = CategoryService::getAllCategoriesNested($categoriesForNested);
 
         return $this->successResponse('Success!',[
             'prices'=>  count($PriceArray) != 0 ? $PriceArray : "-",
@@ -134,32 +126,33 @@ class ProductController extends MainController
      */
 
     public function addproduct(Request $request){
-        $product = $this->productService->createProduct($request->all());
+        $product = $this->productService->createProduct($request);
         return $product;
     }
 
 
-    public function store(StoreProductRequest $request)
+    public function store(Request $request)
     {
         // DB::beginTransaction();
         // try {
-            $product = $this->productService->createProduct($request->all());
+            $product = $this->productService->createProduct($request);
             $childrenIds=[];
-            if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
-               $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
-            }
-            elseif($request->type=='bundle')
-                $this->productService->storeAdditionalBundle($request,$product);
+            // if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
+            //    $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
+            // }
+            // elseif($request->type=='bundle')
+            //     $this->productService->storeAdditionalBundle($request,$product);
 
             $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
-            // return $this->successResponse('Success!',['product'=>$product]);
-            return $this->successResponse( __('messages.success.create',
-            ['name' => __(self::OBJECT_NAME)]),
-            ['product' => new ProductResource($product)]
-            );
+
+
 
         // DB::commit();
-
+        return $this->successResponse('Success!',['product'=>$product]);
+          // return $this->successResponse( __('messages.success.create',
+            // ['name' => __(self::OBJECT_NAME)]),
+            // ['product' => new ProductResource($product)]
+            // );
         // return $this->successResponse( __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
         // ['product' =>  new ProductResource($product->load(['defaultCategory','brand','category','tags']))]);
 
