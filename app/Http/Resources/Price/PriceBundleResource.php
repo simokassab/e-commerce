@@ -24,7 +24,7 @@ class PriceBundleResource extends JsonResource
     //    return $returnArray;
 
        return [
-            'id' => $this->id,
+            'id' => $this->price_id,
             'price'=> $this->price
         ];
     }

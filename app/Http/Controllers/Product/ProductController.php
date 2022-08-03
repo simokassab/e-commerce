@@ -29,6 +29,7 @@ use App\Models\Unit\Unit;
 use App\Services\Category\CategoryService;
 use App\Services\Product\ProductService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends MainController
@@ -121,8 +122,10 @@ class ProductController extends MainController
 
     public function getAllProductsAndPrices(){
 
-        // $settings=
-        $products = Product::with('price')->whereNotIn('type',['variable','bundle'])->select('id','name','image')->get();
+        $defaultPriceId = Cache::get('settings')->where('title','website_pricing')->pluck('value','title')->toArray();
+
+        // $products = Product::with('priceClass','price')->whereNotIn('type',['variable','bundle'])->orWhereHas('',fn($query) => $query->wehre('','')  )->select('id','name','image')->get();
+        $products = Product::with('priceClass','price')->whereNotIn('type',['variable','bundle'])->select('id','name','image')->get();
         return $this->successResponse('Success!',['products'=> ProductBundleResource::collection($products)]);
     }
 

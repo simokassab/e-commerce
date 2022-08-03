@@ -77,7 +77,7 @@ function convertFromArrayToString($array, $separator = ',')
 function array_to_obj($array, &$obj)
 {
     foreach ($array as $key => $value) {
-        $id=$value->id;
+        $id=$value->price_id;
         if (is_array($value)) {
             $obj->{$id} = new stdClass();
             array_to_obj($value, $obj->$key);
