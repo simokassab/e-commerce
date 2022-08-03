@@ -4,8 +4,10 @@ namespace App\Http\Requests\Field;
 
 use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
-class StoreFieldRequest extends MainRequest
+class StoreFieldRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,14 +25,14 @@ class StoreFieldRequest extends MainRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(Request $request)
     {
         return [
             'title' => 'required',
-            'type' => 'required | in:'.config('defaults.validation_default_type'),
+            'type' => ['required',' in:'.config('defaults.validation_default_type'),Rule::when($request->is_attribute,['in:select'])],
             'entity' => 'required | in:'.config('defaults.validation_default_entities'),
             'is_required' => 'required | boolean',
-            'is_attribute' => 'nullable | boolean',
+            'is_attribute' => 'required | boolean',
 
             'field_values' => 'required_if:type,select',
             'field_values.*'  => 'required_if:type,select',
