@@ -120,14 +120,24 @@ class ProductController extends MainController
 
     }
 
-    public function getAllProductsAndPrices(){
+    public function getAllProductsAndPrices(Request $request){
 
+        $products = Product::with('priceClass','price')
+            ->when(($request->has('product_name') && $request->product_name!=null), function($query) use ($request){
+                $value=strtolower($request->product_name);
+                $query->whereRaw('lower(name) like (?)', ["%$value%"]);
+            })
+            ->when(($request->has('category') && $request->category!=null),function($query) use ($request){
+                 $query->orWhereHas('category',function($query) use ($request){
+                     $query->where('category_id',$request->category);
+                })
+                ->orWhereHas('defaultCategory',function($query) use ($request){
+                            $query->where('categories.id',$request->category);
+                        });
+            })
+            ->whereNotIn('type',['variable','bundle'])->get();
 
-          $products = Product::with('priceClass','price')
-                ->whereNotIn('type',['variable','bundle'])
-                ->select('id','name','image')->get();
-                // $products = Product::with('priceClass','price')->whereNotIn('type',['variable','bundle'])->select('id','name','image')->get();
-        return $this->successResponse('Success!',['products'=> ProductBundleResource::collection($products)]);
+            return $this->successResponse('Success!',['products'=> ProductBundleResource::collection($products)]);
     }
 
     /**
