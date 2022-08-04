@@ -45,6 +45,11 @@ class PricesListController extends MainController
         $products = [];
         $pricesClassesProducts = [];
         $prices = collect([]);
+
+        if(count($request->advanced_search['prices_class']) == 0){
+            return PriceListCreateResource::collection([]);
+        }
+
         if($request->advanced_search['prices_class']){
             $prices = Price::with(['products'])->findMany($request->advanced_search['prices_class'] ?? []);
             $pricesClassesProducts = $prices->pluck('products');
