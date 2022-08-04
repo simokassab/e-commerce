@@ -204,7 +204,7 @@ class ProductService
                 $data[$related_product] = [
                     'parent_product_id' => $product->id,
                     'child_product_id' => $value['child_product_id'],
-                    'name' => ($value['name']),
+                    'name' => json_encode($value['name']),
                     'child_quantity' => $value['child_quantity'],
                     'created_at' => Carbon::now()->toDateTimeString(),
                     'updated_at' => Carbon::now()->toDateTimeString(),
