@@ -47,7 +47,12 @@ class PricesListController extends MainController
         $prices = collect([]);
 
         if(count($request->advanced_search['prices_class']) == 0){
-            return PriceListCreateResource::collection([]);
+            return $this->successResponse('success',[
+                'prices' => PriceListCreateResource::customCollection($products,$prices->toArray())
+
+                ]
+
+            );
         }
 
         if($request->advanced_search['prices_class']){
