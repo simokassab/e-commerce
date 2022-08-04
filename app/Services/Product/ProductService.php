@@ -45,7 +45,7 @@ class ProductService
 
     public function storeAdditionalCategrories( $request, $product, $childrenIds)
     {
-
+        return $product->id;
         if (!$request->has('categories'))
             return $this;
 
@@ -60,7 +60,7 @@ class ProductService
         if (ProductCategory::insert($categoriesIdsArray))
             return $this;
 
-        throw new Exception('Error while storing product images');
+        throw new Exception('Error while storing product categories');
     }
 
     public function storeAdditionalFields( $request, $product, $childrenIds)
