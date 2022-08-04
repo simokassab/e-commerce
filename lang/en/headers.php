@@ -561,20 +561,7 @@ return [
             'type' => 'string',
             'sort' => true
         ],
-        'price_1' => [
-            'is_show' => true,
-            'name' => 'Price 1',
-            'search' => 'string',
-            'type' => 'string',
-            'sort' => true
-        ],
-        'price_2' => [
-            'is_show' => true,
-            'name' => 'Price 2',
-            'search' => 'string',
-            'type' => 'string',
-            'sort' => true
-        ]
+       
 
 
     ],

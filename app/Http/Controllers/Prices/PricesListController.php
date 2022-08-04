@@ -13,13 +13,25 @@ use App\Support\Collection;
 
 class PricesListController extends MainController
 {
-    public function getTableHeaders(){
-        return $this->successResponse('Success!', ['headers' => __('headers.prices_list') ]);
+    public function getTableHeaders(Request $request){
+        $prices = Price::findMany($request->prices_class);
+        $pricesHeader = [];
+        foreach ($prices as $price){
+            $pricesHeader['price_'.$price->id] = [
+                'is_show' => true,
+                'name' => $price->getTranslation('name','en'),
+                'search' => 'string',
+                'type' => 'string',
+                'sort' => true
+            ];
+        }
+
+        return $this->successResponse('Success!', ['headers' =>array_merge(__('headers.prices_list'),$pricesHeader) ]);
     }
 
-    public function create(Request $request){
+    public function show(Request $request){
 
-        $prices = Price::with('products')->findMany($request->prices_class);
+        $prices = Price::with(['products'])->findMany($request->prices_class);
         $pricesClassesProducts = $prices->pluck('products');
 
         foreach ($pricesClassesProducts as $products){
@@ -28,7 +40,7 @@ class PricesListController extends MainController
             }
         }
 
-        $products = Product::with('pricesList.prices.currency')
+        $products = Product::with(['pricesList.prices.currency','unit'])
             ->whereIn('id',collect($products)->unique()->pluck('id'))
             ->orWhereNotIn('id',collect($products)->unique()->pluck('id'))
             ->paginate();

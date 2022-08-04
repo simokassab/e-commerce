@@ -110,7 +110,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::get('price/get-original-prices',[PricesController::class,'getOriginalPrices'])->name('get.original.prices');
     Route::apiResource('price',PricesController::class);
 
-    Route::post('price_list/create',[PricesListController::class , 'create']);
+    Route::post('price_list/show',[PricesListController::class , 'show']);
     Route::apiResource('price_list',PricesListController::class);
 
     Route::post('product/all',[ProductController::class,'index']);// for search
@@ -129,7 +129,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
         Route::get('labels',[LabelController::class,'getTableHeaders']);
         Route::get('languages',[LanguageController::class,'getTableHeaders']);
         Route::get('prices',[PricesController::class,'getTableHeaders']);
-        Route::get('prices_list',[PricesListController::class,'getTableHeaders']);
+        Route::post('prices_list',[PricesListController::class,'getTableHeaders']);
         Route::get('roles',[RolesController::class,'getTableHeaders']);
         Route::get('settings',[SettingsController::class,'getTableHeaders']);
         Route::get('tags',[TagController::class,'getTableHeaders']);

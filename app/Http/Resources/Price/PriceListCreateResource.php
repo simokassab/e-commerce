@@ -19,15 +19,14 @@ class PriceListCreateResource extends JsonResource
 //        $priceClassIds = Arr::pluck($this::$data, 'id');
         $priceClasses = [];
         $priceListsWasLoaded = $this->relationLoaded('profile') ? true : false;
-
         if(!$priceListsWasLoaded){
             foreach ($this::$data as $priceList){
-                    $priceClasses[$priceList['id']] = [
+                    $priceClasses['price_'.$priceList['id']] = [
                         'id' => null,
                         'price' => 0 ,
+                        'UOM' => $this->whenLoaded('unit')->code ?? '-',
                         'is_virtual' => (bool)$priceList['is_virtual'],
                     ];
-
 
             }
         }
@@ -36,9 +35,10 @@ class PriceListCreateResource extends JsonResource
             foreach ($priceLists as $priceList){
                 $price = $priceList->load('prices')->prices;
                 if($price){
-                    $priceClasses[$price->id] = [
+                    $priceClasses['price_'.$price->id] = [
                         'id' => $priceList->id,
                         'price' => $priceList->price,
+                        'UOM' => $this->whenLoaded('unit')->code ?? '-',
                         'is_virtual' => (bool)$price->is_virtual,
                     ];
 
