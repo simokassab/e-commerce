@@ -44,6 +44,7 @@ class PricesListController extends MainController
     public function show(Request $request){
         $products = [];
         $pricesClassesProducts = [];
+        $prices = collect([]);
         if($request->advanced_search['prices_class']){
             $prices = Price::with(['products'])->findMany($request->advanced_search['prices_class'] ?? []);
             $pricesClassesProducts = $prices->pluck('products');
