@@ -22,6 +22,9 @@ class ProductPrice extends Model
     public function prices(){
         return $this->hasOne(Price::class,'id','price_id');
     }
+
+
+
 //
 //    public function priceList(){
 //        return $this->price->priceList;

@@ -165,8 +165,8 @@ class PricesController extends MainController
     }
 
     public function getPricesList(){
-         $prices = Price::with('currency')->take(['id','currency_id','name'])->get();
-         return SelectPriceResource::collection($prices);
+        $prices = Price::with('currency')->get();
+        return SelectPriceResource::collection($prices);
 
     }
 
