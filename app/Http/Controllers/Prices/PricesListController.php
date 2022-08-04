@@ -14,7 +14,7 @@ use App\Support\Collection;
 class PricesListController extends MainController
 {
     public function getTableHeaders(Request $request){
-        if($request->has('prices_class')){
+        if(count($request->prices_class) > 0 && ($request->prices_class) != null ){
 
         $prices = Price::findMany($request->prices_class);
         $pricesHeader = [];
