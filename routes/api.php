@@ -110,6 +110,9 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::get('price/get-original-prices',[PricesController::class,'getOriginalPrices'])->name('get.original.prices');
     Route::apiResource('price',PricesController::class);
 
+    Route::post('price_list/create',[PricesListController::class , 'create']);
+    Route::apiResource('price_list',PricesListController::class);
+
     Route::post('product/all',[ProductController::class,'index']);// for search
     Route::post('product/add',[ProductController::class,'addproduct']);// for search
     Route::get('product/create',[ProductController::class,'create']);

@@ -20,9 +20,9 @@ class Price extends MainModel
         return $this->belongsTo(Currency::class,'currency_id');
 
     }
-    public function products(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function products(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->hasMany(Product::class,'id' ,'product_id');
+        return $this->belongsToMany(Product::class,'products_prices' ,'price_id','product_id');
     }
 
     public function originalPrice(): \Illuminate\Database\Eloquent\Relations\BelongsTo
