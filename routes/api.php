@@ -111,6 +111,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::apiResource('price',PricesController::class);
 
     Route::post('price_list/show',[PricesListController::class , 'show']);
+    Route::PUT('price_list',[PricesListController::class , 'update']);
     Route::apiResource('price_list',PricesListController::class);
 
     Route::post('product/all',[ProductController::class,'index']);// for search

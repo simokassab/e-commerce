@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Price;
 
+use App\Models\Price\Price;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
 
@@ -16,34 +17,53 @@ class PriceListCreateResource extends JsonResource
      */
     public function toArray($request)
     {
-//        $priceClassIds = Arr::pluck($this::$data, 'id');
+
         $priceClasses = [];
-        $priceListsWasLoaded = $this->relationLoaded('profile') ? true : false;
-        if(!$priceListsWasLoaded){
+        $neededPricesIds = collect($this::$data)->pluck('id');
+
+        if(( count($this->pricesList->toArray()) == 0 ) ){
             foreach ($this::$data as $priceList){
+
                     $priceClasses['price_'.$priceList['id']] = [
                         'id' => null,
-                        'price' => 0 ,
+                        'price' => $this->getPrice($priceList['id']) ,
+                        'price_id' => $priceList['id'],
                         'is_virtual' => (bool)$priceList['is_virtual'],
                     ];
 
             }
         }
-        $priceClasses =  $this->whenLoaded('pricesList', function ()use($priceClasses){
+        $priceClassesArray = [];
+
+        $priceClassesArray =  $this->whenLoaded('pricesList', function ()use($priceClasses,$neededPricesIds){
+            $availablePrices = [];
+
             $priceLists =  $this->whenLoaded('pricesList');
             foreach ($priceLists as $priceList){
                 $price = $priceList->load('prices')->prices;
-                if($price){
+                if($price && in_array($price->id, $neededPricesIds->toArray())){
+                    $availablePrices[] = $price->id;
                     $priceClasses['price_'.$price->id] = [
                         'id' => $priceList->id,
-                        'price' => $priceList->price,
+                        'price' => $this->getPrice($price->id) ,
+                        'price_id' => $price->id,
                         'is_virtual' => (bool)$price->is_virtual,
                     ];
-
                 }
-
             }
-            return $priceClasses;
+
+            $result = array_diff( $neededPricesIds->toArray(),$availablePrices);
+
+            foreach ($result as $item) {
+                $item = collect($this::$data)->where('id',$item)->first();
+                $priceClasses['price_'.$item['id']] = [
+                    'id' => null,
+                    'price' => 0,
+                    'price_id' => $item['id'],
+                    'is_virtual' => (bool)$item['is_virtual'],
+                ];
+            }
+            return collect($priceClasses)->sortBy('price_id')->toArray();
         });
 
 
@@ -53,7 +73,7 @@ class PriceListCreateResource extends JsonResource
            'UOM' => $this->whenLoaded('unit')->code ?? '-',
        ];
 
-        return array_merge($productArray,$priceClasses);
+        return array_merge($productArray,$priceClassesArray);
 
     }
 

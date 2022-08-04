@@ -15,7 +15,6 @@ class PricesListController extends MainController
 {
     public function getTableHeaders(Request $request){
         if(count($request->prices_class) > 0 && ($request->prices_class) != null ){
-
         $prices = Price::findMany($request->prices_class);
         $pricesHeader = [];
         foreach ($prices as $price){
@@ -37,6 +36,7 @@ class PricesListController extends MainController
                 'sort' => true
             ];
         }
+
 
         return $this->successResponse('Success!', ['headers' =>array_merge(__('headers.prices_list'),$pricesHeader) ]);
     }
@@ -71,7 +71,71 @@ class PricesListController extends MainController
 
     }
 
-    public function store(Request $request){
+    public function update(Request $request){
+        try {
+            $pricesWithPricesClasses = ($request->data);
+            $newPrices = [];
+            $pricesToBeSaved = [];
+            $i = 0;
+            foreach ($pricesWithPricesClasses as $pricesWithPricesClass){
+                $code = $pricesWithPricesClass['code'];
+                unset($pricesWithPricesClass['UOM']);
+                unset($pricesWithPricesClass['item']);
+                unset($pricesWithPricesClass['code']);
+                $newPrices[$i] = $pricesWithPricesClass;
+                $newPrices[$i]['code'] = $code;
+
+                $i++;
+
+            }
+
+            foreach ($newPrices as $innerNewPrices){
+                $code = $innerNewPrices['code'];
+                $productId = Product::where('code' ,$code )->first()->id;
+                foreach($innerNewPrices as $innerInnerNewPrice){
+                    if(gettype($innerInnerNewPrice) == 'array'){
+                        $innerInnerNewPrice['code'] = $code;
+                        $innerInnerNewPrice['product_id'] = $productId;
+                        $pricesToBeSaved[] = $innerInnerNewPrice;
+                    }
+
+                }
+
+            }
+            $pricesWithIds = (collect($pricesToBeSaved)->whereNotNull('id')->map(fn($value)=> (collect($value)->forget('is_virtual')->forget('code') )));
+            $pricesWithNull = (collect($pricesToBeSaved)->whereNull('id'));
+            $codes = $pricesWithNull->pluck('code');
+            $productsCodesAndIds = Product::select('code','id')->whereIn('code',$codes)->get();
+            $newPrices = [];
+            foreach ($pricesWithNull as $priceWithNull){
+                foreach($productsCodesAndIds as $productCodeAndIds){
+                    $price = [];
+                    if($priceWithNull['code'] == $productCodeAndIds['code']){
+                        $price['price'] = $priceWithNull['price'];
+                        $price['price_id'] = $priceWithNull['price_id'];
+                        $price['product_id'] = $productCodeAndIds['id'];
+                        $price['created_at'] = now();
+                        $price['updated_at'] = now();
+
+                    }
+                    $newPrices[] = $price;
+                }
+            }
+
+
+            if(count($newPrices) != 0){
+                ProductPrice::insert($newPrices);
+            }
+            if(count($pricesWithIds->toArray()) > 0){
+                batch()->update(new ProductPrice(),$pricesWithIds->toArray(),'id');
+            }
+
+            return $this->successResponse('the prices have been updated successfully');
+        }catch (\Exception $e){
+            dd($e);
+            return $this->errorResponse('error occurred please try again later!');
+        }
+
 
     }
 }
