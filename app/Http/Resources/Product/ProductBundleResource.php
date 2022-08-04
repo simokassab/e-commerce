@@ -22,7 +22,8 @@ class ProductBundleResource extends JsonResource
 
         return [
           'id' => $this->id,
-          'name' => $this->getTranslation('name','en'),
+        //   'name' => $this->getTranslation('name','en'),
+          'name' =>$this->name,
           'image' => $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
           'prices' =>  arrayToObject(PriceBundleResource::collection($this->whenLoaded('price'))),
           'default_price' => $defaultPrice
