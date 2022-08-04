@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Permission;
 
 use function PHPUnit\Framework\isEmpty;
@@ -113,9 +114,10 @@ class ProductService
             return $this;
         }
 
-        //  if (count($request->images) != count($request->images_data)){
-        //      throw new Exception('Images and images_data count is not equal');
-        //  }
+
+         if (count($request->images) != $request->images_data->count()){
+             throw new Exception('Images and images_data count is not equal');
+         }
 
         $childrenIdsArray = $childrenIds;
         $childrenIdsArray[] = $product->id;
@@ -276,7 +278,7 @@ class ProductService
     public function storeVariationsAndPrices($request, $product)
     {
 
-        try {
+        // try {
             $childrenIds = [];
             $data = [];
             throw_if(!$request->product_variations, Exception::class, 'No variations found');
@@ -288,13 +290,13 @@ class ProductService
                     $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
                 }
                 $productVariationsArray = [
-                    'name' => json_encode($request->name),
+                    'name' => ($request->name),
                     'slug' => $variation['slug'],
                     'code' => $variation['code'],
                     'type' => 'variable_child',
                     'sku' => $variation['sku'],
                     'quantity' => $variation['quantity'],
-                    'reserved_quantity' => $variation['reserved_quantity'],
+                    'reserved_quantity' => $variation['reserved_quantity'] ?? 0,
                     'minimum_quantity' => $variation['minimum_quantity'],
                     'height' => $variation['height'],
                     'width' => $variation['width'],
@@ -305,11 +307,12 @@ class ProductService
                     'unit_id' => $request->unit_id,
                     'tax_id' => $request->tax_id,
                     'brand_id' => $request->brand_id,
-                    'summary' => json_encode($request->summary),
-                    'specification' => json_encode($request->specification),
-                    'meta_title' => json_encode($request->meta_title),
-                    'meta_description' => json_encode($request->meta_description),
-                    'description' => json_encode($request->description),
+                    'summary' => ($request->summary),
+                    'specification' => ($request->specification),
+                    'meta_title' => ($request->meta_title),
+                    'meta_keyword' => ($request->meta_keyword),
+                    'meta_description' => ($request->meta_description),
+                    'description' => ($request->description),
                     'status' => $request->status,
                     'parent_product_id' => $product->id,
                     'products_statuses_id' => $request->products_statuses_id,
@@ -337,10 +340,10 @@ class ProductService
                 return $childrenIds;
             }
 
-            throw new Exception('No variations found');
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
-        }
+        //     throw new Exception('No variations found');
+        // } catch (Exception $e) {
+        //     throw new Exception($e->getMessage());
+        // }
     }
 
     public function createProduct($request)
