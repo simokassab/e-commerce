@@ -112,6 +112,7 @@ class ProductService
     {
         if (!$request->has('images')){
             return $this;
+        }
 
             return ($request->images);
         //  if (count($request->images) != count($request->images_data)){
@@ -140,7 +141,6 @@ class ProductService
                return $this;
            }
         throw new Exception('Error while storing product images');
-    }
     }
 
     public function storeAdditionalLabels( $request,$productId,$childrenIds)
@@ -204,19 +204,19 @@ class ProductService
         if ($request->type == 'bundle') {
             $relatedProductsArray = $request->related_products;
             foreach ($request->related_products as $related_product => $value) {
-                ProductRelated::create([
+                    $data[$related_product]=[
                     'parent_product_id' => $productId,
                     'child_product_id' =>$value['child_product_id'],
                     'name' => json_encode($value['name']),
                     'created_at'=>Carbon::now()->toDateTimeString(),
                     'updated_at'=>Carbon::now()->toDateTimeString(),
                     'child_quantity' => $value['child_quantity'],
-                ]);
+                ];
                 // $relatedProductsArray[$related_product]["parent_product_id"] = $productId;
                 // $relatedProductsArray[$related_product]["created_at"] = Carbon::now()->toDateTimeString();
                 // $relatedProductsArray[$related_product]["updated_at"] = Carbon::now()->toDateTimeString();
             }
-            // ProductRelated::insert($relatedProductsArray);
+            ProductRelated::insert($data);
         }
         return $this;
     }
