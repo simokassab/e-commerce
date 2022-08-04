@@ -200,12 +200,11 @@ class ProductService
     public function storeAdditionalBundle($request, $product)
     {
         if ($request->type == 'bundle') {
-            $relatedProductsArray = $request->related_products;
             foreach ($request->related_products as $related_product => $value) {
                 $data[$related_product] = [
                     'parent_product_id' => $product->id,
                     'child_product_id' => $value['child_product_id'],
-                    'name' => json_encode($value['name']),
+                    'name' => (array)json_decode($value['name']),
                     'created_at' => Carbon::now()->toDateTimeString(),
                     'updated_at' => Carbon::now()->toDateTimeString(),
                     'child_quantity' => $value['child_quantity'],
@@ -349,11 +348,11 @@ class ProductService
 
     public function createProduct($request)
     {
-
+        // dd(gettype($request->name));
         // DB::beginTransaction();
         // try {
         $product = new Product();
-        $product->name = ($request->name);
+        $product->name = (array)json_decode($request->name);
         $product->slug = $request->slug;
         $product->code = $request->code;
         $product->sku = $request->sku;
@@ -361,15 +360,15 @@ class ProductService
         $product->quantity = $request->quantity;
         $product->reserved_quantity = $request->reserved_quantity ?? 0;
         $product->minimum_quantity = $request->minimum_quantity;
-        $product->summary = ($request->summary);
-        $product->specification = ($request->specification);
+        $product->summary = (array)json_decode($request->summary);
+        $product->specification = (array)json_decode($request->specification);
         if ($request->has('image') && !empty($request->image))
             $product->image = uploadImage($request->image, config('images_paths.product.images'));
 
-        $product->meta_title = ($request->meta_title);
-        $product->meta_keyword = ($request->meta_keyword);
-        $product->meta_description = ($request->meta_description);
-        $product->description = ($request->description);
+        $product->meta_title = (array)json_decode($request->meta_title);
+        $product->meta_keyword = (array)json_decode($request->meta_keyword);
+        $product->meta_description = (array)json_decode($request->meta_description);
+        $product->description = (array)json_decode($request->description);
         $product->status = $request->status;
         $product->barcode = $request->barcode;
         $product->height = $request->height;

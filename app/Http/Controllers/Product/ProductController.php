@@ -167,7 +167,7 @@ class ProductController extends MainController
             if($request->type=='bundle')
                 $this->productService->storeAdditionalBundle($request,$product);
 
-            $this-> productService->storeAdditionalProductData($request,$product,$childrenIds);
+                $this-> productService->storeAdditionalProductData($request,$product,$childrenIds);
 
 
 
