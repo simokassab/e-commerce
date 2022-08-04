@@ -54,7 +54,7 @@ class ProductService
         foreach ($oneLevelCategoryArray as $key => $category) {
             if ($category['checked']) {
                 $categoriesIdsArray[$key]['category_id'] = $category['id'];
-                $categoriesIdsArray[$key]['product_id'] = $product;
+                $categoriesIdsArray[$key]['product_id'] = $product->id;
             }
         }
         if (ProductCategory::insert($categoriesIdsArray))
@@ -115,7 +115,6 @@ class ProductService
             return $this;
         }
 
-            return ($request->images);
         //  if (count($request->images) != count($request->images_data)){
         //      throw new Exception('Images and images_data count is not equal');
         //  }
