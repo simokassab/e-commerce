@@ -32,20 +32,18 @@ class ProductService
         // $product = $product_id;
         // $childrenIds = $childrenIds ?? [];
 
-         $this->storeAdditionalCategrories($request, $product, $childrenIds)
+        $this->storeAdditionalCategrories($request, $product, $childrenIds)
             ->storeAdditionalFields($request, $product, $childrenIds) // different than parent
-            ->storeAdditionalImages($request, $product, $childrenIds)// different than parent
+            ->storeAdditionalImages($request, $product, $childrenIds) // different than parent
             ->storeAdditionalLabels($request, $product, $childrenIds)
             ->storeAdditionalTags($request, $product, $childrenIds)
             ->storeAdditionalPrices($request, $product, $childrenIds);
-
     }
 
 
 
-    public function storeAdditionalCategrories( $request, $product, $childrenIds)
+    public function storeAdditionalCategrories($request, $product, $childrenIds)
     {
-        return $product->id;
         if (!$request->has('categories'))
             return $this;
 
@@ -63,13 +61,13 @@ class ProductService
         throw new Exception('Error while storing product categories');
     }
 
-    public function storeAdditionalFields( $request, $product, $childrenIds)
+    public function storeAdditionalFields($request, $product, $childrenIds)
     {
         if (!$request->has('fields'))
             return $this;
 
         $childrenIdsArray = $childrenIds;
-       $childrenIdsArray[] = $product->id;
+        $childrenIdsArray[] = $product->id;
 
         $data = [];
 
@@ -109,9 +107,9 @@ class ProductService
      * @throws \App\Exceptions\FileErrorException
      * @throws Exception
      */
-    public function storeAdditionalImages( $request, $product, $childrenIds)
+    public function storeAdditionalImages($request, $product, $childrenIds)
     {
-        if (!$request->has('images')){
+        if (!$request->has('images')) {
             return $this;
         }
 
@@ -120,7 +118,7 @@ class ProductService
         //  }
 
         $childrenIdsArray = $childrenIds;
-       $childrenIdsArray[] = $product->id;
+        $childrenIdsArray[] = $product->id;
         $data = [];
         foreach ($childrenIdsArray as $key => $child) {
             foreach ($request->images as $index => $image) {
@@ -137,19 +135,19 @@ class ProductService
             }
         }
 
-           if (ProductImage::insert($data)) {
-               return $this;
-           }
+        if (ProductImage::insert($data)) {
+            return $this;
+        }
         throw new Exception('Error while storing product images');
     }
 
-    public function storeAdditionalLabels( $request,$product,$childrenIds)
+    public function storeAdditionalLabels($request, $product, $childrenIds)
     {
         if (!$request->has('labels'))
             return $this;
 
         $childrenIdsArray = $childrenIds;
-       $childrenIdsArray[] = $product->id;
+        $childrenIdsArray[] = $product->id;
 
         $data = [];
 
@@ -171,13 +169,13 @@ class ProductService
         throw new Exception('Error while storing product categories');
     }
 
-    public function storeAdditionalTags( $request,$product,$childrenIds)
+    public function storeAdditionalTags($request, $product, $childrenIds)
     {
         if (!$request->has('tags'))
             return $this;
 
         $childrenIdsArray = $childrenIds;
-       $childrenIdsArray[] = $product->id;
+        $childrenIdsArray[] = $product->id;
 
         $data = [];
 
@@ -199,17 +197,17 @@ class ProductService
         throw new Exception('Error while storing product tags');
     }
 
-    public function storeAdditionalBundle( $request,$product)
+    public function storeAdditionalBundle($request, $product)
     {
         if ($request->type == 'bundle') {
             $relatedProductsArray = $request->related_products;
             foreach ($request->related_products as $related_product => $value) {
-                    $data[$related_product]=[
+                $data[$related_product] = [
                     'parent_product_id' => $product->id,
-                    'child_product_id' =>$value['child_product_id'],
+                    'child_product_id' => $value['child_product_id'],
                     'name' => json_encode($value['name']),
-                    'created_at'=>Carbon::now()->toDateTimeString(),
-                    'updated_at'=>Carbon::now()->toDateTimeString(),
+                    'created_at' => Carbon::now()->toDateTimeString(),
+                    'updated_at' => Carbon::now()->toDateTimeString(),
                     'child_quantity' => $value['child_quantity'],
                 ];
                 // $relatedProductsArray[$related_product]["parent_product_id"] = $product;
@@ -221,13 +219,13 @@ class ProductService
         return $this;
     }
 
-    public function storeAdditionalPrices( $request,$product)
+    public function storeAdditionalPrices($request, $product)
     {
 
         if ($request->has('prices')) {
             $pricesArray =  [];
             foreach ($request->prices as $price => $value) {
-                $pricesArray[$price]["product_id"] = $product;
+                $pricesArray[$price]["product_id"] = $product->id;
                 $pricesArray[$price]["price_id"] = $value['price_id'];
                 $pricesArray[$price]["price"] = $value['price'];
                 $pricesArray[$price]["discounted_price"] = $value['discounted_price'];
@@ -279,7 +277,7 @@ class ProductService
         }
     }
 
-    public function storeVariationsAndPrices( $request, $product)
+    public function storeVariationsAndPrices($request, $product)
     {
 
         try {
@@ -354,51 +352,49 @@ class ProductService
 
         // DB::beginTransaction();
         // try {
-            $product = new Product();
-            $product->name = json_encode($request->name);
-            $product->slug = $request->slug;
-            $product->code = $request->code;
-            $product->sku = $request->sku;
-            $product->type = $request->type;
-            $product->quantity = $request->quantity;
-            $product->reserved_quantity = $request->reserved_quantity ?? 0;
-            $product->minimum_quantity = $request->minimum_quantity;
-            $product->summary = json_encode($request->summary);
-            $product->specification = json_encode($request->specification);
-            if ($request->has('image') && !empty($request->image))
-                $product->image = uploadImage($request->image, config('images_paths.product.images'));
+        $product = new Product();
+        $product->name = json_encode($request->name);
+        $product->slug = $request->slug;
+        $product->code = $request->code;
+        $product->sku = $request->sku;
+        $product->type = $request->type;
+        $product->quantity = $request->quantity;
+        $product->reserved_quantity = $request->reserved_quantity ?? 0;
+        $product->minimum_quantity = $request->minimum_quantity;
+        $product->summary = json_encode($request->summary);
+        $product->specification = json_encode($request->specification);
+        if ($request->has('image') && !empty($request->image))
+            $product->image = uploadImage($request->image, config('images_paths.product.images'));
 
-            $product->meta_title = json_encode($request->meta_title);
-            $product->meta_keyword = json_encode($request->meta_keyword);
-            $product->meta_description = json_encode($request->meta_description);
-            $product->description = json_encode($request->description);
-            $product->status = $request->status;
-            $product->barcode = $request->barcode;
-            $product->height = $request->height;
-            $product->width = $request->width;
-            $product->is_disabled = 0;
-            $product->length = $request->p_length;
-            $product->weight = $request->weight;
-            $product->is_default_child = $request->is_default_child ?? 0;
-            $product->parent_product_id = $request->parent_product_id ?? null;
-            $product->category_id = $request->category_id;
-            $product->unit_id = $request->unit_id;
-            $product->brand_id = $request->brand_id;
-            $product->tax_id = $request->tax_id;
-            $product->products_statuses_id = $request->products_statuses_id;
-            $product->is_show_related_product = $request->is_show_related_product;
-            $product->save();
+        $product->meta_title = json_encode($request->meta_title);
+        $product->meta_keyword = json_encode($request->meta_keyword);
+        $product->meta_description = json_encode($request->meta_description);
+        $product->description = json_encode($request->description);
+        $product->status = $request->status;
+        $product->barcode = $request->barcode;
+        $product->height = $request->height;
+        $product->width = $request->width;
+        $product->is_disabled = 0;
+        $product->length = $request->p_length;
+        $product->weight = $request->weight;
+        $product->is_default_child = $request->is_default_child ?? 0;
+        $product->parent_product_id = $request->parent_product_id ?? null;
+        $product->category_id = $request->category_id;
+        $product->unit_id = $request->unit_id;
+        $product->brand_id = $request->brand_id;
+        $product->tax_id = $request->tax_id;
+        $product->products_statuses_id = $request->products_statuses_id;
+        $product->is_show_related_product = $request->is_show_related_product;
+        $product->save();
 
-            // $product->update(['meta_keyword' => $request->meta_keyword]);
-            // DB::commit();
-            // dd($product);
-            return $product;
-            // dd(Product::find($product->id));
+        // $product->update(['meta_keyword' => $request->meta_keyword]);
+        // DB::commit();
+        // dd($product);
+        return $product;
+        // dd(Product::find($product->id));
         // } catch (Exception $e) {
         //     DB::rollBack();
         //     throw new Exception($e->getMessage());
         // }
     }
-
-
 }
