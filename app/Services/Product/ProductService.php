@@ -353,7 +353,7 @@ class ProductService
         // DB::beginTransaction();
         // try {
         $product = new Product();
-        $product->name = json_encode($request->name);
+        $product->name = ($request->name);
         $product->slug = $request->slug;
         $product->code = $request->code;
         $product->sku = $request->sku;
@@ -361,15 +361,15 @@ class ProductService
         $product->quantity = $request->quantity;
         $product->reserved_quantity = $request->reserved_quantity ?? 0;
         $product->minimum_quantity = $request->minimum_quantity;
-        $product->summary = json_encode($request->summary);
-        $product->specification = json_encode($request->specification);
+        $product->summary = ($request->summary);
+        $product->specification = ($request->specification);
         if ($request->has('image') && !empty($request->image))
             $product->image = uploadImage($request->image, config('images_paths.product.images'));
 
-        $product->meta_title = json_encode($request->meta_title);
-        $product->meta_keyword = json_encode($request->meta_keyword);
-        $product->meta_description = json_encode($request->meta_description);
-        $product->description = json_encode($request->description);
+        $product->meta_title = ($request->meta_title);
+        $product->meta_keyword = ($request->meta_keyword);
+        $product->meta_description = ($request->meta_description);
+        $product->description = ($request->description);
         $product->status = $request->status;
         $product->barcode = $request->barcode;
         $product->height = $request->height;
