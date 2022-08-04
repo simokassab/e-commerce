@@ -20,6 +20,7 @@ class Setting extends MainModel
         'products_minimum_and_reserved_quantity_greater_than_or_equal'=>[],
         'products_prices_greater_than_or_equal'=>[],
         'products_discounted_price_greater_than_or_equal'=>[],
+        'website_pricing'=> [],
     ];
 
     public static function validateOptionsByTitle($keyTitle,$givenOptions){
