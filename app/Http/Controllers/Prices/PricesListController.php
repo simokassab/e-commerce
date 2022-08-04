@@ -14,12 +14,24 @@ use App\Support\Collection;
 class PricesListController extends MainController
 {
     public function getTableHeaders(Request $request){
+        if($request->has('prices_class')){
+
         $prices = Price::findMany($request->prices_class);
         $pricesHeader = [];
         foreach ($prices as $price){
             $pricesHeader['price_'.$price->id] = [
                 'is_show' => true,
                 'name' => $price->getTranslation('name','en'),
+                'search' => 'string',
+                'type' => 'string',
+                'sort' => true
+            ];
+        }
+
+        }else{
+            $pricesHeader['price'] =[
+                'is_show' => true,
+                'name' => 'Price',
                 'search' => 'string',
                 'type' => 'string',
                 'sort' => true
