@@ -24,7 +24,6 @@ class PriceListCreateResource extends JsonResource
                     $priceClasses['price_'.$priceList['id']] = [
                         'id' => null,
                         'price' => 0 ,
-                        'UOM' => $this->whenLoaded('unit')->code ?? '-',
                         'is_virtual' => (bool)$priceList['is_virtual'],
                     ];
 
@@ -38,7 +37,6 @@ class PriceListCreateResource extends JsonResource
                     $priceClasses['price_'.$price->id] = [
                         'id' => $priceList->id,
                         'price' => $priceList->price,
-                        'UOM' => $this->whenLoaded('unit')->code ?? '-',
                         'is_virtual' => (bool)$price->is_virtual,
                     ];
 
@@ -52,6 +50,7 @@ class PriceListCreateResource extends JsonResource
        $productArray = [
            'code' => $this->code,
            'item' => $this->name,
+           'UOM' => $this->whenLoaded('unit')->code ?? '-',
            'UOM' => $this->whenLoaded('unit_id'),
        ];
 
