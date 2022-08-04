@@ -155,7 +155,7 @@ class ProductController extends MainController
 
 
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
         // DB::beginTransaction();
         // try {
@@ -198,7 +198,6 @@ class ProductController extends MainController
     public function show(Product $product)
     {
         return $this->successResponse(['product' =>  new ProductResource($product)]);
-
     }
 
     /**

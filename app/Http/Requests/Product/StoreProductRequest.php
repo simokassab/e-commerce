@@ -10,7 +10,7 @@ use Illuminate\Validation\Rule;
 
 class StoreProductRequest extends FormRequest
 {
-    private $productsRequiredSettingsArray = array();
+    private $productsRequiredSettingsArray = [];
     private $QuantityValue = 0;
     private $minimumAndReservedQuantityValue = 0;
     private $priceValue = 0;
@@ -43,13 +43,12 @@ class StoreProductRequest extends FormRequest
 
         }
 
-
         return [
             'name' => 'required',
-            // 'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
-            'slug' => 'required | max:' . config('defaults.default_string_length') ,
-            // 'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
-            'code' => 'required | max:' . config('defaults.default_string_length'),
+            'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
+            // 'slug' => 'required | max:' . config('defaults.default_string_length') ,
+            'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
+            // 'code' => 'required | max:' . config('defaults.default_string_length'),
             'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'type' => 'required | in:' . config('defaults.validation_default_types'),
             'quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
@@ -105,6 +104,7 @@ class StoreProductRequest extends FormRequest
 
             'related_products.*.child_product_id' => [Rule::when($request->type == 'bundle', ['required', 'integer', 'exists:products,id'])],
             'related_products.*.child_quantity' => [Rule::when($request->type == 'bundle', ['required','integer', 'gte:' . $this->QuantityValue])],
+            'name' => 'nullable',
 
             'tags.*' => 'exists:tags,id',
 

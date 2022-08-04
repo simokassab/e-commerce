@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources\Product;
 
-use App\Http\Resources\Brand\BrandResource;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Category\CategoryResource;
 
 use function PHPSTORM_META\map;
 

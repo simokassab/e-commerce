@@ -110,12 +110,13 @@ class ProductService
      */
     public function storeAdditionalImages( $request, $productId, $childrenIds)
     {
-        if (!$request->has('images'))
+        if (!$request->has('images')){
             return $this;
 
-         if (count($request->images) != count($request->images_data)){
-             throw new Exception('Images and images_data count is not equal');
-         }
+            dd($request->images);
+        //  if (count($request->images) != count($request->images_data)){
+        //      throw new Exception('Images and images_data count is not equal');
+        //  }
 
         $childrenIdsArray = $childrenIds;
         $childrenIdsArray[] = $productId;
@@ -139,6 +140,7 @@ class ProductService
                return $this;
            }
         throw new Exception('Error while storing product images');
+    }
     }
 
     public function storeAdditionalLabels( $request,$productId,$childrenIds)
@@ -219,7 +221,7 @@ class ProductService
         return $this;
     }
 
-    public function storeAdditionalPrices( $request,$productId,$childrenIds)
+    public function storeAdditionalPrices( $request,$productId)
     {
 
         if ($request->has('prices')) {
