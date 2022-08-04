@@ -51,7 +51,6 @@ class PriceListCreateResource extends JsonResource
            'code' => $this->code,
            'item' => $this->name,
            'UOM' => $this->whenLoaded('unit')->code ?? '-',
-           'UOM' => $this->whenLoaded('unit_id'),
        ];
 
         return array_merge($productArray,$priceClasses);
