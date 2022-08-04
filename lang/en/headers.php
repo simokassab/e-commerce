@@ -554,7 +554,7 @@ return [
             'type' => 'string',
             'sort' => true
         ],
-        'uom' => [
+        'UOM' => [
             'is_show' => true,
             'name' => 'UOM',
             'search' => 'string',
