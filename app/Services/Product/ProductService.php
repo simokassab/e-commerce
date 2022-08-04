@@ -25,26 +25,27 @@ class ProductService
 {
     // private $request, $product_id;
 
-    public function storeAdditionalProductData($request, $productId, $childrenIds)
+    public function storeAdditionalProductData($request, $product, $childrenIds)
     {
 
         // $request = $request;
-        // $productId = $product_id;
+        // $product = $product_id;
         // $childrenIds = $childrenIds ?? [];
 
-         $this->storeAdditionalCategrories($request, $productId, $childrenIds)
-            ->storeAdditionalFields($request, $productId, $childrenIds) // different than parent
-            ->storeAdditionalImages($request, $productId, $childrenIds)// different than parent
-            ->storeAdditionalLabels($request, $productId, $childrenIds)
-            ->storeAdditionalTags($request, $productId, $childrenIds)
-            ->storeAdditionalPrices($request, $productId, $childrenIds);
+         $this->storeAdditionalCategrories($request, $product, $childrenIds)
+            ->storeAdditionalFields($request, $product, $childrenIds) // different than parent
+            ->storeAdditionalImages($request, $product, $childrenIds)// different than parent
+            ->storeAdditionalLabels($request, $product, $childrenIds)
+            ->storeAdditionalTags($request, $product, $childrenIds)
+            ->storeAdditionalPrices($request, $product, $childrenIds);
 
     }
 
 
 
-    public function storeAdditionalCategrories( $request, $productId, $childrenIds)
+    public function storeAdditionalCategrories( $request, $product, $childrenIds)
     {
+
         if (!$request->has('categories'))
             return $this;
 
@@ -53,7 +54,7 @@ class ProductService
         foreach ($oneLevelCategoryArray as $key => $category) {
             if ($category['checked']) {
                 $categoriesIdsArray[$key]['category_id'] = $category['id'];
-                $categoriesIdsArray[$key]['product_id'] = $productId;
+                $categoriesIdsArray[$key]['product_id'] = $product;
             }
         }
         if (ProductCategory::insert($categoriesIdsArray))
@@ -62,13 +63,13 @@ class ProductService
         throw new Exception('Error while storing product images');
     }
 
-    public function storeAdditionalFields( $request, $productId, $childrenIds)
+    public function storeAdditionalFields( $request, $product, $childrenIds)
     {
         if (!$request->has('fields'))
             return $this;
 
         $childrenIdsArray = $childrenIds;
-        $childrenIdsArray[] = $productId;
+       $childrenIdsArray[] = $product->id;
 
         $data = [];
 
@@ -108,7 +109,7 @@ class ProductService
      * @throws \App\Exceptions\FileErrorException
      * @throws Exception
      */
-    public function storeAdditionalImages( $request, $productId, $childrenIds)
+    public function storeAdditionalImages( $request, $product, $childrenIds)
     {
         if (!$request->has('images')){
             return $this;
@@ -120,7 +121,7 @@ class ProductService
         //  }
 
         $childrenIdsArray = $childrenIds;
-        $childrenIdsArray[] = $productId;
+       $childrenIdsArray[] = $product->id;
         $data = [];
         foreach ($childrenIdsArray as $key => $child) {
             foreach ($request->images as $index => $image) {
@@ -143,13 +144,13 @@ class ProductService
         throw new Exception('Error while storing product images');
     }
 
-    public function storeAdditionalLabels( $request,$productId,$childrenIds)
+    public function storeAdditionalLabels( $request,$product,$childrenIds)
     {
         if (!$request->has('labels'))
             return $this;
 
         $childrenIdsArray = $childrenIds;
-        $childrenIdsArray[] = $productId;
+       $childrenIdsArray[] = $product->id;
 
         $data = [];
 
@@ -171,13 +172,13 @@ class ProductService
         throw new Exception('Error while storing product categories');
     }
 
-    public function storeAdditionalTags( $request,$productId,$childrenIds)
+    public function storeAdditionalTags( $request,$product,$childrenIds)
     {
         if (!$request->has('tags'))
             return $this;
 
         $childrenIdsArray = $childrenIds;
-        $childrenIdsArray[] = $productId;
+       $childrenIdsArray[] = $product->id;
 
         $data = [];
 
@@ -199,20 +200,20 @@ class ProductService
         throw new Exception('Error while storing product tags');
     }
 
-    public function storeAdditionalBundle( $request,$productId)
+    public function storeAdditionalBundle( $request,$product)
     {
         if ($request->type == 'bundle') {
             $relatedProductsArray = $request->related_products;
             foreach ($request->related_products as $related_product => $value) {
                     $data[$related_product]=[
-                    'parent_product_id' => $productId,
+                    'parent_product_id' => $product->id,
                     'child_product_id' =>$value['child_product_id'],
                     'name' => json_encode($value['name']),
                     'created_at'=>Carbon::now()->toDateTimeString(),
                     'updated_at'=>Carbon::now()->toDateTimeString(),
                     'child_quantity' => $value['child_quantity'],
                 ];
-                // $relatedProductsArray[$related_product]["parent_product_id"] = $productId;
+                // $relatedProductsArray[$related_product]["parent_product_id"] = $product;
                 // $relatedProductsArray[$related_product]["created_at"] = Carbon::now()->toDateTimeString();
                 // $relatedProductsArray[$related_product]["updated_at"] = Carbon::now()->toDateTimeString();
             }
@@ -221,13 +222,13 @@ class ProductService
         return $this;
     }
 
-    public function storeAdditionalPrices( $request,$productId)
+    public function storeAdditionalPrices( $request,$product)
     {
 
         if ($request->has('prices')) {
             $pricesArray =  [];
             foreach ($request->prices as $price => $value) {
-                $pricesArray[$price]["product_id"] = $productId;
+                $pricesArray[$price]["product_id"] = $product;
                 $pricesArray[$price]["price_id"] = $value['price_id'];
                 $pricesArray[$price]["price"] = $value['price'];
                 $pricesArray[$price]["discounted_price"] = $value['discounted_price'];

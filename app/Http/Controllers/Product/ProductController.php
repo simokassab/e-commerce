@@ -165,7 +165,7 @@ class ProductController extends MainController
             //    $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
             // }
             if($request->type=='bundle')
-                $this->productService->storeAdditionalBundle($request,$product->id);
+                $this->productService->storeAdditionalBundle($request,$product);
 
             $this-> productService->storeAdditionalProductData($request,$product,$childrenIds);
 
