@@ -200,7 +200,6 @@ class ProductService
     public function storeAdditionalBundle($request, $product)
     {
         if ($request->type == 'bundle') {
-            return $request->related_products;
             foreach ($request->related_products as $related_product => $value) {
                 $data[$related_product] = [
                     'parent_product_id' => $product->id,
