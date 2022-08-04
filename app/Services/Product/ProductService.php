@@ -200,14 +200,15 @@ class ProductService
     public function storeAdditionalBundle($request, $product)
     {
         if ($request->type == 'bundle') {
+            return $request->related_products;
             foreach ($request->related_products as $related_product => $value) {
                 $data[$related_product] = [
                     'parent_product_id' => $product->id,
                     'child_product_id' => $value['child_product_id'],
                     'name' => ($value['name']),
+                    'child_quantity' => $value['child_quantity'],
                     'created_at' => Carbon::now()->toDateTimeString(),
                     'updated_at' => Carbon::now()->toDateTimeString(),
-                    'child_quantity' => $value['child_quantity'],
                 ];
                 // $relatedProductsArray[$related_product]["parent_product_id"] = $product;
                 // $relatedProductsArray[$related_product]["created_at"] = Carbon::now()->toDateTimeString();
