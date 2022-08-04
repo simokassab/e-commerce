@@ -209,9 +209,6 @@ class ProductService
                     'created_at' => Carbon::now()->toDateTimeString(),
                     'updated_at' => Carbon::now()->toDateTimeString(),
                 ];
-                // $relatedProductsArray[$related_product]["parent_product_id"] = $product;
-                // $relatedProductsArray[$related_product]["created_at"] = Carbon::now()->toDateTimeString();
-                // $relatedProductsArray[$related_product]["updated_at"] = Carbon::now()->toDateTimeString();
             }
             ProductRelated::insert($data);
         }
