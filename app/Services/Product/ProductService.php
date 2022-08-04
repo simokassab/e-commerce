@@ -291,12 +291,11 @@ class ProductService
                 }
                 $productVariationsArray = [
                     'name' => ($request->name),
-                    'slug' => $variation['slug'],
                     'code' => $variation['code'],
                     'type' => 'variable_child',
                     'sku' => $variation['sku'],
                     'quantity' => $variation['quantity'],
-                    'reserved_quantity' => $variation['reserved_quantity'] ?? 0,
+                    'reserved_quantity' => 0,
                     'minimum_quantity' => $variation['minimum_quantity'],
                     'height' => $variation['height'],
                     'width' => $variation['width'],
@@ -315,11 +314,8 @@ class ProductService
                     'description' => ($request->description),
                     'status' => $request->status,
                     'parent_product_id' => $product->id,
-                    'products_statuses_id' => $request->products_statuses_id,
-                    'image' => $imagePath,
-
-                ];
-
+                    'products_statuses_id' => $variation['products_statuses_id'],
+                    'image' => $imagePath   ];
 
                 $productVariation = Product::create($productVariationsArray);
 
@@ -329,7 +325,6 @@ class ProductService
                 }
 
                 $childrenIds[] = $productVariation->id;
-
                 $data[] = $pricesInfo;
             }
             $finalPricesCollect = collect($data)->collapse()->toArray();
@@ -348,7 +343,6 @@ class ProductService
 
     public function createProduct($request)
     {
-        // dd(gettype($request->name));
         // DB::beginTransaction();
         // try {
         $product = new Product();
@@ -358,7 +352,7 @@ class ProductService
         $product->sku = $request->sku;
         $product->type = $request->type;
         $product->quantity = $request->quantity;
-        $product->reserved_quantity = $request->reserved_quantity ?? 0;
+        $product->reserved_quantity =  0;
         $product->minimum_quantity = $request->minimum_quantity;
         $product->summary = ($request->summary);
         $product->specification = ($request->specification);
