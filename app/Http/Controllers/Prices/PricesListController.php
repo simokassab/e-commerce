@@ -72,6 +72,7 @@ class PricesListController extends MainController
     }
 
     public function update(Request $request){
+        return $request;
         try {
             $pricesWithPricesClasses = ($request->data);
             $newPrices = [];
@@ -122,7 +123,6 @@ class PricesListController extends MainController
                 }
             }
 
-            return $newPrices;
             if(count($newPrices) != 0){
                 ProductPrice::insert($newPrices);
             }
