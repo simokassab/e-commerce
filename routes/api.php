@@ -119,31 +119,6 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::get('product/create',[ProductController::class,'create']);
     Route::apiResource('product',ProductController::class);
 
-    //TODO: move all headers to a new file for apis headers
-    Route::group(['prefix' => 'headers'], function (){
-        Route::get('brands',[BrandController::class,'getTableHeaders']);
-        Route::get('categories',[CategoryController::class,'getTableHeaders']);
-        Route::get('countries',[CountryController::class,'getTableHeaders']);
-        Route::get('currencies',[CurrencyController::class,'getTableHeaders']);
-        Route::get('discounts',[DiscountController::class,'getTableHeaders']);
-        Route::get('fields',[FieldsController::class,'getTableHeaders']);
-        Route::get('labels',[LabelController::class,'getTableHeaders']);
-        Route::get('languages',[LanguageController::class,'getTableHeaders']);
-        Route::get('prices',[PricesController::class,'getTableHeaders']);
-        Route::post('prices_list',[PricesListController::class,'getTableHeaders']);
-        Route::get('roles',[RolesController::class,'getTableHeaders']);
-        Route::get('settings',[SettingsController::class,'getTableHeaders']);
-        Route::get('tags',[TagController::class,'getTableHeaders']);
-        Route::get('taxes',[TaxController::class,'getTableHeaders']);
-        Route::get('units',[UnitController::class,'getTableHeaders']);
-        Route::get('users',[UsersController::class,'getTableHeaders']);
-        Route::get('settings',[SettingsController::class,'getTableHeaders']);
-        Route::get('products',[ProductController::class,'getTableHeaders']);
-
-
-
-});
-
 
     });
 
