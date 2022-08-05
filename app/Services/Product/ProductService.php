@@ -104,10 +104,6 @@ class ProductService
     }
 
 
-    /**
-     * @throws \App\Exceptions\FileErrorException
-     * @throws Exception
-     */
     public function storeAdditionalImages($request, $product, $childrenIds)
     {
         if (!$request->has('images')) {
@@ -115,9 +111,9 @@ class ProductService
         }
 
 
-         if (count($request->images) != $request->images_data->count()){
-             throw new Exception('Images and images_data count is not equal');
-         }
+        if (count($request->images) != $request->images_data->count()) {
+            throw new Exception('Images and images_data count is not equal');
+        }
 
         $childrenIdsArray = $childrenIds;
         $childrenIdsArray[] = $product->id;
@@ -279,61 +275,62 @@ class ProductService
     {
 
         // try {
-            $childrenIds = [];
-            $data = [];
-            throw_if(!$request->product_variations, Exception::class, 'No variations found');
+        $childrenIds = [];
+        $data = [];
+        throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
-            foreach ($request->product_variations as $variation) {
-                if ($variation['image'] == null)
-                    $imagePath = "";
-                else {
-                    $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
-                }
-                $productVariationsArray = [
-                    'name' => ($request->name),
-                    'code' => $variation['code'],
-                    'type' => 'variable_child',
-                    'sku' => $variation['sku'],
-                    'quantity' => $variation['quantity'],
-                    'reserved_quantity' => 0,
-                    'minimum_quantity' => $variation['minimum_quantity'],
-                    'height' => $variation['height'],
-                    'width' => $variation['width'],
-                    'length' => $variation['p_length'],
-                    'weight' => $variation['weight'],
-                    'barcode' => $variation['barcode'],
-                    'category_id' => $request->category_id,
-                    'unit_id' => $request->unit_id,
-                    'tax_id' => $request->tax_id,
-                    'brand_id' => $request->brand_id,
-                    'summary' => ($request->summary),
-                    'specification' => ($request->specification),
-                    'meta_title' => ($request->meta_title),
-                    'meta_keyword' => ($request->meta_keyword),
-                    'meta_description' => ($request->meta_description),
-                    'description' => ($request->description),
-                    'status' => $request->status,
-                    'parent_product_id' => $product->id,
-                    'products_statuses_id' => $variation['products_statuses_id'],
-                    'image' => $imagePath   ];
-
-                $productVariation = Product::create($productVariationsArray);
-
-                $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
-                foreach ($pricesInfo as $key => $price) {
-                    $pricesInfo[$key]['product_id'] = $productVariation->id;
-                }
-
-                $childrenIds[] = $productVariation->id;
-                $data[] = $pricesInfo;
+        foreach ($request->product_variations as $variation) {
+            if ($variation['image'] == null)
+                $imagePath = "";
+            else {
+                $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
             }
-            $finalPricesCollect = collect($data)->collapse()->toArray();
-            ProductPrice::insert($finalPricesCollect);
+            $productVariationsArray = [
+                'name' => ($request->name),
+                'code' => $variation['code'],
+                'type' => 'variable_child',
+                'sku' => $variation['sku'],
+                'quantity' => $variation['quantity'],
+                'reserved_quantity' => 0,
+                'minimum_quantity' => $variation['minimum_quantity'],
+                'height' => $variation['height'],
+                'width' => $variation['width'],
+                'length' => $variation['p_length'],
+                'weight' => $variation['weight'],
+                'barcode' => $variation['barcode'],
+                'category_id' => $request->category_id,
+                'unit_id' => $request->unit_id,
+                'tax_id' => $request->tax_id,
+                'brand_id' => $request->brand_id,
+                'summary' => ($request->summary),
+                'specification' => ($request->specification),
+                'meta_title' => ($request->meta_title),
+                'meta_keyword' => ($request->meta_keyword),
+                'meta_description' => ($request->meta_description),
+                'description' => ($request->description),
+                'status' => $request->status,
+                'parent_product_id' => $product->id,
+                'products_statuses_id' => $variation['products_statuses_id'],
+                'image' => $imagePath
+            ];
 
+            $productVariation = Product::create($productVariationsArray);
 
-            if (count($childrenIds) > 0) {
-                return $childrenIds;
+            $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
+            foreach ($pricesInfo as $key => $price) {
+                $pricesInfo[$key]['product_id'] = $productVariation->id;
             }
+
+            $childrenIds[] = $productVariation->id;
+            $data[] = $pricesInfo;
+        }
+        $finalPricesCollect = collect($data)->collapse()->toArray();
+        ProductPrice::insert($finalPricesCollect);
+
+
+        if (count($childrenIds) > 0) {
+            return $childrenIds;
+        }
 
         //     throw new Exception('No variations found');
         // } catch (Exception $e) {
