@@ -39,6 +39,7 @@ class ProductResource extends JsonResource
                 $tagsArray = [];
                 $tagsArray['name'] = $tag->name;
                 return $tagsArray;
+
             }
         );
         return [

@@ -308,7 +308,7 @@ class ProductService
                 'meta_keyword' => ($request->meta_keyword),
                 'meta_description' => ($request->meta_description),
                 'description' => ($request->description),
-                'status' => $request->status,
+                'website_status' => $request->status,
                 'parent_product_id' => $product->id,
                 'products_statuses_id' => $variation['products_statuses_id'],
                 'image' => $imagePath
@@ -360,7 +360,7 @@ class ProductService
         $product->meta_keyword = ($request->meta_keyword);
         $product->meta_description = ($request->meta_description);
         $product->description = ($request->description);
-        $product->status = $request->status;
+        $product->website_status = $request->status;
         $product->barcode = $request->barcode;
         $product->height = $request->height;
         $product->width = $request->width;
