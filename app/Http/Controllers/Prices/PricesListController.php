@@ -122,7 +122,7 @@ class PricesListController extends MainController
                 }
             }
 
-
+            return $newPrices;
             if(count($newPrices) != 0){
                 ProductPrice::insert($newPrices);
             }
