@@ -72,7 +72,6 @@ class PricesListController extends MainController
     }
 
     public function update(Request $request){
-        return $request;
         try {
             $pricesWithPricesClasses = ($request->data);
             $newPrices = [];
@@ -104,7 +103,7 @@ class PricesListController extends MainController
 
             }
             $pricesWithIds = (collect($pricesToBeSaved)->whereNotNull('id')->map(fn($value)=> (collect($value)->forget('is_virtual')->forget('code') )));
-            $pricesWithNull = (collect($pricesToBeSaved)->whereNull('id'));
+            return$pricesWithNull = (collect($pricesToBeSaved)->whereNull('id'));
             $codes = $pricesWithNull->pluck('code');
             $productsCodesAndIds = Product::select('code','id')->whereIn('code',$codes)->get();
             $newPrices = [];
