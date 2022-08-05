@@ -103,7 +103,7 @@ class PricesListController extends MainController
 
             }
             $pricesWithIds = (collect($pricesToBeSaved)->whereNotNull('id')->map(fn($value)=> (collect($value)->forget('is_virtual')->forget('code') )));
-            return$pricesWithNull = (collect($pricesToBeSaved)->whereNull('id'));
+            $pricesWithNull = (collect($pricesToBeSaved)->whereNull('id'));
             $codes = $pricesWithNull->pluck('code');
             $productsCodesAndIds = Product::select('code','id')->whereIn('code',$codes)->get();
             $newPrices = [];
@@ -118,7 +118,9 @@ class PricesListController extends MainController
                         $price['updated_at'] = now();
 
                     }
-                    $newPrices[] = $price;
+                    if(count($price) > 0){
+                        $newPrices[] = $price;
+                    }
                 }
             }
 
