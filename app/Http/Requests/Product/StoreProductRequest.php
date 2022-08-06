@@ -42,8 +42,7 @@ class StoreProductRequest extends FormRequest
             $this->discountedPriceValue= $productSettings['products_discounted_price_greater_than_or_equal'][0]['value'] ?? 0;
 
         }
-die($this->discountedPriceValue.'===');
-        return [
+        $x= [
             'name' => 'required',
             'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
             // 'slug' => 'required | max:' . config('defaults.default_string_length') ,
@@ -150,6 +149,9 @@ die($this->discountedPriceValue.'===');
             'product_variations.*.fields.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
 
         ];
+die($this->discountedPriceValue.'===');
+
+        return $x;
     }
 
     public function messages()
