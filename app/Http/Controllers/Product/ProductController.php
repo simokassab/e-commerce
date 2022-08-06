@@ -54,15 +54,15 @@ class ProductController extends MainController
             $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
 
             $categoriesCount = Product::has('category')->count();
-            $tagsCount = Product::has('tags')->count();
-            $brandsCount = Product::has('brand')->count();
+            // $tagsCount = Product::has('tags')->count();
+            // $brandsCount = Product::has('brand')->count();
 
             if($categoriesCount>0)
                 $searchRelationsKeys['category'] = ['categories' => 'name'];
-            if($tagsCount>0)
-                $searchRelationsKeys['tags'] = ['tags' => 'name'];
-            if($brandsCount>0)
-                $searchRelationsKeys['brand'] = ['brands' => 'name'];
+            // if($tagsCount>0)
+            //     $searchRelationsKeys['tags'] = ['tags' => 'name'];
+            // if($brandsCount>0)
+            //     $searchRelationsKeys['brand'] = ['brands' => 'name'];
 
             return $this->getSearchPaginated(ProductResource::class, Product::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
         }
@@ -155,7 +155,7 @@ class ProductController extends MainController
 
 
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
         // DB::beginTransaction();
         // try {
