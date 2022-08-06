@@ -32,16 +32,16 @@ class StoreProductRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-        // $settingsTitles = Cache::get('settings')->pluck('title')->toArray();
-        // $productSettings = Cache::get('settings')->whereIn('title',$settingsTitles)->groupBy('title')->toArray();
-        // if($productSettings){
-        //     $this->productsRequiredSettingsArray = explode(',',$productSettings['products_required_fields'][0]['value']) ?? "";
-        //     $this->QuantityValue= $productSettings['products_quantity_greater_than_or_equal'][0]['value'] ?? 0;
-        //     $this->minimumAndReservedQuantityValue= $productSettings['products_minimum_and_reserved_quantity_greater_than_or_equal'][0]['value'] ?? 0;
-        //     $this->priceValue= $productSettings['products_prices_greater_than_or_equal'][0]['value'] ?? 0;
-        //     $this->discountedPriceValue= $productSettings['products_discounted_price_greater_than_or_equal'][0]['value'] ?? 0;
+        $settingsTitles = Cache::get('settings')->pluck('title')->toArray();
+        $productSettings = Cache::get('settings')->whereIn('title',$settingsTitles)->groupBy('title')->toArray();
+        if($productSettings){
+            $this->productsRequiredSettingsArray = explode(',',$productSettings['products_required_fields'][0]['value']) ?? "";
+            $this->QuantityValue= $productSettings['products_quantity_greater_than_or_equal'][0]['value'] ?? 0;
+            $this->minimumAndReservedQuantityValue= $productSettings['products_minimum_and_reserved_quantity_greater_than_or_equal'][0]['value'] ?? 0;
+            $this->priceValue= $productSettings['products_prices_greater_than_or_equal'][0]['value'] ?? 0;
+            $this->discountedPriceValue= $productSettings['products_discounted_price_greater_than_or_equal'][0]['value'] ?? 0;
 
-        // }
+        }
 
         return [
             'name' => 'required',
@@ -49,11 +49,11 @@ class StoreProductRequest extends FormRequest
             // 'slug' => 'required | max:' . config('defaults.default_string_length') ,
             'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
             // 'code' => 'required | max:' . config('defaults.default_string_length'),
-            // 'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
-            // 'type' => 'required | in:' . config('defaults.validation_default_types'),
-            // 'quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
-            // 'reserved_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'nullable'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
-            // 'minimum_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
+            'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
+            'type' => 'required | in:' . config('defaults.validation_default_types'),
+            'quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
+            'reserved_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'nullable'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
+            'minimum_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
             // 'summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
             // 'specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
 
