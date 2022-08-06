@@ -149,7 +149,7 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.fields.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
 
         ];
-die($this->discountedPriceValue.'===');
+// die($this->discountedPriceValue.'===');
 
         return $x;
     }
