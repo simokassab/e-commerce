@@ -54,19 +54,19 @@ class StoreProductRequest extends FormRequest
             'quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
             'reserved_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'nullable'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
             'minimum_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
-            // 'summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
-            // 'specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
+            'summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
+            'specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
 
-            // 'image' => 'nullable | file
-            // | mimes:' . config('defaults.default_image_extentions') . '
-            // | max:' . config('defaults.default_image_size') . '
-            // | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
+            'image' => 'nullable | file
+            | mimes:' . config('defaults.default_image_extentions') . '
+            | max:' . config('defaults.default_image_size') . '
+            | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
 
-            // 'meta_title' => 'nullable',
-            // 'meta_description' => 'nullable',
-            // 'meta_keyword' => 'nullable',
-            // 'description' => 'nullable',
-            // 'status' => 'required | in:' . config('defaults.validation_default_status'),
+            'meta_title' => 'nullable',
+            'meta_description' => 'nullable',
+            'meta_keyword' => 'nullable',
+            'description' => 'nullable',
+            'status' => 'required | in:' . config('defaults.validation_default_status'),
             // 'barcode' => [Rule::when(in_array('barcode',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'max:' . config('defaults.default_string_length')],
             // 'height' => [Rule::when(in_array('height',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
             // 'width' =>  [Rule::when(in_array('width',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
