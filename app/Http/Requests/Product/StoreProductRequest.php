@@ -85,18 +85,18 @@ class StoreProductRequest extends FormRequest
 
             'categories.*' => 'exists:categories,id',
 
-            'fields.*.field_id' => 'required | integer | exists:fields,id,entity,product',
-            'fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
-            'fields.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
+            // 'fields.*.field_id' => 'required | integer | exists:fields,id,entity,product',
+            // 'fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
+            // 'fields.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
 
-            'images.*.image' => 'required | file
-            | mimes:' . config('defaults.default_image_extentions') . '
-            | max:' . config('defaults.default_image_size') . '
-            | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
-            'images.*.title' => 'required ',
-            'images.*.sort' => 'required | integer',
+            // 'images.*.image' => 'required | file
+            // | mimes:' . config('defaults.default_image_extentions') . '
+            // | max:' . config('defaults.default_image_size') . '
+            // | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
+            // 'images.*.title' => 'required ',
+            // 'images.*.sort' => 'required | integer',
 
-            'labels.*' => 'exists:labels,id',
+            // 'labels.*' => 'exists:labels,id',
 
             // 'prices.*.price_id' => 'required | integer | exists:prices,id',
             // 'prices.*.price' => 'required | numeric | gte:' .$this->priceValue,
