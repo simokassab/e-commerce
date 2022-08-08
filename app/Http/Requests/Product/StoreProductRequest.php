@@ -43,7 +43,7 @@ class StoreProductRequest extends FormRequest
 
         }
 
-        var_dump($request->isSamePriceAsParent);
+        return ($request->isSamePriceAsParent);
 
         return [
             'name' => 'required',
