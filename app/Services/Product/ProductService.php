@@ -304,7 +304,7 @@ class ProductService
 
             $productVariation = Product::create($productVariationsArray);
 
-            $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
+            $pricesInfo = (bool)$variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
             foreach ($pricesInfo as $key => $price) {
                 $pricesInfo[$key]['product_id'] = $productVariation->id;
             }
