@@ -33,10 +33,9 @@ class PricesListController extends MainController
                 'name' => 'Price',
                 'search' => 'string',
                 'type' => 'string',
-                'sort' => true
+                'sort' => false
             ];
         }
-
 
         return $this->successResponse('Success!', ['headers' =>array_merge(__('headers.prices_list'),$pricesHeader) ]);
     }
@@ -54,14 +53,9 @@ class PricesListController extends MainController
         $pricesClassesProducts = [];
         $prices = collect([]);
 
-        if(count($request->advanced_search['prices_class']) == 0){
-            return $this->successResponse();
-        }
 
-        if($request->advanced_search['prices_class']){
-            $prices = Price::with(['products'])->findMany($request->advanced_search['prices_class'] ?? []);
-            $pricesClassesProducts = $prices->pluck('products');
-        }
+        $prices = Price::with(['products'])->findMany($request->advanced_search['prices_class'] ?? []);
+        $pricesClassesProducts = $prices->pluck('products');
 
 
         foreach ($pricesClassesProducts as $products){
@@ -127,7 +121,7 @@ class PricesListController extends MainController
                 $code = $innerNewPrices['code'];
                 $productId = Product::where('code' ,$code )->first()->id;
                 foreach($innerNewPrices as $innerInnerNewPrice){
-                    if(gettype($innerInnerNewPrice) == 'array'){
+                    if(is_array($innerInnerNewPrice)){
                         $innerInnerNewPrice['code'] = $code;
                         $innerInnerNewPrice['product_id'] = $productId;
                         $pricesToBeSaved[] = $innerInnerNewPrice;
@@ -167,7 +161,6 @@ class PricesListController extends MainController
 
             return $this->successResponse('the prices have been updated successfully');
         }catch (\Exception $e){
-            dd($e);
             return $this->errorResponse('error occurred please try again later!');
         }
 

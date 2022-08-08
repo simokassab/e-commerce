@@ -105,19 +105,15 @@ class Product extends MainModel
     public function getVirtualPricing(Price | int $pricingClass){
         $pricingClass  = is_int($pricingClass)  ?  Price::findOrFail($pricingClass) : $pricingClass ;
         $originalPricingClass = $pricingClass->originalPrice;
-        $originalPricingClassId = 0;
-        if($originalPricingClass){
-            $originalPricingClassId = $originalPricingClass->id;
-        }
-        $productPricing = ProductPrice::where('product_id' ,$this->id )->where('price_id', $originalPricingClassId)->first();
-        if($productPricing == null || count($productPricing->toArray()) == 0){
+        if(!$originalPricingClass){
             return 0;
         }
         if(!$pricingClass->is_virtual){
-
             return 0;
         }
-        if(!$originalPricingClass){
+        $originalPricingClassId = $originalPricingClass->id;
+        $productPricing = ProductPrice::where('product_id' ,$this->id )->where('price_id', $originalPricingClassId)->first();
+        if($productPricing == null){
             return 0;
         }
         return ($productPricing->price * $pricingClass->percentage)/100.0;
