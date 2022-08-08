@@ -376,7 +376,7 @@ class ProductService
         $product->brand_id = $request->brand_id;
         $product->tax_id = $request->tax_id;
         $product->products_statuses_id = $request->products_statuses_id;
-        $product->is_show_related_product = $request->is_show_related_product;
+        $product->is_show_related_product = $request->is_show_related_product ?? 0;
         $product->save();
 
         // $product->update(['meta_keyword' => $request->meta_keyword]);
