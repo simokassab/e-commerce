@@ -48,6 +48,7 @@ class ProductController extends MainController
      */
     public function index(Request $request)
     {
+
         if($request->method()=='POST'){
             $searchKeys=['id','name','sku','type','quantity','status'];
 

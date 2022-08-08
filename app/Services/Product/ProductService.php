@@ -280,11 +280,11 @@ class ProductService
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
         foreach ($request->product_variations as $variation) {
-            // if ($variation['image'] == null)
-            //     $imagePath = "";
-            // else {
-            //     $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
-            // }
+            if (empty($variation['image']) && $variation['image'] == null)
+                $imagePath = "";
+            else {
+                $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
+            }
             $productVariationsArray = [
                 'name' => ($request->name),
                 'code' => $variation['code'],
