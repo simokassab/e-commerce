@@ -355,8 +355,8 @@ class ProductService
         $product->minimum_quantity = $request->minimum_quantity;
         $product->summary = ($request->summary);
         $product->specification = ($request->specification);
-        if (!is_null($request->image) && !empty($request->image))
-            $product->image = uploadImage($request->image, config('images_paths.product.images'));
+        // if (!is_null($request->image) && !empty($request->image))
+            // $product->image = uploadImage($request->image, config('images_paths.product.images'));
 
         $product->meta_title = $request->meta_title ?? "";
         // $product->meta_keyword = $request->meta_keyword ?? "";
