@@ -24,7 +24,6 @@ use function PHPUnit\Framework\isEmpty;
 
 class ProductService
 {
-    // private $request, $product_id;
 
     public function storeAdditionalProductData($request, $product, $childrenIds)
     {
@@ -40,8 +39,6 @@ class ProductService
             ->storeAdditionalTags($request, $product, $childrenIds)
             ->storeAdditionalPrices($request, $product, $childrenIds);
     }
-
-
 
     public function storeAdditionalCategrories($request, $product, $childrenIds)
     {
@@ -102,7 +99,6 @@ class ProductService
 
         throw new Exception('Error while storing product fields');
     }
-
 
     public function storeAdditionalImages($request, $product, $childrenIds)
     {
@@ -230,7 +226,6 @@ class ProductService
         }
         return $this;
     }
-
 
     public static function deleteRelatedDataForProduct(Product $product)
     {

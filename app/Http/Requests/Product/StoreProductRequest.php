@@ -83,8 +83,8 @@ class StoreProductRequest extends FormRequest
             'tax_id' => [Rule::when(in_array('tax_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:taxes,id'],
             'products_statuses_id' => 'required | integer | exists:products_statuses,id',
 
-            'categories.*' => 'nullable',
-            'categories.*.id' => 'exists:categories,id',
+            // 'categories.*' => 'nullable',
+            // 'categories.*.id' => 'exists:categories,id',
 
 
             'fields.*.field_id' => 'required | integer | exists:fields,id,entity,product',

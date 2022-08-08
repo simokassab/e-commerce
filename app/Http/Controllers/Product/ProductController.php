@@ -167,16 +167,19 @@ class ProductController extends MainController
             if($request->type=='bundle')
                 $this->productService->storeAdditionalBundle($request,$product);
 
-            $this-> productService->storeAdditionalProductData($request,$product,$childrenIds);
+            $this->productService->storeAdditionalProductData($request,$product,$childrenIds);
 
 
 
         // DB::commit();
         // return $this->successResponse('Success!',['product'=>$product]);
-          return $this->successResponse( 'Success!',[__('messages.success.create',
-            ['name' => __(self::OBJECT_NAME)]),
+        //   return $this->successResponse( 'Success!',[__('messages.success.create',
+        //     ['name' => __(self::OBJECT_NAME)]),
 
-            ]);
+        //     ]);
+        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+        'product' =>  new ProductResource($product)
+          ]);
         // return $this->successResponse( __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
         // ['product' =>  new ProductResource($product->load(['defaultCategory','brand','category','tags']))]);
 
