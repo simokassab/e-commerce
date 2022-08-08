@@ -280,11 +280,11 @@ class ProductService
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
         foreach ($request->product_variations as $variation) {
-            if ($variation['image'] == null)
-                $imagePath = "";
-            else {
-                $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
-            }
+            // if ($variation['image'] == null)
+            //     $imagePath = "";
+            // else {
+            //     $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
+            // }
             $productVariationsArray = [
                 'name' => ($request->name),
                 'code' => $variation['code'],
@@ -311,7 +311,7 @@ class ProductService
                 'website_status' => $request->status,
                 'parent_product_id' => $product->id,
                 'products_statuses_id' => $variation['products_statuses_id'],
-                'image' => $imagePath
+                // 'image' => $imagePath
             ];
 
             $productVariation = Product::create($productVariationsArray);
