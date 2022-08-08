@@ -43,6 +43,8 @@ class StoreProductRequest extends FormRequest
 
         }
 
+        var_dump($request->isSamePriceAsParent);
+
         return [
             'name' => 'required',
             'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,

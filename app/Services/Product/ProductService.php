@@ -304,7 +304,7 @@ class ProductService
 
             $productVariation = Product::create($productVariationsArray);
 
-            $pricesInfo =  (bool)$variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
+            $pricesInfo =  $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
             foreach ($pricesInfo as $key => $price) {
                 $pricesInfo[$key]['product_id'] = $productVariation->id;
             }
@@ -355,7 +355,7 @@ class ProductService
         $product->is_disabled = 0;
         $product->length = $request->p_length;
         $product->weight = $request->weight;
-        $product->is_default_child = (bool)$request->is_default_child ?? 0;
+        $product->is_default_child = $request->is_default_child ?? 0;
         $product->parent_product_id = $request->parent_product_id ?? null;
         $product->category_id = $request->category_id;
         $product->unit_id = $request->unit_id;
