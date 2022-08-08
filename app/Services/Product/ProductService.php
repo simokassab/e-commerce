@@ -358,6 +358,7 @@ class ProductService
         if ($request->image && !empty($request->image))
             $product->image = uploadImage($request->image, config('images_paths.product.images'));
 
+            return $request->meta_title;
         $product->meta_title = ($request->meta_title);
         $product->meta_keyword = ($request->meta_keyword);
         $product->meta_description = ($request->meta_description);
