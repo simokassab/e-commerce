@@ -24,6 +24,7 @@ class ProductService
         // $request = $request;
         // $product = $product_id;
         // $childrenIds = $childrenIds ?? [];
+        $request=(object)$request;
 
         $this->storeAdditionalCategrories($request, $product, $childrenIds)
             ->storeAdditionalFields($request, $product, $childrenIds) // different than parent
@@ -35,6 +36,8 @@ class ProductService
 
     public function storeAdditionalCategrories($request, $product, $childrenIds)
     {
+        $request=(object)$request;
+
         if (!$request->has('categories'))
             return $this;
 
@@ -95,6 +98,8 @@ class ProductService
 
     public function storeAdditionalImages($request, $product, $childrenIds)
     {
+        $request=(object)$request;
+
         if (!$request->has('images')) {
             return $this;
         }
@@ -130,6 +135,8 @@ class ProductService
 
     public function storeAdditionalLabels($request, $product, $childrenIds)
     {
+        $request=(object)$request;
+
         if (!$request->has('labels'))
             return $this;
 
@@ -158,6 +165,8 @@ class ProductService
 
     public function storeAdditionalTags($request, $product, $childrenIds)
     {
+        $request=(object)$request;
+
         if (!$request->has('tags'))
             return $this;
 
@@ -186,6 +195,8 @@ class ProductService
 
     public function storeAdditionalBundle($request, $product)
     {
+        $request=(object)$request;
+
         if ($request->type == 'bundle') {
             foreach ($request->related_products as $related_product => $value) {
                 $data[$related_product] = [
@@ -204,6 +215,7 @@ class ProductService
 
     public function storeAdditionalPrices($request, $product)
     {
+        $request=(object)$request;
 
         if ($request->has('prices')) {
             $pricesArray =  [];
@@ -261,7 +273,7 @@ class ProductService
 
     public function storeVariationsAndPrices($request, $product)
     {
-
+        $request=(object)$request;
         // try {
         $childrenIds = [];
         $data = [];
@@ -330,6 +342,8 @@ class ProductService
     {
         // DB::beginTransaction();
         // try {
+            $request=(object)$request;
+
         $product = new Product();
         $product->name = ($request->name);
         $product->slug = $request->slug;
