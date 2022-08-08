@@ -358,10 +358,10 @@ class ProductService
         if ($request->image && !empty($request->image))
             $product->image = uploadImage($request->image, config('images_paths.product.images'));
 
-        $product->meta_title = $request->meta_title ?? json_encode([]);
-        $product->meta_keyword = $request->meta_keyword ?? json_encode([]);
-        $product->meta_description = $request->meta_description ?? json_encode([]);
-        $product->description = $request->description ?? json_encode([]);
+        $product->meta_title = $request->meta_title ?? "";
+        $product->meta_keyword = $request->meta_keyword;
+        $product->meta_description = $request->meta_description;
+        $product->description = $request->description;
         $product->website_status = $request->status;
         $product->barcode = $request->barcode;
         $product->height = $request->height;
