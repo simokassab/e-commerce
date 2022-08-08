@@ -304,10 +304,10 @@ class ProductService
                 'brand_id' => $request->brand_id,
                 'summary' => ($request->summary),
                 'specification' => ($request->specification),
-                'meta_title' => ($request->meta_title),
-                'meta_keyword' => ($request->meta_keyword),
-                'meta_description' => ($request->meta_description),
-                'description' => ($request->description),
+                'meta_title' => ($request->meta_title) ?? "",
+                'meta_keyword' => ($request->meta_keyword) ?? "",
+                'meta_description' => ($request->meta_description) ?? "",
+                'description' => ($request->description) ?? "",
                 'website_status' => $request->status,
                 'parent_product_id' => $product->id,
                 'products_statuses_id' => $variation['products_statuses_id'],
@@ -359,7 +359,7 @@ class ProductService
             $product->image = uploadImage($request->image, config('images_paths.product.images'));
 
         $product->meta_title = $request->meta_title ?? "";
-        $product->meta_keyword = $request->meta_keyword ?? "";
+        $product->meta_keyword = $request->meta_keyword;
         $product->meta_description = $request->meta_description ?? "";
         $product->description = $request->description ?? "";
         $product->website_status = $request->status;
