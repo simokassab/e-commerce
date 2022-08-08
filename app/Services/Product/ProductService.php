@@ -2,7 +2,6 @@
 
 namespace App\Services\Product;
 
-use App\Models\Category\Category;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
 use App\Models\Product\ProductField;
@@ -11,16 +10,10 @@ use App\Models\Product\ProductLabel;
 use App\Models\Product\ProductPrice;
 use App\Models\Product\ProductRelated;
 use App\Models\Product\ProductTag;
-use App\Models\RolesAndPermissions\CustomPermission;
 use App\Services\Category\CategoryService;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Spatie\Permission\Models\Permission;
-
-use function PHPUnit\Framework\isEmpty;
 
 class ProductService
 {
