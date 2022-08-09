@@ -132,7 +132,7 @@ class ProductService
             }
         }
 
-        dd($data);
+        dd("facefveag");
 
         if (ProductImage::insert($data)) {
             return $this;
