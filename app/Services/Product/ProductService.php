@@ -51,11 +51,11 @@ class ProductService
         foreach ($childrenIdsArray as $key => $child) {
           foreach ($oneLevelCategoryArray as $key => $category) {
             if ($category['checked']) {
-                $data[]=[
+                $data[$key]=[
                     'product_id' => $child,
-                    'category_id' => $category['id'],
-                    'created_at' => Carbon::now()->toDateTimeString(),
-                    'updated_at' => Carbon::now()->toDateTimeString(),
+                    'category_id' => $category,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
                 ];
 
             }
