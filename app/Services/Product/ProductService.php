@@ -124,7 +124,7 @@ class ProductService
                 $data[] = [
                     'product_id' => $child,
                     'image' => $imagePath,
-                    'title' => ($request->images_data[$index]['title']),
+                    'title' => json_encode($request->images_data[$index]['title']),
                     'sort' => $request->images_data[$index]['sort'],
                     'created_at'  => today()->toDateString(),
                     'updated_at' => today()->toDateString(),
@@ -132,7 +132,6 @@ class ProductService
             }
         }
 
-        dd($data);
 
         if (ProductImage::insert($data)) {
             return $this;
