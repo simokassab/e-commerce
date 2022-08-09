@@ -100,7 +100,7 @@ class ProductService
     {
         //$request=(object)$request;
 
-        if (!$request->has('images')) {
+        if (!$request->has('images') || !is_null($request->images)) {
             return $this;
         }
 
