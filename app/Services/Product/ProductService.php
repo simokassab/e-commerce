@@ -48,13 +48,14 @@ class ProductService
         $categoriesIdsArray = [];
         $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($request->categories);
         foreach ($childrenIdsArray as $key => $child) {
-
-        foreach ($oneLevelCategoryArray as $key => $category) {
+          foreach ($oneLevelCategoryArray as $key => $category) {
             if ($category['checked']) {
                 $categoriesIdsArray[$key]['category_id'] = $category['id'];
                 $categoriesIdsArray[$key]['product_id'] = $child;
             }
-        }}
+        }
+    }
+dd($childrenIdsArray);
         if (ProductCategory::insert($categoriesIdsArray))
             return $this;
 
@@ -118,18 +119,16 @@ class ProductService
         $childrenIdsArray = $childrenIds;
         $childrenIdsArray[] = $product->id;
         $data = [];
-        foreach ($childrenIdsArray as $key => $child) {
             foreach ($request->images as $index => $image) {
                 $imagePath = uploadImage($image, config('images_paths.product.images'));
                 $data[] = [
-                    'product_id' => $child,
+                    'product_id' => $product->id,
                     'image' => $imagePath,
                     'title' => json_encode($request->images_data[$index]['title']),
                     'sort' => $request->images_data[$index]['sort'],
                     'created_at'  => today()->toDateString(),
                     'updated_at' => today()->toDateString(),
                 ];
-            }
         }
 
 
