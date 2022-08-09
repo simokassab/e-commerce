@@ -45,17 +45,22 @@ class ProductService
         if (!$request->has('categories'))
             return $this;
 
-        $categoriesIdsArray = [];
-        $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($request->categories);
+            $data = [];
+            $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($request->categories);
 
         foreach ($childrenIdsArray as $key => $child) {
-        foreach ($oneLevelCategoryArray as $key => $category) {
+          foreach ($oneLevelCategoryArray as $key => $category) {
             if ($category['checked']) {
-                $categoriesIdsArray[$key]['category_id'] = $category['id'];
-                $categoriesIdsArray[$key]['product_id'] = $child;
+                $data[]=[
+                    'product_id' => $child,
+                    'category_id' => $category['category_id'],
+                    'created_at' => Carbon::now()->toDateTimeString(),
+                    'updated_at' => Carbon::now()->toDateTimeString(),
+                ];
+
             }
         }}
-        if (ProductCategory::insert($categoriesIdsArray))
+        if (ProductCategory::insert($data))
             return $this;
 
         throw new Exception('Error while storing product categories');
