@@ -345,8 +345,8 @@ class ProductService
 
     public function createProduct($request)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             //$request=(object)$request;
 
         $product = new Product();
@@ -385,13 +385,13 @@ class ProductService
         $product->save();
 
         // $product->update(['meta_keyword' => $request->meta_keyword]);
-        // DB::commit();
+        DB::commit();
         // dd($product);
         return $product;
         // dd(Product::find($product->id));
-        // } catch (Exception $e) {
-        //     DB::rollBack();
-        //     throw new Exception($e->getMessage());
-        // }
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
     }
 }
