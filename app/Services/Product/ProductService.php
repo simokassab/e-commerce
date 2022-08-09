@@ -55,7 +55,7 @@ class ProductService
             }
         }
     }
-dd($childrenIdsArray);
+dd($categoriesIdsArray);
         if (ProductCategory::insert($categoriesIdsArray))
             return $this;
 
