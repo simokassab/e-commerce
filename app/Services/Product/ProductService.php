@@ -53,7 +53,7 @@ class ProductService
             if ($category['checked']) {
                 $data[]=[
                     'product_id' => $child,
-                    'category_id' => $category['category_id'],
+                    'category_id' => $category['id'],
                     'created_at' => Carbon::now()->toDateTimeString(),
                     'updated_at' => Carbon::now()->toDateTimeString(),
                 ];
