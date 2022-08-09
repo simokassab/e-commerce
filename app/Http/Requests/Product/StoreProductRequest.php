@@ -115,7 +115,6 @@ class StoreProductRequest extends FormRequest
             'order.*.sort' => 'required | integer',
 
             'product_variations'=> [Rule::when($request->type == 'variable', 'required', 'nullable')],
-            // 'product_variations.*.slug' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'product_variations.*.code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
             'product_variations.*.sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
 
@@ -293,6 +292,12 @@ class StoreProductRequest extends FormRequest
             'order.*.id.exists' => 'The id is not exists',
             'order.*.sort.required' => 'The sort is required',
             'order.*.sort.integer' => 'The sort should be an integer',
+
+            'product_varitations.*.code.required' => 'The code is required',
+            'product_varitations.*.code.max' => 'The code should be less than :max characters',
+            'product_varitations.*.code.string' => 'The code should be a string',
+            'product_varitations.*.code.unique' => 'The code is already exists',
+
 
         ];
     }

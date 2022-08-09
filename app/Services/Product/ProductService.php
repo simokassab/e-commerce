@@ -38,17 +38,23 @@ class ProductService
     {
         //$request=(object)$request;
 
+
+        $childrenIdsArray = $childrenIds;
+        $childrenIdsArray[] = $product->id;
+
         if (!$request->has('categories'))
             return $this;
 
         $categoriesIdsArray = [];
         $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($request->categories);
+
+        foreach ($childrenIdsArray as $key => $child) {
         foreach ($oneLevelCategoryArray as $key => $category) {
             if ($category['checked']) {
                 $categoriesIdsArray[$key]['category_id'] = $category['id'];
-                $categoriesIdsArray[$key]['product_id'] = $product->id;
+                $categoriesIdsArray[$key]['product_id'] = $child;
             }
-        }
+        }}
         if (ProductCategory::insert($categoriesIdsArray))
             return $this;
 
@@ -114,16 +120,15 @@ class ProductService
         $data = [];
         foreach ($childrenIdsArray as $key => $child) {
             foreach ($request->images as $index => $image) {
-
                 $imagePath = uploadImage($image, config('images_paths.product.images'));
-                ProductImage::create([
+                $data[] = [
                     'product_id' => $child,
                     'image' => $imagePath,
                     'title' => ($request->images_data[$index]['title']),
                     'sort' => $request->images_data[$index]['sort'],
                     'created_at'  => today()->toDateString(),
                     'updated_at' => today()->toDateString(),
-                ]);
+                ];
             }
         }
 
@@ -326,11 +331,10 @@ class ProductService
                 $data[$key]['updated_at'] = Carbon::now()->toDateTimeString();
 
             }
-
             $childrenIds[] = $productVariation->id;
         }
-        $finalPricesCollect = collect($data)->collapse()->toArray();
-        ProductPrice::insert($finalPricesCollect);
+        // $finalPricesCollect = collect($data)->collapse()->toArray();
+        ProductPrice::insert($data);
 
 
         if (count($childrenIds) > 0) {
