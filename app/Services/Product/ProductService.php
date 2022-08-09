@@ -50,8 +50,12 @@ class ProductService
         foreach ($childrenIdsArray as $key => $child) {
           foreach ($oneLevelCategoryArray as $key => $category) {
             if ($category['checked']) {
-                $categoriesIdsArray[$key]['category_id'] = $category['id'];
-                $categoriesIdsArray[$key]['product_id'] = $child;
+                $categoriesIdsArray[]=[
+                    'product_id' => $child,
+                    'category_id' => $category['id'],
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                    ];
             }
         }
     }
