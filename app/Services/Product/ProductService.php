@@ -277,16 +277,16 @@ class ProductService
         // try {
         $childrenIds = [];
         $data = [];
-        throw_if(!$request->product_variations, Exception::class, 'No variations found');
+        throw_if(!$request['product_variations'], Exception::class, 'No variations found');
 
-        foreach ($request->product_variations as $variation) {
+        foreach ($request['product_variations'] as $variation) {
             if (empty($variation['image']) && $variation['image'] == null)
                 $imagePath = "";
             else {
                 $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
             }
             $productVariationsArray = [
-                'name' => ($request->name),
+                'name' => ($request['name']),
                 'code' => $variation['code'],
                 'type' => 'variable_child',
                 'sku' => $variation['sku'],
@@ -298,17 +298,17 @@ class ProductService
                 'length' => $variation['p_length'],
                 'weight' => $variation['weight'],
                 'barcode' => $variation['barcode'],
-                'category_id' => $request->category_id,
-                'unit_id' => $request->unit_id,
-                'tax_id' => $request->tax_id,
-                'brand_id' => $request->brand_id,
-                'summary' => ($request->summary),
-                'specification' => ($request->specification),
-                'meta_title' => ($request->meta_title) ?? "",
+                'category_id' => $request['category_id'],
+                'unit_id' => $request['unit_id'],
+                'tax_id' => $request['tax_id'],
+                'brand_id' => $request['brand_id'],
+                'summary' => ($request['summary']),
+                'specification' => ($request['specification']),
+                'meta_title' => ($request['meta_title']) ?? "",
                 // 'meta_keyword' => ($request->meta_keyword) ?? "",
-                'meta_description' => ($request->meta_description) ?? "",
-                'description' => ($request->description) ?? "",
-                'website_status' => $request->status,
+                'meta_description' => ($request['meta_description']) ?? "",
+                'description' => ($request['description']) ?? "",
+                'website_status' => $request['status'],
                 'parent_product_id' => $product->id,
                 'products_statuses_id' => $variation['products_statuses_id'],
                 // 'image' => $imagePath
@@ -345,38 +345,71 @@ class ProductService
             $request=(object)$request;
 
         $product = new Product();
-        $product->name = ($request->name);
-        $product->slug = $request->slug;
-        $product->code = $request->code;
-        $product->sku = $request->sku;
-        $product->type = $request->type;
-        $product->quantity = $request->quantity;
-        $product->reserved_quantity =  0;
-        $product->minimum_quantity = $request->minimum_quantity;
-        $product->summary = ($request->summary);
-        $product->specification = ($request->specification);
-        // if (!is_null($request->image) && !empty($request->image))
-            // $product->image = uploadImage($request->image, config('images_paths.product.images'));
+        // $product->name = ($request->name);
+        // $product->slug = $request->slug;
+        // $product->code = $request->code;
+        // $product->sku = $request->sku;
+        // $product->type = $request->type;
+        // $product->quantity = $request->quantity;
+        // $product->reserved_quantity =  0;
+        // $product->minimum_quantity = $request->minimum_quantity;
+        // $product->summary = ($request->summary);
+        // $product->specification = ($request->specification);
+        // // if (!is_null($request->image) && !empty($request->image))
+        //     // $product->image = uploadImage($request->image, config('images_paths.product.images'));
 
-        $product->meta_title = $request->meta_title ?? "";
+        // $product->meta_title = $request->meta_title ?? "";
+        // // $product->meta_keyword = $request->meta_keyword ?? "";
+        // $product->meta_description = $request->meta_description ?? "";
+        // $product->description = $request->description ?? "";
+        // $product->website_status = $request->status;
+        // $product->barcode = $request->barcode;
+        // $product->height = $request->height;
+        // $product->width = $request->width;
+        // $product->is_disabled = 0;
+        // $product->length = $request->p_length;
+        // $product->weight = $request->weight;
+        // $product->is_default_child = $request->is_default_child ?? 0;
+        // $product->parent_product_id = $request->parent_product_id ?? null;
+        // $product->category_id = $request->category_id;
+        // $product->unit_id = $request->unit_id;
+        // $product->brand_id = $request->brand_id;
+        // $product->tax_id = $request->tax_id;
+        // $product->products_statuses_id = $request->products_statuses_id;
+        // $product->is_show_related_product = $request->is_show_related_product ?? 0;
+
+        $product->name = ($request['name']);
+        $product->slug = $request['slug'];
+        $product->code = $request['code'];
+        $product->sku = $request['sku'];
+        $product->type = $request['type'];
+        $product->quantity = $request['quantity'];
+        $product->reserved_quantity =  0;
+        $product->minimum_quantity = $request['minimum_quantity'];
+        $product->summary = ($request['summary']);
+        $product->specification = ($request['specification']);
+        if (!is_null($request['image']) && !empty($request['image']))
+            $product->image = uploadImage($request['image'], config('images_paths.product.images'));
+
+        $product->meta_title = $request['meta_title'] ?? "";
         // $product->meta_keyword = $request->meta_keyword ?? "";
-        $product->meta_description = $request->meta_description ?? "";
-        $product->description = $request->description ?? "";
-        $product->website_status = $request->status;
-        $product->barcode = $request->barcode;
-        $product->height = $request->height;
-        $product->width = $request->width;
+        $product->meta_description = $request['meta_description'] ?? "";
+        $product->description = $request['description'] ?? "";
+        $product->website_status = $request['status'];
+        $product->barcode = $request['barcode'];
+        $product->height = $request['height'];
+        $product->width = $request['width'];
         $product->is_disabled = 0;
-        $product->length = $request->p_length;
-        $product->weight = $request->weight;
-        $product->is_default_child = $request->is_default_child ?? 0;
-        $product->parent_product_id = $request->parent_product_id ?? null;
-        $product->category_id = $request->category_id;
-        $product->unit_id = $request->unit_id;
-        $product->brand_id = $request->brand_id;
-        $product->tax_id = $request->tax_id;
-        $product->products_statuses_id = $request->products_statuses_id;
-        $product->is_show_related_product = $request->is_show_related_product ?? 0;
+        $product->length = $request['p_length'];
+        $product->weight = $request['weight'];
+        $product->is_default_child = $request['is_default_child'] ?? 0;
+        $product->parent_product_id = $request['parent_product_id'] ?? null;
+        $product->category_id = $request['category_id'];
+        $product->unit_id = $request['unit_id'];
+        $product->brand_id = $request['brand_id'];
+        $product->tax_id = $request['tax_id'];
+        $product->products_statuses_id = $request['products_statuses_id'];
+        $product->is_show_related_product = $request['is_show_related_product'] ?? 0;
         $product->save();
 
         // $product->update(['meta_keyword' => $request->meta_keyword]);
