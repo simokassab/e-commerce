@@ -158,8 +158,8 @@ class ProductController extends MainController
 
     public function store(StoreProductRequest $request)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             $product = $this->productService->createProduct($request);
             $childrenIds=[];
             if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
@@ -172,7 +172,7 @@ class ProductController extends MainController
 
 
 
-        // DB::commit();
+        DB::commit();
         // return $this->successResponse('Success!',['product'=>$product]);
         //   return $this->successResponse( 'Success!',[__('messages.success.create',
         //     ['name' => __(self::OBJECT_NAME)]),
@@ -184,13 +184,13 @@ class ProductController extends MainController
         // return $this->successResponse( __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
         // ['product' =>  new ProductResource($product->load(['defaultCategory','brand','category','tags']))]);
 
-        // }catch (\Exception $ex) {
-        //     DB::rollBack();
-        //     return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
-        //     'message' => $ex->getMessage()
-        //      ]);
+        }catch (\Exception $ex) {
+            DB::rollBack();
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
+            'message' => $ex->getMessage()
+             ]);
 
-        // }
+        }
     }
 
     /**
