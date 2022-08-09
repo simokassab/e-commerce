@@ -382,7 +382,7 @@ class ProductService
                 'summary' => ($request->summary),
                 'specification' => ($request->specification),
                 'meta_title' => ($request->meta_title) ?? "",
-                // 'meta_keyword' => ($request->meta_keyword) ?? "",
+                'meta_word' => ($request->meta_keyword) ?? "",
                 'meta_description' => ($request->meta_description) ?? "",
                 'description' => ($request->description) ?? "",
                 'website_status' => $request->status,
@@ -440,7 +440,7 @@ class ProductService
             $product->specification = ($request->specification);
             // if (!is_null($request->image) && !empty($request->image))
             // $product->image = uploadImage($request->image, config('images_paths.product.images'));
-
+dd($request->meta_keyword);
             $product->meta_title = $request->meta_title ?? "";
             // $product->meta_keyword = $request->meta_keyword ?? "";
             $product->meta_description = $request->meta_description ?? "";
