@@ -357,7 +357,7 @@ class ProductService
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
         foreach ($request->product_variations as $variation) {
-            if (empty($variation['image']) || $variation['image'] == null)
+            if ($variation['image'] == null)
                 $imagePath = "";
             else {
                 $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
@@ -388,7 +388,7 @@ class ProductService
                 'website_status' => $request->status,
                 'parent_product_id' => $product->id,
                 'products_statuses_id' => $variation['products_statuses_id'],
-                // 'image' => $imagePath
+                'image' => $imagePath
             ];
 
             $productVariation = Product::create($productVariationsArray);
