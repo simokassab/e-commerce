@@ -440,9 +440,9 @@ class ProductService
             $product->specification = ($request->specification);
             // if (!is_null($request->image) && !empty($request->image))
             // $product->image = uploadImage($request->image, config('images_paths.product.images'));
-dd($request->meta_keyword);
+
             $product->meta_title = $request->meta_title ?? "";
-            // $product->meta_keyword = $request->meta_keyword ?? "";
+            $product->meta_word = $request->meta_word ?? "";
             $product->meta_description = $request->meta_description ?? "";
             $product->description = $request->description ?? "";
             $product->website_status = $request->status;
