@@ -35,7 +35,43 @@ class OrdersController extends MainController
             'countries' => SelectContryResource::collection(Country::query()->select(['id','name','iso_code_1'])->get()),
             'statuses' => SelectOrderStatus::collection(OrderStatus::query()->select(['id','name'],)->get()),
             'customers' => SelectCustomerResource::collection(Customer::query()->select(['id','first_name','last_name','phone'])->WhereNot('is_blacklist',1)->get()),
-            'order' => null
+            'order' => null,
+            'delivery_methods' => [
+                [
+                    'id' => 1,
+                    'value' => 'ARMX'
+                ],
+                [
+                    'id' => 2,
+                    'value' => 'AZZAM DELIVERY'
+                ],
+                [
+                    'id' => 3,
+                    'value' => 'Mohsseeeeeeeen'
+                ],
+                [
+                'id' => 5,
+                'value' => 'Take Me'
+            ],
+            ],
+            'payment_methods' =>[
+                [
+                    'id' => 1,
+                    'value' => 'Cache On Delivery'
+                ],
+                [
+                    'id' => 2,
+                    'value' => 'Visa Card'
+                ],
+                [
+                    'id' => 3,
+                    'value' => 'Master Card'
+                ],
+                [
+                    'id' => 5,
+                    'value' => 'OMT Card'
+                ],
+            ]
         ]);
 
     }

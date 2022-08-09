@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->string('prefix')->unique();
             $table->time('time')->nullable();
-            $table->unsignedBigInteger('customer_id')->unique();
+            $table->unsignedBigInteger('customer_id');
             $table->double('currency_rate')->nullable();
             $table->double('total')->nullable();
             $table->double('tax_total')->nullable();
