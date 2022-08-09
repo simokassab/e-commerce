@@ -277,7 +277,7 @@ class ProductService
         }
     }
 
-    public function storeFieldsForVariations($request, $product,$childrenIds)
+    public function storeFieldsForVariations($request,$childrenIds)
     {
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
@@ -288,7 +288,7 @@ class ProductService
         $data = [];
 
         foreach ($childrenIdsArray as $key => $child) {
-            foreach ($request->product_variations['fields'] as $index => $field) {
+            foreach ($request->product_variations[$key]['fields'] as $index => $field) {
                 if (gettype($field) == 'string') {
                     $field = (array)json_decode($field);
                 }
@@ -318,7 +318,7 @@ class ProductService
         throw new Exception('Error while storing product fields');
     }
 
-    public function storeImagesForVariations($request,$product,$childrenIds){
+    public function storeImagesForVariations($request,$childrenIds){
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
         if (!$request->has('product_variations'))
@@ -328,13 +328,13 @@ class ProductService
         $data = [];
 
         foreach ($childrenIdsArray as $key => $child) {
-            foreach ($request->product_variations['images'] as $index => $image) {
+            foreach ($request->product_variations[$key]['images'] as $index => $image) {
                 $imagePath = uploadImage($image, config('images_paths.product.images'));
                 $data[] = [
                     'product_id' => $child,
                     'image' => $imagePath,
-                    'title' => json_encode($request->product_variations['images_data'][$index]['title']),
-                    'sort' => $request->product_variations['images_data'][$index]['sort'],
+                    'title' => json_encode($request->product_variations[$key]['images_data'][$index]['title']),
+                    'sort' => $request->product_variations[$key]['images_data'][$index]['sort'],
                     'created_at'  => Carbon::now()->toDateString(),
                     'updated_at' => Carbon::now()->toDateString(),
                 ];
@@ -357,7 +357,7 @@ class ProductService
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
         foreach ($request->product_variations as $variation) {
-            if (empty($variation['image']) && $variation['image'] == null)
+            if (empty($variation['image']) || $variation['image'] == null)
                 $imagePath = "";
             else {
                 $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
@@ -382,7 +382,7 @@ class ProductService
                 'summary' => ($request->summary),
                 'specification' => ($request->specification),
                 'meta_title' => ($request->meta_title) ?? "",
-                'meta_keyword' => ($request->meta_keyword) ?? "",
+                // 'meta_keyword' => ($request->meta_keyword) ?? "",
                 'meta_description' => ($request->meta_description) ?? "",
                 'description' => ($request->description) ?? "",
                 'website_status' => $request->status,
@@ -392,7 +392,6 @@ class ProductService
             ];
 
             $productVariation = Product::create($productVariationsArray);
-
             $pricesInfo =  $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
             foreach ($pricesInfo as $key => $price) {
                 $data[$key]['product_id'] = $productVariation->id;
@@ -407,8 +406,8 @@ class ProductService
         // $finalPricesCollect = collect($data)->collapse()->toArray();
         ProductPrice::insert($data);
 
-        $this->storeFieldsForVariations($request, $product, $childrenIds);
-        $this->storeImagesForVariations($request, $product, $childrenIds);
+            $this->storeImagesForVariations($request,$childrenIds);
+            $this->storeFieldsForVariations($request,$childrenIds);
 
         if (count($childrenIds) > 0) {
             return $childrenIds;
