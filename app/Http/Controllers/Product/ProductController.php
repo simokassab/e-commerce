@@ -160,15 +160,15 @@ class ProductController extends MainController
     {
         // DB::beginTransaction();
         // try {
-            $product = $this->productService->createProduct($request->all());
+            $product = $this->productService->createProduct($request);
             $childrenIds=[];
             if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
-               $childrenIds=$this->productService->storeVariationsAndPrices($request->all(),$product);
+               $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
             }
             if($request->type=='bundle')
-                $this->productService->storeAdditionalBundle($request->all(),$product);
+                $this->productService->storeAdditionalBundle($request,$product);
 
-            $this->productService->storeAdditionalProductData($request->all(),$product,$childrenIds);
+            $this->productService->storeAdditionalProductData($request,$product,$childrenIds);
 
 
 
