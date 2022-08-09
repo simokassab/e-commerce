@@ -105,9 +105,9 @@ class ProductService
         }
 
 
-        if (count($request->images) != $request->images_data->count()) {
-            throw new Exception('Images and images_data count is not equal');
-        }
+        // if (count($request->images) != $request->images_data->count()) {
+        //     throw new Exception('Images and images_data count is not equal');
+        // }
 
         $childrenIdsArray = $childrenIds;
         $childrenIdsArray[] = $product->id;
