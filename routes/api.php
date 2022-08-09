@@ -21,7 +21,7 @@ use App\Http\Controllers\Users\UsersController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Prices\PricesController;
 use App\Http\Controllers\Product\ProductController;
-
+use \App\Http\Controllers\Orders\OrdersController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -58,6 +58,10 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::post('country/all',[CountryController::class,'index']); // for search
 //    Route::post("country/{country}",[CountryController::class,'update']);
 
+    Route::post('order/all',[OrdersController::class,'index']);// for search
+    Route::get('order/create',[OrdersController::class,'create']);
+    Route::apiResource('order',OrdersController::class);
+
     Route::apiResource('currency',CurrencyController::class);
     Route::patch('currency/set-is-default/{id}',[CurrencyController::class,'setCurrencyIsDefault']);
     Route::post('currency/all',[CurrencyController::class,'index']); // for search
@@ -66,7 +70,9 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::post('discount/all',[DiscountController::class,'index']); // for search
 
     Route::apiResource('category',CategoryController::class);
+
     Route::apiResource('brands',BrandController::class);
+
     Route::apiResource('discount-entity',DiscountEntityController::class);
     Route::post('discount-entity/all',[DiscountEntityController::class,'index']); // for search
 
@@ -93,12 +99,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::apiResource('unit',UnitController::class);
     Route::post('unit/all',[UnitController::class,'index']);// for search
 
-
-
     // @TODO: make a correct function for the user profile
     Route::get('/profile', fn() =>  auth()->user());
-
-
 
     Route::post('tax/all',[TaxController::class,'index']);//for searching
     Route::get('tax/create' , [TaxController::class,'create']);
