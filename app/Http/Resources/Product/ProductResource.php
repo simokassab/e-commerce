@@ -18,7 +18,6 @@ class ProductResource extends JsonResource
     {
 
 
-        dd($this->whenLoaded('defaultCategory') ? $this->whenLoaded('defaultCategory')->name : "-");
         $data[0]['name'] = $this->whenLoaded('defaultCategory') ? $this->whenLoaded('defaultCategory')->name : "-";
         $data[0]['isMain'] = true;
         $categories = [];
