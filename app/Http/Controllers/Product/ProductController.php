@@ -179,7 +179,7 @@ class ProductController extends MainController
 
         //     ]);
         return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-        'product' =>  new ProductResource($product->load('defaultCategory','tags','brand','category'))
+        'product' =>  new ProductResource($product->load(['defaultCategory','tags','brand','category']))
           ]);
         // return $this->successResponse( __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
         // ['product' =>  new ProductResource($product->load(['defaultCategory','brand','category','tags']))]);
