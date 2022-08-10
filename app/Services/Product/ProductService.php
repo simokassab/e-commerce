@@ -406,7 +406,7 @@ class ProductService
         // $finalPricesCollect = collect($data)->collapse()->toArray();
         ProductPrice::insert($data);
 
-            // $this->storeImagesForVariations($request,$childrenIds);
+            $this->storeImagesForVariations($request,$childrenIds);
             // $this->storeFieldsForVariations($request,$childrenIds);
 
         if (count($childrenIds) > 0) {
