@@ -21,8 +21,8 @@ class Coupon extends Model
             return [
                 'is_valid' => false,
                 'error_message' => 'Sorry, but this coupon was used',
-                'percentage' => $this->discount_percentage,
-                'amount' => $this->discount_amount,
+                'percentage' => 0,
+                'amount' => 0,
                 'minimum_amount' => $this->min_amount,
                 'is_discount_on_shipping' => (boolean)$isDiscountOnShipping
 
@@ -33,8 +33,8 @@ class Coupon extends Model
             return [
                 'is_valid' => false,
                 'error_message' => 'Sorry, but this coupon has expired at '.$this->expiry_date,
-                'percentage' => $this->discount_percentage,
-                'amount' => $this->discount_amount,
+                'percentage' => 0,
+                'amount' => 0,
                 'minimum_amount' => $this->min_amount,
                 'is_discount_on_shipping' => (boolean)$isDiscountOnShipping
 
@@ -45,8 +45,8 @@ class Coupon extends Model
             return [
                 'is_valid' => false,
                 'error_message' => 'Sorry, but you at least have to buy ' . $this->min_amount . ' to use this coupon',
-                'percentage' => $this->discount_percentage,
-                'amount' => $this->discount_amount,
+                'percentage' => 0,
+                'amount' => 0,
                 'minimum_amount' => $this->min_amount,
                 'is_discount_on_shipping' => (boolean)$isDiscountOnShipping
 

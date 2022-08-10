@@ -101,10 +101,11 @@ class OrdersController extends MainController
         $currencyRate = Price::findOrFail($request->price_class)->currency->currencyHistory->last()->rate;
         $order->currency_rate = $currencyRate;
         $order->coupon_id = $request->coupon_id;
-        $order->save();
         $products = $request->selected_products;
 
-        $totalPrice = OrdersService::calculateTotalOrderPrice($products,$order);
+        OrdersService::calculateTotalOrderPrice($products,$order);
+        $order->save();
+
         DB::commit();
 
 
