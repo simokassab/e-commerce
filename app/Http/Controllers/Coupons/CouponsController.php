@@ -86,7 +86,7 @@ class CouponsController extends MainController
     }
 
     public function getCouponByCode(Request $request,$code){
-        $coupon = Coupon::where('code',$code)->first();
+        $coupon = Coupon::where('code',$code)->firstOrFail();
         $data = $coupon->checkIfCouponIsValid($request->amount);
         return $this->successResponse(data:$data);
     }
