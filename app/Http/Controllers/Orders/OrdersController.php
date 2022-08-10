@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Orders;
 
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\MainController;
 use App\Http\Resources\Country\SelectContryResource;
 use App\Http\Resources\Customers\SelectCustomerResource;
 use App\Models\Country\Country;
 use App\Models\Orders\OrderStatus;
+use App\Models\Price\Price;
 use App\Models\User\Customer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Resources\Orders\SelectOrderStatus;
+use App\Models\Orders\Order;
+use App\Services\Orders\OrdersService;
+
 class OrdersController extends MainController
 {
     /**
@@ -80,11 +82,32 @@ class OrdersController extends MainController
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        //
+        try {
+        $order = new Order();
+        $order->customer_id = $request->client_id;
+        $order->time = $request->time;
+        $order->customer_comment = $request->customer_comment;
+        $order->order_status_id = $request->order_status_id;
+        $order->prefix = $request->prefix;
+        $currencyRate = Price::findOrFail($request->price_class)->currency->currencyHistory->latest()->rate;
+        $order->currency_rate = $currencyRate;
+        $order->coupon_id = $request->coupon_id;
+        $order->save();
+
+
+
+        return $this->successResponse('The order has been created successfully !', [
+            'order' => $order
+        ]);
+
+        }catch (\Exception $exception){
+            return $this->errorResponse('The Order has not been created correctly!');
+        }
+
     }
 
     /**

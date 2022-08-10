@@ -14,7 +14,8 @@ class Coupon extends Model
     public function checkIfCouponIsValid($amount = null) : array{
 
 //        $isDiscountOnShipping = Setting::where('title','is_discount_on_shipping')->first()->value;
-        $isDiscountOnShipping = Cache::get('settings')->where('title','is_discount_on_shipping')->first()->value;
+//        $isDiscountOnShipping = Cache::get('settings')->where('title','is_discount_on_shipping')->first()->value;
+        $isDiscountOnShipping = Setting::query()->where('title','is_discount_on_shipping')->first() ? Setting::query()->where('title','is_discount_on_shipping')->first()->value : false;
 
         if($this->is_one_time && $this->is_used){
             return [
