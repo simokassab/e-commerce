@@ -9,10 +9,12 @@ use App\Models\Country\Country;
 use App\Models\Orders\OrderStatus;
 use App\Models\Price\Price;
 use App\Models\User\Customer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Resources\Orders\SelectOrderStatus;
 use App\Models\Orders\Order;
 use App\Services\Orders\OrdersService;
+use Illuminate\Support\Facades\DB;
 
 class OrdersController extends MainController
 {
@@ -86,18 +88,24 @@ class OrdersController extends MainController
      */
     public function store(Request $request)
     {
+        DB::beginTransaction();
+
         try {
         $order = new Order();
         $order->customer_id = $request->client_id;
+//        $order->time = Carbon::now()->format('H:i:s');
         $order->time = $request->time;
         $order->customer_comment = $request->customer_comment;
         $order->order_status_id = $request->order_status_id;
         $order->prefix = $request->prefix;
-        $currencyRate = Price::findOrFail($request->price_class)->currency->currencyHistory->latest()->rate;
+        $currencyRate = Price::findOrFail($request->price_class)->currency->currencyHistory->last()->rate;
         $order->currency_rate = $currencyRate;
         $order->coupon_id = $request->coupon_id;
         $order->save();
+        $products = $request->selected_products;
 
+        $totalPrice = OrdersService::calculateTotalOrderPrice($products,$order);
+        DB::commit();
 
 
         return $this->successResponse('The order has been created successfully !', [
@@ -105,6 +113,8 @@ class OrdersController extends MainController
         ]);
 
         }catch (\Exception $exception){
+            dd($exception);
+            DB::rollBack();
             return $this->errorResponse('The Order has not been created correctly!');
         }
 
