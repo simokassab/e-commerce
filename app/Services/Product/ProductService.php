@@ -440,10 +440,10 @@ class ProductService
             if ($request->image)
                 $product->image = uploadImage($request->image, config('images_paths.product.images'));
 
-            $product->meta_title = $request->meta_title ?? "";
-            // $product->meta_keyword = $request->has('meta_keyword') ? $request->meta_keyword : "-";
-            $product->meta_description = $request->meta_description ?? "";
-            $product->description = $request->description ?? "";
+            $product->meta_title = $request->meta_title ?? null;
+            $product->meta_keyword = $request->meta_keyword ?? null;
+            $product->meta_description = $request->meta_description ?? null;
+            $product->description = $request->description ?? null;
             $product->website_status = $request->status;
             $product->barcode = $request->barcode;
             $product->height = $request->height;
