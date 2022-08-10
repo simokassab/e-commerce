@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Prices\PricesController;
 use App\Http\Controllers\Product\ProductController;
 use \App\Http\Controllers\Orders\OrdersController;
+use \App\Http\Controllers\Coupons\CouponsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -119,7 +120,10 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::post('product/all',[ProductController::class,'index']);// for search
     Route::post('product/add',[ProductController::class,'addproduct']);// for search
     Route::get('product/create',[ProductController::class,'create']);
+    Route::get('product/get-products-for-order',[ProductController::class,'getProductsForOrders']);
     Route::apiResource('product',ProductController::class);
+
+    Route::post('coupon/get-coupon-by-code/{code}',[CouponsController::class,'getCouponByCode']);
 
 
     });

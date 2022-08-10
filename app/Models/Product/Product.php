@@ -44,7 +44,7 @@ class Product extends MainModel
         return $this->belongsTo(Unit::class,'unit_id');
     }
     public function tax(){
-        return $this->belongsTo(Tax::class,'tax_id');
+        return $this->belongsTo(Tax::class,'tax_id','id');
     }
     public function brand(){
         return $this->belongsTo(Brand::class,'brand_id');

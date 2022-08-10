@@ -2,9 +2,9 @@
 
 namespace App\Models\Tax;
 
+use App\Models\Tax\TaxComponent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
-use App\Models\Tax\TaxComponent;
 use App\Models\Category\Category;
 use App\Models\Product\Product;
 use App\Models\Brand\Brand;
@@ -32,5 +32,33 @@ class Tax extends MainModel
     }
     public function brand(){
         return $this->hasMany(Brand::class,'brand_id');
+    }
+
+    public function getComplexPrice($price,array $allTaxComponents = [],$allTaxes = []) :float{
+
+        $allTaxComponents = count($allTaxComponents) != 0 ? $allTaxComponents : TaxComponent::all()->toArray();
+        $allTaxes = count($allTaxes) != 0 ? $allTaxes : Tax::all()->toArray();
+        $allTaxes = collect($allTaxes);
+        $neededTaxComponents = collect($allTaxComponents)->where('tax_id',$this->id)->toArray();
+
+        $resultantTaxRate = 0.0;
+        $totalTax = 0.0;
+        if($this->complex_behavior == 'combine'){
+            foreach($neededTaxComponents as $neededTaxComponent){
+                $tax = $allTaxes->where('id',$neededTaxComponent['id'])->first();
+                $totalTax += $tax['percentage'];
+            }
+            $resultantTaxRate = $totalTax * $price / 100;
+        }else{
+            foreach($neededTaxComponents as $neededTaxComponent){
+                $tax = $allTaxes->where('id',$neededTaxComponent['id'])->first();
+                $tempTax = ($tax['percentage'] * $price) / 100;
+                $price += $tempTax;
+                $totalTax = $tempTax;
+            }
+            $resultantTaxRate = $totalTax;
+        }
+
+        return $resultantTaxRate;
     }
 }

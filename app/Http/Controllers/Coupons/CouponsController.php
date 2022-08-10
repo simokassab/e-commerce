@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Coupons;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MainController;
+use App\Models\Coupons\Coupon;
 use Illuminate\Http\Request;
 
 class CouponsController extends MainController
@@ -83,4 +84,11 @@ class CouponsController extends MainController
     {
         //
     }
+
+    public function getCouponByCode(Request $request,$code){
+        $coupon = Coupon::where('code',$code)->first();
+        $data = $coupon->checkIfCouponIsValid($request->amount);
+        return $this->successResponse(data:$data);
+    }
+
 }

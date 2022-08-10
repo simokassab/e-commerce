@@ -22,13 +22,16 @@ use App\Models\Price\Price;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
 use App\Models\Product\ProductStatus;
+use App\Models\Settings\Setting;
 use App\Models\Tag\Tag;
 use App\Models\Tax\Tax;
+use App\Models\Tax\TaxComponent;
 use App\Models\Unit\Unit;
 use App\Services\Category\CategoryService;
 use App\Services\Product\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\Product\SelectProductorderResource;
 
 class ProductController extends MainController
 {
@@ -297,10 +300,21 @@ class ProductController extends MainController
             return $this->successResponsePaginated(ProductResource::class,Product::class,self::relations);
     }
 
+    public function getProductsForOrders(Request $request){
+        $minimumQuantity = Setting::where('title','products_minimum_and_reserved_quantity_greater_than_or_equal')->firstOrFail()->value;
+        $products = Product::with(['tax','pricesList.prices'])->where('quantity' , '>' , $minimumQuantity)->get();
+        $data['taxComponents'] = TaxComponent::all();
+        $data['tax'] = Tax::all();
+        return $this->successResponse(data:[
+            'products' => SelectProductorderResource::customCollection($products,$data),
+        ]);
+    }
+
 
 
     public function getTableHeaders(){
         return $this->successResponse('Success!',['headers' => __('headers.products') ]);
 }
+
 
 }
