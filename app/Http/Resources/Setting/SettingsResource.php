@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Setting;
 
+use App\Models\Price\Price;
 use App\Models\Settings\Setting;
 use App\Services\Setting\SettingService;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -22,17 +23,25 @@ class SettingsResource extends JsonResource
         $typesArray = [];
         $valuesArray = [];
 
-         Cache::get('settings')->map(function ($setting) use (&$idsArray,&$titlesArray,&$typesArray,&$valuesArray) {
+        Cache::get('settings')->map(function ($setting) use (&$idsArray, &$titlesArray, &$typesArray, &$valuesArray) {
             $idsArray[] = $setting->id;
             $titlesArray[] = $setting->title;
             $typesArray[] = $setting->type;
             $valuesArray[] = $setting->value;
-             });
+        });
 
-        $id= $idsArray[array_search($this->title,$titlesArray)];
-        $title= $titlesArray[array_search($this->title,$titlesArray)];
-        $type= $typesArray[array_search($this->title,$titlesArray)];
-        $value= $valuesArray[array_search($this->title,$titlesArray)];
+
+        $options = Setting::$titlesOptions[$this->title];
+        if ($this->title == 'website_pricing') {
+            $options = array_merge($options, Price::all('id','name')->toArray());
+            foreach ($options as $key => $option)
+                $options[$key]['name'] = $option['name']['en'];
+        }
+
+        $id = $idsArray[array_search($this->title, $titlesArray)];
+        $title = $titlesArray[array_search($this->title, $titlesArray)];
+        $type = $typesArray[array_search($this->title, $titlesArray)];
+        $value = $valuesArray[array_search($this->title, $titlesArray)];
 
         switch ($type) {
             case 'number':
@@ -51,10 +60,10 @@ class SettingsResource extends JsonResource
 
         return [
             'key' => $id,
-            'title'=> $title,
-            'name' => ucwords(str_replace("_"," ",$title)),
+            'title' => $title,
+            'name' => ucwords(str_replace("_", " ", $title)),
             'type' => $type,
-            'options' => Setting::$titlesOptions[$title],
+            'options' => collect($options),
             'value' => $value
         ];
     }

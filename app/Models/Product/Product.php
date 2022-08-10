@@ -26,8 +26,35 @@ class Product extends MainModel
     protected $translatable=['name','summary','specification','description','meta_title','meta_description','meta_keywords'];
     protected $table='products';
     protected $guard_name = 'web';
-    protected $guarded=[];
-    
+    protected $fillable = [
+        'name',
+        'slug',
+        'code',
+        'sku',
+        'type',
+        'quantity',
+        'reserved_quantity',
+        'summary',
+        'specification',
+        'meta_title',
+        'meta_description',
+        'meta_keyword',
+        'description',
+        'status',
+        'barcode',
+        'height',
+        'width',
+        'length',
+        'weight',
+        'is_default_child',
+        'parent_product_id',
+        'category_id',
+        'unit_id',
+        'brand_id',
+        'tax_id',
+        'products_statuses_id',
+        'is_show_related_product',
+    ];
 
     public function parent(){
         return $this->belongsTo(Product::class,'parent_product_id','id');
@@ -50,9 +77,14 @@ class Product extends MainModel
         return $this->belongsTo(Brand::class,'brand_id');
     }
 
-    public function price(){
-        return $this->belongsTo(Price::class,'price_id');
+    public function priceClass(){
+        return $this->belongsToMany(Price::class,'products_prices','product_id','price_id');
     }
+
+    public function price(){
+        return $this->hasMany(ProductPrice::class,'product_id','id');
+    }
+
 
     public function productRelatedParent(){
         return $this->belongsTo(Product::class,'parent_product_id');
@@ -96,6 +128,10 @@ class Product extends MainModel
     public function fieldValue(){
         return $this->hasMany(FieldValue::class,'field_value_id');
 
+    }
+
+    public function getPrice(){
+        return $this->price();
     }
 
 }

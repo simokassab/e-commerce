@@ -64,6 +64,15 @@ class SettingSeeder extends Seeder
                 'updated_at' => Carbon::now()->toDateString(),
 
             ],
+            [
+                'title' => "webiste_pricing",
+                'type' => 'number',
+                'value' => null,
+                'is_developer'=> 1,
+                'created_at' => Carbon::now()->toDateString(),
+                'updated_at' => Carbon::now()->toDateString(),
+
+            ],
         ]);
     }
 }
