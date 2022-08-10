@@ -382,7 +382,7 @@ class ProductService
                 'summary' => ($request->summary),
                 'specification' => ($request->specification),
                 'meta_title' => ($request->meta_title) ?? "",
-                // 'meta_keyword' => ($request->meta_keyword) ?? "",
+                'meta_keyword' => ($request->meta_keyword) ?? "",
                 'meta_description' => ($request->meta_description) ?? "",
                 'description' => ($request->description) ?? "",
                 'website_status' => $request->status,
