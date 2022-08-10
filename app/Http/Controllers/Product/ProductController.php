@@ -302,7 +302,7 @@ class ProductController extends MainController
 
     public function getProductsForOrders(Request $request){
         $minimumQuantity = Setting::where('title','products_minimum_and_reserved_quantity_greater_than_or_equal')->firstOrFail()->value;
-        $products = Product::with(['tax','pricesList.prices'])->where('quantity' , '>' , $minimumQuantity)->get();
+        $products = Product::with(['tax','pricesList.prices'])->get();
         $data['taxComponents'] = TaxComponent::all();
         $data['tax'] = Tax::all();
         return $this->successResponse(data:[
