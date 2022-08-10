@@ -23,7 +23,7 @@ use Spatie\Translatable\HasTranslations;
 class Product extends MainModel
 {
     use HasFactory,HasTranslations;
-    protected $translatable=['name','summary','specification','description','meta_title','meta_description','meta_keywords'];
+    protected $translatable=['name','summary','specification','description','meta_title','meta_description','meta_keyword'];
     protected $table='products';
     protected $guard_name = 'web';
 
