@@ -118,9 +118,13 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::apiResource('price_list',PricesListController::class);
 
     Route::post('product/all',[ProductController::class,'index']);// for search
-    Route::post('product/add',[ProductController::class,'addproduct']);// for search
+    // Route::post('product/add',[ProductController::class,'addproduct']);// for search
     Route::get('product/create',[ProductController::class,'create']);
+
     Route::get('product/get-products-for-order',[ProductController::class,'getProductsForOrders']);
+
+    Route::post('product/bundle',[ProductController::class,'getAllProductsAndPrices']);
+
     Route::apiResource('product',ProductController::class);
 
     Route::post('coupon/get-coupon-by-code/{code}',[CouponsController::class,'getCouponByCode']);

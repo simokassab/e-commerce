@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Type\Integer;
-
 class ProductPrice extends Model
 {
     use HasFactory;
@@ -29,4 +28,5 @@ class ProductPrice extends Model
 //    public function priceList(){
 //        return $this->price->priceList;
 //    }
+
 }

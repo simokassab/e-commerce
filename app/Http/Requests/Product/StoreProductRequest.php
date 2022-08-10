@@ -10,7 +10,7 @@ use Illuminate\Validation\Rule;
 
 class StoreProductRequest extends FormRequest
 {
-    private $productsRequiredSettingsArray = array();
+    private $productsRequiredSettingsArray = [];
     private $QuantityValue = 0;
     private $minimumAndReservedQuantityValue = 0;
     private $priceValue = 0;
@@ -46,10 +46,10 @@ class StoreProductRequest extends FormRequest
 
         return [
             'name' => 'required',
-            // 'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
-            'slug' => 'required | max:' . config('defaults.default_string_length') ,
-            // 'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
-            'code' => 'required | max:' . config('defaults.default_string_length'),
+            'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
+            // 'slug' => 'required | max:' . config('defaults.default_string_length') ,
+            'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
+            // 'code' => 'required | max:' . config('defaults.default_string_length'),
             'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'type' => 'required | in:' . config('defaults.validation_default_types'),
             'quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
@@ -84,7 +84,9 @@ class StoreProductRequest extends FormRequest
             'tax_id' => [Rule::when(in_array('tax_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:taxes,id'],
             'products_statuses_id' => 'required | integer | exists:products_statuses,id',
 
-            'categories.*' => 'exists:categories,id',
+            // 'categories.*' => 'nullable',
+            // 'categories.*.id' => 'exists:categories,id',
+
 
             'fields.*.field_id' => 'required | integer | exists:fields,id,entity,product',
             'fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
@@ -105,6 +107,7 @@ class StoreProductRequest extends FormRequest
 
             'related_products.*.child_product_id' => [Rule::when($request->type == 'bundle', ['required', 'integer', 'exists:products,id'])],
             'related_products.*.child_quantity' => [Rule::when($request->type == 'bundle', ['required','integer', 'gte:' . $this->QuantityValue])],
+            'name' => 'nullable',
 
             'tags.*' => 'exists:tags,id',
 
@@ -112,7 +115,6 @@ class StoreProductRequest extends FormRequest
             'order.*.sort' => 'required | integer',
 
             'product_variations'=> [Rule::when($request->type == 'variable', 'required', 'nullable')],
-            'product_variations.*.slug' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'product_variations.*.code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
             'product_variations.*.sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
 
@@ -290,6 +292,12 @@ class StoreProductRequest extends FormRequest
             'order.*.id.exists' => 'The id is not exists',
             'order.*.sort.required' => 'The sort is required',
             'order.*.sort.integer' => 'The sort should be an integer',
+
+            'product_varitations.*.code.required' => 'The code is required',
+            'product_varitations.*.code.max' => 'The code should be less than :max characters',
+            'product_varitations.*.code.string' => 'The code should be a string',
+            'product_varitations.*.code.unique' => 'The code is already exists',
+
 
         ];
     }

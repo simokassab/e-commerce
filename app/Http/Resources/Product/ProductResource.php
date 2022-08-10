@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources\Product;
 
-use App\Http\Resources\Brand\BrandResource;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Category\CategoryResource;
 
 use function PHPSTORM_META\map;
 
@@ -20,7 +18,7 @@ class ProductResource extends JsonResource
     {
 
 
-        $data[0]['name'] = $this->whenLoaded('defaultCategory')->name;
+        $data[0]['name'] = $this->whenLoaded('defaultCategory') ? $this->whenLoaded('defaultCategory')->name : "-";
         $data[0]['isMain'] = true;
         $categories = [];
         $categories = $this->whenLoaded('category')->map(
@@ -41,12 +39,14 @@ class ProductResource extends JsonResource
                 $tagsArray = [];
                 $tagsArray['name'] = $tag->name;
                 return $tagsArray;
+
             }
         );
         return [
 
             'id' => $this->id,
-            'name' => $this->getTranslation('name','en'),
+            // 'name' => $this->getTranslation('name','en'),
+            'name' => $this->name,
             'sku' => $this->sku,
             'type' => $this->type,
             'quantity' => $this->quantity,

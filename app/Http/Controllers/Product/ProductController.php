@@ -9,6 +9,7 @@ use App\Http\Resources\Category\SelectCategoryResource;
 use App\Http\Resources\Field\FieldsResource;
 use App\Http\Resources\Label\SelectLabelResource;
 use App\Http\Resources\Price\SelectPriceResource;
+use App\Http\Resources\Product\ProductBundleResource;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Product\SelectProductStatusResource;
 use App\Http\Resources\Tag\TagResource;
@@ -30,6 +31,7 @@ use App\Models\Unit\Unit;
 use App\Services\Category\CategoryService;
 use App\Services\Product\ProductService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\Product\SelectProductorderResource;
 
@@ -49,21 +51,22 @@ class ProductController extends MainController
      */
     public function index(Request $request)
     {
+
         if($request->method()=='POST'){
             $searchKeys=['id','name','sku','type','quantity','status'];
 
             $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
 
             $categoriesCount = Product::has('category')->count();
-            $tagsCount = Product::has('tags')->count();
-            $brandsCount = Product::has('brand')->count();
+            // $tagsCount = Product::has('tags')->count();
+            // $brandsCount = Product::has('brand')->count();
 
             if($categoriesCount>0)
                 $searchRelationsKeys['category'] = ['categories' => 'name'];
-            if($tagsCount>0)
-                $searchRelationsKeys['tags'] = ['tags' => 'name'];
-            if($brandsCount>0)
-                $searchRelationsKeys['brand'] = ['brands' => 'name'];
+            // if($tagsCount>0)
+            //     $searchRelationsKeys['tags'] = ['tags' => 'name'];
+            // if($brandsCount>0)
+            //     $searchRelationsKeys['brand'] = ['brands' => 'name'];
 
             return $this->getSearchPaginated(ProductResource::class, Product::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
         }
@@ -106,7 +109,7 @@ class ProductController extends MainController
 
         return $this->successResponse('Success!',[
             'prices'=>  count($PriceArray) != 0 ? $PriceArray : "-",
-            'fields'=> count($fields) != 0 ? $fields : "-",
+            'fields'=> count($fields) != 0 ? $fields : [],
             'attributes'=> count($attributes) != 0 ? $attributes : "-",
             'labels'=> count($labels) != 0 ? $labels : "-",
             'tags'=> count($tags) != 0 ? $tags : "-",
@@ -121,6 +124,26 @@ class ProductController extends MainController
 
     }
 
+    public function getAllProductsAndPrices(Request $request){
+
+        $products = Product::with('priceClass','price')
+            ->when(($request->has('product_name') && $request->product_name!=null), function($query) use ($request){
+                $value=strtolower($request->product_name);
+                $query->whereRaw('lower(name) like (?)', ["%$value%"]);
+            })
+            ->when(($request->has('category') && $request->category!=null),function($query) use ($request){
+                 $query->orWhereHas('category',function($query) use ($request){
+                     $query->where('category_id',$request->category);
+                })
+                ->orWhereHas('defaultCategory',function($query) use ($request){
+                            $query->where('categories.id',$request->category);
+                        });
+            })
+            ->whereNotIn('type',['variable','bundle'])->get();
+
+            return $this->successResponse('Success!',['products'=> ProductBundleResource::collection($products)]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -128,34 +151,39 @@ class ProductController extends MainController
      * @return \Illuminate\Http\Response
      */
 
-    public function addproduct(Request $request){
-        $product = $this->productService->createProduct($request);
-        return $product;
-    }
+    // public function addproduct(Request $request){
+    //     $product = $this->productService->createProduct($request);
+    //     return $product;
+    // }
 
 
-    public function store(Request $request)
+
+
+    public function store(StoreProductRequest $request)
     {
         // DB::beginTransaction();
         // try {
             $product = $this->productService->createProduct($request);
             $childrenIds=[];
-            // if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
-            //    $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
-            // }
-            // elseif($request->type=='bundle')
-            //     $this->productService->storeAdditionalBundle($request,$product);
+            if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
+               $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
+            }
+            if($request->type=='bundle')
+                $this->productService->storeAdditionalBundle($request,$product);
 
-            $this->productService->storeAdditionalProductData($request,$product->id,$childrenIds);
+            $this->productService->storeAdditionalProductData($request,$product,$childrenIds);
 
 
 
         // DB::commit();
-        return $this->successResponse('Success!',['product'=>$product]);
-          // return $this->successResponse( __('messages.success.create',
-            // ['name' => __(self::OBJECT_NAME)]),
-            // ['product' => new ProductResource($product)]
-            // );
+        // return $this->successResponse('Success!',['product'=>$product]);
+        //   return $this->successResponse( 'Success!',[__('messages.success.create',
+        //     ['name' => __(self::OBJECT_NAME)]),
+
+        //     ]);
+        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+        'product' =>  new ProductResource($product->load(['defaultCategory','tags','brand','category']))
+          ]);
         // return $this->successResponse( __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
         // ['product' =>  new ProductResource($product->load(['defaultCategory','brand','category','tags']))]);
 
@@ -177,7 +205,6 @@ class ProductController extends MainController
     public function show(Product $product)
     {
         return $this->successResponse(['product' =>  new ProductResource($product)]);
-
     }
 
     /**
