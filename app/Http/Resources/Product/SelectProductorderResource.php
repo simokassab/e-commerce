@@ -15,6 +15,7 @@ class SelectProductorderResource extends JsonResource
      */
     public function toArray($request)
     {
+        //change to array from data
         $priceObject = ($this->whenLoaded('pricesList')->where('price_id',1)->first());
         $price = $priceObject ? $priceObject->price : 0;
         //change to code instead of queries just pass an array of the elements, transform them to a collection and simply use the where function
