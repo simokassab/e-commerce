@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Orders;
 use App\Http\Controllers\MainController;
 use App\Http\Resources\Country\SelectContryResource;
 use App\Http\Resources\Customers\SelectCustomerResource;
+use App\Http\Resources\Orders\SingelOrdersResource;
 use App\Models\Country\Country;
+use App\Models\Currency\CurrencyHistory;
 use App\Models\Orders\OrderStatus;
 use App\Models\Price\Price;
 use App\Models\User\Customer;
@@ -89,34 +91,55 @@ class OrdersController extends MainController
     public function store(Request $request)
     {
         DB::beginTransaction();
-
         try {
-        $order = new Order();
-        $order->customer_id = $request->client_id;
-//        $order->time = Carbon::now()->format('H:i:s');
-        $order->time = $request->time;
-        $order->customer_comment = $request->customer_comment;
-        $order->order_status_id = $request->order_status_id;
-        $order->prefix = $request->prefix;
-        $currencyRate = Price::findOrFail($request->price_class)->currency->currencyHistory->last()->rate;
-        $order->currency_rate = $currencyRate;
-        $order->coupon_id = $request->coupon_id;
-        $products = $request->selected_products;
+            $order = new Order();
+            $order->customer_id = $request->client_id;
+//            $order->time = Carbon::now()->format('H:i:s');
+            $order->time = $request->time;
+            $order->customer_comment = $request->customer_comment;
+            $order->order_status_id = $request->order_status_id;
+            $order->prefix = $request->prefix;
+            $order->currency_rate = CurrencyHistory::query()->where('currency_id',1)->latest()->first()->rate;
+            $order->coupon_id = $request->coupon_id;
+            $products = $request->selected_products;
+            $order->shipping_first_name = $request->shipping['shipping_first_name'];
+            $order->shipping_last_name = $request->shipping['shipping_last_name'];
+            $order->shipping_address_one = $request->shipping['shipping_address_one'];
+            $order->shipping_address_two = $request->shipping['shipping_address_two'];
+            $order->shipping_country_id = $request->shipping['shipping_country_id'];
+            $order->shipping_email = $request->shipping['shipping_email'];
+            $order->shipping_phone_number = $request->shipping['shipping_phone_number'];
+            $order->payment_method_id = $request->shipping['payment_method_id'];
 
-        OrdersService::calculateTotalOrderPrice($products,$order);
-        $order->save();
 
-        DB::commit();
+            $order->billing_first_name = $request->billing['billing_first_name'];
+            $order->billing_last_name = $request->billing['billing_last_name'];
+            $order->billing_address_one = $request->billing['billing_address_one'];
+            $order->billing_address_two = $request->billing['billing_address_two'];
+            $order->billing_city = $request->billing['billing_city'];
+            $order->billing_country_id = $request->billing['billing_country_id'];
+            $order->billing_email = $request->billing['billing_email'];
+            $order->billing_phone_number = $request->billing['billing_phone_number'];
+            $order->billing_first_name = $request->billing['billing_first_name'];
+            $order->billing_customer_notes = $request->billing['billing_customer_notes'];
 
+            $order->save();
 
-        return $this->successResponse('The order has been created successfully !', [
-            'order' => $order
-        ]);
+            OrdersService::calculateTotalOrderPrice($products,$order);
+            $order->save();
+
+            DB::commit();
+
+            return $this->successResponse('The order has been created successfully !', [
+                'order' => new SingelOrdersResource($order->load(['status','coupon','products']))
+            ]);
 
         }catch (\Exception $exception){
-            dd($exception);
             DB::rollBack();
-            return $this->errorResponse('The Order has not been created correctly!');
+            return $this->errorResponse('The Order has not been created successfully!' . 'error message: '. $exception);
+        }catch (\Error $error){
+            DB::rollBack();
+            return $this->errorResponse('The Order has not been created successfully!' . 'error message: '. $error);
         }
 
     }

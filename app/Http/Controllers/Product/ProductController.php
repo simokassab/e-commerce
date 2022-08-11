@@ -33,7 +33,7 @@ use App\Services\Product\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use App\Http\Resources\Product\SelectProductorderResource;
+use App\Http\Resources\Product\SelectProductOrderResource;
 
 class ProductController extends MainController
 {
@@ -333,7 +333,7 @@ class ProductController extends MainController
         $data['taxComponents'] = TaxComponent::all();
         $data['tax'] = Tax::all();
         return $this->successResponse(data:[
-            'products' => SelectProductorderResource::customCollection($products,$data),
+            'products' => SelectProductOrderResource::customCollection($products,$data),
         ]);
     }
 

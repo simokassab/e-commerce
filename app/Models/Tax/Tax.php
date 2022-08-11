@@ -2,6 +2,7 @@
 
 namespace App\Models\Tax;
 
+use App\Models\Price\Price;
 use App\Models\Tax\TaxComponent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
@@ -34,7 +35,7 @@ class Tax extends MainModel
         return $this->hasMany(Brand::class,'brand_id');
     }
 
-    public function getComplexPrice($price,array $allTaxComponents = [],$allTaxes = []) :float{
+    public function getComplexPrice( $price,array $allTaxComponents = [],$allTaxes = []) :float{
 
         $allTaxComponents = count($allTaxComponents) != 0 ? $allTaxComponents : TaxComponent::all()->toArray();
         $allTaxes = count($allTaxes) != 0 ? $allTaxes : Tax::all()->toArray();

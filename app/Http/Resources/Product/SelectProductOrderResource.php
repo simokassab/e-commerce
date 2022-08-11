@@ -4,7 +4,7 @@ namespace App\Http\Resources\Product;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SelectProductorderResource extends JsonResource
+class SelectProductOrderResource extends JsonResource
 {
     private static $data = [];
     /**
