@@ -83,8 +83,12 @@ class CategoryController extends MainController
             if($request->icon){
                 $category->icon= $this->imageUpload($request->file('icon'),config('images_paths.category.icons'));
             }
-
-            $category->parent_id= $request->parent_id;
+            if($request->parent_id == 'null'){
+                $category->parent_id=null;
+            }else{
+                $category->parent_id= $request->parent_id;
+            }
+            // $category->parent_id= $request->parent_id;
             $category->slug= $request->slug;
 
             if( gettype($request->meta_title) != 'array'){
