@@ -75,7 +75,7 @@ class FieldsController extends MainController
              FieldService::addFieldValuesToField($request->field_values,$field);
           }
 
-        //   DB::commit();
+          DB::commit();
           return $this->successResponse(
             __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             [
