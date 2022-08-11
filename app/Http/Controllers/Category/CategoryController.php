@@ -67,8 +67,9 @@ class CategoryController extends MainController
      */
     public function store(StoreCategoryRequest $request)
     {
-        // DB::beginTransaction();
-        // try {
+
+        DB::beginTransaction();
+        try {
             $category=new Category();
             if( gettype($request->name) != 'array'){
                 $category->name =(array)json_decode($request->name);
@@ -87,7 +88,6 @@ class CategoryController extends MainController
             }else{
                 $category->parent_id= $request->parent_id;
             }
-            // $category->parent_id= $request->parent_id;
             $category->slug= $request->slug;
 
             if( gettype($request->meta_title) != 'array'){
@@ -133,18 +133,18 @@ class CategoryController extends MainController
                 CategoryService::addLabelsToCategory($category,$request->labels);
             }
 
-            // DB::commit();
+            DB::commit();
             return $this->successResponse(
                 __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
                 [
                     'category' => new SingleCategoryResource($category->load(['fieldValue','label','parent']))
                 ]
             );
-        // } catch (\Exception $e) {
-        //     DB::rollBack();
-        //     return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) . ' error message: '.$e );
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) . ' error message: '.$e );
 
-        //     }
+            }
      }
 
 
@@ -191,24 +191,24 @@ class CategoryController extends MainController
 
             CategoryService::deleteRelatedCategoryFieldsAndLabels($category);
 
+            $category=new Category();
             if( gettype($request->name) != 'array'){
                 $category->name =(array)json_decode($request->name);
             }else{
                 $category->name = $request->name;
             }
+            $category->code= 0;
             if($request->image){
                 $category->image= $this->imageUpload($request->file('image'),config('images_paths.category.images'));
             }
             if($request->icon){
                 $category->icon= $this->imageUpload($request->file('icon'),config('images_paths.category.icons'));
             }
-
             if($request->parent_id == 'null'){
                 $category->parent_id=null;
             }else{
                 $category->parent_id= $request->parent_id;
             }
-
             $category->slug= $request->slug;
 
             if( gettype($request->meta_title) != 'array'){
@@ -236,12 +236,14 @@ class CategoryController extends MainController
             }
 
             $category->save();
+            $category->code= $category->id;
+            $category->save();
 
-            if($request->has('fields') && $request->fields->count() > 0){
+            if($request->has('fields')){
                 CategoryService::addFieldsToCategory($category,$request->fields);
             }
 
-            if ($request->has('labels') && $request->labels->count() > 0) {
+            if ($request->has('labels')) {
                 $oldLabel = $request->labels;
                 if(gettype($request->labels) == 'string'){
                     $request->labels = explode(",",$request->labels);
@@ -256,14 +258,14 @@ class CategoryController extends MainController
             return $this->successResponse(
                 __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
                 [
-                    'category' => new SingleCategoryResource($category->load(['label','fieldValue','brand']))
+                    'category' => new SingleCategoryResource($category->load(['fieldValue','label','parent']))
                 ]
             );
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse( __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) . ' error: '.$e );
+            return $this->errorResponse( __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) . ' error message: '.$e );
 
-        }
+            }
 
 
     }
