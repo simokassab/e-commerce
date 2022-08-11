@@ -17,17 +17,17 @@ class SingleTaxResource extends JsonResource
     {
         $taxComponent=$this->whenLoaded('taxComponents')->pluck('component_tax_id');
 
-        $languages = Language::all()->pluck('code');
+        // $languages = Language::all()->pluck('code');
 
-        $nameTranslatable = [];
+        // $nameTranslatable = [];
 
-        foreach ($languages as $language){
-            $nameTranslatable[$language] = $this->getTranslation('name',$language);
-        }
+        // foreach ($languages as $language){
+        //     $nameTranslatable[$language] = $this->getTranslation('name',$language);
+        // }
 
         return[
             'id' => $this->id,
-            'name' => $nameTranslatable,
+            'name' => $this->getTranslations('name'),
             'is_complex' => (boolean)$this->is_complex,
             'percentage' => $this->percentage,
             'complex_behavior' => $this->complex_behavior,

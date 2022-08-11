@@ -15,17 +15,17 @@ class SinglePriceResource extends JsonResource
      */
     public function toArray($request)
     {
-        $languages = Language::all()->pluck('code');
+        // $languages = Language::all()->pluck('code');
 
-        $nameTranslatable = [];
+        // $nameTranslatable = [];
 
-        foreach ($languages as $language){
-            $nameTranslatable[$language] = $this->getTranslation('name',$language);
-        }
+        // foreach ($languages as $language){
+        //     $nameTranslatable[$language] = $this->getTranslation('name',$language);
+        // }
 
         return [
             'id' => $this->id,
-            'name' => $nameTranslatable,
+            'name' => $this->getTranslations('name'),
             'is_virtual' => (bool)$this->is_virtual,
             'currency_id' => $this->whenLoaded('currency')->id ,
             'original_price_id' => ($this->whenLoaded('originalPrice')->id) ?? '',

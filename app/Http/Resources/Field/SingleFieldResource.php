@@ -17,16 +17,16 @@ class SingleFieldResource extends JsonResource
     {
         $fieldValues=$this->whenLoaded('fieldValue');
 
-        $languages = Language::all()->pluck('code');
-        $translatable = [];
+        // $languages = Language::all()->pluck('code');
+        // $translatable = [];
 
-        foreach ($languages as $language){
-            $nameTranslatable[$language] = $this->getTranslation('title',$language);
-        }
+        // foreach ($languages as $language){
+        //     $nameTranslatable[$language] = $this->getTranslation('title',$language);
+        // }
 
         return [
             'id' =>$this->id,
-            'title'=> $nameTranslatable,
+            'title'=> $this->getTranslations('title'),
             'type'=> $this->type,
             'entity'=> $this->entity,
             'is_required'=> (bool)$this->is_required,

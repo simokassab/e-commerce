@@ -16,17 +16,17 @@ class SingleUnitResource extends JsonResource
      */
     public function toArray($request)
     {
-        $languages = Language::all()->pluck('code');
+        // $languages = Language::all()->pluck('code');
 
-        $translatable = [];
+        // $translatable = [];
 
-        foreach ($languages as $language){
-            $translatable[$language] = $this->getTranslation('name',$language);
-        }
+        // foreach ($languages as $language){
+        //     $translatable[$language] = $this->getTranslation('name',$language);
+        // }
 
         return [
             'id' => $this->id,
-            'name' => $translatable,
+            'name' => $this->getTranslations('name'),
             'code' => $this->code
         ];
     }
