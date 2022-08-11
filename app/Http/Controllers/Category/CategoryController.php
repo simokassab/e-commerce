@@ -191,7 +191,6 @@ class CategoryController extends MainController
 
             CategoryService::deleteRelatedCategoryFieldsAndLabels($category);
 
-            $category=new Category();
             if( gettype($request->name) != 'array'){
                 $category->name =(array)json_decode($request->name);
             }else{
