@@ -67,8 +67,8 @@ class CategoryController extends MainController
      */
     public function store(StoreCategoryRequest $request)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             $category=new Category();
             if( gettype($request->name) != 'array'){
                 $category->name =(array)json_decode($request->name);
@@ -133,18 +133,18 @@ class CategoryController extends MainController
                 CategoryService::addLabelsToCategory($category,$request->labels);
             }
 
-            DB::commit();
+            // DB::commit();
             return $this->successResponse(
                 __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
                 [
                     'category' => new SingleCategoryResource($category->load(['fieldValue','label','parent']))
                 ]
             );
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) . ' error message: '.$e );
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) . ' error message: '.$e );
 
-            }
+        //     }
      }
 
 
