@@ -18,11 +18,35 @@ class SingelOrdersResource extends JsonResource
 
             "client_id" => $this->customer_id,
             "time" => $this->time,
-            "customer_comment" => $this->customer_comment,
-            "order_status_id" => $this->order_status_id,
+            "date" => $this->date,
+            "comment" => $this->customer_comment,
+            "status_id" => $this->order_status_id,
             "prefix" => $this->prefix,
-            "coupon" => $this->coupon_id,
-//            "selected_products" => ($this->whenLoaded('')),
+            "coupon_code" => $this->whenLoaded('coupon') ? $this->whenLoaded('coupon')->code : '',
+            "selected_products" => ($this->whenLoaded('products')),
+            "billing" => [
+                "first_name" => "mohammad",
+                "last_name" => "azzam",
+                "company_name" => "MTX",
+                "address_1" => "hellaye",
+                "address_2" => "abra",
+                "city" => "Saida",
+                "country_id" => 1,
+                "phone_number" => "96176023035",
+                "email_address" => "azzam@gmail.com",
+                "payment_method_id" => 1
+            ],
+            "shipping" => [
+                "first_name" => "mohammad",
+                "last_name" => "azzam",
+                "company_name" => "MTX",
+                "address_1" => "hellaye",
+                "address_2" => "abra",
+                "city" => "Saida",
+                "country_id" => 1,
+                "phone_number" => "96176023035",
+                "email_address" => "azzam@gmail.com"
+            ]
 
 
 

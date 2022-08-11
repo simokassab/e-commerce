@@ -106,11 +106,10 @@ class OrdersController extends MainController
             }
             $order->currency_rate = CurrencyHistory::query()->where('currency_id',1)->latest()->first()->rate;
 
-            $coupon = Coupon::where('code'.$request->code)->first();
+            $coupon = Coupon::where('code', $request->coupon_code)->first();
             if(is_null($coupon)){
                 throw new \Exception();
             }
-
             $order->coupon_id = $coupon->id;
             $products = $request->selected_products;
             $order->shipping_first_name = $request->shipping['first_name'];
@@ -118,17 +117,18 @@ class OrdersController extends MainController
             $order->shipping_address_one = $request->shipping['address_1'];
             $order->shipping_address_two = $request->shipping['address_2'];
             $order->shipping_country_id = $request->shipping['country_id'];
-            $order->city = $request->shipping['city'];
+            $order->shipping_city = $request->shipping['city'];
             $order->shipping_company_name = $request->shipping['company_name'];
             $order->shipping_email = $request->shipping['email_address'];
             $order->shipping_phone_number = $request->shipping['phone_number'];
+            $order->prefix ='0';
 
 
             $order->billing_first_name = $request->billing['first_name'];
             $order->billing_last_name = $request->billing['last_name'];
             $order->billing_company_name = $request->billing['company_name'];
-            $order->billing_address_one = $request->billing['address_one'];
-            $order->billing_address_two = $request->billing['address_two'];
+            $order->billing_address_one = $request->billing['address_1'];
+            $order->billing_address_two = $request->billing['address_2'];
             $order->billing_city = $request->billing['city'];
             $order->billing_country_id = $request->billing['country_id'];
             $order->billing_email = $request->billing['email_address'];
@@ -148,6 +148,7 @@ class OrdersController extends MainController
             ]);
 
         }catch (\Exception $exception){
+            dd($exception);
             DB::rollBack();
             return $this->errorResponse('The Order has not been created successfully!' . 'error message: '. $exception);
         }catch (\Error $error){

@@ -56,9 +56,7 @@ class OrdersService {
 
         $coupon = Coupon::query()
             ->where('id', $order->coupon_id ?? 0)
-            ->whereDate('expiry_date','<' ,today())
             ->first();
-
 
         $order->discount_percentage = $coupon->discount_percentage;
         $order->discount_amount = $coupon->discount_amount;
