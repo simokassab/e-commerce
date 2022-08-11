@@ -26,8 +26,10 @@ class CategoryService {
 
     }
 
-    public static function addFieldsToCategory(Category $category, array $fields)
+    public static function addFieldsToCategory(Category $category, array $fields = [])
     {
+        $fields = $fields ? $fields : [];
+
         $tobeSavedArray = [];
         foreach ($fields as $key => $field) {
 
@@ -63,7 +65,9 @@ class CategoryService {
         return CategoriesFields::insert($tobeSavedArray);
     }
 
-    public static function addLabelsToCategory(Category $category, array $labels){
+    public static function addLabelsToCategory(Category $category, array $labels=[]){
+        $labels = $labels ? $labels : [];
+
         $labelsArray=[];
         if(count($labels) <= 0){
             return true;
