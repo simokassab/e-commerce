@@ -30,7 +30,8 @@ class SingleFieldResource extends JsonResource
             'type'=> $this->type,
             'entity'=> $this->entity,
             'is_required'=> (bool)$this->is_required,
-            'field_values' => FieldResourceEntity::collection($fieldValues)
+            'field_values' => FieldResourceEntity::collection($fieldValues),
+            'is_attribute'=> (bool)$this->is_attribute,
         ];
     }
 }
