@@ -184,7 +184,7 @@ class CategoryController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Category $category)
+    public function update(StoreCategoryRequest $request, Category $category)
     {
         DB::beginTransaction();
         try {
