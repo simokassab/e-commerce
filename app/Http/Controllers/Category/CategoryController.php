@@ -67,6 +67,7 @@ class CategoryController extends MainController
      */
     public function store(StoreCategoryRequest $request)
     {
+        dd($request->toArray());
         DB::beginTransaction();
         try {
             $category=new Category();
