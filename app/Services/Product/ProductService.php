@@ -411,13 +411,12 @@ class ProductService
         }
     }
 
-    public function createProduct($request)
+    public function createAndUpdateProduct($request,$product=null)
     {
         DB::beginTransaction();
         try {
             //$request=(object)$request;
-
-            $product = new Product();
+            $product= $product ?  $product : new Product();
             $product->name = ($request->name);
             $product->slug = $request->slug;
             $product->code = $request->code;
