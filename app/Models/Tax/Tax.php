@@ -47,12 +47,18 @@ class Tax extends MainModel
         if($this->complex_behavior == 'combine'){
             foreach($neededTaxComponents as $neededTaxComponent){
                 $tax = $allTaxes->where('id',$neededTaxComponent['id'])->first();
+                if(is_null($tax)){
+                    continue;
+                }
                 $totalTax += $tax['percentage'];
             }
             $resultantTaxRate = $totalTax * $price / 100;
         }else{
             foreach($neededTaxComponents as $neededTaxComponent){
                 $tax = $allTaxes->where('id',$neededTaxComponent['id'])->first();
+                if(is_null($tax)){
+                    continue;
+                }
                 $tempTax = ($tax['percentage'] * $price) / 100;
                 $price += $tempTax;
                 $totalTax = $tempTax;
