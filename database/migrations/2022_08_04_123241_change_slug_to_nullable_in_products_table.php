@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->string('slug')->nullable()->change();
+            $table->string('slug')->nullable()->unique()->change();
         });
     }
 
@@ -26,8 +26,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('slug');
-
+            $table->dropIndex(['products_slug_unique']);
+            $table->string('slug')->nullable()->change();
         });
     }
 };

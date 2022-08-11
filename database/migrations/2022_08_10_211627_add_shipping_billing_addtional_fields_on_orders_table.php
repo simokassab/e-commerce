@@ -20,14 +20,17 @@ return new class extends Migration
             $table->text('shipping_address_one')->nullable();
             $table->text('shipping_address_two')->nullable();
             $table->string('shipping_city')->nullable();
+            $table->string('shipping_company_name')->nullable();
             $table->unsignedBigInteger('shipping_country_id')->nullable();
             $table->string('shipping_email')->nullable();
+            $table->date('date')->nullable();
             $table->string('shipping_phone_number')->nullable();
             $table->unsignedBigInteger('payment_method_id')->nullable();
 
             $table->string('billing_first_name')->nullable();
             $table->string('billing_last_name')->nullable();
             $table->text('billing_address_one')->nullable();
+            $table->string('billing_company_name')->nullable();
             $table->text('billing_address_two')->nullable();
             $table->string('billing_city')->nullable();
             $table->unsignedBigInteger('billing_country_id')->nullable();

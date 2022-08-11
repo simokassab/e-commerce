@@ -7,6 +7,8 @@ use App\Http\Resources\Country\SelectContryResource;
 use App\Http\Resources\Customers\SelectCustomerResource;
 use App\Http\Resources\Orders\SingelOrdersResource;
 use App\Models\Country\Country;
+use App\Models\Coupons\Coupon;
+use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyHistory;
 use App\Models\Orders\OrderStatus;
 use App\Models\Price\Price;
@@ -96,34 +98,45 @@ class OrdersController extends MainController
             $order->customer_id = $request->client_id;
 //            $order->time = Carbon::now()->format('H:i:s');
             $order->time = $request->time;
-            $order->customer_comment = $request->customer_comment;
-            $order->order_status_id = $request->order_status_id;
-            $order->prefix = $request->prefix;
+            $order->customer_comment = $request->comment;
+            $order->order_status_id = $request->status_id;
+            $defaultCurrency = Currency::where('is_default',1)->first();
+            if(is_null($defaultCurrency)){
+                throw new \Exception();
+            }
             $order->currency_rate = CurrencyHistory::query()->where('currency_id',1)->latest()->first()->rate;
-            $order->coupon_id = $request->coupon_id;
+
+            $coupon = Coupon::where('code'.$request->code)->first();
+            if(is_null($coupon)){
+                throw new \Exception();
+            }
+
+            $order->coupon_id = $coupon->id;
             $products = $request->selected_products;
-            $order->shipping_first_name = $request->shipping['shipping_first_name'];
-            $order->shipping_last_name = $request->shipping['shipping_last_name'];
-            $order->shipping_address_one = $request->shipping['shipping_address_one'];
-            $order->shipping_address_two = $request->shipping['shipping_address_two'];
-            $order->shipping_country_id = $request->shipping['shipping_country_id'];
-            $order->shipping_email = $request->shipping['shipping_email'];
-            $order->shipping_phone_number = $request->shipping['shipping_phone_number'];
-            $order->payment_method_id = $request->shipping['payment_method_id'];
+            $order->shipping_first_name = $request->shipping['first_name'];
+            $order->shipping_last_name = $request->shipping['last_name'];
+            $order->shipping_address_one = $request->shipping['address_1'];
+            $order->shipping_address_two = $request->shipping['address_2'];
+            $order->shipping_country_id = $request->shipping['country_id'];
+            $order->city = $request->shipping['city'];
+            $order->shipping_company_name = $request->shipping['company_name'];
+            $order->shipping_email = $request->shipping['email_address'];
+            $order->shipping_phone_number = $request->shipping['phone_number'];
 
 
-            $order->billing_first_name = $request->billing['billing_first_name'];
-            $order->billing_last_name = $request->billing['billing_last_name'];
-            $order->billing_address_one = $request->billing['billing_address_one'];
-            $order->billing_address_two = $request->billing['billing_address_two'];
-            $order->billing_city = $request->billing['billing_city'];
-            $order->billing_country_id = $request->billing['billing_country_id'];
-            $order->billing_email = $request->billing['billing_email'];
-            $order->billing_phone_number = $request->billing['billing_phone_number'];
-            $order->billing_first_name = $request->billing['billing_first_name'];
-            $order->billing_customer_notes = $request->billing['billing_customer_notes'];
+            $order->billing_first_name = $request->billing['first_name'];
+            $order->billing_last_name = $request->billing['last_name'];
+            $order->billing_company_name = $request->billing['company_name'];
+            $order->billing_address_one = $request->billing['address_one'];
+            $order->billing_address_two = $request->billing['address_two'];
+            $order->billing_city = $request->billing['city'];
+            $order->billing_country_id = $request->billing['country_id'];
+            $order->billing_email = $request->billing['email_address'];
+            $order->billing_phone_number = $request->billing['phone_number'];
+            $order->payment_method_id = $request->billing['payment_method_id'];
 
             $order->save();
+            $order->prefix = 'order' . $order->id;
 
             OrdersService::calculateTotalOrderPrice($products,$order);
             $order->save();

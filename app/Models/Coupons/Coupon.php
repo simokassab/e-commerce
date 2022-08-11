@@ -25,7 +25,6 @@ class Coupon extends Model
                 'amount' => 0,
                 'minimum_amount' => $this->min_amount,
                 'is_discount_on_shipping' => (boolean)$isDiscountOnShipping
-
             ];
         }
 
@@ -37,8 +36,6 @@ class Coupon extends Model
                 'amount' => 0,
                 'minimum_amount' => $this->min_amount,
                 'is_discount_on_shipping' => (boolean)$isDiscountOnShipping
-
-
             ];
         }
         if(!is_null($amount)){
@@ -50,7 +47,6 @@ class Coupon extends Model
                     'amount' => 0,
                     'minimum_amount' => $this->min_amount,
                     'is_discount_on_shipping' => (boolean)$isDiscountOnShipping
-
                 ];
             }
         }
@@ -62,8 +58,6 @@ class Coupon extends Model
             'percentage' => $this->discount_percentage,
             'minimum_amount' => $this->min_amount,
             'is_discount_on_shipping' => (boolean)$isDiscountOnShipping
-
-
         ];
 
     }
