@@ -565,6 +565,44 @@ return [
 
 
     ],
+    'orders' => [
+        'id' => [
+            'name' => 'Code',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'customer_first_name' => [
+            'name' => 'Customer First Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => false
+        ],
+        'customer_last_name' => [
+            'name' => 'Customer Last Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => false
+        ],
+        'time' => [
+            'name' => 'Time',
+            'search' => 'time',
+            'type' => 'time',
+            'sort' => false
+        ],
+        'date' => [
+            'name' => 'Date',
+            'search' => 'date',
+            'type' => 'date',
+            'sort' => false
+        ],
+        'total' => [
+            'name' => 'Total',
+            'search' => 'double',
+            'type' => 'double',
+            'sort' => false
+        ]
+    ]
     
 
     

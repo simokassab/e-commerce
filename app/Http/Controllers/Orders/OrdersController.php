@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Orders;
 use App\Http\Controllers\MainController;
 use App\Http\Resources\Country\SelectContryResource;
 use App\Http\Resources\Customers\SelectCustomerResource;
+use App\Http\Resources\Orders\OrderResource;
 use App\Http\Resources\Orders\SingelOrdersResource;
 use App\Http\Resources\roles\RolesResource;
 use App\Models\Country\Country;
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\DB;
 class OrdersController extends MainController
 {
     const OBJECT_NAME = 'objects.role';
-    const relations =['parent'];
+    const relations =['customer'];
     /**
      * Display a listing of the resource.
      *
@@ -35,13 +36,12 @@ class OrdersController extends MainController
     {
 
         if ($request->method()=='POST') {
-
             $searchKeys=['code','time','date','total'];
             $searchRelationsKeys = ['customer' => ['customer_first_name' => 'first_name', 'customer_last_name' => 'last_name'] ];
-            return $this->getSearchPaginated(RolesResource::class, Customer::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
+            return $this->getSearchPaginated(OrderResource::class, Order::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
         }
 
-        return $this->successResponsePaginated(RolesResource::class,Customer::class,self::relations);
+        return $this->successResponsePaginated(OrderResource::class,Order::class,self::relations);
     }
 
     /**
@@ -211,5 +211,9 @@ class OrdersController extends MainController
     public function destroy($id)
     {
         //
+    }
+
+    public function getTableHeaders(){
+        return $this->successResponse('Success!', ['headers' => __('headers.orders') ]);
     }
 }

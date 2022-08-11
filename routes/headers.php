@@ -21,7 +21,7 @@ use App\Http\Controllers\Users\UsersController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Prices\PricesController;
 use App\Http\Controllers\Product\ProductController;
-
+use \App\Http\Controllers\Orders\OrdersController;
 
 
 Route::get('brands',[BrandController::class,'getTableHeaders']);
@@ -42,6 +42,7 @@ Route::get('units',[UnitController::class,'getTableHeaders']);
 Route::get('users',[UsersController::class,'getTableHeaders']);
 Route::get('settings',[SettingsController::class,'getTableHeaders']);
 Route::get('products',[ProductController::class,'getTableHeaders']);
+Route::get('orders',[OrdersController::class,'getTableHeaders']);
 
 
 
