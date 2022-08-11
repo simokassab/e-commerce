@@ -26,7 +26,7 @@ class StoreCategoryRequest extends FormRequest
     public function rules(Request $request)
     {
         if($request->image=='undefined'){
-            $request->image=null;
+            $request->image="";
         }
         return [
 
