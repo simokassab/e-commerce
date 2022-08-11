@@ -14,8 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
+            if(Schema::hasColumn('products','status')){
             $table->dropColumn('status');
-            $table->enum('website_status',['draft','published','pending_review'])->default('draft');
+            }
+            if(!Schema::hasColumn('products','website_status')){
+                $table->enum('website_status',['draft','published','pending_review'])->default('draft');
+            }
 
         });
     }
