@@ -26,33 +26,33 @@ class SingleCategoryResource extends JsonResource
         $fieldsValues = $this->whenLoaded('fieldValue');
 
 
-        $languages = Language::all()->pluck('code');
-        $nameTranslatable = [];
-        $metaTitleTranslatable = [];
-        $metaDescriptionTranslatable = [];
-        $metaKeyWordTranslatable = [];
-        $descriptionTranslatable = [];
+        // $languages = Language::all()->pluck('code');
+        // $nameTranslatable = [];
+        // $metaTitleTranslatable = [];
+        // $metaDescriptionTranslatable = [];
+        // $metaKeyWordTranslatable = [];
+        // $descriptionTranslatable = [];
 
-        foreach ($languages as $language){
-            $nameTranslatable[$language] = $this->getTranslation('name',$language);
-            $metaTitleTranslatable[$language] = $this->getTranslation('meta_title',$language);
-            $metaDescriptionTranslatable[$language] = $this->getTranslation('meta_description',$language);
-            $metaKeyWordTranslatable[$language] = $this->getTranslation('meta_keyword',$language);
-            $descriptionTranslatable[$language] = $this->getTranslation('description',$language);
-        }
+        // foreach ($languages as $language){
+        //     $nameTranslatable[$language] = $this->getTranslation('name',$language);
+        //     $metaTitleTranslatable[$language] = $this->getTranslation('meta_title',$language);
+        //     $metaDescriptionTranslatable[$language] = $this->getTranslation('meta_description',$language);
+        //     $metaKeyWordTranslatable[$language] = $this->getTranslation('meta_keyword',$language);
+        //     $descriptionTranslatable[$language] = $this->getTranslation('description',$language);
+        // }
 
         return [
             'id' => $this->id,
-            'name' => $nameTranslatable,
+            'name' => $this->getTranslations('name'),
             'code' => $this->code,
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
             'icon'=> $this->icon && !empty($this->icon) ?  getAssetsLink('storage/'.$this->icon): 'default_icon' ,
             'slug' => $this->slug,
             'parent_id' => $this->parent_id,
-            'meta_title' => $metaTitleTranslatable,
-            'meta_description' => $metaDescriptionTranslatable,
-            'meta_keyword' => $metaKeyWordTranslatable,
-            'description' => $descriptionTranslatable,
+            'meta_title' =>  $this->getTranslations('meta_title'),
+            'meta_description' => $this->getTranslations('meta_description'),
+            'meta_keyword' => $this->getTranslations('meta_keyword'),
+            'description' => $this->getTranslations('description'),
             'labels' => $labels,
             'fields' => FieldResourceEntity::collection($fieldsValues),
             'brands' => new CategoryResource($this->whenLoaded('brands')),

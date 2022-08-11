@@ -16,15 +16,15 @@ class SingleLableResource extends JsonResource
     public function toArray($request)
     {
 
-        $languages = Language::all()->pluck('code');
-        $titleTranslatable = [];
+        // $languages = Language::all()->pluck('code');
+        // $titleTranslatable = [];
 
-        foreach ($languages as $language){
-            $titleTranslatable[$language] = $this->getTranslation('title',$language);
-        }
+        // foreach ($languages as $language){
+        //     $titleTranslatable[$language] = $this->getTranslation('title',$language);
+        // }
         return [
             'id' => $this->id,
-            'title' => $titleTranslatable,
+            'title' => $this->getTranslations('title'),
             'entity' => $this->entity,
             'color' => $this->color,
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image) : 'default_image' ,

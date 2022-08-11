@@ -15,17 +15,17 @@ class SingleLanguageResource extends JsonResource
      */
     public function toArray($request)
     {
-        $languages = Language::all()->pluck('code');
-        $nameTranslatable = [];
+        // $languages = Language::all()->pluck('code');
+        // $nameTranslatable = [];
 
-        foreach ($languages as $language){
-            $nameTranslatable[$language] = $this->getTranslation('name',$language);
-        }
+        // foreach ($languages as $language){
+        //     $nameTranslatable[$language] = $this->getTranslation('name',$language);
+        // }
 
 
         return [
             'id' => $this->id,
-            'name' => $nameTranslatable,
+            'name' => $this->getTranslations('name'),
             'code' => $this->code,
             'is_default' => (bool)$this->is_default,
             'is_disabled' => (bool)$this->is_disabled,

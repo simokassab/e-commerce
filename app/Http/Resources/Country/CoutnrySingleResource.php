@@ -15,15 +15,15 @@ class CoutnrySingleResource extends JsonResource
      */
     public function toArray($request)
     {
-        $languages = Language::all()->pluck('code');
-        $translatable = [];
-        foreach ($languages as $language){
-            $nameTranslatable[$language] = $this->getTranslation('name',$language);
-        }
+        // $languages = Language::all()->pluck('code');
+        // $translatable = [];
+        // foreach ($languages as $language){
+        //     $nameTranslatable[$language] = $this->getTranslation('name',$language);
+        // }
 
         return [
             'id' => $this->id,
-            'name'=> $nameTranslatable,
+            'name'=> $this->getTranslations('name'),
             'iso_code_1'=>$this->iso_code_1,
             'iso_code_2'=>$this->iso_code_2,
             'phone_code'=>$this->phone_code,

@@ -18,18 +18,18 @@ class SingleCurrencyResource extends JsonResource
 
 
         $currency_history=$this->whenLoaded('currencyHistory');
-        $languages = Language::all()->pluck('code');
-        $nameTranslatable = [];
+        // $languages = Language::all()->pluck('code');
+        // $nameTranslatable = [];
 
-        foreach ($languages as $language){
-            $nameTranslatable[$language] = $this->getTranslation('name',$language);
-        }
+        // foreach ($languages as $language){
+        //     $nameTranslatable[$language] = $this->getTranslation('name',$language);
+        // }
 
 
         $currencyHistory=$this->whenLoaded('currencyHistory');
         return [
             'id' => $this->id,
-            'name'=>$nameTranslatable,
+            'name'=>$this->getTranslations('name'),
             'title'=>$this->code . ' - ' . $this->symbol,
             'code' => $this->code,
             'symbol'=>$this->symbol,
