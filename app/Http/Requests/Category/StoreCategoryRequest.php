@@ -6,7 +6,7 @@ use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
-class StoreCategoryRequest extends FormRequest
+class StoreCategoryRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +23,9 @@ class StoreCategoryRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(Request $request)
+    public function rules()
     {
-        if($request->image=='undefined'){
-            $request->image="";
-        }
+
         return [
 
             'name' => 'required',
