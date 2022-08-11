@@ -41,16 +41,18 @@ class Coupon extends Model
 
             ];
         }
-        if($this->min_amount > $amount && !is_null($this->min_amount)){
-            return [
-                'is_valid' => false,
-                'error_message' => 'Sorry, but you at least have to buy ' . $this->min_amount . ' to use this coupon',
-                'percentage' => 0,
-                'amount' => 0,
-                'minimum_amount' => $this->min_amount,
-                'is_discount_on_shipping' => (boolean)$isDiscountOnShipping
+        if(!is_null($amount)){
+            if($this->min_amount > $amount && !is_null($this->min_amount)){
+                return [
+                    'is_valid' => false,
+                    'error_message' => 'Sorry, but you at least have to buy ' . $this->min_amount . ' to use this coupon',
+                    'percentage' => 0,
+                    'amount' => 0,
+                    'minimum_amount' => $this->min_amount,
+                    'is_discount_on_shipping' => (boolean)$isDiscountOnShipping
 
-            ];
+                ];
+            }
         }
         return [
             'is_valid' => true,
