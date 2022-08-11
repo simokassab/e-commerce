@@ -52,8 +52,8 @@ class StoreFieldRequest extends FormRequest
 
             'is_required.required' => 'The :attribute is required',
 
-            'is_required.required' => 'The :attribute field is required',
-            'is_required.boolean' =>  'The :attribute field accepts only 0 or 1',
+            'is_required.required' => 'The :attribute is required',
+            'is_required.boolean' =>  'The :attribute accepts only 0 or 1',
 
 
             'field_value.required_if' => 'the field_value field is required.',

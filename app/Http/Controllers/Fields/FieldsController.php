@@ -57,6 +57,8 @@ class FieldsController extends MainController
      */
     public function store(StoreFieldRequest $request)
     {
+        DB::beginTransaction();
+        try {
         $field=new Field();
         $field->title = ($request->title);
         $field->type = $request->type;
@@ -70,19 +72,24 @@ class FieldsController extends MainController
         $check=true;
 
           if($request->type=='select' && $request->field_values){
-              $check = FieldService::addFieldValuesToField($request->field_values,$field);
+             FieldService::addFieldValuesToField($request->field_values,$field);
           }
 
-            if(!$check)
-                return $this->errorResponse(__('messages.failed.create',['name' => __(self::OBJECT_NAME)]));
-
-
-        return $this->successResponse(
+          DB::commit();
+          return $this->successResponse(
             __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             [
                 'field' => new SingleFieldResource($field->load('fieldValue'))
             ]
         );
+    }
+        catch(\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse(
+                __('messages.failed.update', ['name' => __(self::OBJECT_NAME)])
+            );
+
+        }
 
     }
 
