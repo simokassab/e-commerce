@@ -6,12 +6,14 @@ use App\Http\Controllers\MainController;
 use App\Http\Resources\Country\SelectContryResource;
 use App\Http\Resources\Customers\SelectCustomerResource;
 use App\Http\Resources\Orders\SingelOrdersResource;
+use App\Http\Resources\roles\RolesResource;
 use App\Models\Country\Country;
 use App\Models\Coupons\Coupon;
 use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyHistory;
 use App\Models\Orders\OrderStatus;
 use App\Models\Price\Price;
+use App\Models\RolesAndPermissions\CustomRole;
 use App\Models\User\Customer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -22,14 +24,24 @@ use Illuminate\Support\Facades\DB;
 
 class OrdersController extends MainController
 {
+    const OBJECT_NAME = 'objects.role';
+    const relations =['parent'];
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+
+        if ($request->method()=='POST') {
+
+            $searchKeys=['code','time','date','total'];
+            $searchRelationsKeys = ['customer' => ['customer_first_name' => 'first_name', 'customer_last_name' => 'last_name'] ];
+            return $this->getSearchPaginated(RolesResource::class, Customer::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
+        }
+
+        return $this->successResponsePaginated(RolesResource::class,Customer::class,self::relations);
     }
 
     /**
@@ -107,10 +119,8 @@ class OrdersController extends MainController
             $order->currency_rate = CurrencyHistory::query()->where('currency_id',1)->latest()->first()->rate;
 
             $coupon = Coupon::where('code', $request->coupon_code)->first();
-            if(is_null($coupon)){
-                throw new \Exception();
-            }
-            $order->coupon_id = $coupon->id;
+
+            $order->coupon_id =  $coupon ? $coupon->id : 0;
             $products = $request->selected_products;
             $order->shipping_first_name = $request->shipping['first_name'];
             $order->shipping_last_name = $request->shipping['last_name'];
