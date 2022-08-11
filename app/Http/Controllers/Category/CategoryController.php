@@ -189,7 +189,7 @@ class CategoryController extends MainController
         DB::beginTransaction();
         try {
 
-            CategoryService::deleteRelatedCategoryFieldsAndLabels($category);
+            CategoryService::deleteRelatedCategoryFieldsAndLabels($category?? []);
 
             if( gettype($request->name) != 'array'){
                 $category->name =(array)json_decode($request->name);
