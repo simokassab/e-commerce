@@ -47,12 +47,12 @@ class StoreCategoryRequest extends MainRequest
             'description' => 'nullable',
             'sort' => 'nullable | integer',
 
-//            'fields.*.field_id' => 'required | exists:fields,id,entity,category',
-//            'fields.*.field_value_id' =>  'integer | exists:fields_values,id',
-//            'fields.*.value'=> 'nullable | max:'.config('defaults.default_string_length_2'),
+           'fields.*.field_id' => 'required | exists:fields,id,entity,category',
+           'fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
+           'fields.*.value'=> 'nullable  | max:'.config('defaults.default_string_length_2'),
+           'fields.*.type' => 'required | exists:fields,type,entity,category',
 
-
-            'labels.*.label_id' => 'required | integer | exists:labels,id',
+            'labels.*' => 'required | integer | exists:labels,id',
 
             'order.*.id' => 'required | integer | exists:categories,id',
             'order.*.sort' => 'required | integer',
@@ -91,7 +91,7 @@ class StoreCategoryRequest extends MainRequest
 
             'fields.*.field_id.required' => 'The field_id is required',
             'fields.*.field_id.integer' => 'The field_id should be an integer',
-            'fields.*.field_id.exists' => 'The field_id is not exists or not for brand entity',
+            'fields.*.field_id.exists' => 'The field_id is not exists or not for category entity',
             'fields.*.field_value_id.required' => 'The field_value_id  is required',
             'fields.*.field_value_id.exists' => 'The field_value_id  is not exists',
             'fields.*.value.required' => 'The value is required',
