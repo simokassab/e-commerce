@@ -24,7 +24,7 @@ class ProductService
         //$request=(object)$request;
 
         $this->storeAdditionalCategrories($request, $product, $childrenIds)
-            ->storeAdditionalFields($request, $product, $childrenIds) // different than parent
+            ->storeAdditionalFields($request, $product) // different than parent
             ->storeAdditionalImages($request, $product) // different than parent
             ->storeAdditionalLabels($request, $product, $childrenIds)
             ->storeAdditionalTags($request, $product, $childrenIds)
@@ -62,39 +62,35 @@ class ProductService
         throw new Exception('Error while storing product categories');
     }
 
-    public function storeAdditionalFields($request, $product, $childrenIds)
+    public function storeAdditionalFields($request, $product)
     {
         if (!$request->has('fields'))
             return $this;
 
-        $childrenIdsArray = $childrenIds;
-        $childrenIdsArray[] = $product->id;
 
         $data = [];
 
-        foreach ($childrenIdsArray as $key => $child) {
             foreach ($request->fields as $index => $field) {
                 if (gettype($field) == 'string') {
                     $field = (array)json_decode($field);
                 }
                 if ($field["type"] == 'select') {
-                    $data[$key]["value"] = null;
+                    $data[$index]["value"] = null;
                     if (gettype($field["value"]) == 'array') {
-                        $data[$key]["field_value_id"] = $field["value"][0];
+                        $data[$index]["field_value_id"] = $field["value"][0];
                     } elseif (gettype($field["value"]) == 'integer') {
-                        $data[$key]["field_value_id"] = $field["value"];
+                        $data[$index]["field_value_id"] = $field["value"];
                     }
                 } else {
-                    $data[$key]["value"] = ($field['value']);
-                    $data[$key]["field_value_id"] = null;
+                    $data[$index]["value"] = ($field['value']);
+                    $data[$index]["field_value_id"] = null;
                     if (gettype($field['value']) == 'array') {
-                        $data[$key]["value"] = ($field['value']);
+                        $data[$index]["value"] = ($field['value']);
                     }
                 }
-                $data[$key]["product_id"] = $child;
-                $data[$key]["field_id"] = $field['field_id'];
+                $data[$index]["product_id"] = $product->id;
+                $data[$index]["field_id"] = $field['field_id'];
             }
-        }
         if (ProductField::insert($data)) {
 
             return $this;
