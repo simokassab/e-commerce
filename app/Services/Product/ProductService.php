@@ -404,7 +404,7 @@ class ProductService
             ProductPrice::insert($data);
 
             $this->storeImagesForVariations($request, $childrenIds);
-            // $this->storeFieldsForVariations($request,$childrenIds);
+            $this->storeFieldsForVariations($request,$childrenIds);
 
             if (count($childrenIds) > 0) {
                 return $childrenIds;
