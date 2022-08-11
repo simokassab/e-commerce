@@ -21,7 +21,7 @@ class FieldService{
             $fieldsValuesArray = [];
             foreach ($fieldValues as $key => $value){
                 $fieldsValuesArray[$key]['field_id'] = $field->id;
-                $fieldsValuesArray[$key]['value'] = json_encode($value);
+                $fieldsValuesArray[$key]['value'] = json_encode($value['value']);
             }
             return $check = FieldValue::insert($fieldsValuesArray);
 

@@ -75,23 +75,21 @@ class FieldsController extends MainController
              FieldService::addFieldValuesToField($request->field_values,$field);
           }
 
-          DB::commit();
+        //   DB::commit();
           return $this->successResponse(
             __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
             [
                 'field' => new SingleFieldResource($field->load('fieldValue'))
             ]
         );
-    }
-        catch(\Exception $e) {
-            DB::rollBack();
-            return $this->errorResponse(
-                __('messages.failed.update', ['name' => __(self::OBJECT_NAME)])
-            );
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $this->errorResponse(__('messages.failed.create',['name' => __(self::OBJECT_NAME)]));
+        }
 
         }
 
-    }
+
 
     /**
      * Display the specified resource.
