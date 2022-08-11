@@ -56,7 +56,7 @@ class Coupon extends Model
         }
         return [
             'is_valid' => true,
-            'message' => 'you have received an discount of ' . $this->discount_percentage ?? $this->discount_amount,
+//            'message' => 'you have received an discount of ' . $this->discount_percentage ?? $this->discount_amount,
             'error_message' => '',
             'amount' => $this->discount_amount,
             'percentage' => $this->discount_percentage,
