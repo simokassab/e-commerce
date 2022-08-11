@@ -237,11 +237,11 @@ class CategoryController extends MainController
 
             $category->save();
 
-            if($request->has('fields') && count($request->fields) > 0){
+            if($request->has('fields') && $request->fields->count() > 0){
                 CategoryService::addFieldsToCategory($category,$request->fields);
             }
 
-            if ($request->has('labels') && count($request->labels) > 0) {
+            if ($request->has('labels') && $request->labels->count() > 0) {
                 $oldLabel = $request->labels;
                 if(gettype($request->labels) == 'string'){
                     $request->labels = explode(",",$request->labels);
