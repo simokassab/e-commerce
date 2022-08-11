@@ -21,14 +21,11 @@ class ProductService
     public function storeAdditionalProductData($request, $product, $childrenIds)
     {
 
-        // $request = $request;
-        // $product = $product_id;
-        // $childrenIds = $childrenIds ?? [];
         //$request=(object)$request;
 
         $this->storeAdditionalCategrories($request, $product, $childrenIds)
             ->storeAdditionalFields($request, $product, $childrenIds) // different than parent
-            ->storeAdditionalImages($request, $product, $childrenIds) // different than parent
+            ->storeAdditionalImages($request, $product) // different than parent
             ->storeAdditionalLabels($request, $product, $childrenIds)
             ->storeAdditionalTags($request, $product, $childrenIds)
             ->storeAdditionalPrices($request, $product, $childrenIds);
@@ -107,7 +104,7 @@ class ProductService
     }
 
 
-    public function storeAdditionalImages($request, $product, $childrenIds)
+    public function storeAdditionalImages($request, $product)
     {
         //$request=(object)$request;
 
@@ -277,7 +274,7 @@ class ProductService
         }
     }
 
-    public function storeFieldsForVariations($request,$childrenIds)
+    public function storeFieldsForVariations($request, $childrenIds)
     {
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
@@ -318,7 +315,8 @@ class ProductService
         throw new Exception('Error while storing product fields');
     }
 
-    public function storeImagesForVariations($request,$childrenIds){
+    public function storeImagesForVariations($request, $childrenIds)
+    {
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
         if (!$request->has('product_variations'))
@@ -350,75 +348,72 @@ class ProductService
 
     public function storeVariationsAndPrices($request, $product)
     {
-        //$request=(object)$request;
-        // try {
-        $childrenIds = [];
-        $data = [];
-        throw_if(!$request->product_variations, Exception::class, 'No variations found');
+        DB::beginTransaction();
+        try {
+            $childrenIds = [];
+            $data = [];
+            throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
-        foreach ($request->product_variations as $variation) {
-            if ($variation['image'] == null)
-                $imagePath = "";
-            else {
-                $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
+            foreach ($request->product_variations as $variation) {
+                if ($variation['image'] == null)
+                    $imagePath = "";
+                else {
+                    $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
+                }
+                $productVariationsArray = [
+                    'name' => ($request->name),
+                    'code' => $variation['code'],
+                    'type' => 'variable_child',
+                    'sku' => $variation['sku'],
+                    'quantity' => $variation['quantity'],
+                    'reserved_quantity' => 0,
+                    'minimum_quantity' => $variation['minimum_quantity'],
+                    'height' => $variation['height'],
+                    'width' => $variation['width'],
+                    'length' => $variation['p_length'],
+                    'weight' => $variation['weight'],
+                    'barcode' => $variation['barcode'],
+                    'category_id' => $request->category_id,
+                    'unit_id' => $request->unit_id,
+                    'tax_id' => $request->tax_id,
+                    'brand_id' => $request->brand_id,
+                    'summary' => ($request->summary),
+                    'specification' => ($request->specification),
+                    'meta_title' => ($request->meta_title) ?? "",
+                    'meta_keyword' => ($request->meta_keyword) ?? "",
+                    'meta_description' => ($request->meta_description) ?? "",
+                    'description' => ($request->description) ?? "",
+                    'website_status' => $request->status,
+                    'parent_product_id' => $product->id,
+                    'products_statuses_id' => $variation['products_statuses_id'],
+                    'image' => $imagePath
+                ];
+
+                $productVariation = Product::create($productVariationsArray);
+                $pricesInfo =  $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
+                foreach ($pricesInfo as $key => $price) {
+                    $data[$key]['product_id'] = $productVariation->id;
+                    $data[$key]['price_id'] = $price['price_id'];
+                    $data[$key]['price'] = $price['price'];
+                    $data[$key]['discounted_price'] = $price['discounted_price'];
+                    $data[$key]['created_at'] = Carbon::now()->toDateTimeString();
+                    $data[$key]['updated_at'] = Carbon::now()->toDateTimeString();
+                }
+                $childrenIds[] = $productVariation->id;
             }
-            $productVariationsArray = [
-                'name' => ($request->name),
-                'code' => $variation['code'],
-                'type' => 'variable_child',
-                'sku' => $variation['sku'],
-                'quantity' => $variation['quantity'],
-                'reserved_quantity' => 0,
-                'minimum_quantity' => $variation['minimum_quantity'],
-                'height' => $variation['height'],
-                'width' => $variation['width'],
-                'length' => $variation['p_length'],
-                'weight' => $variation['weight'],
-                'barcode' => $variation['barcode'],
-                'category_id' => $request->category_id,
-                'unit_id' => $request->unit_id,
-                'tax_id' => $request->tax_id,
-                'brand_id' => $request->brand_id,
-                'summary' => ($request->summary),
-                'specification' => ($request->specification),
-                'meta_title' => ($request->meta_title) ?? "",
-                // 'meta_keyword' => ($request->meta_keyword) ?? "",
-                'meta_description' => ($request->meta_description) ?? "",
-                'description' => ($request->description) ?? "",
-                'website_status' => $request->status,
-                'parent_product_id' => $product->id,
-                'products_statuses_id' => $variation['products_statuses_id'],
-                'image' => $imagePath
-            ];
+            ProductPrice::insert($data);
 
-            $productVariation = Product::create($productVariationsArray);
-            $pricesInfo =  $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
-            foreach ($pricesInfo as $key => $price) {
-                $data[$key]['product_id'] = $productVariation->id;
-                $data[$key]['price_id'] = $price['price_id'];
-                $data[$key]['price'] = $price['price'];
-                $data[$key]['discounted_price'] = $price['discounted_price'];
-                $data[$key]['created_at'] = Carbon::now()->toDateTimeString();
-                $data[$key]['updated_at'] = Carbon::now()->toDateTimeString();
+            $this->storeImagesForVariations($request, $childrenIds);
+            $this->storeFieldsForVariations($request,$childrenIds);
+
+            if (count($childrenIds) > 0) {
+                return $childrenIds;
             }
-            $childrenIds[] = $productVariation->id;
+            DB::commit();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
         }
-        // $finalPricesCollect = collect($data)->collapse()->toArray();
-        ProductPrice::insert($data);
-
-            // $this->storeImagesForVariations($request,$childrenIds);
-            // $this->storeFieldsForVariations($request,$childrenIds);
-
-        if (count($childrenIds) > 0) {
-            return $childrenIds;
-        }
-
-        //     throw new Exception('No variations found');
-        // } catch (Exception $e) {
-        //     throw new Exception($e->getMessage());
-        // }
     }
-
 
     public function createProduct($request)
     {
@@ -440,10 +435,10 @@ class ProductService
             if ($request->image)
                 $product->image = uploadImage($request->image, config('images_paths.product.images'));
 
-            $product->meta_title = $request->meta_title ?? "";
-            // $product->meta_keyword = $request->has('meta_keyword') ? $request->meta_keyword : "-";
-            $product->meta_description = $request->meta_description ?? "";
-            $product->description = $request->description ?? "";
+            $product->meta_title = $request->meta_title ?? null;
+            $product->meta_keyword = $request->meta_keyword ?? null;
+            $product->meta_description = $request->meta_description ?? null;
+            $product->description = $request->description ?? null;
             $product->website_status = $request->status;
             $product->barcode = $request->barcode;
             $product->height = $request->height;
@@ -461,11 +456,8 @@ class ProductService
             $product->is_show_related_product = $request->is_show_related_product ?? 0;
             $product->save();
 
-            // $product->update(['meta_keyword' => $request->meta_keyword]);
             DB::commit();
-            // dd($product);
             return $product;
-            // dd(Product::find($product->id));
         } catch (Exception $e) {
             DB::rollBack();
             throw new Exception($e->getMessage());
