@@ -54,14 +54,11 @@ class OrdersService {
         }
          OrderProduct::insert($productsOrders);
 
-        $coupon = Coupon::query()->where('id', $order->coupon_id ?? 0)
+        $coupon = Coupon::query()
+            ->where('id', $order->coupon_id ?? 0)
             ->whereDate('expiry_date','<' ,today())
-            ->where(function ($query){
-                $query->orWhere('is_one_time' , 1)->where('is_used', 0);
-            })
             ->first();
 
-        dd($coupon);
 
         $order->discount_percentage = $coupon->discount_percentage;
         $order->discount_amount = $coupon->discount_amount;
