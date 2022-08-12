@@ -26,9 +26,6 @@ class StoreCategoryRequest extends FormRequest
     public function rules()
     {
 
-
-
-dd($this->request);
         return [
 
             'name' => 'required',
