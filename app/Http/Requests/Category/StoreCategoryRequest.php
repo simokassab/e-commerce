@@ -26,15 +26,7 @@ class StoreCategoryRequest extends FormRequest
     public function rules(Request $request)
     {
 
-        if($request->image=='undefined'){
-            $request->image="";
-        }
-        if($request->icon=='undefined'){
-            $request->icon="";
-        }
-        if($request->parent_id=='null'){
-            $request->parent_id=="";
-        }
+
 
 
         return [
@@ -74,6 +66,24 @@ class StoreCategoryRequest extends FormRequest
         ];
     }
 
+    public function getValidatorInstance()
+    {
+        $this->changeImageAndIconAndParentIdToNull();
+        return parent::getValidatorInstance();
+    }
+
+    protected function changeImageAndIconAndParentIdToNull()
+    {
+        if($this->request->image=='undefined'){
+            $this->request->image="";
+        }
+        if($this->request->icon=='undefined'){
+            $this->request->icon="";
+        }
+        if($this->request->parent_id=='null'){
+            $this->request->parent_id=="";
+        }
+    }
     public function messages()
     {
 
