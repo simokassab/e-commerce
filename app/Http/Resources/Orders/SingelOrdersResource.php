@@ -15,7 +15,7 @@ class SingelOrdersResource extends JsonResource
     public function toArray($request)
     {
         return [
-
+            'code' => $this->id,
             "client_id" => $this->customer_id,
             "time" => $this->time,
             "date" => $this->date,
@@ -23,32 +23,45 @@ class SingelOrdersResource extends JsonResource
             "status_id" => $this->order_status_id,
             "prefix" => $this->prefix,
             "coupon_code" => $this->whenLoaded('coupon') ? $this->whenLoaded('coupon')->code : '',
-            "selected_products" => ($this->whenLoaded('products')),
             "billing" => [
-                "first_name" => "mohammad",
-                "last_name" => "azzam",
-                "company_name" => "MTX",
-                "address_1" => "hellaye",
-                "address_2" => "abra",
-                "city" => "Saida",
-                "country_id" => 1,
-                "phone_number" => "96176023035",
-                "email_address" => "azzam@gmail.com",
-                "payment_method_id" => 1
+                "first_name" => $this->billing_first_name,
+                "last_name" => $this->billing_last_name,
+                "company_name" => $this->billing_company_name,
+                "address_1" => $this->billing_address_one,
+                "address_2" => $this->billing_address_two,
+                "city" => $this->billing_city,
+                "country_id" => $this->billing_country_id,
+                "phone_number" => $this->billing_phone_number,
+                "email_address" => $this->billing_email,
+                "payment_method_id" => $this->payment_method_id
             ],
             "shipping" => [
-                "first_name" => "mohammad",
-                "last_name" => "azzam",
-                "company_name" => "MTX",
-                "address_1" => "hellaye",
-                "address_2" => "abra",
-                "city" => "Saida",
-                "country_id" => 1,
-                "phone_number" => "96176023035",
-                "email_address" => "azzam@gmail.com"
-            ]
+                "first_name" => $this->shipping_first_name,
+                "last_name" => $this->shipping_last_name,
+                "company_name" => $this->shipping_company_name,
+                "address_1" => $this->shipping_address_one,
+                "address_2" => $this->shipping_address_two,
+                "city" => $this->shipping_city,
+                "country_id" => $this->shipping_country_id,
+                "phone_number" => $this->shipping_phone_number,
+                "email_address" => $this->shipping_email
+            ],
+//            "selected_products" => [
+//                "id" => 1,
+//                "name"=> "sfsdfdsfsdfcs",
+//                "tax"=> 110,
+//                "image"=> "default_image",
+//                "sku"=> "asdasd",
+//                "price"=> 610,
+//                "currency"=> "$",
+//                "quantity"=> 5,
+//                "quantity_in_stock_available"=> 1,
+//                "quantity_in_stock"=> 1,
+//                "tax_percentage" => 20
+//
+//            ]
 
-
+            'selected_products' => $this->selected_products,
 
         ];
     }

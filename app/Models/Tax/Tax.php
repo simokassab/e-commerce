@@ -18,6 +18,9 @@ class Tax extends MainModel
     protected array $translatable=['name'];
     protected $table='taxes';
     protected $guard_name = 'web';
+    protected $fillable = [
+        'id', // added just for when creating an object form this class while working with Orders in OrderService
+    ];
 
     public function taxComponents(){
         return $this->hasMany(TaxComponent::class,'tax_id');

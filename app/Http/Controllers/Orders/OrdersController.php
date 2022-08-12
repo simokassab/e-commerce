@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Orders;
 
 use App\Http\Controllers\MainController;
+use App\Http\Requests\Orders\StoreOrderRequest;
 use App\Http\Resources\Country\SelectContryResource;
 use App\Http\Resources\Customers\SelectCustomerResource;
 use App\Http\Resources\Orders\OrderResource;
@@ -14,7 +15,12 @@ use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyHistory;
 use App\Models\Orders\OrderStatus;
 use App\Models\Price\Price;
+use App\Models\Product\Product;
+use App\Models\Product\ProductPrice;
 use App\Models\RolesAndPermissions\CustomRole;
+use App\Models\Settings\Setting;
+use App\Models\Tax\Tax;
+use App\Models\Tax\TaxComponent;
 use App\Models\User\Customer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -102,8 +108,13 @@ class OrdersController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(StoreOrderRequest $request)
     {
+        DB::enableQueryLog();
+        $allProducts = Product::with(['tax','pricesList'])->get()->toArray();
+        $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
+        $allTaxes = Tax::all();
+        $allTaxComponents = TaxComponent::all();
         DB::beginTransaction();
         try {
             $order = new Order();
@@ -148,17 +159,19 @@ class OrdersController extends MainController
             $order->save();
             $order->prefix = 'order' . $order->id;
 
-            OrdersService::calculateTotalOrderPrice($products,$order);
+            $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
             $order->save();
 
-            DB::commit();
 
+            $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
+
+//            return ($productsOrders);
+            DB::commit();
             return $this->successResponse('The order has been created successfully !', [
                 'order' => new SingelOrdersResource($order->load(['status','coupon','products']))
             ]);
 
         }catch (\Exception $exception){
-            dd($exception);
             DB::rollBack();
             return $this->errorResponse('The Order has not been created successfully!' . 'error message: '. $exception);
         }catch (\Error $error){

@@ -28,4 +28,11 @@ class OrderResource extends JsonResource
 //            "coupon_code" => $this->whenLoaded('coupon') ? $this->whenLoaded('coupon')->title : '-' ,
         ];
     }
+
+    public static function customCollection($resource, $data): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    {
+        //you can add as many params as you want.
+        self::$data = $data;
+        return parent::collection($resource);
+    }
 }
