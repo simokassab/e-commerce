@@ -220,16 +220,16 @@ class ProductController extends MainController
     {
         // DB::beginTransaction();
         // try {
-            $product = $this->productService->createAndUpdateProduct($request,$product->input('id'));
-            $childrenIds=[];
-            if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
-               $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
-            }
-            if($request->type=='bundle'){
-                $this->productService->storeAdditionalBundle($request,$product);
-            }
-            $this->productService->storeAdditionalProductData($request,$product,$childrenIds);
+            $product = $this->productService->createAndUpdateProduct($request,$product);
 
+            // if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
+            //    $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
+            // }
+            if($request->type=='bundle')
+                $this->productService->storeAdditionalBundle($request,$product);
+            return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            'product' =>  new ProductResource($product->load(['defaultCategory','tags','brand','category']))
+              ]);
 
             // DB::commit();
         // return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),

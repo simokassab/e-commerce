@@ -135,6 +135,10 @@ class ProductService
     public function storeAdditionalLabels($request, $product, $childrenIds)
     {
         //$request=(object)$request;
+        $labelCheck = ProductLabel::where('product_id',$product->id)->orWhereIn('product_id',$childrenIds)->get();
+        if($labelCheck){
+            $labelCheck->delete();
+        }
 
         if (!$request->has('labels'))
             return $this;
@@ -195,13 +199,17 @@ class ProductService
     public function storeAdditionalBundle($request, $product)
     {
         //$request=(object)$request;
+        $bundleCheck = ProductRelated::where('parent_product_id',$product->id);
+        if($bundleCheck){
+            $bundleCheck->delete();
+        }
 
         if ($request->type == 'bundle') {
             foreach ($request->related_products as $related_product => $value) {
                 $data[$related_product] = [
                     'parent_product_id' => $product->id,
                     'child_product_id' => $value['child_product_id'],
-                    'name' => json_encode($value['name']),
+                    'name' => json_encode($value['name']) ?? "",
                     'child_quantity' => $value['child_quantity'],
                     'created_at' => Carbon::now()->toDateTimeString(),
                     'updated_at' => Carbon::now()->toDateTimeString(),
