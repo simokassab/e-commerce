@@ -26,7 +26,7 @@ class StoreCategoryRequest extends FormRequest
     public function rules()
     {
 
-        return [
+    return [
 
             'name' => 'required',
             'code' => 'required | max:'.config('defaults.default_string_length'),
@@ -63,21 +63,21 @@ class StoreCategoryRequest extends FormRequest
         ];
     }
 
-    // public function getValidatorInstance()
-    // {
-    //     $this->changeImageAndIconAndParentIdToNull();
+    public function getValidatorInstance()
+    {
+        $this->changeImageAndIconAndParentIdToNull();
 
-    //     parent::getValidatorInstance();
-    // }
+        Self::getValidatorInstance();
+    }
 
     protected function changeImageAndIconAndParentIdToNull()
     {
-        // if($this->image == 'undefined')
-        //     $this->merge(['image' => null]);
-        // if($this->icon == 'undefined')
-        //     $this->merge(['icon' => null]);
-        // if($this->parent_id == 'null')
-        //     $this->merge(['parent_id' => null]);
+        if($this->image == 'undefined')
+            $this->merge(['image' => null]);
+        if($this->icon == 'undefined')
+            $this->merge(['icon' => null]);
+        if($this->parent_id == 'null')
+            $this->merge(['parent_id' => null]);
     }
 
     public function messages()
