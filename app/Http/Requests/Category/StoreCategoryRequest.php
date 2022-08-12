@@ -29,6 +29,8 @@ class StoreCategoryRequest extends FormRequest
         if($request->image=='undefined'){
             $request->image="";
         }
+
+        dd($request->image);
         return [
 
             'name' => 'required',
