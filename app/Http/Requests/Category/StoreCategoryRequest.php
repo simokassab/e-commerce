@@ -63,12 +63,12 @@ class StoreCategoryRequest extends FormRequest
         ];
     }
 
-    public function getValidatorInstance()
-    {
-        $this->changeImageAndIconAndParentIdToNull();
+    // public function getValidatorInstance()
+    // {
+    //     $this->changeImageAndIconAndParentIdToNull();
 
-        parent::getValidatorInstance();
-    }
+    //     parent::getValidatorInstance();
+    // }
 
     protected function changeImageAndIconAndParentIdToNull()
     {
