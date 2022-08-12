@@ -75,13 +75,13 @@ class StoreCategoryRequest extends FormRequest
     protected function changeImageAndIconAndParentIdToNull()
     {
         if($this->request->has('image')=='undefined'){
-            $this->request->image="";
+            $this->request->image=null;
         }
         if($this->request->has('icon')=='undefined'){
-            $this->request->icon="";
+            $this->request->icon=null;
         }
         if($this->request->has('parent_id')=='null'){
-            $this->request->parent_id="";
+            $this->request->parent_id=null;
         }
     }
     public function messages()
