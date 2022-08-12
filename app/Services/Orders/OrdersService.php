@@ -18,7 +18,7 @@ class OrdersService {
      * @param Order $order
      * @return array
      */
-    public static function calculateTotalOrderPrice(array $productsOfOrder = [], Order &$order): void
+    public static function calculateTotalOrderPrice(array $productsOfOrder = [], Order &$order): array
     {
         $taxes = Tax::all();
         $allTaxComponents = TaxComponent::all();
@@ -72,14 +72,45 @@ class OrdersService {
         }
 
         //@TODO: finish the request class
-        //@TODO: finish the resource class for the product inside the order
-        //@TODO: make an observer for the product once saved check the coupon and change it to is_used for used once
+        //@TODO: make an observer for the product once saved check the coupon and change it to is_used for used ones
 
 
         $order->total = $total;
         $order->tax_total = $totalTax;
+
+        return $productsOrders;
     }
 
+    public static function generateOrderProducts($productsOrders,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency){
+        $selectedProducts = [];
+
+        foreach ($productsOrders as $key => $orderProduct) {
+
+            $currentProduct = collect($allProducts)->where('id' , $orderProduct['product_id'])->first();
+            $pricePerUnit = collect($currentProduct['prices_list'])->where('price_id' , $defaultPricingClass)->first()['price'];
+            $taxPerUnit = 0;
+
+            $selectedProducts[$key]['id'] = $orderProduct['product_id'];
+            $selectedProducts[$key]['name'] = $currentProduct['name']['en'];
+            if($currentProduct['tax']['is_complex']){
+                $newTax= new Tax($currentProduct['tax']);
+                $taxPerUnit = $newTax->getComplexPrice($pricePerUnit,$allTaxComponents->toArray(),$allTaxes->toArray());
+            }else{
+                $taxPerUnit = ($currentProduct['tax']['percentage'] * $pricePerUnit)/100;
+            }
+            $selectedProducts[$key]['tax'] = $taxPerUnit;
+            $selectedProducts[$key]['image'] = $currentProduct['image'] ?? 'default_image';
+            $selectedProducts[$key]['price'] = $currentProduct['quantity'] * $pricePerUnit * $taxPerUnit;
+            $selectedProducts[$key]['sku'] = $currentProduct['sku'];
+            $selectedProducts[$key]['quantity'] = $orderProduct['quantity'];
+            $selectedProducts[$key]['quantity_in_stock_available'] = $currentProduct['minimum_quantity'] < 0 ? 0 : $currentProduct['quantity'] - $currentProduct['minimum_quantity'];
+            $selectedProducts[$key]['quantity_in_stock'] = $currentProduct['quantity'];
+            $selectedProducts[$key]['currency']  = $defaultCurrency->symbol;
+        }
+
+        return $selectedProducts;
+
+    }
 }
 
 
