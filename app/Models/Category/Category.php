@@ -19,6 +19,7 @@ class Category extends MainModel
 {
     use HasFactory,HasTranslations;
     protected array $translatable=['name','meta_title','meta_description','meta_keyword','description'];
+    protected $fillable=['name','code','image','icon','parent_id','slug','meta_title','meta_description','meta_keyword','description'];
 
     public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
