@@ -36,7 +36,7 @@ class StoreCategoryRequest extends FormRequest
         }
 
 
-
+dd($this->request);
         return [
 
             'name' => 'required',
