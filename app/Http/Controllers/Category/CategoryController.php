@@ -118,7 +118,7 @@ class CategoryController extends MainController
             $category->code= $category->id;
             $category->save();
 
-            if($request->has('fields')){
+            if($request->has('fields') && !is_null($request->fields)){
                 CategoryService::addFieldsToCategory($category,$request->fields);
             }
 
