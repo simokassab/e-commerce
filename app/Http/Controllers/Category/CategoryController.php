@@ -65,9 +65,9 @@ class CategoryController extends MainController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(Request $request)
     {
-
+dd($request->image);
         DB::beginTransaction();
         try {
             $category=new Category();

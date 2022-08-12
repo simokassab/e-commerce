@@ -25,7 +25,6 @@ class StoreCategoryRequest extends MainRequest
      */
     public function rules()
     {
-
         return [
 
             'name' => 'required',
