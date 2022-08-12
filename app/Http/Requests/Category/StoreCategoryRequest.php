@@ -67,7 +67,7 @@ class StoreCategoryRequest extends FormRequest
     {
         $this->changeImageAndIconAndParentIdToNull();
 
-        Self::getValidatorInstance();
+        return  parent::getValidatorInstance();
     }
 
     protected function changeImageAndIconAndParentIdToNull()
