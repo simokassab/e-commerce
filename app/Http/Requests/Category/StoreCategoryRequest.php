@@ -23,9 +23,17 @@ class StoreCategoryRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(Request $request)
+    public function rules()
     {
-
+        if($this->request->has('image')=='undefined'){
+            $this->request->image=null;
+        }
+        if($this->request->has('icon')=='undefined'){
+            $this->request->icon=null;
+        }
+        if($this->request->has('parent_id')=='null'){
+            $this->request->parent_id=null;
+        }
 
 
 
@@ -66,24 +74,7 @@ class StoreCategoryRequest extends FormRequest
         ];
     }
 
-    public function getValidatorInstance()
-    {
-        $this->changeImageAndIconAndParentIdToNull();
-        return parent::getValidatorInstance();
-    }
 
-    protected function changeImageAndIconAndParentIdToNull()
-    {
-        if($this->request->has('image')=='undefined'){
-            $this->request->image=null;
-        }
-        if($this->request->has('icon')=='undefined'){
-            $this->request->icon=null;
-        }
-        if($this->request->has('parent_id')=='null'){
-            $this->request->parent_id=null;
-        }
-    }
     public function messages()
     {
 
