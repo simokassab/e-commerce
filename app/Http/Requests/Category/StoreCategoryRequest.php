@@ -4,8 +4,9 @@ namespace App\Http\Requests\Category;
 
 use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
-class StoreCategoryRequest extends MainRequest
+class StoreCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +25,13 @@ class StoreCategoryRequest extends MainRequest
      */
     public function rules()
     {
-        return [
+
+    return [
 
             'name' => 'required',
             'code' => 'required | max:'.config('defaults.default_string_length'),
 
-            'image' => 'nullable | file | max:'.config('defaults.default_string_length').'
+            'image' => 'nullable | file
             | mimes:'.config('defaults.default_image_extentions').'
             | max:'.config('defaults.default_image_size').'
             | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
@@ -59,6 +61,23 @@ class StoreCategoryRequest extends MainRequest
 
             'labels.*' => 'required | exists:labels,id',
         ];
+    }
+
+    public function getValidatorInstance()
+    {
+        $this->changeImageAndIconAndParentIdToNull();
+
+        return  parent::getValidatorInstance();
+    }
+
+    protected function changeImageAndIconAndParentIdToNull()
+    {
+        if($this->image == 'undefined')
+            $this->merge(['image' => null]);
+        if($this->icon == 'undefined')
+            $this->merge(['icon' => null]);
+        if($this->parent_id == 'null')
+            $this->merge(['parent_id' => null]);
     }
 
     public function messages()

@@ -118,11 +118,11 @@ class CategoryController extends MainController
             $category->code= $category->id;
             $category->save();
 
-            if($request->has('fields')){
+            if($request->has('fields') && !is_null($request->fields)){
                 CategoryService::addFieldsToCategory($category,$request->fields);
             }
 
-            if ($request->has('labels')) {
+            if ($request->has('labels')  && !is_null($request->labels)) {
                 $oldLabel = $request->labels;
                 if(gettype($request->labels) == 'string'){
                     $request->labels = explode(",",$request->labels);
@@ -235,11 +235,11 @@ class CategoryController extends MainController
             $category->code= $category->id;
             $category->save();
 
-            if($request->has('fields')){
+            if($request->has('fields') && !is_null($request->fields)){
                 CategoryService::addFieldsToCategory($category,$request->fields);
             }
 
-            if ($request->has('labels')) {
+            if ($request->has('labels')  && !is_null($request->labels)) {
                 $oldLabel = $request->labels;
                 if(gettype($request->labels) == 'string'){
                     $request->labels = explode(",",$request->labels);
