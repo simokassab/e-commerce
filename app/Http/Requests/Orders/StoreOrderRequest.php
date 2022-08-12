@@ -3,9 +3,11 @@
 namespace App\Http\Requests\Orders;
 
 use App\Http\Requests\MainRequest;
+use App\Models\Product\Product;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
-class StoreOrderRequest extends MainRequest
+class StoreOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +24,19 @@ class StoreOrderRequest extends MainRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(Request $request)
     {
-        return [
+        $products = $request->selected_products ?? [];
+        $productsRules = [];
+
+        foreach ($products as $key => $product){
+            $productObject = Product::query()->select(['id','quantity','minimum_quantity'])->find($product['id']);
+            $productsRules['selected_products.'.$key.'.quantity'] ='required|integer|min:1|lte:'.$productObject['quantity'] - $productObject['minimum_quantity'];
+
+        }
+
+
+        $rules = [
             "client_id" => 'required|exists:customers,id',
 //            "time" => "required|date_format:H:i",
 //            "date" => "required|date_format:format",
@@ -33,6 +45,8 @@ class StoreOrderRequest extends MainRequest
             "shipping_as_billing" => 'required|boolean',
             "coupon_code" => "exists:coupons,code",
 
+            "selected_products" => 'required|array',
+            "selected_products.*" => 'required',
             "selected_products.*.id" => 'required|exists:products',
             "selected_products.*.quantity" => 'required|integer',
 
@@ -58,5 +72,7 @@ class StoreOrderRequest extends MainRequest
             "shipping.email_address" => 'required|email',
 
         ];
+
+        return(array_merge($rules,$productsRules));
     }
 }
