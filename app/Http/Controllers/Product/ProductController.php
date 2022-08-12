@@ -218,30 +218,28 @@ class ProductController extends MainController
      */
     public function update(StoreProductRequest $request, Product $product)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             $product = $this->productService->createAndUpdateProduct($request,$product);
 
-            // if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
-            //    $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
-            // }
+            if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
+               $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
+            }
             if($request->type=='bundle')
                 $this->productService->storeAdditionalBundle($request,$product);
+
+            DB::commit();
             return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             'product' =>  new ProductResource($product->load(['defaultCategory','tags','brand','category']))
               ]);
 
-            // DB::commit();
-        // return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-        // 'product' =>  new ProductResource($product)
-        //   ]);
-    //     }catch (\Exception $ex) {
-    //         DB::rollBack();
-    //         return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
-    //         'message' => $ex->getMessage()
-    //          ]);
+        }catch (\Exception $ex) {
+            DB::rollBack();
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
+            'message' => $ex->getMessage()
+             ]);
 
-    // }
+    }
 }
 
     /**
