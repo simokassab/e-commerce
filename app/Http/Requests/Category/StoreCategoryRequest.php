@@ -6,7 +6,7 @@ use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
-class StoreCategoryRequest extends MainRequest
+class StoreCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -72,12 +72,12 @@ class StoreCategoryRequest extends MainRequest
 
     protected function changeImageAndIconAndParentIdToNull()
     {
-        if($this->image == 'undefined')
-            $this->merge(['image' => null]);
-        if($this->icon == 'undefined')
-            $this->merge(['icon' => null]);
-        if($this->parent_id == 'null')
-            $this->merge(['parent_id' => null]);
+        // if($this->image == 'undefined')
+        //     $this->merge(['image' => null]);
+        // if($this->icon == 'undefined')
+        //     $this->merge(['icon' => null]);
+        // if($this->parent_id == 'null')
+        //     $this->merge(['parent_id' => null]);
     }
 
     public function messages()
