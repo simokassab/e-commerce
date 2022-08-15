@@ -49,10 +49,10 @@ class StoreCategoryRequest extends FormRequest
             'description' => 'nullable',
             'sort' => 'nullable | integer',
 
-           'fields.*.field_id' => 'required | exists:fields,id,entity,category',
-           'fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
-           'fields.*.value'=> 'nullable  | max:'.config('defaults.default_string_length_2'),
-           'fields.*.type' => 'required | exists:fields,type,entity,category',
+            'fields.*.field_id' => 'required | exists:fields,id,entity,category',
+            'fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
+            'fields.*.value'=> 'nullable  | max:'.config('defaults.default_string_length_2'),
+            'fields.*.type' => 'required | exists:fields,type,entity,category',
 
             'labels.*' => 'required | integer | exists:labels,id',
 
