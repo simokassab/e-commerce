@@ -150,6 +150,10 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.fields.*.field_id' => 'required | integer | exists:fields,id,entity,product',
             'product_variations.*.fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
             'product_variations.*.fields.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
+            
+            'product_variations.*.attributes.*.field_id' => 'required | integer | exists:fields,id,entity,product',
+            'product_variations.*.attributes.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
+            'product_variations.*.attributes.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
 
         ];
     }
