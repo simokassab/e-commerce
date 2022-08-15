@@ -4,7 +4,7 @@ namespace App\Http\Resources\Currency;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class IndexCurrencyResource extends JsonResource
+class SelectCurrencyResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,13 +14,20 @@ class IndexCurrencyResource extends JsonResource
      */
     public function toArray($request)
     {
+
+        $defaultCurrency = Currency::where('is_default' , 1)->first();
+        if($defaultCurrency->id == $this->id){
+            $rate = 1;
+        }else{
+            $rate = $this->rate;
+        }
         return [
             'id' => $this->id,
-            'name'=>$this->name,
+            'value'=>$this->code . ' - '.$this->symbol,
+            'rate'=> $rate,
             'code' => $this->code,
             'symbol'=>$this->symbol,
-            'rate'=>$this->rate,
-            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_icon' ,
+
         ];
     }
 }

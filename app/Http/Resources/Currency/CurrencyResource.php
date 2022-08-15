@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Currency;
 
+use App\Models\Currency\Currency;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\CurrencyHistoryResource;
 
@@ -18,6 +19,7 @@ class CurrencyResource extends JsonResource
     {
 
         // $currency_history=$this->whenLoaded('currencyHistory');
+
         return [
             'id' => $this->id,
             'name'=>$this->name,

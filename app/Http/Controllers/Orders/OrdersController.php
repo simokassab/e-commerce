@@ -59,6 +59,7 @@ class OrdersController extends MainController
     {
         return $this->successResponse(data:[
             'countries' => SelectContryResource::collection(Country::query()->select(['id','name','iso_code_1'])->get()),
+            'currencies' => ::collection(Country::query()->select(['id','name','iso_code_1'])->get()),
             'statuses' => SelectOrderStatus::collection(OrderStatus::query()->select(['id','name'],)->get()),
             'customers' => SelectCustomerResource::collection(Customer::query()->select(['id','first_name','last_name','phone'])->WhereNot('is_blacklist',1)->get()),
             'order' => null,

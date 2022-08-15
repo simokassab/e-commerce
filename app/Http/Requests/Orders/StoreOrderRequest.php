@@ -35,7 +35,6 @@ class StoreOrderRequest extends FormRequest
 
         }
 
-
         $rules = [
             "client_id" => 'required|exists:customers,id',
 //            "time" => "required|date_format:H:i",
@@ -74,5 +73,24 @@ class StoreOrderRequest extends FormRequest
         ];
 
         return(array_merge($rules,$productsRules));
+    }
+
+    public function messages()
+    {
+
+        return [
+            'client_id.required' => 'the :attribute field is required',
+            'comment.required' => 'the :attribute field is required',
+            'status_id.required' => 'the :attribute field is required',
+            'coupon_code.required' => 'The :attribute field is required',
+            'selected_products.required' => 'The :attribute are required',
+            'selected_products.*.id' => 'The product id is required',
+            'selected_products.*.quantity' => 'The product quantity is required',
+
+
+
+
+        ];
+
     }
 }
