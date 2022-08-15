@@ -24,7 +24,7 @@ class SelectCurrencyResource extends JsonResource
         }
         return [
             'id' => $this->id,
-            'value'=>$this->code . ' - '.$this->symbol,
+            'value'=>$this->code ?? 'NON' . ' - '.$this->symbol ?? 'NON',
             'rate'=> $rate,
             'code' => $this->code,
             'symbol'=>$this->symbol,

@@ -80,7 +80,7 @@ class OrdersController extends MainController
                 [
                 'id' => 5,
                 'value' => 'Take Me'
-            ],
+                ],
             ],
             'payment_methods' =>[
                 [
