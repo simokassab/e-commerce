@@ -389,7 +389,7 @@ class ProductService
             $fieldCheck->delete();
         }
 
-        throw_if(!$request->product_variations, Exception::class, 'No variations found');
+        throw_if(!$request->product_variations, Exception::class,'No variations found');
 
         if (!$request->has('product_variations'))
             return $this;
@@ -462,10 +462,25 @@ class ProductService
         throw new Exception('Error while storing product images');
     }
 
-    public function storeVariationsAndPrices($request, $product)
+    public function storePricesForVariations($request,$childrenIds){
+$data=[];
+        foreach ($request->product_variations as $variation) {
+            $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
+
+            foreach ($pricesInfo as $key => $price) {
+                    $data[$key]['product_id'] = $childrenIds[$key];
+                    $data[$key]['price_id'] = $price['price_id'];
+                    $data[$key]['price'] = $price['price'];
+                    $data[$key]['discounted_price'] = $price['discounted_price'];
+                    $data[$key]['created_at'] = Carbon::now()->toDateTimeString();
+                    $data[$key]['updated_at'] = Carbon::now()->toDateTimeString();
+                }
+            }
+            ProductPrice::Insert($data);
+
+    }
+    public function storeVariations($request, $product)
     {
-
-
         DB::beginTransaction();
         try {
             $variationCheck = Product::where('parent_product_id', $product->id)->get();
@@ -478,15 +493,15 @@ class ProductService
             }
 
             $childrenIds = [];
-            $data = [];
-            throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
+            throw_if(!$request->product_variations, Exception::class, 'No variations found');
+            $productVariationParentsArray = [];
             foreach ($request->product_variations as $variation) {
                 if ($variation['image'] == null)
                     $imagePath = "";
-                else {
+                else
                     $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
-                }
+
                 $productVariationsArray = [
                     'name' => ($request->name),
                     'code' => $variation['code'],
@@ -515,28 +530,27 @@ class ProductService
                     'products_statuses_id' => $variation['products_statuses_id'],
                     'image' => $imagePath
                 ];
-                $productVariation = Product::updateOrCreate($productVariationsArray,['id' => $variation['id']]);
+                $productVariationParentsArray [] = $productVariationsArray;
 
+                // $productVariation = Product::updateOrCreate($productVariationsArray,['id' => $variation['id']]);
 
-                $pricesInfo =  $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
-                foreach ($pricesInfo as $key => $price) {
-                    $data[$key]['product_id'] = $productVariation->id;
-                    $data[$key]['price_id'] = $price['price_id'];
-                    $data[$key]['price'] = $price['price'];
-                    $data[$key]['discounted_price'] = $price['discounted_price'];
-                    $data[$key]['created_at'] = Carbon::now()->toDateTimeString();
-                    $data[$key]['updated_at'] = Carbon::now()->toDateTimeString();
-                }
+            }
+
+            $productVariation = Product::upsert($productVariationsArray,['id'],Product::$fillable);
+
+            foreach ($productVariation as $key => $variation) {
                 $childrenIds[] = $productVariation->id;
             }
-            ProductPrice::Insert($data);
 
             $this->storeImagesForVariations($request, $childrenIds);
+            $this->storePricesForVariations($request, $childrenIds);
             $this->storeFieldsForVariations($request, $childrenIds);
+            $this->storeAttributesForVariations($request, $childrenIds);
 
             if (count($childrenIds) > 0) {
                 return $childrenIds;
             }
+
             DB::commit();
         } catch (Exception $e) {
             throw new Exception($e->getMessage());

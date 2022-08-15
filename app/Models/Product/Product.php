@@ -27,7 +27,7 @@ class Product extends MainModel
     protected $table='products';
     protected $guard_name = 'web';
 
-    protected $fillable = [
+    public array $fillable = [
         'name',
         'slug',
         'code',
