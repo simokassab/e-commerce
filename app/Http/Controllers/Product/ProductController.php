@@ -58,15 +58,15 @@ class ProductController extends MainController
             $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
 
             $categoriesCount = Product::has('category')->count();
-            // $tagsCount = Product::has('tags')->count();
-            // $brandsCount = Product::has('brand')->count();
+            $tagsCount = Product::has('tags')->count();
+            $brandsCount = Product::has('brand')->count();
 
             if($categoriesCount>0)
                 $searchRelationsKeys['category'] = ['categories' => 'name'];
-            // if($tagsCount>0)
-            //     $searchRelationsKeys['tags'] = ['tags' => 'name'];
-            // if($brandsCount>0)
-            //     $searchRelationsKeys['brand'] = ['brands' => 'name'];
+            if($tagsCount>0)
+                $searchRelationsKeys['tags'] = ['tags' => 'name'];
+            if($brandsCount>0)
+                $searchRelationsKeys['brand'] = ['brands' => 'name'];
 
             return $this->getSearchPaginated(ProductResource::class, Product::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
         }
@@ -166,7 +166,7 @@ class ProductController extends MainController
             $product = $this->productService->createAndUpdateProduct($request);
             $childrenIds=[];
             if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
-               $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
+               $childrenIds=$this->productService->storeVariations($request,$product);
             }
             if($request->type=='bundle')
                 $this->productService->storeAdditionalBundle($request,$product);
@@ -223,7 +223,7 @@ class ProductController extends MainController
             $product = $this->productService->createAndUpdateProduct($request,$product);
 
             if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
-               $childrenIds=$this->productService->storeVariationsAndPrices($request,$product);
+               $childrenIds=$this->productService->storeVariations($request,$product);
             }
             if($request->type=='bundle')
                 $this->productService->storeAdditionalBundle($request,$product);

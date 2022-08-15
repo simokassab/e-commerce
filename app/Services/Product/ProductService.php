@@ -28,14 +28,15 @@ class ProductService
             ->storeAdditionalImages($request, $product) // different than parent
             ->storeAdditionalLabels($request, $product, $childrenIds)
             ->storeAdditionalTags($request, $product, $childrenIds)
-            ->storeAdditionalPrices($request, $product, $childrenIds);
+            ->storeAdditionalPrices($request, $product, $childrenIds)
+            ->storeAdditionalAttributes($request,$product);
     }
 
     public function storeAdditionalCategrories($request, $product, $childrenIds)
     {
         //$request=(object)$request;
-        $categoryCheck = ProductCategory::where('product_id',$product->id)->orWhereIn('product_id',$childrenIds)->get();
-        if($categoryCheck){
+        $categoryCheck = ProductCategory::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->get();
+        if ($categoryCheck) {
             $categoryCheck->delete();
         }
 
@@ -67,8 +68,8 @@ class ProductService
 
     public function storeAdditionalFields($request, $product)
     {
-        $fieldCheck = ProductField::where('product_id',$product->id)->get();
-        if($fieldCheck){
+        $fieldCheck = ProductField::where('product_id', $product->id)->get();
+        if ($fieldCheck) {
             $fieldCheck->delete();
         }
         if (!$request->has('fields'))
@@ -77,27 +78,27 @@ class ProductService
 
         $data = [];
 
-            foreach ($request->fields as $index => $field) {
-                if (gettype($field) == 'string') {
-                    $field = (array)json_decode($field);
-                }
-                if ($field["type"] == 'select') {
-                    $data[$index]["value"] = null;
-                    if (gettype($field["value"]) == 'array') {
-                        $data[$index]["field_value_id"] = $field["value"][0];
-                    } elseif (gettype($field["value"]) == 'integer') {
-                        $data[$index]["field_value_id"] = $field["value"];
-                    }
-                } else {
-                    $data[$index]["value"] = ($field['value']);
-                    $data[$index]["field_value_id"] = null;
-                    if (gettype($field['value']) == 'array') {
-                        $data[$index]["value"] = ($field['value']);
-                    }
-                }
-                $data[$index]["product_id"] = $product->id;
-                $data[$index]["field_id"] = $field['field_id'];
+        foreach ($request->fields as $index => $field) {
+            if (gettype($field) == 'string') {
+                $field = (array)json_decode($field);
             }
+            if ($field["type"] == 'select') {
+                $data[$index]["value"] = null;
+                if (gettype($field["value"]) == 'array') {
+                    $data[$index]["field_value_id"] = $field["value"][0];
+                } elseif (gettype($field["value"]) == 'integer') {
+                    $data[$index]["field_value_id"] = $field["value"];
+                }
+            } else {
+                $data[$index]["value"] = ($field['value']);
+                $data[$index]["field_value_id"] = null;
+                if (gettype($field['value']) == 'array') {
+                    $data[$index]["value"] = ($field['value']);
+                }
+            }
+            $data[$index]["product_id"] = $product->id;
+            $data[$index]["field_id"] = $field['field_id'];
+        }
         if (ProductField::insert($data)) {
 
             return $this;
@@ -106,12 +107,52 @@ class ProductService
         throw new Exception('Error while storing product fields');
     }
 
+    public function storeAdditionalAttributes($request, $product)
+    {
+        $fieldCheck = ProductField::where('product_id', $product->id)->get();
+        if ($fieldCheck) {
+            $fieldCheck->delete();
+        }
+        if (!$request->has('attributes'))
+            return $this;
+
+
+        $data = [];
+
+        foreach ($request->attributes as $index => $attribute) {
+            if (gettype($attribute) == 'string') {
+                $attribute = (array)json_decode($attribute);
+            }
+            if ($attribute["type"] == 'select') {
+                $data[$index]["value"] = null;
+                if (gettype($attribute["value"]) == 'array') {
+                    $data[$index]["field_value_id"] = $attribute["value"][0];
+                } elseif (gettype($attribute["value"]) == 'integer') {
+                    $data[$index]["field_value_id"] = $attribute["value"];
+                }
+            } else {
+                $data[$index]["value"] = ($attribute['value']);
+                $data[$index]["field_value_id"] = null;
+                if (gettype($attribute['value']) == 'array') {
+                    $data[$index]["value"] = ($attribute['value']);
+                }
+            }
+            $data[$index]["product_id"] = $product->id;
+            $data[$index]["field_id"] = $attribute['field_id'];
+        }
+        if (ProductField::insert($data)) {
+
+            return $this;
+        }
+
+        throw new Exception('Error while storing product attributes');
+    }
 
     public function storeAdditionalImages($request, $product)
     {
         //$request=(object)$request;
-        $imageCheck = ProductImage::where('product_id',$product->id)->get();
-        if($imageCheck){
+        $imageCheck = ProductImage::where('product_id', $product->id)->get();
+        if ($imageCheck) {
             $imageCheck->delete();
         }
         if (!$request->has('images') || is_null($request->images)) {
@@ -145,8 +186,8 @@ class ProductService
     public function storeAdditionalLabels($request, $product, $childrenIds)
     {
         //$request=(object)$request;
-        $labelCheck = ProductLabel::where('product_id',$product->id)->orWhereIn('product_id',$childrenIds)->get();
-        if($labelCheck){
+        $labelCheck = ProductLabel::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->get();
+        if ($labelCheck) {
             $labelCheck->delete();
         }
 
@@ -179,8 +220,8 @@ class ProductService
     public function storeAdditionalTags($request, $product, $childrenIds)
     {
         //$request=(object)$request;
-        $tagCheck = ProductTag::where('product_id',$product->id)->orWhereIn('product_id',$childrenIds)->get();
-        if($tagCheck){
+        $tagCheck = ProductTag::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->get();
+        if ($tagCheck) {
             $tagCheck->delete();
         }
 
@@ -213,8 +254,8 @@ class ProductService
     public function storeAdditionalBundle($request, $product)
     {
         //$request=(object)$request;
-        $bundleCheck = ProductRelated::where('parent_product_id',$product->id);
-        if($bundleCheck){
+        $bundleCheck = ProductRelated::where('parent_product_id', $product->id);
+        if ($bundleCheck) {
             $bundleCheck->delete();
         }
 
@@ -237,8 +278,8 @@ class ProductService
     public function storeAdditionalPrices($request, $product)
     {
         //$request=(object)$request;
-        $priceCheck = ProductPrice::where('product_id',$product->id)->get();
-        if($priceCheck){
+        $priceCheck = ProductPrice::where('product_id', $product->id)->get();
+        if ($priceCheck) {
             $priceCheck->delete();
         }
         if ($request->has('prices')) {
@@ -297,8 +338,8 @@ class ProductService
 
     public function storeFieldsForVariations($request, $childrenIds)
     {
-        $fieldCheck = ProductField::whereIn('product_id',$childrenIds)->get();
-        if($fieldCheck){
+        $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->get();
+        if ($fieldCheck) {
             $fieldCheck->delete();
         }
 
@@ -341,10 +382,55 @@ class ProductService
         throw new Exception('Error while storing product fields');
     }
 
+    public function storeAttributesForVariations($request, $childrenIds)
+    {
+        $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->get();
+        if ($fieldCheck) {
+            $fieldCheck->delete();
+        }
+
+        throw_if(!$request->product_variations, Exception::class,'No variations found');
+
+        if (!$request->has('product_variations'))
+            return $this;
+
+        $childrenIdsArray = $childrenIds;
+        $data = [];
+
+        foreach ($childrenIdsArray as $key => $child) {
+            foreach ($request->product_variations[$key]['attributes'] as $index => $attribute) {
+                if (gettype($attribute) == 'string') {
+                    $attribute = (array)json_decode($attribute);
+                }
+                if ($attribute["type"] == 'select') {
+                    $data[$key]["value"] = null;
+                    if (gettype($attribute["value"]) == 'array') {
+                        $data[$key]["field_value_id"] = $attribute["value"][0];
+                    } elseif (gettype($attribute["value"]) == 'integer') {
+                        $data[$key]["field_value_id"] = $attribute["value"];
+                    }
+                } else {
+                    $data[$key]["value"] = ($attribute['value']);
+                    $data[$key]["field_value_id"] = null;
+                    if (gettype($attribute['value']) == 'array') {
+                        $data[$key]["value"] = ($attribute['value']);
+                    }
+                }
+                $data[$key]["product_id"] = $child;
+                $data[$key]["field_id"] = $attribute['field_id'];
+            }
+        }
+        if (ProductField::insert($data)) {
+
+            return $this;
+        }
+
+        throw new Exception('Error while storing product attributes for variations');
+    }
     public function storeImagesForVariations($request, $childrenIds)
     {
-        $imageCheck = ProductImage::whereIn('product_id',$childrenIds)->get();
-        if($imageCheck){
+        $imageCheck = ProductImage::whereIn('product_id', $childrenIds)->get();
+        if ($imageCheck) {
             $imageCheck->delete();
         }
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
@@ -376,31 +462,46 @@ class ProductService
         throw new Exception('Error while storing product images');
     }
 
-    public function storeVariationsAndPrices($request, $product)
+    public function storePricesForVariations($request,$childrenIds){
+$data=[];
+        foreach ($request->product_variations as $variation) {
+            $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
+
+            foreach ($pricesInfo as $key => $price) {
+                    $data[$key]['product_id'] = $childrenIds[$key];
+                    $data[$key]['price_id'] = $price['price_id'];
+                    $data[$key]['price'] = $price['price'];
+                    $data[$key]['discounted_price'] = $price['discounted_price'];
+                    $data[$key]['created_at'] = Carbon::now()->toDateTimeString();
+                    $data[$key]['updated_at'] = Carbon::now()->toDateTimeString();
+                }
+            }
+            ProductPrice::Insert($data);
+
+    }
+    public function storeVariations($request, $product)
     {
-
-
         DB::beginTransaction();
         try {
-            $variationCheck = Product::where('parent_product_id',$product->id)->get();
-            $variationPriceCheck = ProductPrice::whereIn('product_id',$variationCheck->id)->get();
-            if($variationCheck){
-                $variationCheck->delete();
-            }
-            if($variationPriceCheck){
+            $variationCheck = Product::where('parent_product_id', $product->id)->get();
+            // if ($variationCheck) {
+            //     $variationCheck->delete();
+            // }
+            $variationPriceCheck = ProductPrice::whereIn('product_id', $variationCheck->id)->get();
+            if ($variationPriceCheck) {
                 $variationPriceCheck->delete();
             }
 
             $childrenIds = [];
-            $data = [];
-            throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
+            throw_if(!$request->product_variations, Exception::class, 'No variations found');
+            $productVariationParentsArray = [];
             foreach ($request->product_variations as $variation) {
                 if ($variation['image'] == null)
                     $imagePath = "";
-                else {
+                else
                     $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
-                }
+
                 $productVariationsArray = [
                     'name' => ($request->name),
                     'code' => $variation['code'],
@@ -429,39 +530,39 @@ class ProductService
                     'products_statuses_id' => $variation['products_statuses_id'],
                     'image' => $imagePath
                 ];
+                $productVariationParentsArray [] = $productVariationsArray;
 
-                $productVariation = Product::create($productVariationsArray);
-                $pricesInfo =  $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
-                foreach ($pricesInfo as $key => $price) {
-                    $data[$key]['product_id'] = $productVariation->id;
-                    $data[$key]['price_id'] = $price['price_id'];
-                    $data[$key]['price'] = $price['price'];
-                    $data[$key]['discounted_price'] = $price['discounted_price'];
-                    $data[$key]['created_at'] = Carbon::now()->toDateTimeString();
-                    $data[$key]['updated_at'] = Carbon::now()->toDateTimeString();
-                }
+                // $productVariation = Product::updateOrCreate($productVariationsArray,['id' => $variation['id']]);
+
+            }
+
+            $productVariation = Product::upsert($productVariationsArray,['id'],Product::$fillable);
+
+            foreach ($productVariation as $key => $variation) {
                 $childrenIds[] = $productVariation->id;
             }
-            ProductPrice::insert($data);
 
             $this->storeImagesForVariations($request, $childrenIds);
-            $this->storeFieldsForVariations($request,$childrenIds);
+            $this->storePricesForVariations($request, $childrenIds);
+            $this->storeFieldsForVariations($request, $childrenIds);
+            $this->storeAttributesForVariations($request, $childrenIds);
 
             if (count($childrenIds) > 0) {
                 return $childrenIds;
             }
+
             DB::commit();
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
     }
 
-    public function createAndUpdateProduct($request,$product=null)
+    public function createAndUpdateProduct($request, $product = null)
     {
         DB::beginTransaction();
         try {
             //$request=(object)$request;
-            $product= $product ?  $product : new Product();
+            $product = $product ?  $product : new Product();
             $product->name = ($request->name);
             $product->slug = $request->slug;
             $product->code = $request->code;

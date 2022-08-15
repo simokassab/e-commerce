@@ -12,7 +12,7 @@ class StoreProductRequest extends FormRequest
 {
     private $productsRequiredSettingsArray = [];
     private $QuantityValue = 0;
-    private $minimumAndReservedQuantityValue = 0;
+    private $allowNegativeQuantity = 0;
     private $priceValue = 0;
     private $discountedPriceValue = 0;
     /**
@@ -37,7 +37,7 @@ class StoreProductRequest extends FormRequest
         if($productSettings){
             $this->productsRequiredSettingsArray = explode(',',$productSettings['products_required_fields'][0]['value']) ?? "";
             $this->QuantityValue= $productSettings['products_quantity_greater_than_or_equal'][0]['value'] ?? 0;
-            $this->minimumAndReservedQuantityValue= $productSettings['products_minimum_and_reserved_quantity_greater_than_or_equal'][0]['value'] ?? 0;
+            $this->allowNegativeQuantity= $productSettings['allow_negative_quantity'][0]['value'] ?? 0;
             $this->priceValue= $productSettings['products_prices_greater_than_or_equal'][0]['value'] ?? 0;
             $this->discountedPriceValue= $productSettings['products_discounted_price_greater_than_or_equal'][0]['value'] ?? 0;
 
@@ -53,8 +53,8 @@ class StoreProductRequest extends FormRequest
             'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'type' => 'required | in:' . config('defaults.validation_default_types'),
             'quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
-            'reserved_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'nullable'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
-            'minimum_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
+            'reserved_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'nullable'), 'integer', 'gte:0'],
+            'minimum_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', Rule::when(!$this->allowNegativeQuantity,['gte:0'])],
             'summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
             'specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
 
@@ -119,8 +119,8 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
 
             'product_variations.*.quantity' => ['required', 'integer', 'gte:' . $this->QuantityValue],
-            'product_variations.*.reserved_quantity' => ['nullable' , 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
-            'product_variations.*.minimum_quantity' => ['required', 'integer', 'gte:' . $this->minimumAndReservedQuantityValue],
+            'product_variations.*.reserved_quantity' => ['nullable' , 'integer', 'gte:0'],
+            'product_variations.*.minimum_quantity' => ['required', 'integer', Rule::when(!$this->allowNegativeQuantity,['gte:0'])],
 
             'product_variations.*.summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
             'product_variations.*.specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
@@ -180,12 +180,12 @@ class StoreProductRequest extends FormRequest
 
             'reserved_quantity.required' => 'the :attribute field is required',
             'reserved_quantity.integer' => 'The :attribute must be an integer',
-            'reserved_quantity.gte' => 'The :attribute must be greater than or equal to '.$this->minimumAndReservedQuantityValue,
+            'reserved_quantity.gte' => 'The :attribute must be greater than or equal to '.$this->allowNegativeQuantity,
             'reserved_quantity.in' => 'The :attribute must be 0',
 
             'minimum_quantity.required' => 'the :attribute field is required',
             'minimum_quantity.integer' => 'The :attribute must be an integer',
-            'minimum_quantity.gte' => 'The :attribute must be greater than or equal to '.$this->minimumAndReservedQuantityValue,
+            'minimum_quantity.gte' => 'The :attribute must be greater than or equal to '.$this->allowNegativeQuantity,
             'minimum_quantity.in' => 'The :attribute must be 0',
 
             'summary.required' => 'the :attribute field is required',
