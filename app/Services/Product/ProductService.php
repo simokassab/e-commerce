@@ -29,7 +29,7 @@ class ProductService
             ->storeAdditionalLabels($request, $product, $childrenIds)
             ->storeAdditionalTags($request, $product, $childrenIds)
             ->storeAdditionalPrices($request, $product, $childrenIds)
-            ->storeAdditionalAttributes($request,$product);
+            ->storeAdditionalAttributes($request, $product);
     }
 
     public function storeAdditionalCategrories($request, $product, $childrenIds)
@@ -251,6 +251,7 @@ class ProductService
         throw new Exception('Error while storing product tags');
     }
 
+    // TYPE BUNDLE
     public function storeAdditionalBundle($request, $product)
     {
         //$request=(object)$request;
@@ -274,6 +275,7 @@ class ProductService
         }
         return $this;
     }
+    // END OF TYPE BUNDLE
 
     public function storeAdditionalPrices($request, $product)
     {
@@ -336,6 +338,7 @@ class ProductService
         }
     }
 
+    // TYPE VARIABLE
     public function storeFieldsForVariations($request, $childrenIds)
     {
         $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->get();
@@ -389,7 +392,7 @@ class ProductService
             $fieldCheck->delete();
         }
 
-        throw_if(!$request->product_variations, Exception::class,'No variations found');
+        throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
         if (!$request->has('product_variations'))
             return $this;
@@ -427,6 +430,7 @@ class ProductService
 
         throw new Exception('Error while storing product attributes for variations');
     }
+
     public function storeImagesForVariations($request, $childrenIds)
     {
         $imageCheck = ProductImage::whereIn('product_id', $childrenIds)->get();
@@ -462,39 +466,33 @@ class ProductService
         throw new Exception('Error while storing product images');
     }
 
-    public function storePricesForVariations($request,$childrenIds){
-$data=[];
+    public function storePricesForVariations($request, $childrenIds)
+    {
+        $data = [];
         foreach ($request->product_variations as $variation) {
             $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
 
             foreach ($pricesInfo as $key => $price) {
-                    $data[$key]['product_id'] = $childrenIds[$key];
-                    $data[$key]['price_id'] = $price['price_id'];
-                    $data[$key]['price'] = $price['price'];
-                    $data[$key]['discounted_price'] = $price['discounted_price'];
-                    $data[$key]['created_at'] = Carbon::now()->toDateTimeString();
-                    $data[$key]['updated_at'] = Carbon::now()->toDateTimeString();
-                }
+                $data[$key]['product_id'] = $childrenIds[$key];
+                $data[$key]['price_id'] = $price['price_id'];
+                $data[$key]['price'] = $price['price'];
+                $data[$key]['discounted_price'] = $price['discounted_price'];
+                $data[$key]['created_at'] = Carbon::now()->toDateTimeString();
+                $data[$key]['updated_at'] = Carbon::now()->toDateTimeString();
             }
-            ProductPrice::Insert($data);
-
+        }
+        ProductPrice::Insert($data);
     }
+
     public function storeVariations($request, $product)
     {
         DB::beginTransaction();
         try {
-            $variationCheck = Product::where('parent_product_id', $product->id)->get();
-            // if ($variationCheck) {
-            //     $variationCheck->delete();
-            // }
-            $variationPriceCheck = ProductPrice::whereIn('product_id', $variationCheck->id)->get();
-            if ($variationPriceCheck) {
-                $variationPriceCheck->delete();
-            }
 
             $childrenIds = [];
 
             throw_if(!$request->product_variations, Exception::class, 'No variations found');
+           
             $productVariationParentsArray = [];
             foreach ($request->product_variations as $variation) {
                 if ($variation['image'] == null)
@@ -530,13 +528,13 @@ $data=[];
                     'products_statuses_id' => $variation['products_statuses_id'],
                     'image' => $imagePath
                 ];
-                $productVariationParentsArray [] = $productVariationsArray;
+                $productVariationParentsArray[] = $productVariationsArray;
 
                 // $productVariation = Product::updateOrCreate($productVariationsArray,['id' => $variation['id']]);
 
             }
 
-            $productVariation = Product::upsert($productVariationsArray,['id'],Product::$fillable);
+            $productVariation = Product::upsert($productVariationParentsArray, ['id'], Product::$fillable);
 
             foreach ($productVariation as $key => $variation) {
                 $childrenIds[] = $productVariation->id;
@@ -556,6 +554,7 @@ $data=[];
             throw new Exception($e->getMessage());
         }
     }
+    // END OF TYPE VARIABLE
 
     public function createAndUpdateProduct($request, $product = null)
     {
