@@ -28,6 +28,7 @@ class SelectCurrencyResource extends JsonResource
             'rate'=> $rate,
             'code' => $this->code,
             'symbol'=>$this->symbol,
+            'is_default'=>$this->is_default,
 
         ];
     }
