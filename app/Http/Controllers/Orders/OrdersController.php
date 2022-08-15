@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Orders;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Orders\StoreOrderRequest;
 use App\Http\Resources\Country\SelectContryResource;
+use App\Http\Resources\Currency\SelectCurrencyResource;
 use App\Http\Resources\Customers\SelectCustomerResource;
 use App\Http\Resources\Orders\OrderResource;
 use App\Http\Resources\Orders\SingelOrdersResource;
@@ -59,7 +60,7 @@ class OrdersController extends MainController
     {
         return $this->successResponse(data:[
             'countries' => SelectContryResource::collection(Country::query()->select(['id','name','iso_code_1'])->get()),
-            'currencies' => ::collection(Country::query()->select(['id','name','iso_code_1'])->get()),
+            'currencies' => SelectCurrencyResource::collection(Currency::all()),
             'statuses' => SelectOrderStatus::collection(OrderStatus::query()->select(['id','name'],)->get()),
             'customers' => SelectCustomerResource::collection(Customer::query()->select(['id','first_name','last_name','phone'])->WhereNot('is_blacklist',1)->get()),
             'order' => null,

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Currency;
 
+use App\Models\Currency\Currency;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SelectCurrencyResource extends JsonResource
