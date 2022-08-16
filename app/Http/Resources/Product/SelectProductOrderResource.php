@@ -25,6 +25,10 @@ class SelectProductOrderResource extends JsonResource
         if($taxObject->is_complex){
             $tax = $taxObject->getComplexPrice($price,self::$data['taxComponents']->toArray(),self::$data['tax']->toArray());
         }
+        $quantity = $this->quantity;
+        if($this->type == 'bundle'){
+            $quantity = '--';
+        }
 
         return [
             'id' => $this->id,
@@ -35,7 +39,7 @@ class SelectProductOrderResource extends JsonResource
             'sku' => $this->sku,
             'price' => $price + $tax,
             'currency_symbol' => $currencySymbol,
-            'quantity_in_stock' => $this->quantity,
+            'quantity_in_stock' => $quantity,
             'edit_status' => false,
             'type' => $this->type,
             'pre_order' => false
