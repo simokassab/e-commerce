@@ -34,6 +34,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\Product\SelectProductOrderResource;
+use App\Http\Resources\Product\SingleProductResource;
 
 class ProductController extends MainController
 {
@@ -195,7 +196,7 @@ class ProductController extends MainController
      */
     public function show(Product $product)
     {
-        return $this->successResponse(['product' =>  new ProductResource($product)]);
+        return $this->successResponse('Success!',['product' =>  new SingleProductResource($product->load(['defaultCategory','tags','brand','category','unit','tax','priceClass','price','field','labels']))]);
     }
 
     /**

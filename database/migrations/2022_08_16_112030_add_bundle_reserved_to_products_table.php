@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->boolean('pre_order')->nullable();
+            $table->integer('bundle_reserved_quantity')->nullable();
+
         });
     }
 
@@ -26,8 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            if(Schema::hasColumn('products','pre_order')){
-                $table->dropColumn('pre_order');
+            if(Schema::hasColumn('products','bundle_reserved_quantity')){
+                $table->dropColumn('bundle_reserved_quantity');
             }
         });
     }
