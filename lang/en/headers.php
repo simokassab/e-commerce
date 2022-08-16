@@ -465,6 +465,24 @@ return [
             'is_visible' => false,
             'is_show' => false
         ],
+        'type' => [
+            'key' => 'type',
+            'name' => 'Type',
+            'search' => '',
+            'type' => 'string',
+            'sort' => false,
+            'is_visible' => false,
+            'is_show' => false
+        ],
+        'pre_order' => [
+            'key' => 'pre_order',
+            'name' => 'Pre Order',
+            'search' => '',
+            'type' => 'string',
+            'sort' => false,
+            'is_visible' => false,
+            'is_show' => false
+        ],
         
     ],
     'roles' => [
