@@ -36,9 +36,6 @@ class ProductService
     {
         //$request=(object)$request;
         $categoryCheck = ProductCategory::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
-        // if ($categoryCheck) {
-        //     $categoryCheck->destroy();
-        // }
 
         $childrenIdsArray = $childrenIds;
         $childrenIdsArray[] = $product->id;
@@ -69,9 +66,7 @@ class ProductService
     public function storeAdditionalFields($request, $product)
     {
         $fieldCheck = ProductField::where('product_id', $product->id)->delete();
-        // if ($fieldCheck) {
-        //     $fieldCheck->destroy();
-        // }
+
         if (!$request->has('fields'))
             return $this;
 
@@ -110,9 +105,7 @@ class ProductService
     public function storeAdditionalAttributes($request, $product)
     {
         $fieldCheck = ProductField::where('product_id', $product->id)->delete();
-        // if ($fieldCheck) {
-        //     $fieldCheck->destroy();
-        // }
+
         if (!$request->has('attributes'))
             return $this;
 
@@ -150,9 +143,7 @@ class ProductService
     {
         //$request=(object)$request;
         $imageCheck = ProductImage::where('product_id', $product->id)->delete();
-        // if ($imageCheck) {
-        //     $imageCheck->destroy();
-        // }
+
         if (!$request->has('images') || is_null($request->images)) {
             return $this;
         }
@@ -185,9 +176,6 @@ class ProductService
     {
         //$request=(object)$request;
         $labelCheck = ProductLabel::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
-        // if ($labelCheck) {
-        //     $labelCheck->destroy();
-        // }
 
         if (!$request->has('labels'))
             return $this;
@@ -219,9 +207,6 @@ class ProductService
     {
         //$request=(object)$request;
         $tagCheck = ProductTag::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
-        // if ($tagCheck) {
-        //     $tagCheck->destroy();
-        // }
 
         if (!$request->has('tags'))
             return $this;
@@ -254,9 +239,6 @@ class ProductService
     {
         //$request=(object)$request;
         $bundleCheck = ProductRelated::where('parent_product_id', $product->id)->delete();
-        // if ($bundleCheck) {
-        //     $bundleCheck->destroy();
-        // }
 
         if ($request->type == 'bundle') {
             foreach ($request->related_products as $related_product => $value) {
@@ -279,9 +261,7 @@ class ProductService
     {
         //$request=(object)$request;
         $priceCheck = ProductPrice::where('product_id', $product->id)->delete();
-        // if ($priceCheck) {
-        //     $priceCheck->destroy();
-        // }
+
         if ($request->has('prices')) {
             $pricesArray =  [];
             foreach ($request->prices as $price => $value) {
@@ -340,9 +320,6 @@ class ProductService
     public function storeFieldsForVariations($request, $childrenIds)
     {
         $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
-        // if ($fieldCheck) {
-        //     $fieldCheck->destroy();
-        // }
 
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
@@ -386,9 +363,6 @@ class ProductService
     public function storeAttributesForVariations($request, $childrenIds)
     {
         $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
-        // if ($fieldCheck) {
-        //     $fieldCheck->destroy();
-        // }
 
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
@@ -432,9 +406,7 @@ class ProductService
     public function storeImagesForVariations($request, $childrenIds)
     {
         $imageCheck = ProductImage::whereIn('product_id', $childrenIds)->delete();
-        // if ($imageCheck) {
-        //     $imageCheck->destroy();
-        // }
+
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
         if (!$request->has('product_variations'))
