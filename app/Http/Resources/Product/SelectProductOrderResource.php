@@ -28,15 +28,15 @@ class SelectProductOrderResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'tax' => $tax,
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image) : 'default_image' ,
+            'name' => $this->name,
+            'quantity' => 1,
+            'tax' => $tax,
             'sku' => $this->sku,
             'price' => $price + $tax,
             'currency_symbol' => $currencySymbol,
-            'quantity' => 1,
-            'quantity_in_stock_available' => $this->quantity - $this->minimum_quantity < 0 ? 0 : $this->quantity - $this->minimum_quantity,
             'quantity_in_stock' => $this->quantity,
+//            'quantity_in_stock_available' => $this->quantity - $this->minimum_quantity < 0 ? 0 : $this->quantity - $this->minimum_quantity,
 
         ];
     }

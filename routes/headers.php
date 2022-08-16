@@ -42,6 +42,7 @@ Route::get('units',[UnitController::class,'getTableHeaders']);
 Route::get('users',[UsersController::class,'getTableHeaders']);
 Route::get('settings',[SettingsController::class,'getTableHeaders']);
 Route::get('products',[ProductController::class,'getTableHeaders']);
+Route::get('products-select',[ProductController::class,'getTableHeadersForSelect']);
 Route::get('orders',[OrdersController::class,'getTableHeaders']);
 
 

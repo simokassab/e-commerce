@@ -289,20 +289,21 @@ class ProductController extends MainController
     }
 
     public function getProductsForOrders(Request $request){
-        $minimumQuantity = Setting::where('title','products_minimum_and_reserved_quantity_greater_than_or_equal')->firstOrFail()->value;
-        $products = Product::with(['tax','pricesList.prices'])->get();
+        $products = Product::with(['tax','pricesList.prices'])->paginate(10);
         $data['taxComponents'] = TaxComponent::all();
         $data['tax'] = Tax::all();
-        return $this->successResponse(data:[
-            'products' => SelectProductOrderResource::customCollection($products,$data),
-        ]);
+        return SelectProductOrderResource::customCollection($products,$data);
+//        return $this->successResponse(data:[
+//            'products' => SelectProductOrderResource::customCollection($products,$data),
+//        ]);
     }
-
-
 
     public function getTableHeaders(){
         return $this->successResponse('Success!',['headers' => __('headers.products') ]);
-}
+    }
 
+    public function getTableHeadersForSelect(){
+        return $this->successResponse('Success!',['headers' => __('headers.products_select_product') ]);
+    }
 
 }
