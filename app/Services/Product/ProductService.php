@@ -35,10 +35,7 @@ class ProductService
     public function storeAdditionalCategrories($request, $product, $childrenIds)
     {
         //$request=(object)$request;
-        $categoryCheck = ProductCategory::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->get();
-        if ($categoryCheck) {
-            $categoryCheck->delete();
-        }
+        $categoryCheck = ProductCategory::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
 
         $childrenIdsArray = $childrenIds;
         $childrenIdsArray[] = $product->id;
@@ -68,10 +65,8 @@ class ProductService
 
     public function storeAdditionalFields($request, $product)
     {
-        $fieldCheck = ProductField::where('product_id', $product->id)->get();
-        if ($fieldCheck) {
-            $fieldCheck->delete();
-        }
+        $fieldCheck = ProductField::where('product_id', $product->id)->delete();
+
         if (!$request->has('fields'))
             return $this;
 
@@ -109,10 +104,8 @@ class ProductService
 
     public function storeAdditionalAttributes($request, $product)
     {
-        $fieldCheck = ProductField::where('product_id', $product->id)->get();
-        if ($fieldCheck) {
-            $fieldCheck->delete();
-        }
+        $fieldCheck = ProductField::where('product_id', $product->id)->delete();
+
         if (!$request->has('attributes'))
             return $this;
 
@@ -149,10 +142,8 @@ class ProductService
     public function storeAdditionalImages($request, $product)
     {
         //$request=(object)$request;
-        $imageCheck = ProductImage::where('product_id', $product->id)->get();
-        if ($imageCheck) {
-            $imageCheck->delete();
-        }
+        $imageCheck = ProductImage::where('product_id', $product->id)->delete();
+
         if (!$request->has('images') || is_null($request->images)) {
             return $this;
         }
@@ -184,10 +175,7 @@ class ProductService
     public function storeAdditionalLabels($request, $product, $childrenIds)
     {
         //$request=(object)$request;
-        $labelCheck = ProductLabel::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->get();
-        if ($labelCheck) {
-            $labelCheck->delete();
-        }
+        $labelCheck = ProductLabel::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
 
         if (!$request->has('labels'))
             return $this;
@@ -218,10 +206,7 @@ class ProductService
     public function storeAdditionalTags($request, $product, $childrenIds)
     {
         //$request=(object)$request;
-        $tagCheck = ProductTag::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->get();
-        if ($tagCheck) {
-            $tagCheck->delete();
-        }
+        $tagCheck = ProductTag::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
 
         if (!$request->has('tags'))
             return $this;
@@ -253,10 +238,7 @@ class ProductService
     public function storeAdditionalBundle($request, $product)
     {
         //$request=(object)$request;
-        $bundleCheck = ProductRelated::where('parent_product_id', $product->id)->get();
-        if ($bundleCheck) {
-            $bundleCheck->delete();
-        }
+        $bundleCheck = ProductRelated::where('parent_product_id', $product->id)->delete();
 
         if ($request->type == 'bundle') {
             foreach ($request->related_products as $related_product => $value) {
@@ -278,10 +260,8 @@ class ProductService
     public function storeAdditionalPrices($request, $product)
     {
         //$request=(object)$request;
-        $priceCheck = ProductPrice::where('product_id', $product->id)->get();
-        if ($priceCheck) {
-            $priceCheck->delete();
-        }
+        $priceCheck = ProductPrice::where('product_id', $product->id)->delete();
+
         if ($request->has('prices')) {
             $pricesArray =  [];
             foreach ($request->prices as $price => $value) {
@@ -339,10 +319,7 @@ class ProductService
     // TYPE VARIABLE
     public function storeFieldsForVariations($request, $childrenIds)
     {
-        $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->get();
-        if ($fieldCheck) {
-            $fieldCheck->delete();
-        }
+        $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
 
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
@@ -385,10 +362,7 @@ class ProductService
 
     public function storeAttributesForVariations($request, $childrenIds)
     {
-        $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->get();
-        if ($fieldCheck) {
-            $fieldCheck->delete();
-        }
+        $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
 
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
@@ -431,10 +405,8 @@ class ProductService
 
     public function storeImagesForVariations($request, $childrenIds)
     {
-        $imageCheck = ProductImage::whereIn('product_id', $childrenIds)->get();
-        if ($imageCheck) {
-            $imageCheck->delete();
-        }
+        $imageCheck = ProductImage::whereIn('product_id', $childrenIds)->delete();
+
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
         if (!$request->has('product_variations'))
