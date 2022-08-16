@@ -37,7 +37,7 @@ class ProductService
         //$request=(object)$request;
         $categoryCheck = ProductCategory::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->get();
         if ($categoryCheck) {
-            $categoryCheck->delete();
+            $categoryCheck->destroy();
         }
 
         $childrenIdsArray = $childrenIds;
@@ -70,7 +70,7 @@ class ProductService
     {
         $fieldCheck = ProductField::where('product_id', $product->id)->get();
         if ($fieldCheck) {
-            $fieldCheck->delete();
+            $fieldCheck->destroy();
         }
         if (!$request->has('fields'))
             return $this;
@@ -111,7 +111,7 @@ class ProductService
     {
         $fieldCheck = ProductField::where('product_id', $product->id)->get();
         if ($fieldCheck) {
-            $fieldCheck->delete();
+            $fieldCheck->destroy();
         }
         if (!$request->has('attributes'))
             return $this;
@@ -151,7 +151,7 @@ class ProductService
         //$request=(object)$request;
         $imageCheck = ProductImage::where('product_id', $product->id)->get();
         if ($imageCheck) {
-            $imageCheck->delete();
+            $imageCheck->destroy();
         }
         if (!$request->has('images') || is_null($request->images)) {
             return $this;
@@ -186,7 +186,7 @@ class ProductService
         //$request=(object)$request;
         $labelCheck = ProductLabel::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->get();
         if ($labelCheck) {
-            $labelCheck->delete();
+            $labelCheck->destroy();
         }
 
         if (!$request->has('labels'))
@@ -220,7 +220,7 @@ class ProductService
         //$request=(object)$request;
         $tagCheck = ProductTag::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->get();
         if ($tagCheck) {
-            $tagCheck->delete();
+            $tagCheck->destroy();
         }
 
         if (!$request->has('tags'))
@@ -255,7 +255,7 @@ class ProductService
         //$request=(object)$request;
         $bundleCheck = ProductRelated::where('parent_product_id', $product->id);
         if ($bundleCheck) {
-            $bundleCheck->delete();
+            $bundleCheck->destroy();
         }
 
         if ($request->type == 'bundle') {
@@ -280,7 +280,7 @@ class ProductService
         //$request=(object)$request;
         $priceCheck = ProductPrice::where('product_id', $product->id)->get();
         if ($priceCheck) {
-            $priceCheck->delete();
+            $priceCheck->destroy();
         }
         if ($request->has('prices')) {
             $pricesArray =  [];
@@ -319,14 +319,14 @@ class ProductService
 
                 $productChildren = $product->children->pluck('id');
                 foreach ($data as $table) {
-                    $table::whereIn('product_id', $productChildren)->delete();
+                    $table::whereIn('product_id', $productChildren)->destroy();
                 }
-                Product::whereIn('id', $productChildren)->delete();
+                Product::whereIn('id', $productChildren)->destroy();
             }
 
-            ProductRelated::where('parent_product_id', $product->id)->delete();
+            ProductRelated::where('parent_product_id', $product->id)->destroy();
             foreach ($data as $table) {
-                $table::where('product_id', $product->id)->delete();
+                $table::where('product_id', $product->id)->destroy();
             }
 
             DB::commit();
@@ -341,7 +341,7 @@ class ProductService
     {
         $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->get();
         if ($fieldCheck) {
-            $fieldCheck->delete();
+            $fieldCheck->destroy();
         }
 
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
@@ -387,7 +387,7 @@ class ProductService
     {
         $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->get();
         if ($fieldCheck) {
-            $fieldCheck->delete();
+            $fieldCheck->destroy();
         }
 
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
@@ -433,7 +433,7 @@ class ProductService
     {
         $imageCheck = ProductImage::whereIn('product_id', $childrenIds)->get();
         if ($imageCheck) {
-            $imageCheck->delete();
+            $imageCheck->destroy();
         }
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
