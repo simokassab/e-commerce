@@ -289,7 +289,11 @@ class ProductController extends MainController
     }
 
     public function getProductsForOrders(Request $request){
-        $name = strtolower($request->data['name']);
+        $name = '';
+        if(array_key_exists('name', $request->data)){
+            $name = strtolower($request->data['name']);
+        }
+
         $products = Product::with(['tax','pricesList.prices'])->whereRaw('lower(name) like (?)', ["%$name%"])->paginate($request->limit ?? config('defaults.default_pagination'));
         $data['taxComponents'] = TaxComponent::all();
         $data['tax'] = Tax::all();
