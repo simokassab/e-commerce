@@ -341,7 +341,7 @@ class ProductService
     {
         $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->get();
         if ($fieldCheck) {
-            $fieldCheck->delete();
+            $fieldCheck->destroy();
         }
 
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
@@ -387,7 +387,7 @@ class ProductService
     {
         $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->get();
         if ($fieldCheck) {
-            $fieldCheck->delete();
+            $fieldCheck->destroy();
         }
 
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
@@ -433,7 +433,7 @@ class ProductService
     {
         $imageCheck = ProductImage::whereIn('product_id', $childrenIds)->get();
         if ($imageCheck) {
-            $imageCheck->delete();
+            $imageCheck->destroy();
         }
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
