@@ -374,6 +374,90 @@ return [
 
        
     ],
+    'products_select_product' => [
+        'id' => [
+            'key' => 'id',
+            'name' => 'ID',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true,
+            'is_visible' => false,
+            'is_show' => true
+        ],
+        'image' => [
+            'key' => 'image',
+            'name' => 'Image',
+            'search' => '',
+            'type' => 'string',
+            'sort' => false,
+            'is_visible' => true,
+            'is_show' => true
+        ],
+        'name' => [
+            'key' => 'name',
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true,
+            'is_visible' => true,
+            'is_show' => true
+        ],
+        'quantity' => [
+            'key' => 'quantity',
+            'name' => 'Price',
+            'search' => '',
+            'type' => 'string',
+            'sort' => false,
+            'is_visible' => true,
+            'is_show' => true
+        ],
+        'tax' => [
+            'key' => 'tax',
+            'name' => 'Tax',
+            'search' => 'double',
+            'type' => 'double',
+            'sort' => true,
+            'is_visible' => false,
+            'is_show' => true
+        ],
+        'sku' => [
+            'key' => 'sku',
+            'name' => 'Sku',
+            'search' => 'string',
+            'type' => 'double',
+            'sort' => true,
+            'is_visible' => false,
+            'is_show' => true
+        ],
+        'price' => [
+            'key' => 'price',
+            'name' => 'Price',
+            'search' => '',
+            'type' => 'double',
+            'sort' => false,
+            'is_visible' => true,
+            'is_show' => true
+        ],
+        'currency_symbol' => [
+            'key' => 'currency_symbol',
+            'name' => 'Currency Symbol',
+            'search' => '',
+            'type' => 'string',
+            'sort' => false,
+            'is_visible' => false,
+            'is_show' => true
+        ],
+        'quantity_in_stock' => [
+            'key' => 'quantity_in_stock',
+            'name' => 'Quantity in stock',
+            'search' => '',
+            'type' => 'string',
+            'sort' => false,
+            'is_visible' => true,
+            'is_show' => true
+        ],
+        
+    ],
     'roles' => [
         'id' => [
             'name' => 'ID',
@@ -602,7 +686,8 @@ return [
             'type' => 'double',
             'sort' => false
         ]
-    ]
+    ],
+    
     
 
     

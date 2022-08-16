@@ -121,7 +121,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     // Route::post('product/add',[ProductController::class,'addproduct']);// for search
     Route::get('product/create',[ProductController::class,'create']);
 
-    Route::get('product/get-products-for-order',[ProductController::class,'getProductsForOrders']);
+    Route::post('product/get-products-for-order',[ProductController::class,'getProductsForOrders']);
 
     Route::post('product/bundle',[ProductController::class,'getAllProductsAndPrices']);
 
