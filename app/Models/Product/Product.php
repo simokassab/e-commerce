@@ -114,7 +114,7 @@ class Product extends MainModel
 
     }
     public function labels(){
-        return $this->hasMany(Label::class,'label_id');
+        return $this->belongsToMany(Label::class,'products_labels','product_id','label_id');
 
     }
     public function attribute(){
@@ -127,7 +127,7 @@ class Product extends MainModel
     }
 
     public function field(){
-        return $this->hasMany(Field::class,'field_id');
+        return $this->belongsToMany(Field::class,'products_fields','product_id','field_id');
 
     }
     public function fieldValue(){

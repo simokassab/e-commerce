@@ -53,7 +53,7 @@ class StoreProductRequest extends FormRequest
             'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'type' => 'required | in:' . config('defaults.validation_default_types'),
             'quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
-            'reserved_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'nullable'), 'integer', 'gte:0'],
+'reserved_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'nullable'), 'integer', 'gte:0'],
             'minimum_quantity' => [Rule::when(in_array($request->type,['variable','bundle']), ['in:0'], 'required'), 'integer', Rule::when(!$this->allowNegativeQuantity,['gte:0'])],
             'summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
             'specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
@@ -150,7 +150,7 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.fields.*.field_id' => 'required | integer | exists:fields,id,entity,product',
             'product_variations.*.fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
             'product_variations.*.fields.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
-            
+
             'product_variations.*.attributes.*.field_id' => 'required | integer | exists:fields,id,entity,product',
             'product_variations.*.attributes.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
             'product_variations.*.attributes.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),

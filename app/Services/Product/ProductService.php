@@ -36,6 +36,9 @@ class ProductService
     {
         //$request=(object)$request;
         $categoryCheck = ProductCategory::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
+        // if ($categoryCheck) {
+        //     $categoryCheck->destroy();
+        // }
 
         $childrenIdsArray = $childrenIds;
         $childrenIdsArray[] = $product->id;
@@ -254,6 +257,43 @@ class ProductService
             ProductRelated::insert($data);
         }
         return $this;
+    }
+
+    public function canMakeBundle($request)
+    {
+       
+        $bundleIds = [];
+        $bundleQuantities = [];
+        $quantities = [];
+        foreach ($request->related_products as $related_product => $value) {
+            //TODO collection and pluck 
+            $bundleIds[] = $value['child_product_id'];
+            $bundleQuantities[] = $value['child_quantity'];
+        }
+        $bundleProductsQuantities = Product::findMany($bundleIds)->pluck('quantity');
+        foreach ($bundleProductsQuantities as $key => $bundleProductQuantity) {
+            if (!($bundleQuantities[$key] <= $bundleProductQuantity)) {
+                return errorResponse('Bundle quantity is greater than product quantity');
+            }
+            $quantities[] = $bundleProductQuantity[$key] / $bundleQuantities[$key];
+        }
+        $minimumBundleQuantityInArray = array_column($quantities, 'quantity');
+        $minimumBundleQuantity = min($minimumBundleQuantityInArray);
+        if ($minimumBundleQuantity > $request->quantity) {
+            return errorResponse('Minimum quantity in bundle is ' . $minimumBundleQuantity);
+        }
+        return true;
+
+    }
+    public function CalculateReservedAndBundleReservedQuantities($request){
+        $canMakeBundle = $this->canMakeBundle($request);
+        $reservedQuantity=[];
+        if($canMakeBundle){
+            foreach($request->related_products as $related_product => $value){
+                $reservedQuantity[$related_product]=$value['child_product_id'];
+                $reservedQuantity[$related_product]=$value['child_quantity'];
+            }
+        }
     }
     // END OF TYPE BUNDLE
 
@@ -496,7 +536,12 @@ class ProductService
                     'website_status' => $request->status,
                     'parent_product_id' => $product->id,
                     'products_statuses_id' => $variation['products_statuses_id'],
-                    'image' => $imagePath
+                    'image' => $imagePath,
+                    'created_at' => Carbon::now()->toDateTimeString(),
+                    'updated_at' => Carbon::now()->toDateTimeString(),
+                    'bundle_reserved_quantity' => null,
+                    'pre_order' => 0,
+
                 ];
                 $productVariationParentsArray[] = $productVariationsArray;
 
@@ -538,7 +583,7 @@ class ProductService
             $product->sku = $request->sku;
             $product->type = $request->type;
             $product->quantity = $request->quantity;
-            $product->reserved_quantity =  0;
+            $product->reserved_quantity = null;
             $product->minimum_quantity = $request->minimum_quantity;
             $product->summary = ($request->summary);
             $product->specification = ($request->specification);
@@ -564,6 +609,8 @@ class ProductService
             $product->tax_id = $request->tax_id;
             $product->products_statuses_id = $request->products_statuses_id;
             $product->is_show_related_product = $request->is_show_related_product ?? 0;
+            $product->pre_order = 0;
+            $product->bundle_reserved_quantity = null;
             $product->save();
 
             DB::commit();
