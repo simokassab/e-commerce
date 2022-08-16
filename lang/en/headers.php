@@ -456,6 +456,15 @@ return [
             'is_visible' => true,
             'is_show' => true
         ],
+        'edit_status' => [
+            'key' => 'edit_status',
+            'name' => 'Edit Status',
+            'search' => '',
+            'type' => 'string',
+            'sort' => false,
+            'is_visible' => false,
+            'is_show' => false
+        ],
         
     ],
     'roles' => [

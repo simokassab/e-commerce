@@ -36,6 +36,7 @@ class SelectProductOrderResource extends JsonResource
             'price' => $price + $tax,
             'currency_symbol' => $currencySymbol,
             'quantity_in_stock' => $this->quantity,
+            'edit_status' => false,
 //            'quantity_in_stock_available' => $this->quantity - $this->minimum_quantity < 0 ? 0 : $this->quantity - $this->minimum_quantity,
 
         ];

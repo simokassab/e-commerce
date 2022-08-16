@@ -289,13 +289,11 @@ class ProductController extends MainController
     }
 
     public function getProductsForOrders(Request $request){
-        $products = Product::with(['tax','pricesList.prices'])->paginate(10);
+        $name = strtolower($request->data['name']);
+        $products = Product::with(['tax','pricesList.prices'])->whereRaw('lower(name) like (?)', ["%$name%"])->paginate($request->limit ?? config('defaults.default_pagination'));
         $data['taxComponents'] = TaxComponent::all();
         $data['tax'] = Tax::all();
         return SelectProductOrderResource::customCollection($products,$data);
-//        return $this->successResponse(data:[
-//            'products' => SelectProductOrderResource::customCollection($products,$data),
-//        ]);
     }
 
     public function getTableHeaders(){
