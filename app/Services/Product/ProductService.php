@@ -116,9 +116,7 @@ class ProductService
         if (!$request->has('attributes'))
             return $this;
 
-
         $data = [];
-
         foreach ($request->attributes as $index => $attribute) {
             if (gettype($attribute) == 'string') {
                 $attribute = (array)json_decode($attribute);
@@ -492,7 +490,7 @@ class ProductService
             $childrenIds = [];
 
             throw_if(!$request->product_variations, Exception::class, 'No variations found');
-           
+
             $productVariationParentsArray = [];
             foreach ($request->product_variations as $variation) {
                 if ($variation['image'] == null)
