@@ -253,7 +253,7 @@ class ProductService
     public function storeAdditionalBundle($request, $product)
     {
         //$request=(object)$request;
-        $bundleCheck = ProductRelated::where('parent_product_id', $product->id);
+        $bundleCheck = ProductRelated::where('parent_product_id', $product->id)->get();
         if ($bundleCheck) {
             $bundleCheck->destroy();
         }
