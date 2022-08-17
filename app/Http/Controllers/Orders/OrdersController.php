@@ -201,7 +201,9 @@ class OrdersController extends MainController
         $allTaxComponents = TaxComponent::all();
 
         $order->selected_products =  OrdersService::generateOrderProducts($orderProducts,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
-        return new SingelOrdersResource($order->load(['status','coupon','products']));
+        return $this->successResponse(data: [
+            'order' => new SingelOrdersResource($order->load(['status','coupon','products']))
+        ]);
     }
 
     /**
