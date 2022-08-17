@@ -177,8 +177,32 @@ class Product extends MainModel
     public function updateProductQuantity(int $quantity, string $method){
 //        $product = is_int($product) ? Product::find($product) : $product;
         if($method != 'add' || $method != 'sub'){
-            throw new \Exception('Bad method name '.$method);
+            throw new \Exception('Bad method type '.$method);
         }
+        if($this->type == 'service' || $this->type == 'variable'){
+            return $this;
+        }
+        if($this->type == 'normal' || $this->type == 'variable_child'){
+            if($method == 'add'){
+                return $this->addQuantityForNormalAndVariableChild($quantity);
+            }else{
+                return $this->subQuantityForNormalAndVariableChild($quantity);
+            }
+        }
+
+        throw new Exception('The type of product is invalid '.$this->type);
+
+    }
+
+    protected function addQuantityForNormalAndVariableChild(int $quantity){
+        $this->quantity += $quantity;
+        if($this->save())
+            return $this;
+
+        throw new \Exception('An error occurred please try again !');
+    }
+
+    protected function subQuantityForNormalAndVariableChild(int $quantity){
 
     }
 
