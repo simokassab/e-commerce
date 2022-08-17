@@ -258,7 +258,25 @@ class Product extends MainModel
             throw new \Exception('An error occurred please try again !');
 
         }
-        if($this->hasEnoughRelatedProductsQuantity($quantity)){
+        if($this->hasEnoughRelatedProductsQuantity($quantity,$allProducts,$allRelatedProducts)){
+
+            $relatedProducts = collect($allRelatedProducts)->where('parent_product_id',$this->id)->get();
+            $relatedProductsIds = $relatedProducts->pluck('id');
+            $products = $allProducts->whereIn('id',$relatedProductsIds)->get();
+
+            foreach ($products as $product) {
+                $productModel = self::find($product->id);
+                $childRelatedProduct = $relatedProducts
+                    ->where('child_product_id',$product->id)
+                    ->where('parent_product_id',$this->id)
+                    ->first();
+                $productModel->reserved_quantity += $quantity * $childRelatedProduct->child_quantity;
+                if($productModel->save()){
+                    return $this;
+                }
+                throw new Exception('An error occurred please try again later');
+            }
+
             $this->quantity = $quantity;
             if($this->save())
                 return $this;
@@ -268,15 +286,32 @@ class Product extends MainModel
 
     }
 
-    private function subQuantityForBundle(int $quantity)
+    /**
+     * @throws Exception
+     */
+    private function subQuantityForBundle(int $quantity, array $allProducts = [], array $relatedProducts = [])
     {
+        //TODO: take settings from cache
+        $isAllowNegativeQuantity = Setting::where('title','allow_negative_quantity')->first();
+        if($isAllowNegativeQuantity){
+            $this->quantity = $quantity;
+            if($this->save())
+                return $this;
+            throw new \Exception('An error occurred please try again !');
+        }
+
+        if($this->hasEnoughRelatedProductsQuantity($quantity,$allProducts,$relatedProducts)){
+
+        }
+
 
     }
 
     /**
      * @throws Exception
+     *
      */
-    private function hasEnoughRelatedProductsQuantity(int $quantity, array $allProducts = [], array $relatedProducts = []){
+    private function hasEnoughRelatedProductsQuantity(int $quantity, array $allProducts = [], array $relatedProducts = []):bool{
         if($this->type != 'bundle'){
             throw new Exception('Call hasEnoughRelatedProductsQuantity on wrong product type not bundle');
         }
@@ -287,6 +322,7 @@ class Product extends MainModel
         $relatedProducts = collect($allRelatedProducts)->where('parent_product_id',$this->id)->get();
         $relatedProductsIds = $relatedProducts->pluck('id');
         $childrenProducts = collect($allProducts)->whereIn('id',$relatedProductsIds)->get();
+
         foreach ($childrenProducts as $childProduct){
             $childRelatedProduct = $relatedProducts
                 ->where('child_product_id',$childProduct->id)
@@ -298,12 +334,11 @@ class Product extends MainModel
             if($quantityToBeReserved > $childProduct->quantity){
                 return false;
             }
-
         }
         return true;
 
-
     }
+
 
 }
 
