@@ -27,15 +27,14 @@ class StoreOrderRequest extends FormRequest
     public function rules(Request $request)
     {
         $products = $request->selected_products ?? [];
-        $productsRules = [];
 
-        foreach ($products as $key => $product){
-            $productObject = Product::query()->select(['id','quantity','minimum_quantity'])->find($product['id']);
-            $productsRules['selected_products.'.$key.'.quantity'] ='required|integer|min:1|lte:'.$productObject['quantity'] - $productObject['minimum_quantity'];
+//        foreach ($products as $key => $product){
+//            $productObject = Product::query()->select(['id','quantity','minimum_quantity'])->find($product['id']);
+//            $productsRules['selected_products.'.$key.'.quantity'] ='required|integer|min:1|lte:'.$productObject['quantity'] - $productObject['minimum_quantity'];
+//
+//        }
 
-        }
-
-        $rules = [
+        return [
             "client_id" => 'required|exists:customers,id',
 //            "time" => "required|date_format:H:i",
 //            "date" => "required|date_format:format",

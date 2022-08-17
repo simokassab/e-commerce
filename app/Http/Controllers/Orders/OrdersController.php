@@ -189,7 +189,7 @@ class OrdersController extends MainController
      * Display the specified resource.
      *
      * @param Order $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Order $order)
     {
@@ -221,12 +221,22 @@ class OrdersController extends MainController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Order  $order
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(StoreOrderRequest $request, Order $order)
     {
-        return "hello";
+        $orderProducts =  OrderProduct::where('order_id',$order->id)->get();
+        $allProducts = Product::with(['tax','pricesList'])->get()->toArray();
+        $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
+        $allTaxes = Tax::all();
+        $defaultCurrency = Currency::where('is_default',1)->first();
+        $allTaxComponents = TaxComponent::all();
+
+        $order->selected_products =  OrdersService::generateOrderProducts($orderProducts,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
+        return $this->successResponse(data: [
+            'order' => new SingelOrdersResource($order->load(['status','coupon','products']))
+        ]);
     }
 
     /**
