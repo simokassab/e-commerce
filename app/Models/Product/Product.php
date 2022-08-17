@@ -20,6 +20,7 @@ use App\Models\Field\FieldValue;
 use App\Models\MainModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\False_;
 use Spatie\Translatable\HasTranslations;
 
 class Product extends MainModel
@@ -240,13 +241,67 @@ class Product extends MainModel
 
     }
 
-    protected function addQuantityForBundle(int $quantity)
+    /**
+     * @throws Exception
+     */
+    private function addQuantityForBundle(int $quantity, array $allProducts = [], array $relatedProducts = [])
+    {
+        $allProducts = count($allProducts) > 0 ? $allProducts : self::all();
+        $allRelatedProducts = count($relatedProducts) > 0 ? $relatedProducts : ProductRelated::all();
+
+        //TODO: change the settings instead of sending a query get them from the cache
+        $isAllowNegativeQuantity = Setting::where('title','allow_negative_quantity')->first();
+        if($isAllowNegativeQuantity){
+            $this->quantity = $quantity;
+            if($this->save())
+                return $this;
+            throw new \Exception('An error occurred please try again !');
+
+        }
+        if($this->hasEnoughRelatedProductsQuantity($quantity)){
+            $this->quantity = $quantity;
+            if($this->save())
+                return $this;
+            throw new \Exception('An error occurred please try again !');
+        }
+
+
+    }
+
+    private function subQuantityForBundle(int $quantity)
     {
 
     }
 
-    protected function subQuantityForBundle(int $quantity)
-    {
+    /**
+     * @throws Exception
+     */
+    private function hasEnoughRelatedProductsQuantity(int $quantity, array $allProducts = [], array $relatedProducts = []){
+        if($this->type != 'bundle'){
+            throw new Exception('Call hasEnoughRelatedProductsQuantity on wrong product type not bundle');
+        }
+
+        $allProducts = count($allProducts) > 0 ? $allProducts : self::all();
+        $allRelatedProducts = count($relatedProducts) > 0 ? $relatedProducts : ProductRelated::all();
+        //TODO: to make the loop faster convert the huge array into chunks and loop over the chunks
+        $relatedProducts = collect($allRelatedProducts)->where('parent_product_id',$this->id)->get();
+        $relatedProductsIds = $relatedProducts->pluck('id');
+        $childrenProducts = collect($allProducts)->whereIn('id',$relatedProductsIds)->get();
+        foreach ($childrenProducts as $childProduct){
+            $childRelatedProduct = $relatedProducts
+                ->where('child_product_id',$childProduct->id)
+                ->where('parent_product_id',$this->id)
+                ->first();
+            $childProduct->quantity -= $childProduct->bundle_reserved_quantity;
+
+            $quantityToBeReserved = $childRelatedProduct->child_quantity * $quantity;
+            if($quantityToBeReserved > $childProduct->quantity){
+                return false;
+            }
+
+        }
+        return true;
+
 
     }
 

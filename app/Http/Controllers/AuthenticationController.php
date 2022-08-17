@@ -39,7 +39,7 @@ class AuthenticationController extends MainController
 
 
     public function logout(){
-        auth()->user()->tokens()->delete();
+//        auth()->user()->tokens()->delete();
         return Auth::logout();
     }
 }
