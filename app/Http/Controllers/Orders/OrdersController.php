@@ -14,6 +14,7 @@ use App\Models\Country\Country;
 use App\Models\Coupons\Coupon;
 use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyHistory;
+use App\Models\Orders\OrderProduct;
 use App\Models\Orders\OrderStatus;
 use App\Models\Price\Price;
 use App\Models\Product\Product;
@@ -117,7 +118,7 @@ class OrdersController extends MainController
         $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
         $allTaxes = Tax::all();
         $allTaxComponents = TaxComponent::all();
-        dd($request->selected_products);
+//        dd($request->selected_products);
         DB::beginTransaction();
         try {
             $order = new Order();
@@ -187,12 +188,20 @@ class OrdersController extends MainController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param Order $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Order $order)
     {
-        //
+        $orderProducts =  OrderProduct::where('order_id',$order->id)->get();
+        $allProducts = Product::with(['tax','pricesList'])->get()->toArray();
+        $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
+        $allTaxes = Tax::all();
+        $defaultCurrency = Currency::where('is_default',1)->first();
+        $allTaxComponents = TaxComponent::all();
+
+        $order->selected_products =  OrdersService::generateOrderProducts($orderProducts,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
+        return new SingelOrdersResource($order->load(['status','coupon','products']));
     }
 
     /**
