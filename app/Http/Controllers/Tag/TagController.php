@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Tag;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Tag\StoreTagRequest;
+use App\Http\Resources\Tag\RestFullTagResource;
 use App\Http\Resources\Tag\SingleTagResource;
 use App\Http\Resources\Tag\TagResource;
 use App\Models\Tag\Tag;
@@ -157,6 +158,10 @@ class TagController extends MainController
 
     public function getTableHeaders(){
         return $this->successResponse('Success!' ,['headers' => __('headers.tags') ]);
+    }
+
+    public function getTagsData(){
+        return $this->successResponsePaginated(RestFullTagResource::class,Tag::class);
     }
 }
 

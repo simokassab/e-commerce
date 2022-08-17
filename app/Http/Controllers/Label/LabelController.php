@@ -8,6 +8,7 @@ use App\Http\Resources\Label\SingleLableResource;
 use App\Models\Label\Label;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Labels\StoreLabelRequest;
+use App\Http\Resources\Label\RestFullLabelResource;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -163,5 +164,9 @@ class LabelController extends MainController
     }
     public function getTableHeaders(){
         return $this->successResponse('Success!',['headers' => __('headers.labels') ]);
+    }
+
+    public function getLabelsData(){
+        return $this->successResponsePaginated(RestFullLabelResource::class,Label::class);
     }
 }

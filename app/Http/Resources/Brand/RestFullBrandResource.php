@@ -2,14 +2,9 @@
 
 namespace App\Http\Resources\Brand;
 
-use App\Http\Resources\Field\FieldResourceEntity;
-use App\Http\Resources\Field\FieldsResource;
-use App\Http\Resources\Field\FieldsValueResource;
-use App\Http\Resources\Label\SingleLableResource;
-use App\Models\Language\Language;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SingleBrandResource extends JsonResource
+class RestFullBrandResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,9 +14,8 @@ class SingleBrandResource extends JsonResource
      */
     public function toArray($request)
     {
-
-        $labels = $this->whenLoaded('label') ? $this->whenLoaded('label') : $this->whenLoaded('label')->pluck('id');
-        $fieldsValues = $this->whenLoaded('fieldValue');
+        $labels = $this->whenLoaded('label') ?? [];
+        $fields = $this->whenLoaded('field') ?? [];
 
 
         return [
@@ -36,8 +30,10 @@ class SingleBrandResource extends JsonResource
             'sort' => $this->sort,
             'is_disabled' => (bool) $this->is_disabled,
             'labels' => ($labels),
-            'fields' => FieldResourceEntity::collection($fieldsValues),
-
+            'fields' => ($fields),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            
 
         ];
     }

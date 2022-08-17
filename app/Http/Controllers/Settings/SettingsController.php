@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Setting\StoreSettingRequest;
+use App\Http\Resources\Setting\RestFullSettingResource;
 use App\Http\Resources\Setting\SettingsResource;
 use App\Http\Resources\Setting\SingleSettingResource;
 use App\Models\Settings\Setting;
@@ -134,4 +135,8 @@ class SettingsController extends MainController
             ]
         ]);
     }
+
+    public function getSettingsData(){
+        return $this->successResponsePaginated(RestFullSettingResource::class, Setting::class);
+        }
 }

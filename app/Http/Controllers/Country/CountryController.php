@@ -11,6 +11,8 @@ use App\Models\Country\Country;
 use Exception;
 use Illuminate\Http\Request;
 use App\Http\Resources\Country\CoutnrySingleResource;
+use App\Http\Resources\Country\RestFullCountryResource;
+
 class CountryController extends MainController
 {
     const OBJECT_NAME = 'objects.country';
@@ -185,5 +187,9 @@ class CountryController extends MainController
 
     public function getTableHeaders(){
         return $this->successResponse('Success!',['headers' => __('headers.countries') ]);
+}
+
+public function getCountriesData(){
+    return $this->successResponsePaginated(RestFullCountryResource::class,Country::class);
 }
 }

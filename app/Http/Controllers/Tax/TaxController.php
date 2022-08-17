@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Tax;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Tax\StoreTaxRequest;
+use App\Http\Resources\Tax\RestFullTaxResource;
 use App\Http\Resources\Tax\SingleTaxResource;
 use App\Http\Resources\Tax\TaxResource;
 use App\Models\Tax\Tax;
@@ -198,4 +199,8 @@ class TaxController extends MainController
     public function getTableHeaders(){
         return $this->successResponse('Success',['headers' => __('headers.taxes') ]);
 }
+
+    public function getTaxesData(){
+        return $this->successResponsePaginated(RestFullTaxResource::class,Tax::class,['taxComponents']);
+    }
 }
