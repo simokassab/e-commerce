@@ -2,6 +2,7 @@
 
 namespace App\Models\Product;
 
+use App\Models\Settings\Setting;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Category\Category;
@@ -202,8 +203,27 @@ class Product extends MainModel
         throw new \Exception('An error occurred please try again !');
     }
 
+    /**
+     * @throws Exception
+     */
     protected function subQuantityForNormalAndVariableChild(int $quantity){
+        //TODO: change the settings instead of sending a query get them from the cache
+        $isAllowNegativeQuantity = Setting::where('title','allow_negative_quantity')->first();
+        if($isAllowNegativeQuantity){
+            $this->quantity -= $quantity;
+            if($this->save())
+                return $this;
+            throw new \Exception('An error occurred please try again !');
 
+        }
+        if($this->pre_order){
+            $this->quantity -= $quantity;
+            if($this->save())
+                return $this;
+            throw new \Exception('An error occurred please try again !');
+
+
+        }
     }
 
 }
