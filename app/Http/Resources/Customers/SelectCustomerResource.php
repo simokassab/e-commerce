@@ -15,7 +15,7 @@ class SelectCustomerResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
+            'id' => (int)$this->id,
             'value' => $this->first_name . ' ' . $this->last_name .' - ' . $this->phone,
 
         ];
