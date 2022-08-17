@@ -2,6 +2,7 @@
 
 namespace App\Models\Product;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Category\Category;
 use App\Models\Unit\Unit;
@@ -168,6 +169,17 @@ class Product extends MainModel
 
     public function getPriceRelation(){
         return $this->price();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function updateProductQuantity(int $quantity, string $method){
+//        $product = is_int($product) ? Product::find($product) : $product;
+        if($method != 'add' || $method != 'sub'){
+            throw new \Exception('Bad method name '.$method);
+        }
+
     }
 
 }

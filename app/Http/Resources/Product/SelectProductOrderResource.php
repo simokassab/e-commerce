@@ -35,7 +35,7 @@ class SelectProductOrderResource extends JsonResource
             $preOrder = !$preOrder;
             $quantity = '--';
         }
-        if($isAllowNegativeQuantity->value){
+        if($isAllowNegativeQuantity){
             if(($this->pre_order)){
                 $preOrder = !$preOrder;
                 $quantity = '--';

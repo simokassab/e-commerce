@@ -261,12 +261,12 @@ class ProductService
 
     public function canMakeBundle($request)
     {
-       
+
         $bundleIds = [];
         $bundleQuantities = [];
         $quantities = [];
         foreach ($request->related_products as $related_product => $value) {
-            //TODO collection and pluck 
+            //TODO collection and pluck
             $bundleIds[] = $value['child_product_id'];
             $bundleQuantities[] = $value['child_quantity'];
         }
@@ -620,4 +620,6 @@ class ProductService
             throw new Exception($e->getMessage());
         }
     }
+
+
 }
