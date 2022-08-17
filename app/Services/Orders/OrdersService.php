@@ -58,8 +58,8 @@ class OrdersService {
             ->where('id', $order->coupon_id ?? 0)
             ->first();
 
-        $order->discount_percentage = $coupon->discount_percentage;
-        $order->discount_amount = $coupon->discount_amount;
+        $order->discount_percentage = $coupon?->discount_percentage;
+        $order->discount_amount = $coupon?->discount_amount;
 
         if(!is_null($coupon)){
             if($coupon->is_one_time && $coupon->is_used){

@@ -117,6 +117,7 @@ class OrdersController extends MainController
         $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
         $allTaxes = Tax::all();
         $allTaxComponents = TaxComponent::all();
+        dd($request->selected_products);
         DB::beginTransaction();
         try {
             $order = new Order();
@@ -127,7 +128,7 @@ class OrdersController extends MainController
             $order->order_status_id = $request->status_id;
             $defaultCurrency = Currency::where('is_default',1)->first();
             if(is_null($defaultCurrency)){
-                throw new \Exception();
+                return $this->errorResponse('There is no default currency!');
             }
             $order->currency_rate = CurrencyHistory::query()->where('currency_id',1)->latest()->first()->rate;
 
@@ -214,7 +215,7 @@ class OrdersController extends MainController
      */
     public function update(Request $request, $id)
     {
-        //
+        return "hello";
     }
 
     /**

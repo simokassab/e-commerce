@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Product;
 
+use App\Models\Settings\Setting;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SelectProductOrderResource extends JsonResource
@@ -15,7 +16,9 @@ class SelectProductOrderResource extends JsonResource
      */
     public function toArray($request)
     {
-        //change to array from data
+        $settings = Setting::query()->get();
+        $isAllowNegativeQuantity  = $settings->where('title','allow_negative_quantity')->first() ?? false;
+
         $priceObject = ($this->whenLoaded('pricesList')->where('price_id',1)->first());
         $price = $priceObject ? $priceObject->price : 0;
         //@TODO:change to code instead of queries just pass an array of the elements, transform them to a collection and simply use the where function
@@ -25,11 +28,19 @@ class SelectProductOrderResource extends JsonResource
         if($taxObject->is_complex){
             $tax = $taxObject->getComplexPrice($price,self::$data['taxComponents']->toArray(),self::$data['tax']->toArray());
         }
+
         $quantity = $this->quantity;
+        $preOrder = false;
         if($this->type == 'bundle'){
+            $preOrder = !$preOrder;
             $quantity = '--';
         }
-
+        if($isAllowNegativeQuantity->value){
+            if(($this->pre_order)){
+                $preOrder = !$preOrder;
+                $quantity = '--';
+            }
+        }
         return [
             'id' => $this->id,
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image) : 'default_image' ,
