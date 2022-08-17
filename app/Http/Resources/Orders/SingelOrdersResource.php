@@ -17,6 +17,7 @@ class SingelOrdersResource extends JsonResource
         return [
             'code' => $this->id,
             "client_id" => $this->customer_id,
+            "currency_id" => $this->currency_id,
             "time" => $this->time,
             "date" => $this->date,
             "comment" => $this->customer_comment,
