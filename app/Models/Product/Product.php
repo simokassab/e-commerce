@@ -189,6 +189,8 @@ class Product extends MainModel
             }else{
                 return $this->subQuantityForNormalAndVariableChild($quantity);
             }
+        }if($this->type == 'normal'){
+
         }
 
         throw new Exception('The type of product is invalid '.$this->type);
@@ -214,16 +216,24 @@ class Product extends MainModel
             if($this->save())
                 return $this;
             throw new \Exception('An error occurred please try again !');
-
         }
         if($this->pre_order){
             $this->quantity -= $quantity;
             if($this->save())
                 return $this;
             throw new \Exception('An error occurred please try again !');
-
-
         }
+
+        if($this->quantity < $quantity){
+            throw new Exception('You have less quantity than '. $quantity .' in stock');
+        }
+
+        $this->quantity -= $quantity;
+        if($this->save())
+            return $this;
+        throw new \Exception('An error occurred please try again !');
+
+
     }
 
 }

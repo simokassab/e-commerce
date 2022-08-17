@@ -57,7 +57,8 @@ class StoreOrderRequest extends FormRequest
             "billing.country_id" => 'required|exists:countries,id',
             "billing.phone_number" => 'required|integer',
             "billing.email_address" => 'required|email',
-            "billing.payment_method_id" => 'required|exists:payments_types,id',
+//            "billing.payment_method_id" => 'required|exists:payments_types,id',
+            "billing.payment_method_id" => 'required|numeric',
 
             "shipping.first_name" => 'required|string',
             "shipping.last_name" => 'required|string',
