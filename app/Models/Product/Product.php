@@ -189,8 +189,12 @@ class Product extends MainModel
             }else{
                 return $this->subQuantityForNormalAndVariableChild($quantity);
             }
-        }if($this->type == 'normal'){
-
+        }if($this->type == 'bundel'){
+            if($method == 'add'){
+                return $this->addQuantityForBundle($quantity);
+            }else{
+                return $this->subQuantityForBundle($quantity);
+            }
         }
 
         throw new Exception('The type of product is invalid '.$this->type);
@@ -233,6 +237,16 @@ class Product extends MainModel
             return $this;
         throw new \Exception('An error occurred please try again !');
 
+
+    }
+
+    protected function addQuantityForBundle(int $quantity)
+    {
+
+    }
+
+    protected function subQuantityForBundle(int $quantity)
+    {
 
     }
 

@@ -16,8 +16,8 @@ class SingelOrdersResource extends JsonResource
     {
         return [
             'code' => $this->id,
-            "client_id" => $this->customer_id,
-            "currency_id" => $this->currency_id,
+            "client_id" => (int)$this->customer_id,
+            "currency_id" => (int)$this->currency_id,
             "time" => $this->time,
             'shipping_as_billing' => false,
             'notes' => [], //to be added after fining the order for sure,
