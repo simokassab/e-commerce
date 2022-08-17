@@ -22,6 +22,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\False_;
 use Spatie\Translatable\HasTranslations;
+use Illuminate\Support\Facades\DB;
 
 class Product extends MainModel
 {
@@ -177,28 +178,29 @@ class Product extends MainModel
      * @throws Exception
      */
     public function updateProductQuantity(int $quantity, string $method){
-//        $product = is_int($product) ? Product::find($product) : $product;
-        if($method != 'add' || $method != 'sub'){
-            throw new \Exception('Bad method type '.$method);
-        }
-        if($this->type == 'service' || $this->type == 'variable'){
-            return $this;
-        }
-        if($this->type == 'normal' || $this->type == 'variable_child'){
-            if($method == 'add'){
-                return $this->addQuantityForNormalAndVariableChild($quantity);
-            }else{
-                return $this->subQuantityForNormalAndVariableChild($quantity);
-            }
-        }if($this->type == 'bundel'){
-            if($method == 'add'){
-                return $this->addQuantityForBundle($quantity);
-            }else{
-                return $this->subQuantityForBundle($quantity);
-            }
-        }
 
-        throw new Exception('The type of product is invalid '.$this->type);
+            if($method != 'add' && $method != 'sub'){
+                throw new \Exception('Bad method type '.$method);
+            }
+            if($this->type == 'service' || $this->type == 'variable'){
+                return $this;
+            }
+            if($this->type == 'normal' || $this->type == 'variable_child'){
+                if($method == 'add'){
+                    return $this->addQuantityForNormalAndVariableChild($quantity);
+                }else{
+                    return $this->subQuantityForNormalAndVariableChild($quantity);
+                }
+            }if($this->type == 'bundle'){
+                if($method == 'add'){
+                    return $this->addQuantityForBundle($quantity);
+                }else{
+                    return $this->subQuantityForBundle($quantity);
+                }
+            }
+
+            throw new Exception('The type of product is invalid '.$this->type);
+
 
     }
 
@@ -244,25 +246,69 @@ class Product extends MainModel
     /**
      * @throws Exception
      */
-    private function addQuantityForBundle(int $quantity, array $allProducts = [], array $relatedProducts = [])
+    private function addQuantityForBundle(int $quantity, array $allProducts = [], array $allRelatedProducts = [])
     {
         $allProducts = count($allProducts) > 0 ? $allProducts : self::all();
-        $allRelatedProducts = count($relatedProducts) > 0 ? $relatedProducts : ProductRelated::all();
+        $allRelatedProducts = count($allRelatedProducts) > 0 ? $allRelatedProducts : ProductRelated::all();
+        $relatedProducts = collect($allRelatedProducts)->where('parent_product_id',$this->id);
+        $relatedProductsIds = $relatedProducts->pluck('child_product_id');
+        $products = $allProducts->whereIn('id',$relatedProductsIds);
 
         //TODO: change the settings instead of sending a query get them from the cache
-        $isAllowNegativeQuantity = Setting::where('title','allow_negative_quantity')->first();
+        $isAllowNegativeQuantity = (bool)Setting::where('title','allow_negative_quantity')->first()->value;
         if($isAllowNegativeQuantity){
-            $this->quantity = $quantity;
-            if($this->save())
-                return $this;
-            throw new \Exception('An error occurred please try again !');
+            foreach ($products as $product) {
+                $productModel = self::find($product->id);
+                $childRelatedProduct = $relatedProducts
+                    ->where('child_product_id',$product->id)
+                    ->where('parent_product_id',$this->id)
+                    ->first();
+
+                $productModel->bundle_reserved_quantity += $quantity * $childRelatedProduct->child_quantity;
+                if(!$productModel->save()){
+                    throw new Exception('One of the related products for bundle was not saved correctly! try again later ');
+                }
+
+            }
+
+            $this->reserved_quantity += $quantity;
+            $this->quantity = 0;
+            if(!$this->save()){
+                throw new \Exception('An error occurred please try again !');
+            }
+            return $this;
 
         }
-        if($this->hasEnoughRelatedProductsQuantity($quantity,$allProducts,$allRelatedProducts)){
 
-            $relatedProducts = collect($allRelatedProducts)->where('parent_product_id',$this->id)->get();
-            $relatedProductsIds = $relatedProducts->pluck('id');
-            $products = $allProducts->whereIn('id',$relatedProductsIds)->get();
+        if($this->pre_order){
+            foreach ($products as $product) {
+                $productModel = self::find($product->id);
+                $childRelatedProduct = $relatedProducts
+                    ->where('child_product_id',$product->id)
+                    ->where('parent_product_id',$this->id)
+                    ->first();
+
+                $productModel->bundle_reserved_quantity += $quantity * $childRelatedProduct->child_quantity;
+                if(!$productModel->save()){
+                    throw new Exception('One of the related products for bundle was not saved correctly! try again later ');
+                }
+
+            }
+
+            $this->reserved_quantity += $quantity;
+            $this->quantity = 0;
+            if(!$this->save()){
+                throw new \Exception('An error occurred please try again !');
+            }
+            return $this;
+        }
+        if(!$this->hasEnoughRelatedProductsQuantity($quantity,$allProducts->toArray(),$allRelatedProducts->toArray())){
+            throw new Exception('Please try again later');
+        }
+
+            $relatedProducts = collect($allRelatedProducts)->where('parent_product_id',$this->id);
+            $relatedProductsIds = $relatedProducts->pluck('child_product_id');
+            $products = $allProducts->whereIn('id',$relatedProductsIds);
 
             foreach ($products as $product) {
                 $productModel = self::find($product->id);
@@ -270,18 +316,18 @@ class Product extends MainModel
                     ->where('child_product_id',$product->id)
                     ->where('parent_product_id',$this->id)
                     ->first();
-                $productModel->reserved_quantity += $quantity * $childRelatedProduct->child_quantity;
-                if($productModel->save()){
-                    return $this;
-                }
+                $productModel->bundle_reserved_quantity += $quantity * $childRelatedProduct->child_quantity;
+                if(!$productModel->save()){
                 throw new Exception('An error occurred please try again later');
+                }
             }
 
-            $this->quantity = $quantity;
+            $this->reserved_quantity += $quantity;
+            $this->quantity = 0;
             if($this->save())
                 return $this;
             throw new \Exception('An error occurred please try again !');
-        }
+
 
 
     }
@@ -289,20 +335,89 @@ class Product extends MainModel
     /**
      * @throws Exception
      */
-    private function subQuantityForBundle(int $quantity, array $allProducts = [], array $relatedProducts = [])
+    private function subQuantityForBundle(int $quantity, array $allProducts = [], array $allRelatedProducts = [])
     {
-        //TODO: take settings from cache
-        $isAllowNegativeQuantity = Setting::where('title','allow_negative_quantity')->first();
-        if($isAllowNegativeQuantity){
-            $this->quantity = $quantity;
-            if($this->save())
+        $allProducts = count($allProducts) > 0 ? $allProducts : self::all();
+        $allRelatedProducts = count($allRelatedProducts) > 0 ? $allRelatedProducts : ProductRelated::all();
+            //TODO: take settings from cache
+            $isAllowNegativeQuantity = Setting::where('title','allow_negative_quantity')->first()->value;
+
+            $relatedProducts = collect($allRelatedProducts)->where('parent_product_id',$this->id);
+            $relatedProductsIds = $relatedProducts->pluck('child_product_id');
+            $products = $allProducts->whereIn('id',$relatedProductsIds);
+
+            if($isAllowNegativeQuantity){
+
+                foreach ($products as $product) {
+                    $productModel = self::find($product->id);
+                    $childRelatedProduct = $relatedProducts
+                        ->where('child_product_id',$product->id)
+                        ->where('parent_product_id',$this->id)
+                        ->first();
+                    $productModel->bundle_reserved_quantity -= $quantity * $childRelatedProduct->child_quantity;
+                    if(!$productModel->save()){
+                        throw new Exception('One of the related products for bundle was not saved correctly! try again later ');
+                    }
+
+                }
+
+                $this->reserved_quantity -= $quantity;
+                $this->quantity = 0;
+                if(!$this->save())
+                    throw new \Exception('An error occurred please try again !');
                 return $this;
-            throw new \Exception('An error occurred please try again !');
+            }
+
+        if($this->pre_order){
+            foreach ($products as $product) {
+                $productModel = self::find($product->id);
+                $childRelatedProduct = $relatedProducts
+                    ->where('child_product_id',$product->id)
+                    ->where('parent_product_id',$this->id)
+                    ->first();
+                $productModel->quantity -= $quantity * $childRelatedProduct->child_quantity;
+                $productModel->bundle_reserved_quantity -= $quantity * $childRelatedProduct->child_quantity;
+                if(!$productModel->save()){
+                    throw new Exception('One of the related products for bundle was not saved correctly! try again later ');
+                }
+
+            }
+
+            $this->reserved_quantity -= $quantity;
+            $this->quantity = 0;
+            if(!$this->save())
+                throw new \Exception('An error occurred please try again !');
+            return $this;
         }
 
-        if($this->hasEnoughRelatedProductsQuantity($quantity,$allProducts,$relatedProducts)){
+            if( !$this->hasEnoughRelatedProductsQuantity($quantity,$allProducts->toArray(),$allRelatedProducts->toArray()) ){
+                throw new Exception('Not enough quantity for children products !');
+            }
 
-        }
+            if($this->reserved_quantity < $quantity){
+                throw new Exception('Not enough quantity for product !');
+            }
+
+            foreach ($products as $product) {
+                $productModel = self::find($product['id']);
+                $childRelatedProduct = $relatedProducts
+                    ->where('child_product_id',$product['id'])
+                    ->where('parent_product_id',$this->id)
+                    ->first();
+                $productModel->quantity -= $quantity * $childRelatedProduct->child_quantity;
+                $productModel->bundle_reserved_quantity -= $quantity * $childRelatedProduct->child_quantity;
+                if(!$productModel->save()){
+                    throw new Exception('One of the related products for bundle was not saved correctly! try again later ');
+                }
+
+            }
+
+            $this->reserved_quantity -= $quantity;
+            $this->quantity = 0;
+            if(!$this->save())
+                throw new \Exception('An error occurred please try again !');
+
+            return $this;
 
 
     }
@@ -311,33 +426,57 @@ class Product extends MainModel
      * @throws Exception
      *
      */
-    private function hasEnoughRelatedProductsQuantity(int $quantity, array $allProducts = [], array $relatedProducts = []):bool{
+    public function hasEnoughRelatedProductsQuantity(int $quantity, array $allProducts = [], array $allRelatedProducts = []):bool{
         if($this->type != 'bundle'){
             throw new Exception('Call hasEnoughRelatedProductsQuantity on wrong product type not bundle');
         }
 
         $allProducts = count($allProducts) > 0 ? $allProducts : self::all();
-        $allRelatedProducts = count($relatedProducts) > 0 ? $relatedProducts : ProductRelated::all();
+        $allRelatedProducts = count($allRelatedProducts) > 0 ? $allRelatedProducts : ProductRelated::all();
         //TODO: to make the loop faster convert the huge array into chunks and loop over the chunks
-        $relatedProducts = collect($allRelatedProducts)->where('parent_product_id',$this->id)->get();
-        $relatedProductsIds = $relatedProducts->pluck('id');
-        $childrenProducts = collect($allProducts)->whereIn('id',$relatedProductsIds)->get();
-
+        $relatedProducts = collect($allRelatedProducts)->where('parent_product_id',$this->id);
+        $relatedProductsIds = $relatedProducts->pluck('child_product_id');
+        $childrenProducts = collect($allProducts)->whereIn('id',$relatedProductsIds);
+        $i = 0;
         foreach ($childrenProducts as $childProduct){
+            $i ++ ;
             $childRelatedProduct = $relatedProducts
-                ->where('child_product_id',$childProduct->id)
+                ->where('child_product_id',$childProduct['id'])
                 ->where('parent_product_id',$this->id)
                 ->first();
-            $childProduct->quantity -= $childProduct->bundle_reserved_quantity;
 
-            $quantityToBeReserved = $childRelatedProduct->child_quantity * $quantity;
-            if($quantityToBeReserved > $childProduct->quantity){
+            if($childProduct['bundle_reserved_quantity'] < 0 ){
+                $childProduct['bundle_reserved_quantity'] *= -1;
+            }
+
+            $childProduct['quantity'] -= $childProduct['bundle_reserved_quantity'];
+
+            if($childRelatedProduct['child_quantity'] < 0 ){
+                $childRelatedProduct['child_quantity'] *= -1;
+            }
+
+            $quantityToBeReserved = $childRelatedProduct['child_quantity'] * $quantity;
+            if($quantityToBeReserved > $childProduct['quantity']){
                 return false;
             }
         }
         return true;
 
     }
+
+//    public function recalculateBundleReservedQuantity( array $allProducts = [], array $allRelatedProducts = []){
+//        $allProducts = count($allProducts) > 0 ? $allProducts : self::all();
+//        $allRelatedProducts = count($allRelatedProducts) > 0 ? $allRelatedProducts : ProductRelated::all();
+//
+//
+//        $relatedProducts = collect($allRelatedProducts)->where('parent_product_id' ,$this->id)->get();
+//        $relatedProductsIds = $relatedProducts->pluck('id');
+//        $products = $allProducts->whereIn('id',$relatedProductsIds)->get();
+//
+//        foreach ($products as $product){
+//
+//        }
+//    }
 
 
 }
