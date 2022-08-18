@@ -116,11 +116,9 @@ class OrdersService {
     public static function adjustQuantityOfOrderProducts($orderProducts): void
     {
         foreach ($orderProducts as $orderProduct){
-            echo $orderProduct['quantity'];
             $product = Product::find($orderProduct['id'])->updateProductQuantity($orderProduct['quantity'],'sub');
 
         }
-        die();
     }
 }
 

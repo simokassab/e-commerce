@@ -121,6 +121,7 @@ class OrdersController extends MainController
         $allTaxes = Tax::all();
         $allTaxComponents = TaxComponent::all();
 //        dd($request->selected_products);
+
         DB::beginTransaction();
         try {
             $order = new Order();
@@ -176,7 +177,8 @@ class OrdersController extends MainController
                 'order' => new SingelOrdersResource($order->load(['status','coupon','products']))
             ]);
 
-        }catch (\Exception $exception){
+        }
+        catch (\Exception $exception){
             DB::rollBack();
             return $this->errorResponse('The Order has not been created successfully!' . 'error message: '. $exception);
         }catch (\Error $error){
@@ -227,12 +229,78 @@ class OrdersController extends MainController
      */
     public function update(StoreOrderRequest $request, Order $order)
     {
-        $orderProducts =  OrderProduct::where('order_id',$order->id)->get();
-        $allProducts = Product::with(['tax','pricesList'])->get()->toArray();
-        $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
-        $allTaxes = Tax::all();
-        $defaultCurrency = Currency::where('is_default',1)->first();
-        $allTaxComponents = TaxComponent::all();
+        $oldOrderProducts = $order->products;
+       return  $oldOrderProductsRelation = OrderProduct::query()->where('order_id',$order->id)->get();
+        try {
+            $allProducts = Product::with(['tax','pricesList'])->get()->toArray();
+            $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
+            $allTaxes = Tax::all();
+            $allTaxComponents = TaxComponent::all();
+            $orderProducts =  OrderProduct::where('order_id',$order->id)->get();
+            $defaultCurrency = Currency::where('is_default',1)->first();
+
+            $order->customer_id = $request->client_id;
+            $order->time = $request->time;
+//            $order->date = new Carbon($request->date)->format('H:i:s');
+            $order->customer_comment = $request->comment;
+            $order->order_status_id = $request->status_id;
+            if(is_null($defaultCurrency)){
+                return $this->errorResponse('There is no default currency!');
+            }
+            $order->currency_rate = CurrencyHistory::query()->where('currency_id',1)->latest()->first()->rate;
+
+            $coupon = Coupon::where('code', $request->coupon_code)->first();
+
+            $order->coupon_id =  $coupon ? $coupon->id : 0;
+            $products = $request->selected_products;
+            $order->shipping_first_name = $request->shipping['first_name'];
+            $order->shipping_last_name = $request->shipping['last_name'];
+            $order->shipping_address_one = $request->shipping['address_1'];
+            $order->shipping_address_two = $request->shipping['address_2'];
+            $order->shipping_country_id = $request->shipping['country_id'];
+            $order->shipping_city = $request->shipping['city'];
+            $order->shipping_company_name = $request->shipping['company_name'];
+            $order->shipping_email = $request->shipping['email_address'];
+            $order->shipping_phone_number = $request->shipping['phone_number'];
+            $order->prefix ='0';
+
+
+            $order->billing_first_name = $request->billing['first_name'];
+            $order->billing_last_name = $request->billing['last_name'];
+            $order->billing_company_name = $request->billing['company_name'];
+            $order->billing_address_one = $request->billing['address_1'];
+            $order->billing_address_two = $request->billing['address_2'];
+            $order->billing_city = $request->billing['city'];
+            $order->billing_country_id = $request->billing['country_id'];
+            $order->billing_email = $request->billing['email_address'];
+            $order->billing_phone_number = $request->billing['phone_number'];
+            $order->payment_method_id = $request->billing['payment_method_id'];
+
+            $order->save();
+            $order->prefix = 'order' . $order->id;
+
+            $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
+            $order->save();
+
+            $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
+            OrdersService::adjustQuantityOfOrderProducts($order->selected_products);
+
+            DB::commit();
+            return $this->successResponse('The order has been created successfully !', [
+                'order' => new SingelOrdersResource($order->load(['status','coupon','products']))
+            ]);
+
+        }
+        catch (\Exception $exception){
+            DB::rollBack();
+            return $this->errorResponse('The Order has not been created successfully!' . 'error message: '. $exception);
+        }catch (\Error $error){
+            DB::rollBack();
+            return $this->errorResponse('The Order has not been created successfully!' . 'error message: '. $error);
+        }
+
+
+
 
         $order->selected_products =  OrdersService::generateOrderProducts($orderProducts,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
         return $this->successResponse(data: [
