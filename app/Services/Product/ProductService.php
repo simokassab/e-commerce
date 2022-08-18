@@ -242,7 +242,7 @@ class ProductService
     {
         //$request=(object)$request;
         $bundleCheck = ProductRelated::where('parent_product_id', $product->id)->delete();
-        
+
         if ($request->type == 'bundle') {
             foreach ($request->related_products as $related_product => $value) {
                 $data[$related_product] = [
@@ -304,7 +304,7 @@ class ProductService
         DB::rollBack();
         throw new Exception($e->getMessage());
     }
-       
+
     }
 
     public function calculateReservedQuantity($request, $product)
