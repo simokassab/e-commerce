@@ -82,7 +82,8 @@ class OrdersService {
         return $productsOrders;
     }
 
-    public static function generateOrderProducts($productsOrders,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency){
+    public static function generateOrderProducts($productsOrders,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency): array
+    {
         $selectedProducts = [];
 
         foreach ($productsOrders as $key => $orderProduct) {
@@ -116,9 +117,44 @@ class OrdersService {
     public static function adjustQuantityOfOrderProducts($orderProducts): void
     {
         foreach ($orderProducts as $orderProduct){
-            $product = Product::find($orderProduct['id'])->updateProductQuantity($orderProduct['quantity'],'sub');
+            Product::find($orderProduct['id'])->updateProductQuantity($orderProduct['quantity'],'sub');
 
         }
+    }
+
+    public static function updateProductsOfOrder(array $oldProducts,array $newProducts,array $oldOrderProducts,array $allProducts = []): void
+    {
+        // old products from database
+        // new products from request
+        // oldOrderProducts are the relation of each product
+        // all the products in the database
+
+
+        $oldProductsWithQuantities = collect($oldOrderProducts)->pluck('quantity','product_id')->all();
+        $newProductsWithQuantities = collect($newProducts)->pluck('quantity','id')->all();
+
+        $newAddedProducts = [];
+        $oldUpdatedProducts = [];
+        $deletedProducts = [];
+
+//        $arraysLoop = count($oldProductsWithQuantities) >= count($newProductsWithQuantities) ? ($oldProductsWithQuantities) : ($newProductsWithQuantities);
+
+        foreach ($newProductsWithQuantities as $key => $newItem) {
+            if(array_key_exists($key,$oldProductsWithQuantities)){
+                $oldUpdatedProducts[$key] = $newItem;
+            }else{
+                $newAddedProducts[$key] = $newItem;
+            }
+        }
+
+        foreach ($oldProductsWithQuantities as $key => $oldItem) {
+            if(array_key_exists($key,$newProductsWithQuantities)){
+                $deletedProducts[$key] = $oldItem;
+            }
+        }
+
+        print_r($deletedProducts);
+        die();
     }
 }
 

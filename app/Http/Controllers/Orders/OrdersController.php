@@ -166,12 +166,14 @@ class OrdersController extends MainController
             $order->save();
             $order->prefix = 'order' . $order->id;
 
+
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
-            $order->save();
+
             $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
             OrdersService::adjustQuantityOfOrderProducts($order->selected_products);
 
-//            return ($productsOrders);
+            $order->save();
+
             DB::commit();
             return $this->successResponse('The order has been created successfully !', [
                 'order' => new SingelOrdersResource($order->load(['status','coupon','products']))
@@ -229,8 +231,8 @@ class OrdersController extends MainController
      */
     public function update(StoreOrderRequest $request, Order $order)
     {
-        $oldOrderProducts = $order->products;
-       return  $oldOrderProductsRelation = OrderProduct::query()->where('order_id',$order->id)->get();
+        $oldProducts = $order->products;
+        $oldOrderProducts = OrderProduct::query()->where('order_id',$order->id)->get();
         try {
             $allProducts = Product::with(['tax','pricesList'])->get()->toArray();
             $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
@@ -244,6 +246,7 @@ class OrdersController extends MainController
 //            $order->date = new Carbon($request->date)->format('H:i:s');
             $order->customer_comment = $request->comment;
             $order->order_status_id = $request->status_id;
+
             if(is_null($defaultCurrency)){
                 return $this->errorResponse('There is no default currency!');
             }
@@ -276,11 +279,15 @@ class OrdersController extends MainController
             $order->billing_phone_number = $request->billing['phone_number'];
             $order->payment_method_id = $request->billing['payment_method_id'];
 
+            OrdersService::updateProductsOfOrder($oldProducts->toArray(), $request->selected_products ,$oldOrderProducts->toArray(),$allProducts);
+            die();
             $order->save();
             $order->prefix = 'order' . $order->id;
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
             $order->save();
+
+
 
             $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
             OrdersService::adjustQuantityOfOrderProducts($order->selected_products);
