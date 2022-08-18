@@ -122,7 +122,7 @@ class OrdersService {
         }
     }
 
-    public static function updateProductsOfOrder(array $oldProducts,array $newProducts,array $oldOrderProducts,array $allProducts = []): void
+    public static function updateProductsOfOrder( $order,array $newProducts,array $oldOrderProducts,array $allProducts = []): void
     {
         // old products from database
         // new products from request
@@ -148,10 +148,16 @@ class OrdersService {
         }
 
         foreach ($oldProductsWithQuantities as $key => $oldItem) {
-            if(array_key_exists($key,$newProductsWithQuantities)){
+            if(!array_key_exists($key,$newProductsWithQuantities)){
                 $deletedProducts[$key] = $oldItem;
             }
         }
+        $dataToBeUpdatedOrCreated = [];
+        OrderProduct::upsert($dataToBeUpdatedOrCreated,['id'],[]);
+//        OrderProduct::query()
+//            ->whereIn('product_id',array_keys($deletedProducts))
+//            ->where('order_id',$order->id)
+//            ->delete();
 
         print_r($deletedProducts);
         die();

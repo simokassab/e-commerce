@@ -279,7 +279,7 @@ class OrdersController extends MainController
             $order->billing_phone_number = $request->billing['phone_number'];
             $order->payment_method_id = $request->billing['payment_method_id'];
 
-            OrdersService::updateProductsOfOrder($oldProducts->toArray(), $request->selected_products ,$oldOrderProducts->toArray(),$allProducts);
+            OrdersService::updateProductsOfOrder($order, $request->selected_products ,$oldOrderProducts->toArray(),$allProducts);
             die();
             $order->save();
             $order->prefix = 'order' . $order->id;
