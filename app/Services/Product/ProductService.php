@@ -255,6 +255,8 @@ class ProductService
                 ];
             }
             ProductRelated::insert($data);
+            $this->calculateBundleReservedQuantities($request);
+            $this->calculateReservedQuantity($request, $product);
         }
         return $this;
     }
@@ -267,32 +269,57 @@ class ProductService
         $quantities = [];
         foreach ($request->related_products as $related_product => $value) {
             //TODO collection and pluck
-            $bundleIds[] = $value['child_product_id'];
-            $bundleQuantities[] = $value['child_quantity'];
+            $bundleIds[$related_product] = $value['child_product_id'];
+            $bundleQuantities[$related_product] = $value['child_quantity'];
         }
         $bundleProductsQuantities = Product::findMany($bundleIds)->pluck('quantity');
-        foreach ($bundleProductsQuantities as $key => $bundleProductQuantity) {
+
+        foreach ($bundleProductsQuantities->toArray() as $key => $bundleProductQuantity) {
             if (!($bundleQuantities[$key] <= $bundleProductQuantity)) {
                 return errorResponse('Bundle quantity is greater than product quantity');
             }
-            $quantities[] = $bundleProductQuantity[$key] / $bundleQuantities[$key];
+            $quantities[$key]['quantity'] = $bundleProductQuantity / $bundleQuantities[$key];
         }
+
         $minimumBundleQuantityInArray = array_column($quantities, 'quantity');
         $minimumBundleQuantity = min($minimumBundleQuantityInArray);
-        if ($minimumBundleQuantity > $request->quantity) {
+        if ($minimumBundleQuantity < $request->quantity) {
             return errorResponse('Minimum quantity in bundle is ' . $minimumBundleQuantity);
         }
-        return true;
+        return $minimumBundleQuantity;
+    }
+    public function calculateBundleReservedQuantities($request)
+    {
+        DB::beginTransaction();
+        try{
+        $canMakeBundle = $this->canMakeBundle($request);
+        $bundleReservedQuantity = [];
+        foreach ($request->related_products as $related_product => $value) {
+            $bundleReservedQuantity[$related_product]['id'] = $value['child_product_id'];
+            $bundleReservedQuantity[$related_product]['bundle_reserved_quantity'] = $value['child_quantity'] * $request->quantity;
+        }
+
+        batch()->update(new Product, $bundleReservedQuantity, 'id');
+        DB::commit();
+    }catch(Exception $e){
+        DB::rollBack();
+        throw new Exception($e->getMessage());
+    }
 
     }
-    public function CalculateReservedAndBundleReservedQuantities($request){
-        $canMakeBundle = $this->canMakeBundle($request);
-        $reservedQuantity=[];
-        if($canMakeBundle){
-            foreach($request->related_products as $related_product => $value){
-                $reservedQuantity[$related_product]=$value['child_product_id'];
-                $reservedQuantity[$related_product]=$value['child_quantity'];
-            }
+
+    public function calculateReservedQuantity($request, $product)
+    {
+        DB::beginTransaction();
+        try {
+            $minimumBundleQuantity = $this->canMakeBundle($request);
+            $reservedQuantity = ($minimumBundleQuantity - $request->quantity);
+            $product->reserved_quantity = $reservedQuantity;
+            $product->save();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
         }
     }
     // END OF TYPE BUNDLE
@@ -612,7 +639,6 @@ class ProductService
             $product->pre_order = 0;
             $product->bundle_reserved_quantity = null;
             $product->save();
-
             DB::commit();
             return $product;
         } catch (Exception $e) {

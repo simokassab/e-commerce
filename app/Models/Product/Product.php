@@ -96,11 +96,11 @@ class Product extends MainModel
 
 
     public function productRelatedParent(){
-        return $this->belongsTo(Product::class,'parent_product_id');
+        return $this->belongsTo(ProductRelated::class,'parent_product_id');
 
     }
     public function productRelatedChildren(){
-        return $this->hasMany(Product::class,'child_product_id');
+        return $this->hasMany(ProductRelated::class,'child_product_id');
 
     }
     public function productImages(){
@@ -121,14 +121,6 @@ class Product extends MainModel
         return $this->belongsToMany(Label::class,'products_labels','product_id','label_id');
 
     }
-    public function attribute(){
-        return $this->hasMany(Attribute::class,'attribute_id');
-
-    }
-    public function attributeValue(){
-        return $this->hasMany(AttributeValue::class,'attribute_value_id');
-
-    }
 
     public function field(){
         return $this->belongsToMany(Field::class,'products_fields','product_id','field_id');
@@ -137,6 +129,10 @@ class Product extends MainModel
     public function fieldValue(){
         return $this->hasMany(FieldValue::class,'field_value_id');
 
+    }
+
+    public function images(){
+        return $this->hasMany(ProductImage::class,'product_id');
     }
 
 

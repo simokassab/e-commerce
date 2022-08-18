@@ -196,7 +196,7 @@ class ProductController extends MainController
      */
     public function show(Product $product)
     {
-        return $this->successResponse('Success!',['product' =>  new SingleProductResource($product->load(['defaultCategory','tags','brand','category','unit','tax','priceClass','price','field','labels']))]);
+        return $this->successResponse('Success!',['product' =>  new SingleProductResource($product->load(['defaultCategory','tags','brand','category','unit','tax','priceClass','price','field','labels','productRelatedChildren','children','images']))]);
     }
 
     /**
