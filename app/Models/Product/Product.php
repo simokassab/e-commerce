@@ -191,7 +191,8 @@ class Product extends MainModel
                 }else{
                     return $this->subQuantityForNormalAndVariableChild($quantity);
                 }
-            }if($this->type == 'bundle'){
+            }
+            if($this->type == 'bundle'){
                 if($method == 'add'){
                     return $this->addQuantityForBundle($quantity);
                 }else{
@@ -217,7 +218,7 @@ class Product extends MainModel
      */
     protected function subQuantityForNormalAndVariableChild(int $quantity){
         //TODO: change the settings instead of sending a query get them from the cache
-        $isAllowNegativeQuantity = Setting::where('title','allow_negative_quantity')->first();
+        $isAllowNegativeQuantity = Setting::where('title','allow_negative_quantity')->first()->value;
         if($isAllowNegativeQuantity){
             $this->quantity -= $quantity;
             if($this->save())
@@ -248,14 +249,16 @@ class Product extends MainModel
      */
     private function addQuantityForBundle(int $quantity, array $allProducts = [], array $allRelatedProducts = [])
     {
-        $allProducts = count($allProducts) > 0 ? $allProducts : self::all();
-        $allRelatedProducts = count($allRelatedProducts) > 0 ? $allRelatedProducts : ProductRelated::all();
+        $allProducts = count($allProducts) > 0 ? $allProducts : self::all()->toArray();
+        $allRelatedProducts = count($allRelatedProducts) > 0 ? $allRelatedProducts : ProductRelated::all()->toArray();
+
         $relatedProducts = collect($allRelatedProducts)->where('parent_product_id',$this->id);
         $relatedProductsIds = $relatedProducts->pluck('child_product_id');
         $products = $allProducts->whereIn('id',$relatedProductsIds);
 
         //TODO: change the settings instead of sending a query get them from the cache
         $isAllowNegativeQuantity = (bool)Setting::where('title','allow_negative_quantity')->first()->value;
+
         if($isAllowNegativeQuantity){
             foreach ($products as $product) {
                 $productModel = self::find($product->id);
@@ -302,7 +305,8 @@ class Product extends MainModel
             }
             return $this;
         }
-        if(!$this->hasEnoughRelatedProductsQuantity($quantity,$allProducts->toArray(),$allRelatedProducts->toArray())){
+
+        if(!$this->hasEnoughRelatedProductsQuantity( $quantity,$allProducts,$allRelatedProducts )){
             throw new Exception('Please try again later');
         }
 
@@ -437,9 +441,7 @@ class Product extends MainModel
         $relatedProducts = collect($allRelatedProducts)->where('parent_product_id',$this->id);
         $relatedProductsIds = $relatedProducts->pluck('child_product_id');
         $childrenProducts = collect($allProducts)->whereIn('id',$relatedProductsIds);
-        $i = 0;
         foreach ($childrenProducts as $childProduct){
-            $i ++ ;
             $childRelatedProduct = $relatedProducts
                 ->where('child_product_id',$childProduct['id'])
                 ->where('parent_product_id',$this->id)
