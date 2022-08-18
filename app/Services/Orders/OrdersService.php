@@ -11,6 +11,7 @@ use App\Models\Product\Product;
 use App\Models\Product\ProductPrice;
 use App\Models\Tax\Tax;
 use App\Models\Tax\TaxComponent;
+use phpDocumentor\Reflection\DocBlock\Tags\Method;
 
 class OrdersService {
     /**
@@ -110,6 +111,16 @@ class OrdersService {
 
         return $selectedProducts;
 
+    }
+
+    public static function adjustQuantityOfOrderProducts($orderProducts): void
+    {
+        foreach ($orderProducts as $orderProduct){
+            echo $orderProduct['quantity'];
+            $product = Product::find($orderProduct['id'])->updateProductQuantity($orderProduct['quantity'],'sub');
+
+        }
+        die();
     }
 }
 

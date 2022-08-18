@@ -125,8 +125,8 @@ class OrdersController extends MainController
         try {
             $order = new Order();
             $order->customer_id = $request->client_id;
-//            $order->time = Carbon::now()->format('H:i:s');
             $order->time = $request->time;
+//            $order->date = new Carbon($request->date)->format('H:i:s');
             $order->customer_comment = $request->comment;
             $order->order_status_id = $request->status_id;
             $defaultCurrency = Currency::where('is_default',1)->first();
@@ -167,9 +167,8 @@ class OrdersController extends MainController
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
             $order->save();
-
-
             $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
+            OrdersService::adjustQuantityOfOrderProducts($order->selected_products);
 
 //            return ($productsOrders);
             DB::commit();

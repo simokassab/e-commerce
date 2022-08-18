@@ -24,7 +24,8 @@ class SingelOrdersResource extends JsonResource
             'shipping_company_id' => null, // tpo be added after adding the shipping companies
             "date" => $this->date,
             "comment" => $this->customer_comment,
-            "status_id" => $this->order_status_id,
+            "payment_method" => 1,
+            "status_id" => (int)$this->order_status_id,
             "prefix" => $this->prefix,
             "coupon_code" => $this->whenLoaded('coupon') ? $this->whenLoaded('coupon')->code : '',
             "billing" => [
@@ -34,10 +35,10 @@ class SingelOrdersResource extends JsonResource
                 "address_1" => $this->billing_address_one,
                 "address_2" => $this->billing_address_two,
                 "city" => $this->billing_city,
-                "country_id" => $this->billing_country_id,
+                "country_id" => (int)$this->billing_country_id,
                 "phone_number" => $this->billing_phone_number,
                 "email_address" => $this->billing_email,
-                "payment_method_id" => $this->payment_method_id
+                "payment_method_id" => (int)$this->payment_method_id
             ],
             "shipping" => [
                 "first_name" => $this->shipping_first_name,
@@ -46,7 +47,7 @@ class SingelOrdersResource extends JsonResource
                 "address_1" => $this->shipping_address_one,
                 "address_2" => $this->shipping_address_two,
                 "city" => $this->shipping_city,
-                "country_id" => $this->shipping_country_id,
+                "country_id" => (int)$this->shipping_country_id,
                 "phone_number" => $this->shipping_phone_number,
                 "email_address" => $this->shipping_email
             ],

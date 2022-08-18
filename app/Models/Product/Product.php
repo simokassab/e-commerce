@@ -375,7 +375,7 @@ class Product extends MainModel
                     ->where('child_product_id',$product->id)
                     ->where('parent_product_id',$this->id)
                     ->first();
-                $productModel->quantity -= $quantity * $childRelatedProduct->child_quantity;
+                $productModel->reserved_quantity -= $quantity * $childRelatedProduct->child_quantity;
                 $productModel->bundle_reserved_quantity -= $quantity * $childRelatedProduct->child_quantity;
                 if(!$productModel->save()){
                     throw new Exception('One of the related products for bundle was not saved correctly! try again later ');
@@ -404,7 +404,7 @@ class Product extends MainModel
                     ->where('child_product_id',$product['id'])
                     ->where('parent_product_id',$this->id)
                     ->first();
-                $productModel->quantity -= $quantity * $childRelatedProduct->child_quantity;
+                $productModel->reserved_quantity -= $quantity * $childRelatedProduct->child_quantity;
                 $productModel->bundle_reserved_quantity -= $quantity * $childRelatedProduct->child_quantity;
                 if(!$productModel->save()){
                     throw new Exception('One of the related products for bundle was not saved correctly! try again later ');
