@@ -6,6 +6,7 @@ use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Language\StoreLanguageRequest;
 use App\Http\Resources\Language\LanguageResource;
+use App\Http\Resources\Language\RestFullLanguageResource;
 use App\Http\Resources\Language\SingleLanguageResource;
 use App\Models\Language\Language;
 use Exception;
@@ -255,5 +256,8 @@ __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
         );
 }
 
+    public function getLanguagesData(){
+        return $this->successResponsePaginated(RestFullLanguageResource::class,Language::class);
+    }
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Prices;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\price\PricesRequest;
 use App\Http\Resources\Price\PriceResource;
+use App\Http\Resources\Price\RestFullPriceResource;
 use App\Http\Resources\Price\SelectPriceResource;
 use App\Http\Resources\Price\SinglePriceResource;
 use Illuminate\Http\Request;
@@ -172,5 +173,8 @@ class PricesController extends MainController
 
     public function getTableHeaders(){
         return $this->successResponse('Success!', ['headers' => __('headers.prices') ]);
+    }
+    public function getPricesData(){
+        return $this->successResponsePaginated(RestFullPriceResource::class,Price::class,['originalPrice','currency']);
     }
 }

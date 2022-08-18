@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Unit;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Unit\StoreUnitRequest;
+use App\Http\Resources\Unit\RestFullUnitResource;
 use App\Http\Resources\Unit\SingleUnitResource;
 use App\Http\Resources\Unit\UnitResource;
 use App\Models\Unit\Unit;
@@ -150,4 +151,8 @@ class UnitController extends MainController
     public function getTableHeaders(){
         return $this->successResponse('Success!',['headers' => __('headers.units') ]);
 }
+
+    public function getUnitsData(){
+        return $this->successResponsePaginated(RestFullUnitResource::class,Unit::class);
+    }
 }

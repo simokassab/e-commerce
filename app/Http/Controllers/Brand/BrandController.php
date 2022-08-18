@@ -6,6 +6,8 @@ use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Brand\StoreBrandRequest;
 use App\Http\Resources\Brand\BrandResource;
+use App\Http\Resources\Brand\HxaBrandResource;
+use App\Http\Resources\Brand\RestFullBrandResource;
 use App\Http\Resources\Brand\SingleBrandResource;
 use App\Http\Resources\Field\FieldsResource;
 use App\Http\Resources\Label\LabelsResource;
@@ -333,4 +335,8 @@ public function getTableHeaders(): \Illuminate\Http\JsonResponse
         return $this->successResponse( 'success' , ['headers' => __('headers.brands') ]);
 }
 
+public function getBrandsData()
+{
+    return $this->successResponsePaginated(RestFullBrandResource::class,Brand::class,['field','label']);
+}
 }

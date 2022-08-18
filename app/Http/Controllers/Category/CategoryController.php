@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Category;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Resources\Category\CategoryResource;
+use App\Http\Resources\Category\RestFullCategoryResource;
 use App\Http\Resources\Category\SelectCategoryResource;
 use App\Http\Resources\Category\SingleCategoryResource;
 use App\Http\Resources\Field\FieldsResource;
@@ -344,6 +345,10 @@ class CategoryController extends MainController
     public function getTableHeaders(){
         return $this->successResponse('Success!',['headers' => __('headers.categories') ]);
 }
+
+    public function getCategoiresData(){
+        return $this->successResponsePaginated(RestFullCategoryResource::class,Category::class,['fields','label']);
+    }
 
 }
 

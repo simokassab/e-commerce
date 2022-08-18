@@ -8,6 +8,7 @@ use App\Http\Requests\Currency\StoreCurrencyRequest;
 use App\Http\Resources\Currency\CurrencyHistoryResource;
 use App\Http\Resources\Currency\CurrencyResource;
 use App\Http\Resources\Currency\IndexCurrencyResource;
+use App\Http\Resources\Currency\RestFullCurrencyResource;
 use App\Http\Resources\Currency\SingleCurrencyResource;
 use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyHistory;
@@ -207,5 +208,8 @@ class CurrencyController extends MainController
                 'headers' => __('headers.currencies')
             ]
         );
+    }
+    public function getCurrenciesData(){
+        return $this->successResponsePaginated(RestFullCurrencyResource::class,Currency::class,['currencyHistory']);
     }
 }

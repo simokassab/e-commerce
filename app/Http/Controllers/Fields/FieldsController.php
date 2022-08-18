@@ -6,6 +6,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Field\StoreFieldRequest;
 use App\Http\Resources\Field\FieldHeaderResource;
 use App\Http\Resources\Field\FieldsResource;
+use App\Http\Resources\Field\RestFullFieldResource;
 use App\Http\Resources\Field\SingleFieldResource;
 use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
@@ -193,5 +194,9 @@ class FieldsController extends MainController
 
     public function getTableHeaders(){
         return $this->successResponse('Success!' , ['headers' => __('headers.fields') ]);
+    }
+
+    public function getFieldsData(){
+        return $this->successResponsePaginated(RestFullFieldResource::class,Field::class,['fieldValue']);
     }
 }
