@@ -171,8 +171,8 @@ class ProductController extends MainController
             }
             if($request->type=='bundle'){
                 $this->productService->storeAdditionalBundle($request,$product);
-                Product::find($product->id)->updateProductQuantity($request->reserved_quantity,'add');
             }
+            Product::find($product->id)->updateProductQuantity($request->reserved_quantity,'add');
             $this->productService->storeAdditionalProductData($request,$product,$childrenIds);
 
         DB::commit();
@@ -227,8 +227,11 @@ class ProductController extends MainController
             if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
                $childrenIds=$this->productService->storeVariations($request,$product);
             }
-            if($request->type=='bundle')
+            if($request->type=='bundle'){
                 $this->productService->storeAdditionalBundle($request,$product);
+        }
+        Product::find($product->id)->updateProductQuantity($request->reserved_quantity,'add');
+        $this->productService->storeAdditionalProductData($request,$product,$childrenIds);
 
             DB::commit();
             return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
