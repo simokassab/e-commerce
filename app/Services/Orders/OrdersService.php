@@ -25,8 +25,8 @@ class OrdersService {
         $allTaxComponents = TaxComponent::all();
         $products = Product::all();
         $prices = ProductPrice::all();
-
         $total = 0;
+
         $totalTax = 0;
         $productsOrders = [];
 
@@ -53,7 +53,7 @@ class OrdersService {
             $total += $productsOrders[$key]['total'];
             $totalTax += $tax;
         }
-         OrderProduct::insert($productsOrders);
+        OrderProduct::insert($productsOrders);
 
         $coupon = Coupon::query()
             ->where('id', $order->coupon_id ?? 0)
@@ -153,6 +153,38 @@ class OrdersService {
             }
         }
         $dataToBeUpdatedOrCreated = [];
+        $taxes = Tax::all();
+        $allTaxComponents = TaxComponent::all();
+        $products = Product::all();
+        $prices = ProductPrice::all();
+        $total = 0;
+
+
+        foreach ($productsOfOrder as $key => $product){
+            $priceOfUnit = $prices->where('product_id' , $product['id'])->where('price_id',1)->first() ? $prices->where('product_id' , $product['id'])->where('price_id',1)->first()->price : 0;
+            $mainProduct = $products->where('id',$product['id'])->first();
+            $taxObject = $taxes->where('id',$mainProduct->tax_id)->first();
+            if($taxObject->is_complex){
+                $tax = $taxObject->getComplexPrice($priceOfUnit,$allTaxComponents->toArray(),$taxes->toArray());
+
+            }else{
+                $tax = $taxObject->percentage * $priceOfUnit/100;
+            }
+            $productsOrders[$key]['id'] = $order->id;
+            $productsOrders[$key]['order_id'] = $order->id;
+            $productsOrders[$key]['product_id'] = $product['id'];
+            $productsOrders[$key]['quantity'] = $product['quantity'];
+            $productsOrders[$key]['unit_price'] = $priceOfUnit;
+            $productsOrders[$key]['tax_percentage'] = $taxObject->percentage;
+            $productsOrders[$key]['tax_amount'] = $tax;
+            $productsOrders[$key]['total'] = $priceOfUnit * $product['quantity'];
+
+            $productsOrders[$key]['created_at'] = now();
+            $productsOrders[$key]['updated_at'] = now();
+            $total += $productsOrders[$key]['total'];
+            $totalTax += $tax;
+        }
+
         OrderProduct::upsert($dataToBeUpdatedOrCreated,['id'],[]);
 //        OrderProduct::query()
 //            ->whereIn('product_id',array_keys($deletedProducts))
