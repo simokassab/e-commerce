@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Product;
 
 use App\Models\Settings\Setting;
+use Hamcrest\Core\Set;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SelectProductOrderResource extends JsonResource
@@ -16,8 +17,7 @@ class SelectProductOrderResource extends JsonResource
      */
     public function toArray($request)
     {
-        $settings = Setting::query()->get();
-        $isAllowNegativeQuantity  = $settings->where('title','allow_negative_quantity')->first() ?? false;
+        $isAllowNegativeQuantity  = Setting::query()->where('title','allow_negative_quantity')->first()->value;
 
         $priceObject = ($this->whenLoaded('pricesList')->where('price_id',1)->first());
         $price = $priceObject ? $priceObject->price : 0;
@@ -35,12 +35,23 @@ class SelectProductOrderResource extends JsonResource
             $preOrder = !$preOrder;
             $quantity = '--';
         }
-        if($isAllowNegativeQuantity){
+        if(!$isAllowNegativeQuantity){
             if(($this->pre_order)){
-                $preOrder = !$preOrder;
+                $preOrder = true;
                 $quantity = '--';
             }
+        }else{
+            $preOrder = true;
+            $quantity = '--';
+
         }
+
+        if($this->type == 'service'){
+            $preOrder = true;
+        }
+
+
+
         return [
             'id' => $this->id,
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image) : 'default_image' ,
@@ -53,7 +64,7 @@ class SelectProductOrderResource extends JsonResource
             'quantity_in_stock' => $quantity,
             'edit_status' => false,
             'type' => $this->type,
-            'pre_order' => false
+            'pre_order' => $preOrder
 //            'quantity_in_stock_available' => $this->quantity - $this->minimum_quantity < 0 ? 0 : $this->quantity - $this->minimum_quantity,
 
         ];
