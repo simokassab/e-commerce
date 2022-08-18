@@ -84,11 +84,18 @@ class OrdersService {
 
     public static function generateOrderProducts($productsOrders,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency){
         $selectedProducts = [];
-
         foreach ($productsOrders as $key => $orderProduct) {
 
             $currentProduct = collect($allProducts)->where('id' , $orderProduct['product_id'])->first();
-            $pricePerUnit = collect($currentProduct['prices_list'])->where('price_id' , $defaultPricingClass)->first()['price'];
+            if(is_null($currentProduct)){
+                continue;
+            }
+
+            $pricePerUnit = collect($currentProduct['prices_list'])->where('price_id' , $defaultPricingClass)->first();
+            if(is_null($pricePerUnit)){
+                continue;
+            }
+                $pricePerUnit = collect($currentProduct['prices_list'])->where('price_id' , $defaultPricingClass)->first()['price'];
             $taxPerUnit = 0;
 
             $selectedProducts[$key]['id'] = $orderProduct['product_id'];
@@ -107,6 +114,10 @@ class OrdersService {
             $selectedProducts[$key]['quantity_in_stock_available'] = $currentProduct['minimum_quantity'] < 0 ? 0 : $currentProduct['quantity'] - $currentProduct['minimum_quantity'];
             $selectedProducts[$key]['quantity_in_stock'] = $currentProduct['quantity'];
             $selectedProducts[$key]['currency']  = $defaultCurrency->symbol;
+            $selectedProducts[$key]['type']  = $currentProduct['type'];
+            $selectedProducts[$key]['edit_status']  = false;
+            $selectedProducts[$key]['pre_order']  = false;
+
         }
 
         return $selectedProducts;
