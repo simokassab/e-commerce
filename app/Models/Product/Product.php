@@ -20,6 +20,7 @@ use App\Models\Field\FieldValue;
 use App\Models\MainModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use phpDocumentor\Reflection\Types\False_;
 use Spatie\Translatable\HasTranslations;
 use Illuminate\Support\Facades\DB;
@@ -245,7 +246,7 @@ class Product extends MainModel
      */
     private function addQuantityForBundle(int $quantity, array $allProducts = [], array $allRelatedProducts = [])
     {
-        $allProducts = count($allProducts) > 0 ? $allProducts : self::all()->toArray();
+        $allProducts = count($allProducts) > 0 ? $allProducts : self::all();
         $allRelatedProducts = count($allRelatedProducts) > 0 ? $allRelatedProducts : ProductRelated::all()->toArray();
 
         $relatedProducts = collect($allRelatedProducts)->where('parent_product_id',$this->id);
@@ -253,7 +254,8 @@ class Product extends MainModel
         $products = $allProducts->whereIn('id',$relatedProductsIds);
 
         //TODO: change the settings instead of sending a query get them from the cache
-        $isAllowNegativeQuantity = (bool)Setting::where('title','allow_negative_quantity')->first()->value;
+        // $isAllowNegativeQuantity = (bool)Setting::where('title','allow_negative_quantity')->first()->value;
+        $isAllowNegativeQuantity = Cache::get('settings')->where('title','allow_negative_quantity')->first()->value;
 
         if($isAllowNegativeQuantity){
             foreach ($products as $product) {
@@ -262,7 +264,6 @@ class Product extends MainModel
                     ->where('child_product_id',$product->id)
                     ->where('parent_product_id',$this->id)
                     ->first();
-
                 $productModel->bundle_reserved_quantity += $quantity * $childRelatedProduct->child_quantity;
                 if(!$productModel->save()){
                     throw new Exception('One of the related products for bundle was not saved correctly! try again later ');
@@ -302,7 +303,7 @@ class Product extends MainModel
             return $this;
         }
 
-        if(!$this->hasEnoughRelatedProductsQuantity( $quantity,$allProducts,$allRelatedProducts )){
+        if(!$this->hasEnoughRelatedProductsQuantity( $quantity,$allProducts->toArray(),$allRelatedProducts )){
             throw new Exception('Please try again later');
         }
 
@@ -316,7 +317,7 @@ class Product extends MainModel
                     ->where('child_product_id',$product->id)
                     ->where('parent_product_id',$this->id)
                     ->first();
-                $productModel->bundle_reserved_quantity += $quantity * $childRelatedProduct->child_quantity;
+                $productModel->bundle_reserved_quantity += $quantity * $childRelatedProduct['child_quantity'];
                 if(!$productModel->save()){
                 throw new Exception('An error occurred please try again later');
                 }
@@ -448,7 +449,6 @@ class Product extends MainModel
             }
 
             $childProduct['quantity'] -= $childProduct['bundle_reserved_quantity'];
-
             if($childRelatedProduct['child_quantity'] < 0 ){
                 $childRelatedProduct['child_quantity'] *= -1;
             }

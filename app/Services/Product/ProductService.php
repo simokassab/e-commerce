@@ -255,8 +255,8 @@ class ProductService
                 ];
             }
             ProductRelated::insert($data);
-            $this->calculateBundleReservedQuantities($request);
-            $this->calculateReservedQuantity($request, $product);
+            // $this->calculateBundleReservedQuantities($request);
+            // $this->calculateReservedQuantity($request, $product);
         }
         return $this;
     }
