@@ -31,10 +31,7 @@ class SelectProductOrderResource extends JsonResource
 
         $quantity = $this->quantity;
         $preOrder = false;
-        if($this->type == 'bundle'){
-            $preOrder = !$preOrder;
-            $quantity = '--';
-        }
+
         if(!$isAllowNegativeQuantity){
             if(($this->pre_order)){
                 $preOrder = true;
