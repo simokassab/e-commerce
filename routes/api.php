@@ -23,6 +23,7 @@ use App\Http\Controllers\Prices\PricesController;
 use App\Http\Controllers\Product\ProductController;
 use \App\Http\Controllers\Orders\OrdersController;
 use \App\Http\Controllers\Coupons\CouponsController;
+use \App\Http\Controllers\Users\CustomersController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -53,6 +54,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     //End of Routes Macro
 
     Route::post('user/all',[UsersController::class,'index']);//for searching
+    Route::get('user/customer/get-addresses-of-customer/{customer}',[CustomersController::class,'getCountriesOfCustomer']);
     Route::apiResource('user',UsersController::class);
 
     Route::apiResource('country',CountryController::class);

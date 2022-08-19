@@ -5,11 +5,8 @@ namespace App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Customer extends Model
+class CustomerAddress extends Model
 {
     use HasFactory;
-
-    public function addresses(){
-        return $this->hasMany(CustomerAddress::class,'customer_id','id');
-    }
+    protected $table = 'customer_address';
 }

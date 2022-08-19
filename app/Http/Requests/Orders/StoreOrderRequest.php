@@ -39,7 +39,13 @@ class StoreOrderRequest extends FormRequest
             'currency_id' => 'required|numeric|exists:currencies,id',
 //            "time" => "required|date_format:H:i",
 //            "date" => "required|date_format:format",
+
             "comment" => "required",
+            "notes" => 'nullable|array',
+            "notes.*.user_id" => 'required',
+            "notes.*.title" => 'required',
+            "notes.*.body" => 'required',
+
             "status_id" => 'required|exists:order_statuses,id',
             "shipping_as_billing" => 'required|boolean',
             "coupon_code" => "exists:coupons,code",

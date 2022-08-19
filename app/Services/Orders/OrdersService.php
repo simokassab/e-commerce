@@ -5,6 +5,7 @@ namespace App\Services\Orders;
 
 use App\Models\Coupons\Coupon;
 use App\Models\Orders\Order;
+use App\Models\Orders\OrderNote;
 use App\Models\Orders\OrderProduct;
 use App\Models\Price\Price;
 use App\Models\Product\Product;
@@ -59,8 +60,8 @@ class OrdersService {
             ->where('id', $order->coupon_id ?? 0)
             ->first();
 
-        $order->discount_percentage = $coupon?->discount_percentage;
-        $order->discount_amount = $coupon?->discount_amount;
+        $order->discount_percentage = $coupon ?-> discount_percentage;
+        $order->discount_amount = $coupon ?-> discount_amount;
 
         if(!is_null($coupon)){
             if($coupon->is_one_time && $coupon->is_used){
@@ -230,7 +231,51 @@ class OrdersService {
         $order->total = $total;
         $order->tax_total = $totalTax;
 
+    }
 
+    public static function createNotesForOrder(Order $order, array $notes,array $data= []):bool{
+
+        $notesToBeSaved = [];
+        foreach ($notes as $key => $note) {
+            $notesToBeSaved[$key]['user_id'] = auth()->user()->id;
+            $notesToBeSaved[$key]['title'] = $note['title'];
+            $notesToBeSaved[$key]['body'] = $note['body'];
+            $notesToBeSaved[$key]['date'] = now();
+            $notesToBeSaved[$key]['created_at'] = now();
+            $notesToBeSaved[$key]['updated_at'] = now();
+            $notesToBeSaved[$key]['order_id'] = $order->id;
+            $notesToBeSaved[$key]['order_status_id'] = array_key_exists('order_status_id',$data) ? $data['order_status_id'] : null ;
+
+        }
+
+        return OrderNote::insert($notesToBeSaved);
+    }
+
+    public static function updateNotesForOrder(Order $order, array $newNotes,array $data= []){
+        $oldNotesCollection = collect($order->notes);
+        $newNotes = collect($newNotes);
+
+        $oldNotesToBeDeleted = $oldNotesCollection->filter(function ($object)use($newNotes){
+           return (!$newNotes->contains('id',$object->id));
+        });
+
+        OrderNote::query()->whereIn('id',$oldNotesToBeDeleted->pluck('id'))->delete();
+
+        $notesToBeSaved = [];
+        foreach ($newNotes as $key => $note) {
+            $notesToBeSaved[$key]['id'] = $note['id'] ?? null;
+            $notesToBeSaved[$key]['user_id'] = auth()->user()->id;
+            $notesToBeSaved[$key]['title'] = $note['title'];
+            $notesToBeSaved[$key]['body'] = $note['body'];
+            $notesToBeSaved[$key]['date'] = now();
+            $notesToBeSaved[$key]['created_at'] = now();
+            $notesToBeSaved[$key]['updated_at'] = now();
+            $notesToBeSaved[$key]['order_id'] = $order->id;
+            $notesToBeSaved[$key]['order_status_id'] = array_key_exists('order_status_id',$data) ? $data['order_status_id'] : null ;
+
+        }
+
+        OrderNote::query()->upsert($notesToBeSaved,['id'],['user_id','customer_id','order_id','order_status_id','title','body','date','created_at','updated_at']);
 
     }
 }

@@ -33,24 +33,7 @@ class UsersController extends MainController
                 })
                 ->paginate($request->limit ?? config('defaults.default_pagination'));
 
-                if($rows->isEmpty()){
-                    $rows=[
-                       'data' => [
-                           [
-                           'id' => '',
-                           'username'=>'',
-                           'email'=> '',
-                           'first_name'=> '',
-                           'is_confirmed'=> '',
-                           'is_disabled'=> '',
-                           'role'=> '',
 
-                       ]
-                       ]
-                   ];
-                   return response()->json($rows);
-                   return  UserResource::collection($rows);
-               }
                 return  UserResource::collection($rows);
 
         }

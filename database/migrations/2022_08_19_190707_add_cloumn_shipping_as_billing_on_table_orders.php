@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('orders',function (Blueprint $table){
-            if(Schema::hasColumn('orders','is_billing_as_shipping')){
+            if(!Schema::hasColumn('orders','is_billing_as_shipping')){
                 $table->boolean('is_billing_as_shipping')->after('updated_at')->default(0);
             }
         });

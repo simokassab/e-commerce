@@ -14,6 +14,7 @@ use App\Models\Country\Country;
 use App\Models\Coupons\Coupon;
 use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyHistory;
+use App\Models\Orders\OrderNote;
 use App\Models\Orders\OrderProduct;
 use App\Models\Orders\OrderStatus;
 use App\Models\Price\Price;
@@ -115,7 +116,7 @@ class OrdersController extends MainController
      */
     public function store(StoreOrderRequest $request)
     {
-        DB::enableQueryLog();
+
         $allProducts = Product::with(['tax','pricesList'])->get()->toArray();
         $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
         $allTaxes = Tax::all();
@@ -128,6 +129,7 @@ class OrdersController extends MainController
             $order->customer_id = $request->client_id;
             $order->currency_id = $request->currency_id;
             $order->time = $request->time;
+
 //            $order->date = new Carbon($request->date)->format('H:i:s');
             $order->customer_comment = $request->comment;
             $order->order_status_id = $request->status_id;
@@ -139,19 +141,32 @@ class OrdersController extends MainController
 
             $coupon = Coupon::where('code', $request->coupon_code)->first();
 
+            $order->is_billing_as_shipping = $request->is_billing_as_shipping;
+            if($request->is_billing_as_shipping){
+                $order->shipping_first_name = $request->billing['first_name'];
+                $order->shipping_last_name = $request->billing['last_name'];
+                $order->shipping_address_one = $request->billing['address_1'];
+                $order->shipping_address_two = $request->billing['address_2'];
+                $order->shipping_country_id = $request->billing['country_id'];
+                $order->shipping_city = $request->billing['city'];
+                $order->shipping_company_name = $request->billing['company_name'];
+                $order->shipping_email = $request->billing['email_address'];
+                $order->shipping_phone_number = $request->billing['phone_number'];
+            }else{
+                $order->shipping_first_name = $request->shipping['first_name'];
+                $order->shipping_last_name = $request->shipping['last_name'];
+                $order->shipping_address_one = $request->shipping['address_1'];
+                $order->shipping_address_two = $request->shipping['address_2'];
+                $order->shipping_country_id = $request->shipping['country_id'];
+                $order->shipping_city = $request->shipping['city'];
+                $order->shipping_company_name = $request->shipping['company_name'];
+                $order->shipping_email = $request->shipping['email_address'];
+                $order->shipping_phone_number = $request->shipping['phone_number'];
+            }
             $order->coupon_id =  $coupon ? $coupon->id : 0;
             $products = $request->selected_products;
-            $order->shipping_first_name = $request->shipping['first_name'];
-            $order->shipping_last_name = $request->shipping['last_name'];
-            $order->shipping_address_one = $request->shipping['address_1'];
-            $order->shipping_address_two = $request->shipping['address_2'];
-            $order->shipping_country_id = $request->shipping['country_id'];
-            $order->shipping_city = $request->shipping['city'];
-            $order->shipping_company_name = $request->shipping['company_name'];
-            $order->shipping_email = $request->shipping['email_address'];
-            $order->shipping_phone_number = $request->shipping['phone_number'];
-            $order->prefix ='0';
 
+            $order->prefix ='0';
 
             $order->billing_first_name = $request->billing['first_name'];
             $order->billing_last_name = $request->billing['last_name'];
@@ -166,6 +181,7 @@ class OrdersController extends MainController
             $order->save();
             $order->prefix = 'order' . $order->id;
 
+            OrdersService::createNotesForOrder(order: $order, notes: $request->notes, data :$request->toArray());
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
             $order->save();
@@ -259,15 +275,28 @@ class OrdersController extends MainController
 
             $order->coupon_id =  $coupon ? $coupon->id : 0;
             $products = $request->selected_products;
-            $order->shipping_first_name = $request->shipping['first_name'];
-            $order->shipping_last_name = $request->shipping['last_name'];
-            $order->shipping_address_one = $request->shipping['address_1'];
-            $order->shipping_address_two = $request->shipping['address_2'];
-            $order->shipping_country_id = $request->shipping['country_id'];
-            $order->shipping_city = $request->shipping['city'];
-            $order->shipping_company_name = $request->shipping['company_name'];
-            $order->shipping_email = $request->shipping['email_address'];
-            $order->shipping_phone_number = $request->shipping['phone_number'];
+            $order->is_billing_as_shipping = $request->is_billing_as_shipping;
+            if($request->is_billing_as_shipping){
+                $order->shipping_first_name = $request->billing['first_name'];
+                $order->shipping_last_name = $request->billing['last_name'];
+                $order->shipping_address_one = $request->billing['address_1'];
+                $order->shipping_address_two = $request->billing['address_2'];
+                $order->shipping_country_id = $request->billing['country_id'];
+                $order->shipping_city = $request->billing['city'];
+                $order->shipping_company_name = $request->billing['company_name'];
+                $order->shipping_email = $request->billing['email_address'];
+                $order->shipping_phone_number = $request->billing['phone_number'];
+            }else{
+                $order->shipping_first_name = $request->shipping['first_name'];
+                $order->shipping_last_name = $request->shipping['last_name'];
+                $order->shipping_address_one = $request->shipping['address_1'];
+                $order->shipping_address_two = $request->shipping['address_2'];
+                $order->shipping_country_id = $request->shipping['country_id'];
+                $order->shipping_city = $request->shipping['city'];
+                $order->shipping_company_name = $request->shipping['company_name'];
+                $order->shipping_email = $request->shipping['email_address'];
+                $order->shipping_phone_number = $request->shipping['phone_number'];
+            }
             $order->prefix ='0';
 
 
@@ -286,6 +315,9 @@ class OrdersController extends MainController
 
             $order->save();
             $order->prefix = 'order' . $order->id;
+
+
+            OrdersService::updateNotesForOrder($order,$request->notes ?? [] , $request->toArray());
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
             $order->save();
