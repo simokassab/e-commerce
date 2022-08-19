@@ -72,10 +72,6 @@ class OrdersService {
             }
         }
 
-        //@TODO: finish the request class
-        //@TODO: make an observer for the product once saved check the coupon and change it to is_used for used ones
-
-
         $order->total = $total;
         $order->tax_total = $totalTax;
 
@@ -87,9 +83,12 @@ class OrdersService {
         $selectedProducts = [];
 
         foreach ($productsOrders as $key => $orderProduct) {
-
             $currentProduct = collect($allProducts)->where('id' , $orderProduct['product_id'])->first();
-            $pricePerUnit = collect($currentProduct['prices_list'])->where('price_id' , $defaultPricingClass)->first()['price'];
+            if(is_null($currentProduct)){
+                continue;
+            }
+            $pricePerUnit = collect($currentProduct['prices_list'])->where('price_id' , $defaultPricingClass)->first();
+            $pricePerUnit = is_null($pricePerUnit) ? 0 :$pricePerUnit['price'];
             $taxPerUnit = 0;
 
             $selectedProducts[$key]['id'] = $orderProduct['product_id'];
@@ -102,10 +101,10 @@ class OrdersService {
             }
             $selectedProducts[$key]['tax'] = $taxPerUnit;
             $selectedProducts[$key]['image'] = $currentProduct['image'] ?? 'default_image';
-            $selectedProducts[$key]['price'] = $currentProduct['quantity'] * $pricePerUnit * $taxPerUnit;
+            $selectedProducts[$key]['price'] = $orderProduct['quantity'] * $pricePerUnit * $taxPerUnit;
             $selectedProducts[$key]['sku'] = $currentProduct['sku'];
             $selectedProducts[$key]['quantity'] = $orderProduct['quantity'];
-            $selectedProducts[$key]['quantity_in_stock_available'] = $currentProduct['minimum_quantity'] < 0 ? 0 : $currentProduct['quantity'] - $currentProduct['minimum_quantity'];
+//            $selectedProducts[$key]['quantity_in_stock_available'] = $currentProduct['minimum_quantity'] < 0 ? 0 : $currentProduct['quantity'] - $currentProduct['minimum_quantity'];
             $selectedProducts[$key]['quantity_in_stock'] = $currentProduct['quantity'];
             $selectedProducts[$key]['currency']  = $defaultCurrency->symbol;
         }
@@ -122,13 +121,12 @@ class OrdersService {
         }
     }
 
-    public static function updateProductsOfOrder( $order,array $newProducts,array $oldOrderProducts,array $allProducts = []): void
+    public static function updateProductsOfOrder( &$order,array $newProducts,array $oldOrderProducts,array $allProducts = [], array $allOrdersProducts): void
     {
         // old products from database
         // new products from request
         // oldOrderProducts are the relation of each product
         // all the products in the database
-
 
         $oldProductsWithQuantities = collect($oldOrderProducts)->pluck('quantity','product_id')->all();
         $newProductsWithQuantities = collect($newProducts)->pluck('quantity','id')->all();
@@ -152,47 +150,79 @@ class OrdersService {
                 $deletedProducts[$key] = $oldItem;
             }
         }
-        $dataToBeUpdatedOrCreated = [];
+
         $taxes = Tax::all();
         $allTaxComponents = TaxComponent::all();
         $products = Product::all();
         $prices = ProductPrice::all();
         $total = 0;
+        $totalTax = 0;
 
 
-        foreach ($productsOfOrder as $key => $product){
+        //prepare the array for update
+        $dataToBeUpdatedOrCreated = [];
+        foreach ($newProducts as $key => $product){
             $priceOfUnit = $prices->where('product_id' , $product['id'])->where('price_id',1)->first() ? $prices->where('product_id' , $product['id'])->where('price_id',1)->first()->price : 0;
             $mainProduct = $products->where('id',$product['id'])->first();
             $taxObject = $taxes->where('id',$mainProduct->tax_id)->first();
+            $oldOrderProduct = collect($allOrdersProducts)->where('product_id',$product['id'])->where('order_id',$order->id)->first();
+            $mainProduct->updateProductQuantity($product['quantity'],'sub');
             if($taxObject->is_complex){
                 $tax = $taxObject->getComplexPrice($priceOfUnit,$allTaxComponents->toArray(),$taxes->toArray());
 
             }else{
                 $tax = $taxObject->percentage * $priceOfUnit/100;
             }
-            $productsOrders[$key]['id'] = $order->id;
-            $productsOrders[$key]['order_id'] = $order->id;
-            $productsOrders[$key]['product_id'] = $product['id'];
-            $productsOrders[$key]['quantity'] = $product['quantity'];
-            $productsOrders[$key]['unit_price'] = $priceOfUnit;
-            $productsOrders[$key]['tax_percentage'] = $taxObject->percentage;
-            $productsOrders[$key]['tax_amount'] = $tax;
-            $productsOrders[$key]['total'] = $priceOfUnit * $product['quantity'];
+            $dataToBeUpdatedOrCreated[$key]['id'] = $oldOrderProduct ? $oldOrderProduct['id'] : null ;
+            $dataToBeUpdatedOrCreated[$key]['order_id'] = $order->id;
+            $dataToBeUpdatedOrCreated[$key]['product_id'] = $product['id'];
+            $dataToBeUpdatedOrCreated[$key]['quantity'] = $product['quantity'];
+            $dataToBeUpdatedOrCreated[$key]['unit_price'] = $priceOfUnit;
+            $dataToBeUpdatedOrCreated[$key]['tax_percentage'] = $taxObject->percentage;
+            $dataToBeUpdatedOrCreated[$key]['tax_amount'] = $tax;
+            $dataToBeUpdatedOrCreated[$key]['total'] = $priceOfUnit * $product['quantity'];
 
-            $productsOrders[$key]['created_at'] = now();
-            $productsOrders[$key]['updated_at'] = now();
-            $total += $productsOrders[$key]['total'];
+            $dataToBeUpdatedOrCreated[$key]['created_at'] = now();
+            $dataToBeUpdatedOrCreated[$key]['updated_at'] = now();
+            $total += $dataToBeUpdatedOrCreated[$key]['total'];
             $totalTax += $tax;
         }
+        // update or create the new products of the order
+        OrderProduct::upsert($dataToBeUpdatedOrCreated,['id'],['quantity','unit_price','tax_percentage','tax_amount','total','created_at','updated_at']);
 
-        OrderProduct::upsert($dataToBeUpdatedOrCreated,['id'],[]);
-//        OrderProduct::query()
-//            ->whereIn('product_id',array_keys($deletedProducts))
-//            ->where('order_id',$order->id)
-//            ->delete();
+        //delete non used products in the order
+        OrderProduct::query()
+            ->whereIn('product_id',array_keys($deletedProducts))
+            ->where('order_id',$order->id)
+            ->delete();
 
-        print_r($deletedProducts);
-        die();
+        $coupon = Coupon::query()
+            ->where('id', $order->coupon_id ?? 0)
+            ->first();
+
+        $order->discount_percentage = $coupon?->discount_percentage;
+        $order->discount_amount = $coupon?->discount_amount;
+
+        if(!is_null($coupon)){
+            if($coupon->is_one_time && $coupon->is_used){
+
+                $order->discount_percentage = null;
+                $order->discount_amount = null;
+                $order->coupon_id = null;
+
+            }
+        }
+
+        // now add the old quantity to the database
+        foreach ($deletedProducts as $key => $deletedProductQuantity){
+            Product::find($key)->updateProductQuantity($deletedProductQuantity, "add");
+        }
+
+        $order->total = $total;
+        $order->tax_total = $totalTax;
+
+
+
     }
 }
 

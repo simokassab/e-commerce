@@ -233,6 +233,7 @@ class OrdersController extends MainController
     {
         $oldProducts = $order->products;
         $oldOrderProducts = OrderProduct::query()->where('order_id',$order->id)->get();
+        $allOrdersWithProducts = OrderProduct::all()->toArray();
         try {
             $allProducts = Product::with(['tax','pricesList'])->get()->toArray();
             $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
@@ -279,8 +280,8 @@ class OrdersController extends MainController
             $order->billing_phone_number = $request->billing['phone_number'];
             $order->payment_method_id = $request->billing['payment_method_id'];
 
-            OrdersService::updateProductsOfOrder($order, $request->selected_products ,$oldOrderProducts->toArray(),$allProducts);
-            die();
+            OrdersService::updateProductsOfOrder($order, $request->selected_products ,$oldOrderProducts->toArray(),$allProducts,$allOrdersWithProducts);
+
             $order->save();
             $order->prefix = 'order' . $order->id;
 
