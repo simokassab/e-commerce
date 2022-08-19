@@ -272,7 +272,6 @@ class OrdersService {
             $notesToBeSaved[$key]['updated_at'] = now();
             $notesToBeSaved[$key]['order_id'] = $order->id;
             $notesToBeSaved[$key]['order_status_id'] = array_key_exists('order_status_id',$data) ? $data['order_status_id'] : null ;
-
         }
 
         OrderNote::query()->upsert($notesToBeSaved,['id'],['user_id','customer_id','order_id','order_status_id','title','body','date','created_at','updated_at']);
