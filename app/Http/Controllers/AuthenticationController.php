@@ -39,6 +39,7 @@ class AuthenticationController extends MainController
 
 
     public function logout(){
-        return Auth::logout();
+        Auth::logout();
+        return $this->successResponse('Logout Successfully!');
     }
 }

@@ -40,6 +40,6 @@ class TestController extends MainController
     }
 
     public function test(){
-          return (Product::find(1)->updateProductQuantity(1,'add'));
+          return (Product::find(1)->updateProductQuantity(1,'sub'));
     }
 }
