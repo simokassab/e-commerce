@@ -126,6 +126,7 @@ class OrdersController extends MainController
         try {
             $order = new Order();
             $order->customer_id = $request->client_id;
+            $order->currency_id = $request->currency_id;
             $order->time = $request->time;
 //            $order->date = new Carbon($request->date)->format('H:i:s');
             $order->customer_comment = $request->comment;
@@ -242,6 +243,8 @@ class OrdersController extends MainController
             $defaultCurrency = Currency::where('is_default',1)->first();
 
             $order->customer_id = $request->client_id;
+            $order->currency_id = $request->currency_id;
+
             $order->time = $request->time;
 //            $order->date = new Carbon($request->date)->format('H:i:s');
             $order->customer_comment = $request->comment;
