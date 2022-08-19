@@ -404,11 +404,11 @@ return [
         ],
         'quantity' => [
             'key' => 'quantity',
-            'name' => 'Price',
+            'name' => 'Quantity',
             'search' => '',
             'type' => 'string',
             'sort' => false,
-            'is_visible' => true,
+            'is_visible' => false,
             'is_show' => true
         ],
         'tax' => [
