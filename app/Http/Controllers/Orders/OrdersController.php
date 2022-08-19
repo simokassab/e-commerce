@@ -162,17 +162,16 @@ class OrdersController extends MainController
             $order->billing_email = $request->billing['email_address'];
             $order->billing_phone_number = $request->billing['phone_number'];
             $order->payment_method_id = $request->billing['payment_method_id'];
-
             $order->save();
             $order->prefix = 'order' . $order->id;
 
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
+            $order->save();
 
             $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
             OrdersService::adjustQuantityOfOrderProducts($order->selected_products);
 
-            $order->save();
 
             DB::commit();
             return $this->successResponse('The order has been created successfully !', [
@@ -306,9 +305,6 @@ class OrdersController extends MainController
             DB::rollBack();
             return $this->errorResponse('The Order has not been created successfully!' . 'error message: '. $error);
         }
-
-
-
 
         $order->selected_products =  OrdersService::generateOrderProducts($orderProducts,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
         return $this->successResponse(data: [
