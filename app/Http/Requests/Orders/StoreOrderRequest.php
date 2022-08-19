@@ -36,6 +36,7 @@ class StoreOrderRequest extends FormRequest
 
         return [
             "client_id" => 'required|exists:customers,id',
+            'currency_id' => 'required|numeric|exists:currencies,id',
 //            "time" => "required|date_format:H:i",
 //            "date" => "required|date_format:format",
             "comment" => "required",

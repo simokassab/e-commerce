@@ -215,7 +215,7 @@ class ProductController extends MainController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreProductRequest $request, Product $product)
     {

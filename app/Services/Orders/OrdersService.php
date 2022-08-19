@@ -105,12 +105,12 @@ class OrdersService {
             }
             $selectedProducts[$key]['tax'] = $taxPerUnit;
             $selectedProducts[$key]['image'] = $currentProduct['image'] ?? 'default_image';
-            $selectedProducts[$key]['price'] = $orderProduct['quantity'] * $pricePerUnit * $taxPerUnit;
+            $selectedProducts[$key]['price'] = $pricePerUnit + $taxPerUnit;
             $selectedProducts[$key]['sku'] = $currentProduct['sku'];
             $selectedProducts[$key]['quantity'] = $orderProduct['quantity'];
 //            $selectedProducts[$key]['quantity_in_stock_available'] = $currentProduct['minimum_quantity'] < 0 ? 0 : $currentProduct['quantity'] - $currentProduct['minimum_quantity'];
             $selectedProducts[$key]['quantity_in_stock'] = $currentProduct['quantity'];
-            $selectedProducts[$key]['currency']  = $defaultCurrency->symbol;
+            $selectedProducts[$key]['currency_symbol']  = $defaultCurrency?->symbol;
             $selectedProducts[$key]['type']  = $currentProduct['type'];
             $selectedProducts[$key]['edit_status']  = false;
             $selectedProducts[$key]['pre_order']  = false;
