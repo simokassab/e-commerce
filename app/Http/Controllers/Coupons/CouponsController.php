@@ -86,7 +86,7 @@ class CouponsController extends MainController
     }
 
     public function getCouponByCode(Request $request,$code){
-        $coupon = Coupon::where('code',$code)->first();
+        $coupon = Coupon::whereRaw("BINARY `code`= ?",[$code])->first();
         if(is_null($coupon)){
             return $this->errorResponse('The Coupon is invalid');
         }
