@@ -109,7 +109,7 @@ class CouponsController extends MainController
     public function update(CouponRequest $request, Coupon $coupon)
     {
 
-        $coupon->title = $request->title
+        $coupon->title = $request->title;
         $coupon->code = $request->code;
         $coupon->start_date = $request->start_date;
         $coupon->expiry_date = $request->expiry_date;
