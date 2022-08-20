@@ -130,6 +130,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::apiResource('product',ProductController::class);
 
     Route::post('coupon/get-coupon-by-code/{code}',[CouponsController::class,'getCouponByCode']);
+    Route::post('coupon/all',[CouponsController::class,'index']);
+    Route::apiResource('coupon',CouponsController::class);
 
 
     });

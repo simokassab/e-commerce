@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Coupons;
 
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\MainController;
+use App\Http\Requests\Coupons\CouponRequest;
+use App\Http\Requests\MainRequest;
+use App\Http\Resources\Coupons\CouponResource;
+use App\Http\Resources\Coupons\CouponSingleResource;
 use App\Models\Coupons\Coupon;
 use Illuminate\Http\Request;
 
@@ -14,9 +17,20 @@ class CouponsController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    const RELATIONS = [];
+    const OBJECT_NAME = [];
+
+    public function index(Request $request)
     {
-        //
+        if ($request->method()=='POST') {
+            $searchKeys=['id','title','code','start_date','expiry_date','discount_percentage','discount_amount','min_amount'];
+            $searchRelationsKeys = [];
+
+            return $this->getSearchPaginated(CouponResource::class, Coupon::class,$request, $searchKeys,self::RELATIONS,$searchRelationsKeys);
+        }
+        return $this->successResponsePaginated(CouponResource::class,Coupon::class,self::RELATIONS);
+
     }
 
     /**
@@ -33,22 +47,45 @@ class CouponsController extends MainController
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(CouponRequest $request)
     {
-        //
+        $coupon = new Coupon();
+        $coupon->title = ($request->title);
+        $coupon->code = $request->code;
+        $coupon->start_date = $request->start_date;
+        $coupon->expiry_date = $request->expiry_date;
+        $coupon->discount_percentage = $request?->discount_percentage;
+        $coupon->discount_amount = $request?->discount_amount;
+        $coupon->min_amount = $request?->min_amount;
+        $coupon->is_one_time = $request->is_one_time ?? 0;
+        $coupon->is_used =0;
+
+        if(!$coupon->save()){
+            return $this->errorResponse('Sorry but the coupon was not created try again later!');
+        }
+
+        return $this->successResponse(data:[
+            'coupon' => new CouponSingleResource($coupon)
+        ]);
+
+
+
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Coupon $coupon
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function show(Coupon $coupon)
     {
-        //
+        return $this->successResponse('The created was updated successfully',data:[
+            'coupon' => new CouponSingleResource($coupon)
+        ]);
     }
 
     /**
@@ -66,12 +103,31 @@ class CouponsController extends MainController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Coupon $coupon
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(CouponRequest $request, Coupon $coupon)
     {
-        //
+
+        $coupon->title = $request->title
+        $coupon->code = $request->code;
+        $coupon->start_date = $request->start_date;
+        $coupon->expiry_date = $request->expiry_date;
+        $coupon->discount_percentage = $request?->discount_percentage;
+        $coupon->discount_amount = $request?->discount_amount;
+        $coupon->min_amount = $request?->min_amount;
+        $coupon->is_one_time = $request->is_one_time ?? 0;
+        $coupon->is_used =0;
+
+        if(!$coupon->save()){
+            return $this->errorResponse('Sorry but the coupon was not updated, try again later!');
+        }
+
+        return $this->successResponse('The Coupon was updated successfully',data:[
+            'coupon' => new CouponSingleResource($coupon)
+        ]);
+
+
     }
 
     /**

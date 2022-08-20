@@ -5,11 +5,13 @@ namespace App\Models\Coupons;
 use App\Models\Settings\Setting;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
+use Spatie\Translatable\HasTranslations;
 
 class Coupon extends Model
 {
-    use HasFactory;
+    use HasFactory,HasTranslations;
+
+    protected array $translatable = ['title'];
 
     public function checkIfCouponIsValid($amount = null) : array{
 

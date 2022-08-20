@@ -672,9 +672,6 @@ return [
             'type' => 'string',
             'sort' => true
         ],
-       
-
-
     ],
     'orders' => [
         'id' => [
@@ -713,6 +710,56 @@ return [
             'type' => 'double',
             'sort' => false
         ]
+    ],
+    'coupons' => [
+        'id' => [
+            'name' => 'ID',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+        'title' => [
+            'name' => 'Title',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => false
+        ],
+        'code' => [
+            'name' => 'Code',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => false
+        ],
+        'start_date' => [
+            'name' => 'Start Date',
+            'search' => 'date',
+            'type' => 'date',
+            'sort' => false
+        ],
+        'expiry_date' => [
+            'name' => 'Expiry Date',
+            'search' => 'date',
+            'type' => 'date',
+            'sort' => false
+        ],
+        'discount_percentage' => [
+            'name' => 'Discounted Percentage',
+            'search' => 'float',
+            'type' => 'float',
+            'sort' => false
+        ],
+        'discount_amount' => [
+            'name' => 'Discounted Amount',
+            'search' => 'float',
+            'type' => 'float',
+            'sort' => false
+        ],
+        'min_amount' => [
+            'name' => 'Minimum Amount',
+            'search' => 'float',
+            'type' => 'float',
+            'sort' => false
+        ],
     ],
     
     
