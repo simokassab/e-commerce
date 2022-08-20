@@ -150,4 +150,9 @@ class CouponsController extends MainController
         return $this->successResponse(data:$data);
     }
 
+    public function getTableHeaders(){
+        return $this->successResponse('Success!',['headers' => __('headers.coupons') ]);
+
+    }
+
 }

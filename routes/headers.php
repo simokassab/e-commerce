@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Prices\PricesController;
 use App\Http\Controllers\Product\ProductController;
 use \App\Http\Controllers\Orders\OrdersController;
-
+use \App\Http\Controllers\Coupons\CouponsController;
 
 Route::get('brands',[BrandController::class,'getTableHeaders']);
 Route::get('categories',[CategoryController::class,'getTableHeaders']);
@@ -44,6 +44,7 @@ Route::get('settings',[SettingsController::class,'getTableHeaders']);
 Route::get('products',[ProductController::class,'getTableHeaders']);
 Route::get('products-select',[ProductController::class,'getTableHeadersForSelect']);
 Route::get('orders',[OrdersController::class,'getTableHeaders']);
+Route::get('coupons',[CouponsController::class,'getTableHeaders']);
 
 
 
