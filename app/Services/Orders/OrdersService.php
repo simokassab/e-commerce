@@ -32,7 +32,6 @@ class OrdersService {
         $productsOrders = [];
 
         foreach ($productsOfOrder as $key => $product){
-            dd($product);
             $priceOfUnit = $prices->where('product_id' , $product['id'])->where('price_id',1)->first() ? $prices->where('product_id' , $product['id'])->where('price_id',1)->first()->price : 0;
             $mainProduct = $products->where('id',$product['id'])->first();
             $taxObject = $taxes->where('id',$mainProduct->tax_id)->first();
@@ -76,10 +75,12 @@ class OrdersService {
         return $productsOrders;
     }
 
-    public static function generateOrderProducts($productsOrders,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency): array
+    public static function generateOrderProducts($productsOrders,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency): array
     {
+        $allProducts = Product::with('pricesList','tax')->findMany(collect($productsOrders)->pluck('product_id'))->toArray();
         $selectedProducts = [];
         foreach ($productsOrders as $key => $orderProduct) {
+            $orderProduct = $orderProduct->toArray();
             $currentProduct = collect($allProducts)->where('id' , $orderProduct['product_id'])->first();
             if(is_null($currentProduct)){
                 continue;
@@ -94,6 +95,7 @@ class OrdersService {
             $taxPerUnit = 0;
 
             $selectedProducts[$key]['id'] = $orderProduct['product_id'];
+            $selectedProducts[$key]['order_product_id'] = array_key_exists('id',$orderProduct) ? $orderProduct['id'] ?? 0 : 0;
             $selectedProducts[$key]['name'] = $currentProduct['name']['en'];
             if($currentProduct['tax']['is_complex']){
                 $newTax= new Tax($currentProduct['tax']);

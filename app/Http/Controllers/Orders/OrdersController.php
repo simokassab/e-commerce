@@ -187,14 +187,14 @@ class OrdersController extends MainController
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
 
-            if($order->total != $request->total_price){
-                return $this->errorResponse('The calculated price is invalid!, please try again later');
-            }
+//            if($order->total != $request->total_price){
+//                return $this->errorResponse('The calculated price is invalid!, please try again later');
+//            }
 
 
             $order->save();
 
-            $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
+            $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
             OrdersService::adjustQuantityOfOrderProducts($order->selected_products);
 
             DB::commit();
@@ -228,7 +228,7 @@ class OrdersController extends MainController
         $defaultCurrency = Currency::where('is_default',1)->first();
         $allTaxComponents = TaxComponent::all();
 
-        $order->selected_products =  OrdersService::generateOrderProducts($orderProducts,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
+        $order->selected_products =  OrdersService::generateOrderProducts($orderProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
         return $this->successResponse(data: [
             'order' => new SingelOrdersResource($order->load(['status','coupon','products','notes']))
         ]);
@@ -336,7 +336,7 @@ class OrdersController extends MainController
 
 
 
-            $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
+            $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
             OrdersService::adjustQuantityOfOrderProducts($order->selected_products);
 
             DB::commit();

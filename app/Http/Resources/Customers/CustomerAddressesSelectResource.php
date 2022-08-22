@@ -27,7 +27,9 @@ class CustomerAddressesSelectResource extends JsonResource
                 "country_id" => (int)$this->country_id,
                 "phone_number" => $this->phone_number,
                 "email_address" => $this->email_address,
-                "payment_method_id" => (int)$this->payment_method_id
+                "payment_method_id" => (int)$this->payment_method_id,
+                "edit_type" => null,
+
             ],
 
         ];
