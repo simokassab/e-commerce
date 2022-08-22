@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Product;
 
+use App\Models\Price\Price;
 use App\Models\Settings\Setting;
 use Hamcrest\Core\Set;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -18,7 +19,7 @@ class SelectProductOrderResource extends JsonResource
     public function toArray($request)
     {
         $isAllowNegativeQuantity  = Setting::query()->where('title','allow_negative_quantity')->first()->value;
-
+//        $defaultPricingClass = Price::query()->where('is_default')->first()->id;
         $priceObject = ($this->whenLoaded('pricesList')->where('price_id',1)->first());
         $price = $priceObject ? $priceObject->price : 0;
         //@TODO:change to code instead of queries just pass an array of the elements, transform them to a collection and simply use the where function
@@ -56,7 +57,7 @@ class SelectProductOrderResource extends JsonResource
             'quantity' => 1,
             'tax' => $tax,
             'sku' => $this->sku,
-            'price' => $price + $tax,
+            'cost_per_unit' => $price + $tax,
             'currency_symbol' => $currencySymbol,
             'quantity_in_stock' => $quantity,
             'edit_status' => false,

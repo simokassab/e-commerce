@@ -31,6 +31,7 @@ use App\Http\Resources\Orders\SelectOrderStatus;
 use App\Models\Orders\Order;
 use App\Services\Orders\OrdersService;
 use Illuminate\Support\Facades\DB;
+use mysql_xdevapi\Exception;
 
 class OrdersController extends MainController
 {
@@ -66,7 +67,7 @@ class OrdersController extends MainController
             'currencies' => SelectCurrencyResource::collection(Currency::all()),
             'default_currency' => (int)$defaultCurrency->id,
             'statuses' => SelectOrderStatus::collection(OrderStatus::query()->select(['id','name'],)->get()),
-            'customers' => SelectCustomerResource::collection(Customer::query()->select(['id','first_name','last_name','phone'])->WhereNot('is_blacklist',1)->get()),
+            'customers' => SelectCustomerResource::collection(Customer::with('addresses')->select(['id','first_name','last_name','phone'])->isNotBlackedList()->get()),
             'order' => null,
             'delivery_methods' => [
                 [
@@ -185,6 +186,12 @@ class OrdersController extends MainController
             OrdersService::createNotesForOrder(order: $order, notes: $request->notes, data :$request->toArray());
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
+
+            if($order->total != $request->total_price){
+                return $this->errorResponse('The calculated price is invalid!, please try again later');
+            }
+
+
             $order->save();
 
             $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
@@ -192,7 +199,7 @@ class OrdersController extends MainController
 
             DB::commit();
             return $this->successResponse('The order has been created successfully !', [
-                'order' => new SingelOrdersResource($order->load(['status','coupon','products']))
+                'order' => new SingelOrdersResource($order->load(['status','coupon','products','notes']))
             ]);
 
         }
@@ -223,7 +230,7 @@ class OrdersController extends MainController
 
         $order->selected_products =  OrdersService::generateOrderProducts($orderProducts,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
         return $this->successResponse(data: [
-            'order' => new SingelOrdersResource($order->load(['status','coupon','products']))
+            'order' => new SingelOrdersResource($order->load(['status','coupon','products','notes']))
         ]);
     }
 
@@ -320,6 +327,11 @@ class OrdersController extends MainController
             OrdersService::updateNotesForOrder($order,$request->notes ?? [] , $request->toArray());
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
+
+            if($order->total != $request->total_price){
+                return $this->errorResponse('The calculated price is invalid!, please try again later');
+            }
+
             $order->save();
 
 
@@ -329,7 +341,7 @@ class OrdersController extends MainController
 
             DB::commit();
             return $this->successResponse('The order has been created successfully !', [
-                'order' => new SingelOrdersResource($order->load(['status','coupon','products']))
+                'order' => new SingelOrdersResource($order->load(['status','coupon','products','notes']))
             ]);
 
         }
@@ -341,10 +353,6 @@ class OrdersController extends MainController
             return $this->errorResponse('The Order has not been created successfully!' . 'error message: '. $error);
         }
 
-        $order->selected_products =  OrdersService::generateOrderProducts($orderProducts,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
-        return $this->successResponse(data: [
-            'order' => new SingelOrdersResource($order->load(['status','coupon','products']))
-        ]);
     }
 
     /**

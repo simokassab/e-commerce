@@ -32,6 +32,7 @@ class OrdersService {
         $productsOrders = [];
 
         foreach ($productsOfOrder as $key => $product){
+            dd($product);
             $priceOfUnit = $prices->where('product_id' , $product['id'])->where('price_id',1)->first() ? $prices->where('product_id' , $product['id'])->where('price_id',1)->first()->price : 0;
             $mainProduct = $products->where('id',$product['id'])->first();
             $taxObject = $taxes->where('id',$mainProduct->tax_id)->first();
@@ -44,10 +45,10 @@ class OrdersService {
             $productsOrders[$key]['order_id'] = $order->id;
             $productsOrders[$key]['product_id'] = $product['id'];
             $productsOrders[$key]['quantity'] = $product['quantity'];
-            $productsOrders[$key]['unit_price'] = $priceOfUnit;
+            $productsOrders[$key]['unit_price'] = $product['price'];
             $productsOrders[$key]['tax_percentage'] = $taxObject->percentage;
             $productsOrders[$key]['tax_amount'] = $tax;
-            $productsOrders[$key]['total'] = $priceOfUnit * $product['quantity'];
+            $productsOrders[$key]['total'] = $product['price'] * $product['quantity'];
 
             $productsOrders[$key]['created_at'] = now();
             $productsOrders[$key]['updated_at'] = now();
@@ -183,10 +184,10 @@ class OrdersService {
             $dataToBeUpdatedOrCreated[$key]['order_id'] = $order->id;
             $dataToBeUpdatedOrCreated[$key]['product_id'] = $product['id'];
             $dataToBeUpdatedOrCreated[$key]['quantity'] = $product['quantity'];
-            $dataToBeUpdatedOrCreated[$key]['unit_price'] = $priceOfUnit;
+            $dataToBeUpdatedOrCreated[$key]['unit_price'] = $product['price'];
             $dataToBeUpdatedOrCreated[$key]['tax_percentage'] = $taxObject->percentage;
             $dataToBeUpdatedOrCreated[$key]['tax_amount'] = $tax;
-            $dataToBeUpdatedOrCreated[$key]['total'] = $priceOfUnit * $product['quantity'];
+            $dataToBeUpdatedOrCreated[$key]['total'] = $product['price'] * $product['quantity'];
 
             $dataToBeUpdatedOrCreated[$key]['created_at'] = now();
             $dataToBeUpdatedOrCreated[$key]['updated_at'] = now();

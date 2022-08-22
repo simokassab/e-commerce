@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Customers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-
+use App\Http\Resources\Customers\CustomerAddressesSelectResource;
 class SelectCustomerResource extends JsonResource
 {
     /**
@@ -14,9 +14,11 @@ class SelectCustomerResource extends JsonResource
      */
     public function toArray($request)
     {
+        $addresses = $this->whenLoaded('addresses');
         return [
             'id' => (int)$this->id,
             'value' => $this->first_name . ' ' . $this->last_name .' - ' . $this->phone,
+            'addresses' => CustomerAddressesSelectResource::collection($this->whenLoaded('addresses')),
 
         ];
     }
