@@ -158,7 +158,7 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.attributes.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
 
         ];
-        dd($this->isSamePriceAsParent);
+        dd($request->isSamePriceAsParent);
         if(!$this->isSamePriceAsParent){
             $pricesRulesArray=[
                 'product_variations.*.prices.*.price_id' => 'required | integer | exists:prices,id',
