@@ -564,10 +564,11 @@ class ProductService
                     'parent_product_id' => $product->id,
                     'products_statuses_id' => $variation['products_statuses_id'],
                     'image' => $imagePath,
+                    'is_show_related_product' => $variation['is_show_related_product'] ?? 0,
+                    'bundle_reserved_quantity' => null,
+                    'pre_order' => $variation['pre_order'] ?? 0,
                     'created_at' => Carbon::now()->toDateTimeString(),
                     'updated_at' => Carbon::now()->toDateTimeString(),
-                    'bundle_reserved_quantity' => null,
-                    'pre_order' => 0,
 
                 ];
                 $productVariationParentsArray[] = $productVariationsArray;
@@ -636,7 +637,7 @@ class ProductService
             $product->tax_id = $request->tax_id;
             $product->products_statuses_id = $request->products_statuses_id;
             $product->is_show_related_product = $request->is_show_related_product ?? 0;
-            $product->pre_order = 0;
+            $product->pre_order = $request->pre_order ?? 0;
             $product->bundle_reserved_quantity = null;
             $product->save();
             DB::commit();
@@ -646,6 +647,7 @@ class ProductService
             throw new Exception($e->getMessage());
         }
     }
+
 
 
 }
