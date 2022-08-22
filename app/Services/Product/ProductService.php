@@ -555,7 +555,7 @@ class ProductService
                     'tax_id' => $request->tax_id,
                     'brand_id' => $request->brand_id,
                     'summary' => ($request->summary),
-                    'specification' => ($request->specification),
+                    // 'specification' => ($request->specification),
                     'meta_title' => ($request->meta_title) ?? "",
                     'meta_keyword' => ($request->meta_keyword) ?? "",
                     'meta_description' => ($request->meta_description) ?? "",
@@ -577,7 +577,6 @@ class ProductService
 
             }
             $model = new Product();
-            dd($productVariationParentsArray);
             $productVariation = Product::upsert($productVariationParentsArray, ['id'],$model->getFillable());
 
             foreach ($productVariation as $key => $variation) {
