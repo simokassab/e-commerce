@@ -19,7 +19,7 @@ class SingelOrdersResource extends JsonResource
             "client_id" => (int)$this->customer_id,
             "currency_id" => (int)$this->currency_id,
             "time" => $this->time,
-            'shipping_as_billing' => false,
+            'is_billing_as_shipping' => (bool)$this->is_billing_as_shipping,
             'notes' => [], //to be added after fining the order for sure,
             'shipping_company_id' => null, // tpo be added after adding the shipping companies
             "date" => $this->date,
