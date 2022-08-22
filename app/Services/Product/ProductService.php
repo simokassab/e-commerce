@@ -564,9 +564,9 @@ class ProductService
                     'parent_product_id' => $product->id,
                     'products_statuses_id' => $variation['products_statuses_id'],
                     'image' => $imagePath,
-                    'is_show_related_product' => $variation['is_show_related_product'] ?? 0,
-                    'bundle_reserved_quantity' => null,
-                    'pre_order' => $variation['pre_order'] ?? 0,
+                    // 'is_show_related_product' => $variation['is_show_related_product'] ?? 0,
+                    // 'bundle_reserved_quantity' => null,
+                    // 'pre_order' => $variation['pre_order'] ?? 0,
                     'created_at' => Carbon::now()->toDateTimeString(),
                     'updated_at' => Carbon::now()->toDateTimeString(),
 
