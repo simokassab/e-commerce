@@ -17,7 +17,7 @@ class CustomerAddressesSelectResource extends JsonResource
         return[
             "id" => $this->id,
             "value" => $this->city . ' ' .$this->street . ' ' . $this->address_1,
-            "billing" => [
+            "data" => [
                 "first_name" => $this->first_name,
                 "last_name" => $this->last_name,
                 "company_name" => $this->company_name,
@@ -29,17 +29,7 @@ class CustomerAddressesSelectResource extends JsonResource
                 "email_address" => $this->email_address,
                 "payment_method_id" => (int)$this->payment_method_id
             ],
-            "shipping" => [
-                "first_name" => $this->first_name,
-                "last_name" => $this->last_name,
-                "company_name" => $this->company_name,
-                "address_1" => $this->address_one,
-                "address_2" => $this->address_two,
-                "city" => $this->city,
-                "country_id" => (int)$this->country_id,
-                "phone_number" => $this->phone_number,
-                "email_address" => $this->email_address
-            ],
+
         ];
     }
 }
