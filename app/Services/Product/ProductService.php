@@ -555,7 +555,7 @@ class ProductService
                     'tax_id' => $request->tax_id,
                     'brand_id' => $request->brand_id,
                     'summary' => ($request->summary),
-                    // 'specification' => ($request->specification),
+                    'specification' => ($request->specification),
                     'meta_title' => ($request->meta_title) ?? "",
                     'meta_keyword' => ($request->meta_keyword) ?? "",
                     'meta_description' => ($request->meta_description) ?? "",
@@ -601,8 +601,9 @@ class ProductService
 
     public function createAndUpdateProduct($request, $product = null)
     {
-        DB::beginTransaction();
-        try {
+        dd($request->specification);
+        // DB::beginTransaction();
+        // try {
             //$request=(object)$request;
             $product = $product ?  $product : new Product();
             $product->name = ($request->name);
@@ -640,12 +641,12 @@ class ProductService
             $product->pre_order = $request->pre_order ?? 0;
             $product->bundle_reserved_quantity = null;
             $product->save();
-            DB::commit();
+        //     DB::commit();
             return $product;
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw new Exception($e->getMessage());
-        }
+        // } catch (Exception $e) {
+        //     DB::rollBack();
+        //     throw new Exception($e->getMessage());
+        // }
     }
 
 
