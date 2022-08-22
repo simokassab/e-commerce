@@ -38,8 +38,8 @@ class SettingSeeder extends Seeder
             ],
 
             [
-                'title' => "products_minimum_and_reserved_quantity_greater_than_or_equal",
-                'type' => 'number',
+                'title' => "allow_negative_quantity",
+                'type' => 'checkbox',
                 'value' => 0,
                 'is_developer'=> 1,
                 'created_at' => Carbon::now()->toDateString(),
