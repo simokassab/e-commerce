@@ -560,7 +560,7 @@ class ProductService
                     'meta_keyword' => ($request->meta_keyword) ?? "",
                     'meta_description' => ($request->meta_description) ?? "",
                     'description' => ($request->description) ?? "",
-                    'website_status' => $request->website_status,
+                    'website_status' => $request->status,
                     'parent_product_id' => $product->id,
                     'products_statuses_id' => $variation['products_statuses_id'],
                     'image' => $imagePath,
