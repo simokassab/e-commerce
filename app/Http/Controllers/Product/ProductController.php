@@ -315,7 +315,7 @@ class ProductController extends MainController
     }
 
     public function getProductsData(){
-        return $this->successResponsePaginated(RestFullProductResource::class,Product::class);
+        return $this->successResponsePaginated(RestFullProductResource::class,Product::class,['defaultCategory','tags','brand','category','unit','tax','price','field','labels','productRelatedChildren','children','images']);
     }
 
 }
