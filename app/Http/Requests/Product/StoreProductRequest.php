@@ -44,7 +44,8 @@ class StoreProductRequest extends FormRequest
         }
 
 
-        return [
+
+        $rules= [
             'name' => 'required',
             'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
             // 'slug' => 'required | max:' . config('defaults.default_string_length') ,
@@ -139,9 +140,7 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.is_default_child' => 'required | boolean',
             'product_variations.*.isSamePriceAsParent' =>'required | boolean',
 
-            'product_variations.*.prices.*.price_id' => 'required | integer | exists:prices,id',
-            'product_variations.*.prices.*.price' => 'required | numeric | gte:' .$this->priceValue,
-            'product_variations.*.prices.*.discounted_price' => 'nullable | numeric | gte:' .$this->discountedPriceValue,
+
 
             'product_variations.*.images.*.image' => 'required | file
             | mimes:' . config('defaults.default_image_extentions') . '
@@ -159,7 +158,18 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.attributes.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
 
         ];
+
+        if(!$this->isSamePriceAsParent){
+            $pricesRulesArray=[
+                'product_variations.*.prices.*.price_id' => 'required | integer | exists:prices,id',
+                'product_variations.*.prices.*.price' => 'required | numeric | gte:' .$this->priceValue,
+                'product_variations.*.prices.*.discounted_price' => 'nullable | numeric | gte:' .$this->discountedPriceValue,
+            ];
+            $rules=array_merge($rules,$pricesRulesArray);
+        }
+        return $rules;
     }
+
 
     public function messages()
     {
