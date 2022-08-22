@@ -577,7 +577,8 @@ class ProductService
 
             }
             $model = new Product();
-            $productVariation = Product::upsert($productVariationParentsArray, ['id']);
+            dd($productVariationParentsArray);
+            $productVariation = Product::upsert($productVariationParentsArray, ['id'],$model->getFillable());
 
             foreach ($productVariation as $key => $variation) {
                 $childrenIds[] = $productVariation->id;
