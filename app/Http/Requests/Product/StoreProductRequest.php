@@ -67,7 +67,7 @@ class StoreProductRequest extends FormRequest
             'meta_description' => 'nullable',
             'meta_keyword' => 'nullable',
             'description' => 'nullable',
-            'website_status' => 'required | in:' . config('defaults.validation_default_status'),
+            'status' => 'required | in:' . config('defaults.validation_default_status'),
             'barcode' => [Rule::when(in_array('barcode',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'max:' . config('defaults.default_string_length')],
             'height' => [Rule::when(in_array('height',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
             'width' =>  [Rule::when(in_array('width',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
