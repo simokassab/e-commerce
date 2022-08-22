@@ -158,14 +158,16 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.attributes.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
 
         ];
-        dd($request->isSamePriceAsParent);
-        if(!$this->isSamePriceAsParent){
-            $pricesRulesArray=[
-                'product_variations.*.prices.*.price_id' => 'required | integer | exists:prices,id',
-                'product_variations.*.prices.*.price' => 'required | numeric | gte:' .$this->priceValue,
-                'product_variations.*.prices.*.discounted_price' => 'nullable | numeric | gte:' .$this->discountedPriceValue,
-            ];
-            $rules=array_merge($rules,$pricesRulesArray);
+        foreach($request->product_varitions as $key => $variation){
+            if(!$variation['isSamePriceAsParent']){
+                $pricesRulesArray=[
+                    'product_variations.*.prices.*.price_id' => 'required | integer | exists:prices,id',
+                    'product_variations.*.prices.*.price' => 'required | numeric | gte:' .$this->priceValue,
+                    'product_variations.*.prices.*.discounted_price' => 'nullable | numeric | gte:' .$this->discountedPriceValue,
+                ];
+                $rules=array_merge($rules,$pricesRulesArray);
+            }
+
         }
         return $rules;
     }
