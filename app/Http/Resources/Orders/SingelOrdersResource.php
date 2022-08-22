@@ -51,21 +51,6 @@ class SingelOrdersResource extends JsonResource
                 "phone_number" => $this->shipping_phone_number,
                 "email_address" => $this->shipping_email
             ],
-//            "selected_products" => [
-//                "id" => 1,
-//                "name"=> "sfsdfdsfsdfcs",
-//                "tax"=> 110,
-//                "image"=> "default_image",
-//                "sku"=> "asdasd",
-//                "price"=> 610,
-//                "currency"=> "$",
-//                "quantity"=> 5,
-//                "quantity_in_stock_available"=> 1,
-//                "quantity_in_stock"=> 1,
-//                "tax_percentage" => 20
-//
-//            ]
-
             'selected_products' => $this->selected_products,
 
         ];

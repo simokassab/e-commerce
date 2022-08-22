@@ -20,7 +20,7 @@ class OrdersService {
      * @param Order $order
      * @return array
      */
-    public static function calculateTotalOrderPrice(array $productsOfOrder = [], Order &$order): array
+    public static function calculateTotalOrderPrice(array $productsOfOrder = [], Order $order): array
     {
         $taxes = Tax::all();
         $allTaxComponents = TaxComponent::all();
@@ -60,16 +60,12 @@ class OrdersService {
             ->where('id', $order->coupon_id ?? 0)
             ->first();
 
-        $order->discount_percentage = $coupon ?-> discount_percentage;
-        $order->discount_amount = $coupon ?-> discount_amount;
+        $order->discount_percentage = $coupon ? $coupon->discount_percentage : 0;
+        $order->discount_amount = $coupon ? $coupon->discount_amount : 0;
 
         if(!is_null($coupon)){
             if($coupon->is_one_time && $coupon->is_used){
-
-                $order->discount_percentage = null;
-                $order->discount_amount = null;
-                $order->coupon_id = null;
-
+                throw new \Exception('The coupon is already used!');
             }
         }
 
@@ -114,7 +110,7 @@ class OrdersService {
             $selectedProducts[$key]['currency_symbol']  = $defaultCurrency?->symbol;
             $selectedProducts[$key]['type']  = $currentProduct['type'];
             $selectedProducts[$key]['edit_status']  = false;
-            $selectedProducts[$key]['pre_order']  = false;
+            $selectedProducts[$key]['pre_order']  = $currentProduct['pre_order'];
 
         }
 
@@ -131,7 +127,7 @@ class OrdersService {
 
     }
 
-    public static function updateProductsOfOrder( &$order,array $newProducts,array $oldOrderProducts,array $allProducts = [], array $allOrdersProducts): void
+    public static function updateProductsOfOrder( $order,array $newProducts,array $oldOrderProducts,array $allProducts = [], array $allOrdersProducts): void
     {
         // old products from database
         // new products from request
@@ -141,19 +137,19 @@ class OrdersService {
         $oldProductsWithQuantities = collect($oldOrderProducts)->pluck('quantity','product_id')->all();
         $newProductsWithQuantities = collect($newProducts)->pluck('quantity','id')->all();
 
-        $newAddedProducts = [];
-        $oldUpdatedProducts = [];
+//        $newAddedProducts = [];
+//        $oldUpdatedProducts = [];
         $deletedProducts = [];
-
-//        $arraysLoop = count($oldProductsWithQuantities) >= count($newProductsWithQuantities) ? ($oldProductsWithQuantities) : ($newProductsWithQuantities);
-
-        foreach ($newProductsWithQuantities as $key => $newItem) {
-            if(array_key_exists($key,$oldProductsWithQuantities)){
-                $oldUpdatedProducts[$key] = $newItem;
-            }else{
-                $newAddedProducts[$key] = $newItem;
-            }
-        }
+//`
+////        $arraysLoop = count($oldProductsWithQuantities) >= count($newProductsWithQuantities) ? ($oldProductsWithQuantities) : ($newProductsWithQuantities);
+//
+//        foreach ($newProductsWithQuantities as $key => $newItem) {
+//            if(array_key_exists($key,$oldProductsWithQuantities)){
+//                $oldUpdatedProducts[$key] = $newItem;
+//            }else{
+//                $newAddedProducts[$key] = $newItem;
+//            }
+//        }
 
         foreach ($oldProductsWithQuantities as $key => $oldItem) {
             if(!array_key_exists($key,$newProductsWithQuantities)){
@@ -259,7 +255,7 @@ class OrdersService {
            return (!$newNotes->contains('id',$object->id));
         });
 
-        OrderNote::query()->whereIn('id',$oldNotesToBeDeleted->pluck('id'))->delete();
+        OrderNote::query()->whereIn('id',$oldNotesToBeDeleted->pluck('id'))->whereNull('order_status_id')->delete();
 
         $notesToBeSaved = [];
         foreach ($newNotes as $key => $note) {
@@ -268,10 +264,10 @@ class OrdersService {
             $notesToBeSaved[$key]['title'] = $note['title'];
             $notesToBeSaved[$key]['body'] = $note['body'];
             $notesToBeSaved[$key]['date'] = now();
-            $notesToBeSaved[$key]['created_at'] = now();
+            $notesToBeSaved[$key]['created_at'] = $note['title'];
             $notesToBeSaved[$key]['updated_at'] = now();
             $notesToBeSaved[$key]['order_id'] = $order->id;
-            $notesToBeSaved[$key]['order_status_id'] = array_key_exists('order_status_id',$data) ? $data['order_status_id'] : null ;
+            $notesToBeSaved[$key]['order_status_id'] =  null ;
         }
 
         OrderNote::query()->upsert($notesToBeSaved,['id'],['user_id','customer_id','order_id','order_status_id','title','body','date','created_at','updated_at']);

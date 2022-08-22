@@ -117,6 +117,7 @@ class OrdersController extends MainController
     public function store(StoreOrderRequest $request)
     {
 
+
         $allProducts = Product::with(['tax','pricesList'])->get()->toArray();
         $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
         $allTaxes = Tax::all();
@@ -188,7 +189,6 @@ class OrdersController extends MainController
 
             $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$allProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
             OrdersService::adjustQuantityOfOrderProducts($order->selected_products);
-
 
             DB::commit();
             return $this->successResponse('The order has been created successfully !', [

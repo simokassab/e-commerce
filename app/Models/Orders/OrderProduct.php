@@ -13,4 +13,6 @@ class OrderProduct extends MainModel
     use HasFactory,HasTranslations;
 
     protected array $translatable = [];
+
+
 }
