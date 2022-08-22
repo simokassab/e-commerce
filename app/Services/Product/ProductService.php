@@ -523,8 +523,8 @@ class ProductService
 
     public function storeVariations($request, $product)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
 
             $childrenIds = [];
 
@@ -592,10 +592,10 @@ class ProductService
                 return $childrenIds;
             }
 
-            DB::commit();
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
-        }
+        //     DB::commit();
+        // } catch (Exception $e) {
+        //     throw new Exception($e->getMessage());
+        // }
     }
     // END OF TYPE VARIABLE
 
