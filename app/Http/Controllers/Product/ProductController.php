@@ -11,6 +11,7 @@ use App\Http\Resources\Label\SelectLabelResource;
 use App\Http\Resources\Price\SelectPriceResource;
 use App\Http\Resources\Product\ProductBundleResource;
 use App\Http\Resources\Product\ProductResource;
+use App\Http\Resources\Product\RestFullProductResource;
 use App\Http\Resources\Product\SelectProductStatusResource;
 use App\Http\Resources\Tag\TagResource;
 use App\Http\Resources\Tax\SelectTaxResource;
@@ -311,6 +312,10 @@ class ProductController extends MainController
 
     public function getTableHeadersForSelect(){
         return $this->successResponse('Success!',['headers' => __('headers.products_select_product') ]);
+    }
+
+    public function getProductsData(){
+        return $this->successResponsePaginated(RestFullProductResource::class,Product::class);
     }
 
 }

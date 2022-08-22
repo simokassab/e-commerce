@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MainController;
+use App\Http\Resources\Customers\RestFullCustomerResource;
 use App\Models\User\Customer;
 use Illuminate\Http\Request;
 
@@ -89,5 +90,9 @@ class CustomersController extends MainController
         return $this->successResponse(data:[
             'addresses' => $customer->addresses
         ]);
+    }
+
+    public function getCustomersData(){
+        return $this->successResponsePaginated(RestFullCustomerResource::class,Customer::class,['addresses']);
     }
 }

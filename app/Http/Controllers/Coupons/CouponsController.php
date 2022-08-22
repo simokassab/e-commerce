@@ -7,6 +7,7 @@ use App\Http\Requests\Coupons\CouponRequest;
 use App\Http\Requests\MainRequest;
 use App\Http\Resources\Coupons\CouponResource;
 use App\Http\Resources\Coupons\CouponSingleResource;
+use App\Http\Resources\Coupons\RestFullCouponResource;
 use App\Models\Coupons\Coupon;
 use Illuminate\Http\Request;
 
@@ -153,6 +154,10 @@ class CouponsController extends MainController
     public function getTableHeaders(){
         return $this->successResponse('Success!',['headers' => __('headers.coupons') ]);
 
+    }
+
+    public function getCouponsData(){
+        return $this->successResponsePaginated(RestFullCouponResource::class,Coupon::class);
     }
 
 }
