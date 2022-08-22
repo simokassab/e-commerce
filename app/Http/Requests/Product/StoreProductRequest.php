@@ -67,7 +67,7 @@ class StoreProductRequest extends FormRequest
             'meta_description' => 'nullable',
             'meta_keyword' => 'nullable',
             'description' => 'nullable',
-            'status' => 'required | in:' . config('defaults.validation_default_status'),
+            'website_status' => 'required | in:' . config('defaults.validation_default_status'),
             'barcode' => [Rule::when(in_array('barcode',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'max:' . config('defaults.default_string_length')],
             'height' => [Rule::when(in_array('height',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
             'width' =>  [Rule::when(in_array('width',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
@@ -83,6 +83,9 @@ class StoreProductRequest extends FormRequest
             'brand_id' => [Rule::when(in_array('brand_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:brands,id'],
             'tax_id' => [Rule::when(in_array('tax_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:taxes,id'],
             'products_statuses_id' => 'required | integer | exists:products_statuses,id',
+            'is_show_related_product' => 'required | boolean',
+            'pre_order'=> 'nullable | boolean',
+            'bundle_reserved_quantity' => 'nullable | integer',
 
             // 'categories.*' => 'nullable',
             // 'categories.*.id' => 'exists:categories,id',
@@ -201,8 +204,8 @@ class StoreProductRequest extends FormRequest
             'image.mimes' => 'Invalid extention.',
             'image.dimensions' => 'Invalid dimentions! maximum(' . config('defaults.default_image_maximum_width') . 'x' . config('defaults.default_image_maximum_height') . ')',
 
-            'status.required' => 'the :attribute field is required',
-            'status.in' => 'The :attribute is not a valid status',
+            'website_status.required' => 'the :attribute field is required',
+            'website_status.in' => 'The :attribute is not a valid status',
 
             'barcode.required' => 'the :attribute field is required',
             'barcode.max' => 'the maximum string length is :max',
