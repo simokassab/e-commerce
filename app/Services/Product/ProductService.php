@@ -621,7 +621,7 @@ class ProductService
             $product->meta_keyword = $request->meta_keyword ?? null;
             $product->meta_description = $request->meta_description ?? null;
             $product->description = $request->description ?? null;
-            $product->website_status = $request->website_status;
+            $product->website_status = $request->status;
             $product->barcode = $request->barcode;
             $product->height = $request->height;
             $product->width = $request->width;
