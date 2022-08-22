@@ -162,6 +162,7 @@ class ProductController extends MainController
 
     public function store(StoreProductRequest $request)
     {
+
         DB::beginTransaction();
         try {
             $product = $this->productService->createAndUpdateProduct($request);
@@ -220,9 +221,11 @@ class ProductController extends MainController
      */
     public function update(StoreProductRequest $request, Product $product)
     {
+
         DB::beginTransaction();
         try {
             $product = $this->productService->createAndUpdateProduct($request,$product);
+            $childrenIds=[];
 
             if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
                $childrenIds=$this->productService->storeVariations($request,$product);
@@ -230,6 +233,7 @@ class ProductController extends MainController
             if($request->type=='bundle'){
                 $this->productService->storeAdditionalBundle($request,$product);
         }
+
         Product::find($product->id)->updateProductQuantity($request->reserved_quantity,'add');
         $this->productService->storeAdditionalProductData($request,$product,$childrenIds);
 
