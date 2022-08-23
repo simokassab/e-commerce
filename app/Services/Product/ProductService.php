@@ -571,6 +571,7 @@ class ProductService
                     // 'updated_at' => Carbon::now()->toDateTimeString(),
 
                 ];
+                dd($request->status);
                 $productVariationParentsArray[] = $productVariationsArray;
 
             }
