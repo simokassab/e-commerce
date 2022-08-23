@@ -578,9 +578,11 @@ class ProductService
             $productVariation = Product::upsert($productVariationParentsArray,'id',$model->getFillable());
            if($productVariation){
 
-               $childrenIds=Product::where('parent_product_id',$product->id)->get();
-
-               dd($childrenIds->toArray());
+               $childrenData=Product::where('parent_product_id',$product->id)->get();
+            foreach ($childrenData as $key => $child) {
+                $childrenIds[$key]=$child[$key]['id'];
+            }
+               dd($childrenIds);
 
                 $this->storeImagesForVariations($request, $childrenIds);
                 $this->storePricesForVariations($request, $childrenIds);
