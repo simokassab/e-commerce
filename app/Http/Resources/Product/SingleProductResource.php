@@ -18,7 +18,6 @@ use App\Http\Resources\Tax\SingleTaxResource;
 use App\Http\Resources\Unit\SelectUnitResource;
 use App\Http\Resources\Unit\SingleUnitResource;
 use App\Models\Category\Category;
-use App\Models\Price\Price;
 use App\Services\Category\CategoryService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -36,16 +35,6 @@ class SingleProductResource extends JsonResource
         $categoriesForNested = Category::with('parent')->get();
         $nestedCategories = CategoryService::getAllCategoriesNested($categoriesForNested);
 
-        $PriceArray=[];
-        $prices= SelectPriceResource::collection(Price::with('currency')->where('is_virtual', 0)->select('id','name','currency_id')->get());
-
-        foreach ($prices as $price => $value) {
-            $object = (object)[];
-            $object->id=$value['id'];
-            $object->name=$value['name'];
-            $object->currency=$value->currency->code .'-'.$value->currency->symbol;
-            $PriceArray[]=$object;
-        }
         return [
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
@@ -80,7 +69,7 @@ class SingleProductResource extends JsonResource
             'is_show_related_product' => $this->is_show_related_product,
             'website_status' => $this->website_status,
             'pre_order' => $this->pre_order ?? 0,
-            'prices' => count($PriceArray) != 0 ? $PriceArray : [],
+            'prices' => SelectPriceResource::collection($this->whenLoaded('price')) ?? [],
             'fields' => SingleFieldResource::collection($this->whenLoaded('field'))->where('is_attribute',0) ?? [],
             'attributes' => SingleFieldResource::collection($this->whenLoaded('field'))->where('is_attribute',1) ?? [],
             'tags' => TagResource::collection($this->whenLoaded('tags')),

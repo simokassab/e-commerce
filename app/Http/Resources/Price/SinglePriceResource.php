@@ -22,7 +22,6 @@ class SinglePriceResource extends JsonResource
         // foreach ($languages as $language){
         //     $nameTranslatable[$language] = $this->getTranslation('name',$language);
         // }
-
         return [
             'id' => $this->id,
             'name' => $this->getTranslations('name'),
