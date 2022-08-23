@@ -576,11 +576,10 @@ class ProductService
             $model = new Product();
             $productVariation = Product::upsert($productVariationParentsArray,'id',$model->getFillable());
             $childrenIds = [];
-            dd($productVariation);
            if($productVariation){
 
                $childrenData=Product::where('parent_product_id',$product->id)->get();
-               dd($childrenData[0]->id);
+              
             foreach ($childrenData as $key => $child) {
                 $childrenIds[$key]=$child[$key]->id;
             }
