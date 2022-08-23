@@ -575,6 +575,7 @@ class ProductService
 
             }
             $model = new Product();
+            dd($productVariationParentsArray);
             $productVariation = Product::upsert($productVariationParentsArray, ['id']);
 
             foreach ($productVariation as $key => $variation) {
