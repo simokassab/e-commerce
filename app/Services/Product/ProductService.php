@@ -481,7 +481,6 @@ class ProductService
 
         $childrenIdsArray = $childrenIds;
         $data = [];
-
         foreach ($childrenIdsArray as $key => $child) {
             foreach ($request->product_variations[$key]['images'] as $index => $image) {
                 $imagePath = uploadImage($image, config('images_paths.product.images'));
@@ -523,8 +522,8 @@ class ProductService
 
     public function storeVariations($request, $product)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
 
 
             throw_if(!$request->product_variations, Exception::class, 'No variations found');
@@ -584,7 +583,6 @@ class ProductService
             }
           
 
-            dd($childrenIds);
                 $this->storeImagesForVariations($request, $childrenIds);
                 $this->storePricesForVariations($request, $childrenIds);
                 $this->storeFieldsForVariations($request, $childrenIds);
@@ -596,10 +594,10 @@ class ProductService
                 return $childrenIds;
             }
 
-        //     DB::commit();
-        // } catch (Exception $e) {
-        //     throw new Exception($e->getMessage());
-        // }
+            DB::commit();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
     // END OF TYPE VARIABLE
 
