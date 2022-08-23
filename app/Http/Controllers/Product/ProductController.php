@@ -163,8 +163,8 @@ class ProductController extends MainController
     public function store(StoreProductRequest $request)
     {
 
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             $product = $this->productService->createAndUpdateProduct($request);
             $childrenIds=[];
             if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
@@ -181,13 +181,13 @@ class ProductController extends MainController
         'product' =>  new ProductResource($product->load(['defaultCategory','tags','brand','category']))
           ]);
 
-        }catch (\Exception $ex) {
-            DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
-            'message' => $ex->getMessage()
-             ]);
+        // }catch (\Exception $ex) {
+        //     DB::rollBack();
+        //     return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
+        //     'message' => $ex->getMessage()
+        //      ]);
 
-        }
+        // }
     }
 
     /**
@@ -222,15 +222,15 @@ class ProductController extends MainController
     public function update(StoreProductRequest $request, Product $product)
     {
 
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             // $oldReservedQuantity=Product::find($request->id)->pluck('reserved_quantity')->last();
 
             $product = $this->productService->createAndUpdateProduct($request,$product);
             $childrenIds=[];
 
             if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
-            //    $childrenIds=$this->productService->storeVariations($request,$product);
+               $childrenIds=$this->productService->storeVariations($request,$product);
             }
             if($request->type=='bundle'){
                 $this->productService->storeAdditionalBundle($request,$product);
@@ -240,18 +240,18 @@ class ProductController extends MainController
 
         $this->productService->storeAdditionalProductData($request,$product,$childrenIds);
 
-            // DB::commit();
+            DB::commit();
             return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             'product' =>  new ProductResource($product->load(['defaultCategory','tags','brand','category']))
               ]);
 
-        // }catch (\Exception $ex) {
-            // DB::rollBack();
-            // return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
-            // 'message' => $ex->getMessage()
-            //  ]);
+        }catch (\Exception $ex) {
+            DB::rollBack();
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
+            'message' => $ex->getMessage()
+             ]);
 
-        // }
+        }
 
 }
 

@@ -638,12 +638,12 @@ class ProductService
             $product->pre_order = $request->pre_order ?? 0;
             $product->bundle_reserved_quantity = null;
             $product->save();
-            DB::commit();
+            // DB::commit();
             return $product;
-    //     } catch (Exception $e) {
-    //         DB::rollBack();
-    //         throw new Exception($e->getMessage());
-    //     }
+        // } catch (Exception $e) {
+            // DB::rollBack();
+            // throw new Exception($e->getMessage());
+        // }
     }
 
 
