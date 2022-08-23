@@ -81,7 +81,7 @@ class OrdersService {
         $selectedProducts = [];
 
         foreach ($productsOrders as $key => $orderProduct) {
-            $orderProduct = $orderProduct->toArray();
+//            $orderProduct = $orderProduct->toArray();
             $currentProduct = collect($allProducts)->where('id' , $orderProduct['product_id'])->first();
             if(is_null($currentProduct)){
                 continue;
