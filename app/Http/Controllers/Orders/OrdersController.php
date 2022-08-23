@@ -186,10 +186,10 @@ class OrdersController extends MainController
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
 
-//            if($order->total != $request->total_price){
-//                return $this->errorResponse('The calculated price is invalid!, please try again later');
-//            }
-
+            $differencePrice = abs($order->total - $request->total_price);
+            if($differencePrice >= 0.001){
+                return $this->errorResponse('Sorry but there was a problem with the calculations! ');
+            }
 
             $order->save();
 
@@ -327,9 +327,14 @@ class OrdersController extends MainController
             OrdersService::updateNotesForOrder($order,$request->notes ?? [] , $request->toArray());
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
+//
+//            if($order->total != $request->total_price){
+//                return $this->errorResponse('The calculated price is invalid!, please try again later');
+//            }
 
-            if($order->total != $request->total_price){
-                return $this->errorResponse('The calculated price is invalid!, please try again later');
+            $differencePrice = abs($order->total - $request->total_price);
+            if($differencePrice > 0.001){
+                return $this->errorResponse('Sorry but there was a problem with the calculations! ');
             }
 
             $order->save();
