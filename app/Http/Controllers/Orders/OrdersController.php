@@ -167,7 +167,7 @@ class OrdersController extends MainController
             $order->coupon_id =  $coupon ? $coupon->id : 0;
             $products = $request->selected_products;
 
-            $order->prefix ='0';
+            $order->prefix =uniqid('order-');
 
             $order->billing_first_name = $request->billing['first_name'];
             $order->billing_last_name = $request->billing['last_name'];
@@ -180,21 +180,15 @@ class OrdersController extends MainController
             $order->billing_phone_number = $request->billing['phone_number'];
             $order->payment_method_id = $request->billing['payment_method_id'];
             $order->save();
-            $order->prefix = 'order' . $order->id;
 
             OrdersService::createNotesForOrder(order: $order, notes: $request->notes, data :$request->toArray());
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
 
             $differencePrice = abs(($order->total + 12) - $request->total_price);
-            if($differencePrice >= 0.001){
-                return [
-                    'order_total' => $order->total,
-                    'shipping' => 12,
-
-                ];
-                return $this->errorResponse('Sorry but there was a problem with the calculations! ');
-            }
+//            if($differencePrice >= 0.001){
+//                return $this->errorResponse('Sorry but there was a problem with the calculations! ');
+//            }
 
             $order->save();
 
@@ -309,7 +303,7 @@ class OrdersController extends MainController
                 $order->shipping_email = $request->shipping['email_address'];
                 $order->shipping_phone_number = $request->shipping['phone_number'];
             }
-            $order->prefix ='0';
+            $order->prefix =uniqid('order-');
 
 
             $order->billing_first_name = $request->billing['first_name'];
@@ -326,7 +320,6 @@ class OrdersController extends MainController
             OrdersService::updateProductsOfOrder($order, $request->selected_products ,$oldOrderProducts->toArray(),$allOrdersWithProducts);
 
             $order->save();
-            $order->prefix = 'order' . $order->id;
 
 
             OrdersService::updateNotesForOrder($order,$request->notes ?? [] , $request->toArray());
@@ -339,11 +332,6 @@ class OrdersController extends MainController
 
             $differencePrice = abs(($order->total + 12) - $request->total_price);
             if($differencePrice >= 0.001){
-                return [
-                    'order_total' => $order->total,
-                    'shipping' => 12,
-
-                ];
                 return $this->errorResponse('Sorry but there was a problem with the calculations! ');
             }
 

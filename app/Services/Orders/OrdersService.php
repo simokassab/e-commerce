@@ -90,6 +90,12 @@ class OrdersService {
                 continue;
             }
 
+            if(collect($selectedProducts)->contains('id',$orderProduct['product_id'])){
+                $selectedProducts[$key]['quantity'] += $orderProduct['quantity'];
+
+                continue;
+            }
+
             $price = collect($currentProduct['prices_list'])->where('price_id' , $defaultPricingClass)->first();
             if(is_null($price)){
                 continue;

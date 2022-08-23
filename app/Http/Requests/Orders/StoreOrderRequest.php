@@ -40,11 +40,11 @@ class StoreOrderRequest extends FormRequest
 //            "time" => "required|date_format:H:i",
 //            "date" => "required|date_format:format",
 
-            "comment" => "required",
+            "comment" => "nullable",
             "notes" => 'nullable|array',
-            "notes.*.user_id" => 'required',
-            "notes.*.title" => 'required',
-            "notes.*.body" => 'required',
+            "notes.*.user_id" => 'nullable',
+            "notes.*.title" => 'nullable',
+            "notes.*.body" => 'nullable',
 
             "status_id" => 'required|exists:order_statuses,id',
             "is_billing_as_shipping" => 'required|boolean',
