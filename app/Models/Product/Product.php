@@ -46,7 +46,7 @@ class Product extends MainModel
         'meta_description',
         'meta_keyword',
         'description',
-        'status',
+        'website_status',
         'barcode',
         'height',
         'width',
