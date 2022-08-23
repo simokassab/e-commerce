@@ -40,6 +40,15 @@ class TestController extends MainController
     }
 
     public function test(){
-          return (Product::find(1)->updateProductQuantity(1,'sub'));
+
+        $x = 2.959 * 1.02643;
+
+        $y = 2.0004 * 1.00602;
+
+        return $x - $y;
+
+        //    (Product::find(1)->updateProductQuantity(1,'add'));
+
+           return "hello";
     }
 }

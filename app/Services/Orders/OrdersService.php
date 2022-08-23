@@ -79,6 +79,7 @@ class OrdersService {
     {
         $allProducts = Product::with('pricesList','tax')->findMany(collect($productsOrders)->pluck('product_id'))->toArray();
         $selectedProducts = [];
+
         foreach ($productsOrders as $key => $orderProduct) {
             $orderProduct = $orderProduct->toArray();
             $currentProduct = collect($allProducts)->where('id' , $orderProduct['product_id'])->first();
@@ -86,16 +87,16 @@ class OrdersService {
                 continue;
             }
 
-            $pricePerUnit = collect($currentProduct['prices_list'])->where('price_id' , $defaultPricingClass)->first();
-            if(is_null($pricePerUnit)){
+            $price = collect($currentProduct['prices_list'])->where('price_id' , $defaultPricingClass)->first();
+            if(is_null($price)){
                 continue;
             }
-            $pricePerUnit = collect($currentProduct['prices_list'])->where('price_id' , $defaultPricingClass)->first()['price'];
+            $pricePerUnit = $orderProduct['unit_price'];
 
             $taxPerUnit = 0;
 
             $selectedProducts[$key]['id'] = $orderProduct['product_id'];
-            $selectedProducts[$key]['order_product_id'] = array_key_exists('id',$orderProduct) ? $orderProduct['id'] ?? 0 : 0;
+            $selectedProducts[$key]['order_product_id'] = array_key_exists('id',$orderProduct) ? $orderProduct['id'] ?? null : null;
             $selectedProducts[$key]['name'] = $currentProduct['name']['en'];
             if($currentProduct['tax']['is_complex']){
                 $newTax= new Tax($currentProduct['tax']);
@@ -121,7 +122,7 @@ class OrdersService {
 
     }
 
-    public static function adjustQuantityOfOrderProducts($orderProducts): void
+    public static function adjustQuantityOfOrderProducts(array $orderProducts): void
     {
         foreach ($orderProducts as $orderProduct){
             Product::find($orderProduct['id'])->updateProductQuantity($orderProduct['quantity'],'sub');
@@ -130,7 +131,7 @@ class OrdersService {
 
     }
 
-    public static function updateProductsOfOrder( $order,array $newProducts,array $oldOrderProducts,array $allProducts = [], array $allOrdersProducts): void
+    public static function updateProductsOfOrder( $order,array $newProducts,array $oldOrderProducts, array $allOrdersProducts): void
     {
         // old products from database
         // new products from request

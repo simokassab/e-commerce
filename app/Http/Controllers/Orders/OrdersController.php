@@ -117,9 +117,8 @@ class OrdersController extends MainController
      */
     public function store(StoreOrderRequest $request)
     {
-
-
-        $allProducts = Product::with(['tax','pricesList'])->get()->toArray();
+        $productIds = (collect($request->selected_products)->pluck('id'));
+        $allProducts = Product::with(['tax','pricesList'])->findMany($productIds)->toArray();
         $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
         $allTaxes = Tax::all();
         $allTaxComponents = TaxComponent::all();
@@ -254,11 +253,12 @@ class OrdersController extends MainController
      */
     public function update(StoreOrderRequest $request, Order $order)
     {
+        $productIds = (collect($request->selected_products)->pluck('id'));
+        $allProducts = Product::with(['tax','pricesList'])->findMany($productIds)->toArray();
         $oldProducts = $order->products;
         $oldOrderProducts = OrderProduct::query()->where('order_id',$order->id)->get();
         $allOrdersWithProducts = OrderProduct::all()->toArray();
         try {
-            $allProducts = Product::with(['tax','pricesList'])->get()->toArray();
             $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
             $allTaxes = Tax::all();
             $allTaxComponents = TaxComponent::all();
@@ -318,7 +318,7 @@ class OrdersController extends MainController
             $order->billing_phone_number = $request->billing['phone_number'];
             $order->payment_method_id = $request->billing['payment_method_id'];
 
-            OrdersService::updateProductsOfOrder($order, $request->selected_products ,$oldOrderProducts->toArray(),$allProducts,$allOrdersWithProducts);
+            OrdersService::updateProductsOfOrder($order, $request->selected_products ,$oldOrderProducts->toArray(),$allOrdersWithProducts);
 
             $order->save();
             $order->prefix = 'order' . $order->id;
@@ -337,7 +337,7 @@ class OrdersController extends MainController
 
 
             $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
-            OrdersService::adjustQuantityOfOrderProducts($order->selected_products);
+            OrdersService::adjustQuantityOfOrderProducts($order->selected_products,$allProducts);
 
             DB::commit();
             return $this->successResponse('The order has been created successfully !', [

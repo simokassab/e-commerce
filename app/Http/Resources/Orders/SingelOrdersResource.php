@@ -29,6 +29,9 @@ class SingelOrdersResource extends JsonResource
             "status_id" => (int)$this->order_status_id,
             "prefix" => $this->prefix,
             "coupon_code" => $this->whenLoaded('coupon') ? $this->whenLoaded('coupon')->code : '',
+            "billing_address_id" => null,
+            "shipping_address_id" => null,
+
             "billing" => [
                 "first_name" => $this->billing_first_name,
                 "last_name" => $this->billing_last_name,
@@ -39,7 +42,9 @@ class SingelOrdersResource extends JsonResource
                 "country_id" => (int)$this->billing_country_id,
                 "phone_number" => $this->billing_phone_number,
                 "email_address" => $this->billing_email,
-                "payment_method_id" => (int)$this->payment_method_id
+                "payment_method_id" => (int)$this->payment_method_id,
+                "edit_type" => null,
+
             ],
             "shipping" => [
                 "first_name" => $this->shipping_first_name,
@@ -50,7 +55,8 @@ class SingelOrdersResource extends JsonResource
                 "city" => $this->shipping_city,
                 "country_id" => (int)$this->shipping_country_id,
                 "phone_number" => $this->shipping_phone_number,
-                "email_address" => $this->shipping_email
+                "email_address" => $this->shipping_email,
+                "edit_type" => null,
             ],
             'selected_products' => $this->selected_products,
 

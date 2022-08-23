@@ -36,11 +36,16 @@ class SelectProductOrderResource extends JsonResource
         if(!$isAllowNegativeQuantity){
             if(($this->pre_order)){
                 $preOrder = true;
-                $quantity = '--';
+                $quantity = '∞';
             }
+
+            if($quantity < 0){
+                $quantity = 0;
+            }
+
         }else{
             $preOrder = true;
-            $quantity = '--';
+            $quantity = '∞';
 
         }
 
@@ -57,7 +62,7 @@ class SelectProductOrderResource extends JsonResource
             'quantity' => 1,
             'tax' => $tax,
             'sku' => $this->sku,
-            'cost_per_unit' => $price + $tax,
+            'unit_price' => $price + $tax,
             'currency_symbol' => $currencySymbol,
             'quantity_in_stock' => $quantity,
             'edit_status' => false,
