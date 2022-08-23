@@ -70,7 +70,7 @@ class SingleProductResource extends JsonResource
             'is_show_related_product' => $this->is_show_related_product,
             'website_status' => $this->website_status,
             'pre_order' => $this->pre_order ?? 0,
-            'prices' => SelectPriceResource::collection($this->whenLoaded('price.currency')) ?? [],
+            'prices' => SelectPriceResource::collection($this->whenLoaded('price')->with('currency')) ?? [],
             'fields' => SingleFieldResource::collection($this->whenLoaded('field'))->where('is_attribute',0) ?? [],
             'attributes' => SingleFieldResource::collection($this->whenLoaded('field'))->where('is_attribute',1) ?? [],
             'tags' => TagResource::collection($this->whenLoaded('tags')),
