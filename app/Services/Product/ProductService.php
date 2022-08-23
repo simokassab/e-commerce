@@ -567,41 +567,15 @@ class ProductService
                     'is_show_related_product' => $variation['is_show_related_product'] ?? 0,
                     'bundle_reserved_quantity' => null,
                     'pre_order' => $variation['pre_order'] ?? 0,
-                    'created_at' => Carbon::now()->toDateTimeString(),
-                    'updated_at' => Carbon::now()->toDateTimeString(),
+                    // 'created_at' => Carbon::now()->toDateTimeString(),
+                    // 'updated_at' => Carbon::now()->toDateTimeString(),
 
                 ];
                 $productVariationParentsArray[] = $productVariationsArray;
 
             }
-            $productVariation = Product::upsert($productVariationParentsArray, ['id'],[
-            'name',
-            'slug',
-            'code',
-            'sku',
-            'type',
-            'quantity',
-            'reserved_quantity',
-            'summary',
-            'specification',
-            'meta_title',
-            'meta_description',
-            'meta_keyword',
-            'description',
-            'status',
-            'barcode',
-            'height',
-            'width',
-            'length',
-            'weight',
-            'is_default_child',
-            'parent_product_id',
-            'category_id',
-            'unit_id',
-            'brand_id',
-            'tax_id',
-            'products_statuses_id',
-            'is_show_related_product',]);
+            $model = new Product();
+            $productVariation = Product::upsert($productVariationParentsArray, ['id'],$model->getFillable());
 
             foreach ($productVariation as $key => $variation) {
                 $childrenIds[] = $productVariation->id;
