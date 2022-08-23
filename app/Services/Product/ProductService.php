@@ -579,6 +579,7 @@ class ProductService
            if($productVariation){
 
                $childrenData=Product::where('parent_product_id',$product->id)->get();
+               dd($childrenData[0]);
             foreach ($childrenData as $key => $child) {
                 $childrenIds[$key]=$child[$key]['id'];
             }
