@@ -16,7 +16,9 @@ class SelectPriceResource extends JsonResource
     {
         dd($this->whenLoaded('currency'));
         //try now please
-        return [
+        //wait localy cant you? 
+        //locally sh8ali w 3a km product sh8ali
+                return [
             'id' => $this->id,
             'name' => $this->name,
             'currency' => ($this->whenLoaded('currency')->code.' - '.$this->whenLoaded('currency')->symbol)  ?? '-',
