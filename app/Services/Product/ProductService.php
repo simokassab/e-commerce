@@ -522,8 +522,8 @@ class ProductService
 
     public function storeVariations($request, $product)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
 
 
             throw_if(!$request->product_variations, Exception::class, 'No variations found');
@@ -594,10 +594,10 @@ class ProductService
                 return $childrenIds;
             }
 
-            DB::commit();
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
-        }
+        //     DB::commit();
+        // } catch (Exception $e) {
+        //     throw new Exception($e->getMessage());
+        // }
     }
     // END OF TYPE VARIABLE
 
