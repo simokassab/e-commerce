@@ -526,7 +526,6 @@ class ProductService
         // DB::beginTransaction();
         // try {
 
-            $childrenIds = [];
 
             throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
@@ -576,12 +575,13 @@ class ProductService
             }
             $model = new Product();
             $productVariation = Product::upsert($productVariationParentsArray,'id',$model->getFillable());
+            $childrenIds = [];
            if($productVariation){
 
                $childrenData=Product::where('parent_product_id',$product->id)->get();
                dd($childrenData[0]->id);
             foreach ($childrenData as $key => $child) {
-                $childrenIds[$key]=$child[$key]->id;
+                $childrenIds[]=$child[$key]->id;
             }
                dd($childrenIds);
 
