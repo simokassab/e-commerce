@@ -580,8 +580,7 @@ class ProductService
 
                $childrenData=Product::where('parent_product_id',$product->id)->get();
                foreach ($childrenData as $key => $child) {
-                dd($child->id);
-                $childrenIds[$key]=$child[$key]->id;
+                $childrenIds[$key]=$child->id;
             }
           
 
