@@ -507,7 +507,8 @@ class ProductService
         $data = [];
         foreach ($request->product_variations as $variation) {
             $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
-            dd($childrenIds);
+        }
+
             $childrenIdsArray = $childrenIds;
             $data = [];
             foreach ($childrenIdsArray as $key => $child) {
@@ -521,7 +522,6 @@ class ProductService
                     'updated_at' => Carbon::now()->toDateTimeString(),
                 ];
                 }
-        }
         }
         ProductPrice::Insert($data);
     }
