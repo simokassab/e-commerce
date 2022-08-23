@@ -14,6 +14,8 @@ class SelectPriceResource extends JsonResource
      */
     public function toArray($request)
     {
+        dd($this->whenLoaded('currency'));
+        //try now please
         return [
             'id' => $this->id,
             'name' => $this->name,
