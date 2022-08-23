@@ -508,14 +508,20 @@ class ProductService
         foreach ($request->product_variations as $variation) {
             $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
             dd($childrenIds);
+            $childrenIdsArray = $childrenIds;
+            $data = [];
+            foreach ($childrenIdsArray as $key => $child) {
             foreach ($pricesInfo as $key => $price) {
-                $data[$key]['product_id'] = $childrenIds[$key];
-                $data[$key]['price_id'] = $price['price_id'];
-                $data[$key]['price'] = $price['price'];
-                $data[$key]['discounted_price'] = $price['discounted_price'];
-                $data[$key]['created_at'] = Carbon::now()->toDateTimeString();
-                $data[$key]['updated_at'] = Carbon::now()->toDateTimeString();
-            }
+                $data[] = [
+                    'product_id' => $child,
+                    'price_id' => $price['price_id'],
+                    'price' => $price['price_id'],
+                    'discounted_price' => $price['discounted_price'],
+                    'created_at' =>  Carbon::now()->toDateTimeString(),
+                    'updated_at' => Carbon::now()->toDateTimeString(),
+                ];
+                }
+        }
         }
         ProductPrice::Insert($data);
     }
