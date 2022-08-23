@@ -576,16 +576,18 @@ class ProductService
             }
             $model = new Product();
             $productVariation = Product::upsert($productVariationParentsArray,'id',$model->getFillable());
-            dd($productVariation);
-            foreach ($productVariation as $key => $variation) {
-                $childrenIds[] = $productVariation->id;
+           if($productVariation){
+
+               $childrenIds=Product::where('parent_product_id',$product->id);
+
+               dd($childrenIds->toArray());
+
+                $this->storeImagesForVariations($request, $childrenIds);
+                $this->storePricesForVariations($request, $childrenIds);
+                $this->storeFieldsForVariations($request, $childrenIds);
+                $this->storeAttributesForVariations($request, $childrenIds);
+
             }
-
-            $this->storeImagesForVariations($request, $childrenIds);
-            $this->storePricesForVariations($request, $childrenIds);
-            $this->storeFieldsForVariations($request, $childrenIds);
-            $this->storeAttributesForVariations($request, $childrenIds);
-
             if (count($childrenIds) > 0) {
                 return $childrenIds;
             }
