@@ -560,7 +560,7 @@ class ProductService
                     'meta_keyword' => json_encode($request->meta_keyword) ?? "",
                     'meta_description' => json_encode($request->meta_description) ?? "",
                     'description' => json_encode($request->description) ?? "",
-                    'website_status' => $request->status,
+                    'website_status' => $request->website_status,
                     'parent_product_id' => $product->id,
                     'products_statuses_id' => $variation['products_statuses_id'],
                     'image' => $imagePath,
@@ -620,7 +620,7 @@ class ProductService
             $product->meta_keyword = $request->meta_keyword ?? null;
             $product->meta_description = $request->meta_description ?? null;
             $product->description = $request->description ?? null;
-            $product->website_status = $request->status;
+            $product->website_status = $request->website_status;
             $product->barcode = $request->barcode;
             $product->height = $request->height;
             $product->width = $request->width;
