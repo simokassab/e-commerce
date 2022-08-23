@@ -591,7 +591,7 @@ class ProductService
 
                 $this->storeImagesForVariations($request, $childrenIds);
                 $this->storePricesForVariations($request, $childrenIds);
-                // $this->storeFieldsForVariations($request, $childrenIds);
+                $this->storeFieldsForVariations($request, $childrenIds);
                 $this->storeAttributesForVariations($request, $childrenIds);
 
             }
