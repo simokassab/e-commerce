@@ -14,7 +14,6 @@ class SelectPriceResource extends JsonResource
      */
     public function toArray($request)
     {
-        dd($this->whenLoaded('currency'));
         //try now please
         //wait localy cant you? 
         //locally sh8ali w 3a km product sh8ali
