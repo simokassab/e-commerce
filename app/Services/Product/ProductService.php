@@ -574,8 +574,34 @@ class ProductService
                 $productVariationParentsArray[] = $productVariationsArray;
 
             }
-            $model = new Product();
-            $productVariation = Product::upsert($productVariationParentsArray, ['id'],[$model->getFillable()]);
+            $productVariation = Product::upsert($productVariationParentsArray, ['id'],[
+            'name',
+            'slug',
+            'code',
+            'sku',
+            'type',
+            'quantity',
+            'reserved_quantity',
+            'summary',
+            'specification',
+            'meta_title',
+            'meta_description',
+            'meta_keyword',
+            'description',
+            'status',
+            'barcode',
+            'height',
+            'width',
+            'length',
+            'weight',
+            'is_default_child',
+            'parent_product_id',
+            'category_id',
+            'unit_id',
+            'brand_id',
+            'tax_id',
+            'products_statuses_id',
+            'is_show_related_product',]);
 
             foreach ($productVariation as $key => $variation) {
                 $childrenIds[] = $productVariation->id;

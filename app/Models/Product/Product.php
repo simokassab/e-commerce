@@ -32,7 +32,7 @@ class Product extends MainModel
     protected $table='products';
     protected $guard_name = 'web';
 
-    public $fillable = [
+    protected $fillable = [
         'name',
         'slug',
         'code',
