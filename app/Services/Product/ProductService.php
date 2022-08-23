@@ -523,8 +523,8 @@ class ProductService
 
     public function storeVariations($request, $product)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
 
             $childrenIds = [];
 
@@ -581,19 +581,19 @@ class ProductService
                 $childrenIds[] = $productVariation->id;
             }
 
-            $this->storeImagesForVariations($request, $childrenIds);
-            $this->storePricesForVariations($request, $childrenIds);
-            $this->storeFieldsForVariations($request, $childrenIds);
-            $this->storeAttributesForVariations($request, $childrenIds);
+            // $this->storeImagesForVariations($request, $childrenIds);
+            // $this->storePricesForVariations($request, $childrenIds);
+            // $this->storeFieldsForVariations($request, $childrenIds);
+            // $this->storeAttributesForVariations($request, $childrenIds);
 
             if (count($childrenIds) > 0) {
                 return $childrenIds;
             }
 
-            DB::commit();
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
-        }
+        //     DB::commit();
+        // } catch (Exception $e) {
+        //     throw new Exception($e->getMessage());
+        // }
     }
     // END OF TYPE VARIABLE
 
