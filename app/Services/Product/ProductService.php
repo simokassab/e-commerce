@@ -538,7 +538,7 @@ class ProductService
                     $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
 
                 $productVariationsArray = [
-                    'name' => ($request->name),
+                    'name' => json_encode($request->name),
                     'code' => $variation['code'],
                     'type' => 'variable_child',
                     'sku' => $variation['sku'],
@@ -554,12 +554,12 @@ class ProductService
                     'unit_id' => $request->unit_id,
                     'tax_id' => $request->tax_id,
                     'brand_id' => $request->brand_id,
-                    'summary' => ($request->summary),
-                    'specification' => ($request->specification),
-                    'meta_title' => ($request->meta_title) ?? "",
-                    'meta_keyword' => ($request->meta_keyword) ?? "",
-                    'meta_description' => ($request->meta_description) ?? "",
-                    'description' => ($request->description) ?? "",
+                    'summary' => json_encode($request->summary),
+                    'specification' => json_encode($request->specification),
+                    'meta_title' => json_encode($request->meta_title) ?? "",
+                    'meta_keyword' => json_encode($request->meta_keyword) ?? "",
+                    'meta_description' => json_encode($request->meta_description) ?? "",
+                    'description' => json_encode($request->description) ?? "",
                     'website_status' => $request->status,
                     'parent_product_id' => $product->id,
                     'products_statuses_id' => $variation['products_statuses_id'],
@@ -575,7 +575,7 @@ class ProductService
 
             }
             $model = new Product();
-            $productVariation = Product::upsert([$productVariationParentsArray],'id');
+            $productVariation = Product::upsert($productVariationParentsArray,'id',$model->getFillable());
 
             foreach ($productVariation as $key => $variation) {
                 $childrenIds[] = $productVariation->id;
