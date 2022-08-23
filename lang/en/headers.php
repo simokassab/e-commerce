@@ -429,8 +429,8 @@ return [
             'is_visible' => false,
             'is_show' => true
         ],
-        'cost_per_unit' => [
-            'key' => 'cost_per_unit',
+        'unit_price' => [
+            'key' => 'unit_price',
             'name' => 'Cost Per Unit',
             'search' => '',
             'type' => 'double',
