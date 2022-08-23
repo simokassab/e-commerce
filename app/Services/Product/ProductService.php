@@ -507,7 +507,7 @@ class ProductService
         $data = [];
         foreach ($request->product_variations as $variation) {
             $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
-
+            dd($childrenIds);
             foreach ($pricesInfo as $key => $price) {
                 $data[$key]['product_id'] = $childrenIds[$key];
                 $data[$key]['price_id'] = $price['price_id'];
@@ -583,7 +583,7 @@ class ProductService
             }
           
 
-                // $this->storeImagesForVariations($request, $childrenIds);
+                $this->storeImagesForVariations($request, $childrenIds);
                 $this->storePricesForVariations($request, $childrenIds);
                 $this->storeFieldsForVariations($request, $childrenIds);
                 $this->storeAttributesForVariations($request, $childrenIds);
