@@ -44,10 +44,10 @@ class OrdersService {
             $productsOrders[$key]['order_id'] = $order->id;
             $productsOrders[$key]['product_id'] = $product['id'];
             $productsOrders[$key]['quantity'] = $product['quantity'];
-            $productsOrders[$key]['unit_price'] = $product['price'];
+            $productsOrders[$key]['unit_price'] = $product['unit_price'];
             $productsOrders[$key]['tax_percentage'] = $taxObject->percentage;
             $productsOrders[$key]['tax_amount'] = $tax;
-            $productsOrders[$key]['total'] = $product['price'] * $product['quantity'];
+            $productsOrders[$key]['total'] = $product['unit_price'] * $product['quantity'];
 
             $productsOrders[$key]['created_at'] = now();
             $productsOrders[$key]['updated_at'] = now();
@@ -187,10 +187,10 @@ class OrdersService {
             $dataToBeUpdatedOrCreated[$key]['order_id'] = $order->id;
             $dataToBeUpdatedOrCreated[$key]['product_id'] = $product['id'];
             $dataToBeUpdatedOrCreated[$key]['quantity'] = $product['quantity'];
-            $dataToBeUpdatedOrCreated[$key]['unit_price'] = $product['price'];
+            $dataToBeUpdatedOrCreated[$key]['unit_price'] = $product['unit_price'];
             $dataToBeUpdatedOrCreated[$key]['tax_percentage'] = $taxObject->percentage;
             $dataToBeUpdatedOrCreated[$key]['tax_amount'] = $tax;
-            $dataToBeUpdatedOrCreated[$key]['total'] = $product['price'] * $product['quantity'];
+            $dataToBeUpdatedOrCreated[$key]['total'] = $product['unit_price'] * $product['quantity'];
 
             $dataToBeUpdatedOrCreated[$key]['created_at'] = now();
             $dataToBeUpdatedOrCreated[$key]['updated_at'] = now();

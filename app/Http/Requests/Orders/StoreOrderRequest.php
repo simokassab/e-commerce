@@ -53,7 +53,8 @@ class StoreOrderRequest extends FormRequest
             "selected_products" => 'required|array',
             "selected_products.*" => 'required',
             "selected_products.*.id" => 'required|exists:products',
-            "selected_products.*.quantity" => 'required|integer',
+            "selected_products.*.quantity" => 'required|numeric',
+            "selected_products.*.unit_price" => 'nullable|numeric',
 
             "billing.first_name" => 'required|string',
             "billing.last_name" => 'required|string',
@@ -62,7 +63,7 @@ class StoreOrderRequest extends FormRequest
             "billing.address_2" => 'required|string',
             "billing.city" => 'required|string',
             "billing.country_id" => 'required|exists:countries,id',
-            "billing.phone_number" => 'required|integer',
+            "billing.phone_number" => 'required|numeric',
             "billing.email_address" => 'required|email',
 //            "billing.payment_method_id" => 'required|exists:payments_types,id',
             "billing.payment_method_id" => 'required|numeric',
