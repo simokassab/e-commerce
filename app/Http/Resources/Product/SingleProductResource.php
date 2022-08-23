@@ -31,7 +31,6 @@ class SingleProductResource extends JsonResource
      */
     public function toArray($request)
     {
-            dd($this->whenLoaded('currency'));
 
         $categoriesForNested = Category::with('parent')->get();
         $nestedCategories = CategoryService::getAllCategoriesNested($categoriesForNested);
