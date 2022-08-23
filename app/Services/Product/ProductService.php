@@ -571,7 +571,6 @@ class ProductService
                     // 'updated_at' => Carbon::now()->toDateTimeString(),
 
                 ];
-                dd($request->status);
                 $productVariationParentsArray[] = $productVariationsArray;
 
             }
@@ -582,10 +581,10 @@ class ProductService
                 $childrenIds[] = $productVariation->id;
             }
 
-            // $this->storeImagesForVariations($request, $childrenIds);
-            // $this->storePricesForVariations($request, $childrenIds);
-            // $this->storeFieldsForVariations($request, $childrenIds);
-            // $this->storeAttributesForVariations($request, $childrenIds);
+            $this->storeImagesForVariations($request, $childrenIds);
+            $this->storePricesForVariations($request, $childrenIds);
+            $this->storeFieldsForVariations($request, $childrenIds);
+            $this->storeAttributesForVariations($request, $childrenIds);
 
             if (count($childrenIds) > 0) {
                 return $childrenIds;
