@@ -332,7 +332,13 @@ class OrdersController extends MainController
 
             $differencePrice = abs(($order->total + 12) - $request->total_price);
             if($differencePrice >= 0.001){
-                return $this->errorResponse('Sorry but there was a problem with the calculations! ');
+                return $this->errorResponse(
+                    'Sorry but there was a problem with the calculations! ',
+                    [
+                        'shipping' => 12,
+                        'order_total' => $order->total
+                    ]
+                );
             }
 
             $order->save();
