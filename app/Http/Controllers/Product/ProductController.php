@@ -230,7 +230,7 @@ class ProductController extends MainController
             $childrenIds=[];
 
             if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
-               $childrenIds=$this->productService->storeVariations($request,$product);
+            //    $childrenIds=$this->productService->storeVariations($request,$product);
             }
             if($request->type=='bundle'){
                 $this->productService->storeAdditionalBundle($request,$product);
