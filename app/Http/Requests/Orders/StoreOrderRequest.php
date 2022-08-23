@@ -47,8 +47,8 @@ class StoreOrderRequest extends FormRequest
             "notes.*.body" => 'required',
 
             "status_id" => 'required|exists:order_statuses,id',
-            "billing_as_shipping" => 'required|boolean',
-            "coupon_code" => "exists:coupons,code",
+            "is_billing_as_shipping" => 'required|boolean',
+            "coupon_code" => "nullable|exists:coupons,code",
 
             "selected_products" => 'required|array',
             "selected_products.*" => 'required',
