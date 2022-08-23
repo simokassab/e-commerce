@@ -222,8 +222,8 @@ class ProductController extends MainController
     public function update(StoreProductRequest $request, Product $product)
     {
 
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             // $oldReservedQuantity=Product::find($request->id)->pluck('reserved_quantity')->last();
 
             $product = $this->productService->createAndUpdateProduct($request,$product);
@@ -240,18 +240,18 @@ class ProductController extends MainController
 
         $this->productService->storeAdditionalProductData($request,$product,$childrenIds);
 
-            DB::commit();
+            // DB::commit();
             return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
             'product' =>  new ProductResource($product->load(['defaultCategory','tags','brand','category']))
               ]);
 
-        }catch (\Exception $ex) {
-            DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
-            'message' => $ex->getMessage()
-             ]);
+        // }catch (\Exception $ex) {
+            // DB::rollBack();
+            // return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
+            // 'message' => $ex->getMessage()
+            //  ]);
 
-        }
+        // }
 
 }
 

@@ -599,8 +599,8 @@ class ProductService
 
     public function createAndUpdateProduct($request, $product = null)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             //$request=(object)$request;
             $product = $product ?  $product : new Product();
             $product->name = ($request->name);
@@ -640,10 +640,10 @@ class ProductService
             $product->save();
             DB::commit();
             return $product;
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw new Exception($e->getMessage());
-        }
+    //     } catch (Exception $e) {
+    //         DB::rollBack();
+    //         throw new Exception($e->getMessage());
+    //     }
     }
 
 
