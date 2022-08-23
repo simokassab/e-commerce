@@ -584,6 +584,7 @@ class ProductService
             }
           
 
+            dd($childrenIds);
                 $this->storeImagesForVariations($request, $childrenIds);
                 $this->storePricesForVariations($request, $childrenIds);
                 $this->storeFieldsForVariations($request, $childrenIds);
@@ -591,7 +592,6 @@ class ProductService
 
             }
 
-            dd($childrenIds);
             if (count($childrenIds) > 0) {
                 return $childrenIds;
             }
