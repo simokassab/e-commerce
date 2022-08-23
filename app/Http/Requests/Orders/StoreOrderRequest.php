@@ -47,7 +47,7 @@ class StoreOrderRequest extends FormRequest
             "notes.*.body" => 'required',
 
             "status_id" => 'required|exists:order_statuses,id',
-            "shipping_as_billing" => 'required|boolean',
+            "billing_as_shipping" => 'required|boolean',
             "coupon_code" => "exists:coupons,code",
 
             "selected_products" => 'required|array',
@@ -79,7 +79,7 @@ class StoreOrderRequest extends FormRequest
 
         ];
 
-        return(array_merge($rules,$productsRules));
+        // return(array_merge($rules,$productsRules));
     }
 
     public function messages()
