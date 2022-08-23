@@ -224,6 +224,8 @@ class ProductController extends MainController
 
         DB::beginTransaction();
         try {
+            // $oldReservedQuantity=Product::find($request->id)->pluck('reserved_quantity')->last();
+
             $product = $this->productService->createAndUpdateProduct($request,$product);
             $childrenIds=[];
 
@@ -233,8 +235,9 @@ class ProductController extends MainController
             if($request->type=='bundle'){
                 $this->productService->storeAdditionalBundle($request,$product);
         }
+            // Product::find($product->id)->updateProductQuantity($oldReservedQuantity,'sub');
 
-        Product::find($product->id)->updateProductQuantity($request->reserved_quantity,'add');
+
         $this->productService->storeAdditionalProductData($request,$product,$childrenIds);
 
             DB::commit();
@@ -248,7 +251,8 @@ class ProductController extends MainController
             'message' => $ex->getMessage()
              ]);
 
-    }
+        }
+
 }
 
     /**

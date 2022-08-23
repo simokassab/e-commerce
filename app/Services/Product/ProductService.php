@@ -543,7 +543,7 @@ class ProductService
                     'type' => 'variable_child',
                     'sku' => $variation['sku'],
                     'quantity' => $variation['quantity'],
-                    'reserved_quantity' => 0,
+                    'reserved_quantity' => $variation['reserved_quantity'],
                     'minimum_quantity' => $variation['minimum_quantity'],
                     'height' => $variation['height'],
                     'width' => $variation['width'],
@@ -572,8 +572,6 @@ class ProductService
 
                 ];
                 $productVariationParentsArray[] = $productVariationsArray;
-
-                // $productVariation = Product::updateOrCreate($productVariationsArray,['id' => $variation['id']]);
 
             }
             $model = new Product();
@@ -611,7 +609,7 @@ class ProductService
             $product->sku = $request->sku;
             $product->type = $request->type;
             $product->quantity = $request->quantity;
-            $product->reserved_quantity = null;
+            $product->reserved_quantity = $request->reserved_quantity;
             $product->minimum_quantity = $request->minimum_quantity;
             $product->summary = ($request->summary);
             $product->specification = ($request->specification);

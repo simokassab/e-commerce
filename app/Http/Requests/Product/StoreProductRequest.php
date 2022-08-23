@@ -158,6 +158,7 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.attributes.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
 
         ];
+        if($request->type=='variable'){
         foreach($request->product_variations as $key => $variation){
             if(!$variation['isSamePriceAsParent']){
                 $pricesRulesArray=[
@@ -168,7 +169,7 @@ class StoreProductRequest extends FormRequest
                 $rules=array_merge($rules,$pricesRulesArray);
             }
 
-        }
+        }}
         return $rules;
     }
 
