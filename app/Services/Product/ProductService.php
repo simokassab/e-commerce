@@ -528,11 +528,10 @@ class ProductService
 
     public function storeVariations($request, $product)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
 
-
-            throw_if(!$request->product_variations, Exception::class, 'No variations found');
+throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
             $productVariationParentsArray = [];
             foreach ($request->product_variations as $variation) {
@@ -587,7 +586,6 @@ class ProductService
                foreach ($childrenData as $key => $child) {
                 $childrenIds[$key]=$child->id;
             }
-          
 
                 $this->storeImagesForVariations($request, $childrenIds);
                 $this->storePricesForVariations($request, $childrenIds);
@@ -600,10 +598,10 @@ class ProductService
                 return $childrenIds;
             }
 
-        //     DB::commit();
-        // } catch (Exception $e) {
-        //     throw new Exception($e->getMessage());
-        // }
+            DB::commit();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
     // END OF TYPE VARIABLE
 
