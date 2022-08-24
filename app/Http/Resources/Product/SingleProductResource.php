@@ -18,6 +18,7 @@ use App\Http\Resources\Tax\SingleTaxResource;
 use App\Http\Resources\Unit\SelectUnitResource;
 use App\Http\Resources\Unit\SingleUnitResource;
 use App\Models\Category\Category;
+use App\Models\Product\ProductCategory;
 use App\Services\Category\CategoryService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -31,8 +32,7 @@ class SingleProductResource extends JsonResource
      */
     public function toArray($request)
     {
-
-        $categoriesForNested = Category::with('parent')->get();
+        $categoriesForNested = $this->whenLoaded('category');
         $nestedCategories = CategoryService::getAllCategoriesNested($categoriesForNested);
 
         return [
