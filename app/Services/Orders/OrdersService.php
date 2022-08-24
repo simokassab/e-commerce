@@ -43,9 +43,6 @@ class OrdersService {
                 $tax = $taxObject->percentage * $priceOfUnit/100;
             }
 
-            if (collect($productsOrders)->contains('product_id',$product['id'])){
-                dd('hello');
-            }
 
             $productsOrders[$key]['order_id'] = $order->id;
             $productsOrders[$key]['product_id'] = $product['id'];
