@@ -21,6 +21,7 @@ class SingelOrdersResource extends JsonResource
             "shipping_address_id" => (int) $this->shipping_address_id,
             "billing_address_id" => (int) $this->billing_address_id,
             "time" => $this->time,
+            "currency_rate" => $this->currency_rate,
             "total_price" => $this->total,
             'is_billing_as_shipping' => (bool)$this->is_billing_as_shipping,
             'notes' => OrdersNotesResource::collection($this->whenLoaded('notes')),
