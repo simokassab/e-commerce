@@ -164,7 +164,6 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
 
         foreach ($oldOrderProducts as $oldOrderProduct) {
             Product::query()->find($oldOrderProduct['product_id'])->updateProductQuantity($oldOrderProduct['quantity'], "add");
-
         }
 
         foreach ($oldProductsWithQuantities as $key => $oldItemQuantity) {

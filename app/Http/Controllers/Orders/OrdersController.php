@@ -131,7 +131,6 @@ class OrdersController extends MainController
             $order->currency_id = $request->currency_id;
             $order->time = now();
 
-
             $order->shipping_first_name = $request->shipping['first_name'];
             $order->shipping_last_name = $request->shipping['last_name'];
             $order->shipping_address_one = $request->shipping['address_1'];
@@ -155,6 +154,8 @@ class OrdersController extends MainController
 
             $order->shipping_address_id = $request->shipping_address_id;
             $order->billing_address_id = $request->billing_address_id;
+
+
 
             if($request->shipping_address_id == $request->billing_address_id || $request->is_billing_as_shipping){
                 $newAddress = null;
@@ -283,7 +284,6 @@ class OrdersController extends MainController
                 }
             }
 
-
             $order->customer_comment = $request->comment;
             $order->order_status_id = $request->status_id;
             $defaultCurrency = Currency::where('is_default',1)->first();
@@ -301,31 +301,7 @@ class OrdersController extends MainController
 
             $order->is_billing_as_shipping = $request->is_billing_as_shipping;
 
-            if($request->shipping_address_id == $request->billing_address_id || $request->is_billing_as_shipping){
-                $request->is_billing_as_shipping = 1;
 
-                $order->shipping_first_name = $request->billing['first_name'];
-                $order->shipping_last_name = $request->billing['last_name'];
-                $order->shipping_address_one = $request->billing['address_1'];
-                $order->shipping_address_two = $request->billing['address_2'];
-                $order->shipping_country_id = $request->billing['country_id'];
-                $order->shipping_city = $request->billing['city'];
-                $order->shipping_company_name = $request->billing['company_name'];
-                $order->shipping_email = $request->billing['email_address'];
-                $order->shipping_phone_number = $request->billing['phone_number'];
-
-
-            }else{
-                $order->shipping_first_name = $request->shipping['first_name'];
-                $order->shipping_last_name = $request->shipping['last_name'];
-                $order->shipping_address_one = $request->shipping['address_1'];
-                $order->shipping_address_two = $request->shipping['address_2'];
-                $order->shipping_country_id = $request->shipping['country_id'];
-                $order->shipping_city = $request->shipping['city'];
-                $order->shipping_company_name = $request->shipping['company_name'];
-                $order->shipping_email = $request->shipping['email_address'];
-                $order->shipping_phone_number = $request->shipping['phone_number'];
-            }
 
             $coupon = Coupon::where('code', $request->coupon_code)->first();
 
