@@ -18,10 +18,12 @@ class SingelOrdersResource extends JsonResource
             'code' => $this->id,
             "client_id" => (int)$this->customer_id,
             "currency_id" => (int)$this->currency_id,
+            "shipping_address_id" => (int) $this->shipping_address_id,
+            "billing_address_id" => (int) $this->billing_address_id,
             "time" => $this->time,
             "total_price" => $this->total,
             'is_billing_as_shipping' => (bool)$this->is_billing_as_shipping,
-            'notes' => $this->whenLoaded('notes'),
+            'notes' => OrdersNotesResource::collection($this->whenLoaded('notes')),
             'shipping_company_id' => null, // tpo be added after adding the shipping companies
             "date" => $this->date,
             "comment" => $this->customer_comment,
@@ -29,8 +31,6 @@ class SingelOrdersResource extends JsonResource
             "status_id" => (int)$this->order_status_id,
             "prefix" => $this->prefix,
             "coupon_code" => $this->whenLoaded('coupon') ? $this->whenLoaded('coupon')->code : '',
-            "billing_address_id" => null,
-            "shipping_address_id" => null,
 
             "billing" => [
                 "first_name" => $this->billing_first_name,

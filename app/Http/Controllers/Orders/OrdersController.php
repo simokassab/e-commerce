@@ -25,6 +25,7 @@ use App\Models\Settings\Setting;
 use App\Models\Tax\Tax;
 use App\Models\Tax\TaxComponent;
 use App\Models\User\Customer;
+use App\Models\User\CustomerAddress;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Resources\Orders\SelectOrderStatus;
@@ -118,7 +119,7 @@ class OrdersController extends MainController
     public function store(StoreOrderRequest $request)
     {
         $productIds = (collect($request->selected_products)->pluck('id'));
-        $allProducts = Product::with(['tax','pricesList'])->findMany($productIds)->toArray();
+        $allProducts = Product::with(['tax','pricesList'])->findMany($productIds);
         $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
         $allTaxes = Tax::all();
         $allTaxComponents = TaxComponent::all();
@@ -129,21 +130,142 @@ class OrdersController extends MainController
             $order = new Order();
             $order->customer_id = $request->client_id;
             $order->currency_id = $request->currency_id;
-            $order->time = $request->time;
+            $order->time = now();
 
-//            $order->date = new Carbon($request->date)->format('H:i:s');
+            $order->shipping_address_id = $request->shipping_address_id ?? 0;
+            $order->billing_address_id = $request->billing_address_id ?? 0;
+
+//            if($request->shipping_address_id == $request->billing_address_id || $request->is_billing_as_shipping){
+//                if($request->billing['flag_address'] == 'create'){
+//                    $newAddress = CustomerAddress::query()->create([
+//                        'customer_id' => $request->customer_id,
+//                        'phone_number' => $request->billing['phone_number'],
+//                        'email_address' => $request->billing['email_address'],
+//                        'address_2' => $request->billing['address_2'],
+//                        'address_1' => $request->billing['address_1'],
+//                        'company_name' => $request->billing['company_name'],
+//                        'last_name' => $request->billing['last_name'],
+//                        'first_name' => $request->billing['first_name'],
+//                        'country_id' => $request->billing['country_id'],
+//                        'street' => $request->billing['street'],
+//                        'city' => $request->billing['city'],
+//                        'postal_code' => '',
+//                        'payment_method_id' => $request->billing['payment_method_id'],
+//
+//                    ]);
+//                    $order->shipping_address_id = $newAddress->id;
+//                    $order->billing_address_id = $newAddress->id;
+//
+//                }else{
+//                    CustomerAddress::query()->findOrFail($request->billing_address_id)->update([
+//                        'customer_id' => $request->customer_id,
+//                        'phone_number' => $request->billing['phone_number'],
+//                        'email_address' => $request->billing['email_address'],
+//                        'address_2' => $request->billing['address_2'],
+//                        'address_1' => $request->billing['address_1'],
+//                        'company_name' => $request->billing['company_name'],
+//                        'last_name' => $request->billing['last_name'],
+//                        'first_name' => $request->billing['first_name'],
+//                        'country_id' => $request->billing['country_id'],
+//                        'street' => $request->billing['street'],
+//                        'city' => $request->billing['city'],
+//                        'postal_code' => '',
+//                        'payment_method_id' => $request->billing['payment_method_id'],
+//                    ]);
+//                    $order->shipping_address_id = $request->billing_address_id ;
+//                    $order->billing_address_id = $request->billing_address_id ;
+//                }
+//
+//
+//            }else{
+//                if($request->billing['flag_address'] == 'create'){
+//                    $newAddress = CustomerAddress::query()->create([
+//                        'customer_id' => $request->customer_id,
+//                        'phone_number' => $request->billing['phone_number'],
+//                        'email_address' => $request->billing['email_address'],
+//                        'address_2' => $request->billing['address_2'],
+//                        'address_1' => $request->billing['address_1'],
+//                        'company_name' => $request->billing['company_name'],
+//                        'last_name' => $request->billing['last_name'],
+//                        'first_name' => $request->billing['first_name'],
+//                        'country_id' => $request->billing['country_id'],
+//                        'street' => $request->billing['street'],
+//                        'city' => $request->billing['city'],
+//                        'postal_code' => '',
+//                        'payment_method_id' => $request->billing['payment_method_id'],
+//                    ]);
+//                    $order->billing_address_id = $newAddress->id;
+//
+//                }else{
+//                    CustomerAddress::query()->findOrFail($request->billing_address_id)->update([
+//                        'customer_id' => $request->customer_id,
+//                        'phone_number' => $request->billing['phone_number'],
+//                        'email_address' => $request->billing['email_address'],
+//                        'address_2' => $request->billing['address_2'],
+//                        'address_1' => $request->billing['address_1'],
+//                        'company_name' => $request->billing['company_name'],
+//                        'last_name' => $request->billing['last_name'],
+//                        'first_name' => $request->billing['first_name'],
+//                        'country_id' => $request->billing['country_id'],
+//                        'street' => $request->billing['street'],
+//                        'city' => $request->billing['city'],
+//                        'postal_code' => '',
+//                        'payment_method_id' => $request->billing['payment_method_id'],
+//                    ]);
+//                }
+//
+//                if($request->shipping['flag_address'] == 'create'){
+//                    $newAddress = CustomerAddress::query()->create([
+//                        'customer_id' => $request->customer_id,
+//                        'phone_number' => $request->shipping['phone_number'],
+//                        'email_address' => $request->shipping['email_address'],
+//                        'address_2' => $request->shipping['address_2'],
+//                        'address_1' => $request->shipping['address_1'],
+//                        'company_name' => $request->shipping['company_name'],
+//                        'last_name' => $request->shipping['last_name'],
+//                        'first_name' => $request->shipping['first_name'],
+//                        'country_id' => $request->shipping['country_id'],
+//                        'street' => $request->shipping['street'],
+//                        'city' => $request->shipping['city'],
+//                        'postal_code' => '',
+//
+//                    ]);
+//                    $order->shipping_address_id = $newAddress->id;
+//
+//                }else{
+//                    CustomerAddress::query()->findOrFail($request->shipping_address_id)->update([
+//                        'customer_id' => $request->customer_id,
+//                        'phone_number' => $request->shipping['phone_number'],
+//                        'email_address' => $request->shipping['email_address'],
+//                        'address_2' => $request->shipping['address_2'],
+//                        'address_1' => $request->shipping['address_1'],
+//                        'company_name' => $request->shipping['company_name'],
+//                        'last_name' => $request->shipping['last_name'],
+//                        'first_name' => $request->shipping['first_name'],
+//                        'country_id' => $request->shipping['country_id'],
+//                        'street' => $request->shipping['street'],
+//                        'city' => $request->shipping['city'],
+//                        'postal_code' => '',
+//
+//                    ]);
+//                }
+//            }
+//
+
+
             $order->customer_comment = $request->comment;
             $order->order_status_id = $request->status_id;
             $defaultCurrency = Currency::where('is_default',1)->first();
             if(is_null($defaultCurrency)){
                 return $this->errorResponse('There is no default currency!');
             }
-            $order->currency_rate = CurrencyHistory::query()->where('currency_id',1)->latest()->first()->rate;
-
-            $coupon = Coupon::where('code', $request->coupon_code)->first();
+            $order->currency_rate = $request->rate;
 
             $order->is_billing_as_shipping = $request->is_billing_as_shipping;
-            if($request->is_billing_as_shipping){
+
+            if($request->shipping_address_id == $request->billing_address_id || $request->is_billing_as_shipping){
+                $request->is_billing_as_shipping = 1;
+
                 $order->shipping_first_name = $request->billing['first_name'];
                 $order->shipping_last_name = $request->billing['last_name'];
                 $order->shipping_address_one = $request->billing['address_1'];
@@ -153,6 +275,8 @@ class OrdersController extends MainController
                 $order->shipping_company_name = $request->billing['company_name'];
                 $order->shipping_email = $request->billing['email_address'];
                 $order->shipping_phone_number = $request->billing['phone_number'];
+
+
             }else{
                 $order->shipping_first_name = $request->shipping['first_name'];
                 $order->shipping_last_name = $request->shipping['last_name'];
@@ -164,6 +288,9 @@ class OrdersController extends MainController
                 $order->shipping_email = $request->shipping['email_address'];
                 $order->shipping_phone_number = $request->shipping['phone_number'];
             }
+
+            $coupon = Coupon::where('code', $request->coupon_code)->first();
+
             $order->coupon_id =  $coupon ? $coupon->id : 0;
             $products = $request->selected_products;
 
@@ -181,7 +308,7 @@ class OrdersController extends MainController
             $order->payment_method_id = $request->billing['payment_method_id'];
             $order->save();
 
-            OrdersService::createNotesForOrder(order: $order, notes: $request->notes, data :$request->toArray());
+            OrdersService::createNotesForOrder(order: $order, notes: $request->notes ?? [], data :$request->toArray());
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
 
@@ -193,7 +320,7 @@ class OrdersController extends MainController
             $order->save();
 
             $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
-            OrdersService::adjustQuantityOfOrderProducts($order->selected_products);
+            OrdersService::adjustQuantityOfOrderProducts($order->selected_products,$allProducts);
 
             DB::commit();
             return $this->successResponse('The order has been created successfully !', [
@@ -214,13 +341,13 @@ class OrdersController extends MainController
     /**
      * Display the specified resource.
      *
-     * @param Order $id
+     * @param Order Order
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(Order $order)
     {
         $orderProducts =  OrderProduct::where('order_id',$order->id)->get();
-        $allProducts = Product::with(['tax','pricesList'])->get()->toArray();
+        $allProducts = Product::with(['tax','pricesList'])->get();
         $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
         $allTaxes = Tax::all();
         $defaultCurrency = Currency::where('is_default',1)->first();
@@ -253,7 +380,7 @@ class OrdersController extends MainController
     public function update(StoreOrderRequest $request, Order $order)
     {
         $productIds = (collect($request->selected_products)->pluck('id'));
-        $allProducts = Product::with(['tax','pricesList'])->findMany($productIds)->toArray();
+        $allProducts = Product::with(['tax','pricesList'])->findMany($productIds);
         $oldProducts = $order->products;
         $oldOrderProducts = OrderProduct::query()->where('order_id',$order->id)->get();
         $allOrdersWithProducts = OrderProduct::all()->toArray();
@@ -272,10 +399,135 @@ class OrdersController extends MainController
             $order->customer_comment = $request->comment;
             $order->order_status_id = $request->status_id;
 
+            $order->currency_rate = $request->rate;
+
+            $order->shipping_address_id = $request->shipping_address_id ?? 0;
+            $order->billing_address_id = $request->billing_address_id ?? 0;
+
+//            if($request->shipping_address_id == $request->billing_address_id || $request->is_billing_as_shipping){
+//                if($request->billing['flag_address'] == 'create'){
+//                    $newAddress = CustomerAddress::query()->create([
+//                        'customer_id' => $request->customer_id,
+//                        'phone_number' => $request->billing['phone_number'],
+//                        'email_address' => $request->billing['email_address'],
+//                        'address_2' => $request->billing['address_2'],
+//                        'address_1' => $request->billing['address_1'],
+//                        'company_name' => $request->billing['company_name'],
+//                        'last_name' => $request->billing['last_name'],
+//                        'first_name' => $request->billing['first_name'],
+//                        'country_id' => $request->billing['country_id'],
+//                        'street' => $request->billing['street'],
+//                        'city' => $request->billing['city'],
+//                        'postal_code' => '',
+//                        'payment_method_id' => $request->billing['payment_method_id'],
+//
+//                    ]);
+//                    $order->shipping_address_id = $newAddress->id;
+//                    $order->billing_address_id = $newAddress->id;
+//
+//                }else{
+//                    CustomerAddress::query()->findOrFail($request->billing_address_id)->update([
+//                        'customer_id' => $request->customer_id,
+//                        'phone_number' => $request->billing['phone_number'],
+//                        'email_address' => $request->billing['email_address'],
+//                        'address_2' => $request->billing['address_2'],
+//                        'address_1' => $request->billing['address_1'],
+//                        'company_name' => $request->billing['company_name'],
+//                        'last_name' => $request->billing['last_name'],
+//                        'first_name' => $request->billing['first_name'],
+//                        'country_id' => $request->billing['country_id'],
+//                        'street' => $request->billing['street'],
+//                        'city' => $request->billing['city'],
+//                        'postal_code' => '',
+//                        'payment_method_id' => $request->billing['payment_method_id'],
+//                    ]);
+//                    $order->shipping_address_id = $request->billing_address_id ;
+//                    $order->billing_address_id = $request->billing_address_id ;
+//                }
+//
+//
+//            }else{
+//                if($request->billing['flag_address'] == 'create'){
+//                    $newAddress = CustomerAddress::query()->create([
+//                        'customer_id' => $request->customer_id,
+//                        'phone_number' => $request->billing['phone_number'],
+//                        'email_address' => $request->billing['email_address'],
+//                        'address_2' => $request->billing['address_2'],
+//                        'address_1' => $request->billing['address_1'],
+//                        'company_name' => $request->billing['company_name'],
+//                        'last_name' => $request->billing['last_name'],
+//                        'first_name' => $request->billing['first_name'],
+//                        'country_id' => $request->billing['country_id'],
+//                        'street' => $request->billing['street'],
+//                        'city' => $request->billing['city'],
+//                        'postal_code' => '',
+//                        'payment_method_id' => $request->billing['payment_method_id'],
+//                    ]);
+//                    $order->billing_address_id = $newAddress->id;
+//
+//                }else{
+//                    CustomerAddress::query()->findOrFail($request->billing_address_id)->update([
+//                        'customer_id' => $request->customer_id,
+//                        'phone_number' => $request->billing['phone_number'],
+//                        'email_address' => $request->billing['email_address'],
+//                        'address_2' => $request->billing['address_2'],
+//                        'address_1' => $request->billing['address_1'],
+//                        'company_name' => $request->billing['company_name'],
+//                        'last_name' => $request->billing['last_name'],
+//                        'first_name' => $request->billing['first_name'],
+//                        'country_id' => $request->billing['country_id'],
+//                        'street' => $request->billing['street'],
+//                        'city' => $request->billing['city'],
+//                        'postal_code' => '',
+//                        'payment_method_id' => $request->billing['payment_method_id'],
+//                    ]);
+//                }
+//
+//                if($request->shipping['flag_address'] == 'create'){
+//                    $newAddress = CustomerAddress::query()->create([
+//                        'customer_id' => $request->customer_id,
+//                        'phone_number' => $request->shipping['phone_number'],
+//                        'email_address' => $request->shipping['email_address'],
+//                        'address_2' => $request->shipping['address_2'],
+//                        'address_1' => $request->shipping['address_1'],
+//                        'company_name' => $request->shipping['company_name'],
+//                        'last_name' => $request->shipping['last_name'],
+//                        'first_name' => $request->shipping['first_name'],
+//                        'country_id' => $request->shipping['country_id'],
+//                        'street' => $request->shipping['street'],
+//                        'city' => $request->shipping['city'],
+//                        'postal_code' => '',
+//
+//                    ]);
+//                    $order->shipping_address_id = $newAddress->id;
+//
+//                }else{
+//                    CustomerAddress::query()->findOrFail($request->shipping_address_id)->update([
+//                        'customer_id' => $request->customer_id,
+//                        'phone_number' => $request->shipping['phone_number'],
+//                        'email_address' => $request->shipping['email_address'],
+//                        'address_2' => $request->shipping['address_2'],
+//                        'address_1' => $request->shipping['address_1'],
+//                        'company_name' => $request->shipping['company_name'],
+//                        'last_name' => $request->shipping['last_name'],
+//                        'first_name' => $request->shipping['first_name'],
+//                        'country_id' => $request->shipping['country_id'],
+//                        'street' => $request->shipping['street'],
+//                        'city' => $request->shipping['city'],
+//                        'postal_code' => '',
+//
+//                    ]);
+//                }
+//            }
+
+            if($request->shipping_address_id == $request->billing_address_id){
+                $request->is_billing_as_shipping = 1;
+                $order->is_billing_as_shipping = 1;
+            }
+
             if(is_null($defaultCurrency)){
                 return $this->errorResponse('There is no default currency!');
             }
-            $order->currency_rate = CurrencyHistory::query()->where('currency_id',1)->latest()->first()->rate;
 
             $coupon = Coupon::where('code', $request->coupon_code)->first();
 
@@ -321,25 +573,26 @@ class OrdersController extends MainController
 
             $order->save();
 
-
             OrdersService::updateNotesForOrder($order,$request->notes ?? [] , $request->toArray());
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
+
+
 //
 //            if($order->total != $request->total_price){
 //                return $this->errorResponse('The calculated price is invalid!, please try again later');
 //            }
-
-            $differencePrice = abs(($order->total + 12) - $request->total_price);
-            if($differencePrice >= 0.001){
-                return $this->errorResponse(
-                    'Sorry but there was a problem with the calculations! ',
-                    [
-                        'shipping' => 12,
-                        'order_total' => $order->total
-                    ]
-                );
-            }
+//
+//            $differencePrice = abs(($order->total + 12) - $request->total_price);
+//            if($differencePrice >= 0.001){
+//                return $this->errorResponse(
+//                    'Sorry but there was a problem with the calculations! ',
+//                    [
+//                        'shipping' => 12,
+//                        'order_total' => $order->total
+//                    ]
+//                );
+//            }
 
             $order->save();
 

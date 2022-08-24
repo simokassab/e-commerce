@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('orders',function(Blueprint $table){
             $table->unsignedBigInteger('shipping_address_id');
-            $table->unsignedBigInteger('shipping_address_id');
+            $table->unsignedBigInteger('billing_address_id');
         });
     }
 
@@ -26,6 +26,14 @@ return new class extends Migration
      */
     public function down()
     {
+
+        if(Schema::hasColumns('orders',['shipping_address_id', 'shipping_address_id'])){
+            Schema::table('orders',function(Blueprint $table){
+                $table->dropColumn('shipping_address_id');
+                $table->dropColumn('billing_address_id');
+            });
+        }
+
 
     }
 };
