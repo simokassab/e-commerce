@@ -174,8 +174,7 @@ class Product extends MainModel
     /**
      * @throws Exception
      */
-    public function updateProductQuantity(int $quantity, string $method){
-
+    public function updateProductQuantity(float $quantity, string $method){
             if($method != 'add' && $method != 'sub'){
                 throw new \Exception('Bad method type '.$method);
             }
@@ -186,6 +185,7 @@ class Product extends MainModel
                 if($method == 'add'){
                     return $this->addQuantityForNormalAndVariableChild($quantity);
                 }else{
+
                     return $this->subQuantityForNormalAndVariableChild($quantity);
                 }
             }
@@ -202,7 +202,7 @@ class Product extends MainModel
 
     }
 
-    protected function addQuantityForNormalAndVariableChild(int $quantity){
+    protected function addQuantityForNormalAndVariableChild(float $quantity){
         $this->quantity += $quantity;
         if($this->save())
             return $this;
@@ -213,7 +213,7 @@ class Product extends MainModel
     /**
      * @throws Exception
      */
-    protected function subQuantityForNormalAndVariableChild(int $quantity){
+    protected function subQuantityForNormalAndVariableChild(float $quantity){
         //TODO: change the settings instead of sending a query get them from the cache
         $isAllowNegativeQuantity = Setting::where('title','allow_negative_quantity')->first()->value;
         if($isAllowNegativeQuantity){
@@ -244,7 +244,7 @@ class Product extends MainModel
     /**
      * @throws Exception
      */
-    private function addQuantityForBundle(int $quantity, array $allProducts = [], array $allRelatedProducts = [])
+    private function addQuantityForBundle(float $quantity, array $allProducts = [], array $allRelatedProducts = [])
     {
         $allProducts = count($allProducts) > 0 ? $allProducts : self::all();
         $allRelatedProducts = count($allRelatedProducts) > 0 ? $allRelatedProducts : ProductRelated::all()->toArray();
@@ -336,7 +336,7 @@ class Product extends MainModel
     /**
      * @throws Exception
      */
-    private function subQuantityForBundle(int $quantity, array $allProducts = [], array $allRelatedProducts = [])
+    private function subQuantityForBundle(float $quantity, array $allProducts = [], array $allRelatedProducts = [])
     {
         $allProducts = count($allProducts) > 0 ? $allProducts : self::all();
         $allRelatedProducts = count($allRelatedProducts) > 0 ? $allRelatedProducts : ProductRelated::all();
@@ -427,7 +427,7 @@ class Product extends MainModel
      * @throws Exception
      *
      */
-    public function hasEnoughRelatedProductsQuantity(int $quantity, array $allProducts = [], array $allRelatedProducts = []):bool{
+    public function hasEnoughRelatedProductsQuantity(float $quantity, array $allProducts = [], array $allRelatedProducts = []):bool{
         if($this->type != 'bundle'){
             throw new Exception('Call hasEnoughRelatedProductsQuantity on wrong product type not bundle');
         }

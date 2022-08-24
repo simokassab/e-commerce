@@ -46,11 +46,10 @@ class OrdersService {
             }else{
                 $tax = $taxObject->percentage * $priceOfUnit/100;
             }
-            $productsEloquentCollection->where('id',3)->first()->updateProductQuantity($product['quantity'],'sub');
             $productsOrders[$key]['order_id'] = $order->id;
             $productsOrders[$key]['product_id'] = $product['id'];
             $productsOrders[$key]['quantity'] = $product['quantity'];
-            $productsOrders[$key]['unit_price'] = $product['unit_price'];
+            $productsOrders[$key]['unit_price'] = $product['unit_price']* $currentRate;
             $productsOrders[$key]['tax_percentage'] = $taxObject->percentage;
             $productsOrders[$key]['tax_amount'] = $tax * $currentRate;
             $productsOrders[$key]['total'] = ($product['unit_price'] * $product['quantity'] * $currentRate);
@@ -72,14 +71,14 @@ class OrdersService {
         if(!is_null($coupon) && ($coupon->is_one_time && $coupon->is_used)){
             throw new \Exception('The coupon was already used!');
         }
+
         $amountToBeDiscounted = 0;
 
         if(!is_null($coupon)){
             $amountToBeDiscounted = is_null($coupon->discount_percentage) ? $coupon->discount_amount : ($coupon->discount_percentage/100)*$order->total;
         }
 
-
-        $order->total = $total - $amountToBeDiscounted;
+        $order->total = $total - ($amountToBeDiscounted * $currentRate);
         $order->tax_total = $totalTax;
         return $productsOrders;
     }
@@ -140,8 +139,7 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
     public static function adjustQuantityOfOrderProducts(array $orderProducts,$allProducts): void
     {
         foreach ($orderProducts as $orderProduct){
-            $allProducts->find($orderProduct['id'])->updateProductQuantity($orderProduct['quantity'],'sub');
-
+            $allProducts->where('id',$orderProduct['id'])->first()->updateProductQuantity($orderProduct['quantity'],'sub');
         }
 
     }
