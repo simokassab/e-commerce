@@ -69,7 +69,7 @@ class SingleProductResource extends JsonResource
             'is_show_related_product' => (bool)$this->is_show_related_product,
             'website_status' => $this->website_status,
             'pre_order' => (int)$this->pre_order ?? 0,
-            'prices' => ProductPriceResoruce::collection($this->whenLoaded('priceClass')->load('currency')) ?? [],
+            'prices' => ProductPriceResoruce::collection($this->whenLoaded('price')->load('priceClass.currency')) ?? [],
             'fields' => SingleFieldResource::collection($this->whenLoaded('field'))->where('is_attribute',0) ?? [],
             'attributes' => SingleFieldResource::collection($this->whenLoaded('field'))->where('is_attribute',1) ?? [],
             'tags' => TagResource::collection($this->whenLoaded('tags')),
