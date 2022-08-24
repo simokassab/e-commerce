@@ -40,8 +40,8 @@ class StoreOrderRequest extends FormRequest
 //            "time" => "required|date_format:H:i",
 //            "date" => "required|date_format:format",
 
-            "shipping_address_id" => 'required',
-            "billing_address_id" => 'required',
+            "shipping_address_id" => 'nullable',
+            "billing_address_id" => 'nullable',
             "comment" => "nullable",
             "notes" => 'nullable|array',
             "notes.*.title" => 'required|string',
