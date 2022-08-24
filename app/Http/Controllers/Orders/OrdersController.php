@@ -132,8 +132,8 @@ class OrdersController extends MainController
             $order->currency_id = $request->currency_id;
             $order->time = now();
 
-            $order->shipping_address_id = $request->shipping_address_id ?? 0;
-            $order->billing_address_id = $request->billing_address_id ?? 0;
+            $order->shipping_address_id = $request->shipping_address_id ?? null;
+            $order->billing_address_id = $request->billing_address_id ?? null;
 
 //            if($request->shipping_address_id == $request->billing_address_id || $request->is_billing_as_shipping){
 //                if($request->billing['flag_address'] == 'create'){
@@ -291,7 +291,7 @@ class OrdersController extends MainController
 
             $coupon = Coupon::where('code', $request->coupon_code)->first();
 
-            $order->coupon_id =  $coupon ? $coupon->id : 0;
+            $order->coupon_id =  $coupon ? $coupon->id : null;
             $products = $request->selected_products;
 
             $order->prefix =uniqid('order-');
@@ -401,8 +401,8 @@ class OrdersController extends MainController
 
             $order->currency_rate = $request->rate;
 
-            $order->shipping_address_id = $request->shipping_address_id ?? 0;
-            $order->billing_address_id = $request->billing_address_id ?? 0;
+            $order->shipping_address_id = $request->shipping_address_id ?? null;
+            $order->billing_address_id = $request->billing_address_id ?? null;
 
 //            if($request->shipping_address_id == $request->billing_address_id || $request->is_billing_as_shipping){
 //                if($request->billing['flag_address'] == 'create'){
@@ -424,6 +424,7 @@ class OrdersController extends MainController
 //                    ]);
 //                    $order->shipping_address_id = $newAddress->id;
 //                    $order->billing_address_id = $newAddress->id;
+//                    $order->is_billing_as_shipping = true;
 //
 //                }else{
 //                    CustomerAddress::query()->findOrFail($request->billing_address_id)->update([
@@ -531,7 +532,7 @@ class OrdersController extends MainController
 
             $coupon = Coupon::where('code', $request->coupon_code)->first();
 
-            $order->coupon_id =  $coupon ? $coupon->id : 0;
+            $order->coupon_id =  $coupon ? $coupon->id : null;
             $products = $request->selected_products;
             $order->is_billing_as_shipping = $request->is_billing_as_shipping;
             if($request->is_billing_as_shipping){
