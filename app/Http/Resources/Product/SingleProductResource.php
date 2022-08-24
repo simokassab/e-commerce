@@ -77,7 +77,7 @@ class SingleProductResource extends JsonResource
             'categories' => $nestedCategories,
             'related_products' => $this->whenLoaded('productRelatedChildren') ? $this->whenLoaded('productRelatedChildren') : [],
             'variations' => $this->whenLoaded('children') ? $this->whenLoaded('children') : [],
-            'images' => $this->whenLoaded('images') ? $this->whenLoaded('images') : [],
+            'images' => ProductImagesResource::collection($this->whenLoaded('images')) ?? [],
         ];
     }
 }

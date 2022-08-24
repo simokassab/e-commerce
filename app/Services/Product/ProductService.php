@@ -291,21 +291,20 @@ class ProductService
     public function calculateBundleReservedQuantities($request)
     {
         DB::beginTransaction();
-        try{
-        $canMakeBundle = $this->canMakeBundle($request);
-        $bundleReservedQuantity = [];
-        foreach ($request->related_products as $related_product => $value) {
-            $bundleReservedQuantity[$related_product]['id'] = $value['child_product_id'];
-            $bundleReservedQuantity[$related_product]['bundle_reserved_quantity'] = $value['child_quantity'] * $request->quantity;
+        try {
+            $canMakeBundle = $this->canMakeBundle($request);
+            $bundleReservedQuantity = [];
+            foreach ($request->related_products as $related_product => $value) {
+                $bundleReservedQuantity[$related_product]['id'] = $value['child_product_id'];
+                $bundleReservedQuantity[$related_product]['bundle_reserved_quantity'] = $value['child_quantity'] * $request->quantity;
+            }
+
+            batch()->update(new Product, $bundleReservedQuantity, 'id');
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
         }
-
-        batch()->update(new Product, $bundleReservedQuantity, 'id');
-        DB::commit();
-    }catch(Exception $e){
-        DB::rollBack();
-        throw new Exception($e->getMessage());
-    }
-
     }
 
     public function calculateReservedQuantity($request, $product)
@@ -509,9 +508,9 @@ class ProductService
             $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
         }
 
-            $childrenIdsArray = $childrenIds;
-            $data = [];
-            foreach ($childrenIdsArray as $key => $child) {
+        $childrenIdsArray = $childrenIds;
+        $data = [];
+        foreach ($childrenIdsArray as $key => $child) {
             foreach ($pricesInfo as $key => $price) {
                 $data[] = [
                     'product_id' => $child,
@@ -521,7 +520,7 @@ class ProductService
                     'created_at' =>  Carbon::now()->toDateTimeString(),
                     'updated_at' => Carbon::now()->toDateTimeString(),
                 ];
-                }
+            }
         }
         ProductPrice::Insert($data);
     }
@@ -531,7 +530,7 @@ class ProductService
         DB::beginTransaction();
         try {
 
-throw_if(!$request->product_variations, Exception::class, 'No variations found');
+            throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
             $productVariationParentsArray = [];
             foreach ($request->product_variations as $variation) {
@@ -575,23 +574,21 @@ throw_if(!$request->product_variations, Exception::class, 'No variations found')
 
                 ];
                 $productVariationParentsArray[] = $productVariationsArray;
-
             }
             $model = new Product();
-            $productVariation = Product::upsert($productVariationParentsArray,'id',$model->getFillable());
+            $productVariation = Product::upsert($productVariationParentsArray, 'id', $model->getFillable());
             $childrenIds = [];
-           if($productVariation){
+            if ($productVariation) {
 
-               $childrenData=Product::where('parent_product_id',$product->id)->get();
-               foreach ($childrenData as $key => $child) {
-                $childrenIds[$key]=$child->id;
-            }
+                $childrenData = Product::where('parent_product_id', $product->id)->get();
+                foreach ($childrenData as $key => $child) {
+                    $childrenIds[$key] = $child->id;
+                }
 
                 $this->storeImagesForVariations($request, $childrenIds);
                 $this->storePricesForVariations($request, $childrenIds);
                 $this->storeFieldsForVariations($request, $childrenIds);
                 $this->storeAttributesForVariations($request, $childrenIds);
-
             }
 
             if (count($childrenIds) > 0) {
@@ -609,51 +606,48 @@ throw_if(!$request->product_variations, Exception::class, 'No variations found')
     {
         // DB::beginTransaction();
         // try {
-            //$request=(object)$request;
-            $product = $product ?  $product : new Product();
-            $product->name = ($request->name);
-            $product->slug = $request->slug;
-            $product->code = $request->code;
-            $product->sku = $request->sku;
-            $product->type = $request->type;
-            $product->quantity = $request->quantity;
-            $product->reserved_quantity = $request->reserved_quantity;
-            $product->minimum_quantity = $request->minimum_quantity;
-            $product->summary = ($request->summary);
-            $product->specification = ($request->specification);
-            if ($request->image)
-                $product->image = uploadImage($request->image, config('images_paths.product.images'));
+        //$request=(object)$request;
+        $product = $product ?  $product : new Product();
+        $product->name = ($request->name);
+        $product->slug = $request->slug;
+        $product->code = $request->code;
+        $product->sku = $request->sku;
+        $product->type = $request->type;
+        $product->quantity = $request->quantity;
+        $product->reserved_quantity = $request->reserved_quantity;
+        $product->minimum_quantity = $request->minimum_quantity;
+        $product->summary = ($request->summary);
+        $product->specification = ($request->specification);
+        if ($request->image)
+            $product->image = uploadImage($request->image, config('images_paths.product.images'));
 
-            $product->meta_title = $request->meta_title ?? null;
-            $product->meta_keyword = $request->meta_keyword ?? null;
-            $product->meta_description = $request->meta_description ?? null;
-            $product->description = $request->description ?? null;
-            $product->website_status = $request->website_status;
-            $product->barcode = $request->barcode;
-            $product->height = $request->height;
-            $product->width = $request->width;
-            $product->is_disabled = 0;
-            $product->length = $request->p_length;
-            $product->weight = $request->weight;
-            $product->is_default_child = $request->is_default_child ?? 0;
-            $product->parent_product_id = $request->parent_product_id ?? null;
-            $product->category_id = $request->category_id;
-            $product->unit_id = $request->unit_id;
-            $product->brand_id = $request->brand_id;
-            $product->tax_id = $request->tax_id;
-            $product->products_statuses_id = $request->products_statuses_id;
-            $product->is_show_related_product = $request->is_show_related_product ?? 0;
-            $product->pre_order = $request->pre_order ?? 0;
-            $product->bundle_reserved_quantity = null;
-            $product->save();
-            // DB::commit();
-            return $product;
+        $product->meta_title = $request->meta_title ?? null;
+        $product->meta_keyword = $request->meta_keyword ?? null;
+        $product->meta_description = $request->meta_description ?? null;
+        $product->description = $request->description ?? null;
+        $product->website_status = $request->website_status;
+        $product->barcode = $request->barcode;
+        $product->height = $request->height;
+        $product->width = $request->width;
+        $product->is_disabled = 0;
+        $product->length = $request->p_length;
+        $product->weight = $request->weight;
+        $product->is_default_child = $request->is_default_child ?? 0;
+        $product->parent_product_id = $request->parent_product_id ?? null;
+        $product->category_id = $request->category_id;
+        $product->unit_id = $request->unit_id;
+        $product->brand_id = $request->brand_id;
+        $product->tax_id = $request->tax_id;
+        $product->products_statuses_id = $request->products_statuses_id;
+        $product->is_show_related_product = $request->is_show_related_product ?? 0;
+        $product->pre_order = $request->pre_order ?? 0;
+        $product->bundle_reserved_quantity = null;
+        $product->save();
+        // DB::commit();
+        return $product;
         // } catch (Exception $e) {
-            // DB::rollBack();
-            // throw new Exception($e->getMessage());
+        // DB::rollBack();
+        // throw new Exception($e->getMessage());
         // }
     }
-
-
-
 }
