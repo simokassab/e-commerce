@@ -20,7 +20,7 @@ class ProductPriceResoruce extends JsonResource
             'price_id' => (int)$this->price_id,
             'price' => (float)$this->price,
             'discounted_price' => (float)$this->discounted_price,
-            'currency' => ($this->whenLoaded('currency')->code.' - '.$this->whenLoaded('currency')->symbol)  ?? '-',
+            'currency' => ($this->whenLoaded('priceClass.currency')->code.' - '.$this->whenLoaded('priceClass.currency')->symbol)  ?? '-',
         ];
     }
 }
