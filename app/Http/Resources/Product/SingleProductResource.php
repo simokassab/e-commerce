@@ -18,6 +18,7 @@ use App\Http\Resources\Tax\SingleTaxResource;
 use App\Http\Resources\Unit\SelectUnitResource;
 use App\Http\Resources\Unit\SingleUnitResource;
 use App\Models\Category\Category;
+use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
 use App\Services\Category\CategoryService;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -35,6 +36,9 @@ class SingleProductResource extends JsonResource
         $categoriesForNested = $this->whenLoaded('category');
         $nestedCategories = CategoryService::getAllCategoriesNested($categoriesForNested);
 
+        // $childrenIds = Product::where('parent_product_id',$request->input('id'))->get();
+        // dd($childrenIds);/
+
         return [
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
@@ -50,6 +54,7 @@ class SingleProductResource extends JsonResource
             'summary' => $this->getTranslations('summary') ?? [],
             'specification' => $this->getTranslations('specification')  ?? [],
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
+            'image_path' => $this->image ?? 'default_image',
             'brand' => $this->whenLoaded('brand') ? new SelectBrandResource($this->whenLoaded('brand')) :[],
             'tax' => $this->whenLoaded('tax') ? new SelectTaxResource($this->whenLoaded('tax')) : [],
             'meta_title' => $this->getTranslations('meta_title')  ?? [],
