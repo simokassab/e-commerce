@@ -19,21 +19,25 @@ class OrdersService {
      * @param array $productsOfOrder
      * @param Order $order
      * @return array
+     * @throws \Exception
      */
     public static function calculateTotalOrderPrice(array $productsOfOrder = [], Order $order): array
     {
+        $currentRate = $order->currency_rate;
+
         $taxes = Tax::all();
         $allTaxComponents = TaxComponent::all();
-        $products = Product::query()->findMany(collect($productsOfOrder)->pluck('id'))->toArray();
-        $products = collect($products);
-        $prices = ProductPrice::all();
+
+        $productsEloquentCollection = Product::query()->findMany(collect($productsOfOrder)->pluck('id'));
+        $products = collect($productsEloquentCollection->toArray());
+        $prices = ProductPrice::query()->whereIn('product_id',collect($productsOfOrder)->pluck('id'))->get()->toArray();
         $total = 0;
 
         $totalTax = 0;
         $productsOrders = [];
 
         foreach ($productsOfOrder as $key => $product){
-            $priceOfUnit = $prices->where('product_id' , $product['id'])->where('price_id',1)->first() ? $prices->where('product_id' , $product['id'])->where('price_id',1)->first()->price : 0;
+            $priceOfUnit = collect($prices)->where('product_id' , $product['id'])->where('price_id',1)->first() ? collect($prices)->where('product_id' , $product['id'])->where('price_id',1)->first()['price'] : 0;
             $mainProduct = $products->where('id',$product['id'])->first();
             $taxObject = $taxes->where('id',$mainProduct['tax_id'])->first();
             if($taxObject->is_complex){
@@ -42,19 +46,18 @@ class OrdersService {
             }else{
                 $tax = $taxObject->percentage * $priceOfUnit/100;
             }
-
-
+            $productsEloquentCollection->where('id',3)->first()->updateProductQuantity($product['quantity'],'sub');
             $productsOrders[$key]['order_id'] = $order->id;
             $productsOrders[$key]['product_id'] = $product['id'];
             $productsOrders[$key]['quantity'] = $product['quantity'];
             $productsOrders[$key]['unit_price'] = $product['unit_price'];
             $productsOrders[$key]['tax_percentage'] = $taxObject->percentage;
-            $productsOrders[$key]['tax_amount'] = $tax;
-            $productsOrders[$key]['total'] = $product['unit_price'] * $product['quantity'];
+            $productsOrders[$key]['tax_amount'] = $tax * $currentRate;
+            $productsOrders[$key]['total'] = ($product['unit_price'] * $product['quantity'] * $currentRate);
 
             $productsOrders[$key]['created_at'] = now();
             $productsOrders[$key]['updated_at'] = now();
-            $total += $productsOrders[$key]['total'];
+            $total += $productsOrders[$key]['total'] + $tax ;
             $totalTax += $tax;
         }
         OrderProduct::insert($productsOrders);
@@ -66,23 +69,20 @@ class OrdersService {
         $order->discount_percentage = $coupon ? $coupon->discount_percentage : 0;
         $order->discount_amount = $coupon ? $coupon->discount_amount : 0;
 
+        if(!is_null($coupon) && ($coupon->is_one_time && $coupon->is_used)){
+            throw new \Exception('The coupon was already used!');
+        }
+        $amountToBeDiscounted = 0;
+
         if(!is_null($coupon)){
-            if($coupon->is_one_time && $coupon->is_used){
-                throw new \Exception('The coupon is already used!');
-            }
+            $amountToBeDiscounted = is_null($coupon->discount_percentage) ? $coupon->discount_amount : ($coupon->discount_percentage/100)*$order->total;
         }
 
-        $order->total = $total;
+
+        $order->total = $total - $amountToBeDiscounted;
         $order->tax_total = $totalTax;
         return $productsOrders;
     }
-
-//
-//if(collect($selectedProducts)->contains('id',$orderProduct['product_id'])){
-//dd($selectedProducts);
-//$selectedProducts[$orderProduct['product_id']]['quantity'] += $orderProduct['quantity'];
-//continue;
-//}
 
 
 public static function generateOrderProducts($productsOrders,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency): array

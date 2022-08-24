@@ -287,10 +287,17 @@ class OrdersController extends MainController
             $order->customer_comment = $request->comment;
             $order->order_status_id = $request->status_id;
             $defaultCurrency = Currency::where('is_default',1)->first();
+            $selectedCurrency = Currency::query()->find($request->currency_id);
             if(is_null($defaultCurrency)){
                 return $this->errorResponse('There is no default currency!');
             }
+
             $order->currency_rate = $request->rate;
+
+            if($request->currency_id == $defaultCurrency->id){
+                $order->currency_rate = 1;
+            }
+
 
             $order->is_billing_as_shipping = $request->is_billing_as_shipping;
 
@@ -350,7 +357,7 @@ class OrdersController extends MainController
 
             $order->save();
 
-            $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
+            $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$defaultPricingClass,$allTaxComponents,$allTaxes,$selectedCurrency);
             OrdersService::adjustQuantityOfOrderProducts($order->selected_products,$allProducts);
 
             DB::commit();
@@ -377,6 +384,7 @@ class OrdersController extends MainController
      */
     public function show(Order $order)
     {
+        $selectedCurrency = Currency::query()->find($order->currency_id);
         $orderProducts =  OrderProduct::where('order_id',$order->id)->get();
         $allProducts = Product::with(['tax','pricesList'])->get();
         $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
@@ -384,7 +392,7 @@ class OrdersController extends MainController
         $defaultCurrency = Currency::where('is_default',1)->first();
         $allTaxComponents = TaxComponent::all();
 
-        $order->selected_products =  OrdersService::generateOrderProducts($orderProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
+        $order->selected_products =  OrdersService::generateOrderProducts($orderProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$selectedCurrency);
         return $this->successResponse(data: [
             'order' => new SingelOrdersResource($order->load(['status','coupon','products','notes']))
         ]);
@@ -410,6 +418,7 @@ class OrdersController extends MainController
      */
     public function update(StoreOrderRequest $request, Order $order)
     {
+        $selectedCurrency = Currency::query()->find($request->currency_id);
         $productIds = (collect($request->selected_products)->pluck('id'));
         $allProducts = Product::with(['tax','pricesList'])->findMany($productIds);
         $oldProducts = $order->products;
@@ -422,8 +431,164 @@ class OrdersController extends MainController
             $orderProducts =  OrderProduct::where('order_id',$order->id)->get();
             $defaultCurrency = Currency::where('is_default',1)->first();
 
+            if($request->currency_id == $defaultCurrency->id){
+                $order->currency_rate = 1;
+            }
+
             $order->customer_id = $request->client_id;
             $order->currency_id = $request->currency_id;
+
+            $order->shipping_first_name = $request->shipping['first_name'];
+            $order->shipping_last_name = $request->shipping['last_name'];
+            $order->shipping_address_one = $request->shipping['address_1'];
+            $order->shipping_address_two = $request->shipping['address_2'];
+            $order->shipping_country_id = $request->shipping['country_id'];
+            $order->shipping_city = $request->shipping['city'];
+            $order->shipping_company_name = $request->shipping['company_name'];
+            $order->shipping_email = $request->shipping['email_address'];
+            $order->shipping_phone_number = $request->shipping['phone_number'];
+
+
+            $order->billing_first_name = $request->billing['first_name'];
+            $order->billing_last_name = $request->billing['last_name'];
+            $order->billing_address_one = $request->billing['address_1'];
+            $order->billing_address_two = $request->billing['address_2'];
+            $order->billing_country_id = $request->billing['country_id'];
+            $order->billing_city = $request->billing['city'];
+            $order->billing_company_name = $request->billing['company_name'];
+            $order->billing_email = $request->billing['email_address'];
+            $order->billing_phone_number = $request->billing['phone_number'];
+
+            $order->shipping_address_id = $request->shipping_address_id;
+            $order->billing_address_id = $request->billing_address_id;
+
+            if($request->shipping_address_id == $request->billing_address_id || $request->is_billing_as_shipping){
+                $newAddress = null;
+                if($request->billing['edit_type'] == 'create'){
+                    $newAddress = CustomerAddress::query()->create([
+                        'customer_id' => $request->client_id,
+                        'phone_number' => $request->billing['phone_number'],
+                        'email_address' => $request->billing['email_address'],
+                        'address_2' => $request->billing['address_2'],
+                        'address_1' => $request->billing['address_1'],
+                        'company_name' => $request->billing['company_name'],
+                        'last_name' => $request->billing['last_name'],
+                        'first_name' => $request->billing['first_name'],
+                        'country_id' => $request->billing['country_id'],
+                        'city' => $request->billing['city'],
+                        'postal_code' => '',
+                        'payment_method_id' => $request->billing['payment_method_id'],
+
+                    ]);
+
+                }elseif($request->billing['edit_type'] == 'update' && !is_null($request->billing_address_id)){
+                    $newAddress = CustomerAddress::query()->findOrFail($request->billing_address_id)->update([
+                        'customer_id' => $request->client_id,
+                        'phone_number' => $request->billing['phone_number'],
+                        'email_address' => $request->billing['email_address'],
+                        'address_2' => $request->billing['address_2'],
+                        'address_1' => $request->billing['address_1'],
+                        'company_name' => $request->billing['company_name'],
+                        'last_name' => $request->billing['last_name'],
+                        'first_name' => $request->billing['first_name'],
+                        'country_id' => $request->billing['country_id'],
+                        'city' => $request->billing['city'],
+                        'postal_code' => '',
+                        'payment_method_id' => $request->billing['payment_method_id'],
+                    ]);
+                }
+                $order->shipping_address_id = $request->billing_address_id;
+                $order->billing_address_id = $request->billing_address_id;
+
+                $request->is_billing_as_shipping = 1;
+                $order->is_billing_as_shipping = 1;
+
+                $order->shipping_first_name = $request->billing['first_name'];
+                $order->shipping_last_name = $request->billing['last_name'];
+                $order->shipping_address_one = $request->billing['address_1'];
+                $order->shipping_address_two = $request->billing['address_2'];
+                $order->shipping_country_id = $request->billing['country_id'];
+                $order->shipping_city = $request->billing['city'];
+                $order->shipping_company_name = $request->billing['company_name'];
+                $order->shipping_email = $request->billing['email_address'];
+                $order->shipping_phone_number = $request->billing['phone_number'];
+
+            }else{
+
+                if($request->billing['edit_type'] == 'create'){
+                    $newAddress = CustomerAddress::query()->create([
+                        'customer_id' => $request->client_id,
+                        'phone_number' => $request->billing['phone_number'],
+                        'email_address' => $request->billing['email_address'],
+                        'address_2' => $request->billing['address_2'],
+                        'address_1' => $request->billing['address_1'],
+                        'company_name' => $request->billing['company_name'],
+                        'last_name' => $request->billing['last_name'],
+                        'first_name' => $request->billing['first_name'],
+                        'country_id' => $request->billing['country_id'],
+                        'city' => $request->billing['city'],
+                        'postal_code' => '',
+                        'payment_method_id' => $request->billing['payment_method_id'],
+                    ]);
+                    $order->billing_address_id = $newAddress->id;
+
+                }elseif($request->billing['edit_type'] == 'update' && !is_null($request->billing_address_id)){
+                    CustomerAddress::query()->findOrFail($request->billing_address_id)->update([
+                        'customer_id' => $request->client_id,
+                        'phone_number' => $request->billing['phone_number'],
+                        'email_address' => $request->billing['email_address'],
+                        'address_2' => $request->billing['address_2'],
+                        'address_1' => $request->billing['address_1'],
+                        'company_name' => $request->billing['company_name'],
+                        'last_name' => $request->billing['last_name'],
+                        'first_name' => $request->billing['first_name'],
+                        'country_id' => $request->billing['country_id'],
+                        'city' => $request->billing['city'],
+                        'postal_code' => '',
+                        'payment_method_id' => $request->billing['payment_method_id'],
+                    ]);
+
+                    $order->billing_address_id = $request->billing_address_id;
+
+                }
+
+                if($request->shipping['edit_type'] == 'create'){
+                    $newAddress = CustomerAddress::query()->create([
+                        'customer_id' => $request->client_id,
+                        'phone_number' => $request->shipping['phone_number'],
+                        'email_address' => $request->shipping['email_address'],
+                        'address_2' => $request->shipping['address_2'],
+                        'address_1' => $request->shipping['address_1'],
+                        'company_name' => $request->shipping['company_name'],
+                        'last_name' => $request->shipping['last_name'],
+                        'first_name' => $request->shipping['first_name'],
+                        'country_id' => $request->shipping['country_id'],
+                        'city' => $request->shipping['city'],
+                        'postal_code' => '',
+
+                    ]);
+                    $order->shipping_address_id = $newAddress->id;
+
+                }elseif($request->shipping['edit_type'] == 'update' && !is_null($request->shipping_address_id)){
+                    CustomerAddress::query()->findOrFail($request->shipping_address_id)->update([
+                        'customer_id' => $request->client_id,
+                        'phone_number' => $request->shipping['phone_number'],
+                        'email_address' => $request->shipping['email_address'],
+                        'address_2' => $request->shipping['address_2'],
+                        'address_1' => $request->shipping['address_1'],
+                        'company_name' => $request->shipping['company_name'],
+                        'last_name' => $request->shipping['last_name'],
+                        'first_name' => $request->shipping['first_name'],
+                        'country_id' => $request->shipping['country_id'],
+                        'city' => $request->shipping['city'],
+                        'postal_code' => '',
+
+                    ]);
+                    $order->shipping_address_id = $request->billing_address_id;
+
+                }
+            }
+
 
             $order->time = $request->time;
 //            $order->date = new Carbon($request->date)->format('H:i:s');
@@ -432,8 +597,8 @@ class OrdersController extends MainController
 
             $order->currency_rate = $request->rate;
 
-            $order->shipping_address_id = $request->shipping_address_id ?? null;
-            $order->billing_address_id = $request->billing_address_id ?? null;
+            $order->shipping_address_id = $request->shipping_address_id;
+            $order->billing_address_id = $request->billing_address_id;
 
 
             if($request->shipping_address_id == $request->billing_address_id){
@@ -494,7 +659,7 @@ class OrdersController extends MainController
 
 
 
-            $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$defaultPricingClass,$allTaxComponents,$allTaxes,$defaultCurrency);
+            $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$defaultPricingClass,$allTaxComponents,$allTaxes,$selectedCurrency);
             OrdersService::adjustQuantityOfOrderProducts($order->selected_products,$allProducts);
 
             DB::commit();
