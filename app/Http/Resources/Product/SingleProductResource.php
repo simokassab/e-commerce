@@ -39,7 +39,7 @@ class SingleProductResource extends JsonResource
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
             'slug' => $this->slug,
-            'main_category' => $this->whenLoaded('defaultCategory') ? new SelectCategoryResource($this->whenLoaded('defaultCategory')) : [],
+            'category' => $this->whenLoaded('defaultCategory') ? new SelectCategoryResource($this->whenLoaded('defaultCategory')) : [],
             'code' => $this->code,
             'sku' => $this->sku,
             'type' => $this->type,
