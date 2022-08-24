@@ -15,7 +15,6 @@ class ProductPriceResoruce extends JsonResource
     public function toArray($request)
     {
         $price = $this->whenLoaded('prices');
-        dd();
         return [
             'id' => $this->id,
             'product_id' => (int)$this->product_id,
