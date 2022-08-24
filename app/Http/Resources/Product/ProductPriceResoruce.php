@@ -21,7 +21,7 @@ class ProductPriceResoruce extends JsonResource
             'price_id' => (int)$this->price_id,
             'price' => (float)$this->price,
             'discounted_price' => (float)$this->discounted_price,
-            'currency' => $price['currency']->symbol . '-' .$price['currency']->code,
+            'currency' => $price['currency'] ? $price['currency']->code . '-' .$price['currency']->symbol : '-',
         ];
     }
 }
