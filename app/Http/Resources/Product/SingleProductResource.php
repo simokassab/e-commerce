@@ -20,6 +20,7 @@ use App\Http\Resources\Unit\SingleUnitResource;
 use App\Models\Category\Category;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
+use App\Models\Product\ProductField;
 use App\Services\Category\CategoryService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -36,7 +37,9 @@ class SingleProductResource extends JsonResource
         $categoriesForNested = $this->whenLoaded('category');
         $nestedCategories = CategoryService::getAllCategoriesNested($categoriesForNested);
 
-        // $childrenIds = Product::where('parent_product_id',$request->input('id'))->get();
+        // $childrenIds = Product::where('parent_product_id',$request->input('id'))->pluck('id');
+        // $productAttributes = ProductField::whereHas('f',$childrenIds);
+
         // dd($childrenIds);/
 
         return [
