@@ -15,14 +15,14 @@ class ProductPriceResoruce extends JsonResource
     public function toArray($request)
     {
         $price = $this->whenLoaded('prices');
-        dd($price->whenLoaded('currency'));
+        dd();
         return [
             'id' => $this->id,
             'product_id' => (int)$this->product_id,
             'price_id' => (int)$this->price_id,
             'price' => (float)$this->price,
             'discounted_price' => (float)$this->discounted_price,
-            'currency' => ($this->whenLoaded('currency')->code.' - '.$this->whenLoaded('currency')->symbol)  ?? '-',
+            'currency' => $price['currency']->symbol . '-' .$price['currency']->code,
         ];
     }
 }
