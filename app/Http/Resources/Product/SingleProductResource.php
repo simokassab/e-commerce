@@ -19,6 +19,7 @@ use App\Http\Resources\Unit\SelectUnitResource;
 use App\Http\Resources\Unit\SingleUnitResource;
 use App\Models\Category\Category;
 use App\Models\Field\Field;
+use App\Models\Field\FieldValue;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
 use App\Models\Product\ProductField;
@@ -41,12 +42,13 @@ class SingleProductResource extends JsonResource
         $childrenIds = Product::where('parent_product_id',$this->id)->pluck('id')->toArray();
         $productAttributes = ProductField::whereIn('product_id',$childrenIds)->get();
         
-        $attributesIds=[];
-        foreach ($productAttributes as $key => $productAttribute) {
-            $attributesIds[]= $productAttribute['field_id'];
-        }
-        $attributes = Field::whereIn('id', $attributesIds)->get();
-        dd($attributes->toArray());
+        // $attributesIds=[];
+        // foreach ($productAttributes as $key => $productAttribute) {
+        //     $attributesIds[]= $productAttribute['field_id'];
+        // }
+        // $attributes = Field::whereIn('id', $attributesIds)->get();
+        // $attributeValues=FieldValue::whereIn
+        dd($productAttributes->toArray());
         // $productAttributes = Product:
         // $productAttributes = ProductField::whereHas('f',$childrenIds);
 
