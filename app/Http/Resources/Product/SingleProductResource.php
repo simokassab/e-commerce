@@ -45,7 +45,7 @@ class SingleProductResource extends JsonResource
         foreach ($productAttributes as $key => $productAttribute) {
             $attributesIds[]= $productAttribute['field_id'];
         }
-        $attributes = Field::whereIn('id', $attributesIds);
+        $attributes = Field::whereIn('id', $attributesIds)->get();
         dd($attributes->toArray());
         // $productAttributes = Product:
         // $productAttributes = ProductField::whereHas('f',$childrenIds);
