@@ -7,7 +7,7 @@ use App\Models\Product\Product;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
-class StoreOrderRequest extends FormRequest
+class StoreOrderRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,15 +24,8 @@ class StoreOrderRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(Request $request)
+    public function rules()
     {
-        $products = $request->selected_products ?? [];
-
-//        foreach ($products as $key => $product){
-//            $productObject = Product::query()->select(['id','quantity','minimum_quantity'])->find($product['id']);
-//            $productsRules['selected_products.'.$key.'.quantity'] ='required|integer|min:1|lte:'.$productObject['quantity'] - $productObject['minimum_quantity'];
-//
-//        }
 
         return [
             "client_id" => 'required|exists:customers,id',
