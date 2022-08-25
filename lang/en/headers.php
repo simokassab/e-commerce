@@ -453,8 +453,8 @@ return [
             'search' => '',
             'type' => 'double',
             'sort' => false,
-            'is_visible' => true,
-            'is_show' => true
+            'is_visible' => false,
+            'is_show' => false
         ],
         'currency_symbol' => [
             'key' => 'currency_symbol',

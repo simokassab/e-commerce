@@ -62,17 +62,17 @@ class SelectProductOrderResource extends JsonResource
 
 
         return [
-            'id' => $this->id,
+            'id' => (int)$this->id,
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image) : 'default_image' ,
             'name' => $this->name,
-            'quantity' => 1,
-            'tax' => number_format((float)$tax * $rate,2,'.',''),
+            'quantity' => (int)1,
+            'tax' => (float)number_format((float)$tax * $rate,2,'.',''),
             'sku' => $this->sku,
-            'original_tax' => number_format((float)$tax,2,'.',''),
-            'original_unit_price' => number_format((float)($price + $tax),2,'.',''),
-            'unit_price' => number_format((float)($price + $tax) * $rate,2,'.',''),
+            'original_tax' => (float)number_format((float)$tax,2,'.',''),
+            'original_unit_price' => (float)number_format((float)($price + $tax),2,'.',''),
+            'unit_price' => (float)number_format((float)($price + $tax) * $rate,2,'.',''),
             'currency_symbol' => $currencySymbol,
-            'quantity_in_stock' => !is_numeric($quantity) ? $quantity :  number_format((float)$quantity, 2, '.', ''),
+            'quantity_in_stock' => !is_numeric($quantity) ? $quantity :  (float)number_format((float)$quantity, 2, '.', ''),
             'edit_status' => false,
             'type' => $this->type,
             'pre_order' => $preOrder
