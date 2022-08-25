@@ -41,7 +41,7 @@ class SingleProductResource extends JsonResource
         $attributes = Product::whereHas('field',function($query){
             $query->where('is_attribute',1);
         });
-        dd($attributes);
+        dd($attributes->toArray());
         // $productAttributes = Product:
         // $productAttributes = ProductField::whereHas('f',$childrenIds);
 
