@@ -10,6 +10,7 @@ use App\Models\Orders\OrderProduct;
 use App\Models\Price\Price;
 use App\Models\Product\Product;
 use App\Models\Product\ProductPrice;
+use App\Models\Settings\Setting;
 use App\Models\Tax\Tax;
 use App\Models\Tax\TaxComponent;
 use phpDocumentor\Reflection\DocBlock\Tags\Method;
@@ -77,8 +78,16 @@ class OrdersService {
         if(!is_null($coupon)){
             $amountToBeDiscounted = is_null($coupon->discount_percentage) ? $coupon->discount_amount : ($coupon->discount_percentage/100)*$order->total;
         }
+        $amountToBeDiscounted *=  $currentRate;
 
-        $order->total = $total - ($amountToBeDiscounted * $currentRate);
+        $order->total = $total - $amountToBeDiscounted ;
+        $order->total += 12;//added the discount
+
+        $isDiscountOnShipping = Setting::query()->where('title','is_discount_on_shipping')->first();
+        if((bool)$isDiscountOnShipping->value){
+            $order->total = ($total+12) - $amountToBeDiscounted;
+        }
+
         $order->tax_total = $totalTax;
         return $productsOrders;
     }
