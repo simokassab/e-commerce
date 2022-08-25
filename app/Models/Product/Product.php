@@ -127,10 +127,10 @@ class Product extends MainModel
         return $this->belongsToMany(Field::class,'products_fields','product_id','field_id');
 
     }
-    public function fieldValue(){
-        return $this->hasMany(FieldValue::class,'field_value_id');
+    // public function fieldValue(){
+    //     return $this->hasMany(FieldValue::class,'id','');
 
-    }
+    // }
 
     public function images(){
         return $this->hasMany(ProductImage::class,'product_id');
