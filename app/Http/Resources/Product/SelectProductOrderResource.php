@@ -68,6 +68,8 @@ class SelectProductOrderResource extends JsonResource
             'quantity' => 1,
             'tax' => number_format((float)$tax * $rate,2,'.',''),
             'sku' => $this->sku,
+            'original_tax' => number_format((float)$tax,2,'.',''),
+            'original_unit_price' => number_format((float)($price + $tax),2,'.',''),
             'unit_price' => number_format((float)($price + $tax) * $rate,2,'.',''),
             'currency_symbol' => $currencySymbol,
             'quantity_in_stock' => !is_numeric($quantity) ? $quantity :  number_format((float)$quantity, 2, '.', ''),

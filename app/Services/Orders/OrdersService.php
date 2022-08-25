@@ -117,19 +117,24 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
             $pricePerUnit = $orderProduct['unit_price'];
 
             $taxPerUnit = 0;
+            $originalTax = 0;
 
             $selectedProducts[$key]['id'] = $orderProduct['product_id'];
             $selectedProducts[$key]['order_product_id'] = array_key_exists('id',$orderProduct) ? $orderProduct['id'] ?? null : null;
             $selectedProducts[$key]['name'] = $currentProduct['name']['en'];
             if($currentProduct['tax']['is_complex']){
                 $newTax= new Tax($currentProduct['tax']);
+                $originalTax = $newTax->getComplexPrice($price['price'],$allTaxComponents->toArray(),$allTaxes->toArray());
                 $taxPerUnit = $newTax->getComplexPrice($pricePerUnit,$allTaxComponents->toArray(),$allTaxes->toArray());
             }else{
+                $originalTax = ($currentProduct['tax']['percentage'] * $price['price'])/100;
                 $taxPerUnit = ($currentProduct['tax']['percentage'] * $pricePerUnit)/100;
             }
             $selectedProducts[$key]['tax'] = $taxPerUnit;
             $selectedProducts[$key]['image'] = $currentProduct['image'] ?? 'default_image';
             $selectedProducts[$key]['unit_price'] = $pricePerUnit + $taxPerUnit;
+            $selectedProducts[$key]['original_unit_price'] = $price['price'];
+            $selectedProducts[$key]['original_tax'] =  $originalTax;
             $selectedProducts[$key]['sku'] = $currentProduct['sku'];
             $selectedProducts[$key]['quantity'] = $orderProduct['quantity'];
 //            $selectedProducts[$key]['quantity_in_stock_available'] = $currentProduct['minimum_quantity'] < 0 ? 0 : $currentProduct['quantity'] - $currentProduct['minimum_quantity'];

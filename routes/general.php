@@ -14,15 +14,27 @@ use App\Http\Controllers\Tax\TaxController;
 use App\Http\Controllers\Unit\UnitController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('brands',[BrandController::class,'getBrandsData']);
-Route::get('categories',[CategoryController::class,'getCategoiresData']);
-Route::get('countries',[CountryController::class,'getCountriesData']);
-Route::get('currencies',[CurrencyController::class,'getCurrenciesData']);
-Route::get('fields',[FieldsController::class,'getFieldsData']);
-Route::get('labels',[LabelController::class,'getLabelsData']);
-Route::get('languages',[LanguageController::class,'getLanguagesData']);
-Route::get('tags',[TagController::class,'getTagsData']);
-Route::get('units',[UnitController::class,'getUnitsData']);
-Route::get('taxes',[TaxController::class,'getTaxesData']);
-Route::get('settings',[SettingsController::class,'getSettingsData']);
-Route::get('prices',[PricesController::class,'getPricesData']);
+$dashboardMiddleware = ['auth:sanctum','localization'];
+
+if( env('APP_DEBUG') ){
+    $key = array_search('auth:sanctum', $dashboardMiddleware);
+    unset( $dashboardMiddleware[$key] );
+}
+
+
+Route::middleware($dashboardMiddleware)->group(function (){
+
+    Route::get('brands',[BrandController::class,'getBrandsData']);
+    Route::get('categories',[CategoryController::class,'getCategoiresData']);
+    Route::get('countries',[CountryController::class,'getCountriesData']);
+    Route::get('currencies',[CurrencyController::class,'getCurrenciesData']);
+    Route::get('fields',[FieldsController::class,'getFieldsData']);
+    Route::get('labels',[LabelController::class,'getLabelsData']);
+    Route::get('languages',[LanguageController::class,'getLanguagesData']);
+    Route::get('tags',[TagController::class,'getTagsData']);
+    Route::get('units',[UnitController::class,'getUnitsData']);
+    Route::get('taxes',[TaxController::class,'getTaxesData']);
+    Route::get('settings',[SettingsController::class,'getSettingsData']);
+    Route::get('prices',[PricesController::class,'getPricesData']);
+
+});
