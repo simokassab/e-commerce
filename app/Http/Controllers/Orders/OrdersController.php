@@ -156,7 +156,6 @@ class OrdersController extends MainController
             $order->billing_address_id = $request->billing_address_id;
 
 
-
             if($request->shipping_address_id == $request->billing_address_id || $request->is_billing_as_shipping){
                 $newAddress = null;
                 if($request->billing['edit_type'] == 'create'){
@@ -298,10 +297,7 @@ class OrdersController extends MainController
                 $order->currency_rate = 1;
             }
 
-
             $order->is_billing_as_shipping = $request->is_billing_as_shipping;
-
-
 
             $coupon = Coupon::where('code', $request->coupon_code)->first();
 
