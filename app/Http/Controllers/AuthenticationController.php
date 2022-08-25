@@ -39,6 +39,35 @@ class AuthenticationController extends MainController
 
     }
 
+    public function ThirdPartylogin(LoginRequest $request){
+
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if(! auth()->attempt($validated)){
+            return $this->errorResponse('Sorry, but you entered the wrong credentials!',[],-1,401);
+        }
+
+        $permissions = [];
+
+        if(!is_null(\auth()->user()->roles) && count(\auth()->user()->roles) > 0){
+            $permissions = \auth()->user()->roles[0]->permissions;
+        }
+
+        return $this->successResponse(
+            'Authenticated Successfully! ',
+            [
+                'user' => \auth()->user(),
+                'permissions' => $permissions,
+                'token' => \auth()->user()->createToken('app-token', ['service'])->plainTextToken
+
+            ]
+            ,1,202);
+
+    }
+
 
     public function logout(){
         Auth::logout();
