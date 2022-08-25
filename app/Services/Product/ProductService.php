@@ -25,6 +25,7 @@ class ProductService
 
         $this->storeAdditionalCategrories($request, $product, $childrenIds)
             ->storeAdditionalFields($request, $product) // different than parent
+            ->removeAdditionalImages($request)
             ->storeAdditionalImages($request, $product) // different than parent
             ->storeAdditionalLabels($request, $product, $childrenIds)
             ->storeAdditionalTags($request, $product, $childrenIds)
@@ -140,6 +141,16 @@ class ProductService
         }
 
         throw new Exception('Error while storing product attributes');
+    }
+    public function removeAdditionalImages($request)
+    {
+
+        if (!$request->has('images_deleted') || is_null($request->images_deleted))
+            return $this;
+
+        if (!ProductImage::whereIn('id', $request->images_deleted)->delete()) {
+            throw new Exception('Error while deleting product images');
+        }
     }
 
     public function storeAdditionalImages($request, $product)
@@ -469,9 +480,23 @@ class ProductService
         throw new Exception('Error while storing product attributes for variations');
     }
 
+    public function removeImagesForVariations($request, $childrenIds)
+    {
+
+        if (!$request->has('product_variations'))
+            return $this;
+
+        $childrenIdsArray = $childrenIds;
+        foreach ($childrenIdsArray as $key => $child) {
+            foreach ($request->product_variations[$key]['images_deleted'] as $key => $value) {
+                $imagesIdsArray = $request->product_variations[$key]['images_deleted'];
+                ProductImage::whereIn('id', $imagesIdsArray)->delete();
+            }
+        }
+    }
     public function storeImagesForVariations($request, $childrenIds)
     {
-        $imageCheck = ProductImage::whereIn('product_id', $childrenIds)->delete();
+        // $imageCheck = ProductImage::whereIn('product_id', $childrenIds)->delete();
 
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
@@ -585,6 +610,8 @@ class ProductService
                     $childrenIds[$key] = $child->id;
                 }
 
+                $this->removeImagesForVariations($request, $childrenIds);
+                $this->storeImagesForVariations($request, $childrenIds);
                 $this->storeImagesForVariations($request, $childrenIds);
                 $this->storePricesForVariations($request, $childrenIds);
                 // $this->storeFieldsForVariations($request, $childrenIds);
