@@ -49,10 +49,10 @@ class OrdersService {
             $productsOrders[$key]['order_id'] = $order->id;
             $productsOrders[$key]['product_id'] = $product['id'];
             $productsOrders[$key]['quantity'] = $product['quantity'];
-            $productsOrders[$key]['unit_price'] = $product['unit_price']* $currentRate;
+            $productsOrders[$key]['unit_price'] = $product['unit_price'];
             $productsOrders[$key]['tax_percentage'] = $taxObject->percentage;
-            $productsOrders[$key]['tax_amount'] = $tax * $currentRate;
-            $productsOrders[$key]['total'] = ($product['unit_price'] * $product['quantity'] * $currentRate);
+            $productsOrders[$key]['tax_amount'] = $tax;
+            $productsOrders[$key]['total'] = $product['unit_price'] * $product['quantity'] ;
 
             $productsOrders[$key]['created_at'] = now();
             $productsOrders[$key]['updated_at'] = now();
