@@ -17,6 +17,7 @@ use App\Http\Resources\Tax\SelectTaxResource;
 use App\Http\Resources\Unit\SelectUnitResource;
 use App\Models\Brand\Brand;
 use App\Models\Category\Category;
+use App\Models\Currency\Currency;
 use App\Models\Field\Field;
 use App\Models\Label\Label;
 use App\Models\Price\Price;
@@ -294,6 +295,13 @@ class ProductController extends MainController
     }
 
     public function getProductsForOrders(Request $request){
+
+        $request->validate([
+            'currency_id' => 'required|exists:currencies,id',
+            'currency_rate' => 'numeric',
+            'name' => 'nullable'
+        ]);
+
         $name = '';
         if(array_key_exists('name', $request->data)){
             $name = strtolower($request->data['name']);
@@ -302,6 +310,8 @@ class ProductController extends MainController
         $products = Product::with(['tax','pricesList.prices'])->whereRaw('lower(name) like (?)', ["%$name%"])->paginate($request->limit ?? config('defaults.default_pagination'));
         $data['taxComponents'] = TaxComponent::all();
         $data['tax'] = Tax::all();
+        $data['currency'] = Currency::query()->find($request->currency_id);
+        $data['currency_rate'] = $request->currency_rate;
         return SelectProductOrderResource::customCollection($products,$data);
     }
 
