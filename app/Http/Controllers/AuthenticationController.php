@@ -31,7 +31,9 @@ class AuthenticationController extends MainController
             'Authenticated Successfully! ',
             [
                 'user' => \auth()->user(),
-                'permissions' => $permissions
+                'permissions' => $permissions,
+                'token' => \auth()->user()->createToken('app-token', ['service'])->plainTextToken
+
             ]
             ,1,202);
 

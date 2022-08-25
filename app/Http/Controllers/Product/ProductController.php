@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\MainController;
+use App\Http\Requests\Product\GetAllProdcutsForOrderRequest;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Resources\Brand\SelectBrandResource;
 use App\Http\Resources\Category\SelectCategoryResource;
@@ -294,13 +295,7 @@ class ProductController extends MainController
             return $this->successResponsePaginated(ProductResource::class,Product::class,self::relations);
     }
 
-    public function getProductsForOrders(Request $request){
-
-        $request->validate([
-            'currency_id' => 'required|exists:currencies,id',
-            'currency_rate' => 'numeric',
-            'name' => 'nullable'
-        ]);
+    public function getProductsForOrders(GetAllProdcutsForOrderRequest $request){
 
         $name = '';
         if(array_key_exists('name', $request->data)){
