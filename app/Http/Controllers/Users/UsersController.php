@@ -61,7 +61,7 @@ class UsersController extends MainController
                  return $this->successResponse(
                      __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
                  [
-                    'user' => new SingleUserResource($user)
+                    'user' => new SingleUserResource($user),
                  ]
                  );
         }catch (\Exception $exception){

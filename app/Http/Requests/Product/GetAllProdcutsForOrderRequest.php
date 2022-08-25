@@ -3,11 +3,15 @@
 namespace App\Http\Requests\Product;
 
 use App\Http\Requests\MainRequest;
+
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class GetAllProdcutsForOrderRequest extends FormRequest
+
+
+class GetAllProdcutsForOrderRequest extends MainRequest
+
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -34,17 +34,17 @@ use \App\Http\Controllers\Users\CustomersController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-$dashboardMiddleware = ['auth:sanctum','localization'];
+$dashboardMiddlewares = ['auth:sanctum','localization'];
 
 if( env('APP_DEBUG') ){
-    $key = array_search('auth:sanctum', $dashboardMiddleware);
-    unset( $dashboardMiddleware[$key] );
+    $key = array_search('auth:sanctum', $dashboardMiddlewares);
+//    unset( $dashboardMiddlewares[$key] );
 }
 
 Route::post('login', [AuthenticationController::class,'login'])->name('login');
 Route::get('logout', [AuthenticationController::class,'logout'])->name('logout');
 
-Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],function (){
+Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddlewares ],function (){
 
 
     // Routes Macro

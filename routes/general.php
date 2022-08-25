@@ -13,6 +13,7 @@ use App\Http\Controllers\Tag\TagController;
 use App\Http\Controllers\Tax\TaxController;
 use App\Http\Controllers\Unit\UnitController;
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\AuthenticationController;
 
 $dashboardMiddleware = ['auth:sanctum','localization'];
 
@@ -21,6 +22,8 @@ if( env('APP_DEBUG') ){
     unset( $dashboardMiddleware[$key] );
 }
 
+Route::post('login',[AuthenticationController::class,'thirdPartyLogin']);
+Route::get('logout',[AuthenticationController::class,'thirdPartyLogout']);
 
 Route::middleware($dashboardMiddleware)->group(function (){
 
