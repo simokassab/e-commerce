@@ -42,19 +42,7 @@ class SingleProductResource extends JsonResource
         $childrenIds = Product::where('parent_product_id',$this->id)->pluck('id')->toArray();
         $productAttributes = ProductField::whereIn('product_id',$childrenIds)->get();
         
-        // $attributesIds=[];
-        // foreach ($productAttributes as $key => $productAttribute) {
-        //     $attributesIds[]= $productAttribute['field_id'];
-        // }
-        // $attributes = Field::whereIn('id', $attributesIds)->get();
-        // $attributeValues=FieldValue::whereIn
-        dd($productAttributes->toArray());
-        // $productAttributes = Product:
-        // $productAttributes = ProductField::whereHas('f',$childrenIds);
-
-        // dd($childrenIds);/
-
-        return [
+return [
             'id' => (int)$this->id, 
             'name' => $this->getTranslations('name'),
             'slug' => $this->slug,
@@ -91,7 +79,7 @@ class SingleProductResource extends JsonResource
             'pre_order' => (int)$this->pre_order ?? 0,
             'prices' => ProductPriceResoruce::collection($this->whenLoaded('price')->load('prices.currency')) ?? [],
             'fields' => SingleFieldResource::collection($this->whenLoaded('field'))->where('is_attribute',0) ?? [],
-            'attributes' => SingleFieldResource::collection($this->whenLoaded('field'))->where('is_attribute',1) ?? [],
+            'attributes' => SingleFieldResource::collection($productAttributes) ?? [],
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'labels' => SelectLabelResource::collection($this->whenLoaded('labels')),
             'categories' => $nestedCategories,
