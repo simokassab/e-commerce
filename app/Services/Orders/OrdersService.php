@@ -96,7 +96,7 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
     {
         $allProducts = Product::with('pricesList','tax')->findMany(collect($productsOrders)->pluck('product_id'))->toArray();
         $selectedProducts = [];
-
+        dd($productsOrders);
         foreach ($productsOrders as $key => $orderProduct) {
             if(gettype($orderProduct) != 'array'){
             $orderProduct = $orderProduct->toArray();
