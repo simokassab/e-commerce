@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b884a2d0868fabb54910585e21b5eb9a",
+    "content-hash": "f4ef9f620ea0422dad72f8f717920538",
     "packages": [
         {
             "name": "brick/math",
@@ -2481,6 +2481,63 @@
                 }
             ],
             "time": "2022-08-01T11:03:24+00:00"
+        },
+        {
+            "name": "octw/aramex",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Moustafa22/Laravel-Aramex-SDK.git",
+                "reference": "32870964bd6d9e0282cddf9bf2dc3883041d2084"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Moustafa22/Laravel-Aramex-SDK/zipball/32870964bd6d9e0282cddf9bf2dc3883041d2084",
+                "reference": "32870964bd6d9e0282cddf9bf2dc3883041d2084",
+                "shasum": ""
+            },
+            "type": "package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Octw\\Aramex\\AramexServiceProvider"
+                    ],
+                    "aliases": {
+                        "Aramex": "Octw\\Aramex\\Aramex"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Octw\\Aramex\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Moustafa Allahham",
+                    "email": "iteng.moustafa@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Library to integrate with Aramex APIs",
+            "keywords": [
+                "aramex",
+                "integraton",
+                "laravel",
+                "php",
+                "sdk",
+                "ship",
+                "shipping"
+            ],
+            "support": {
+                "issues": "https://github.com/Moustafa22/Laravel-Aramex-SDK/issues",
+                "source": "https://github.com/Moustafa22/Laravel-Aramex-SDK/tree/1.2.1"
+            },
+            "time": "2021-09-18T15:06:21+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -8724,5 +8781,5 @@
         "php": "^8.0.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }

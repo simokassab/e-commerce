@@ -23,6 +23,7 @@ use App\Http\Controllers\Prices\PricesController;
 use App\Http\Controllers\Product\ProductController;
 use \App\Http\Controllers\Orders\OrdersController;
 use \App\Http\Controllers\Coupons\CouponsController;
+use App\Http\Controllers\TestController;
 use \App\Http\Controllers\Users\CustomersController;
 /*
 |--------------------------------------------------------------------------
@@ -133,6 +134,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::post('coupon/all',[CouponsController::class,'index']);
     Route::apiResource('coupon',CouponsController::class);
 
+    Route::get('test',[TestController::class,'test']);
 
     });
 
