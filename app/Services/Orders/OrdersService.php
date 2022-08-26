@@ -230,7 +230,7 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
             $total += $dataToBeUpdatedOrCreated[$key]['total'];
             $totalTax += $tax;
             $array = $dataToBeUpdatedOrCreated[$key];
-            dd($array);
+            $arrayValues= ['order_id' => $order->id,'product_id' => $product['id']];
            dd(OrderProduct::query()->updateOrCreate(['order_id','product_id'],$array));
 
         }
