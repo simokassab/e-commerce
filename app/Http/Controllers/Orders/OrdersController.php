@@ -291,7 +291,7 @@ class OrdersController extends MainController
                 return $this->errorResponse('There is no default currency!');
             }
 
-            $order->currency_rate = $request->rate;
+            $order->currency_rate = $request->currency_rate;
 
             if($request->currency_id == $defaultCurrency->id){
                 $order->currency_rate = 1;
