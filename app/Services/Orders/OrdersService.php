@@ -231,7 +231,7 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
 
         }
         // update or create the n   ew products of the order
-        (OrderProduct::query()->upsert($dataToBeUpdatedOrCreated,['order_id','product_id'],['quantity','unit_price','tax_percentage','tax_amount','total','created_at','updated_at']));
+        dd(OrderProduct::query()->upsert($dataToBeUpdatedOrCreated,['order_id','product_id'],['quantity','unit_price','tax_percentage','tax_amount','total','created_at','updated_at']));
 
         $coupon = Coupon::query()
             ->where('id', $order->coupon_id ?? 0)
