@@ -84,6 +84,7 @@ class OrdersService {
 
         $isDiscountOnShipping = Setting::query()->where('title','is_discount_on_shipping')->first();
         if((bool)$isDiscountOnShipping->value){
+            dd('hello');
             $order->total = ($total+12) - $amountToBeDiscounted;
         }
 
