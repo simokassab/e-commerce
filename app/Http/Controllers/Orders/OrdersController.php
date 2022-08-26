@@ -361,6 +361,7 @@ class OrdersController extends MainController
     {
         $selectedCurrency = Currency::query()->find($order->currency_id);
         $orderProducts =  OrderProduct::where('order_id',$order->id)->get();
+        dd($orderProducts);
         $allProducts = Product::with(['tax','pricesList'])->get();
         $defaultPricingClass = Setting::where('title','website_pricing')->first()->value;
         $allTaxes = Tax::all();
