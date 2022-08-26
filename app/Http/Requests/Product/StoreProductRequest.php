@@ -104,6 +104,7 @@ class StoreProductRequest extends FormRequest
             'images.*.sort' => 'required | integer',
 
             'labels.*' => 'exists:labels,id',
+            'tags.*' => 'exists:tags,id',
 
             'prices.*.price_id' => 'required | integer | exists:prices,id',
             'prices.*.price' => 'required | numeric | gte:' .$this->priceValue,
@@ -113,7 +114,6 @@ class StoreProductRequest extends FormRequest
             'related_products.*.child_quantity' => [Rule::when($request->type == 'bundle', ['required','integer', 'gte:' . $this->QuantityValue])],
             'related_products.*.name' => 'nullable',
 
-            'tags.*' => 'exists:tags,id',
 
             'order.*.id' => 'required | integer | exists:products,id',
             'order.*.sort' => 'required | integer',
@@ -284,6 +284,10 @@ class StoreProductRequest extends FormRequest
             'labels.*.label_id.integer' => 'The label must be an integer',
             'labels.*.label_id.exists' => 'The label must be a valid label',
 
+            'tags.*.tag_id.required' => 'the tag field is required',
+            'tags.*.tag_id.integer' => 'The tag must be an integer',
+            'tags.*.tag_id.exists' => 'The tag must be a valid tag',
+
             'prices.*.price_id.required' => 'the price field is required',
             'prices.*.price_id.integer' => 'The price must be an integer',
             'prices.*.price_id.exists' => 'The price must be a valid price',
@@ -303,9 +307,6 @@ class StoreProductRequest extends FormRequest
             'related_products.*.child_quantity.integer' => 'The child quantitymust be an integer',
             'related_products.*.child_quantity.gte' => 'The child quantitymust be greater than or equal to :value',
 
-            'tags.*.tag_id.required' => 'the tag field is required',
-            'tags.*.tag_id.integer' => 'The tag must be an integer',
-            'tags.*.tag_id.exists' => 'The tag must be a valid tag',
 
             'order.*.id.required' => 'The id is required',
             'order.*.id.integer' => 'The id should be an integer',

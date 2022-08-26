@@ -43,7 +43,7 @@ class TestController extends MainController
     public function test()
     {
 
-        $soapClient = new SoapClient('shipping.wsdl');
+        $soapClient = new SoapClient('https://ws.dev.aramex.net/ShippingAPI.V2/Shipping/Service_1_0.svc?wsdl');
         $params = array(
             'Shipments' => array(
                 'Shipment' => array(
@@ -100,7 +100,7 @@ class TestController extends MainController
                             'PhoneNumber2'            => '',
                             'PhoneNumber2Ext'        => '',
                             'FaxNumber'                => '',
-                            'CellPhone'                => '',
+                            'CellPhone'                => '0',
                             'EmailAddress'            => 'mazen@aramex.com',
                             'Type'                    => ''
                         ),
@@ -138,7 +138,7 @@ class TestController extends MainController
                     'Reference1'                 => 'Shpt 0001',
                     'Reference2'                 => '',
                     'Reference3'                 => '',
-                    'ForeignHAWB'                => 'ABC 000111',
+                    'ForeignHAWB'                => 'ABCbvvb 000111',
                     'TransportType'                => 0,
                     'ShippingDateTime'             => time(),
                     'DueDate'                    => time(),
