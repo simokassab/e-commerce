@@ -322,8 +322,7 @@ class OrdersController extends MainController
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
 
-            $differencePrice = abs(($order->total + 12) - $request->total_price);
-            dd($differencePrice);
+            $differencePrice = abs(($order->total) - $request->total_price);
             if($differencePrice >= 0.001){
                 return $this->errorResponse('Sorry but there was a problem with the calculations! ',    [
                     'shipping' => 12,
