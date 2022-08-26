@@ -14,6 +14,15 @@ class OrderProduct extends MainModel
 
     protected $table = 'order_products';
     protected $translatable = [];
+    protected $fillable = [
+        'order_id',
+        'product_id',
+        'quantity',
+        'unit_price',
+        'tax_percentage',
+        'tax_amount',
+        'total'
+    ];
 
 
 }
