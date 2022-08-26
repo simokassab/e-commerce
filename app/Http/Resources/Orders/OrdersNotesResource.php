@@ -22,7 +22,7 @@ class OrdersNotesResource extends JsonResource
             'id' => $this->id,
             'note' => $this->body,
             'title' => $this->body,
-            'username' => User::find($this->user_id)->username,
+            'username' => User::find($this->user_id) ? User::find($this->user_id)->username : 'NON',
             'date' => $date,
         ];
     }
