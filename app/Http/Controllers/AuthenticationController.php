@@ -33,8 +33,6 @@ class AuthenticationController extends MainController
             [
                 'user' => \auth()->user(),
                 'permissions' => $permissions,
-                'token' => \auth()->user()->createToken('app-token', ['service'])->plainTextToken
-
             ]
             ,1,202);
 
@@ -73,11 +71,12 @@ class AuthenticationController extends MainController
         return $this->successResponse('Logout Successfully!');
     }
 
-    public static function thirdPartyLogout(){
+    public function thirdPartyLogout(){
         if(\auth()->user()){
         \auth()->user()->tokens()->delete();
         }
         Auth::logout();
+        return $this->successResponse('Logout Successfully!');
 
     }
 
