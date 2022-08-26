@@ -612,16 +612,9 @@ class OrdersController extends MainController
             OrdersService::updateNotesForOrder($order,$request->notes ?? [] , $request->toArray());
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
-            dd($productsOrders);
             $differencePrice = abs(($order->total) - $request->total_price);
             if($differencePrice >= 0.001){
-                return $this->errorResponse(
-                    'Sorry but there was a problem with the calculations! ',
-                    [
-                        'shipping' => 12,
-                        'order_total' => $order->total
-                    ]
-                );
+                return $this->errorResponse('Sorry but there was a problem with the calculations! ');
             }
 
             $order->save();
@@ -630,7 +623,7 @@ class OrdersController extends MainController
 
             $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$defaultPricingClass,$allTaxComponents,$allTaxes,$selectedCurrency);
             OrdersService::adjustQuantityOfOrderProducts($order->selected_products,$allProducts);
-
+            dd($order->selected_products);
             DB::commit();
             return $this->successResponse('The order has been created successfully !', [
                 'order' => new SingelOrdersResource($order->load(['status','coupon','products','notes']))
