@@ -612,7 +612,7 @@ class OrdersController extends MainController
 
             OrdersService::updateNotesForOrder($order,$request->notes ?? [] , $request->toArray());
 
-            $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
+            $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order,'update');
             $differencePrice = abs(($order->total) - $request->total_price);
             if($differencePrice >= 0.001){
                 return $this->errorResponse('Sorry but there was a problem with the calculations! ');

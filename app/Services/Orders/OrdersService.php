@@ -22,7 +22,7 @@ class OrdersService {
      * @return array
      * @throws \Exception
      */
-    public static function calculateTotalOrderPrice(array $productsOfOrder = [], Order $order): array
+    public static function calculateTotalOrderPrice(array $productsOfOrder = [], Order $order,string $type = 'create'): array
     {
         $currentRate = $order->currency_rate;
 
@@ -60,9 +60,12 @@ class OrdersService {
             $totalTax += $tax;
 
         }
-        if(false){
+
+        if($type == 'create'){
+            dd('hello');
             OrderProduct::insert($productsOrders);
         }
+
         $coupon = Coupon::query()
             ->where('id', $order->coupon_id ?? 0)
             ->first();
