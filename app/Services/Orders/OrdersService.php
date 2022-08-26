@@ -58,6 +58,7 @@ class OrdersService {
             $productsOrders[$key]['updated_at'] = now();
             $total += $productsOrders[$key]['total']  ;
             $totalTax += $tax;
+            dd($productsOrders[$key]['total']);
         }
         OrderProduct::insert($productsOrders);
 
@@ -65,8 +66,8 @@ class OrdersService {
             ->where('id', $order->coupon_id ?? 0)
             ->first();
 
-        $order->discount_percentage = $coupon ? $coupon->discount_percentage : 0;
-        $order->discount_amount = $coupon ? $coupon->discount_amount : 0;
+        $order->discount_percentage = $coupon?->discount_percentage;
+        $order->discount_amount = $coupon?->discount_amount;
 
         if(!is_null($coupon) && ($coupon->is_one_time && $coupon->is_used)){
             throw new \Exception('The coupon was already used!');
