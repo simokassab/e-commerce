@@ -394,7 +394,7 @@ class OrdersController extends MainController
      */
     public function update(StoreOrderRequest $request, Order $order)
     {
-        dd($order->selected_products);
+        dd($request->selected_products);
         $selectedCurrency = Currency::query()->find($request->currency_id);
         $productIds = (collect($request->selected_products)->pluck('id'));
         $allProducts = Product::with(['tax','pricesList'])->findMany($productIds);
