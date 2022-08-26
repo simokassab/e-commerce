@@ -59,10 +59,6 @@ class OrdersService {
             $total += $productsOrders[$key]['total']  ;
             $totalTax += $tax;
 
-            if($key == 1){
-                dd($productsOrders[$key]['total']);
-
-            }
         }
         OrderProduct::insert($productsOrders);
         $coupon = Coupon::query()
