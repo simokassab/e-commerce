@@ -623,7 +623,6 @@ class OrdersController extends MainController
 
             $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$defaultPricingClass,$allTaxComponents,$allTaxes,$selectedCurrency);
             OrdersService::adjustQuantityOfOrderProducts($order->selected_products,$allProducts);
-            dd($order->selected_products);
             DB::commit();
             return $this->successResponse('The order has been created successfully !', [
                 'order' => new SingelOrdersResource($order->load(['status','coupon','products','notes']))

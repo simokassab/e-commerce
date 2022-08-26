@@ -14,6 +14,8 @@ class SingelOrdersResource extends JsonResource
      */
     public function toArray($request)
     {
+        dd($this->selected_products);
+
         return [
             'code' => $this->id,
             "client_id" => (int)$this->customer_id,
