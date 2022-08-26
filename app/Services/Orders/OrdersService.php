@@ -96,7 +96,6 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
     {
         $allProducts = Product::with('pricesList','tax')->findMany(collect($productsOrders)->pluck('product_id'))->toArray();
         $selectedProducts = [];
-        dd($productsOrders);
         foreach ($productsOrders as $key => $orderProduct) {
             if(gettype($orderProduct) != 'array'){
             $orderProduct = $orderProduct->toArray();
@@ -216,22 +215,23 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
             }else{
                 $tax = $taxObject->percentage * $priceOfUnit/100;
             }
-            $dataToBeUpdatedOrCreated[$key]['id'] = $oldOrderProduct ? $oldOrderProduct['id'] : null ;
+//            $dataToBeUpdatedOrCreated[$key]['id'] = $oldOrderProduct ? $oldOrderProduct['id'] : null ;
             $dataToBeUpdatedOrCreated[$key]['order_id'] = $order->id;
             $dataToBeUpdatedOrCreated[$key]['product_id'] = $product['id'];
-            $dataToBeUpdatedOrCreated[$key]['quantity'] = $product['quantity'];
+            $dataToBeUpdatedOrCreated[$key]['quantity'] = 100;
             $dataToBeUpdatedOrCreated[$key]['unit_price'] = $product['unit_price'];
             $dataToBeUpdatedOrCreated[$key]['tax_percentage'] = $taxObject->percentage;
             $dataToBeUpdatedOrCreated[$key]['tax_amount'] = $tax;
             $dataToBeUpdatedOrCreated[$key]['total'] = $product['unit_price'] * $product['quantity'];
 
-            $dataToBeUpdatedOrCreated[$key]['created_at'] = now();
-            $dataToBeUpdatedOrCreated[$key]['updated_at'] = now();
+            $dataToBeUpdatedOrCreated[$key]['created_at'] = null;
+            $dataToBeUpdatedOrCreated[$key]['updated_at'] = null;
             $total += $dataToBeUpdatedOrCreated[$key]['total'];
             $totalTax += $tax;
+
         }
-        // update or create the new products of the order
-        OrderProduct::upsert($dataToBeUpdatedOrCreated,['id'],['quantity','unit_price','tax_percentage','tax_amount','total','created_at','updated_at']);
+        // update or create the n   ew products of the order
+        (OrderProduct::query()->upsert($dataToBeUpdatedOrCreated,['order_id','product_id'],['quantity','unit_price','tax_percentage','tax_amount','total','created_at','updated_at']));
 
         $coupon = Coupon::query()
             ->where('id', $order->coupon_id ?? 0)
