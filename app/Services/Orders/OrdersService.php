@@ -290,7 +290,7 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
         $notesToBeSaved = [];
         foreach ($newNotes as $key => $note) {
             $notesToBeSaved[$key]['id'] = $note['id'] ?? null;
-            $notesToBeSaved[$key]['user_id'] = auth()->user()->id;
+            $notesToBeSaved[$key]['user_id'] = auth()->user() ? auth()->user()->id : 0;
             $notesToBeSaved[$key]['title'] = $note['title'];
             $notesToBeSaved[$key]['body'] = $note['note'];
             $notesToBeSaved[$key]['date'] = now();
