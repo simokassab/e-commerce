@@ -62,7 +62,6 @@ class OrdersService {
         }
 
         if($type == 'create'){
-            dd('hello');
             OrderProduct::insert($productsOrders);
         }
 
