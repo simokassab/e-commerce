@@ -54,10 +54,9 @@ class OrdersService {
             $productsOrders[$key]['tax_percentage'] = $taxObject->percentage;
             $productsOrders[$key]['tax_amount'] = $tax;
             $productsOrders[$key]['total'] = $product['unit_price'] * $product['quantity'] ;
-
             $productsOrders[$key]['created_at'] = now();
             $productsOrders[$key]['updated_at'] = now();
-            $total += $productsOrders[$key]['total'] + $tax ;
+            $total += $productsOrders[$key]['total']  ;
             $totalTax += $tax;
         }
         OrderProduct::insert($productsOrders);
@@ -262,10 +261,9 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
     }
 
     public static function createNotesForOrder(Order $order, array $notes = [],array $data= []):bool{
-
         $notesToBeSaved = [];
         foreach ($notes as $key => $note) {
-            $notesToBeSaved[$key]['user_id'] = auth()->user()->id;
+            $notesToBeSaved[$key]['user_id'] = is_null(auth()->user()) ? 0 : auth()->user()->id;
             $notesToBeSaved[$key]['title'] = $note['title'];
             $notesToBeSaved[$key]['body'] = $note['note'];
             $notesToBeSaved[$key]['date'] = now();
