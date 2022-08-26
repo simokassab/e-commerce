@@ -58,9 +58,13 @@ class OrdersService {
             $productsOrders[$key]['updated_at'] = now();
             $total += $productsOrders[$key]['total']  ;
             $totalTax += $tax;
+
+            if($key == 1){
+                dd($productsOrders[$key]['total']);
+
+            }
         }
         OrderProduct::insert($productsOrders);
-        dd($total);
         $coupon = Coupon::query()
             ->where('id', $order->coupon_id ?? 0)
             ->first();
