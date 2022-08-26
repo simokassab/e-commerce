@@ -60,7 +60,9 @@ class OrdersService {
             $totalTax += $tax;
 
         }
-        OrderProduct::insert($productsOrders);
+        if(false){
+            OrderProduct::insert($productsOrders);
+        }
         $coupon = Coupon::query()
             ->where('id', $order->coupon_id ?? 0)
             ->first();
