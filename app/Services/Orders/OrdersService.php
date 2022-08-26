@@ -204,7 +204,7 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
         //prepare the array for update
         $dataToBeUpdatedOrCreated = [];
         foreach ($newProducts as $key => $product){
-
+            $array = [];
             $priceOfUnit = $prices->where('product_id' , $product['id'])->where('price_id',1)->first() ? $prices->where('product_id' , $product['id'])->where('price_id',1)->first()->price : 0;
             $mainProduct = $products->where('id',$product['id'])->first();
             $taxObject = $taxes->where('id',$mainProduct->tax_id)->first();
@@ -229,10 +229,12 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
             $dataToBeUpdatedOrCreated[$key]['updated_at'] = null;
             $total += $dataToBeUpdatedOrCreated[$key]['total'];
             $totalTax += $tax;
+            $array = $dataToBeUpdatedOrCreated[$key];
+           dd(OrderProduct::query()->updateOrCreate(['order_id','product_id'],$array));
 
         }
         // update or create the n   ew products of the order
-        (OrderProduct::query()->upsert($dataToBeUpdatedOrCreated,['order_id','product_id'],['quantity','unit_price','tax_percentage','tax_amount','total','created_at','updated_at']));
+//        (OrderProduct::query()->upsert($dataToBeUpdatedOrCreated,['order_id','product_id'],['quantity','unit_price','tax_percentage','tax_amount','total','created_at','updated_at']));
 
         $coupon = Coupon::query()
             ->where('id', $order->coupon_id ?? 0)
