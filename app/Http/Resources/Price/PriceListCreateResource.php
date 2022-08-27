@@ -26,7 +26,7 @@ class PriceListCreateResource extends JsonResource
         $pricesResult['item'] = $this->name;
         $pricesResult['UOM'] = $this->whenLoaded('unit') ?  $this->whenLoaded('unit')->code : 'NON';
 
-        foreach ($prices as $key => $price){
+        foreach ($prices as $price){
             $productPrice = collect($productPrices)->where('product_id',$this->id)->where('price_id',$price->id)->first();
 
             if(is_null($productPrice)){

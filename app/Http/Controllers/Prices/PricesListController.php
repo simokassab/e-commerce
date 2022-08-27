@@ -10,6 +10,7 @@ use App\Models\Product\Product;
 use App\Models\Product\ProductPrice;
 use Illuminate\Http\Request;
 use App\Support\Collection;
+use function PHPUnit\Framework\isEmpty;
 
 class PricesListController extends MainController
 {
@@ -55,7 +56,34 @@ class PricesListController extends MainController
         $prices = Price::query()->findMany($pricesClassRequired);
         $productPrices = ProductPrice::query()->whereIn('price_id',$pricesClassRequired)->get();
 
-        $allProducts = Product::with('unit')->get();
+
+        $allProducts = Product::with(['pricesList.prices.currency','unit'])
+            ->where(function ($query)use($request){
+                $query->when(!empty($request->general_search) , function($query) use($request){
+                $value = $request->general_search;
+                $query->whereRaw('lower(code) like (?)', ["%$value%"]);
+                $query->orWhereRaw('lower(name) like (?)', ["%$value%"]);
+                $query->orWhereHas('unit',function($query)use($request,$value){
+                    $query->whereRaw('lower(code) like (?)', ["%$value%"]);
+                });
+            });
+            })
+            ->when($request->has('data') && (key_exists('code',$request->data)) , function($query) use($request){
+                $value = $request->data['code'];
+                $query->whereRaw('lower(code) like (?)', ["%$value%"]);
+            })
+            ->when($request->has('data') && (key_exists('title',$request->data)) , function($query) use($request){
+                $value = $request->data['title'];
+                $query->whereRaw('lower(name) like (?)', ["%$value%"]);
+            })
+            ->when($request->has('data') && (key_exists('UOM',$request->data)) , function($query) use($request){
+                $query->whereHas('unit',function($query)use($request){
+                    $value = $request->data['UOM'];
+                    $query->whereRaw('lower(code) like (?)', ["%$value%"]);
+                });
+            })
+            ->paginate($request->limit ?? config('defaults.default_pagination'));
+
 
 
         return PriceListCreateResource::customCollection($allProducts, $prices, $allProducts, $productPrices,);
