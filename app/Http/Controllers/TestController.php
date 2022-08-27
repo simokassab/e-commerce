@@ -8,6 +8,7 @@ use App\Models\Currency\Currency;
 use App\Models\Label\Label;
 use App\Models\Product\Product;
 use App\Models\RolesAndPermissions\CustomRole;
+use App\Models\Tax\Tax;
 use Illuminate\Http\Request;
 use App\Models\User\User;
 use Illuminate\Support\Facades\Auth;
@@ -40,15 +41,7 @@ class TestController extends MainController
     }
 
     public function test(){
+    return Tax::query()->find(6)->getComplexPrice(2);
 
-        $x = 2.959 * 1.02643;
-
-        $y = 2.0004 * 1.00602;
-
-        return $x - $y;
-
-        //    (Product::find(1)->updateProductQuantity(1,'add'));
-
-           return "hello";
     }
 }
