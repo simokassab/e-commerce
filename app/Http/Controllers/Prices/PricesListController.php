@@ -52,12 +52,11 @@ class PricesListController extends MainController
 
         $pricesClassRequired = $request->advanced_search['prices_class'];
 
-//        $prices = Price::with(['products'])->findMany($request->advanced_search['prices_class'] ?? []);
-//        $pricesClassesProducts = $prices->pluck('products');
-
         $prices = Price::query()->findMany($pricesClassRequired);
-        $allProducts = Product::with('unit')->get();
         $productPrices = ProductPrice::query()->whereIn('price_id',$pricesClassRequired)->get();
+
+        $allProducts = Product::with('unit')->get();
+
 
         return PriceListCreateResource::customCollection($allProducts, $prices, $allProducts, $productPrices,);
 
