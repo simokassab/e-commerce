@@ -66,7 +66,7 @@ class Product extends MainModel
     public function getProductName()
 {
 
-    return $this->getTranslation('name','en');
+    return $this->getTranslation('name','ar');
 
 }
     public function parent(){
