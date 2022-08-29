@@ -8,6 +8,7 @@ use App\Http\Resources\Country\SelectContryResource;
 use App\Http\Resources\Currency\SelectCurrencyResource;
 use App\Http\Resources\Customers\SelectCustomerResource;
 use App\Http\Resources\Orders\OrderResource;
+use App\Http\Resources\Orders\RestFullOrderResource;
 use App\Http\Resources\Orders\SingelOrdersResource;
 use App\Http\Resources\roles\RolesResource;
 use App\Models\Country\Country;
@@ -666,5 +667,9 @@ class OrdersController extends MainController
 
     public function getTableHeaders(){
         return $this->successResponse('Success!', ['headers' => __('headers.orders') ]);
+    }
+
+    public function getOrdersData(){
+        return $this->successResponsePaginated(RestFullOrderResource::class,Order::class,['customer','coupon','status','shippingCountry','billingCountry','paymentMethod','products','notes']);
     }
 }
