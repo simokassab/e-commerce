@@ -57,8 +57,15 @@ class CouponsController extends MainController
         $coupon->code = $request->code;
         $coupon->start_date = $request->start_date;
         $coupon->expiry_date = $request->expiry_date;
-        $coupon->discount_percentage = $request?->discount_percentage;
-        $coupon->discount_amount = $request?->discount_amount;
+
+        if($request->type == 'amount'){
+            $coupon->discount_amount = $request->value;
+            $coupon->discount_percentage = null;
+        }else{
+            $coupon->discount_amount =null;
+            $coupon->discount_percentage = $request->value;
+        }
+
         $coupon->min_amount = $request?->min_amount;
         $coupon->is_one_time = $request->is_one_time ?? 0;
         $coupon->is_used =0;

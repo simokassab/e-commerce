@@ -4,6 +4,7 @@ namespace App\Http\Requests\Coupons;
 
 use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CouponRequest extends MainRequest
 {
@@ -29,8 +30,8 @@ class CouponRequest extends MainRequest
             'code' => 'required|unique:coupons,code',
             'start_date' => 'nullable|date',
             'expiry_date' => 'nullable|date',
-            'discount_percentage' => 'nullable|numeric',
-            'discount_amount' => 'nullable|numeric',
+            'type' => ['required',Rule::in(['percentage','amount'])],
+            'value' => 'required|numeric',
             'min_amount' => 'nullable|numeric',
             'is_one_time' => 'nullable|boolean',
             'is_used' => 'nullable|boolean',
