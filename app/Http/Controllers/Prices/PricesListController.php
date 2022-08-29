@@ -46,6 +46,7 @@ class PricesListController extends MainController
             'general_search' => 'nullable',
             'limit' => 'nullable',
             'data.*' => 'nullable',
+            'data' => 'required',
             'advanced_search.prices_class' => 'required',
             'advanced_search.prices_class.*' => 'required|numeric|exists:prices,id',
 
