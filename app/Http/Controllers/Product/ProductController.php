@@ -78,7 +78,7 @@ class ProductController extends MainController
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function create()
     {
@@ -198,6 +198,7 @@ class ProductController extends MainController
      */
     public function show(Product $product)
     {
+        $product->all_categories = Category::all();
         return $this->successResponse('Success!', ['product' =>  new SingleProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category', 'unit', 'tax', 'priceClass', 'price', 'field', 'labels', 'productRelatedChildren', 'children', 'images']))]);
     }
 

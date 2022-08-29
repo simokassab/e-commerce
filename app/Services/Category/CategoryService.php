@@ -108,16 +108,18 @@ class CategoryService {
 
     }
 
-    public static function getAllCategoriesNested($categories)
+    public static function getAllCategoriesNested($categories,$selectedCategoriesIds=[])
     {
+
         $rootCategories = self::getRootCategories($categories);
         $lastResult = [];
         foreach ($rootCategories as $rootCategory) {
             $result = (object)[];
             $result->id = $rootCategory->id;
             $result->label = $rootCategory->name;
+            $result->checked = in_array($rootCategory->id,$selectedCategoriesIds);
             $result->expanded = true;
-            $nodes = (array)self::getCategoryChildren($rootCategory, $categories);
+            $nodes = (array)self::getCategoryChildren($rootCategory, $categories,$selectedCategoriesIds);
             $nodesArray = [];
 
             if (is_array($nodes) && count($nodes) > 0) {
@@ -151,16 +153,16 @@ class CategoryService {
         return ($arrayOfParents);
     }
 
-    private static function getCategoryChildren(int | Category $category, $allCategories)
+    private static function getCategoryChildren(int | Category $category, $allCategories,$selectedCategoriesIds = [])
     {
 
         $categoriesChildren = self::generateChildrenForAllCategories($allCategories);
         $categoryId = (is_numeric($category) ? $category : $category->id);
 
-        return self::drawCategoryChildren($categoryId, $categoriesChildren, true, $allCategories);
+        return self::drawCategoryChildren($categoryId, $categoriesChildren, true, $allCategories,$selectedCategoriesIds);
     }
 
-    private static function drawCategoryChildren($parentCategoryId, $allCategoryIDs, $isMultiLevel = false, $allCategories): array
+    private static function drawCategoryChildren($parentCategoryId, $allCategoryIDs, $isMultiLevel = false, $allCategories,$selectedCategoriesIds = []): array
     {
         //with levels
         $childCategory = array();
@@ -175,6 +177,7 @@ class CategoryService {
                 $childCategory[] = [
                     'id' => $allCategories->find($categoryID)->id,
                     'label' => $allCategories->find($categoryID)->name,
+                    'checked' => in_array($categoryID,$selectedCategoriesIds),
                     'expanded' => true,
                     'nodes' => self::drawCategoryChildren($categoryID, $allCategoryIDs, $isMultiLevel, $allCategories),
                 ];
