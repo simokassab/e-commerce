@@ -47,7 +47,7 @@ class SingleProductResource extends JsonResource
     $productRelated=($this->whenLoaded('productRelatedChildren'))->toArray();
 
     foreach ($productRelated as $key => $product) {
-        $productRelated['name'] = $productsRelatedNames[$key];
+        $productRelated[$key]['name'] = $productsRelatedNames[$key];
         }
     dd($productRelated);
         return [
