@@ -38,7 +38,7 @@ $dashboardMiddlewares = ['auth:sanctum','localization'];
 
 if( env('APP_DEBUG') ){
     $key = array_search('auth:sanctum', $dashboardMiddlewares);
-//    unset( $dashboardMiddlewares[$key] );
+    unset( $dashboardMiddlewares[$key] );
 }
 
 Route::post('login', [AuthenticationController::class,'login'])->name('login');

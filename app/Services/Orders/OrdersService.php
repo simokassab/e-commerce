@@ -22,7 +22,7 @@ class OrdersService {
      * @return array
      * @throws \Exception
      */
-    public static function calculateTotalOrderPrice(array $productsOfOrder = [], Order $order): array
+    public static function calculateTotalOrderPrice(array $productsOfOrder = [], Order $order,string $type = 'create'): array
     {
         $currentRate = $order->currency_rate;
 
@@ -54,20 +54,23 @@ class OrdersService {
             $productsOrders[$key]['tax_percentage'] = $taxObject->percentage;
             $productsOrders[$key]['tax_amount'] = $tax;
             $productsOrders[$key]['total'] = $product['unit_price'] * $product['quantity'] ;
-
             $productsOrders[$key]['created_at'] = now();
             $productsOrders[$key]['updated_at'] = now();
-            $total += $productsOrders[$key]['total'] + $tax ;
+            $total += $productsOrders[$key]['total']  ;
             $totalTax += $tax;
+
         }
-        OrderProduct::insert($productsOrders);
+
+        if($type == 'create'){
+            OrderProduct::insert($productsOrders);
+        }
 
         $coupon = Coupon::query()
             ->where('id', $order->coupon_id ?? 0)
             ->first();
 
-        $order->discount_percentage = $coupon ? $coupon->discount_percentage : 0;
-        $order->discount_amount = $coupon ? $coupon->discount_amount : 0;
+        $order->discount_percentage = $coupon?->discount_percentage;
+        $order->discount_amount = $coupon?->discount_amount;
 
         if(!is_null($coupon) && ($coupon->is_one_time && $coupon->is_used)){
             throw new \Exception('The coupon was already used!');
@@ -76,16 +79,17 @@ class OrdersService {
         $amountToBeDiscounted = 0;
 
         if(!is_null($coupon)){
-            $amountToBeDiscounted = is_null($coupon->discount_percentage) ? $coupon->discount_amount : ($coupon->discount_percentage/100)*$order->total;
+            $amountToBeDiscounted = is_null($coupon->discount_percentage) ? $coupon->discount_amount : ($coupon->discount_percentage/100)*$total;
         }
-        $amountToBeDiscounted *=  $currentRate;
+
+//        $amountToBeDiscounted *=  $currentRate;
 
         $order->total = $total - $amountToBeDiscounted ;
         $order->total += 12;//added the discount
-
         $isDiscountOnShipping = Setting::query()->where('title','is_discount_on_shipping')->first();
-        if((bool)$isDiscountOnShipping->value){
-            $order->total = ($total+12) - $amountToBeDiscounted;
+        if($isDiscountOnShipping->value && !is_null($coupon)){
+            $discountShipping = 12 - ($coupon->discount_percentage/100)*12;
+            $order->total = ($total+$discountShipping) - $amountToBeDiscounted;
         }
 
         $order->tax_total = $totalTax;
@@ -97,7 +101,6 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
     {
         $allProducts = Product::with('pricesList','tax')->findMany(collect($productsOrders)->pluck('product_id'))->toArray();
         $selectedProducts = [];
-
         foreach ($productsOrders as $key => $orderProduct) {
             if(gettype($orderProduct) != 'array'){
             $orderProduct = $orderProduct->toArray();
@@ -117,19 +120,24 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
             $pricePerUnit = $orderProduct['unit_price'];
 
             $taxPerUnit = 0;
+            $originalTax = 0;
 
             $selectedProducts[$key]['id'] = $orderProduct['product_id'];
             $selectedProducts[$key]['order_product_id'] = array_key_exists('id',$orderProduct) ? $orderProduct['id'] ?? null : null;
             $selectedProducts[$key]['name'] = $currentProduct['name']['en'];
             if($currentProduct['tax']['is_complex']){
                 $newTax= new Tax($currentProduct['tax']);
+                $originalTax = $newTax->getComplexPrice($price['price'],$allTaxComponents->toArray(),$allTaxes->toArray());
                 $taxPerUnit = $newTax->getComplexPrice($pricePerUnit,$allTaxComponents->toArray(),$allTaxes->toArray());
             }else{
+                $originalTax = ($currentProduct['tax']['percentage'] * $price['price'])/100;
                 $taxPerUnit = ($currentProduct['tax']['percentage'] * $pricePerUnit)/100;
             }
             $selectedProducts[$key]['tax'] = $taxPerUnit;
             $selectedProducts[$key]['image'] = $currentProduct['image'] ?? 'default_image';
             $selectedProducts[$key]['unit_price'] = $pricePerUnit + $taxPerUnit;
+            $selectedProducts[$key]['original_unit_price'] = $price['price'];
+            $selectedProducts[$key]['original_tax'] =  $originalTax;
             $selectedProducts[$key]['sku'] = $currentProduct['sku'];
             $selectedProducts[$key]['quantity'] = $orderProduct['quantity'];
 //            $selectedProducts[$key]['quantity_in_stock_available'] = $currentProduct['minimum_quantity'] < 0 ? 0 : $currentProduct['quantity'] - $currentProduct['minimum_quantity'];
@@ -200,7 +208,7 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
         //prepare the array for update
         $dataToBeUpdatedOrCreated = [];
         foreach ($newProducts as $key => $product){
-
+            $array = [];
             $priceOfUnit = $prices->where('product_id' , $product['id'])->where('price_id',1)->first() ? $prices->where('product_id' , $product['id'])->where('price_id',1)->first()->price : 0;
             $mainProduct = $products->where('id',$product['id'])->first();
             $taxObject = $taxes->where('id',$mainProduct->tax_id)->first();
@@ -212,22 +220,26 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
             }else{
                 $tax = $taxObject->percentage * $priceOfUnit/100;
             }
-            $dataToBeUpdatedOrCreated[$key]['id'] = $oldOrderProduct ? $oldOrderProduct['id'] : null ;
+//            $dataToBeUpdatedOrCreated[$key]['id'] = $oldOrderProduct ? $oldOrderProduct['id'] : null ;
             $dataToBeUpdatedOrCreated[$key]['order_id'] = $order->id;
             $dataToBeUpdatedOrCreated[$key]['product_id'] = $product['id'];
-            $dataToBeUpdatedOrCreated[$key]['quantity'] = $product['quantity'];
+            $dataToBeUpdatedOrCreated[$key]['quantity'] = 100;
             $dataToBeUpdatedOrCreated[$key]['unit_price'] = $product['unit_price'];
             $dataToBeUpdatedOrCreated[$key]['tax_percentage'] = $taxObject->percentage;
             $dataToBeUpdatedOrCreated[$key]['tax_amount'] = $tax;
             $dataToBeUpdatedOrCreated[$key]['total'] = $product['unit_price'] * $product['quantity'];
 
-            $dataToBeUpdatedOrCreated[$key]['created_at'] = now();
-            $dataToBeUpdatedOrCreated[$key]['updated_at'] = now();
+            $dataToBeUpdatedOrCreated[$key]['created_at'] = null;
+            $dataToBeUpdatedOrCreated[$key]['updated_at'] = null;
             $total += $dataToBeUpdatedOrCreated[$key]['total'];
             $totalTax += $tax;
+            $array = $dataToBeUpdatedOrCreated[$key];
+            $arrayValues= ['order_id' => $order->id,'product_id' => $product['id']];
+           (OrderProduct::query()->updateOrCreate($arrayValues,$array));
+
         }
-        // update or create the new products of the order
-        OrderProduct::upsert($dataToBeUpdatedOrCreated,['id'],['quantity','unit_price','tax_percentage','tax_amount','total','created_at','updated_at']);
+        // update or create the n   ew products of the order
+//        (OrderProduct::query()->upsert($dataToBeUpdatedOrCreated,['order_id','product_id'],['quantity','unit_price','tax_percentage','tax_amount','total','created_at','updated_at']));
 
         $coupon = Coupon::query()
             ->where('id', $order->coupon_id ?? 0)
@@ -257,10 +269,9 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
     }
 
     public static function createNotesForOrder(Order $order, array $notes = [],array $data= []):bool{
-
         $notesToBeSaved = [];
         foreach ($notes as $key => $note) {
-            $notesToBeSaved[$key]['user_id'] = auth()->user()->id;
+            $notesToBeSaved[$key]['user_id'] = is_null(auth()->user()) ? 0 : auth()->user()->id;
             $notesToBeSaved[$key]['title'] = $note['title'];
             $notesToBeSaved[$key]['body'] = $note['note'];
             $notesToBeSaved[$key]['date'] = now();
@@ -287,7 +298,7 @@ public static function generateOrderProducts($productsOrders,$defaultPricingClas
         $notesToBeSaved = [];
         foreach ($newNotes as $key => $note) {
             $notesToBeSaved[$key]['id'] = $note['id'] ?? null;
-            $notesToBeSaved[$key]['user_id'] = auth()->user()->id;
+            $notesToBeSaved[$key]['user_id'] = auth()->user() ? auth()->user()->id : 0;
             $notesToBeSaved[$key]['title'] = $note['title'];
             $notesToBeSaved[$key]['body'] = $note['note'];
             $notesToBeSaved[$key]['date'] = now();

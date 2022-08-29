@@ -12,7 +12,17 @@ class OrderProduct extends MainModel
 
     use HasFactory,HasTranslations;
 
-    protected array $translatable = [];
+    protected $table = 'order_products';
+    protected $translatable = [];
+    protected $fillable = [
+        'order_id',
+        'product_id',
+        'quantity',
+        'unit_price',
+        'tax_percentage',
+        'tax_amount',
+        'total'
+    ];
 
 
 }

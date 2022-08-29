@@ -292,7 +292,7 @@ class OrdersController extends MainController
                 return $this->errorResponse('There is no default currency!');
             }
 
-            $order->currency_rate = $request->rate;
+            $order->currency_rate = $request->currency_rate;
 
             if($request->currency_id == $defaultCurrency->id){
                 $order->currency_rate = 1;
@@ -323,7 +323,7 @@ class OrdersController extends MainController
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
 
-            $differencePrice = abs(($order->total + 12) - $request->total_price);
+            $differencePrice = abs(($order->total) - $request->total_price);
             if($differencePrice >= 0.001){
                 return $this->errorResponse('Sorry but there was a problem with the calculations! ',    [
                     'shipping' => 12,
@@ -369,8 +369,9 @@ class OrdersController extends MainController
         $allTaxComponents = TaxComponent::all();
 
         $order->selected_products =  OrdersService::generateOrderProducts($orderProducts,$defaultPricingClass,$allTaxComponents,$allTaxes,$selectedCurrency);
+
         return $this->successResponse(data: [
-            'order' => new SingelOrdersResource($order->load(['status','coupon','products','notes']))
+            'order' => new SingelOrdersResource($order->load(['status','coupon','notes']))
         ]);
     }
 
@@ -612,23 +613,10 @@ class OrdersController extends MainController
 
             OrdersService::updateNotesForOrder($order,$request->notes ?? [] , $request->toArray());
 
-            $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
-
-
-//
-//            if($order->total != $request->total_price){
-//                return $this->errorResponse('The calculated price is invalid!, please try again later');
-//            }
-//
-            $differencePrice = abs(($order->total + 12) - $request->total_price);
+            $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order,'update');
+            $differencePrice = abs(($order->total) - $request->total_price);
             if($differencePrice >= 0.001){
-                return $this->errorResponse(
-                    'Sorry but there was a problem with the calculations! ',
-                    [
-                        'shipping' => 12,
-                        'order_total' => $order->total
-                    ]
-                );
+                return $this->errorResponse('Sorry but there was a problem with the calculations! ');
             }
 
             $order->save();
@@ -637,7 +625,6 @@ class OrdersController extends MainController
 
             $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$defaultPricingClass,$allTaxComponents,$allTaxes,$selectedCurrency);
             OrdersService::adjustQuantityOfOrderProducts($order->selected_products,$allProducts);
-
             DB::commit();
             return $this->successResponse('The order has been created successfully !', [
                 'order' => new SingelOrdersResource($order->load(['status','coupon','products','notes']))

@@ -3,9 +3,15 @@
 namespace App\Http\Requests\Product;
 
 use App\Http\Requests\MainRequest;
+
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+
+
 
 class GetAllProdcutsForOrderRequest extends MainRequest
+
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,4 +36,16 @@ class GetAllProdcutsForOrderRequest extends MainRequest
            'name' => 'nullable'
        ];
     }
+    protected function failedValidation(Validator $validator) {
+        throw new HttpResponseException(response()->json(
+            [
+                'code' => -1 ,
+                'errors'=>$validator->errors()->messages() ,
+                'message' => 'Please recheck the selected currency or currency rate'
+            ],
+            200)
+
+        );
+    }
+
 }
