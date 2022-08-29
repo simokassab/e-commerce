@@ -49,7 +49,6 @@ class SingleProductResource extends JsonResource
     foreach ($productRelated as $key => $product) {
         $productRelated[$key]['name_original'] = $productsRelatedNames[$key];
         }
-    dd($productRelated);
         return [
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
@@ -91,7 +90,7 @@ class SingleProductResource extends JsonResource
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'labels' => SelectLabelResource::collection($this->whenLoaded('labels')),
             'categories' => $nestedCategories,
-            'related_products' => $this->whenLoaded('productRelatedChildren') ? $this->whenLoaded('productRelatedChildren') : [],
+            'related_products' => $productRelated?? [],
             'variations' => $this->whenLoaded('children') ? $this->whenLoaded('children') : [],
             'images' => ProductImagesResource::collection($this->whenLoaded('images')) ?? [],
         ];
