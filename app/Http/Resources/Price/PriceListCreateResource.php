@@ -18,28 +18,37 @@ class PriceListCreateResource extends JsonResource
     public function toArray($request)
     {
         $prices = self::$data[0];
-        $allProducts = self::$data[1];
         $productPrices = self::$data[2];
-        $pricesResult = [];
 
+        $pricesResult = [];
         $pricesResult['code'] = $this->code;
         $pricesResult['item'] = $this->name;
         $pricesResult['UOM'] = $this->whenLoaded('unit') ?  $this->whenLoaded('unit')->code : 'NON';
 
         foreach ($prices as $price){
             $productPrice = collect($productPrices)->where('product_id',$this->id)->where('price_id',$price->id)->first();
-
             if(is_null($productPrice)){
                 $pricesResult['price_'.$price->id]['id'] = null;
                 $pricesResult['price_'.$price->id]['price'] = 0;
-                $pricesResult['price_'.$price->id]['price_id'] = $price->price_id;
+                $pricesResult['price_'.$price->id]['price_id'] = $price->id;
                 $pricesResult['price_'.$price->id]['is_virtual'] = (bool)$price->is_virtual;
+
+                if(!$price->is_virtual){
+                    continue;
+                }
+
+                $originalPrice = $productPrices->where('price_id',$price->original_price_id)->where('product_id',$this->id)->first();
+                if(is_null($originalPrice)){
+                    continue;
+                }
+                $pricesResult['price_'.$price->id]['price'] = $originalPrice->price * ($price->percentage/100);
+
                 continue;
             }
 
             $pricesResult['price_'.$price->id]['id'] = $productPrice->id;
             $pricesResult['price_'.$price->id]['price'] = $productPrice->price;
-            $pricesResult['price_'.$price->id]['price_id'] = $price->price_id;
+            $pricesResult['price_'.$price->id]['price_id'] = $price->id;
             $pricesResult['price_'.$price->id]['is_virtual'] = (bool)$price->is_virtual;
         }
 
