@@ -136,6 +136,10 @@ class Product extends MainModel
         return $this->hasMany(ProductImage::class,'product_id');
     }
 
+    public function productStatus(){
+        return $this->belongsTo(ProductStatus::class,'products_statuses_id');
+    }
+
 
     public function getVirtualPricing(Price | int $pricingClass){
         $pricingClass  = is_int($pricingClass)  ?  Price::findOrFail($pricingClass) : $pricingClass ;
