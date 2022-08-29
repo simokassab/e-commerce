@@ -134,7 +134,8 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddleware ],fu
     Route::post('coupon/all',[CouponsController::class,'index']);
     Route::apiResource('coupon',CouponsController::class);
 
-    Route::get('test',[TestController::class,'test']);
 
-    });
+});
+Route::get('test',[TestController::class,'test']);
+Route::get('createShipment',[TestController::class,'createShipment']);
 
