@@ -101,7 +101,7 @@ class Product extends MainModel
 
     }
     public function productRelatedChildren(){
-        return $this->hasMany(ProductRelated::class,'child_product_id');
+        return $this->hasMany(ProductRelated::class,'parent_product_id');
 
     }
     public function productImages(){
