@@ -114,7 +114,7 @@ class CouponsController extends MainController
      * @param  Coupon $coupon
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(CouponRequest $request, Coupon $coupon)
+    public function update(CouponRequest $request,Coupon $coupon)
     {
 
         $coupon->title = $request->title;

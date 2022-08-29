@@ -27,7 +27,7 @@ class CouponRequest extends MainRequest
     {
         return [
             'title' => 'required',
-            'code' => 'required|unique:coupons,code',
+            'code' => 'unique:coupons,code,'.$this->coupon->id,
             'start_date' => 'nullable|date',
             'expiry_date' => 'nullable|date',
             'type' => ['required',Rule::in(['percentage','amount'])],
