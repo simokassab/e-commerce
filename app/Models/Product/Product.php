@@ -31,7 +31,6 @@ class Product extends MainModel
     protected $translatable=['name','summary','specification','description','meta_title','meta_description','meta_keyword'];
     protected $table='products';
     protected $guard_name = 'web';
-    protected $appends = ['name'];
 
     protected $fillable = [
         'name',
@@ -63,12 +62,7 @@ class Product extends MainModel
         'is_show_related_product',
     ];
 
-    public function getProductName()
-{
 
-    return $this->getTranslation('name','ar');
-
-}
     public function parent(){
         return $this->belongsTo(Product::class,'parent_product_id','id');
     }
