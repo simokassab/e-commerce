@@ -35,11 +35,7 @@ class ProductService
 
     public function storeAdditionalCategrories($request, $product, $childrenIds)
     {
-        //$request=(object)$request;
         $categoryCheck = ProductCategory::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
-        // if ($categoryCheck) {
-        //     $categoryCheck->destroy();
-        // }
 
         $childrenIdsArray = $childrenIds;
         $childrenIdsArray[] = $product->id;
