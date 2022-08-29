@@ -27,15 +27,14 @@ class CouponRequest extends MainRequest
     {
         $id = $this->coupon ? $this->coupon->id : null;
         return [
-            'title' => 'required',
+            'title' => 'required|',
             'code' => 'unique:coupons,code,'.$id,
-            'start_date' => 'nullable|date',
-            'expiry_date' => 'nullable|date',
+            'start_date' => 'nullable|date|after_or_equal:'.now()->toDateString(),
+            'expiry_date' => 'nullable|date|after:start_date',
             'type' => ['required',Rule::in(['percentage','amount'])],
-            'value' => 'required|numeric',
-            'min_amount' => 'nullable|numeric',
+            'min_amount' => ['nullable','numeric'],
+            'value' => ['required','numeric', Rule::when($this->type == 'amount' && $this->has('min_amount'), ['lte:'.$this->min_amount])],
             'is_one_time' => 'nullable|boolean',
-            'is_used' => 'nullable|boolean',
         ];
     }
 }
