@@ -645,8 +645,6 @@ class ProductService
         $product->minimum_quantity = $request->minimum_quantity;
         $product->summary = ($request->summary);
         $product->specification = ($request->specification);
-        if ($request->image)
-            $product->image = uploadImage($request->image, config('images_paths.product.images'));
 
         $product->meta_title = $request->meta_title ?? null;
         $product->meta_keyword = $request->meta_keyword ?? null;
@@ -669,7 +667,12 @@ class ProductService
         $product->is_show_related_product = $request->is_show_related_product ?? 0;
         $product->pre_order = $request->pre_order ?? 0;
         $product->bundle_reserved_quantity = null;
+
+        if ($request->file('image') && !is_string($request->file('image')))
+            $product->image = uploadImage($request->image, config('images_paths.product.images'));
+
         $product->save();
+
         // DB::commit();
         return $product;
         // } catch (Exception $e) {

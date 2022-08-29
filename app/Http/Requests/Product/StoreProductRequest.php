@@ -100,8 +100,8 @@ class StoreProductRequest extends FormRequest
             | mimes:' . config('defaults.default_image_extentions') . '
             | max:' . config('defaults.default_image_size') . '
             | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
-            'images.*.title' => 'required ',
-            'images.*.sort' => 'required | integer',
+            'images_data.*.title' => 'required ',
+            'images_data.*.sort' => 'required | integer',
 
             'labels.*' => 'exists:labels,id',
             'tags.*' => 'exists:tags,id',
