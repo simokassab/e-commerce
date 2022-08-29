@@ -44,11 +44,11 @@ class SingleProductResource extends JsonResource
     $productRelatedIds=collect($this->whenLoaded('productRelatedChildren'))->pluck('child_product_id');
     $productsRelatedNames=Product::findMany($productRelatedIds->toArray())->pluck('name');
 
-    $productRelated=collect($this->whenLoaded('productRelatedChildren'));
+    $productRelated=($this->whenLoaded('productRelatedChildren'));
 
     foreach ($productRelated as $key => $product) {
-        $productRelated->put('name',$productsRelatedNames);
-    }
+        $productRelated['name'] = $productsRelatedNames[$key];
+        }
     dd($productRelated);
         return [
             'id' => (int)$this->id,
