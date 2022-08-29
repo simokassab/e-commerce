@@ -69,7 +69,6 @@ class PricesListController extends MainController
             });
             })
             ->when($request->has('data') && (key_exists('code',$request->data)) , function($query) use($request){
-                dd('hello');
                 $value = $request->data['code'];
                 $query->whereRaw('lower(code) like (?)', ["%$value%"]);
             })
