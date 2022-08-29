@@ -42,8 +42,8 @@ class SingleProductResource extends JsonResource
         $productAttributes = ProductField::whereIn('product_id',$childrenIds)->get();
 
     $productRelatedIds=collect($this->whenLoaded('productRelatedChildren'))->pluck('child_product_id');
-    dd($productRelatedIds);
-        // $productsRelatedNames=Product::findMany()
+    $productsRelatedNames=Product::findMany($productRelatedIds->toArray());
+    dd($productsRelatedNames);
         return [
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
