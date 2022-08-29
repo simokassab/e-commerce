@@ -199,7 +199,7 @@ class ProductController extends MainController
     public function show(Product $product)
     {
         $product->all_categories = Category::all();
-        return $this->successResponse('Success!', ['product' =>  new SingleProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category', 'unit', 'tax', 'priceClass', 'price', 'field', 'labels', 'productRelatedChildren', 'children', 'images']))]);
+        return $this->successResponse('Success!', ['product' =>  new SingleProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category', 'unit', 'tax', 'priceClass', 'price', 'field', 'labels', 'productRelatedChildren','productRelatedParent', 'children', 'images']))]);
     }
 
     /**
