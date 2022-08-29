@@ -17,70 +17,40 @@ class PriceListCreateResource extends JsonResource
      */
     public function toArray($request)
     {
+        $prices = self::$data[0];
+        $allProducts = self::$data[1];
+        $productPrices = self::$data[2];
+        $pricesResult = [];
 
-        $priceClasses = [];
-        $neededPricesIds = collect($this::$data)->pluck('id');
+        $pricesResult['code'] = $this->code;
+        $pricesResult['item'] = $this->name;
+        $pricesResult['UOM'] = $this->whenLoaded('unit') ?  $this->whenLoaded('unit')->code : 'NON';
 
-        if(( count($this->pricesList->toArray()) == 0 ) ){
-            foreach ($this::$data as $priceList){
+        foreach ($prices as $price){
+            $productPrice = collect($productPrices)->where('product_id',$this->id)->where('price_id',$price->id)->first();
 
-                    $priceClasses['price_'.$priceList['id']] = [
-                        'id' => null,
-                        'price' => (double)($this->getPrice($priceList['id'])) ,
-                        'price_id' => $priceList['id'],
-                        'is_virtual' => (bool)$priceList['is_virtual'],
-                    ];
-
+            if(is_null($productPrice)){
+                $pricesResult['price_'.$price->id]['id'] = null;
+                $pricesResult['price_'.$price->id]['price'] = 0;
+                $pricesResult['price_'.$price->id]['price_id'] = $price->price_id;
+                $pricesResult['price_'.$price->id]['is_virtual'] = (bool)$price->is_virtual;
+                continue;
             }
+
+            $pricesResult['price_'.$price->id]['id'] = $productPrice->id;
+            $pricesResult['price_'.$price->id]['price'] = $productPrice->price;
+            $pricesResult['price_'.$price->id]['price_id'] = $price->price_id;
+            $pricesResult['price_'.$price->id]['is_virtual'] = (bool)$price->is_virtual;
         }
-        $priceClassesArray = [];
 
-        $priceClassesArray =  $this->whenLoaded('pricesList', function ()use($priceClasses,$neededPricesIds){
-            $availablePrices = [];
-
-            $priceLists =  $this->whenLoaded('pricesList');
-            foreach ($priceLists as $priceList){
-                $price = $priceList->load('prices')->prices;
-                if($price && in_array($price->id, $neededPricesIds->toArray())){
-                    $availablePrices[] = $price->id;
-                    $priceClasses['price_'.$price->id] = [
-                        'id' => $priceList->id,
-                        'price' => (double)$this->getPrice($price->id) ,
-                        'price_id' => $price->id,
-                        'is_virtual' => (bool)$price->is_virtual,
-                    ];
-                }
-            }
-
-            $result = array_diff( $neededPricesIds->toArray(),$availablePrices);
-
-            foreach ($result as $item) {
-                $item = collect($this::$data)->where('id',$item)->first();
-                $priceClasses['price_'.$item['id']] = [
-                    'id' => null,
-                    'price' => (double)0,
-                    'price_id' => $item['id'],
-                    'is_virtual' => (bool)$item['is_virtual'],
-                ];
-            }
-            return collect($priceClasses)->sortBy('price_id')->toArray();
-        });
-
-
-       $productArray = [
-           'code' => $this->code,
-           'item' => $this->name,
-           'UOM' => $this->whenLoaded('unit')->code ?? '-',
-       ];
-
-        return array_merge($productArray,$priceClassesArray);
+        return ($pricesResult);
 
     }
 
-    public static function customCollection($resource, $data): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    public static function customCollection($products,...$data): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         //you can add as many params as you want.
         self::$data = $data;
-        return parent::collection($resource);
+        return parent::collection($products);
     }
 }
