@@ -59,7 +59,6 @@ class Tax extends MainModel
 
         if($this->complex_behavior == 'combine'){
             $totalTax =  ($this->getComplexCombinePrice($allTaxes,$allTaxComponents,0,$price));
-            dd($totalTax);
             $resultantTaxRate += ($totalTax/ 100) * $price ;
         }else{
              $this->getComplexAfterOtherPrice($price,$allTaxes,$allTaxComponents,$resultantTaxRate);

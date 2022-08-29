@@ -41,7 +41,13 @@ class TestController extends MainController
     }
 
     public function test(){
-    return Tax::query()->find(6)->getComplexPrice(2);
+    $products = Product::find(1)->updateProductQuantity(1,'add');
+    $products->where('id',1)->first();
+
+
+
+    return 's';
+     return Tax::query()->find(6)->getComplexPrice(2);
 
     }
 }
