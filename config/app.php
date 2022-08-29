@@ -198,6 +198,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Batch' => Mavinoo\Batch\BatchFacade::class,
+        'Aramex' => Octw\Aramex\Aramex::class,
 
 
     ])->toArray(),

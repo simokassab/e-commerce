@@ -63,6 +63,17 @@
       0 => 'Termwind\\Laravel\\TermwindServiceProvider',
     ),
   ),
+  'octw/aramex' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Octw\\Aramex\\AramexServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Aramex' => 'Octw\\Aramex\\Aramex',
+    ),
+  ),
   'protonemedia/laravel-cross-eloquent-search' => 
   array (
     'providers' => 
