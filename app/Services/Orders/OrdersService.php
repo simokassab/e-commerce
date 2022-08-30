@@ -82,7 +82,7 @@ class OrdersService {
             $amountToBeDiscounted = is_null($coupon->discount_percentage) ? $coupon->discount_amount : ($coupon->discount_percentage/100)*$total;
         }
 
-//        $amountToBeDiscounted *=  $currentRate;
+        $amountToBeDiscounted *=  $currentRate;
 
         $order->total = $total - $amountToBeDiscounted ;
         $order->total += 12;//added the discount
