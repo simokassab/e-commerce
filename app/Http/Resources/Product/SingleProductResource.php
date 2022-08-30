@@ -49,7 +49,7 @@ class SingleProductResource extends JsonResource
         foreach ($productRelated as $key => $product) {
             $productRelated[$key]['name_original'] = $productsRelatedNames[$key]['name'];
         }
-        dd($productRelated);
+
         return [
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
