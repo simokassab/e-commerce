@@ -96,7 +96,7 @@ class ProductService
             $data[$index]["field_id"] = $field['field_id'];
         }
         if (ProductField::insert($data)) {
-
+            dd($data);
             return $this;
         }
 
@@ -154,7 +154,6 @@ class ProductService
     public function storeAdditionalImages($request, $product)
     {
         //$request=(object)$request;
-        // $imageCheck = ProductImage::where('product_id', $product->id)->delete();
 
         if (!$request->has('images') || is_null($request->images)) {
             return $this;
