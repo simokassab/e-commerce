@@ -131,6 +131,8 @@ class OrdersController extends MainController
             $order->customer_id = $request->client_id;
             $order->currency_id = $request->currency_id;
             $order->time = now();
+            $order->date = now();
+
 
             $order->shipping_first_name = $request->shipping['first_name'];
             $order->shipping_last_name = $request->shipping['last_name'];
@@ -569,8 +571,8 @@ class OrdersController extends MainController
             }
 
 
-            $order->time = $request->time;
-//            $order->date = new Carbon($request->date)->format('H:i:s');
+            $order->time = now();
+            $order->date = now();
             $order->customer_comment = $request->comment;
             $order->order_status_id = $request->status_id;
 

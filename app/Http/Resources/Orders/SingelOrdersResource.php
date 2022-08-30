@@ -18,7 +18,7 @@ class SingelOrdersResource extends JsonResource
         return [
             'code' => $this->id,
             "client_id" => (int)$this->customer_id,
-            "currency_id" => $this->currency_id,
+            "currency_id" => (int)$this->currency_id,
             "shipping_address_id" => is_null($this->shipping_address_id) ? null : (int) $this->shipping_address_id,
             "billing_address_id" =>  is_null($this->billing_address_id) ? null : (int) $this->billing_address_id,
             "time" => $this->time,
