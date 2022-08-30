@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('orders_notes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
-
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('order_status_id')->nullable();

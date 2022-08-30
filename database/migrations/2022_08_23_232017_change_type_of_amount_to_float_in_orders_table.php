@@ -19,6 +19,7 @@ return new class extends Migration
         DB::statement('ALTER TABLE `products` MODIFY `quantity` DOUBLE(19,4) NULL');
         DB::statement('ALTER TABLE `products` MODIFY `reserved_quantity` DOUBLE(19,4) NULL');
         DB::statement('ALTER TABLE `products` MODIFY `minimum_quantity` DOUBLE(19,4) NULL');
+        DB::statement('ALTER TABLE `products` MODIFY `bundle_reserved_quantity` DOUBLE(19,4) NULL');
 
     }
 
@@ -38,6 +39,7 @@ return new class extends Migration
             $table->integer('quantity')->change();
             $table->integer('reserved_quantity')->change();
             $table->integer('minimum_quantity')->change();
+            $table->integer('bundle_reserved_quantity')->change();
 
         });
     }
