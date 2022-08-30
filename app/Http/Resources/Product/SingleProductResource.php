@@ -42,18 +42,14 @@ class SingleProductResource extends JsonResource
         $productAttributes = ProductField::whereIn('product_id', $childrenIds)->get();
 
         $productRelatedIds = collect($this->whenLoaded('productRelatedChildren'))->pluck('child_product_id');
-        $productsRelatedNames = Product::findMany($productRelatedIds->toArray());
-        $productsNames=[];
         $model=new Product();
-        foreach ($productsRelatedNames as $key => $value) {
-            $productsNames[$key]=$model->getTranslations($value['name']);
-        }
-        dd($productsNames);
+        $productsRelatedNames = Product::findMany($productRelatedIds->toArray())->pluck($model->getTranslations('name'));
         $productRelated = ($this->whenLoaded('productRelatedChildren'))->toArray();
 
         foreach ($productRelated as $key => $product) {
             $productRelated[$key]['name_original'] = $productsRelatedNames[$key];
         }
+        dd($productRelated);
         return [
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
