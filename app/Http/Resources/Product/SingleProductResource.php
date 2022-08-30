@@ -37,17 +37,17 @@ class SingleProductResource extends JsonResource
     public function toArray($request)
     {
         $selectedCategoriesIds = $this->whenLoaded('category');
-        $nestedCategories = CategoryService::getAllCategoriesNested($this->all_categories,$selectedCategoriesIds->pluck('id')->toArray());
-        $childrenIds = Product::where('parent_product_id',$this->id)->pluck('id')->toArray();
-        $productAttributes = ProductField::whereIn('product_id',$childrenIds)->get();
+        $nestedCategories = CategoryService::getAllCategoriesNested($this->all_categories, $selectedCategoriesIds->pluck('id')->toArray());
+        $childrenIds = Product::where('parent_product_id', $this->id)->pluck('id')->toArray();
+        $productAttributes = ProductField::whereIn('product_id', $childrenIds)->get();
 
-    $productRelatedIds=collect($this->whenLoaded('productRelatedChildren'))->pluck('child_product_id');
-    $productsRelatedNames=Product::findMany($productRelatedIds->toArray())->pluck('name');
+        $productRelatedIds = collect($this->whenLoaded('productRelatedChildren'))->pluck('child_product_id');
+        $productsRelatedNames = Product::findMany($productRelatedIds->toArray())->pluck('name');
 
-    $productRelated=($this->whenLoaded('productRelatedChildren'))->toArray();
+        $productRelated = ($this->whenLoaded('productRelatedChildren'))->toArray();
 
-    foreach ($productRelated as $key => $product) {
-        $productRelated[$key]['name_original'] = $productsRelatedNames[$key];
+        foreach ($productRelated as $key => $product) {
+            $productRelated[$key]['name_original'] = $productsRelatedNames[$key];
         }
         return [
             'id' => (int)$this->id,
@@ -63,9 +63,9 @@ class SingleProductResource extends JsonResource
             'minimum_quantity' => (int)$this->minimum_quantity ?? 0,
             'summary' => $this->getTranslations('summary') ?? [],
             'specification' => $this->getTranslations('specification')  ?? [],
-            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
+            'image' => $this->image && !empty($this->image) ?  getAssetsLink('storage/' . $this->image) : 'default_image',
             'image_path' => $this->image ?? 'default_image',
-            'brand' => $this->whenLoaded('brand') ? new SelectBrandResource($this->whenLoaded('brand')) :[],
+            'brand' => $this->whenLoaded('brand') ? new SelectBrandResource($this->whenLoaded('brand')) : [],
             'tax' => $this->whenLoaded('tax') ? new SelectTaxResource($this->whenLoaded('tax')) : [],
             'meta_title' => $this->getTranslations('meta_title')  ?? [],
             'meta_description' => $this->getTranslations('meta_description')  ?? [],
@@ -85,12 +85,12 @@ class SingleProductResource extends JsonResource
             'website_status' => $this->website_status,
             'pre_order' => (int)$this->pre_order ?? 0,
             'prices' => ProductPriceResoruce::collection($this->whenLoaded('price')->load('prices.currency')) ?? [],
-            'fields' => SingleFieldResource::collection($this->whenLoaded('field'))->where('is_attribute',0) ?? [],
+            'fields' => SingleFieldResource::collection($this->whenLoaded('field'))->where('is_attribute', 0) ?? [],
             'attributes' => $productAttributes ?? [],
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'labels' => SelectLabelResource::collection($this->whenLoaded('labels')),
             'categories' => $nestedCategories,
-            'related_products' => $productRelated?? [],
+            'related_products' => $productRelated ?? [],
             'variations' => $this->whenLoaded('children') ? $this->whenLoaded('children') : [],
             'images' => ProductImagesResource::collection($this->whenLoaded('images')) ?? [],
         ];
