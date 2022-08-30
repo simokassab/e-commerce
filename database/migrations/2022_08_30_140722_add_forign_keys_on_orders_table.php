@@ -23,7 +23,7 @@ return new class extends Migration
 //            $table->foreign('shipping_address_id')->on('customer_address')->references('id');
 //            $table->foreign('billing_address_id')->on('customer_address')->references('id');
 //            $table->foreign('currency_id')->on('currencies')->references('id');
-            $table->foreign('payment_method_id')->on('payments_types')->references('id');
+//            $table->foreign('payment_method_id')->on('payments_types')->references('id');
 
 
         });
@@ -46,7 +46,7 @@ return new class extends Migration
 //            $table->dropForeign('shipping_address_id_foreign');
 //            $table->dropForeign('billing_address_id_foreign');
 //            $table->dropForeign('currency_id_foreign');
-            $table->dropForeign('orders_payment_method_id_foreign');
+//            $table->dropForeign('orders_payment_method_id_foreign');
 
         });
     }
