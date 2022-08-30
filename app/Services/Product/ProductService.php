@@ -96,8 +96,7 @@ class ProductService
             $data[$index]["field_id"] = $field['field_id'];
         }
         if (ProductField::insert($data)) {
-            dd($data);
-            return $this;
+    return $this;
         }
 
         throw new Exception('Error while storing product fields');
@@ -636,7 +635,14 @@ class ProductService
         $product->sku = $request->sku;
         $product->type = $request->type;
         $product->quantity = $request->quantity;
-        $product->reserved_quantity = $request->reserved_quantity;
+        if(! $product->type == 'bundle'){
+            $diffrenceQuantity = $request->quantity - ($product->reserved_quantity + $product->bundle_reserved_quantity);
+            if($diffrenceQuantity > ($request->reserved_quantity - $product->reserved_quantity)){
+                $product->reserved_quantity = $request->reserved_quantity;
+            }
+        }else{
+            $product->reserved_quantity = $request->reserved_quantity;
+        }
         $product->minimum_quantity = $request->minimum_quantity;
         $product->summary = ($request->summary);
         $product->specification = ($request->specification);

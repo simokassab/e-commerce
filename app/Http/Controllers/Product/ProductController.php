@@ -236,7 +236,7 @@ class ProductController extends MainController
             if ($request->type == 'bundle') {
                 $this->productService->storeAdditionalBundle($request, $product);
             }
-            // Product::find($product->id)->updateProductQuantity($oldReservedQuantity,'sub');
+            Product::find($product->id)->updateProductQuantity($request->reserved_quantity,'sub');
 
 
             $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
