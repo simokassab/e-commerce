@@ -59,10 +59,10 @@ class StoreProductRequest extends FormRequest
             'summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
             'specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
 
-            'image' => 'nullable | file
-            | mimes:' . config('defaults.default_image_extentions') . '
-            | max:' . config('defaults.default_image_size') . '
-            | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
+            // 'image' => 'nullable | file
+            // | mimes:' . config('defaults.default_image_extentions') . '
+            // | max:' . config('defaults.default_image_size') . '
+            // | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
 
             'meta_title' => 'nullable',
             'meta_description' => 'nullable',
