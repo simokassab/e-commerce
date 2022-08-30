@@ -220,8 +220,9 @@ class ProductController extends MainController
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(StoreProductRequest $request, Product $product)
+    public function update(Request $request, Product $product)
     {
+        dd($request->image);
 
         DB::beginTransaction();
         try {
