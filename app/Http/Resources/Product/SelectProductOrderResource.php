@@ -75,7 +75,7 @@ class SelectProductOrderResource extends JsonResource
             'quantity_in_stock' => !is_numeric($quantity) ? $quantity :  (float)number_format((float)$quantity, 2, '.', ''),
             'edit_status' => false,
             'type' => $this->type,
-            'pre_order' => $preOrder
+            'pre_order' => (bool)$preOrder
 //            'quantity_in_stock_available' => $this->quantity - $this->minimum_quantity < 0 ? 0 : $this->quantity - $this->minimum_quantity,
 
         ];
