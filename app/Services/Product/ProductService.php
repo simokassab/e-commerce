@@ -48,7 +48,7 @@ class ProductService
         foreach ($childrenIdsArray as $key => $child) {
             foreach ($oneLevelCategoryArray as $key => $category) {
                 $isChecked = (bool)$category['checked'];
-                dd($isChecked);
+                dd($category['checked']);
                 if ($isChecked) {
                     $categoriesIdsArray[] = [
                         'product_id' => $child,
