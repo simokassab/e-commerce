@@ -33,6 +33,7 @@ class MainRequest extends FormRequest
 
         throw new HttpResponseException(response()->json(
             [
+                'message' => 'The input validation has failed, check your inputs',
                 'code' => -1 ,
                 'errors'=>$validator->errors()->messages() ,
             ],
