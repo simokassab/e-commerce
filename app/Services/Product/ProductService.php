@@ -148,6 +148,7 @@ class ProductService
         if (!ProductImage::whereIn('id', $request->images_deleted)->delete()) {
             throw new Exception('Error while deleting product images');
         }
+        return $this;
     }
 
     public function storeAdditionalImages($request, $product)
@@ -158,10 +159,10 @@ class ProductService
         if (!$request->has('images') || is_null($request->images)) {
             return $this;
         }
-
-        // if (count($request->images) != $request->images_data->count()) {
-        //     throw new Exception('Images and images_data count is not equal');
-        // }
+        dd(count($request->images));
+        if (count($request->images) != count($request->images_data)) {
+            throw new Exception('Images and images_data count is not equal');
+        }
 
         $data = [];
         foreach ($request->images as $index => $image) {
@@ -556,9 +557,8 @@ class ProductService
 
             $productVariationParentsArray = [];
             foreach ($request->product_variations as $variation) {
-                if ($variation['image'] == null)
-                    $imagePath = "";
-                else
+                $imagePath = null;
+                if ($request->file('image') && !is_string($request->file('image')))
                     $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
 
                 $productVariationsArray = [
