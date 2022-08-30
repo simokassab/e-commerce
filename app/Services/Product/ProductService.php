@@ -47,8 +47,9 @@ class ProductService
         $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($request->categories);
         foreach ($childrenIdsArray as $key => $child) {
             foreach ($oneLevelCategoryArray as $key => $category) {
-                dd($category);
-                if ((bool)$category['checked']) {
+                $isChecked = (bool)$category['checked'];
+                dd($isChecked);
+                if ($isChecked) {
                     $categoriesIdsArray[] = [
                         'product_id' => $child,
                         'category_id' => $category['id'],
