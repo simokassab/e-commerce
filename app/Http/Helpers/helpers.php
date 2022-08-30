@@ -95,3 +95,7 @@ function arrayToObject($array)
     return array_to_obj($array, $object);
 
 }
+
+ function getAllTranslations($model,$key){
+    return $model->getTranslations($key);
+}
