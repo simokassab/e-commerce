@@ -131,6 +131,7 @@ Route::group([ 'prefix' => 'dashboard','middleware' => $dashboardMiddlewares ],f
 
     Route::post('coupon/get-coupon-by-code/{code}',[CouponsController::class,'getCouponByCode']);
     Route::post('coupon/all',[CouponsController::class,'index']);
+    Route::get('coupon/create',[CouponsController::class,'create']);
     Route::apiResource('coupon',CouponsController::class);
 
 

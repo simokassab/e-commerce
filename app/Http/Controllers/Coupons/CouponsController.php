@@ -9,6 +9,7 @@ use App\Http\Resources\Coupons\CouponResource;
 use App\Http\Resources\Coupons\CouponSingleResource;
 use App\Http\Resources\Coupons\RestFullCouponResource;
 use App\Models\Coupons\Coupon;
+use App\Models\Currency\Currency;
 use Illuminate\Http\Request;
 
 class CouponsController extends MainController
@@ -37,11 +38,15 @@ class CouponsController extends MainController
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function create()
     {
-        //
+        $defaultCurrency = Currency::query()->where('is_default',1)->first();
+
+        return $this->successResponse(data:[
+            'default_currency' => $defaultCurrency
+        ]);
     }
 
     /**
