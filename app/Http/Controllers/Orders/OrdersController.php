@@ -408,10 +408,11 @@ class OrdersController extends MainController
             $orderProducts =  OrderProduct::where('order_id',$order->id)->get();
             $defaultCurrency = Currency::where('is_default',1)->first();
 
+            $order->currency_rate = $request->currency_rate;
+
             if($request->currency_id == $defaultCurrency->id){
                 $order->currency_rate = 1;
             }
-
             $order->customer_id = $request->client_id;
             $order->currency_id = $request->currency_id;
 
@@ -479,6 +480,7 @@ class OrdersController extends MainController
 
                 $request->is_billing_as_shipping = 1;
                 $order->is_billing_as_shipping = 1;
+
 
                 $order->shipping_first_name = $request->billing['first_name'];
                 $order->shipping_last_name = $request->billing['last_name'];
@@ -572,8 +574,6 @@ class OrdersController extends MainController
             $order->customer_comment = $request->comment;
             $order->order_status_id = $request->status_id;
 
-            $order->currency_rate = $request->rate;
-
             $order->shipping_address_id = $request->shipping_address_id;
             $order->billing_address_id = $request->billing_address_id;
 
@@ -620,8 +620,6 @@ class OrdersController extends MainController
             }
 
             $order->save();
-
-
 
             $order->selected_products = OrdersService::generateOrderProducts($productsOrders,$defaultPricingClass,$allTaxComponents,$allTaxes,$selectedCurrency);
             OrdersService::adjustQuantityOfOrderProducts($order->selected_products,$allProducts);
