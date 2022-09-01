@@ -34,7 +34,7 @@ class ProductRelatedResource extends JsonResource
             'name' => $this->getTranslations('name'),
             'name_original' => $product->getTranslations('name'),
             'images' => ProductImagesResource::collection($images) ?? [],
-            'prices' => ProductPriceResoruce::collection($prices->load('prices')),
+            'prices' => ProductPriceResoruce::collection($prices->load('prices')) ?? [],
         ];
     }
 
