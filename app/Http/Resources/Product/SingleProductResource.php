@@ -46,7 +46,7 @@ class SingleProductResource extends JsonResource
      */
     public function toArray($request)
     {
-        $selectedCategoriesIds = $this->product->product->whenLoaded('category');
+        $selectedCategoriesIds = $this->product->whenLoaded('category');
         $nestedCategories = CategoryService::getAllCategoriesNested($this->all_categories, $selectedCategoriesIds->pluck('id')->toArray());
         $childrenIds = Product::where('parent_product_id', $this->id)->pluck('id')->toArray();
         $productAttributes = ProductField::whereIn('product_id', $childrenIds)->get();
@@ -59,7 +59,7 @@ class SingleProductResource extends JsonResource
             'code' => $this->code,
             'sku' => $this->sku,
             'type' => $this->type,
-            'unit' => $this->product->product->whenLoaded('unit') ? new SelectUnitResource($this->product->product->whenLoaded('unit')) : [],
+            'unit' => $this->product->whenLoaded('unit') ? new SelectUnitResource($this->product->whenLoaded('unit')) : [],
             'quantity' => (int)$this->quantity ?? 0,
             'reserved_quantity' => (int)$this->reserved_quantity ?? 0,
             'minimum_quantity' => (int)$this->minimum_quantity ?? 0,
