@@ -24,6 +24,7 @@ class ProductRelatedResource extends JsonResource
 
         $product = $relatedProducts->where('id', $this->child_product_id)->first();
         $images =  $relatedProductsImages->where('product_id', $this->child_product_id);
+        dd($this);
         return [
             'id' => $this->child_product_id,
             'child_quantity' => $this->child_quantity,
