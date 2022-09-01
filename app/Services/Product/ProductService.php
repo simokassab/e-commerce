@@ -554,7 +554,7 @@ class ProductService
 
             $productVariationParentsArray = [];
             foreach ($request->product_variations as $variation) {
-                $imagePath = null;
+                $imagePath = "";
                 if ($request->file('image') && !is_string($request->file('image')))
                     $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
 
