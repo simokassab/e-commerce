@@ -209,7 +209,7 @@ class ProductController extends MainController
         $relatedProducts = Product::findMany($productRelated->pluck('child_product_id')->toArray());
         $relatedProductsImages = ProductImage::WhereIn('product_id',$productRelated->pluck('child_product_id')->toArray())->get();
         $relatedProductsPrices= ProductPrice::WhereIn('product_id',$productRelated->pluck('child_product_id')->toArray())->get();
-        return $this->successResponse(
+         $this->successResponse(
             'Success!',
             [
                 'product' =>  new SingleProductResource(
@@ -232,6 +232,7 @@ class ProductController extends MainController
                     ]),$productRelated,$relatedProducts,$relatedProductsImages,$relatedProductsPrices)
             ],
         );
+        return "S";
     }
 
     /**
