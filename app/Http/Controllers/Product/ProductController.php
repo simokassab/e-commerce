@@ -209,7 +209,6 @@ class ProductController extends MainController
         $relatedProducts = Product::findMany($productRelated->pluck('child_product_id')->toArray());
         $relatedProductsImages = ProductImage::WhereIn('product_id',$productRelated->pluck('child_product_id')->toArray())->get();
         $relatedProductsPrices= ProductPrice::WhereIn('product_id',$productRelated->pluck('child_product_id')->toArray())->get();
-        dd($relatedProductsPrices);
         return $this->successResponse(
             'Success!',
             [
@@ -230,7 +229,7 @@ class ProductController extends MainController
                     'children',
                     'images'
 
-                    ]),$productRelated,$relatedProducts,$relatedProductsImages)
+                    ]),$productRelated,$relatedProducts,$relatedProductsImages,$relatedProductsPrices)
             ],
         );
     }
