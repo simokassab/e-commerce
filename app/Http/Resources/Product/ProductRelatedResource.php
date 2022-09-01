@@ -24,13 +24,12 @@ class ProductRelatedResource extends JsonResource
 
         $product = $relatedProducts->where('id', $this->child_product_id)->first();
         $images =  $relatedProductsImages->where('product_id', $this->child_product_id);
-        dd($images);
         return [
             'id' => $this->child_product_id,
             'child_quantity' => $this->child_quantity,
             'name' => $this->getTranslations('name'),
             'name_original' => $product->getTranslations('name'),
-            // 'images' => ProductImagesResource::collection($productRelatedImages) ?? []
+            'images' => ProductImagesResource::collection($images) ?? []
         ];
     }
 
