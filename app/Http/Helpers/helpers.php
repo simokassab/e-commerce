@@ -4,11 +4,11 @@ use App\Exceptions\FileErrorException;
 use Illuminate\Support\Facades\Storage;
 use phpDocumentor\Reflection\Types\Boolean;
 
-function uploadImage($file, $folderpath): bool|string
+function uploadImage($file, $folderPath): bool|string
 {
     try {
         $fileName = uniqid() . '_' . $file->getClientOriginalName();
-        $path = Storage::putFileAs('public/' . $folderpath, $file, $fileName);
+        $path = Storage::putFileAs('public/' . $folderPath, $file, $fileName);
     } catch (\App\Exceptions\FileErrorException $exception) {
         throw new FileErrorException();
     } catch (ValueError $exception) {
@@ -17,7 +17,7 @@ function uploadImage($file, $folderpath): bool|string
         throw new FileErrorException();
     }
 
-    return $realPath = $folderpath . '/' . $fileName;
+    return $realPath = $folderPath . '/' . $fileName;
 }
 
 function getAssetsLink($path)

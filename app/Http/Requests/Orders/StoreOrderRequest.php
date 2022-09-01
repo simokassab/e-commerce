@@ -89,10 +89,6 @@ class StoreOrderRequest extends MainRequest
             'selected_products.required' => 'The :attribute are required',
             'selected_products.*.id' => 'The product id is required',
             'selected_products.*.quantity' => 'The product quantity is required',
-
-
-
-
         ];
 
     }

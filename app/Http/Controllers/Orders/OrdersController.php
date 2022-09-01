@@ -321,13 +321,13 @@ class OrdersController extends MainController
             $order->payment_method_id = $request->billing['payment_method_id'];
             $order->save();
 
-            OrdersService::createNotesForOrder(order: $order, notes: $request->notes ?? [], data :$request->toArray());
+            OrdersService::createNotesForOrder(order: $order, notes: $request->notes ?? [], data: $request->toArray());
 
             $productsOrders = OrdersService::calculateTotalOrderPrice($products,$order);
 
             $differencePrice = abs(($order->total) - $request->total_price);
             if($differencePrice >= 0.001){
-                return $this->errorResponse('Sorry but there was a problem with the calculations! ',    [
+                return $this->errorResponse('Sorry but there was a problem with the calculations! ',[
                     'shipping' => 12,
                     'order_total' => $order->total
                 ]);
