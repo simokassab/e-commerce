@@ -5,7 +5,7 @@
 /storage/app/clockwork
 /storage/app/clockwork/index
 /vendor
-.env
+.env.old
 .env.backup
 .phpunit.result.cache
 Homestead.json

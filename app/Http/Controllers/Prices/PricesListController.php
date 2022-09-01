@@ -10,6 +10,7 @@ use App\Models\Product\Product;
 use App\Models\Product\ProductPrice;
 use Illuminate\Http\Request;
 use App\Support\Collection;
+use function PHPUnit\Framework\isEmpty;
 
 class PricesListController extends MainController
 {
@@ -49,53 +50,43 @@ class PricesListController extends MainController
             'advanced_search.prices_class.*' => 'required|numeric|exists:prices,id',
 
         ]);
-        $products = [];
-        $pricesClassesProducts = [];
-        $prices = collect([]);
 
+        $pricesClassRequired = $request->advanced_search['prices_class'];
 
-        $prices = Price::with(['products'])->findMany($request->advanced_search['prices_class'] ?? []);
-        $pricesClassesProducts = $prices->pluck('products');
+        $prices = Price::query()->findMany($pricesClassRequired);
+        $productPrices = ProductPrice::all();
+//        $allPrices = Price::all();
 
-
-        foreach ($pricesClassesProducts as $products){
-            foreach ($products as $product) {
-                $products[] = $product;
-            }
-        }
-
-        $products = Product::with(['pricesList.prices.currency','unit'])
-            ->where(function ($query) use($products){
-                $query->whereIn('id',collect($products)->unique()->pluck('id'))
-                ->orWhereNotIn('id',collect($products)->unique()->pluck('id'));
+        $allProducts = Product::with(['pricesList.prices.currency','unit'])
+            ->where(function ($query)use($request){
+                $query->when(!empty($request->general_search) , function($query) use($request){
+                $value = $request->general_search;
+                $query->whereRaw('lower(code) like (?)', ["%$value%"]);
+                $query->orWhereRaw('lower(name) like (?)', ["%$value%"]);
+                $query->orWhereHas('unit',function($query)use($request,$value){
+                    $query->whereRaw('lower(code) like (?)', ["%$value%"]);
+                });
+            });
             })
-
-            ->when($request->data['code'] != null && !empty($request->data['code']) , function($query) use($request){
+            ->when($request->has('data') && (key_exists('code',$request->data)) , function($query) use($request){
                 $value = $request->data['code'];
                 $query->whereRaw('lower(code) like (?)', ["%$value%"]);
             })
-            ->when($request->data['title'] != null && !empty($request->data['title']) , function($query) use($request){
+            ->when($request->has('data') && (key_exists('title',$request->data)) , function($query) use($request){
                 $value = $request->data['title'];
                 $query->whereRaw('lower(name) like (?)', ["%$value%"]);
             })
-            ->when($request->data['UOM'] != null && !empty($request->data['UOM']) , function($query) use($request){
+            ->when($request->has('data') && (key_exists('UOM',$request->data)) , function($query) use($request){
                 $query->whereHas('unit',function($query)use($request){
                     $value = $request->data['UOM'];
                     $query->whereRaw('lower(code) like (?)', ["%$value%"]);
                 });
             })
-            ->when($request->has('general_search') , function($query) use($request){
-                $value = $request->general_search;
-                $query->whereRaw('lower(code) like (?)', ["%$value%"]);
-                $query->orwhereRaw('lower(name) like (?)', ["%$value%"]);
-                $query->whereHas('unit',function($query)use($request){
-                    $value = $request->data['UOM'];
-                    $query->orwhereRaw('lower(code) like (?)', ["%$value%"]);
-                });
-            })
             ->paginate($request->limit ?? config('defaults.default_pagination'));
 
-        return PriceListCreateResource::customCollection($products,$prices->toArray());
+
+
+        return PriceListCreateResource::customCollection($allProducts, $prices, $allProducts, $productPrices);
 
     }
 

@@ -18,8 +18,8 @@ class Setting extends MainModel
     // public function getPriceOptions(){
     //     dd($prices);
     // }
-
-    public static $titlesOptions = [
+public static function getTitleOptions(){
+    $titlesOptions = [
         'products_required_fields' =>  [
             [
                 'id' => 'sku',
@@ -67,8 +67,16 @@ class Setting extends MainModel
         'allow_negative_quantity' => [],
         'products_prices_greater_than_or_equal' => [],
         'products_discounted_price_greater_than_or_equal' => [],
-        'website_pricing' => [],
+
+        'is_discount_on_shipping' => []
     ];
+    $titlesOptions['website_pricing']= Price::all('id','name')->toArray();
+    foreach ($titlesOptions['website_pricing'] as $key => $option)
+        $titlesOptions[$key]['name'] = $option['name']['en'];
+
+    return $titlesOptions;
+}
+
 
     public static function validateOptionsByTitle($keyTitle, $givenOptions)
     {

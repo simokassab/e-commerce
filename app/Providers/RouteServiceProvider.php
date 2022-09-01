@@ -41,7 +41,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/headers.php'));
 
             Route::middleware('api')
-                ->prefix('api/dashboard/general')
+                ->prefix('api/general')
                 ->group(base_path('routes/general.php'));
 
 

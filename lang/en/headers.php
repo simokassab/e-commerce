@@ -420,6 +420,15 @@ return [
             'is_visible' => false,
             'is_show' => true
         ],
+        'original_tax' => [
+            'key' => 'original_tax',
+            'name' => 'original tax',
+            'search' => 'double',
+            'type' => 'double',
+            'sort' => true,
+            'is_visible' => false,
+            'is_show' => true
+        ],
         'sku' => [
             'key' => 'sku',
             'name' => 'Sku',
@@ -429,14 +438,23 @@ return [
             'is_visible' => false,
             'is_show' => true
         ],
-        'price' => [
-            'key' => 'price',
-            'name' => 'Price',
+        'unit_price' => [
+            'key' => 'unit_price',
+            'name' => 'Cost Per Unit',
             'search' => '',
             'type' => 'double',
             'sort' => false,
             'is_visible' => true,
             'is_show' => true
+        ],
+        'original_unit_price' => [
+            'key' => 'original_unit_price',
+            'name' => 'original unit price',
+            'search' => '',
+            'type' => 'double',
+            'sort' => false,
+            'is_visible' => false,
+            'is_show' => false
         ],
         'currency_symbol' => [
             'key' => 'currency_symbol',

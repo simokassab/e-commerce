@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\MainController;
+use App\Http\Requests\Product\GetAllProdcutsForOrderRequest;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Resources\Brand\SelectBrandResource;
 use App\Http\Resources\Category\SelectCategoryResource;
@@ -11,12 +12,14 @@ use App\Http\Resources\Label\SelectLabelResource;
 use App\Http\Resources\Price\SelectPriceResource;
 use App\Http\Resources\Product\ProductBundleResource;
 use App\Http\Resources\Product\ProductResource;
+use App\Http\Resources\Product\RestFullProductResource;
 use App\Http\Resources\Product\SelectProductStatusResource;
 use App\Http\Resources\Tag\TagResource;
 use App\Http\Resources\Tax\SelectTaxResource;
 use App\Http\Resources\Unit\SelectUnitResource;
 use App\Models\Brand\Brand;
 use App\Models\Category\Category;
+use App\Models\Currency\Currency;
 use App\Models\Field\Field;
 use App\Models\Label\Label;
 use App\Models\Price\Price;
@@ -303,8 +306,8 @@ class ProductController extends MainController
         return $this->successResponsePaginated(ProductResource::class, Product::class, self::relations);
     }
 
-    public function getProductsForOrders(Request $request)
-    {
+    public function getProductsForOrders(GetAllProdcutsForOrderRequest $request){
+
         $name = '';
         if (array_key_exists('name', $request->data)) {
             $name = strtolower($request->data['name']);
@@ -313,7 +316,10 @@ class ProductController extends MainController
         $products = Product::with(['tax', 'pricesList.prices'])->whereRaw('lower(name) like (?)', ["%$name%"])->paginate($request->limit ?? config('defaults.default_pagination'));
         $data['taxComponents'] = TaxComponent::all();
         $data['tax'] = Tax::all();
-        return SelectProductOrderResource::customCollection($products, $data);
+
+        $data['currency'] = Currency::query()->find($request->currency_id);
+        $data['currency_rate'] = $request->currency_rate;
+        return SelectProductOrderResource::customCollection($products,$data);
     }
 
     public function getTableHeaders()
@@ -325,4 +331,9 @@ class ProductController extends MainController
     {
         return $this->successResponse('Success!', ['headers' => __('headers.products_select_product')]);
     }
+
+    public function getProductsData(){
+        return $this->successResponsePaginated(RestFullProductResource::class,Product::class,['defaultCategory','tags','brand','category','unit','tax','price','field','labels','productRelatedChildren','children','images']);
+    }
+
 }

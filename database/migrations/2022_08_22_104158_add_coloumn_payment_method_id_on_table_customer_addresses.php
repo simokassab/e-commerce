@@ -13,10 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('orders',function (Blueprint $table){
-           if(!Schema::hasColumn('orders','currency_id')){
-               $table->unsignedBigInteger('currency_id')->after('customer_id');
-           }
+        Schema::table('customer_address',function (Blueprint $table){
+            $table->unsignedBigInteger('payment_method_id')->nullable();
         });
     }
 
@@ -27,10 +25,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('orders',function (Blueprint $table){
-            if(Schema::hasColumn('orders','currency_id')){
-                $table->dropColumn('currency_id');
-            }
-        });
+        if(Schema::hasColumn('payment_method_id','customer_address')){
+            Schema::table('customer_address',function (Blueprint $table){
+                $table->dropColumn('payment_method_id');
+            });
+        }
     }
 };

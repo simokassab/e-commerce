@@ -13,10 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('orders',function (Blueprint $table){
-           if(!Schema::hasColumn('orders','currency_id')){
-               $table->unsignedBigInteger('currency_id')->after('customer_id');
-           }
+        Schema::table('customers', function (Blueprint $table) {
+            $table->foreign('address_id')->references('id')->on('customer_address');
         });
     }
 
@@ -27,10 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('orders',function (Blueprint $table){
-            if(Schema::hasColumn('orders','currency_id')){
-                $table->dropColumn('currency_id');
-            }
+        Schema::table('customers', function (Blueprint $table) {
+            $table->dropForeign('customers_address_id_foreign');
         });
     }
 };

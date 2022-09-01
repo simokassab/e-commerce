@@ -9,6 +9,7 @@ use App\Models\Currency\Currency;
 use App\Models\Label\Label;
 use App\Models\Product\Product;
 use App\Models\RolesAndPermissions\CustomRole;
+use App\Models\Tax\Tax;
 use Illuminate\Http\Request;
 use App\Models\User\User;
 use Illuminate\Support\Facades\Auth;
@@ -301,5 +302,6 @@ $params = array(
         $auth_call = $soapClient->CreateShipments($params);
 
         return $auth_call;
+
     }
 }
