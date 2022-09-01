@@ -16,6 +16,7 @@ class ProductRelatedResource extends JsonResource
      */
     public function toArray($request)
     {
+        dd($this);
         $productRelated = $this->whenLoaded('productRelatedChildren');
         dd($productRelated);
         $productRelatedIds = $productRelated->pluck('child_product_id');

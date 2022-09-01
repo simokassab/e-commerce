@@ -44,7 +44,7 @@ class SingleProductResource extends JsonResource
         $productAttributes = ProductField::whereIn('product_id', $childrenIds)->get();
 
 
-     
+
         return [
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
