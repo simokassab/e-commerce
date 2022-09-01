@@ -213,7 +213,7 @@ class ProductController extends MainController
                     'tags',
                     'brand',
                     'category',
-                    'unit ',
+                    'unit',
                     'tax',
                     'priceClass',
                     'price',
