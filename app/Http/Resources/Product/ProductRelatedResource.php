@@ -16,12 +16,10 @@ class ProductRelatedResource extends JsonResource
      */
     public function toArray($request)
     {
-        $productRelated = ($this)->child_product_id;
-        dd($productRelated);
-        $productRelatedIds = $productRelated->pluck('child_product_id');
-        $productsRelatedNames = Product::find($productRelatedIds->toArray())->toArray();
-        $productRelatedImages=ProductImage::whereIn('product_id',$productRelatedIds->toArray())->get();
-        foreach ($productRelated as $key => $product) {
+        $productRelatedId = ($this)->child_product_id;
+        $productsRelatedNames = Product::find($productRelatedId)->toArray();
+        $productRelatedImages=ProductImage::whereIn('product_id',$productRelatedId)->get();
+        foreach ($this as $key => $product) {
             $name = $productsRelatedNames[$key]['name'];
         }
         return [
