@@ -34,7 +34,7 @@ class SingleProductResource extends JsonResource
     public function __construct($product,$productRelated)
     {
         // parent::__construct($resource);
-        $thisRelated = $productRelated;
+        $this->productRelated = $productRelated;
         $this->resource = $product;
     }
     /**
