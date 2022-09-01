@@ -24,6 +24,7 @@ use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
 use App\Models\Product\ProductField;
 use App\Models\Product\ProductImage;
+use App\Models\Product\ProductRelated;
 use App\Services\Category\CategoryService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -42,16 +43,8 @@ class SingleProductResource extends JsonResource
         $childrenIds = Product::where('parent_product_id', $this->id)->pluck('id')->toArray();
         $productAttributes = ProductField::whereIn('product_id', $childrenIds)->get();
 
-        $productRelatedIds = collect($this->whenLoaded('productRelatedChildren'))->pluck('child_product_id');
-        $model=new Product();
-        $productsRelatedNames = Product::find($productRelatedIds->toArray())->toArray();
-        $productRelated = ($this->whenLoaded('productRelatedChildren'))->toArray();
-        $productRelatedImages=ProductImage::whereIn('product_id',$productRelatedIds->toArray())->get();
-        dd($productRelatedImages->toArray());
-        foreach ($productRelated as $key => $product) {
-            $productRelated[$key]['name_original'] = $productsRelatedNames[$key]['name'];
-        }
 
+     
         return [
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
@@ -93,7 +86,7 @@ class SingleProductResource extends JsonResource
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'labels' => SelectLabelResource::collection($this->whenLoaded('labels')),
             'categories' => $nestedCategories,
-            'related_products' => $productRelated ?? [],
+            'related_products' => ProductRelatedResource::collection($this->whenLoaded('productRelatedChildren')) ?? [],
             'variations' => $this->whenLoaded('children') ? $this->whenLoaded('children') : [],
             'images' => ProductImagesResource::collection($this->whenLoaded('images')) ?? [],
         ];
