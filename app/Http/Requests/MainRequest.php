@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+
 class MainRequest extends FormRequest
 {
     /**
@@ -29,15 +30,15 @@ class MainRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation(Validator $validator) {
+    protected function failedValidation(Validator $validator)
+    {
 
         throw new HttpResponseException(response()->json(
             [
                 'message' => 'The input validation has failed, check your inputs',
-                'code' => -1 ,
-                'errors'=>$validator->errors()->messages() ,
-            ],
-            200)
+                'code' => -1,
+                'errors' => $validator->errors()->messages(),
+            ], 200)
 
         );
     }

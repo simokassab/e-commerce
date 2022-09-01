@@ -31,12 +31,8 @@ class SettingsResource extends JsonResource
         });
 
 
-        $options = Setting::$titlesOptions[$this->title];
-        if ($this->title == 'website_pricing') {
-            $options = array_merge($options, Price::all('id','name')->toArray());
-            foreach ($options as $key => $option)
-                $options[$key]['name'] = $option['name']['en'];
-        }
+        $options = Setting::getTitleOptions()[$this->title];
+
 
         $id = $idsArray[array_search($this->title, $titlesArray)];
         $title = $titlesArray[array_search($this->title, $titlesArray)];
