@@ -201,7 +201,7 @@ class CategoryService {
             if (!isset($categoryChildren[$parentId])) {
                 $categoryChildren[$parentId] = [];
             }
-            $categoryChildren[$parentId][] = collect($allCategories)->where('id',$currentCategory->id);
+            $categoryChildren[$parentId][] = collect($allCategories)->where('id',$currentCategory->id)->first();
         }
 
 
