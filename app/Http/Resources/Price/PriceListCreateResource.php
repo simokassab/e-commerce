@@ -56,6 +56,7 @@ class PriceListCreateResource extends JsonResource
 
     }
 
+
     public static function customCollection($products,...$data): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         //you can add as many params as you want.

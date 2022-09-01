@@ -38,6 +38,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\Product\SelectProductOrderResource;
 use App\Http\Resources\Product\SingleProductResource;
+use App\Models\Product\ProductRelated;
 
 class ProductController extends MainController
 {
@@ -202,6 +203,8 @@ class ProductController extends MainController
     public function show(Product $product)
     {
         $product->all_categories = Category::all();
+        $productRelated=ProductRelated::where('parent_product_id',$product->id)->get();
+        dd($productRelated);
         return $this->successResponse('Success!', ['product' =>  new SingleProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category', 'unit', 'tax', 'priceClass', 'price', 'field', 'labels', 'productRelatedChildren','productRelatedParent', 'children', 'images']))]);
     }
 
