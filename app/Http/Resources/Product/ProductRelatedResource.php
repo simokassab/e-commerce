@@ -22,8 +22,8 @@ class ProductRelatedResource extends JsonResource
         $relatedProducts = self::$relatedProducts;
         $relatedProductsImages = self::$relatedProductsImages;
 
-        $product = $relatedProducts->where('id',$this->child_product_id)->first();
-        $images = $relatedProductsImages->where('product_id',$this->child_product_id)->get();
+        $product = $relatedProducts->where('id', $this->child_product_id)->first();
+        $images =  $relatedProductsImages;
         dd($images);
         return [
             'id' => $this->child_product_id,
@@ -34,7 +34,8 @@ class ProductRelatedResource extends JsonResource
         ];
     }
 
-    public static function customCollection($collection,$relatedProducts,$relatedProductsImages ){
+    public static function customCollection($collection, $relatedProducts, $relatedProductsImages)
+    {
 
         self::$relatedProducts = $relatedProducts;
         self::$relatedProductsImages = $relatedProductsImages;
