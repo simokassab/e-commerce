@@ -32,7 +32,7 @@ class Product extends MainModel
     protected $table='products';
     protected $guard_name = 'web';
 
-    public $fillable = [
+    protected $fillable = [
         'name',
         'slug',
         'code',
@@ -46,7 +46,7 @@ class Product extends MainModel
         'meta_description',
         'meta_keyword',
         'description',
-        'status',
+        'website_status',
         'barcode',
         'height',
         'width',
@@ -61,6 +61,7 @@ class Product extends MainModel
         'products_statuses_id',
         'is_show_related_product',
     ];
+
 
     public function parent(){
         return $this->belongsTo(Product::class,'parent_product_id','id');
@@ -101,7 +102,7 @@ class Product extends MainModel
 
     }
     public function productRelatedChildren(){
-        return $this->hasMany(ProductRelated::class,'child_product_id');
+        return $this->hasMany(ProductRelated::class,'parent_product_id');
 
     }
     public function productImages(){
@@ -127,10 +128,10 @@ class Product extends MainModel
         return $this->belongsToMany(Field::class,'products_fields','product_id','field_id');
 
     }
-    public function fieldValue(){
-        return $this->hasMany(FieldValue::class,'field_value_id');
+    // public function fieldValue(){
+    //     return $this->hasMany(FieldValue::class,'id','');
 
-    }
+    // }
 
     public function images(){
         return $this->hasMany(ProductImage::class,'product_id');
@@ -300,7 +301,6 @@ class Product extends MainModel
             $relatedProductsIds = $relatedProducts->pluck('child_product_id');
             $products = $allProducts->whereIn('id',$relatedProductsIds);
 
-
             if( !$this->hasEnoughRelatedProductsQuantityForSubstitutingBundles($quantity,$allProducts->toArray(),$allRelatedProducts->toArray()) ){
                 throw new Exception('Not enough quantity for children products !');
             }
@@ -310,8 +310,9 @@ class Product extends MainModel
                 $childRelatedProduct = $relatedProducts->where('child_product_id',$product['id'])
                     ->where('parent_product_id',$this->id)
                     ->first();
-                $productModel->quantity -= $quantity * $childRelatedProduct->child_quantity;
-                $productModel->bundle_reserved_quantity -= $quantity * $childRelatedProduct->child_quantity;
+
+                $productModel->reserved_quantity -= $quantity * $childRelatedProduct['child_quantity'];
+                $productModel->bundle_reserved_quantity -= $quantity * $childRelatedProduct['child_quantity'];
 
                 if(!$productModel->save()){
                     throw new Exception('One of the related products for bundle was not saved correctly! try again later ');

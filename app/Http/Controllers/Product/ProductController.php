@@ -42,7 +42,7 @@ use App\Http\Resources\Product\SingleProductResource;
 class ProductController extends MainController
 {
     const OBJECT_NAME = 'objects.product';
-    const relations=['parent','children','defaultCategory','unit','tax','brand','category','tags'];
+    const relations = ['parent', 'children', 'defaultCategory', 'unit', 'tax', 'brand', 'category', 'tags'];
 
     public function __construct(ProductService $productService)
     {
@@ -56,8 +56,8 @@ class ProductController extends MainController
     public function index(Request $request)
     {
 
-        if($request->method()=='POST'){
-            $searchKeys=['id','name','sku','type','quantity','status'];
+        if ($request->method() == 'POST') {
+            $searchKeys = ['id', 'name', 'sku', 'type', 'quantity', 'status'];
 
             $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
 
@@ -65,87 +65,86 @@ class ProductController extends MainController
             $tagsCount = Product::has('tags')->count();
             $brandsCount = Product::has('brand')->count();
 
-            if($categoriesCount>0)
+            if ($categoriesCount > 0)
                 $searchRelationsKeys['category'] = ['categories' => 'name'];
-            if($tagsCount>0)
+            if ($tagsCount > 0)
                 $searchRelationsKeys['tags'] = ['tags' => 'name'];
-            if($brandsCount>0)
+            if ($brandsCount > 0)
                 $searchRelationsKeys['brand'] = ['brands' => 'name'];
 
-            return $this->getSearchPaginated(ProductResource::class, Product::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
+            return $this->getSearchPaginated(ProductResource::class, Product::class, $request, $searchKeys, self::relations, $searchRelationsKeys);
         }
 
-        return $this->successResponsePaginated(ProductResource::class,Product::class,self::relations);
-
+        return $this->successResponsePaginated(ProductResource::class, Product::class, self::relations);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function create()
     {
-        $PriceArray=[];
-        $prices= SelectPriceResource::collection(Price::with('currency')->where('is_virtual', 0)->select('id','name','currency_id')->get());
+        $PriceArray = [];
+        $prices = SelectPriceResource::collection(Price::with('currency')->where('is_virtual', 0)->select('id', 'name', 'currency_id')->get());
 
         foreach ($prices as $price => $value) {
             $object = (object)[];
-            $object->id=$value['id'];
-            $object->name=$value['name'];
-            $object->currency=$value->currency->code .'-'.$value->currency->symbol;
-            $PriceArray[]=$object;
+            $object->id = $value['id'];
+            $object->name = $value['name'];
+            $object->currency = $value->currency->code . '-' . $value->currency->symbol;
+            $PriceArray[] = $object;
         }
 
-        $fields= FieldsResource::collection(Field::with('fieldValue')->whereEntity('product')->where('is_attribute',0)->get());
-        $attributes= FieldsResource::collection(Field::with('fieldValue')->whereEntity('product')->where('is_attribute',1)->get());
-        $tags = TagResource::collection(Tag::all('id','name'));
-        $labels = SelectLabelResource::collection(Label::whereEntity('product')->select('id','title')->get());
-        $brands = SelectBrandResource::collection(Brand::all('id','name'));
-        $units = SelectUnitResource::collection(Unit::all('id','name')); // same result as query()->take(['id','name'])->get
-        $taxes= SelectTaxResource::collection(Tax::all('id','name'));
-        $categories = SelectCategoryResource::collection(Category::all('id','name'));
-        $statuses = SelectProductStatusResource::collection(ProductStatus::all('id','name'));
+        $fields = FieldsResource::collection(Field::with('fieldValue')->whereEntity('product')->where('is_attribute', 0)->get());
+        $attributes = FieldsResource::collection(Field::with('fieldValue')->whereEntity('product')->where('is_attribute', 1)->get());
+        $tags = TagResource::collection(Tag::all('id', 'name'));
+        $labels = SelectLabelResource::collection(Label::whereEntity('product')->select('id', 'title')->get());
+        $brands = SelectBrandResource::collection(Brand::all('id', 'name'));
+        $units = SelectUnitResource::collection(Unit::all('id', 'name')); // same result as query()->take(['id','name'])->get
+        $taxes = SelectTaxResource::collection(Tax::all('id', 'name'));
+        $categories = SelectCategoryResource::collection(Category::all('id', 'name'));
+        $statuses = SelectProductStatusResource::collection(ProductStatus::all('id', 'name'));
 
         $nestedCategory = [];
         $categoriesForNested = Category::with('parent')->get();
         $nestedCategories = CategoryService::getAllCategoriesNested($categoriesForNested);
 
-        return $this->successResponse('Success!',[
-            'prices'=>  count($PriceArray) != 0 ? $PriceArray : "-",
-            'fields'=> count($fields) != 0 ? $fields : [],
-            'attributes'=> count($attributes) != 0 ? $attributes : "-",
-            'labels'=> count($labels) != 0 ? $labels : "-",
-            'tags'=> count($tags) != 0 ? $tags : "-",
-            'brands'=> count($brands) != 0 ? $brands : "-",
-            'units'=> count($units) != 0 ? $units : "-",
-            'taxes'=> count($taxes) != 0 ? $taxes : "-",
-            'categories'=> count($categories) != 0 ? $categories : "-",
-            'statuses'=>count($statuses) != 0 ? $statuses : "-",
+        return $this->successResponse('Success!', [
+            'prices' =>  count($PriceArray) != 0 ? $PriceArray : "-",
+            'fields' => count($fields) != 0 ? $fields : [],
+            'attributes' => count($attributes) != 0 ? $attributes : "-",
+            'labels' => count($labels) != 0 ? $labels : "-",
+            'tags' => count($tags) != 0 ? $tags : "-",
+            'brands' => count($brands) != 0 ? $brands : "-",
+            'units' => count($units) != 0 ? $units : "-",
+            'taxes' => count($taxes) != 0 ? $taxes : "-",
+            'categories' => count($categories) != 0 ? $categories : "-",
+            'statuses' => count($statuses) != 0 ? $statuses : "-",
             'nested_categories' => $nestedCategories
 
         ]);
-
     }
 
-    public function getAllProductsAndPrices(Request $request){
+    public function getAllProductsAndPrices(Request $request)
+    {
 
-        $products = Product::with('priceClass','price')
-            ->when(($request->has('product_name') && $request->product_name!=null), function($query) use ($request){
-                $value=strtolower($request->product_name);
+        $products = Product::with('priceClass', 'price')
+            ->when(($request->has('product_name') && $request->product_name != null), function ($query) use ($request) {
+                $value = strtolower($request->product_name);
                 $query->whereRaw('lower(name) like (?)', ["%$value%"]);
             })
-            ->when(($request->has('category') && $request->category!=null),function($query) use ($request){
-                 $query->orWhereHas('category',function($query) use ($request){
-                     $query->where('category_id',$request->category);
+            ->when(($request->has('category') && $request->category != null), function ($query) use ($request) {
+                $query->orWhereHas('category', function ($query) use ($request) {
+                    $query->where('category_id', $request->category);
                 })
-                ->orWhereHas('defaultCategory',function($query) use ($request){
-                            $query->where('categories.id',$request->category);
-                        });
+                    ->orWhereHas('defaultCategory', function ($query) use ($request) {
+                        $query->where('categories.id', $request->category);
+                    });
             })
-            ->whereNotIn('type',['variable','bundle'])->get();
+            ->whereNotIn('type', ['variable', 'bundle'])->get();
 
-            return $this->successResponse('Success!',['products'=> ProductBundleResource::collection($products)]);
+        return $this->successResponse('Success!', ['products' => ProductBundleResource::collection($products)]);
     }
 
     /**
@@ -165,31 +164,33 @@ class ProductController extends MainController
 
     public function store(StoreProductRequest $request)
     {
-        DB::beginTransaction();
-        try {
-            $product = $this->productService->createAndUpdateProduct($request);
-            $childrenIds=[];
-            if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
-               $childrenIds=$this->productService->storeVariations($request,$product);
-            }
-            if($request->type=='bundle'){
-                $this->productService->storeAdditionalBundle($request,$product);
-            }
-            Product::find($product->id)->updateProductQuantity($request->reserved_quantity,'add');
-            $this->productService->storeAdditionalProductData($request,$product,$childrenIds);
+
+        // DB::beginTransaction();
+        // try {
+        $product = $this->productService->createAndUpdateProduct($request);
+        $childrenIds = [];
+        if ($request->type == 'variable' && ($request->product_variations || count($request->product_variations) > 0)) {
+            $childrenIds = $this->productService->storeVariations($request, $product);
+        }
+        if ($request->type == 'bundle') {
+            $this->productService->storeAdditionalBundle($request, $product);
+        }
+        Product::find($product->id)->updateProductQuantity($request->reserved_quantity, 'add');
+        $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
 
         DB::commit();
-        return $this->successResponse(['message' => __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-        'product' =>  new ProductResource($product->load(['defaultCategory','tags','brand','category']))
-          ]);
+        return $this->successResponse([
+            'message' => __('messages.success.create', ['name' => __(self::OBJECT_NAME)]),
+            'product' =>  new ProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category']))
+        ]);
 
-        }catch (\Exception $ex) {
-            DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
-            'message' => $ex->getMessage()
-             ]);
+        // }catch (\Exception $ex) {
+        //     DB::rollBack();
+        //     return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
+        //     'message' => $ex->getMessage()
+        //      ]);
 
-        }
+        // }
     }
 
     /**
@@ -200,7 +201,8 @@ class ProductController extends MainController
      */
     public function show(Product $product)
     {
-        return $this->successResponse('Success!',['product' =>  new SingleProductResource($product->load(['defaultCategory','tags','brand','category','unit','tax','priceClass','price','field','labels','productRelatedChildren','children','images']))]);
+        $product->all_categories = Category::all();
+        return $this->successResponse('Success!', ['product' =>  new SingleProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category', 'unit', 'tax', 'priceClass', 'price', 'field', 'labels', 'productRelatedChildren','productRelatedParent', 'children', 'images']))]);
     }
 
     /**
@@ -223,32 +225,38 @@ class ProductController extends MainController
      */
     public function update(StoreProductRequest $request, Product $product)
     {
+
         DB::beginTransaction();
         try {
-            $product = $this->productService->createAndUpdateProduct($request,$product);
+            // $oldReservedQuantity=Product::find($request->id)->pluck('reserved_quantity')->last();
 
-            if($request->type=='variable' && ($request->product_variations || count($request->product_variations) > 0)){
-               $childrenIds=$this->productService->storeVariations($request,$product);
+            $product = $this->productService->createAndUpdateProduct($request, $product);
+            $childrenIds = [];
+
+            if ($request->type == 'variable' && ($request->product_variations || count($request->product_variations) > 0)) {
+                $childrenIds = $this->productService->storeVariations($request, $product);
             }
-            if($request->type=='bundle'){
-                $this->productService->storeAdditionalBundle($request,$product);
-        }
-        Product::find($product->id)->updateProductQuantity($request->reserved_quantity,'add');
-        $this->productService->storeAdditionalProductData($request,$product,$childrenIds);
+            if ($request->type == 'bundle') {
+                $this->productService->storeAdditionalBundle($request, $product);
+            }
+            Product::find($product->id)->updateProductQuantity($request->reserved_quantity,'sub');
+
+
+            $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
 
             DB::commit();
-            return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            'product' =>  new ProductResource($product->load(['defaultCategory','tags','brand','category']))
-              ]);
-
-        }catch (\Exception $ex) {
+            return $this->successResponse([
+                'message' => __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
+                'product' =>  new ProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category']))
+            ]);
+        } catch (\Exception $ex) {
             DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
-            'message' => $ex->getMessage()
-             ]);
-
+            return $this->errorResponse([
+                'message' => __('messages.failed.create', ['name' => __(self::OBJECT_NAME),]),
+                'message' => $ex->getMessage()
+            ]);
+        }
     }
-}
 
     /**
      * Remove the specified resource from storage.
@@ -262,61 +270,66 @@ class ProductController extends MainController
         try {
             $this->productService->deleteRelatedDataForProduct($product);
             $product->delete();
-            return $this->successResponse(['message' => __('messages.success.delete',['name' => __(self::OBJECT_NAME)])]);
+            return $this->successResponse(['message' => __('messages.success.delete', ['name' => __(self::OBJECT_NAME)])]);
             DB::commit();
-    } catch (\Exception $ex) {
+        } catch (\Exception $ex) {
             DB::rollback();
-            return $this->errorResponse(['message' => __('messages.failed.delete',['name' => __(self::OBJECT_NAME),])]);
+            return $this->errorResponse(['message' => __('messages.failed.delete', ['name' => __(self::OBJECT_NAME),])]);
         }
     }
-    public function toggleStatus(Request $request ,$id){
+    public function toggleStatus(Request $request, $id)
+    {
 
         $request->validate(['is_disabled' => 'boolean|required']);
         $product = Product::findOrFail($id);
-        if($product->type=='variable'){
+        if ($product->type == 'variable') {
             $productChildren = $product->children;
-            $productChildrenArray=[];
+            $productChildrenArray = [];
             foreach ($productChildren as $productChild => $value) {
-                $productChildrenArray[$productChild]->is_disabled=$request->is_disabled;
+                $productChildrenArray[$productChild]->is_disabled = $request->is_disabled;
             }
-            batch()->update(new Product(),$productChildrenArray,'id');
+            batch()->update(new Product(), $productChildrenArray, 'id');
         }
-        $product->is_disabled=$request->is_disabled;
-        if(!$product->save())
-            return $this->errorResponse(['message' => __('messages.failed.update',['name' => __(self::OBJECT_NAME)]) ]);
+        $product->is_disabled = $request->is_disabled;
+        if (!$product->save())
+            return $this->errorResponse(['message' => __('messages.failed.update', ['name' => __(self::OBJECT_NAME)])]);
 
-        return $this->successResponse(['message' => __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+        return $this->successResponse([
+            'message' => __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
             'product' =>  new ProductResource($product)
         ]);
-
     }
 
-    public function updateSortValues(StoreProductRequest $request){
-        batch()->update($product = new Product(),$request->order,'id');
-            return $this->successResponsePaginated(ProductResource::class,Product::class,self::relations);
+    public function updateSortValues(StoreProductRequest $request)
+    {
+        batch()->update($product = new Product(), $request->order, 'id');
+        return $this->successResponsePaginated(ProductResource::class, Product::class, self::relations);
     }
 
     public function getProductsForOrders(GetAllProdcutsForOrderRequest $request){
 
         $name = '';
-        if(array_key_exists('name', $request->data)){
+        if (array_key_exists('name', $request->data)) {
             $name = strtolower($request->data['name']);
         }
 
-        $products = Product::with(['tax','pricesList.prices'])->whereRaw('lower(name) like (?)', ["%$name%"])->paginate($request->limit ?? config('defaults.default_pagination'));
+        $products = Product::with(['tax', 'pricesList.prices'])->whereRaw('lower(name) like (?)', ["%$name%"])->paginate($request->limit ?? config('defaults.default_pagination'));
         $data['taxComponents'] = TaxComponent::all();
         $data['tax'] = Tax::all();
+
         $data['currency'] = Currency::query()->find($request->currency_id);
         $data['currency_rate'] = $request->currency_rate;
         return SelectProductOrderResource::customCollection($products,$data);
     }
 
-    public function getTableHeaders(){
-        return $this->successResponse('Success!',['headers' => __('headers.products') ]);
+    public function getTableHeaders()
+    {
+        return $this->successResponse('Success!', ['headers' => __('headers.products')]);
     }
 
-    public function getTableHeadersForSelect(){
-        return $this->successResponse('Success!',['headers' => __('headers.products_select_product') ]);
+    public function getTableHeadersForSelect()
+    {
+        return $this->successResponse('Success!', ['headers' => __('headers.products_select_product')]);
     }
 
     public function getProductsData(){

@@ -44,7 +44,8 @@ class StoreProductRequest extends FormRequest
         }
 
 
-        return [
+
+        $rules= [
             'name' => 'required',
             'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
             // 'slug' => 'required | max:' . config('defaults.default_string_length') ,
@@ -58,10 +59,10 @@ class StoreProductRequest extends FormRequest
             'summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
             'specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
 
-            'image' => 'nullable | file
-            | mimes:' . config('defaults.default_image_extentions') . '
-            | max:' . config('defaults.default_image_size') . '
-            | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
+            // 'image' => 'nullable | file
+            // | mimes:' . config('defaults.default_image_extentions') . '
+            // | max:' . config('defaults.default_image_size') . '
+            // | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
 
             'meta_title' => 'nullable',
             'meta_description' => 'nullable',
@@ -99,10 +100,11 @@ class StoreProductRequest extends FormRequest
             | mimes:' . config('defaults.default_image_extentions') . '
             | max:' . config('defaults.default_image_size') . '
             | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
-            'images.*.title' => 'required ',
-            'images.*.sort' => 'required | integer',
+            'images_data.*.title' => 'required ',
+            'images_data.*.sort' => 'required | integer',
 
             'labels.*' => 'exists:labels,id',
+            'tags.*' => 'exists:tags,id',
 
             'prices.*.price_id' => 'required | integer | exists:prices,id',
             'prices.*.price' => 'required | numeric | gte:' .$this->priceValue,
@@ -112,7 +114,6 @@ class StoreProductRequest extends FormRequest
             'related_products.*.child_quantity' => [Rule::when($request->type == 'bundle', ['required','integer', 'gte:' . $this->QuantityValue])],
             'related_products.*.name' => 'nullable',
 
-            'tags.*' => 'exists:tags,id',
 
             'order.*.id' => 'required | integer | exists:products,id',
             'order.*.sort' => 'required | integer',
@@ -139,9 +140,7 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.is_default_child' => 'required | boolean',
             'product_variations.*.isSamePriceAsParent' =>'required | boolean',
 
-            'product_variations.*.prices.*.price_id' => 'required | integer | exists:prices,id',
-            'product_variations.*.prices.*.price' => 'required | numeric | gte:' .$this->priceValue,
-            'product_variations.*.prices.*.discounted_price' => 'nullable | numeric | gte:' .$this->discountedPriceValue,
+
 
             'product_variations.*.images.*.image' => 'required | file
             | mimes:' . config('defaults.default_image_extentions') . '
@@ -159,7 +158,21 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.attributes.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
 
         ];
+        if($request->type=='variable'){
+        foreach($request->product_variations as $key => $variation){
+            if(!$variation['isSamePriceAsParent']){
+                $pricesRulesArray=[
+                    'product_variations.*.prices.*.price_id' => 'required | integer | exists:prices,id',
+                    'product_variations.*.prices.*.price' => 'required | numeric | gte:' .$this->priceValue,
+                    'product_variations.*.prices.*.discounted_price' => 'nullable | numeric | gte:' .$this->discountedPriceValue,
+                ];
+                $rules=array_merge($rules,$pricesRulesArray);
+            }
+
+        }}
+        return $rules;
     }
+
 
     public function messages()
     {
@@ -271,6 +284,10 @@ class StoreProductRequest extends FormRequest
             'labels.*.label_id.integer' => 'The label must be an integer',
             'labels.*.label_id.exists' => 'The label must be a valid label',
 
+            'tags.*.tag_id.required' => 'the tag field is required',
+            'tags.*.tag_id.integer' => 'The tag must be an integer',
+            'tags.*.tag_id.exists' => 'The tag must be a valid tag',
+
             'prices.*.price_id.required' => 'the price field is required',
             'prices.*.price_id.integer' => 'The price must be an integer',
             'prices.*.price_id.exists' => 'The price must be a valid price',
@@ -290,9 +307,6 @@ class StoreProductRequest extends FormRequest
             'related_products.*.child_quantity.integer' => 'The child quantitymust be an integer',
             'related_products.*.child_quantity.gte' => 'The child quantitymust be greater than or equal to :value',
 
-            'tags.*.tag_id.required' => 'the tag field is required',
-            'tags.*.tag_id.integer' => 'The tag must be an integer',
-            'tags.*.tag_id.exists' => 'The tag must be a valid tag',
 
             'order.*.id.required' => 'The id is required',
             'order.*.id.integer' => 'The id should be an integer',

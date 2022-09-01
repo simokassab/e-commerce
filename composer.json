@@ -9,7 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^7.4",
         "laravel/framework": "^9.2",
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.7",
@@ -17,7 +17,8 @@
         "spatie/laravel-translatable": "^6.0",
         "mavinoo/laravel-batch": "^2.3",
         "protonemedia/laravel-cross-eloquent-search": "^3.0",
-        "doctrine/dbal": "^3.3"
+        "doctrine/dbal": "^3.3",
+        "octw/aramex": "^1.2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

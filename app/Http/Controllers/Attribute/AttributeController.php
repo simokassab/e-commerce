@@ -11,7 +11,7 @@ use App\Models\Category\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use ProtoneMedia\LaravelCrossEloquentSearch\Search;
-
+use SoapClient;
 
 class AttributeController extends MainController
 {
