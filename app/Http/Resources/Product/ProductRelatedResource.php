@@ -18,7 +18,7 @@ class ProductRelatedResource extends JsonResource
     {
         $productRelatedId = ($this)->child_product_id;
         $productsRelatedNames = Product::find($productRelatedId)->toArray();
-        $productRelatedImages=ProductImage::whereIn('product_id',$productRelatedId)->get();
+        $productRelatedImages=ProductImage::where('product_id',$productRelatedId)->get();
         foreach ($this as $key => $product) {
             $name = $productsRelatedNames[$key]['name'];
         }
