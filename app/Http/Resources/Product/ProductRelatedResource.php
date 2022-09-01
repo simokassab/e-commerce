@@ -22,17 +22,9 @@ class ProductRelatedResource extends JsonResource
         $relatedProducts = self::$relatedProducts;
         $relatedProductsImages = self::$relatedProductsImages;
 
-        dd($relatedProducts);
-
-        $productRelatedId = ($this)->child_product_id;
-        $productsRelatedNames = Product::find($productRelatedId)->toArray();
-        $productRelatedImages=ProductImage::where('product_id',$productRelatedId)->get();
-
-
-        // $name="";
-        // foreach ($productRelatedId as $key => $product) {
-        //     $name = $productsRelatedNames[$key]['name'];
-        // }
+        $product = ($relatedProducts->where('id',$this->child_product_id)->first());
+        dd($product->name);
+       
         return [
             'id' => $this->child_product_id,
             'child_quantity' => $this->child_quantity,
