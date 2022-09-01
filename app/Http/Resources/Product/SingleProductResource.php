@@ -43,8 +43,6 @@ class SingleProductResource extends JsonResource
         $childrenIds = Product::where('parent_product_id', $this->id)->pluck('id')->toArray();
         $productAttributes = ProductField::whereIn('product_id', $childrenIds)->get();
 
-
-
         return [
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
@@ -86,7 +84,7 @@ class SingleProductResource extends JsonResource
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'labels' => SelectLabelResource::collection($this->whenLoaded('labels')),
             'categories' => $nestedCategories,
-            'related_products' => ProductRelatedResource::collection($this->whenLoaded('productRelatedChildren')) ?? [],
+            // 'related_products' => ProductRelatedResource::collection($this->whenLoaded('productRelatedChildren')) ?? [],
             'variations' => $this->whenLoaded('children') ? $this->whenLoaded('children') : [],
             'images' => ProductImagesResource::collection($this->whenLoaded('images')) ?? [],
         ];
