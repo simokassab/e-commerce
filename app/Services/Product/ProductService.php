@@ -96,7 +96,7 @@ class ProductService
             $data[$index]["field_id"] = $field['field_id'];
         }
         if (ProductField::insert($data)) {
-    return $this;
+            return $this;
         }
 
         throw new Exception('Error while storing product fields');
@@ -163,7 +163,10 @@ class ProductService
 
         $data = [];
         foreach ($request->images as $index => $image) {
-            $imagePath = uploadImage($image, config('images_paths.product.images'));
+            $imagePath = "";
+            if ($request->file('images') && !is_string($request->file('images')))
+                $imagePath = uploadImage($image, config('images_paths.product.images'));
+
             $data[] = [
                 'product_id' => $product->id,
                 'image' => $imagePath,
@@ -491,7 +494,6 @@ class ProductService
     }
     public function storeImagesForVariations($request, $childrenIds)
     {
-        // $imageCheck = ProductImage::whereIn('product_id', $childrenIds)->delete();
 
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
@@ -502,7 +504,7 @@ class ProductService
         $data = [];
         foreach ($childrenIdsArray as $key => $child) {
             foreach ($request->product_variations[$key]['images'] as $index => $image) {
-                $imagePath = uploadImage($image, config('images_paths.product.images'));
+                    $imagePath = uploadImage($image, config('images_paths.product.images'));
                 $data[] = [
                     'product_id' => $child,
                     'image' => $imagePath,
@@ -635,12 +637,12 @@ class ProductService
         $product->sku = $request->sku;
         $product->type = $request->type;
         $product->quantity = $request->quantity;
-        if(! $product->type == 'bundle'){
+        if (!$product->type == 'bundle') {
             $diffrenceQuantity = $request->quantity - ($product->reserved_quantity + $product->bundle_reserved_quantity);
-            if($diffrenceQuantity > ($request->reserved_quantity - $product->reserved_quantity)){
+            if ($diffrenceQuantity > ($request->reserved_quantity - $product->reserved_quantity)) {
                 $product->reserved_quantity = $request->reserved_quantity;
             }
-        }else{
+        } else {
             $product->reserved_quantity = $request->reserved_quantity;
         }
         $product->minimum_quantity = $request->minimum_quantity;
