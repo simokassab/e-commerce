@@ -30,6 +30,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class SingleProductResource extends JsonResource
 {
+
+    public function __construct($product,$productRelated)
+    {
+        // parent::__construct($resource);
+        $this->productRelated = $productRelated;
+        $this->product = $product;
+
+    }
     /**
      * Transform the resource into an array.
      *
@@ -84,7 +92,7 @@ class SingleProductResource extends JsonResource
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'labels' => SelectLabelResource::collection($this->whenLoaded('labels')),
             'categories' => $nestedCategories,
-            'related_products' => ProductRelatedResource::collection($this->whenLoaded('productRelatedChildren')) ?? [],
+            'related_products' => ProductRelatedResource::collection($productRelated) ?? [],
             'variations' => $this->whenLoaded('children') ? $this->whenLoaded('children') : [],
             'images' => ProductImagesResource::collection($this->whenLoaded('images')) ?? [],
         ];

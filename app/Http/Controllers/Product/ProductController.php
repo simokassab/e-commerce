@@ -203,9 +203,30 @@ class ProductController extends MainController
     public function show(Product $product)
     {
         $product->all_categories = Category::all();
-        $productRelated=ProductRelated::where('parent_product_id',$product->id)->get();
-        dd($productRelated);
-        return $this->successResponse('Success!', ['product' =>  new SingleProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category', 'unit', 'tax', 'priceClass', 'price', 'field', 'labels', 'productRelatedChildren','productRelatedParent', 'children', 'images']))]);
+        $productRelated = ProductRelated::where('parent_product_id', $product->id)->get();
+        return $this->successResponse(
+            'Success!',
+            [
+                'product' =>  new SingleProductResource(
+                    $product->load([
+                    'defaultCategory',
+                    'tags',
+                    'brand',
+                    'category',
+                    'unit ',
+                    'tax',
+                    'priceClass',
+                    'price',
+                    'field',
+                    'labels',
+                    'productRelatedChildren',
+                    'productRelatedParent',
+                    'children',
+                    'images'
+
+                    ]),$productRelated)
+            ],
+        );
     }
 
     /**
@@ -242,7 +263,7 @@ class ProductController extends MainController
             if ($request->type == 'bundle') {
                 $this->productService->storeAdditionalBundle($request, $product);
             }
-            Product::find($product->id)->updateProductQuantity($request->reserved_quantity,'sub');
+            Product::find($product->id)->updateProductQuantity($request->reserved_quantity, 'sub');
 
 
             $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
@@ -309,7 +330,8 @@ class ProductController extends MainController
         return $this->successResponsePaginated(ProductResource::class, Product::class, self::relations);
     }
 
-    public function getProductsForOrders(GetAllProdcutsForOrderRequest $request){
+    public function getProductsForOrders(GetAllProdcutsForOrderRequest $request)
+    {
 
         $name = '';
         if (array_key_exists('name', $request->data)) {
@@ -322,7 +344,7 @@ class ProductController extends MainController
 
         $data['currency'] = Currency::query()->find($request->currency_id);
         $data['currency_rate'] = $request->currency_rate;
-        return SelectProductOrderResource::customCollection($products,$data);
+        return SelectProductOrderResource::customCollection($products, $data);
     }
 
     public function getTableHeaders()
@@ -335,8 +357,8 @@ class ProductController extends MainController
         return $this->successResponse('Success!', ['headers' => __('headers.products_select_product')]);
     }
 
-    public function getProductsData(){
-        return $this->successResponsePaginated(RestFullProductResource::class,Product::class,['defaultCategory','tags','brand','category','unit','tax','price','field','labels','productRelatedChildren','children','images']);
+    public function getProductsData()
+    {
+        return $this->successResponsePaginated(RestFullProductResource::class, Product::class, ['defaultCategory', 'tags', 'brand', 'category', 'unit', 'tax', 'price', 'field', 'labels', 'productRelatedChildren', 'children', 'images']);
     }
-
 }
