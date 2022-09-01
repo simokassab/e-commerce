@@ -23,6 +23,7 @@ use App\Models\Field\FieldValue;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
 use App\Models\Product\ProductField;
+use App\Models\Product\ProductImage;
 use App\Services\Category\CategoryService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -45,7 +46,8 @@ class SingleProductResource extends JsonResource
         $model=new Product();
         $productsRelatedNames = Product::find($productRelatedIds->toArray())->toArray();
         $productRelated = ($this->whenLoaded('productRelatedChildren'))->toArray();
-
+        $productRelatedImages=ProductImage::with('images')->where('product_id',$productRelatedIds);
+        dd($productRelatedImages);
         foreach ($productRelated as $key => $product) {
             $productRelated[$key]['name_original'] = $productsRelatedNames[$key]['name'];
         }
