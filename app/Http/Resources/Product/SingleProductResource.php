@@ -50,7 +50,7 @@ class SingleProductResource extends JsonResource
         $nestedCategories = CategoryService::getAllCategoriesNested($this->all_categories, $selectedCategoriesIds->pluck('id')->toArray());
         $childrenIds = Product::where('parent_product_id', $this->id)->pluck('id')->toArray();
         $productAttributes = ProductField::whereIn('product_id', $childrenIds)->get();
-
+        dd($this);
         return [
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
