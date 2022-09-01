@@ -44,6 +44,7 @@ class ProductRelatedResource extends JsonResource
 
     public static function customCollection($collection,$relatedProducts,$relatedProductsImages ){
 
+        dd('sss');
         self::$relatedProducts = $relatedProducts;
         self::$relatedProductsImages = $relatedProductsImages;
 
