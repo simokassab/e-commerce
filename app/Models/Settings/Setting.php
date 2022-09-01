@@ -14,7 +14,14 @@ class Setting extends MainModel
 
     protected $translatable = [];
     protected $fillable = ['title', 'value', 'type', 'is_developer'];
-
+    public $fields = [
+        'products_required_fields',
+        'products_quantity_greater_than_or_equal' ,
+        'allow_negative_quantity',
+        'products_prices_greater_than_or_equal',
+        'products_discounted_price_greater_than_or_equal',
+        'is_discount_on_shipping'
+    ];
     // public function getPriceOptions(){
     //     dd($prices);
     // }
@@ -67,7 +74,6 @@ public static function getTitleOptions(){
         'allow_negative_quantity' => [],
         'products_prices_greater_than_or_equal' => [],
         'products_discounted_price_greater_than_or_equal' => [],
-
         'is_discount_on_shipping' => []
     ];
     $titlesOptions['website_pricing']= Price::all('id','name')->toArray();

@@ -99,9 +99,7 @@ class SettingsController extends MainController
             });
             DB::commit();
             return $this->successResponse(
-                __('messages.success.update', ['name' => __(self::OBJECT_NAME)],
-
-            ),
+                __('messages.success.update', ['name' => __(self::OBJECT_NAME)],),
             );
         } catch (\Exception $ex) {
             DB::rollBack();

@@ -30,9 +30,11 @@ class SettingsResource extends JsonResource
             $valuesArray[] = $setting->value;
         });
 
+        $options = [];
 
-        $options = Setting::getTitleOptions()[$this->title];
-
+        if(in_array($this->title,Setting::$fields)){
+            $options = Setting::getTitleOptions()[$this->title];
+        }
 
         $id = $idsArray[array_search($this->title, $titlesArray)];
         $title = $titlesArray[array_search($this->title, $titlesArray)];
@@ -59,7 +61,7 @@ class SettingsResource extends JsonResource
             'title' => $title,
             'name' => ucwords(str_replace("_", " ", $title)),
             'type' => $type,
-            'options' => collect($options),
+            'options' => ($options),
             'value' => $value
         ];
     }
