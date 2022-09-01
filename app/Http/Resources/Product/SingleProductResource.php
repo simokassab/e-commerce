@@ -31,9 +31,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class SingleProductResource extends JsonResource
 {
 
-    public function __construct($product, $productRelated)
+    public function __construct($product, ...$data)
     {
-        $this->productRelated = $productRelated;
+        $this->productRelated = $data[0];
+        $this->relatedProducts = $data[1];
+        $this->relatedProductsImages = $data[2];
         $this->resource = $product;
     }
     /**
@@ -49,7 +51,6 @@ class SingleProductResource extends JsonResource
         $childrenIds = Product::where('parent_product_id', $this->id)->pluck('id')->toArray();
         $productAttributes = ProductField::whereIn('product_id', $childrenIds)->get();
 
-        dd($this->productRelated);
         return [
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
@@ -91,7 +92,7 @@ class SingleProductResource extends JsonResource
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'labels' => SelectLabelResource::collection($this->whenLoaded('labels')),
             'categories' => $nestedCategories,
-            'related_products' => ProductRelatedResource::collection($this->productRelated) ?? [],
+            'related_products' => ProductRelatedResource::customCollection($this->productRelated,$this->relatedProducts,$this->relatedProductsImages ) ?? [],
             'variations' => $this->whenLoaded('children') ? $this->whenLoaded('children') : [],
             'images' => ProductImagesResource::collection($this->whenLoaded('images')) ?? [],
         ];
