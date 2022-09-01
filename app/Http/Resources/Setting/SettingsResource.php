@@ -32,6 +32,7 @@ class SettingsResource extends JsonResource
 
         $options = [];
 
+
         if(in_array($this->title,Setting::$fields)){
             $options = Setting::getTitleOptions()[$this->title];
         }
