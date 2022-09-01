@@ -86,7 +86,7 @@ class SingleProductResource extends JsonResource
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'labels' => SelectLabelResource::collection($this->whenLoaded('labels')),
             'categories' => $nestedCategories,
-            'related_products' => ProductRelatedResource::collection($this->whenLoaded('productRelatedChildren')->loadMissing('productRelatedChildren')) ?? [],
+            'related_products' => ProductRelatedResource::collection($this->whenLoaded('productRelatedChildren')) ?? [],
             'variations' => $this->whenLoaded('children') ? $this->whenLoaded('children') : [],
             'images' => ProductImagesResource::collection($this->whenLoaded('images')) ?? [],
         ];
