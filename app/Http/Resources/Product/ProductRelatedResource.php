@@ -27,8 +27,8 @@ class ProductRelatedResource extends JsonResource
             'id' => $this->child_product_id,
             'child_quantity' => $this->child_quantity,
             'name' => $this->getTranslations('name'),
-            'name_original' => $name,
-            'images' => ProductImagesResource::collection($productRelatedImages) ?? []
+            // 'name_original' => $name,
+            // 'images' => ProductImagesResource::collection($productRelatedImages) ?? []
         ];
     }
 }
