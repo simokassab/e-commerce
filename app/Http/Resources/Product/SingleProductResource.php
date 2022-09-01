@@ -35,8 +35,7 @@ class SingleProductResource extends JsonResource
     {
         // parent::__construct($resource);
         $this->productRelated = $productRelated;
-        $this->product = $product;
-
+        $this->resource = $product;
     }
     /**
      * Transform the resource into an array.
