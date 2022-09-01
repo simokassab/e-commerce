@@ -50,7 +50,7 @@ class SingleProductResource extends JsonResource
         $nestedCategories = CategoryService::getAllCategoriesNested($this->all_categories, $selectedCategoriesIds->pluck('id')->toArray());
         $childrenIds = Product::where('parent_product_id', $this->id)->pluck('id')->toArray();
         $productAttributes = ProductField::whereIn('product_id', $childrenIds)->get();
-        dd($this);
+
         return [
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
@@ -59,7 +59,7 @@ class SingleProductResource extends JsonResource
             'code' => $this->code,
             'sku' => $this->sku,
             'type' => $this->type,
-            'unit' => $this->whenLoaded('unit') ? new SelectUnitResource($this->whenLoaded('unit')) : [],
+            'unit' => $this->product->whenLoaded('unit') ? new SelectUnitResource($this->whenLoaded('unit')) : [],
             'quantity' => (int)$this->quantity ?? 0,
             'reserved_quantity' => (int)$this->reserved_quantity ?? 0,
             'minimum_quantity' => (int)$this->minimum_quantity ?? 0,
@@ -92,7 +92,7 @@ class SingleProductResource extends JsonResource
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'labels' => SelectLabelResource::collection($this->whenLoaded('labels')),
             'categories' => $nestedCategories,
-            'related_products' => ProductRelatedResource::collection($productRelated) ?? [],
+            'related_products' => ProductRelatedResource::collection($this->productRelated) ?? [],
             'variations' => $this->whenLoaded('children') ? $this->whenLoaded('children') : [],
             'images' => ProductImagesResource::collection($this->whenLoaded('images')) ?? [],
         ];
