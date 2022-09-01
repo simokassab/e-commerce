@@ -59,7 +59,7 @@ class SingleProductResource extends JsonResource
             'code' => $this->code,
             'sku' => $this->sku,
             'type' => $this->type,
-            'unit' => $this->product->whenLoaded('unit') ? new SelectUnitResource($this->whenLoaded('unit')) : [],
+            'unit' => $this->product->whenLoaded('unit') ? new SelectUnitResource($this->product->whenLoaded('unit')) : [],
             'quantity' => (int)$this->quantity ?? 0,
             'reserved_quantity' => (int)$this->reserved_quantity ?? 0,
             'minimum_quantity' => (int)$this->minimum_quantity ?? 0,
