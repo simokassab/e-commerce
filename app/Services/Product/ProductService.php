@@ -639,7 +639,7 @@ class ProductService
         $product->code = $request->code;
         $product->sku = $request->sku;
         $product->type = $request->type;
-        $product->quantity = $request->quantity;
+        $product->quantity = 0;
         if (!$product->type == 'bundle') {
             $diffrenceQuantity = $request->quantity - ($product->reserved_quantity + $product->bundle_reserved_quantity);
             if ($diffrenceQuantity > ($request->reserved_quantity - $product->reserved_quantity)) {
