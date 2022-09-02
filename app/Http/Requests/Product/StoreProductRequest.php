@@ -32,8 +32,8 @@ class StoreProductRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-        $settingsTitles = Cache::get('settings')->pluck('title')->toArray();
-        $productSettings = Cache::get('settings')->whereIn('title',$settingsTitles)->groupBy('title')->toArray();
+        $settingsTitles = Cache::get(Setting::$cacheKey)->pluck('title')->toArray();
+        $productSettings = Cache::get(Setting::$cacheKey)->whereIn('title',$settingsTitles)->groupBy('title')->toArray();
         if($productSettings){
             $this->productsRequiredSettingsArray = explode(',',$productSettings['products_required_fields'][0]['value']) ?? "";
             $this->QuantityValue= $productSettings['products_quantity_greater_than_or_equal'][0]['value'] ?? 0;

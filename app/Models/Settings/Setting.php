@@ -13,7 +13,9 @@ class Setting extends MainModel
     use HasFactory;
 
     protected $translatable = [];
+
     protected $fillable = ['title', 'value', 'type', 'is_developer'];
+
     public static array $fields = [
         'products_required_fields',
         'products_quantity_greater_than_or_equal' ,
@@ -22,6 +24,10 @@ class Setting extends MainModel
         'products_discounted_price_greater_than_or_equal',
         'is_discount_on_shipping'
     ];
+
+    public static string $cacheKey = 'settings';
+
+    public static array $types =['multi-select', 'select','number','text','checkbox'];
 
     public static function getTitleOptions(){
         $titlesOptions = [
@@ -68,14 +74,10 @@ class Setting extends MainModel
                 ],
 
             ],
-            'products_quantity_greater_than_or_equal' => [],
-            'allow_negative_quantity' => [],
-            'products_prices_greater_than_or_equal' => [],
-            'products_discounted_price_greater_than_or_equal' => [],
-            'is_discount_on_shipping' => [],
-            'products_minimum_and_reserved_quantity_greater_than_or_equal' => []
+            'website_pricing' => Price::all('id','name')->toArray()
         ];
-        $titlesOptions['website_pricing']= Price::all('id','name')->toArray();
+
+        //taking the english text from the translatable json text
         foreach ($titlesOptions['website_pricing'] as $key => $option)
             $titlesOptions[$key]['name'] = $option['name']['en'];
 

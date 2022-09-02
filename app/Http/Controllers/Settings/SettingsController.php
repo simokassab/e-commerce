@@ -94,7 +94,7 @@ class SettingsController extends MainController
             }
             $setting->value=$value;
             $setting->save();
-            Cache::rememberForever('settings', function () {
+            Cache::rememberForever(Setting::$cacheKey, function () {
                 return Setting::all(['id','title','type','value']);
             });
             DB::commit();

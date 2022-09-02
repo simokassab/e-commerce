@@ -1,6 +1,7 @@
 <?php
 
 use App\Exceptions\FileErrorException;
+use App\Models\Settings\Setting;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
 
@@ -78,9 +79,10 @@ function convertFromArrayToString($array, $separator = ',')
  * @throws Throwable
  */
 function getSettings(array | string $key=null) : mixed{
-    $settings = Cache::get('settings');
-    $availableSettings = $settings->pluck('title');
 
+    $settings = Cache::get(Setting::$cacheKey,fn() => Setting::all());
+
+    $availableSettings = $settings->pluck('title');
 
     if(is_array($key)){
         foreach ($key as $object) {
