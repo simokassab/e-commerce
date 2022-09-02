@@ -295,16 +295,16 @@ class ProductController extends MainController
      */
     public function destroy(Product $product)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             $this->productService->deleteRelatedDataForProduct($product);
             $product->delete();
             return $this->successResponse(['message' => __('messages.success.delete', ['name' => __(self::OBJECT_NAME)])]);
-            DB::commit();
-        } catch (\Exception $ex) {
-            DB::rollback();
-            return $this->errorResponse(['message' => __('messages.failed.delete', ['name' => __(self::OBJECT_NAME),])]);
-        }
+            // DB::commit();
+        // } catch (\Exception $ex) {
+            // DB::rollback();
+            // return $this->errorResponse(['message' => __('messages.failed.delete', ['name' => __(self::OBJECT_NAME),])]);
+        // }
     }
     public function toggleStatus(Request $request, $id)
     {

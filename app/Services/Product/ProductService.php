@@ -13,6 +13,7 @@ use App\Models\Product\ProductTag;
 use App\Services\Category\CategoryService;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class ProductService
@@ -471,7 +472,6 @@ class ProductService
             }
         }
         if (ProductField::insert($data)) {
-
             return $this;
         }
 
@@ -482,6 +482,9 @@ class ProductService
     {
 
         if (!$request->has('product_variations'))
+            return $this;
+
+        if (!Arr::has($request->product_varitations->toArray(), 'product_varitations.*.images_deleted'))
             return $this;
 
         $childrenIdsArray = $childrenIds;
@@ -504,7 +507,7 @@ class ProductService
         $data = [];
         foreach ($childrenIdsArray as $key => $child) {
             foreach ($request->product_variations[$key]['images'] as $index => $image) {
-                    $imagePath = uploadImage($image, config('images_paths.product.images'));
+                $imagePath = uploadImage($image, config('images_paths.product.images'));
                 $data[] = [
                     'product_id' => $child,
                     'image' => $imagePath,
@@ -552,71 +555,71 @@ class ProductService
         // DB::beginTransaction();
         // try {
 
-            throw_if(!$request->product_variations, Exception::class, 'No variations found');
+        throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
-            $productVariationParentsArray = [];
-            foreach ($request->product_variations as $variation) {
-                $imagePath = "";
-                if ($request->file('image') && !is_string($request->file('image')))
-                    $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
+        $productVariationParentsArray = [];
+        foreach ($request->product_variations as $variation) {
+            $imagePath = "";
+            if ($request->file('image') && !is_string($request->file('image')))
+                $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
 
-                $productVariationsArray = [
-                    'name' => json_encode($request->name),
-                    'code' => $variation['code'],
-                    'type' => 'variable_child',
-                    'sku' => $variation['sku'],
-                    'quantity' => $variation['quantity'],
-                    'reserved_quantity' => $variation['reserved_quantity'],
-                    'minimum_quantity' => $variation['minimum_quantity'],
-                    'height' => $variation['height'],
-                    'width' => $variation['width'],
-                    'length' => $variation['p_length'],
-                    'weight' => $variation['weight'],
-                    'barcode' => $variation['barcode'],
-                    'category_id' => $request->category_id,
-                    'unit_id' => $request->unit_id,
-                    'tax_id' => $request->tax_id,
-                    'brand_id' => $request->brand_id,
-                    'summary' => json_encode($request->summary),
-                    'specification' => json_encode($request->specification),
-                    'meta_title' => json_encode($request->meta_title) ?? "",
-                    'meta_keyword' => json_encode($request->meta_keyword) ?? "",
-                    'meta_description' => json_encode($request->meta_description) ?? "",
-                    'description' => json_encode($request->description) ?? "",
-                    'website_status' => $request->website_status,
-                    'parent_product_id' => $product->id,
-                    'products_statuses_id' => $variation['products_statuses_id'],
-                    'image' => $imagePath,
-                    'is_show_related_product' => $variation['is_show_related_product'] ?? 0,
-                    'bundle_reserved_quantity' => null,
-                    'pre_order' => $variation['pre_order'] ?? 0,
-                    // 'created_at' => Carbon::now()->toDateTimeString(),
-                    // 'updated_at' => Carbon::now()->toDateTimeString(),
+            $productVariationsArray = [
+                'name' => json_encode($request->name),
+                'code' => $variation['code'],
+                'type' => 'variable_child',
+                'sku' => $variation['sku'],
+                'quantity' => $variation['quantity'],
+                'reserved_quantity' => $variation['reserved_quantity'],
+                'minimum_quantity' => $variation['minimum_quantity'],
+                'height' => $variation['height'],
+                'width' => $variation['width'],
+                'length' => $variation['p_length'],
+                'weight' => $variation['weight'],
+                'barcode' => $variation['barcode'],
+                'category_id' => $request->category_id,
+                'unit_id' => $request->unit_id,
+                'tax_id' => $request->tax_id,
+                'brand_id' => $request->brand_id,
+                'summary' => json_encode($request->summary),
+                'specification' => json_encode($request->specification),
+                'meta_title' => json_encode($request->meta_title) ?? "",
+                'meta_keyword' => json_encode($request->meta_keyword) ?? "",
+                'meta_description' => json_encode($request->meta_description) ?? "",
+                'description' => json_encode($request->description) ?? "",
+                'website_status' => $request->website_status,
+                'parent_product_id' => $product->id,
+                'products_statuses_id' => $variation['products_statuses_id'],
+                'image' => $imagePath,
+                'is_show_related_product' => $variation['is_show_related_product'] ?? 0,
+                'bundle_reserved_quantity' => null,
+                'pre_order' => $variation['pre_order'] ?? 0,
+                // 'created_at' => Carbon::now()->toDateTimeString(),
+                // 'updated_at' => Carbon::now()->toDateTimeString(),
 
-                ];
-                $productVariationParentsArray[] = $productVariationsArray;
-            }
-            $model = new Product();
-            $productVariation = Product::upsert($productVariationParentsArray, 'id', $model->getFillable());
-            $childrenIds = [];
-            if ($productVariation) {
+            ];
+            $productVariationParentsArray[] = $productVariationsArray;
+        }
+        $model = new Product();
+        $productVariation = Product::upsert($productVariationParentsArray, 'id', $model->getFillable());
+        $childrenIds = [];
+        if ($productVariation) {
 
-                $childrenData = Product::where('parent_product_id', $product->id)->get();
-                foreach ($childrenData as $key => $child) {
-                    $childrenIds[$key] = $child->id;
-                }
-
-                $this->removeImagesForVariations($request, $childrenIds);
-                $this->storeImagesForVariations($request, $childrenIds);
-                $this->storeImagesForVariations($request, $childrenIds);
-                $this->storePricesForVariations($request, $childrenIds);
-                // $this->storeFieldsForVariations($request, $childrenIds);
-                $this->storeAttributesForVariations($request, $childrenIds);
+            $childrenData = Product::where('parent_product_id', $product->id)->get();
+            foreach ($childrenData as $key => $child) {
+                $childrenIds[$key] = $child->id;
             }
 
-            if (count($childrenIds) > 0) {
-                return $childrenIds;
-            }
+            $this->removeImagesForVariations($request, $childrenIds);
+            $this->storeImagesForVariations($request, $childrenIds);
+            $this->storeImagesForVariations($request, $childrenIds);
+            $this->storePricesForVariations($request, $childrenIds);
+            // $this->storeFieldsForVariations($request, $childrenIds);
+            $this->storeAttributesForVariations($request, $childrenIds);
+        }
+
+        if (count($childrenIds) > 0) {
+            return $childrenIds;
+        }
 
         //     DB::commit();
         // } catch (Exception $e) {
