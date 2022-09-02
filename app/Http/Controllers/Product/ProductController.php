@@ -299,8 +299,8 @@ class ProductController extends MainController
         try {
             $this->productService->deleteRelatedDataForProduct($product);
             $product->delete();
-            return $this->successResponse(['message' => __('messages.success.delete', ['name' => __(self::OBJECT_NAME)])]);
             DB::commit();
+            return $this->successResponse(['message' => __('messages.success.delete', ['name' => __(self::OBJECT_NAME)])]);
         } catch (\Exception $ex) {
             DB::rollback();
             return $this->errorResponse(['message' => __('messages.failed.delete', ['name' => __(self::OBJECT_NAME),])]);
