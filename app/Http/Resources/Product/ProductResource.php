@@ -50,7 +50,7 @@ class ProductResource extends JsonResource
             'type' => $this->type,
             'quantity' => $this->quantity,
             'image' => $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
-            'status' => $this->status,
+            'status' => $this->website_status,
             'categories' => $categories ?? "-",
             'tags' => count($tags) != 0 ? $tags : '-',
             'brands' =>  $this->whenLoaded('brand') ? $this->whenLoaded('brand')->name : '-',
