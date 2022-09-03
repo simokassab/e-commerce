@@ -44,7 +44,9 @@ class TestController extends MainController
 
     public function test()
     {
-        return getSettings();
+
+        return Product::query()->find(1)->updateProductQuantity(1,'sub');
+
     }
 
     public function createShipment(){

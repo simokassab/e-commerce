@@ -82,19 +82,24 @@ function getSettings(array | string $key=null) : mixed{
 
     $settings = Cache::get(Setting::$cacheKey,fn() => Setting::all());
 
-    $availableSettings = $settings->pluck('title');
-
     if(is_array($key)){
-        foreach ($key as $object) {
-            throw_if(!in_array($object, $availableSettings->toArray()),new Exception('The ' . $object . ' is not a valid settings'));
+
+        $multiSettings = $settings->whereIn('title',$key);
+        if($multiSettings->count() != count($key)){
+            throw new Exception('One of the keys is not valid settings');
         }
-        return $settings->whereIn('title',$key);
-    }elseif(is_string($key)){
-        throw_if(!in_array($key, $availableSettings->toArray()),new Exception('The ' . $key . ' is not a valid settings'));
-        return $settings->where('title',$key)->first();
-    }else{
-        return $settings;
+        return $multiSettings;
     }
+
+    if(is_string($key)){
+        $singleSettings = $settings->where('title',$key)->first();
+        if(is_null($singleSettings)){
+            throw new Exception('The ' . $key . ' is not a valid settings');
+        }
+        return $singleSettings;
+
+    }
+    return $settings;
 }
 
 function array_to_obj($array, &$obj)
