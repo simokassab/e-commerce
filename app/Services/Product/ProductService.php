@@ -534,9 +534,10 @@ class ProductService
     {
         $data = [];
         foreach ($request->product_variations as $variation) {
-            $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
+            $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : ($variation['prices'] ?? []);
+            dd($variation['isSamePriceAsParent']);
+
         }
-        dd($request->product_variations);
         $childrenIdsArray = $childrenIds;
         $data = [];
         foreach ($childrenIdsArray as $key => $child) {
