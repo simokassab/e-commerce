@@ -159,7 +159,7 @@ class StoreProductRequest extends FormRequest
 
         ];
         if($request->type=='variable'){
-        foreach($request->product_variations as $key => $variation){
+        foreach($request->product_variations ?? [] as $key => $variation){
             if(!$variation['isSamePriceAsParent']){
                 $pricesRulesArray=[
                     'product_variations.*.prices.*.price_id' => 'required | integer | exists:prices,id',
