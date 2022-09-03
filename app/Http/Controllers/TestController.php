@@ -23,7 +23,7 @@ use App\Exceptions\FileErrorException;
 use App\Models\RolesAndPermissions\CustomPermission;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
-use Octw\Aramex\Aramex;
+use App\Http\Helpers\Aramex;
 use SoapClient;
 
 class TestController extends MainController
@@ -44,6 +44,52 @@ class TestController extends MainController
 
     public function test()
     {
+        $callResponse = Aramex::createShipment([
+            'shipper' => [
+                'name' => 'Steve',
+                'email' => 'email@users.companies',
+                'phone'      => '+123456789982',
+                'cell_phone' => '+321654987789',
+                'country_code' => 'US',
+                'city' => 'New York',
+                'zip_code' => 32160,
+                'line1' => 'Line1 Details',
+                'line2' => 'Line2 Details',
+                'line3' => 'Line3 Details',
+            ],
+            'consignee' => [
+                'name' => 'Steve',
+                'email' => 'email@users.companies',
+                'phone'      => '+123456789982',
+                'cell_phone' => '+321654987789',
+                'country_code' => 'US',
+                'city' => 'New York',
+                'zip_code' => 32160,
+                'line1' => 'Line1 Details',
+                'line2' => 'Line2 Details',
+                'line3' => 'Line3 Details',
+            ],
+            'shipping_date_time' => time() + 50000,
+            'due_date' => time() + 60000,
+            'comments' => 'No Comment',
+            'pickup_location' => 'at reception',
+            'pickup_guid' => '4e29b471-0ed8-4ba8-ac0e-fddedfb6beec',
+            'weight' => 1,
+            'number_of_pieces' => 1,
+            'description' => 'Goods Description, like Boxes of flowers',
+        ]);
+        if (!empty($callResponse->error))
+        {
+            foreach ($callResponse->errors as $errorObject) {
+              return response()->json([$errorObject->Code, $errorObject->Message], 500);
+            }
+        }
+        else {
+          // extract your data here, for example
+          // $shipmentId = $response->Shipments->ProcessedShipment->ID;
+          // $labelUrl = $response->Shipments->ProcessedShipment->ShipmentLabel->LabelURL;
+        }
+        return $callResponse;
     }
 
     public function createShipment()
@@ -240,7 +286,7 @@ class TestController extends MainController
             'Comments'        => 'Docs',
             'Reference'        => ''
         );
-        $soapClient = new SoapClient('https://ws.aramex.net/ShippingAPI.V2/Shipping/Service_1_0.svc?wsdl');
+        $soapClient = new SoapClient(asset('shipping.wsdl'));
         $auth_call = $soapClient->CreateShipments($params);
         return $auth_call;
     }

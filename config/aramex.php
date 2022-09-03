@@ -17,7 +17,7 @@ return [
      *		For Development => 'TEST'
      *  	For Staging => 'LIVE'
      */
-    'ENV' => 'TEST',
+    'ENV' => env('ARAMEX_ENV', 'TEST'),
 
 
 
@@ -161,6 +161,6 @@ return [
      */
     'LabelInfo' => [
         'ReportID'         => 9201,
-        'ReportType'    => null,
+        'ReportType'    => 'URL',
     ]
 ];
