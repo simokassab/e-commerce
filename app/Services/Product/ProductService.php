@@ -530,13 +530,17 @@ class ProductService
         throw new Exception('Error while storing product images');
     }
 
+    /**
+     * @throws Exception
+     */
     public function storePricesForVariations($request, $childrenIds)
     {
         $data = [];
         foreach ($request->product_variations as $variation) {
             $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : ($variation['prices'] ?? []);
-            dd($request->prices);
-
+        }
+        if(is_null($pricesInfo)){
+           return $this;
         }
         $childrenIdsArray = $childrenIds;
         $data = [];
