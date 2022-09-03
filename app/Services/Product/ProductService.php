@@ -484,6 +484,8 @@ class ProductService
         if (!$request->has('product_variations'))
             return $this;
 
+        dd($request->product_varitations);
+
         if (!Arr::has($request->product_varitations->toArray(), 'product_varitations.*.images_deleted'))
             return $this;
 
