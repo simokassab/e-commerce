@@ -81,7 +81,7 @@ class TestController extends MainController
         if (!empty($callResponse->error))
         {
             foreach ($callResponse->errors as $errorObject) {
-              return response()->json([$errorObject->Code, $errorObject->Message], 500);
+            //   return response()->json([$errorObject->Code, $errorObject->Message], 500);
             }
         }
         else {

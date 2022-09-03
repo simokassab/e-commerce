@@ -59,7 +59,7 @@ class Aramex extends BaseAramex
         // return $ret;
     }
 
-    public static function createShipment($param =[])
+    public static function createShipment($param = [])
     {
         // Define an instance from the core class.
         $aramex = new Core;
@@ -80,20 +80,19 @@ class Aramex extends BaseAramex
 
         if ($call->HasErrors) {
             $ret->error = 1;
-            if (isset($call->Notifications->Notification))
-            {
+            $ret->errors = [];
+            if (isset($call->Notifications->Notification)) {
                 $ret->errors = [$call->Notifications->Notification];
             }
 
-            elseif (is_object($call->Shipments->ProcessedShipment->Notifications->Notification))
-            {
-                $ret->errors = [ $call->Shipments->ProcessedShipment->Notifications->Notification ];
+            if (isset($call->Shipments->ProcessedShipment->Notifications->Notification)) {
+                if (is_object($call->Shipments->ProcessedShipment->Notifications->Notification)) {
+                    $ret->errors = [$call->Shipments->ProcessedShipment->Notifications->Notification];
+                } else {
+                    $ret->errors = $call->Shipments->ProcessedShipment->Notifications->Notification;
+                }
             }
-            else {
-                $ret->errors = $call->Shipments->ProcessedShipment->Notifications->Notification;
-            }
-        }
-        else{
+        } else {
             $ret = $call;
         }
 
