@@ -484,6 +484,10 @@ class ProductService
         if (!$request->has('product_variations'))
             return $this;
 
+        if($request->product_varitations == null){
+            return $this;
+        }
+
         if (!Arr::has($request->product_varitations->toArray(), 'product_varitations.*.images_deleted'))
             return $this;
 
@@ -526,13 +530,18 @@ class ProductService
         throw new Exception('Error while storing product images');
     }
 
+    /**
+     * @throws Exception
+     */
     public function storePricesForVariations($request, $childrenIds)
     {
         $data = [];
         foreach ($request->product_variations as $variation) {
-            $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : $variation['prices'];
+            $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : ($variation['prices'] ?? []);
         }
-
+        if(is_null($pricesInfo)){
+           return $this;
+        }
         $childrenIdsArray = $childrenIds;
         $data = [];
         foreach ($childrenIdsArray as $key => $child) {
