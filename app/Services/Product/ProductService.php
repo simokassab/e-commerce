@@ -454,7 +454,7 @@ class ProductService
                     'product_id' => $child,
                     'image' => $imagePath,
                     'title' => json_encode($imagesData[$index]['title']),
-                    'sort' => $imagesData[$key]['images_data'][$index]['sort'],
+                    'sort' => $imagesData[$key][$index]['sort'],
                     'created_at'  => Carbon::now()->toDateString(),
                     'updated_at' => Carbon::now()->toDateString(),
                 ];
