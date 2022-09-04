@@ -546,10 +546,10 @@ class ProductService
 
 
             ];
-            $imagesDeletedArray = $variation['images_deleted'];
-            $imagesArray = $variation['images'];
+            $imagesDeletedArray = $variation['images_deleted'] ?? [];
+            $imagesArray = $variation['images'] ?? [];
             // $fieldsArray =$variation['fields'];
-            $attributesArray = $variation['fields'];
+            $attributesArray = $variation['fields'] ?? [];
             $productVariationParentsArray[] = $productVariationsArray;
         }
         dd($imagesArray);
