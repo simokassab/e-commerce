@@ -334,7 +334,7 @@ class ProductService
     public function storeFieldsForVariations($fieldsArray, $childrenIds)
     {
         $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
-     
+
         if (is_null($fieldsArray))
         return $this;
 
@@ -497,10 +497,10 @@ class ProductService
         $fieldsArray = [];
         $attributesArray = [];
         foreach ($request->product_variations as $variation) {
-            $imagePath = "";
-            if ($request->file('image') && !is_string($request->file('image')))
+            $imagePath = array_key_exists('image',$variation) ? $variation['image'] : null;
+            if ($variation['image']->file('image') && !is_string($variation['image']->file('image')) && !is_null($imagePath)){
                 $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
-
+            }
             $productVariationsArray = [
                 'name' => json_encode($request->name),
                 'code' => $variation['code'],
