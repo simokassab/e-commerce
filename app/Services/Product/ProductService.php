@@ -374,20 +374,20 @@ class ProductService
         throw new Exception('Error while storing product fields');
     }
 
-    public function storeAttributesForVariations($request, $childrenIds)
+    public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
         $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
 
-        throw_if(!$request->product_variations, Exception::class, 'No variations found');
+        // throw_if(!$request->product_variations, Exception::class, 'No variations found');
+// 
+        // if (!$request->has('product_variations'))
+            // return $this;
 
-        if (!$request->has('product_variations'))
-            return $this;
-
-        $childrenIdsArray = $childrenIds;
+        // $childrenIdsArray = $childrenIds;
         $data = [];
 
-        foreach ($childrenIdsArray as $key => $child) {
-            foreach ($request->product_variations[$key]['attributes'] as $index => $attribute) {
+        foreach ($childrenIds as $key => $child) {
+            foreach ($attributesArray as $index => $attribute) {
                 if (gettype($attribute) == 'string') {
                     $attribute = (array)json_decode($attribute);
                 }
