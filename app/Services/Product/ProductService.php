@@ -546,6 +546,7 @@ class ProductService
 
 
             ];
+           dd(array_key_exists('images_deleted',$variation->toArray()));
             $imagesDeletedArray = $variation['images_deleted'] ?? [];
             $imagesArray = $variation['images'] ?? [];
             $imagesData= $variation['images_data'] ?? [];
@@ -553,7 +554,7 @@ class ProductService
             $attributesArray = $variation['attributes'] ?? [];
             $productVariationParentsArray[] = $productVariationsArray;
         }
-$model = new Product();
+        $model = new Product();
         $productVariation = Product::upsert($productVariationParentsArray, 'id', $model->getFillable());
         $childrenIds = [];
         if ($productVariation) {
