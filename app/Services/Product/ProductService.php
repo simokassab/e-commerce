@@ -546,7 +546,7 @@ class ProductService
 
 
             ];
-           dd(array_key_exists('images_deleted',$variation->toArray()));
+           dd(array_key_exists('images_deleted',$variation));
             $imagesDeletedArray = $variation['images_deleted'] ?? [];
             $imagesArray = $variation['images'] ?? [];
             $imagesData= $variation['images_data'] ?? [];
