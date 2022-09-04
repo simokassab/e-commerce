@@ -436,7 +436,7 @@ class ProductService
             ProductImage::whereIn('id', $imagesIdsArray)->delete();
         }
     }
-    public function storeImagesForVariations($imagesArray, $childrenIds)
+    public function storeImagesForVariations($imagesArray,$imagesData, $childrenIds)
     {
 
         // throw_if(!$request->product_variations, Exception::class, 'No variations found');
@@ -452,8 +452,8 @@ class ProductService
                 $data[] = [
                     'product_id' => $child,
                     'image' => $imagePath,
-                    'title' => json_encode($imagesArray[$index]['title']),
-                    'sort' => $imagesArray[$key]['images_data'][$index]['sort'],
+                    'title' => json_encode($imagesData[$index]['title']),
+                    'sort' => $imagesData[$key]['images_data'][$index]['sort'],
                     'created_at'  => Carbon::now()->toDateString(),
                     'updated_at' => Carbon::now()->toDateString(),
                 ];
@@ -548,12 +548,12 @@ class ProductService
             ];
             $imagesDeletedArray = $variation['images_deleted'] ?? [];
             $imagesArray = $variation['images'] ?? [];
+            $imagesData= $variation['images_data'] ?? [];
             // $fieldsArray =$variation['fields'];
-            $attributesArray = $variation['fields'] ?? [];
+            $attributesArray = $variation['attributes'] ?? [];
             $productVariationParentsArray[] = $productVariationsArray;
         }
-        dd($imagesArray);
-        $model = new Product();
+$model = new Product();
         $productVariation = Product::upsert($productVariationParentsArray, 'id', $model->getFillable());
         $childrenIds = [];
         if ($productVariation) {
@@ -564,7 +564,7 @@ class ProductService
             }
 
             $this->removeImagesForVariations($imagesDeletedArray, $childrenIds);
-            $this->storeImagesForVariations($imagesArray, $childrenIds);
+            $this->storeImagesForVariations($imagesArray,$imagesData, $childrenIds);
             $this->storePricesForVariations($request, $childrenIds);
             // $this->storeFieldsForVariations($fields, $childrenIds);
             $this->storeAttributesForVariations($attributesArray, $childrenIds);
