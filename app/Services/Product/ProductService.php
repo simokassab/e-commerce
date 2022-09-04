@@ -334,13 +334,10 @@ class ProductService
     public function storeFieldsForVariations($fieldsArray, $childrenIds)
     {
         $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
+     
+        if (is_null($fieldsArray))
+        return $this;
 
-        // throw_if(!$request->product_variations, Exception::class, 'No variations found');
-
-        // if (!$request->has('product_variations'))
-            // return $this;
-
-        // $childrenIdsArray = $childrenIds;
         $data = [];
 
         foreach ($childrenIds as $key => $child) {
@@ -376,14 +373,11 @@ class ProductService
 
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
-        $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
+        $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
 
-        // throw_if(!$request->product_variations, Exception::class, 'No variations found');
-// 
-        // if (!$request->has('product_variations'))
-            // return $this;
+        if (is_null($attributesArray))
+            return $this;
 
-        // $childrenIdsArray = $childrenIds;
         $data = [];
 
         foreach ($childrenIds as $key => $child) {
@@ -418,7 +412,7 @@ class ProductService
 
     public function removeImagesForVariations($imagesDeletedArray, $childrenIds)
     {
-        if(is_null($imagesDeletedArray))
+        if (is_null($imagesDeletedArray))
             return $this;
         // if (!$request->has('product_variations'))
         //     return $this;
@@ -437,15 +431,11 @@ class ProductService
             ProductImage::whereIn('id', $imagesIdsArray)->delete();
         }
     }
-    public function storeImagesForVariations($imagesArray,$imagesData, $childrenIds)
+    public function storeImagesForVariations($imagesArray, $imagesData, $childrenIds)
     {
+        if (is_null($imagesArray) || is_null($imagesData))
+            return $this;
 
-        // throw_if(!$request->product_variations, Exception::class, 'No variations found');
-
-        // if (!$request->has('product_variations'))
-            // return $this;
-
-        // $childrenIdsArray = $childrenIds;
         $data = [];
         foreach ($childrenIds as $key => $child) {
             foreach ($imagesArray as $index => $image) {
@@ -468,9 +458,6 @@ class ProductService
         throw new Exception('Error while storing product images');
     }
 
-    /**
-     * @throws Exception
-     */
     public function storePricesForVariations($request, $childrenIds)
     {
         $data = [];
@@ -548,11 +535,11 @@ class ProductService
 
             ];
 
-            $imagesDeletedArray = array_key_exists('images_deleted',$variation) ?  $variation['images_deleted'] : [];
-            $imagesArray = array_key_exists('images',$variation) ? $variation['images'] : [];
-            $imagesData= array_key_exists('images_data',$variation) ? $variation['images_data'] : [];
+            $imagesDeletedArray = array_key_exists('images_deleted', $variation) ?  $variation['images_deleted'] : [];
+            $imagesArray = array_key_exists('images', $variation) ? $variation['images'] : [];
+            $imagesData = array_key_exists('images_data', $variation) ? $variation['images_data'] : [];
             // $fieldsArray =$variation['fields'];
-            $attributesArray = array_key_exists('attributes',$variation) ? $variation['attributes'] : [];
+            $attributesArray = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
             $productVariationParentsArray[] = $productVariationsArray;
         }
         $model = new Product();
@@ -566,7 +553,7 @@ class ProductService
             }
 
             $this->removeImagesForVariations($imagesDeletedArray, $childrenIds);
-            $this->storeImagesForVariations($imagesArray,$imagesData, $childrenIds);
+            $this->storeImagesForVariations($imagesArray, $imagesData, $childrenIds);
             $this->storePricesForVariations($request, $childrenIds);
             // $this->storeFieldsForVariations($fields, $childrenIds);
             $this->storeAttributesForVariations($attributesArray, $childrenIds);
