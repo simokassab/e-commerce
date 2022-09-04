@@ -498,8 +498,10 @@ class ProductService
         $attributesArray = [];
         foreach ($request->product_variations as $variation) {
             $imagePath = array_key_exists('image',$variation) ? $variation['image'] : null;
-            if ($variation['image']->file('image') && !is_string($variation['image']->file('image')) && !is_null($imagePath)){
-                $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
+            if(!is_null($imagePath)){
+                if ($variation['image']->file('image') && !is_string($variation['image']->file('image'))){
+                    $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
+            }
             }
             $productVariationsArray = [
                 'name' => json_encode($request->name),
