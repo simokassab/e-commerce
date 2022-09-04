@@ -156,7 +156,7 @@ return [
      *	 Label Information
      *	 Available Values:
      *      ReportID   => 9201, 9729 (9729 use it when COD to extract readable reports, 9201 with COD will not be accepted)
-     *		ReportType => “URL” to get report hosted on URL as PDF
+     *		ReportType =>p “URL” to get report hosted on URL as PDF
      *					  “RPT” to get a streamed file
      */
     'LabelInfo' => [
