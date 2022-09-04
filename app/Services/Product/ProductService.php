@@ -418,7 +418,8 @@ class ProductService
 
     public function removeImagesForVariations($imagesDeletedArray, $childrenIds)
     {
-
+        if(is_null($imagesDeletedArray))
+            return $this;
         // if (!$request->has('product_variations'))
         //     return $this;
 
