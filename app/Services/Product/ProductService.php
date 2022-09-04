@@ -25,9 +25,9 @@ class ProductService
         //$request=(object)$request;
 
         $this->storeAdditionalCategrories($request, $product, $childrenIds)
-            ->storeAdditionalFields($request, $product) // different than parent
+            ->storeAdditionalFields($request, $product)
             ->removeAdditionalImages($request)
-            ->storeAdditionalImages($request, $product) // different than parent
+            ->storeAdditionalImages($request, $product)
             ->storeAdditionalLabels($request, $product, $childrenIds)
             ->storeAdditionalTags($request, $product, $childrenIds)
             ->storeAdditionalPrices($request, $product, $childrenIds)
@@ -265,71 +265,9 @@ class ProductService
                 ];
             }
             ProductRelated::insert($data);
-            // $this->calculateBundleReservedQuantities($request);
             // $this->calculateReservedQuantity($request, $product);
         }
         return $this;
-    }
-
-    public function canMakeBundle($request)
-    {
-
-        $bundleIds = [];
-        $bundleQuantities = [];
-        $quantities = [];
-        foreach ($request->related_products as $related_product => $value) {
-            //TODO collection and pluck
-            $bundleIds[$related_product] = $value['child_product_id'];
-            $bundleQuantities[$related_product] = $value['child_quantity'];
-        }
-        $bundleProductsQuantities = Product::findMany($bundleIds)->pluck('quantity');
-
-        foreach ($bundleProductsQuantities->toArray() as $key => $bundleProductQuantity) {
-            if (!($bundleQuantities[$key] <= $bundleProductQuantity)) {
-                return errorResponse('Bundle quantity is greater than product quantity');
-            }
-            $quantities[$key]['quantity'] = $bundleProductQuantity / $bundleQuantities[$key];
-        }
-
-        $minimumBundleQuantityInArray = array_column($quantities, 'quantity');
-        $minimumBundleQuantity = min($minimumBundleQuantityInArray);
-        if ($minimumBundleQuantity < $request->quantity) {
-            return errorResponse('Minimum quantity in bundle is ' . $minimumBundleQuantity);
-        }
-        return $minimumBundleQuantity;
-    }
-    public function calculateBundleReservedQuantities($request)
-    {
-        DB::beginTransaction();
-        try {
-            $canMakeBundle = $this->canMakeBundle($request);
-            $bundleReservedQuantity = [];
-            foreach ($request->related_products as $related_product => $value) {
-                $bundleReservedQuantity[$related_product]['id'] = $value['child_product_id'];
-                $bundleReservedQuantity[$related_product]['bundle_reserved_quantity'] = $value['child_quantity'] * $request->quantity;
-            }
-
-            batch()->update(new Product, $bundleReservedQuantity, 'id');
-            DB::commit();
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw new Exception($e->getMessage());
-        }
-    }
-
-    public function calculateReservedQuantity($request, $product)
-    {
-        DB::beginTransaction();
-        try {
-            $minimumBundleQuantity = $this->canMakeBundle($request);
-            $reservedQuantity = ($minimumBundleQuantity - $request->quantity);
-            $product->reserved_quantity = $reservedQuantity;
-            $product->save();
-            DB::commit();
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw new Exception($e->getMessage());
-        }
     }
     // END OF TYPE BUNDLE
 
@@ -393,20 +331,20 @@ class ProductService
     }
 
     // TYPE VARIABLE
-    public function storeFieldsForVariations($request, $childrenIds)
+    public function storeFieldsForVariations($fieldsArray, $childrenIds)
     {
         $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
 
-        throw_if(!$request->product_variations, Exception::class, 'No variations found');
+        // throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
-        if (!$request->has('product_variations'))
-            return $this;
+        // if (!$request->has('product_variations'))
+            // return $this;
 
-        $childrenIdsArray = $childrenIds;
+        // $childrenIdsArray = $childrenIds;
         $data = [];
 
-        foreach ($childrenIdsArray as $key => $child) {
-            foreach ($request->product_variations[$key]['fields'] as $index => $field) {
+        foreach ($childrenIds as $key => $child) {
+            foreach ($fieldsArray[$key] as $index => $field) {
                 if (gettype($field) == 'string') {
                     $field = (array)json_decode($field);
                 }
@@ -478,45 +416,44 @@ class ProductService
         throw new Exception('Error while storing product attributes for variations');
     }
 
-    public function removeImagesForVariations($request, $childrenIds)
+    public function removeImagesForVariations($imagesDeletedArray, $childrenIds)
     {
 
-        if (!$request->has('product_variations'))
-            return $this;
+        // if (!$request->has('product_variations'))
+        //     return $this;
 
-        if($request->product_varitations == null){
-            return $this;
-        }
+        // if ($request->product_varitations == null) {
+        //     return $this;
+        // }
 
-        if (!Arr::has($request->product_varitations->toArray(), 'product_varitations.*.images_deleted'))
-            return $this;
-
-        $childrenIdsArray = $childrenIds;
-        foreach ($childrenIdsArray as $key => $child) {
-            foreach ($request->product_variations[$key]['images_deleted'] as $key => $value) {
-                $imagesIdsArray = $request->product_variations[$key]['images_deleted'];
-                ProductImage::whereIn('id', $imagesIdsArray)->delete();
+        // if (!Arr::has($request->product_varitations->toArray(), 'product_varitations.*.images_deleted'))
+        //     return $this;
+        $imagesIdsArray = [];
+        foreach ($childrenIds as $key => $child) {
+            foreach ($imagesDeletedArray as $key => $value) {
+                $imagesIdsArray = $value[$key];
             }
+            ProductImage::whereIn('id', $imagesIdsArray)->delete();
         }
     }
-    public function storeImagesForVariations($request, $childrenIds)
+    public function storeImagesForVariations($imagesArray, $childrenIds)
     {
 
-        throw_if(!$request->product_variations, Exception::class, 'No variations found');
+        // throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
-        if (!$request->has('product_variations'))
-            return $this;
+        // if (!$request->has('product_variations'))
+            // return $this;
 
-        $childrenIdsArray = $childrenIds;
+        // $childrenIdsArray = $childrenIds;
         $data = [];
-        foreach ($childrenIdsArray as $key => $child) {
-            foreach ($request->product_variations[$key]['images'] as $index => $image) {
+        foreach ($childrenIds as $key => $child) {
+            foreach ($imagesArray as $index => $image) {
                 $imagePath = uploadImage($image, config('images_paths.product.images'));
                 $data[] = [
                     'product_id' => $child,
                     'image' => $imagePath,
-                    'title' => json_encode($request->product_variations[$key]['images_data'][$index]['title']),
-                    'sort' => $request->product_variations[$key]['images_data'][$index]['sort'],
+                    'title' => json_encode($imagesArray[$index]['title']),
+                    'sort' => $imagesArray[$key]['images_data'][$index]['sort'],
                     'created_at'  => Carbon::now()->toDateString(),
                     'updated_at' => Carbon::now()->toDateString(),
                 ];
@@ -539,8 +476,8 @@ class ProductService
         foreach ($request->product_variations as $variation) {
             $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : ($variation['prices'] ?? []);
         }
-        if(is_null($pricesInfo)){
-           return $this;
+        if (is_null($pricesInfo)) {
+            return $this;
         }
         $childrenIdsArray = $childrenIds;
         $data = [];
@@ -567,6 +504,10 @@ class ProductService
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
         $productVariationParentsArray = [];
+        $imagesDeletedArray = [];
+        $imagesArray = [];
+        $fieldsArray = [];
+        $attributesArray = [];
         foreach ($request->product_variations as $variation) {
             $imagePath = "";
             if ($request->file('image') && !is_string($request->file('image')))
@@ -602,12 +543,16 @@ class ProductService
                 'is_show_related_product' => $variation['is_show_related_product'] ?? 0,
                 'bundle_reserved_quantity' => null,
                 'pre_order' => $variation['pre_order'] ?? 0,
-                // 'created_at' => Carbon::now()->toDateTimeString(),
-                // 'updated_at' => Carbon::now()->toDateTimeString(),
+
 
             ];
+            $imagesDeletedArray = $variation['images_deleted'];
+            $imagesArray = $variation['images'];
+            // $fieldsArray =$variation['fields'];
+            $attributesArray = $variation['fields'];
             $productVariationParentsArray[] = $productVariationsArray;
         }
+        dd($imagesArray);
         $model = new Product();
         $productVariation = Product::upsert($productVariationParentsArray, 'id', $model->getFillable());
         $childrenIds = [];
@@ -618,11 +563,11 @@ class ProductService
                 $childrenIds[$key] = $child->id;
             }
 
-            $this->removeImagesForVariations($request, $childrenIds);
-            $this->storeImagesForVariations($request, $childrenIds);
+            $this->removeImagesForVariations($imagesDeletedArray, $childrenIds);
+            $this->storeImagesForVariations($imagesArray, $childrenIds);
             $this->storePricesForVariations($request, $childrenIds);
-            // $this->storeFieldsForVariations($request, $childrenIds);
-            $this->storeAttributesForVariations($request, $childrenIds);
+            // $this->storeFieldsForVariations($fields, $childrenIds);
+            $this->storeAttributesForVariations($attributesArray, $childrenIds);
         }
 
         if (count($childrenIds) > 0) {
