@@ -546,12 +546,12 @@ class ProductService
 
 
             ];
-           dd(array_key_exists('images_deleted',$variation));
-            $imagesDeletedArray = $variation['images_deleted'] ?? [];
-            $imagesArray = $variation['images'] ?? [];
-            $imagesData= $variation['images_data'] ?? [];
+
+            $imagesDeletedArray = array_key_exists('images_deleted',$variation) ?  $variation['images_deleted'] : [];
+            $imagesArray = array_key_exists('images',$variation) ? $variation['images'] : [];
+            $imagesData= array_key_exists('images_data',$variation) ? $variation['images_data'] : [];
             // $fieldsArray =$variation['fields'];
-            $attributesArray = $variation['attributes'] ?? [];
+            $attributesArray = array_key_exists('attributes',$variation) ? $variation['attributes'] : [];
             $productVariationParentsArray[] = $productVariationsArray;
         }
         $model = new Product();
