@@ -501,10 +501,10 @@ class ProductService
             if(!is_null($variation['image'])){
                 if ( $variation['image'] && !is_string( $variation['image'] ) ){
                     $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
-            }
-            else{
-                 $imagePath="";
-            }
+                }
+                else{
+                     $imagePath="";
+                }
             }
             $productVariationsArray = [
                 'name' => json_encode($request->name),
