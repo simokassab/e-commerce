@@ -499,6 +499,7 @@ class ProductService
         foreach ($request->product_variations as $variation) {
             $imagePath = array_key_exists('image',$variation) ? $variation['image'] : "";
             if(!is_null($variation['image'])){
+                dd($variation['image']);
                 if ($variation['image']->file('image') && !is_string($variation['image']->file('image'))){
                     $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
             }
