@@ -44,7 +44,7 @@ class TestController extends MainController
 
     public function test()
     {
-        return (int)"1";
+        return (int)"testt111";
 
 $params = array(
             'ClientInfo' => array(

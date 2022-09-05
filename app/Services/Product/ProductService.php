@@ -389,11 +389,11 @@ class ProductService
                     $data[$key]["value"] = null;
                     if (gettype($attribute["value"]) == 'array') {
                         $data[$key]["field_value_id"] = $attribute["value"][0];
-                    } elseif (gettype($attribute["value"]) == 'integer') {
-                        dd($attribute);
+                    }
+                    (int)$data[$key]["field_value_id"] = $data[$key]["field_value_id"];
+                    if($data[$key]["field_value_id"] != 0){
                         $data[$key]["field_value_id"] = $attribute["value"];
                     }
-                    dd('out');
                 } else {
                     $data[$key]["value"] = ($attribute['value']);
                     $data[$key]["field_value_id"] = null;
