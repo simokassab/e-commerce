@@ -112,6 +112,7 @@ class ProductService
 
         $data = [];
         foreach ($request->attributes as $index => $attribute) {
+            //converting all the attributes to array if they were sent json string form
             if (gettype($attribute) == 'string') {
                 $attribute = (array)json_decode($attribute);
             }
@@ -387,6 +388,7 @@ class ProductService
                 }
                 if ($attribute["type"] == 'select') {
                     $data[$key]["value"] = null;
+
                     if (gettype($attribute["value"]) == 'array') {
                         $data[$key]["field_value_id"] = $attribute["value"][0];
                     } elseif (is_numeric($attribute["value"])) {
