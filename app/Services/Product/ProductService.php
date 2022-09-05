@@ -382,6 +382,7 @@ class ProductService
 
         foreach ($childrenIds as $key => $child) {
             foreach ($attributesArray as $index => $attribute) {
+                dd($attribute);
                 if (gettype($attribute) == 'string') {
                     $attribute = (array)json_decode($attribute);
                 }
@@ -403,7 +404,6 @@ class ProductService
                 $data[$key]["field_id"] = $attribute['field_id'];
             }
         }
-        dd($data);
         if (ProductField::insert($data)) {
             return $this;
         }
