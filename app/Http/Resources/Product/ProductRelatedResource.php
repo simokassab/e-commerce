@@ -29,12 +29,12 @@ class ProductRelatedResource extends JsonResource
         $prices = $relatedProductsPrices->where('product_id', $this->child_product_id);
 
         return [
-            'id' => $this->child_product_id,
-            'child_quantity' => $this->child_quantity,
+            'id' => (int)$this->child_product_id,
+            'child_quantity' => (int)$this->child_quantity,
             'name' => $this->getTranslations('name'),
             'name_original' => $product->getTranslations('name'),
             'images' => ProductImagesResource::collection($images) ?? [],
-            'prices' => ProductPriceResoruce::collection($prices->load('prices')) ?? [],
+            'prices' => (double)ProductPriceResoruce::collection($prices->load('prices')) ?? [],
         ];
     }
 
