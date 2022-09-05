@@ -382,7 +382,6 @@ class ProductService
 
         foreach ($childrenIds as $key => $child) {
             foreach ($attributesArray as $index => $attribute) {
-                dd($attribute);
                 if (gettype($attribute) == 'string') {
                     $attribute = (array)json_decode($attribute);
                 }
@@ -391,8 +390,10 @@ class ProductService
                     if (gettype($attribute["value"]) == 'array') {
                         $data[$key]["field_value_id"] = $attribute["value"][0];
                     } elseif (gettype($attribute["value"]) == 'integer') {
+                        dd($attribute);
                         $data[$key]["field_value_id"] = $attribute["value"];
                     }
+                    dd('out');
                 } else {
                     $data[$key]["value"] = ($attribute['value']);
                     $data[$key]["field_value_id"] = null;
