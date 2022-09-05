@@ -403,6 +403,7 @@ class ProductService
                 $data[$key]["field_id"] = $attribute['field_id'];
             }
         }
+        dd($data);
         if (ProductField::insert($data)) {
             return $this;
         }
@@ -547,7 +548,6 @@ class ProductService
             $attributesArray = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
             $productVariationParentsArray[] = $productVariationsArray;
         }
-        dd($attributesArray);
         $model = new Product();
         $productVariation = Product::upsert($productVariationParentsArray, 'id', $model->getFillable());
         $childrenIds = [];
