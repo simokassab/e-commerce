@@ -259,6 +259,7 @@ class ProductService
                 $data[$related_product] = [
                     'parent_product_id' => $product->id,
                     'child_product_id' => $value['child_product_id'],
+                    'child_name_status' => array_key_exists('child_name_status',$value) ? $value['child_name_status'] : null ,
                     'name' => json_encode($value['name']) ?? "",
                     'child_quantity' => $value['child_quantity'],
                     'created_at' => Carbon::now()->toDateTimeString(),
