@@ -547,6 +547,7 @@ class ProductService
             $attributesArray = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
             $productVariationParentsArray[] = $productVariationsArray;
         }
+        dd($productVariationParentsArray);
         $model = new Product();
         $productVariation = Product::upsert($productVariationParentsArray, 'id', $model->getFillable());
         $childrenIds = [];
