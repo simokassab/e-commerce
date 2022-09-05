@@ -375,7 +375,7 @@ class ProductService
     {
         $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
 
-        if (is_null($attributesArray))
+        if (is_null($attributesArray) || count($attributesArray) == 0)
             return $this;
 
         $data = [];
@@ -547,6 +547,7 @@ class ProductService
             $attributesArray = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
             $productVariationParentsArray[] = $productVariationsArray;
         }
+        dd($attributesArray);
         $model = new Product();
         $productVariation = Product::upsert($productVariationParentsArray, 'id', $model->getFillable());
         $childrenIds = [];
@@ -562,6 +563,8 @@ class ProductService
             $this->storePricesForVariations($request, $childrenIds);
             // $this->storeFieldsForVariations($fields, $childrenIds);
             $this->storeAttributesForVariations($attributesArray, $childrenIds);
+
+            return $this;
         }
 
         if (count($childrenIds) > 0) {
