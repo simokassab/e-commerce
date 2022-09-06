@@ -24,7 +24,8 @@ class ProductService
 
         //$request=(object)$request;
 
-        $this->storeAdditionalFields($request, $product)
+        $this->storeAdditionalCategrories($request, $product, $childrenIds)
+            ->storeAdditionalFields($request, $product)
             ->removeAdditionalImages($request)
             ->storeAdditionalImages($request, $product)
             ->storeAdditionalLabels($request, $product, $childrenIds)
