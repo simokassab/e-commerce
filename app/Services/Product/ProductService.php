@@ -281,10 +281,11 @@ class ProductService
         if ($request->has('prices')) {
             $pricesArray =  [];
             foreach ($request->prices as $price => $value) {
+                dd($value);
                 $pricesArray[$price]["product_id"] = $product->id;
                 $pricesArray[$price]["price_id"] = $value['price_id'];
                 $pricesArray[$price]["price"] = $value['price'];
-                $pricesArray[$price]["discounted_price"] = array_key_exists('discounted_price',$value) ?$value['discounted_price'] : 0;
+                $pricesArray[$price]["discounted_price"] = array_key_exists('discounted_price',$value) ? $value['discounted_price'] : 0;
                 $pricesArray[$price]["created_at"] = Carbon::now()->toDateTimeString();
                 $pricesArray[$price]["updated_at"] = Carbon::now()->toDateTimeString();
             }
