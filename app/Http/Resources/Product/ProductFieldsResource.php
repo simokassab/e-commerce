@@ -16,24 +16,29 @@ class ProductFieldsResource extends JsonResource
 
     public function toArray($request)
     {
-        $productFields = self::$productFields->toArray();
-        // dd($productFields);
+        $productFields = self::$productFields;
+        $productFieldsArray=self::$productFields->toArray();
         // foreach ($productFields->toArray() as $key => $productField) {
         //     if(!is_null($productField['field_value_id']) && is_null($productField['value'])){
         //         $productsFieldsArray[$key]['value']= (int)$productField['field_value_id'];
         //     }
         // }
 
-        if(!is_null($productFields[0]['field_value_id']) && is_null($productFields[0]['value'])){
-            $value= (int)$productFields[0]['field_value_id'];
-        }
-        else{
-            $value=$productFields[0]['value'];
-        }
+      $value=  $productFields->map(function($value) use($productFieldsArray){
+            if(!is_null($productFieldsArray['field_value_id']) && is_null($productFieldsArray['value'])){
+                $value= (int)$productFieldsArray['field_value_id'];
+            }
+            else{
+                $value=$productFieldsArray->value;
+            }
+            return $value;
+        });
+
+
 
         return [
-            'id' => (int)$productFields[0]['id'],
-            'field_id' => $productFields[0]['field_id'],
+            'id' => $productFields['id'],
+            'field_id' => $productFields['field_id'],
             'value' => $value
         ];
     }
