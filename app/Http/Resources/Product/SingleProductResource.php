@@ -97,7 +97,7 @@ class SingleProductResource extends JsonResource
             'related_products' => ProductRelatedResource::customCollection($this->productRelated,$this->relatedProducts,$this->relatedProductsImages,$this->relatedProductsPrices->load('prices')) ?? [],
             'variations' => $this->whenLoaded('children') ? $this->whenLoaded('children') : [],
             'images' => ProductImagesResource::collection($this->whenLoaded('images')) ?? [],
-            'products_fields' => ProductFieldsResource::customCollection($this->productRelated,$this->productsFields),
+            'products_fields' => ProductFieldsResource::customCollection($this->productsFields),
         ];
     }
 }

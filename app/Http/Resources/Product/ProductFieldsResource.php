@@ -38,11 +38,11 @@ dd($productFields);
         ];
     }
 
-    public static function customCollection($collection,$productFields)
+    public static function customCollection($productFields)
     {
 
         self::$productFields = $productFields;
 
-        return parent::collection($collection);
+        return parent::collection($productFields);
     }
 }
