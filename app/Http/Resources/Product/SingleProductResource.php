@@ -40,7 +40,7 @@ class SingleProductResource extends JsonResource
         $this->productsFields=$data[4];
         $this->productsAttributes=$data[5];
         $this->childrenFieldValues=$data[6];
-        $this->childrenImages=$data[6];
+        $this->childrenImages=$data[7];
         $this->resource = $product;
     }
     /**
