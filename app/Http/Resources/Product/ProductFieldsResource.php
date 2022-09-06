@@ -12,7 +12,6 @@ class ProductFieldsResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
-    private static $productFields;
 
     public function toArray($request)
     {
@@ -25,8 +24,8 @@ class ProductFieldsResource extends JsonResource
 
         // $currentObject->id = $this->id
         return [
-            'id' => $this->id,
-            'field_id' => $this->field_id,
+            'id' => (int)$this->id,
+            'field_id' => (int)$this->field_id,
             'value' => $value
         ];
     }
