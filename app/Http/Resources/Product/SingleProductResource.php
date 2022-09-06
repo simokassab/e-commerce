@@ -85,7 +85,7 @@ class SingleProductResource extends JsonResource
             'sort' => (int)$this->sort,
             'parent_product_id' => (int)$this->parent_product_id ?? null,
             'is_default_child' => (bool)$this->is_default_child,
-            'products_statuses_id' => (int)$this->product_statuses_id,
+            'products_statuses_id' => (int)$this->products_statuses_id,
             'is_show_related_product' => (bool)$this->is_show_related_product,
             'website_status' => $this->website_status,
             'pre_order' => (int)$this->pre_order ?? 0,
