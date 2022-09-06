@@ -17,7 +17,7 @@ class ProductFieldsResource extends JsonResource
     public function toArray($request)
     {
         $productFields = self::$productFields;
-dd($productFields);
+// dd($productFields);
         // foreach ($productFields->toArray() as $key => $productField) {
         //     if(!is_null($productField['field_value_id']) && is_null($productField['value'])){
         //         $productsFieldsArray[$key]['value']= (int)$productField['field_value_id'];
