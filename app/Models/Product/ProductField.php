@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 class ProductField extends Model
 {
+
+    public function __construct()
+    {
+        dd('sss');
+    }
+
     use HasFactory, HasTranslations;
     protected $table = 'products_fields';
     protected $translatable = ['value'];
