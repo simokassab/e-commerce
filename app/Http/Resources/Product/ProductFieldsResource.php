@@ -24,16 +24,16 @@ class ProductFieldsResource extends JsonResource
         //     }
         // }
 
-        if(!is_null($productFields['field_value_id']) && is_null($productFields['value'])){
-            $value= (int)$productFields['field_value_id'];
+        if(!is_null($productFields->field_value_id) && is_null($productFields->value)){
+            $value = (int)$productFields->field_value_id;
         }
         else{
             $value=$productFields->value;
         }
 
         return [
-            'id' => $productFields['id'],
-            'field_id' => $productFields['field_id'],
+            'id' => $productFields->id,
+            'field_id' => $productFields->field_id,
             'value' => $value
         ];
     }
