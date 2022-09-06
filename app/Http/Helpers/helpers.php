@@ -1,8 +1,9 @@
 <?php
 
 use App\Exceptions\FileErrorException;
+use App\Models\Settings\Setting;
 use Illuminate\Support\Facades\Storage;
-use phpDocumentor\Reflection\Types\Boolean;
+use Illuminate\Support\Facades\Cache;
 
 function uploadImage($file, $folderPath): bool|string
 {
@@ -72,6 +73,33 @@ function getLocaleTranslation($model, $key)
 function convertFromArrayToString($array, $separator = ',')
 {
     return implode($separator, $array);
+}
+
+/**
+ * @throws Throwable
+ */
+function getSettings(array | string $key=null) : mixed{
+
+    $settings = Cache::get(Setting::$cacheKey,fn() => Setting::all());
+
+    if(is_array($key)){
+
+        $multiSettings = $settings->whereIn('title',$key);
+        if($multiSettings->count() != count($key)){
+            throw new Exception('One of the keys is not valid settings');
+        }
+        return $multiSettings;
+    }
+
+    if(is_string($key)){
+        $singleSettings = $settings->where('title',$key)->first();
+        if(is_null($singleSettings)){
+            throw new Exception('The ' . $key . ' is not a valid settings');
+        }
+        return $singleSettings;
+
+    }
+    return $settings;
 }
 
 function array_to_obj($array, &$obj)

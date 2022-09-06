@@ -13,8 +13,9 @@ class SettingsResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @throws \Throwable
      */
     public function toArray($request)
     {
@@ -23,43 +24,38 @@ class SettingsResource extends JsonResource
         $typesArray = [];
         $valuesArray = [];
 
-        Cache::get('settings')->map(function ($setting) use (&$idsArray, &$titlesArray, &$typesArray, &$valuesArray) {
+        collect(getSettings())->map(function ($setting) use (&$idsArray, &$titlesArray, &$typesArray, &$valuesArray) {
             $idsArray[] = $setting->id;
             $titlesArray[] = $setting->title;
             $typesArray[] = $setting->type;
             $valuesArray[] = $setting->value;
         });
 
+        $options = [];
 
-        $options = Setting::getTitleOptions()[$this->title];
 
+        if(in_array($this->title,Setting::$fields) && ($this->type == 'select' || $this->type == 'multi-select')){
+            $options = Setting::getTitleOptions()[$this->title];
+        }
 
         $id = $idsArray[array_search($this->title, $titlesArray)];
         $title = $titlesArray[array_search($this->title, $titlesArray)];
         $type = $typesArray[array_search($this->title, $titlesArray)];
         $value = $valuesArray[array_search($this->title, $titlesArray)];
 
-        switch ($type) {
-            case 'number':
-                $value = (int)$value ?? 0;
-                break;
-            case 'checkbox':
-                $value = (bool)$value ?? false;
-                break;
-            case 'multi-select':
-                $value = $value ?? [];
-                break;
-            default:
-                $value = $value ?? "";
-                break;
-        }
+        $value = match ($type) {
+            'number' => (int)$value ?? 0,
+            'checkbox' => (bool)$value ?? false,
+            'multi-select' => $value ?? [],
+            default => $value ?? "",
+        };
 
         return [
             'key' => $id,
             'title' => $title,
             'name' => ucwords(str_replace("_", " ", $title)),
             'type' => $type,
-            'options' => collect($options),
+            'options' => ($options),
             'value' => $value
         ];
     }

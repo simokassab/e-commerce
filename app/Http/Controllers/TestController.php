@@ -45,63 +45,8 @@ class TestController extends MainController
     public function test()
     {
 
-$params = array(
-            'ClientInfo' => array(
-                "UserName"=> 'testingapi@aramex.com',
-                "Password"=> 'R123456789$r',
-                "AccountNumber"=> '20016',
-                "AccountPin"=> '331421',
-                "AccountEntity"=> 'AMM',
-                "AccountCountryCode"=> 'JO',
-                "Version" => '1.0'
-            ),
+        return Product::query()->find(1)->updateProductQuantity(1,'sub');
 
-            'Transaction'             => array(
-                'Reference1'            => '001'
-            ),
-
-            'OriginAddress'          => array(
-                'City'                    => 'Amman',
-                'CountryCode'                => 'JO'
-            ),
-
-            'DestinationAddress'     => array(
-                'City'                    => 'Dubai',
-                'CountryCode'            => 'AE'
-            ),
-            'ShipmentDetails'        => array(
-                'PaymentType'             => 'P',
-                'ProductGroup'             => 'EXP',
-                'ProductType'             => 'PPX',
-                'ActualWeight'              => array('Value' => 5, 'Unit' => 'KG'),
-                'ChargeableWeight'          => array('Value' => 5, 'Unit' => 'KG'),
-                'NumberOfPieces'         => 5
-            ),
-            "Dimensions" => null,
-            "ChargeableWeight"=>null,
-            "CustomsValueAmount"=> null,
-            "CashOnDeliveryAmount"=> null,
-            "InsuranceAmount"=> null,
-            "CashAdditionalAmount"=> null,
-            "CollectAmount"=> null,
-            "DescriptionOfGoods"=> null,
-            "GoodsOriginCountry"=> null,
-            "ProductGroup"=> "DOM",
-            "ProductType"=> "OND",
-            "PaymentType"=> "P",
-            "PaymentOptions"=> "",
-            "CashAdditionalAmountDescription"=> "",
-            "Services"=> "",
-            "Items"=> ""
-        );
-
-//         $soapClient = new SoapClient('http://ws.aramex.net/ShippingAPI.V2/RateCalculator/Service_1_0.svc?wsdl', array('trace' => 1));
-//         $results = $soapClient->CalculateRate($params);
-
-        // return $results;
-
-    $results= Http::post('http://ws.dev.aramex.net/ShippingAPI.V2/RateCalculator/Service_1_0.svc/json/CalculateRate',$params);
-        return $results;
     }
 
     public function createShipment(){

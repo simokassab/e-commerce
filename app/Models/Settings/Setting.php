@@ -13,69 +13,76 @@ class Setting extends MainModel
     use HasFactory;
 
     protected $translatable = [];
+
     protected $fillable = ['title', 'value', 'type', 'is_developer'];
 
-    // public function getPriceOptions(){
-    //     dd($prices);
-    // }
-public static function getTitleOptions(){
-    $titlesOptions = [
-        'products_required_fields' =>  [
-            [
-                'id' => 'sku',
-                'name' => 'sku'
-            ],
-            [
-                'id' => 'summary',
-                'name' => 'summary'
-            ],
-            [
-                'id' => 'specification',
-                'name' => 'specification'
-            ],
-            [
-                'id' => 'barcode',
-                'name' => 'barcode'
-            ],
-            [
-                'id' => 'length',
-                'name' => 'length'
-            ],
-            [
-                'id' => 'height',
-                'name' => 'height'
-            ],
-            [
-                'id' => 'width',
-                'name' => 'width'
-            ],
-            [
-                'id' => 'weight',
-                'name' => 'weight'
-            ],
-            [
-                'id' => 'brand_id',
-                'name' => 'brand_id'
-            ],
-            [
-                'id' => 'tax_id',
-                'name' => 'tax_id'
-            ],
-
-        ],
-        'products_quantity_greater_than_or_equal' => [],
-        'allow_negative_quantity' => [],
-        'products_prices_greater_than_or_equal' => [],
-        'products_discounted_price_greater_than_or_equal' => [],
-
-        'is_discount_on_shipping' => []
+    public static array $fields = [
+        'products_required_fields',
+        'products_quantity_greater_than_or_equal' ,
+        'allow_negative_quantity',
+        'products_prices_greater_than_or_equal',
+        'products_discounted_price_greater_than_or_equal',
+        'is_discount_on_shipping'
     ];
-    $titlesOptions['website_pricing']= Price::all('id','name')->toArray();
-    foreach ($titlesOptions['website_pricing'] as $key => $option)
-        $titlesOptions[$key]['name'] = $option['name']['en'];
 
-    return $titlesOptions;
-}
+    public static string $cacheKey = 'settings';
+
+    public static array $types =['multi-select', 'select','number','text','checkbox'];
+
+    public static function getTitleOptions(){
+        $titlesOptions = [
+            'products_required_fields' =>  [
+                [
+                    'id' => 'sku',
+                    'name' => 'sku'
+                ],
+                [
+                    'id' => 'summary',
+                    'name' => 'summary'
+                ],
+                [
+                    'id' => 'specification',
+                    'name' => 'specification'
+                ],
+                [
+                    'id' => 'barcode',
+                    'name' => 'barcode'
+                ],
+                [
+                    'id' => 'length',
+                    'name' => 'length'
+                ],
+                [
+                    'id' => 'height',
+                    'name' => 'height'
+                ],
+                [
+                    'id' => 'width',
+                    'name' => 'width'
+                ],
+                [
+                    'id' => 'weight',
+                    'name' => 'weight'
+                ],
+                [
+                    'id' => 'brand_id',
+                    'name' => 'brand_id'
+                ],
+                [
+                    'id' => 'tax_id',
+                    'name' => 'tax_id'
+                ],
+
+            ],
+            'website_pricing' => Price::all('id','name')->toArray()
+        ];
+
+        //taking the english text from the translatable json text
+        foreach ($titlesOptions['website_pricing'] as $key => $option)
+            $titlesOptions[$key]['name'] = $option['name']['en'];
+
+        return $titlesOptions;
+    }
 
 
     public static function validateOptionsByTitle($keyTitle, $givenOptions)
