@@ -17,14 +17,17 @@ class ProductFieldsResource extends JsonResource
     public function toArray($request)
     {
 
-
+        $value = $this->value;
+        if(!is_null($this->field_value_id) && is_null($this->value)){
+            $value = (int)$this->field_value_id;
+        }
 
 
         // $currentObject->id = $this->id
         return [
             'id' => $this->id,
             'field_id' => $this->field_id,
-            'value' => $this->value
+            'value' => $value
         ];
     }
 
