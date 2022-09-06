@@ -17,23 +17,23 @@ class ProductFieldsResource extends JsonResource
     public function toArray($request)
     {
         $productFields = self::$productFields->toArray();
-        dd($productFields);
+        // dd($productFields);
         // foreach ($productFields->toArray() as $key => $productField) {
         //     if(!is_null($productField['field_value_id']) && is_null($productField['value'])){
         //         $productsFieldsArray[$key]['value']= (int)$productField['field_value_id'];
         //     }
         // }
 
-        if(!is_null($productFields['field_value_id']) && is_null($productFields['value'])){
-            $value= (int)$productFields['field_value_id'];
+        if(!is_null($productFields[0]['field_value_id']) && is_null($productFields[0]['value'])){
+            $value= (int)$productFields[0]['field_value_id'];
         }
         else{
-            $value=$productFields->value;
+            $value=$productFields[0]['value'];
         }
 
         return [
-            'id' => $productFields['id'],
-            'field_id' => $productFields['field_id'],
+            'id' => $productFields[0]['id'],
+            'field_id' => $productFields[0]['field_id'],
             'value' => $value
         ];
     }
