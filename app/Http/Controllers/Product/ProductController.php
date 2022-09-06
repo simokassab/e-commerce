@@ -212,7 +212,7 @@ class ProductController extends MainController
         $relatedProducts = Product::findMany($productRelated->pluck('child_product_id')->toArray());
         $relatedProductsImages = ProductImage::WhereIn('product_id',$productRelated->pluck('child_product_id')->toArray())->get();
         $relatedProductsPrices= ProductPrice::WhereIn('product_id',$productRelated->pluck('child_product_id')->toArray())->get();
-        $productsFields=ProductField::where('product_id',$this->id)->get() ?? [];
+        $productsFields=ProductField::where('product_id',$product->id)->get() ?? [];
 
         return $this->successResponse(
             'Success!',
