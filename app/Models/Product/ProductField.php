@@ -4,12 +4,12 @@ namespace App\Models\Product;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Spatie\Translatable\HasTranslations;
 class ProductField extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
     protected $table = 'products_fields';
-    protected $translatable = [];
+    protected $translatable = ['value'];
     protected $fillable=[
         'product_id',
         'field_id',
