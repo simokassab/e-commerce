@@ -165,7 +165,7 @@ class ProductController extends MainController
 
 
 
-    public function store(StoreProductRequest $request)
+    public function store(StoreProductRequest $request,Product $product)
     {
 
         // DB::beginTransaction();
