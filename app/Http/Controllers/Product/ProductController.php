@@ -61,7 +61,7 @@ class ProductController extends MainController
 
         if ($request->method() == 'POST') {
             $searchKeys = ['id', 'name', 'sku', 'type', 'quantity', 'status'];
-
+            $searchRelationsKeys=[];
             // $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
 
             // $categoriesCount = Product::has('category')->count();
