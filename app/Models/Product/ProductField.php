@@ -12,11 +12,11 @@ class ProductField extends Model
 
     use HasFactory, HasTranslations;
     protected $table = 'products_fields';
-    protected $translatable = ['value'];
+    protected $translatable = [];
     protected $fillable=[
         'product_id',
         'field_id',
         'field_value_id',
-        'value'
+        'value',
     ];
 }
