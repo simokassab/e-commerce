@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\MainController;
 use App\Exceptions\FileErrorException;
+use App\Models\Product\ProductField;
 use App\Models\RolesAndPermissions\CustomPermission;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -46,7 +47,13 @@ class TestController extends MainController
     {
 
         // return Product::query()->find(1)->updateProductQuantity(1,'sub');
-dd(config('defaults.fields_types'));
+        $data=[
+            "product_id" => 227,
+            "field_id" => 10,
+            "field_value_id" => null,
+            "value" => '{"ar":"xcxc","en":"xcxcxc"}',
+        ];
+        return ProductField::query()->create($data);
     }
 
     public function createShipment(){

@@ -117,10 +117,9 @@ class ProductService
             }else{
                 continue;
             }
-            dd($data);
 
-            ProductField::query()->create($data);
-
+            $create = ProductField::query()->create($data);
+            dd($create->wasRecentlyCreated);
 
         }
 
