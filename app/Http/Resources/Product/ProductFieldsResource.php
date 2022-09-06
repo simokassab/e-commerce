@@ -34,7 +34,7 @@ class ProductFieldsResource extends JsonResource
             } else {
                 $value = $this->value;
             }
-            return [
+            $value[]= [
                 'id' => $this->id,
                 'field_id' => $this->field_id,
                 'value' => $value
