@@ -112,12 +112,11 @@ class ProductService
                     'product_id' => $product->id,
                     'field_id' => (int)$field['field_id'],
                     'field_value_id' =>  null,
-                    'value' => json_encode($field['value']),
+                    'value' => ($field['value']),
                 ];
             }
 
         }
-        dd($data);
         if (ProductField::insert($data)) {
             return $this;
         }
