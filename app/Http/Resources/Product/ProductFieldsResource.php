@@ -30,7 +30,7 @@ class ProductFieldsResource extends JsonResource
         // }
 
       $value=  $productFields->map(function($value) use($productFieldsArray){
-        dd($this);
+        dd($this->field_value_id);
         if(!is_null($productFieldsArray['field_value_id']) && is_null($productFieldsArray['value'])){
             $value= (int)$productFieldsArray['field_value_id'];
         }
