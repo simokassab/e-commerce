@@ -13,14 +13,12 @@ class ProductVariableResoruce extends JsonResource
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
 
-    private static $attributes;
-    private static $fieldValues;
+    private static $childrenFieldValues;
 
     public function toArray($request)
     {
-        $attributes= self::$attributes;
-        $fieldValues= self::$fieldValues;
-
+        $childrenFieldValues= self::$childrenFieldValues;
+        dd($childrenFieldValues);
         //Product fiedl values
         // fields le hene attributes
 
@@ -51,11 +49,10 @@ class ProductVariableResoruce extends JsonResource
         ];
     }
 
-    public static function customCollection($collection, $attributes, $fieldValues)
+    public static function customCollection($collection, $childrenFieldValues)
     {
 
-        self::$attributes = $attributes;
-        self::$fieldValues = $fieldValues;
+        self::$childrenFieldValues = $childrenFieldValues;
 
         return parent::collection($collection);
     }

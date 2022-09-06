@@ -224,7 +224,6 @@ class ProductController extends MainController
         $childrenFieldValues = ProductField::whereIn('product_id',$product->children->pluck('id')->toArray())->whereHas('field',function($query){
             $query->where('is_attribute',1);
         })->get();
-        dd($childrenFieldValues);
 
         return $this->successResponse(
             'Success!',
