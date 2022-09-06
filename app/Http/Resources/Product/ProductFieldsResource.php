@@ -24,16 +24,16 @@ dd($productFields->pluck('field_value_id'));
         //     }
         // }
 
-        if(!is_null($productFields->field_value_id) && is_null($productFields->value)){
-            $value = (int)$productFields->field_value_id;
+        if(!is_null($productFields->pluck('field_value_id')) && is_null($productFields->pluck('value'))){
+            $value = (int)$productFields->pluck('field_value_id');
         }
         else{
-            $value=$productFields->value;
+            $value=$productFields->pluck('value');
         }
 
         return [
-            'id' => $productFields->id,
-            'field_id' => $productFields->field_id,
+            'id' => $productFields->pluck('id'),
+            'field_id' => $productFields->pluck('field_id'),
             'value' => $value
         ];
     }
