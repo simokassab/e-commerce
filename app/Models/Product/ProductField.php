@@ -2,13 +2,11 @@
 
 namespace App\Models\Product;
 
+use App\Models\MainModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
-class ProductField extends Model
+class ProductField extends MainModel
 {
-
-    public function __construct(){}
 
     use HasFactory, HasTranslations;
     protected $table = 'products_fields';
