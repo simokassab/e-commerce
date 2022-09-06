@@ -109,7 +109,7 @@ class ProductService
 
         if (!$request->has('attributes'))
             return $this;
-
+        dd($request->attributes);
         $data = [];
         foreach ($request->attributes as $index => $attribute) {
             //converting all the attributes to array if they were sent json string form
