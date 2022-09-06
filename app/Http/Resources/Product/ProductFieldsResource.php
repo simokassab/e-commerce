@@ -39,7 +39,7 @@ class ProductFieldsResource extends JsonResource
             return $value;
         });
 
-
+        dd($value);
 
         return [
             'id' => $this->id,
