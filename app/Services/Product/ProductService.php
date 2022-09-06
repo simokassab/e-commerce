@@ -80,7 +80,7 @@ class ProductService
             if(!array_key_exists($field['type'],config('defaults.fields_types')))
                 throw new Exception('Invalid fields type');
 
-            if(gettype($field['type']) == 'select' ){
+            if($field['type'] == 'select' ){
                 throw_if(!is_numeric($field['value'], new Exception('Invalid value')));
                 $data[]=[
                     'product_id' => $product->id,
@@ -89,7 +89,7 @@ class ProductService
                     'value' => null,
                 ];
             }
-            elseif(gettype($field['type']) == 'checkbox'){
+            elseif(($field['type']) == 'checkbox'){
                 throw_if(!is_bool($field['value'], new Exception('Invalid value')));
                 $data[]=[
                     'product_id' => $product->id,
@@ -98,7 +98,7 @@ class ProductService
                     'value' => (bool)$field['value'],
                 ];
             }
-            elseif(gettype($field['type']) == 'date'){
+            elseif(($field['type']) == 'date'){
                 throw_if(Carbon::createFromFormat('Y-m-d H:i:s', $field['value']) !== false, new Exception('Invalid value'));
                 $data[]=[
                     'product_id' => $product->id,
@@ -107,7 +107,7 @@ class ProductService
                     'value' => Carbon::createFromFormat('Y-m-d H:i:s', $field['value']),
                 ];
             }
-            elseif(gettype($field['type']) == 'text' || gettype($field['type']) == 'textarea'){
+            elseif(($field['type']) == 'text' || gettype($field['type']) == 'textarea'){
                 $data[]=[
                     'product_id' => $product->id,
                     'field_id' => (int)$field['field_id'],
