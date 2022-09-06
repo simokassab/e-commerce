@@ -34,16 +34,16 @@ class ProductFieldsResource extends JsonResource
             } else {
                 $value = $this->value;
             }
-            $value= [
-                'id' => $this->id,
-                'field_id' => $this->field_id,
-                'value' => $value
-            ];
+            return $value;
         });
 
 
-        return $value;
-        }
+        return [
+            'id' => $this->id,
+            'field_id' => $this->field_id,
+            'value' => $value
+        ];
+    }
 
     public static function customCollection($productFields)
     {
