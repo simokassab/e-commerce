@@ -260,7 +260,7 @@ class ProductService
                     'parent_product_id' => $product->id,
                     'child_product_id' => $value['child_product_id'],
                     'child_name_status' => array_key_exists('child_name_status',$value) ? $value['child_name_status'] : null ,
-                    'name' => json_encode($value['name']) ?? "",
+                    'name' => array_key_exists('name',$value) ? json_encode($value['name']) : "",
                     'child_quantity' => $value['child_quantity'],
                     'created_at' => Carbon::now()->toDateTimeString(),
                     'updated_at' => Carbon::now()->toDateTimeString(),
@@ -284,7 +284,7 @@ class ProductService
                 $pricesArray[$price]["product_id"] = $product->id;
                 $pricesArray[$price]["price_id"] = $value['price_id'];
                 $pricesArray[$price]["price"] = $value['price'];
-                $pricesArray[$price]["discounted_price"] = $value['discounted_price'];
+                $pricesArray[$price]["discounted_price"] = array_key_exists('discounted_price',$value) ?$value['discounted_price'] : 0;
                 $pricesArray[$price]["created_at"] = Carbon::now()->toDateTimeString();
                 $pricesArray[$price]["updated_at"] = Carbon::now()->toDateTimeString();
             }
