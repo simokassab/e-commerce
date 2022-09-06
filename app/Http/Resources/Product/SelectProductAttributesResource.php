@@ -16,7 +16,7 @@ class SelectProductAttributesResource extends JsonResource
     {
         return [
 
-            'field_id' => (int)$this->feild_id,
+            'field_id' => (int)$this->field_id,
             'value' => (int)$this->field_value_id,
         ];
     }
