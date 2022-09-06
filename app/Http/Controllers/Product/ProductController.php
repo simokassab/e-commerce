@@ -221,9 +221,13 @@ class ProductController extends MainController
             $query->where('is_attribute',1);
         })->get();
 
-        $childrenFieldValues = ProductField::whereIn('product_id',$product->children->pluck('id')->toArray())->whereHas('field',function($query){
+        $childrenIds = $product->children->pluck('id')->toArray();
+
+        $childrenFieldValues = ProductField::whereIn('product_id',$childrenIds)->whereHas('field',function($query){
             $query->where('is_attribute',1);
         })->get();
+
+        $childrenImages = ProductImage::query()->whereIn('product_id',$childrenIds)->get();
 
         return $this->successResponse(
             'Success!',
@@ -245,7 +249,7 @@ class ProductController extends MainController
                     'children',
                     'images'
 
-                    ]),$productRelated,$relatedProducts,$relatedProductsImages,$relatedProductsPrices,$productsFields,$productsAttributes, $childrenFieldValues)
+                    ]),$productRelated,$relatedProducts,$relatedProductsImages,$relatedProductsPrices,$productsFields,$productsAttributes, $childrenFieldValues, $childrenImages)
             ],
         );
     }

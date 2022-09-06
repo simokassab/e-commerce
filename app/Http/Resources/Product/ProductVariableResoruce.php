@@ -14,6 +14,7 @@ class ProductVariableResoruce extends JsonResource
      */
 
     private static $childrenFieldValues;
+    private static $childrenImages;
 
     public function toArray($request)
     {
@@ -44,14 +45,16 @@ class ProductVariableResoruce extends JsonResource
             'weight' => (float)$this->height,
             'is_default_child' => (bool)$this->is_default_child,
             'products_statuses_id' =>(int)$this->products_statuses_id,
-            'attributes' => SelectProductAttributesResource::collection($productAttribute )
+            'attributes' => SelectProductAttributesResource::collection($productAttribute ),
+            'images' => ProductImagesResource::collection(self::$childrenImages),
         ];
     }
 
-    public static function customCollection($collection, $childrenFieldValues)
+    public static function customCollection($collection, $childrenFieldValues,$childrenImages)
     {
 
         self::$childrenFieldValues = $childrenFieldValues;
+        self::$childrenImages = $childrenImages;
 
         return parent::collection($collection);
     }
