@@ -27,19 +27,17 @@ class ProductFieldsResource extends JsonResource
         //     }
 
         // }
+        $value =  $productFields->map(function ($value) {
 
-      $value=  $productFields->map(function($value){
-
-        if(!is_null($this->field_value_id) && is_null($this->value)){
-            $value= (int)$this->field_value_id;
-        }
-        else{
-            $value=$this->value;
-        }
+            if (!is_null($this->field_value_id) && is_null($this->value)) {
+                $value = (int)$this->field_value_id;
+            } else {
+                $value = $this->value;
+            }
             return $value;
         });
 
-        dd($value);
+        dd($productFields);
 
         return [
             'id' => $this->id,
