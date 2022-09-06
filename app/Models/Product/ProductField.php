@@ -2,6 +2,7 @@
 
 namespace App\Models\Product;
 
+use App\Models\Field\Field;
 use App\Models\MainModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Translatable\HasTranslations;
@@ -17,4 +18,9 @@ class ProductField extends MainModel
         'field_value_id',
         'value',
     ];
+
+
+    public function field(){
+        return $this->belongsTo(Field::class,'field_id','id');
+    }
 }

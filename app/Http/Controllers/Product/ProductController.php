@@ -212,7 +212,12 @@ class ProductController extends MainController
         $relatedProducts = Product::findMany($productRelated->pluck('child_product_id')->toArray());
         $relatedProductsImages = ProductImage::WhereIn('product_id',$productRelated->pluck('child_product_id')->toArray())->get();
         $relatedProductsPrices= ProductPrice::WhereIn('product_id',$productRelated->pluck('child_product_id')->toArray())->get();
-        $productsFields=ProductField::where('product_id',$product->id)->get() ?? [];
+        $productsFields=ProductField::where('product_id',$product->id)->whereHas('field',function($query){
+            $query->where('is_attribute',0);
+        })->get() ?? [];
+        dd($productsFields);
+
+        $allFields = Field::all();
 
         return $this->successResponse(
             'Success!',
@@ -234,7 +239,7 @@ class ProductController extends MainController
                     'children',
                     'images'
 
-                    ]),$productRelated,$relatedProducts,$relatedProductsImages,$relatedProductsPrices,$productsFields)
+                    ]),$productRelated,$relatedProducts,$relatedProductsImages,$relatedProductsPrices,$productsFields,$allFields)
             ],
         );
     }

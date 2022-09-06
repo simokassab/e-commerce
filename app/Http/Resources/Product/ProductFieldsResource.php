@@ -13,31 +13,16 @@ class ProductFieldsResource extends JsonResource
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     private static $productFields;
+    private static $allFields;
 
     public function toArray($request)
     {
         $productFields = self::$productFields;
 
-        // foreach ($productFields->toArray() as $key => $productField) {
-        //     if(!is_null($productField[$key]['field_value_id']) && is_null($productField[$key]['value'])){
-        //         $value= (int)$productField[$key]['field_value_id'];
-        //     }
-        //     else{
-        //         $value=$productField[$key]['value'];
-        //     }
+        $value = $productFields->where('id',$this->id)->first();
 
-        // }
-        $value =  $productFields->map(function ($value)  {
 
-            if (!is_null($this->field_value_id) && is_null($this->value)) {
-                $value = (int)$this->field_value_id;
-            } else {
-                $value = $this->value;
-            }
-            return $value;
-        })->reject(fn($value,$key) => $productFields[$key]['id'] != $this->id );
 
-        // $currentObject->id = $this->id
         return [
             'id' => $this->id,
             'field_id' => $this->field_id,
