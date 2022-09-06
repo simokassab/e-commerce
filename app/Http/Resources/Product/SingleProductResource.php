@@ -51,7 +51,7 @@ class SingleProductResource extends JsonResource
         $nestedCategories = CategoryService::getAllCategoriesNested($this->all_categories, $selectedCategoriesIds->pluck('id')->toArray());
         $childrenIds = Product::where('parent_product_id', $this->id)->pluck('id')->toArray();
         $productAttributes = ProductField::whereIn('product_id', $childrenIds)->get();
-
+        $productsFields=ProductField::where('product_id',$this->id);
         return [
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
@@ -96,6 +96,7 @@ class SingleProductResource extends JsonResource
             'related_products' => ProductRelatedResource::customCollection($this->productRelated,$this->relatedProducts,$this->relatedProductsImages,$this->relatedProductsPrices->load('prices')) ?? [],
             'variations' => $this->whenLoaded('children') ? $this->whenLoaded('children') : [],
             'images' => ProductImagesResource::collection($this->whenLoaded('images')) ?? [],
+            'products_fields' => $productsFields
         ];
     }
 }
