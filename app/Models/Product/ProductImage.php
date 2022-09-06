@@ -12,7 +12,7 @@ class ProductImage extends MainModel
 {
     use HasFactory,HasTranslations;
     protected $table='products_images';
-    protected array $translatable = ['title'];
+    protected  $translatable = ['title'];
     protected $fillable = [
         'product_id',
         'image',
