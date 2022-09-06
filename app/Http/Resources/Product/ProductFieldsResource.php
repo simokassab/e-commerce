@@ -42,8 +42,8 @@ class ProductFieldsResource extends JsonResource
         });
 
 
-
-    }
+        return $value;
+        }
 
     public static function customCollection($productFields)
     {
