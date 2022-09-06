@@ -25,8 +25,7 @@ class ProductVariableResoruce extends JsonResource
         // $fieldValuesIds = $fieldValues->where('product_id',$this->id)->pluck('id');
 
         // $ProductAttributeValue = $fieldValues->whereIn('field_id',$productAttributesIds);
-        $ProductAttribute = $childrenFieldValues->where('proudct_id',$this->id);
-        dd($this->id);
+        $productAttribute = $childrenFieldValues->where('product_id',$this->id);
         return [
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
@@ -45,7 +44,7 @@ class ProductVariableResoruce extends JsonResource
             'weight' => (float)$this->height,
             'is_default_child' => (bool)$this->is_default_child,
             'products_statuses_id' =>(int)$this->products_statuses_id,
-            'attributes' => SelectProductAttributesResource::collection($ProductAttribute )
+            'attributes' => SelectProductAttributesResource::collection($productAttribute )
         ];
     }
 
