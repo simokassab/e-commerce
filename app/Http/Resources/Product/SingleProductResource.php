@@ -55,7 +55,7 @@ class SingleProductResource extends JsonResource
         $productsFieldsArray=$productsFields;
         foreach ($productsFieldsArray as $key => $productField) {
             if(!is_null($productField['field_value_id']) && is_null($productField['value'])){
-                $productsFieldsArray['value']= $productField['field_value_id'];
+                $productsFieldsArray[$key]['value']= $productField['field_value_id'];
             }
         }
         return [
