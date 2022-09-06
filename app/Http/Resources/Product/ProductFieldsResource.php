@@ -27,7 +27,8 @@ class ProductFieldsResource extends JsonResource
         //     }
 
         // }
-        $value =  $productFields->map(function ($value) {
+        $currentObject = $this;
+        $value =  $productFields->map(function ($value) use($currentObject) {
 
             if (!is_null($this->field_value_id) && is_null($this->value)) {
                 $value = (int)$this->field_value_id;
@@ -35,9 +36,9 @@ class ProductFieldsResource extends JsonResource
                 $value = $this->value;
             }
             return $value;
-        });
+        })->reject(fn($value) => dd($value) );
 
-
+        // $currentObject->id = $this->id
         return [
             'id' => $this->id,
             'field_id' => $this->field_id,
