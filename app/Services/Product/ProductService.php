@@ -77,7 +77,6 @@ class ProductService
         $data = [];
 
         foreach ($request->fields as $index => $field) {
-            dd(in_array($field['type'],config('defaults.fields_types')));
             if(!in_array($field['type'],config('defaults.fields_types')))
                 throw new Exception('Invalid fields type');
 
