@@ -117,7 +117,7 @@ class ProductService
             }
 
         }
-        $check = ProductField::insert($data);
+        DD($data);
         if (ProductField::insert($data)) {
             return $this;
         }

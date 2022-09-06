@@ -8,10 +8,7 @@ use Spatie\Translatable\HasTranslations;
 class ProductField extends Model
 {
 
-    public function __construct()
-    {
-        dd('sss');
-    }
+    public function __construct(){}
 
     use HasFactory, HasTranslations;
     protected $table = 'products_fields';
