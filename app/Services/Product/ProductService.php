@@ -25,7 +25,7 @@ class ProductService
         //$request=(object)$request;
 
         $this->storeAdditionalCategrories($request, $product, $childrenIds)
-            ->storeAdditionalFields($request, $product)
+            // ->storeAdditionalFields($request, $product)
             ->removeAdditionalImages($request)
             ->storeAdditionalImages($request, $product)
             ->storeAdditionalLabels($request, $product, $childrenIds)
@@ -74,25 +74,20 @@ class ProductService
 
 
         $data = [];
-        dd($request->fields);
+
         foreach ($request->fields as $index => $field) {
-            if (gettype($field) == 'string') {
-                $field = (array)json_decode($field);
+            if($field['type'] == 'text' || $field['type'] == 'textarea' || $type['date']){
+                $data[]=[
+                    'value' => ($field['value']),
+                    'field_value_id' => null
+                ];
             }
-            if ($field["type"] == 'select') {
-                $data[$index]["value"] = null;
-                if (gettype($field["value"]) == 'array') {
-                    $data[$index]["field_value_id"] = $field["value"][$index];
-                } elseif (gettype($field["value"]) == 'integer') {
-                    $data[$index]["field_value_id"] = $field["value"];
-                }
-            } else {
-                $data[$index]["value"] = ($field['value']);
-                $data[$index]["field_value_id"] = null;
-                if (gettype($field['value']) == 'array') {
-                    $data[$index]["value"] = ($field['value']);
-                }
-            }
+            elseif($field['type'] == 'select'){
+                $data[]=[
+                    'value' => null,
+                    'field_value_id' => json_encode($field['value']),
+
+                ];
             $data[$index]["product_id"] = $product->id;
             $data[$index]["field_id"] = $field['field_id'];
         }
