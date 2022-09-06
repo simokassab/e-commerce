@@ -36,7 +36,7 @@ class ProductFieldsResource extends JsonResource
                 $value = $this->value;
             }
             return $value;
-        })->reject(fn($value) => dd($value) );
+        })->reject(fn($value,$key) => dd($key) );
 
         // $currentObject->id = $this->id
         return [
