@@ -38,6 +38,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\Product\SelectProductOrderResource;
 use App\Http\Resources\Product\SingleProductResource;
+use App\Models\Product\ProductField;
 use App\Models\Product\ProductImage;
 use App\Models\Product\ProductPrice;
 use App\Models\Product\ProductRelated;
@@ -211,6 +212,8 @@ class ProductController extends MainController
         $relatedProducts = Product::findMany($productRelated->pluck('child_product_id')->toArray());
         $relatedProductsImages = ProductImage::WhereIn('product_id',$productRelated->pluck('child_product_id')->toArray())->get();
         $relatedProductsPrices= ProductPrice::WhereIn('product_id',$productRelated->pluck('child_product_id')->toArray())->get();
+        $productsFields=ProductField::where('product_id',$this->id)->get() ?? [];
+
         return $this->successResponse(
             'Success!',
             [
@@ -231,7 +234,7 @@ class ProductController extends MainController
                     'children',
                     'images'
 
-                    ]),$productRelated,$relatedProducts,$relatedProductsImages,$relatedProductsPrices)
+                    ]),$productRelated,$relatedProducts,$relatedProductsImages,$relatedProductsPrices,$productsFields)
             ],
         );
     }
