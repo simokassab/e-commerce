@@ -74,7 +74,7 @@ class ProductService
 
 
         $data = [];
-
+        dd($request->fields);
         foreach ($request->fields as $index => $field) {
             if (gettype($field) == 'string') {
                 $field = (array)json_decode($field);
@@ -82,7 +82,7 @@ class ProductService
             if ($field["type"] == 'select') {
                 $data[$index]["value"] = null;
                 if (gettype($field["value"]) == 'array') {
-                    $data[$index]["field_value_id"] = $field["value"][0];
+                    $data[$index]["field_value_id"] = $field["value"][$index];
                 } elseif (gettype($field["value"]) == 'integer') {
                     $data[$index]["field_value_id"] = $field["value"];
                 }
