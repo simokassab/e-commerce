@@ -18,14 +18,14 @@ class ProductVariableResoruce extends JsonResource
     public function toArray($request)
     {
         $childrenFieldValues= self::$childrenFieldValues;
-        dd($childrenFieldValues);
+        // dd($childrenFieldValues);
         //Product fiedl values
         // fields le hene attributes
 
         // $fieldValuesIds = $fieldValues->where('product_id',$this->id)->pluck('id');
 
         // $ProductAttributeValue = $fieldValues->whereIn('field_id',$productAttributesIds);
-
+        $ProductAttribute = $childrenFieldValues->where('proudct_id',$this->id)->get();
 
         return [
             'id' => (int)$this->id,
@@ -45,7 +45,7 @@ class ProductVariableResoruce extends JsonResource
             'weight' => (float)$this->height,
             'is_default_child' => (bool)$this->is_default_child,
             'products_statuses_id' =>(int)$this->products_statuses_id,
-            'attributes' => 'green'
+            'attributes' => SelectProductAttributesResource::collection($ProductAttribute )
         ];
     }
 
