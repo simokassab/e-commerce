@@ -73,7 +73,7 @@ class ProductService
 
         try{
 
-            $fieldCheck = ProductField::where('product_id', $product->id)->delete();
+            // $fieldCheck = ProductField::where('product_id', $product->id)->delete();
 
             if (!$request->has('fields'))
                 return $this;
@@ -124,7 +124,7 @@ class ProductService
                 }
 
                 $create = ProductField::query()->create($data);
-
+                
             }
 
             DB::commit();
@@ -136,7 +136,6 @@ class ProductService
 
         }catch(Error $error){
             dd($error);
-
             DB::rollback();
         }
 
