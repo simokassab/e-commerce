@@ -25,7 +25,7 @@ class ProductVariableResoruce extends JsonResource
         // $fieldValuesIds = $fieldValues->where('product_id',$this->id)->pluck('id');
 
         // $ProductAttributeValue = $fieldValues->whereIn('field_id',$productAttributesIds);
-        $ProductAttribute = $childrenFieldValues->where('proudct_id',$this->id)->get();
+        $ProductAttribute = $childrenFieldValues->where('proudct_id',$this->id);
         dd($ProductAttribute);
         return [
             'id' => (int)$this->id,
