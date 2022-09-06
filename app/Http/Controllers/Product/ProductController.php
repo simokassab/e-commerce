@@ -179,7 +179,6 @@ class ProductController extends MainController
             $this->productService->storeAdditionalBundle($request, $product);
         }
         Product::find($product->id)->updateProductQuantity($request->reserved_quantity, 'add');
-        dd($childrenIds);
         $this->productService->storeAdditionalProductData($request,$product,$childrenIds);
 
         DB::commit();

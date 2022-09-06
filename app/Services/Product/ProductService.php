@@ -566,12 +566,9 @@ class ProductService
             // $this->storeFieldsForVariations($fields, $childrenIds);
             $this->storeAttributesForVariations($attributesArray, $childrenIds);
 
-            return $this;
         }
 
-        if (count($childrenIds) > 0) {
-            return $childrenIds;
-        }
+        return $childrenIds;
 
         //     DB::commit();
         // } catch (Exception $e) {
