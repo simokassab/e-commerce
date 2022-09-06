@@ -124,7 +124,7 @@ class ProductService
                 }
 
                 $create = ProductField::query()->create($data);
-                
+
             }
 
             DB::commit();
@@ -145,7 +145,7 @@ class ProductService
 
     public function storeAdditionalAttributes($request, $product)
     {
-        $fieldCheck = ProductField::where('product_id', $product->id)->delete();
+        // $fieldCheck = ProductField::where('product_id', $product->id)->delete();
 
         if (!$request->has('attributes'))
             return $this;
