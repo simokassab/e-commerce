@@ -38,6 +38,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\Product\SelectProductOrderResource;
 use App\Http\Resources\Product\SingleProductResource;
+use App\Models\Field\FieldValue;
 use App\Models\Product\ProductField;
 use App\Models\Product\ProductImage;
 use App\Models\Product\ProductPrice;
@@ -218,8 +219,12 @@ class ProductController extends MainController
 
         $productsAttributes=ProductField::where('product_id',$product->id)->whereHas('field',function($query){
             $query->where('is_attribute',1);
-        })->get() ?? [];
+        })->get();
 
+        $childrenFieldValues = ProductField::whereIn('product_id',$product->children->pluck('id')->toArray())->whereHas('field',function($query){
+            $query->where('is_attribute',1);
+        })->get();
+        dd($childrenFieldValues);
 
         return $this->successResponse(
             'Success!',
@@ -241,7 +246,7 @@ class ProductController extends MainController
                     'children',
                     'images'
 
-                    ]),$productRelated,$relatedProducts,$relatedProductsImages,$relatedProductsPrices,$productsFields,$productsAttributes)
+                    ]),$productRelated,$relatedProducts,$relatedProductsImages,$relatedProductsPrices,$productsFields,$productsAttributes, $childrenFieldValues)
             ],
         );
     }
