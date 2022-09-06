@@ -337,7 +337,7 @@ class Product extends MainModel
         if($this->type != 'bundle'){
             throw new Exception('Call hasEnoughRelatedProductsQuantityForReservingNewBundles on non-bundle product');
         }
-        $isAllowNegativeQuantity = Cache::get('settings')->where('title','allow_negative_quantity')->first()->value;
+        $isAllowNegativeQuantity = getSettings('allow_negative_quantity');
         if($isAllowNegativeQuantity){
             return true;
         }
