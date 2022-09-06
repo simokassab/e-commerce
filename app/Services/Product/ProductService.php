@@ -82,7 +82,7 @@ class ProductService
 
             if($field['type'] == 'select' ){
                 throw_if(!is_numeric($field['value'], new Exception('Invalid value')));
-                $data[]=[
+                $data=[
                     'product_id' => $product->id,
                     'field_id' => (int)$field['field_id'],
                     'field_value_id' =>  (int)$field['value'],
@@ -91,7 +91,7 @@ class ProductService
             }
             elseif(($field['type']) == 'checkbox'){
                 throw_if(!is_bool($field['value'], new Exception('Invalid value')));
-                $data[]=[
+                $data=[
                     'product_id' => $product->id,
                     'field_id' => (int)$field['field_id'],
                     'field_value_id' =>  null,
@@ -100,7 +100,7 @@ class ProductService
             }
             elseif(($field['type']) == 'date'){
                 throw_if(Carbon::createFromFormat('Y-m-d H:i:s', $field['value']) !== false, new Exception('Invalid value'));
-                $data[]=[
+                $data=[
                     'product_id' => $product->id,
                     'field_id' => (int)$field['field_id'],
                     'field_value_id' =>  null,
@@ -108,19 +108,22 @@ class ProductService
                 ];
             }
             elseif(($field['type']) == 'text' || gettype($field['type']) == 'textarea'){
-                $data[]=[
+                $data=[
                     'product_id' => $product->id,
                     'field_id' => (int)$field['field_id'],
                     'field_value_id' =>  null,
                     'value' => ($field['value']),
                 ];
+            }else{
+                continue;
             }
+            
+            ProductField::query()->create($data);
+
 
         }
-        DD($data);
-        if (ProductField::insert($data)) {
-            return $this;
-        }
+
+        return $this;
 
         throw new Exception('Error while storing product fields');
     }
