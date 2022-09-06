@@ -97,6 +97,7 @@ class ProductService
 
         throw new Exception('Error while storing product fields');
     }
+}
 
     public function storeAdditionalAttributes($request, $product)
     {
