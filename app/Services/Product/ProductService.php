@@ -112,7 +112,7 @@ class ProductService
                     'product_id' => $product->id,
                     'field_id' => (int)$field['field_id'],
                     'field_value_id' =>  null,
-                    'value' => $field['value'],
+                    'value' => json_encode($field['value']),
                 ];
             }
 
