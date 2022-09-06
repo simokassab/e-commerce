@@ -12,6 +12,7 @@ use App\Models\Product\ProductRelated;
 use App\Models\Product\ProductTag;
 use App\Services\Category\CategoryService;
 use Carbon\Carbon;
+use DateTime;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -76,20 +77,45 @@ class ProductService
         $data = [];
 
         foreach ($request->fields as $index => $field) {
-            if($field['type'] == 'text' || $field['type'] == 'textarea' || $type['date']){
+            if(!array_key_exists($field['type'],config('defaults.fields_types')))
+                throw new Exception('Invalid fields type');
+
+            if(gettype($field['type']) == 'select' ){
+                throw_if(!is_numeric($field['value'], new Exception('Invalid value')));
                 $data[]=[
-                    'value' => ($field['value']),
-                    'field_value_id' => null
+                    'product_id' => $product->id,
+                    'field_id' => (int)$field['field_id'],
+                    'field_value_id' =>  (int)$field['value'],
+                    'value' => null,
                 ];
             }
-            elseif($field['type'] == 'select'){
+            elseif(gettype($field['type']) == 'checkbox'){
+                throw_if(!is_bool($field['value'], new Exception('Invalid value')));
                 $data[]=[
-                    'value' => null,
-                    'field_value_id' => json_encode($field['value']),
-
+                    'product_id' => $product->id,
+                    'field_id' => (int)$field['field_id'],
+                    'field_value_id' =>  null,
+                    'value' => (bool)$field['value'],
                 ];
-            $data[$index]["product_id"] = $product->id;
-            $data[$index]["field_id"] = $field['field_id'];
+            }
+            elseif(gettype($field['type']) == 'date'){
+                throw_if(Carbon::createFromFormat('Y-m-d H:i:s', $field['value']) !== false, new Exception('Invalid value'));
+                $data[]=[
+                    'product_id' => $product->id,
+                    'field_id' => (int)$field['field_id'],
+                    'field_value_id' =>  null,
+                    'value' => Carbon::createFromFormat('Y-m-d H:i:s', $field['value']),
+                ];
+            }
+            elseif(gettype($field['type']) == 'text' || gettype($field['type']) == 'textarea'){
+                $data[]=[
+                    'product_id' => $product->id,
+                    'field_id' => (int)$field['field_id'],
+                    'field_value_id' =>  null,
+                    'value' => $field['value'],
+                ];
+            }
+
         }
         if (ProductField::insert($data)) {
             return $this;
@@ -97,7 +123,7 @@ class ProductService
 
         throw new Exception('Error while storing product fields');
     }
-}
+
 
     public function storeAdditionalAttributes($request, $product)
     {

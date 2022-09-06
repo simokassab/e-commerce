@@ -45,8 +45,8 @@ class TestController extends MainController
     public function test()
     {
 
-        return Product::query()->find(1)->updateProductQuantity(1,'sub');
-
+        // return Product::query()->find(1)->updateProductQuantity(1,'sub');
+dd(config('defaults.fields_types'));
     }
 
     public function createShipment(){
