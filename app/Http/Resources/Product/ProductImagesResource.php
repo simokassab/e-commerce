@@ -18,7 +18,7 @@ class ProductImagesResource extends JsonResource
             'id' => $this->id,
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
             'product_id' => $this->product_id,
-            'title' => $this->title,
+            'title' => $this->getTranslations('title'),
         ];
     }
 }
