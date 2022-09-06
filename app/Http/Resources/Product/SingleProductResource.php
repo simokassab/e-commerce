@@ -38,7 +38,7 @@ class SingleProductResource extends JsonResource
         $this->relatedProductsImages = $data[2];
         $this->relatedProductsPrices=$data[3];
         $this->productsFields=$data[4];
-        $this->allFields=$data[5];
+        $this->productsAttributes=$data[5];
         $this->resource = $product;
     }
     /**
@@ -98,7 +98,7 @@ class SingleProductResource extends JsonResource
             'related_products' => ProductRelatedResource::customCollection($this->productRelated,$this->relatedProducts,$this->relatedProductsImages,$this->relatedProductsPrices->load('prices')) ?? [],
             'variations' => $this->whenLoaded('children') ? $this->whenLoaded('children') : [],
             'images' => ProductImagesResource::collection($this->whenLoaded('images')) ?? [],
-            'products_fields' => ProductFieldsResource::customCollection($this->productsFields,$this->allFields),
+            'products_fields' => ProductFieldsResource::collection($this->productsFields),
         ];
     }
 }

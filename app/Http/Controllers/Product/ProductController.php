@@ -215,9 +215,11 @@ class ProductController extends MainController
         $productsFields=ProductField::where('product_id',$product->id)->whereHas('field',function($query){
             $query->where('is_attribute',0);
         })->get() ?? [];
-        dd($productsFields);
 
-        $allFields = Field::all();
+        $productsAttributes=ProductField::where('product_id',$product->id)->whereHas('field',function($query){
+            $query->where('is_attribute',1);
+        })->get() ?? [];
+
 
         return $this->successResponse(
             'Success!',
@@ -239,7 +241,7 @@ class ProductController extends MainController
                     'children',
                     'images'
 
-                    ]),$productRelated,$relatedProducts,$relatedProductsImages,$relatedProductsPrices,$productsFields,$allFields)
+                    ]),$productRelated,$relatedProducts,$relatedProductsImages,$relatedProductsPrices,$productsFields,$productsAttributes)
             ],
         );
     }

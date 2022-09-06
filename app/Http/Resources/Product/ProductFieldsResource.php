@@ -13,28 +13,20 @@ class ProductFieldsResource extends JsonResource
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     private static $productFields;
-    private static $allFields;
 
     public function toArray($request)
     {
-        $productFields = self::$productFields;
-
-        $value = $productFields->where('id',$this->id)->first();
 
 
 
+
+        // $currentObject->id = $this->id
         return [
             'id' => $this->id,
             'field_id' => $this->field_id,
-            'value' => $value
+            'value' => $this->value
         ];
     }
 
-    public static function customCollection($productFields)
-    {
 
-        self::$productFields = $productFields;
-
-        return parent::collection($productFields);
-    }
 }
