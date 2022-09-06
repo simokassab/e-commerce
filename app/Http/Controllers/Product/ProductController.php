@@ -89,7 +89,7 @@ class ProductController extends MainController
     public function create()
     {
         $PriceArray = [];
-        $prices = SelectPriceResource::collection(Price::with('currency')->where('is_virtual', 0)->select('id', 'name', 'currency_id')->get());
+        $prices = SelectPriceResource::collection(Price::with('currency')->select('id', 'name', 'currency_id')->get());
 
         foreach ($prices as $price => $value) {
             $object = (object)[];
