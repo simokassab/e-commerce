@@ -117,7 +117,6 @@ class ProductService
             }
 
         }
-        dd($data);
         if (ProductField::insert($data)) {
             return $this;
         }
