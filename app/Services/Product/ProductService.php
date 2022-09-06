@@ -71,70 +71,66 @@ class ProductService
     {
         DB::beginTransaction();
 
-        try{
+        try {
 
-            // $fieldCheck = ProductField::where('product_id', $product->id)->delete();
 
             if (!$request->has('fields'))
                 return $this;
 
+            if (is_null($request->fields))
+                return $this;
+
+            $fieldCheck = ProductField::where('product_id', $product->id)->delete();
 
             $data = [];
-
             foreach ($request->fields as $index => $field) {
-                if(!in_array($field['type'],config('defaults.fields_types')))
+                if (!in_array($field['type'], config('defaults.fields_types')))
                     throw new Exception('Invalid fields type');
 
-                if($field['type'] == 'select' ){
+                if ($field['type'] == 'select') {
                     throw_if(!is_numeric($field['value'], new Exception('Invalid value')));
-                    $data=[
+                    $data = [
                         'product_id' => $product->id,
                         'field_id' => (int)$field['field_id'],
                         'field_value_id' =>  (int)$field['value'],
                         'value' => null,
                     ];
-                }
-                elseif(($field['type']) == 'checkbox'){
+                } elseif (($field['type']) == 'checkbox') {
                     throw_if(!is_bool($field['value'], new Exception('Invalid value')));
-                    $data=[
+                    $data = [
                         'product_id' => $product->id,
                         'field_id' => (int)$field['field_id'],
                         'field_value_id' =>  null,
                         'value' => (bool)$field['value'],
                     ];
-                }
-                elseif(($field['type']) == 'date'){
+                } elseif (($field['type']) == 'date') {
                     throw_if(Carbon::createFromFormat('Y-m-d H:i:s', $field['value']) !== false, new Exception('Invalid value'));
-                    $data=[
+                    $data = [
                         'product_id' => $product->id,
                         'field_id' => (int)$field['field_id'],
                         'field_value_id' =>  null,
                         'value' => Carbon::createFromFormat('Y-m-d H:i:s', $field['value']),
                     ];
-                }
-                elseif(($field['type']) == 'text' || gettype($field['type']) == 'textarea'){
-                    $data=[
+                } elseif (($field['type']) == 'text' || gettype($field['type']) == 'textarea') {
+                    $data = [
                         'product_id' => $product->id,
                         'field_id' => (int)$field['field_id'],
                         'field_value_id' =>  null,
                         'value' => ($field['value']),
                     ];
-                }else{
+                } else {
                     continue;
                 }
 
                 $create = ProductField::query()->create($data);
-
             }
 
             DB::commit();
             return $this;
-
-        }catch(Exception $error){
+        } catch (Exception $error) {
             dd($error);
             DB::rollback();
-
-        }catch(Error $error){
+        } catch (Error $error) {
             dd($error);
             DB::rollback();
         }
@@ -145,10 +141,14 @@ class ProductService
 
     public function storeAdditionalAttributes($request, $product)
     {
-        // $fieldCheck = ProductField::where('product_id', $product->id)->delete();
 
         if (!$request->has('attributes'))
             return $this;
+        if (is_null($request->attributes))
+            return $this;
+
+        $fieldCheck = ProductField::where('product_id', $product->id)->delete();
+
         $data = [];
         foreach ($request->attributes as $index => $attribute) {
             //converting all the attributes to array if they were sent json string form
@@ -298,8 +298,8 @@ class ProductService
                 $data[$related_product] = [
                     'parent_product_id' => $product->id,
                     'child_product_id' => $value['child_product_id'],
-                    'child_name_status' => array_key_exists('child_name_status',$value) ? $value['child_name_status'] : null ,
-                    'name' => array_key_exists('name',$value) ? json_encode($value['name']) : "",
+                    'child_name_status' => array_key_exists('child_name_status', $value) ? $value['child_name_status'] : null,
+                    'name' => array_key_exists('name', $value) ? json_encode($value['name']) : "",
                     'child_quantity' => $value['child_quantity'],
                     'created_at' => Carbon::now()->toDateTimeString(),
                     'updated_at' => Carbon::now()->toDateTimeString(),
@@ -323,7 +323,7 @@ class ProductService
                 $pricesArray[$price]["product_id"] = $product->id;
                 $pricesArray[$price]["price_id"] = $value['price_id'];
                 $pricesArray[$price]["price"] = $value['price'];
-                $pricesArray[$price]["discounted_price"] = array_key_exists('discounted_price',$value) ? $value['discounted_price'] : 0;
+                $pricesArray[$price]["discounted_price"] = array_key_exists('discounted_price', $value) ? $value['discounted_price'] : 0;
                 $pricesArray[$price]["created_at"] = Carbon::now()->toDateTimeString();
                 $pricesArray[$price]["updated_at"] = Carbon::now()->toDateTimeString();
             }
@@ -374,13 +374,13 @@ class ProductService
     // TYPE VARIABLE
     public function storeFieldsForVariations($fieldsArray, $childrenIds)
     {
+
+        if (is_null($fieldsArray)  || count($fieldsArray) == 0 )
+            return $this;
+
         $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
 
-        if (is_null($fieldsArray))
-        return $this;
-
         $data = [];
-
         foreach ($childrenIds as $key => $child) {
             foreach ($fieldsArray[$key] as $index => $field) {
                 if (gettype($field) == 'string') {
@@ -414,11 +414,11 @@ class ProductService
 
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
-        $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
 
         if (is_null($attributesArray) || count($attributesArray) == 0)
             return $this;
 
+        $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
         $data = [];
 
         foreach ($childrenIds as $key => $child) {
@@ -456,15 +456,7 @@ class ProductService
     {
         if (is_null($imagesDeletedArray))
             return $this;
-        // if (!$request->has('product_variations'))
-        //     return $this;
 
-        // if ($request->product_varitations == null) {
-        //     return $this;
-        // }
-
-        // if (!Arr::has($request->product_varitations->toArray(), 'product_varitations.*.images_deleted'))
-        //     return $this;
         $imagesIdsArray = [];
         foreach ($childrenIds as $key => $child) {
             foreach ($imagesDeletedArray as $key => $value) {
@@ -539,13 +531,12 @@ class ProductService
         $fieldsArray = [];
         $attributesArray = [];
         foreach ($request->product_variations as $variation) {
-            $imagePath = array_key_exists('image',$variation) ? $variation['image'] : "";
-            if(!is_null($variation['image'])){
-                if ( $variation['image'] && !is_string( $variation['image'] ) ){
+            $imagePath = array_key_exists('image', $variation) ? $variation['image'] : "";
+            if (!is_null($variation['image'])) {
+                if ($variation['image'] && !is_string($variation['image'])) {
                     $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
-                }
-                else{
-                     $imagePath="";
+                } else {
+                    $imagePath = "";
                 }
             }
             $productVariationsArray = [
@@ -604,7 +595,6 @@ class ProductService
             $this->storePricesForVariations($request, $childrenIds);
             // $this->storeFieldsForVariations($fields, $childrenIds);
             $this->storeAttributesForVariations($attributesArray, $childrenIds);
-
         }
 
         return $childrenIds;
