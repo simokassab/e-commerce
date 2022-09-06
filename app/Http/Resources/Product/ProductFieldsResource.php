@@ -32,7 +32,7 @@ class ProductFieldsResource extends JsonResource
         }
 
         return [
-            'id' => $productFields[0]['id'],
+            'id' => (int)$productFields[0]['id'],
             'field_id' => $productFields[0]['field_id'],
             'value' => $value
         ];
