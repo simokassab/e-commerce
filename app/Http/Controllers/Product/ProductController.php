@@ -221,7 +221,7 @@ class ProductController extends MainController
         $childrenIds = $product->children->pluck('id')->toArray();
 
 
-        $productsAttributes = ProductField::query()->whereIn('product_id',$childrenIds)->whereHas('field', function ($query) {
+        $productsAttributes = ProductField::query()->where('product_id',$product->id)->whereHas('field', function ($query) {
             $query->where('is_attribute', 1);
         })->get();
 

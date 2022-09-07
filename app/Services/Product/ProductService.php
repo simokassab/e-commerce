@@ -147,6 +147,7 @@ class ProductService
             $attributesCheck = ProductField::where('product_id', $product->id)->delete();
 
             $data = [];
+            $allData = [];
             foreach ($request->attributes as $index => $attribute) {
                 if (!in_array($attribute['type'], config('defaults.fields_types')))
                     throw new Exception('Invalid fields type');
@@ -185,8 +186,9 @@ class ProductService
                 } else {
                     continue;
                 }
+                $allData[] = $data;
             }
-            ProductField::insert($data);
+            ProductField::insert($allData);
 //            DB::commit();
             return $this;
         } catch (Exception $e) {
@@ -646,7 +648,6 @@ class ProductService
                         $imagePath = "";
                     }
                 }
-                DD($variation);
                 if($variation['is_default_child']){
                     $defaultChild = $variation;
                 }
@@ -700,9 +701,9 @@ class ProductService
 
             // set default child as default child
             if(!is_null($defaultChild)){
-                dd(Product::query()->where('code',$defaultChild['code'])->update([
+                Product::query()->where('code',$defaultChild['code'])->update([
                     'is_default_child' => 1
-                ]));
+                ]);
             }
 
 
