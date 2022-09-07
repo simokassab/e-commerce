@@ -356,6 +356,7 @@ class ProductService
             if (!$request->has('prices') || is_null($request->prices))
                 return $this;
 
+            dd('hello');
 
             ProductPrice::where('product_id', $product->id)->delete();
 
