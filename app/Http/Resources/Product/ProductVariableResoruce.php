@@ -22,6 +22,7 @@ class ProductVariableResoruce extends JsonResource
         // dd($childrenFieldValues);
         //Product fiedl values
         // fields le hene attributes
+        $childrenImages = self::$childrenImages->where('id',$this->id);
 
         // $fieldValuesIds = $fieldValues->where('product_id',$this->id)->pluck('id');
 
@@ -46,7 +47,7 @@ class ProductVariableResoruce extends JsonResource
             'is_default_child' => (bool)$this->is_default_child,
             'products_statuses_id' =>(int)$this->products_statuses_id,
             'attributes' => SelectProductAttributesResource::collection($productAttribute ),
-            'images' => ProductImagesResource::collection(self::$childrenImages),
+            'images' => ProductImagesResource::collection($childrenImages),
         ];
     }
 
