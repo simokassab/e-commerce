@@ -37,8 +37,8 @@ class ProductService
     }
     public function storeAdditionalCategrories($request, $product, $childrenIds)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
 
             $categoryCheck = ProductCategory::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
 
@@ -64,12 +64,12 @@ class ProductService
                 }
             }
             ProductCategory::insert($categoriesIdsArray);
-            // DB::commit();
+            DB::commit();
             return $this;
-        // } catch (Exception $e) {
-            // DB::rollBack();
-            // throw new Exception($e->getMessage());
-        // }
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
 
     }
     public function storeAdditionalFields($request, $product)
