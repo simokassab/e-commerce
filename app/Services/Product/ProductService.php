@@ -146,7 +146,7 @@ class ProductService
 
             $data = [];
             $allData = [];
-            dd($request->toArray()['attributes']);
+            dd($request->toArray()['product_variations']);
 
             foreach ($request->attributes as $index => $attribute) {
 
