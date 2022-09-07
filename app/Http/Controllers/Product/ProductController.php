@@ -302,7 +302,7 @@ class ProductController extends MainController
 
 
             $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
-            dd('e');
+
             DB::commit();
             return $this->successResponse('Success!', [
                 'message' => __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
