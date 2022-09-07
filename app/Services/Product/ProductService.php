@@ -12,7 +12,6 @@ use App\Models\Product\ProductRelated;
 use App\Models\Product\ProductTag;
 use App\Services\Category\CategoryService;
 use Carbon\Carbon;
-use DateTime;
 use Error;
 use Exception;
 use Illuminate\Support\Arr;
@@ -138,7 +137,7 @@ class ProductService
 //        DB::beginTransaction();
         try {
 
-            if (is_null($request->attributes)){
+            if (is_null($request->attributes) || !$request->has('product_variations')){
                 return $this;
             }
 
