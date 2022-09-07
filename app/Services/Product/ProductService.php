@@ -121,8 +121,11 @@ class ProductService
                         'field_value_id' =>  null,
                         'value' => ($field['value']),
                     ];
-                } 
+                } else {
+                    continue;
+                }
             }
+            dd($data);
             ProductField::insert($data);
             DB::commit();
             return $this;
