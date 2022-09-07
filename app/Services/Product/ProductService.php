@@ -666,8 +666,8 @@ class ProductService
     // END OF TYPE VARIABLE
     public function createAndUpdateProduct($request, $product)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
         //$request=(object)$request;
         $product = $product ?  $product : new Product();
         $product->name = ($request->name);
@@ -715,11 +715,11 @@ class ProductService
 
         $product->save();
 
-        // DB::commit();
+        DB::commit();
         return $product;
-        // } catch (Exception $e) {
-        // DB::rollBack();
-        // throw new Exception($e->getMessage());
-        // }
+        } catch (Exception $e) {
+        DB::rollBack();
+        throw new Exception($e->getMessage());
+        }
     }
 }
