@@ -183,6 +183,8 @@ class ProductService
                         'value' => ($attribute['value']),
                     ];
                 } else {
+                    dd($attribute);
+
                     continue;
                 }
                 $allData[] = $data;
