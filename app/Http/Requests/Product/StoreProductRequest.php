@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Product;
 
+use App\Models\Product\ProductRelated;
 use App\Models\Settings\Setting;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
@@ -110,7 +111,7 @@ class StoreProductRequest extends FormRequest
             'related_products.*.child_product_id' => [Rule::when($request->type == 'bundle', ['required', 'integer', 'exists:products,id'])],
             'related_products.*.child_quantity' => [Rule::when($request->type == 'bundle', ['required', 'integer', 'gte:' . $this->QuantityValue])],
             'related_products.*.name' => 'nullable',
-            'related_products.*.child_name_status' => 'nullable',
+            'related_products.*.child_name_status' => 'required | in:' . ProductRelated::$childNameStatuses,
 
 
             'order.*.id' => 'required | integer | exists:products,id',
