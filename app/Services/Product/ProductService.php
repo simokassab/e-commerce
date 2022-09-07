@@ -135,6 +135,7 @@ class ProductService
     }
     public function storeAdditionalAttributes($request, $product)
     {
+        dd('s');
 //        DB::beginTransaction();
         try {
 
@@ -188,12 +189,15 @@ class ProductService
                 }
                 $allData[] = $data;
             }
-            ProductField::insert($allData);
+            ProductField::query()->insert($allData);
 //            DB::commit();
             return $this;
         } catch (Exception $e) {
 //            DB::rollBack();
             throw new Exception($e->getMessage());
+        }catch (Error $e){
+            throw new Exception($e->getMessage());
+
         }
     }
     public function removeAdditionalImages($request)
