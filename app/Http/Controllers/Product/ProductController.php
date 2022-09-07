@@ -194,7 +194,7 @@ class ProductController extends MainController
 
         }catch (Exception $ex) {
             DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
+            return $this->errorResponse('An error occurred please try again later',['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
             'message' => $ex->getMessage()
              ]);
 
