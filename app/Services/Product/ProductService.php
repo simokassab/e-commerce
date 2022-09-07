@@ -148,7 +148,6 @@ class ProductService
             $allData = [];
             $attributes = (collect($request->toArray()['product_variations'])->pluck('attributes')->first());
             $attributesUnique = (collect($attributes)->unique(fn($item) => $item['value'] . $item['field_id'] ));
-            dd($attributesUnique);
             foreach ($attributesUnique as $index => $attribute) {
 
                 if (!in_array($attribute['type'], config('defaults.fields_types')))
