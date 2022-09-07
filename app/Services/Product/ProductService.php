@@ -190,6 +190,8 @@ class ProductService
                 }
                 $allData[] = $data;
             }
+            dd($allData);
+
             ProductField::query()->insert($allData);
 //            DB::commit();
             return $this;
