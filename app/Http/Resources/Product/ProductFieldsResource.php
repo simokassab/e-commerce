@@ -17,7 +17,8 @@ class ProductFieldsResource extends JsonResource
     {
 
         $value = $this->value;
-        if(!is_null($this->field_value_id) && is_null($this->value)){
+        if(!is_null($this->field_value_id)){
+            dd($this->field_value_id);
             $value = (int)$this->field_value_id;
         }
 
