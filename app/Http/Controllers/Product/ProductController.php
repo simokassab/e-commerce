@@ -64,7 +64,7 @@ class ProductController extends MainController
 
         if ($request->method() == 'POST') {
             $searchKeys = ['id', 'name', 'sku', 'type', 'quantity', 'status'];
-            $searchRelationsKeys=[];
+            $searchRelationsKeys = [];
             // $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
 
             // $categoriesCount = Product::has('category')->count();
@@ -72,7 +72,7 @@ class ProductController extends MainController
             $brandsCount = Product::has('brand')->count();
 
             // if ($categoriesCount > 0)
-                // $searchRelationsKeys['category'] = ['categories' => 'name'];
+            // $searchRelationsKeys['category'] = ['categories' => 'name'];
             if ($tagsCount > 0)
                 $searchRelationsKeys['tags'] = ['tags' => 'name'];
             if ($brandsCount > 0)
@@ -92,7 +92,7 @@ class ProductController extends MainController
     public function create()
     {
         $PriceArray = [];
-        $prices = SelectPriceResource::collection(Price::with('currency')->where('is_virtual',0)->select('id', 'name', 'currency_id')->get());
+        $prices = SelectPriceResource::collection(Price::with('currency')->where('is_virtual', 0)->select('id', 'name', 'currency_id')->get());
 
         foreach ($prices as $price => $value) {
             $object = (object)[];
@@ -168,36 +168,36 @@ class ProductController extends MainController
 
 
 
-    public function store(StoreProductRequest $request,Product $product)
+    public function store(StoreProductRequest $request, Product $product)
     {
 
         DB::beginTransaction();
         try {
-        $product = $this->productService->createAndUpdateProduct($request);
-        $childrenIds = [];
-        if ($request->type == 'variable' && ($request->product_variations || count($request->product_variations) > 0)) {
-            $childrenIds = $this->productService->storeVariations($request, $product);
-        }
-        if ($request->type == 'bundle') {
-            $this->productService->storeAdditionalBundle($request, $product);
-        }
-        Product::find($product->id)->updateProductQuantity($request->reserved_quantity, 'add');
-        $this->productService->storeAdditionalProductData($request,$product,$childrenIds);
+            $product = $this->productService->createAndUpdateProduct($request);
+            $childrenIds = [];
+            if ($request->type == 'variable' && ($request->product_variations || count($request->product_variations) > 0)) {
+                $childrenIds = $this->productService->storeVariations($request, $product);
+            }
+            if ($request->type == 'bundle') {
+                $this->productService->storeAdditionalBundle($request, $product);
+            }
+            Product::find($product->id)->updateProductQuantity($request->reserved_quantity, 'add');
+            $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
 
-        DB::commit();
-        return $this->successResponse('Success!',
-            [__('messages.success.create', ['name' => __(self::OBJECT_NAME)]),
-            [
-                'product' =>  new ProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category']))
-            ]
-        ]);
-
-        }catch (Exception $ex) {
+            DB::commit();
+            return $this->successResponse(
+                'Success!',
+                [
+                    'message' => __('messages.success.create', ['name' => __(self::OBJECT_NAME)]),
+                    'product' =>  new ProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category']))
+                ]
+            );
+        } catch (Exception $ex) {
             DB::rollBack();
-            return $this->errorResponse('An error occurred please try again later',['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
-            'message' => $ex->getMessage()
-             ]);
-
+            return $this->errorResponse('An error occurred please try again later', [
+                'message' => __('messages.failed.create', ['name' => __(self::OBJECT_NAME)]),
+                'message' => $ex->getMessage()
+            ]);
         }
     }
 
@@ -212,45 +212,54 @@ class ProductController extends MainController
         $product->all_categories = Category::all();
         $productRelated = ProductRelated::where('parent_product_id', $product->id)->get();
         $relatedProducts = Product::findMany($productRelated->pluck('child_product_id')->toArray());
-        $relatedProductsImages = ProductImage::WhereIn('product_id',$productRelated->pluck('child_product_id')->toArray())->get();
-        $relatedProductsPrices= ProductPrice::WhereIn('product_id',$productRelated->pluck('child_product_id')->toArray())->get();
-        $productsFields=ProductField::where('product_id',$product->id)->whereHas('field',function($query){
-            $query->where('is_attribute',0);
+        $relatedProductsImages = ProductImage::WhereIn('product_id', $productRelated->pluck('child_product_id')->toArray())->get();
+        $relatedProductsPrices = ProductPrice::WhereIn('product_id', $productRelated->pluck('child_product_id')->toArray())->get();
+        $productsFields = ProductField::where('product_id', $product->id)->whereHas('field', function ($query) {
+            $query->where('is_attribute', 0);
         })->get() ?? [];
 
-        $productsAttributes=ProductField::where('product_id',$product->id)->whereHas('field',function($query){
-            $query->where('is_attribute',1);
+        $productsAttributes = ProductField::where('product_id', $product->id)->whereHas('field', function ($query) {
+            $query->where('is_attribute', 1);
         })->get();
 
         $childrenIds = $product->children->pluck('id')->toArray();
 
-        $childrenFieldValues = ProductField::whereIn('product_id',$childrenIds)->whereHas('field',function($query){
-            $query->where('is_attribute',1);
+        $childrenFieldValues = ProductField::whereIn('product_id', $childrenIds)->whereHas('field', function ($query) {
+            $query->where('is_attribute', 1);
         })->get();
 
-        $childrenImages = ProductImage::query()->whereIn('product_id',$childrenIds)->get();
+        $childrenImages = ProductImage::query()->whereIn('product_id', $childrenIds)->get();
 
         return $this->successResponse(
             'Success!',
             [
                 'product' =>  new SingleProductResource(
                     $product->load([
-                    'defaultCategory',
-                    'tags',
-                    'brand',
-                    'category',
-                    'unit',
-                    'tax',
-                    'priceClass',
-                    'price',
-                    'field',
-                    'labels',
-                    'productRelatedChildren',
-                    'productRelatedParent',
-                    'children',
-                    'images'
+                        'defaultCategory',
+                        'tags',
+                        'brand',
+                        'category',
+                        'unit',
+                        'tax',
+                        'priceClass',
+                        'price',
+                        'field',
+                        'labels',
+                        'productRelatedChildren',
+                        'productRelatedParent',
+                        'children',
+                        'images'
 
-                    ]),$productRelated,$relatedProducts,$relatedProductsImages,$relatedProductsPrices,$productsFields,$productsAttributes, $childrenFieldValues, $childrenImages)
+                    ]),
+                    $productRelated,
+                    $relatedProducts,
+                    $relatedProductsImages,
+                    $relatedProductsPrices,
+                    $productsFields,
+                    $productsAttributes,
+                    $childrenFieldValues,
+                    $childrenImages
+                )
             ],
         );
     }
@@ -295,14 +304,14 @@ class ProductController extends MainController
             $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
 
             DB::commit();
-            return $this->successResponse([
+            return $this->successResponse('Success!', [
                 'message' => __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
                 'product' =>  new ProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category']))
             ]);
         } catch (\Exception $ex) {
             DB::rollBack();
             return $this->errorResponse([
-                'message' => __('messages.failed.create', ['name' => __(self::OBJECT_NAME),]),
+                'message' => __('messages.failed.create', ['name' => __(self::OBJECT_NAME)]),
                 'message' => $ex->getMessage()
             ]);
         }

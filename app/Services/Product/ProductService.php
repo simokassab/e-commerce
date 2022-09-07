@@ -633,6 +633,7 @@ class ProductService
                         $imagePath = "";
                     }
                 }
+                dd($variation['is_default_child']);
                 $productVariationsArray = [
                     'name' => json_encode($request->name),
                     'code' => $variation['code'],
