@@ -647,7 +647,7 @@ class ProductService
                     }
                 }
 
-                if($variation->is_default_child){
+                if($variation['is_default_child']){
                     $defaultChild = $variation;
                 }
 
