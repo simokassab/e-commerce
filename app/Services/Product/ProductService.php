@@ -25,7 +25,8 @@ class ProductService
     {
 
         //$request=(object)$request;
-
+     DB::beginTransaction();
+        try {
         $this->storeAdditionalCategrories($request, $product, $childrenIds)
             ->storeAdditionalFields($request, $product)
             ->removeAdditionalImages($request)
@@ -34,19 +35,28 @@ class ProductService
             ->storeAdditionalTags($request, $product, $childrenIds)
             ->storeAdditionalPrices($request, $product, $childrenIds)
             ->storeAdditionalAttributes($request, $product);
+            
+            DB::commit();
+        } catch (Exception $e) {
+        DB::rollBack();
+        throw new Exception($e->getMessage());
     }
+}
     public function storeAdditionalCategrories($request, $product, $childrenIds)
     {
-        DB::beginTransaction();
-        try {
-
-            $categoryCheck = ProductCategory::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
-
+        // DB::beginTransaction();
+        // try {
+            
             $childrenIdsArray = $childrenIds;
             $childrenIdsArray[] = $product->id;
-
+            
             if (!$request->has('categories'))
-                return $this;
+            return $this;
+
+            if (is_null($request->categories))
+            return $this;
+            
+            $categoryCheck = ProductCategory::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
 
             $categoriesIdsArray = [];
             $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($request->categories);
@@ -64,18 +74,18 @@ class ProductService
                 }
             }
             ProductCategory::insert($categoriesIdsArray);
-            DB::commit();
+            // DB::commit();
             return $this;
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw new Exception($e->getMessage());
-        }
+        // } catch (Exception $e) {
+            // DB::rollBack();
+            // throw new Exception($e->getMessage());
+        // }
 
     }
     public function storeAdditionalFields($request, $product)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             if (!$request->has('fields'))
                 return $this;
 
@@ -125,12 +135,12 @@ class ProductService
                 }
             }
             ProductField::insert($data);
-            DB::commit();
+            // DB::commit();
             return $this;
-        } catch (Exception $e) {
-            // DB::rollBack();
-            throw new Exception($e->getMessage());
-        }
+        // } catch (Exception $e) {
+        //     // DB::rollBack();
+        //     // throw new Exception($e->getMessage());
+        // }
 
     }
     public function storeAdditionalAttributes($request, $product)
