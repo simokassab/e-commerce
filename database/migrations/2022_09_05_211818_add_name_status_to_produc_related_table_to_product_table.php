@@ -14,9 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('products_related', function (Blueprint $table) {
-            if(! Schema::hasColumn('products_related','child_name_status')){
-                $table->string('child_name_status')->nullable()->after('child_quantity');
-            }
+            $table->enum('child_name_status', ['default', 'hide', 'custom'])->default('hide')->after('child_quantity');
         });
     }
 
@@ -28,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('products_related', function (Blueprint $table) {
-            if(Schema::hasColumn('products_related','child_name_status')){
+            if (Schema::hasColumn('products_related', 'child_name_status')) {
                 $table->dropColumn('child_name_status');
             }
         });

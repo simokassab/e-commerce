@@ -330,6 +330,7 @@ class ProductService
                     'child_name_status' => array_key_exists('child_name_status', $value) ? $value['child_name_status'] : null,
                     'name' => array_key_exists('name', $value) ? json_encode($value['name']) : "",
                     'child_quantity' => $value['child_quantity'],
+                    'bundle_info' => array_key_exists('bundle_info', $value) ? $value['child_name_status'] : null,
                     'created_at' => Carbon::now()->toDateTimeString(),
                     'updated_at' => Carbon::now()->toDateTimeString(),
                 ];
