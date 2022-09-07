@@ -646,7 +646,7 @@ class ProductService
                         $imagePath = "";
                     }
                 }
-
+                DD($variation['is_default_child']);
                 if($variation['is_default_child']){
                     $defaultChild = $variation;
                 }
