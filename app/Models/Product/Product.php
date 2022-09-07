@@ -249,8 +249,9 @@ class Product extends MainModel
     /**
      * @throws Exception
      */
-    private function addQuantityForBundle(float $quantity, array $allProducts = [], array $allRelatedProducts = [])
+    private function addQuantityForBundle(float $quantity, array $allProducts = [], array $allRelatedProducts = [], $isOrder = false)
     {
+        // @TODO font take all the products just take the needed ones from the child products
         $allProducts = count($allProducts) > 0 ? $allProducts : self::all();
         //$this->relatedProdcuts
         $allRelatedProducts = count($allRelatedProducts) > 0 ? $allRelatedProducts : ProductRelated::all()->toArray();
@@ -268,13 +269,14 @@ class Product extends MainModel
         $products = $allProducts->whereIn('id',$relatedProductsIds);
 
         foreach ($products as $product) {
+            // @TODO: instead of using query take it from the collection
             $productModel = self::find($product->id);
             $childRelatedProduct = $relatedProducts->where('child_product_id',$product->id)
                 ->where('parent_product_id',$this->id)
                 ->first();
             $productModel->bundle_reserved_quantity += $quantity * $childRelatedProduct['child_quantity'];
             if(!$productModel->save()){
-            throw new Exception('An error occurred please try again later');
+                throw new Exception('An error occurred please try again later');
             }
         }
 
@@ -348,7 +350,7 @@ class Product extends MainModel
         $allProducts = count($allProducts) > 0 ? $allProducts : self::all();
         $allRelatedProducts = count($allRelatedProducts) > 0 ? $allRelatedProducts : ProductRelated::all();
 
-        $relatedProducts = collect($allRelatedProducts)->where('parent_product_id',$this->id);
+        $relatedProducts = ($allRelatedProducts)->where('parent_product_id',$this->id);
         $relatedProductsIds = $relatedProducts->pluck('child_product_id');
         $childrenProducts = collect($allProducts)->whereIn('id',$relatedProductsIds);
         foreach ($childrenProducts as $childProduct){
