@@ -74,13 +74,13 @@ class ProductService
     }
     public function storeAdditionalFields($request, $product)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             if (!$request->has('fields'))
                 return $this;
 
-            // if (is_null($request->fields))
-                // return $this;
+            if (is_null($request->fields))
+                return $this;
 
             $fieldCheck = ProductField::where('product_id', $product->id)->delete();
 
@@ -125,12 +125,12 @@ class ProductService
                 }
             }
             ProductField::insert($data);
-            // DB::commit();
+            DB::commit();
             return $this;
-        // } catch (Exception $e) {
-        //     DB::rollBack();
-        //     throw new Exception($e->getMessage());
-        // }
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
 
     }
     public function storeAdditionalAttributes($request, $product)
