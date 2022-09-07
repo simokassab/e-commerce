@@ -135,21 +135,19 @@ class ProductService
     }
     public function storeAdditionalAttributes($request, $product)
     {
-        dd('s');
 //        DB::beginTransaction();
         try {
 
-            if (!$request->has('attributes'))
+            if (is_null($request->attributes)){
                 return $this;
-
-            if (is_null($request->attributes))
-                return $this;
+            }
 
             $attributesCheck = ProductField::where('product_id', $product->id)->delete();
 
             $data = [];
             $allData = [];
             foreach ($request->attributes as $index => $attribute) {
+
                 if (!in_array($attribute['type'], config('defaults.fields_types')))
                     throw new Exception('Invalid fields type');
 
@@ -189,6 +187,7 @@ class ProductService
                 }
                 $allData[] = $data;
             }
+            dd($allData);
             ProductField::query()->insert($allData);
 //            DB::commit();
             return $this;
