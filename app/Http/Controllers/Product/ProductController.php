@@ -205,7 +205,7 @@ class ProductController extends MainController
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Product $product)
     {
@@ -312,7 +312,7 @@ class ProductController extends MainController
             DB::rollBack();
             return $this->errorResponse([
                 'message' => __('messages.failed.create', ['name' => __(self::OBJECT_NAME)]),
-                'message' => $ex->getMessage()
+                'error_message' => $ex->getMessage()
             ]);
         }
     }

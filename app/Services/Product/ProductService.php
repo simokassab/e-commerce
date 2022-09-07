@@ -24,7 +24,6 @@ class ProductService
     public function storeAdditionalProductData($request, $product, $childrenIds)
     {
 
-        //$request=(object)$request;
 
         $this->storeAdditionalCategrories($request, $product, $childrenIds)
             ->storeAdditionalFields($request, $product)
@@ -37,7 +36,7 @@ class ProductService
     }
     public function storeAdditionalCategrories($request, $product, $childrenIds)
     {
-        DB::beginTransaction();
+//        DB::beginTransaction();
         try {
 
             $childrenIdsArray = $childrenIds;
@@ -67,16 +66,16 @@ class ProductService
                 }
             }
             ProductCategory::insert($categoriesIdsArray);
-            DB::commit();
+//            DB::commit();
             return $this;
         } catch (Exception $e) {
-            DB::rollBack();
+//            DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
     public function storeAdditionalFields($request, $product)
     {
-        DB::beginTransaction();
+//        DB::beginTransaction();
         try {
             if (!$request->has('fields'))
                 return $this;
@@ -127,16 +126,16 @@ class ProductService
                 }
             }
             ProductField::insert($data);
-            DB::commit();
+//            DB::commit();
             return $this;
         } catch (Exception $e) {
-            DB::rollBack();
+//            DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
     public function storeAdditionalAttributes($request, $product)
     {
-        DB::beginTransaction();
+//        DB::beginTransaction();
         try {
 
             if (!$request->has('attributes'))
@@ -188,10 +187,10 @@ class ProductService
                 }
             }
             ProductField::insert($data);
-            DB::commit();
+//            DB::commit();
             return $this;
         } catch (Exception $e) {
-            DB::rollBack();
+//            DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
@@ -209,7 +208,7 @@ class ProductService
     public function storeAdditionalImages($request, $product)
     {
         //$request=(object)$request;
-        DB::beginTransaction();
+//        DB::beginTransaction();
         try {
             if (!$request->has('images') || is_null($request->images)) {
                 return $this;
@@ -236,17 +235,17 @@ class ProductService
 
 
             ProductImage::insert($data);
-            DB::commit();
+//            DB::commit();
             return $this;
         } catch (Exception $e) {
-            DB::rollBack();
+//            DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
     public function storeAdditionalLabels($request, $product, $childrenIds)
     {
         //$request=(object)$request;
-        DB::beginTransaction();
+//        DB::beginTransaction();
         try {
             if (!$request->has('labels'))
                 return $this;
@@ -272,17 +271,17 @@ class ProductService
             }
 
             ProductLabel::insert($data);
-            DB::commit();
+//            DB::commit();
             return $this;
         } catch (Exception $e) {
-            DB::rollBack();
+//            DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
     public function storeAdditionalTags($request, $product, $childrenIds)
     {
         //$request=(object)$request;
-        DB::beginTransaction();
+//        DB::beginTransaction();
         try {
             if (!$request->has('tags'))
                 return $this;
@@ -309,10 +308,10 @@ class ProductService
             }
 
             ProductTag::insert($data);
-            DB::commit();
+//            DB::commit();
             return $this;
         } catch (Exception $e) {
-            DB::rollBack();
+//            DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
@@ -344,7 +343,7 @@ class ProductService
     public function storeAdditionalPrices($request, $product)
     {
         //$request=(object)$request;
-        DB::beginTransaction();
+//        DB::beginTransaction();
         try {
             if (!$request->has('prices'))
                 return $this;
@@ -362,17 +361,17 @@ class ProductService
                 $pricesArray[$price]["updated_at"] = Carbon::now()->toDateTimeString();
             }
             ProductPrice::insert($pricesArray);
-            DB::commit();
+//            DB::commit();
             return $this;
         } catch (Exception $e) {
-            DB::rollBack();
+//            DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
     public static function deleteRelatedDataForProduct(Product $product)
     {
 
-        DB::beginTransaction();
+//        DB::beginTransaction();
         try {
             $data = [
                 ProductCategory::class,
@@ -401,16 +400,16 @@ class ProductService
                 $table::where('product_id', $product->id)->delete();
             }
 
-            DB::commit();
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            throw $th;
+//            DB::commit();
+        } catch (\Exception $e) {
+//            DB::rollBack();
+            throw $e;
         }
     }
     // TYPE VARIABLE
     public function storeFieldsForVariations($fieldsArray, $childrenIds)
     {
-        DB::beginTransaction();
+//        DB::beginTransaction();
         try {
             if (is_null($fieldsArray)  || count($fieldsArray) == 0)
                 return $this;
@@ -461,16 +460,16 @@ class ProductService
             }
             $create = ProductField::query()->create($data);
 
-            DB::commit();
+//            DB::commit();
             return $this;
         } catch (Exception $e) {
-            DB::rollBack();
+//            DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
-        DB::beginTransaction();
+//        DB::beginTransaction();
         try {
             if (is_null($attributesArray) || count($attributesArray) == 0)
                 return $this;
@@ -520,17 +519,17 @@ class ProductService
                 }
             }
             $create = ProductField::query()->create($data);
-            DB::commit();
+//            DB::commit();
             return $this;
         } catch (Exception $e) {
-            DB::rollBack();
+//            DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
     public function removeImagesForVariations($imagesDeletedArray, $childrenIds)
     {
 
-        DB::beginTransaction();
+//        DB::beginTransaction();
         try {
             if (is_null($imagesDeletedArray))
                 return $this;
@@ -542,17 +541,17 @@ class ProductService
                 }
             }
             ProductImage::whereIn('id', $imagesIdsArray)->delete();
-            DB::commit();
+//            DB::commit();
             return $this;
         } catch (Exception $e) {
-            DB::rollBack();
+//            DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
 
     public function storeImagesForVariations($imagesArray, $imagesData, $childrenIds)
     {
-        DB::beginTransaction();
+//        DB::beginTransaction();
         try {
             if (is_null($imagesArray) || is_null($imagesData))
                 return $this;
@@ -574,16 +573,16 @@ class ProductService
 
 
             ProductImage::insert($data);
-            DB::commit();
+//            DB::commit();
             return $this;
         } catch (Exception $e) {
-            DB::rollBack();
+//            DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
     public function storePricesForVariations($request, $childrenIds)
     {
-        DB::beginTransaction();
+//        DB::beginTransaction();
         try {
             $data = [];
             foreach ($request->product_variations as $variation) {
@@ -607,16 +606,16 @@ class ProductService
                 }
             }
             ProductPrice::Insert($data);
-            DB::commit();
+//            DB::commit();
             return $this;
         } catch (Exception $e) {
-            DB::rollBack();
+//            DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
     public function storeVariations($request, $product)
     {
-        DB::beginTransaction();
+//        DB::beginTransaction();
         try {
             throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
@@ -634,7 +633,10 @@ class ProductService
                         $imagePath = "";
                     }
                 }
+<<<<<<< HEAD
                 // dd($variation['is_default_child']);
+=======
+>>>>>>> c99744fcf52ae56ce5fdf0d57ba557bd0ff0d1b1
                 $productVariationsArray = [
                     'name' => json_encode($request->name),
                     'code' => $variation['code'],
@@ -693,7 +695,7 @@ class ProductService
                 $this->storeAttributesForVariations($attributesArray, $childrenIds);
             }
 
-            DB::commit();
+//            DB::commit();
             return $childrenIds;
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
@@ -702,7 +704,7 @@ class ProductService
     // END OF TYPE VARIABLE
     public function createAndUpdateProduct($request, $product = null)
     {
-        DB::beginTransaction();
+//        DB::beginTransaction();
         try {
             //$request=(object)$request;
             $product = $product ?  $product : new Product();
@@ -751,10 +753,10 @@ class ProductService
 
             $product->save();
 
-            DB::commit();
+//            DB::commit();
             return $product;
         } catch (Exception $e) {
-            DB::rollBack();
+//            DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
