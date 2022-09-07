@@ -22,7 +22,7 @@ class SelectPriceResource extends JsonResource
             'name' => $this->name,
             'currency' => ($this->whenLoaded('currency')->code.' - '.$this->whenLoaded('currency')->symbol)  ?? '-',
             'title_price_currency' => $this->name . ' - ' . ($this->whenLoaded('currency')->symbol)  ?? 'NA',
-            'is_virtual' =>(bool)$this->is_virtual
+            // 'is_virtual' =>(bool)$this->is_virtual
         ];
     }
 }
