@@ -670,8 +670,8 @@ class ProductService
         // DB::beginTransaction();
         // try {
         //$request=(object)$request;
-        dd($product);
         $product = $product ?  $product : new Product();
+        dd($product);
         $product->name = ($request->name);
         $product->slug = $request->slug;
         $product->code = $request->code;
