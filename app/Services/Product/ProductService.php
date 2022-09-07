@@ -35,7 +35,6 @@ class ProductService
             ->storeAdditionalPrices($request, $product, $childrenIds)
             ->storeAdditionalAttributes($request, $product);
     }
-
     public function storeAdditionalCategrories($request, $product, $childrenIds)
     {
         $categoryCheck = ProductCategory::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
@@ -66,7 +65,6 @@ class ProductService
 
         throw new Exception('Error while storing product categories');
     }
-
     public function storeAdditionalFields($request, $product)
     {
         DB::beginTransaction();
@@ -133,8 +131,6 @@ class ProductService
 
         throw new Exception('Error while storing product fields');
     }
-
-
     public function storeAdditionalAttributes($request, $product)
     {
         DB::beginTransaction();
@@ -607,32 +603,32 @@ class ProductService
                 'name' => json_encode($request->name),
                 'code' => $variation['code'],
                 'type' => 'variable_child',
-                'sku' => $variation['sku'],
+                'sku' => array_key_exists('sku', $variation) ? $variation['sku'] : null,
                 'quantity' => $variation['quantity'],
                 'reserved_quantity' => $variation['reserved_quantity'],
                 'minimum_quantity' => $variation['minimum_quantity'],
-                'height' => $variation['height'],
-                'width' => $variation['width'],
-                'length' => $variation['p_length'],
-                'weight' => $variation['weight'],
-                'barcode' => $variation['barcode'],
+                'height' => array_key_exists('height', $variation) ? $variation['height'] : null,
+                'width' => array_key_exists('width', $variation) ? $variation['width'] : null,
+                'length' => array_key_exists('p_length', $variation) ? $variation['p_length'] : null,
+                'weight' => array_key_exists('weight', $variation) ? $variation['weight'] : null,
+                'barcode' => array_key_exists('barcode', $variation) ? $variation['barcode'] : null,
                 'category_id' => $request->category_id,
-                'unit_id' => $request->unit_id,
-                'tax_id' => $request->tax_id,
-                'brand_id' => $request->brand_id,
-                'summary' => json_encode($request->summary),
-                'specification' => json_encode($request->specification),
-                'meta_title' => json_encode($request->meta_title) ?? "",
-                'meta_keyword' => json_encode($request->meta_keyword) ?? "",
-                'meta_description' => json_encode($request->meta_description) ?? "",
-                'description' => json_encode($request->description) ?? "",
+                'unit_id' => $request->unit_id ?? null,
+                'tax_id' => $request->tax_id ?? null,
+                'brand_id' => $request->brand_id ?? null,
+                'summary' => json_encode($request->summary) ?? null,
+                'specification' => json_encode($request->specification) ?? null,
+                'meta_title' => json_encode($request->meta_title) ?? null,
+                'meta_keyword' => json_encode($request->meta_keyword) ?? null,
+                'meta_description' => json_encode($request->meta_description) ?? null,
+                'description' => json_encode($request->description) ?? null,
                 'website_status' => $request->website_status,
                 'parent_product_id' => $product->id,
-                'products_statuses_id' => $variation['products_statuses_id'],
+                'products_statuses_id' =>  array_key_exists('products_statuses_id', $variation) ? $variation['products_statuses_id'] : null,
                 'image' => $imagePath,
-                'is_show_related_product' => $variation['is_show_related_product'] ?? 0,
+                'is_show_related_product' => $variation['is_show_related_product'] ?? null,
                 'bundle_reserved_quantity' => null,
-                'pre_order' => $variation['pre_order'] ?? 0,
+                'pre_order' => $variation['pre_order'] ?? null,
 
 
             ];
@@ -669,17 +665,16 @@ class ProductService
         // }
     }
     // END OF TYPE VARIABLE
-
     public function createAndUpdateProduct($request, $product = null)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
         //$request=(object)$request;
         $product = $product ?  $product : new Product();
         $product->name = ($request->name);
         $product->slug = $request->slug;
         $product->code = $request->code;
-        $product->sku = $request->sku;
+        $product->sku = $request->sku ?? null;
         $product->type = $request->type;
         $product->quantity = 0;
         if (!$product->type == 'bundle') {
@@ -691,29 +686,29 @@ class ProductService
             $product->reserved_quantity = $request->reserved_quantity;
         }
         $product->minimum_quantity = $request->minimum_quantity;
-        $product->summary = ($request->summary);
-        $product->specification = ($request->specification);
+        $product->summary = ($request->summary) ?? null;
+        $product->specification = ($request->specification) ?? null;
 
         $product->meta_title = $request->meta_title ?? null;
         $product->meta_keyword = $request->meta_keyword ?? null;
         $product->meta_description = $request->meta_description ?? null;
         $product->description = $request->description ?? null;
         $product->website_status = $request->website_status;
-        $product->barcode = $request->barcode;
-        $product->height = $request->height;
-        $product->width = $request->width;
+        $product->barcode = $request->barcode ?? null;
+        $product->height = $request->height ?? null;
+        $product->width = $request->width ?? null;
         $product->is_disabled = 0;
-        $product->length = $request->p_length;
-        $product->weight = $request->weight;
+        $product->length = $request->p_length ?? null;
+        $product->weight = $request->weight ?? null;
         $product->is_default_child = $request->is_default_child ?? 0;
         $product->parent_product_id = $request->parent_product_id ?? null;
         $product->category_id = $request->category_id;
-        $product->unit_id = $request->unit_id;
-        $product->brand_id = $request->brand_id;
-        $product->tax_id = $request->tax_id;
+        $product->unit_id = $request->unit_id ?? null;
+        $product->brand_id = $request->brand_id ?? null;
+        $product->tax_id = $request->tax_id ?? null;
         $product->products_statuses_id = $request->products_statuses_id;
-        $product->is_show_related_product = $request->is_show_related_product ?? 0;
-        $product->pre_order = $request->pre_order ?? 0;
+        $product->is_show_related_product = $request->is_show_related_product ?? null;
+        $product->pre_order = $request->pre_order ?? null;
         $product->bundle_reserved_quantity = null;
 
         if ($request->file('image') && !is_string($request->file('image')))
@@ -721,11 +716,11 @@ class ProductService
 
         $product->save();
 
-        // DB::commit();
+        DB::commit();
         return $product;
-        // } catch (Exception $e) {
-        // DB::rollBack();
-        // throw new Exception($e->getMessage());
-        // }
+        } catch (Exception $e) {
+        DB::rollBack();
+        throw new Exception($e->getMessage());
+        }
     }
 }
