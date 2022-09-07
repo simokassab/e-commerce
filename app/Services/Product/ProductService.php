@@ -37,38 +37,46 @@ class ProductService
     }
     public function storeAdditionalCategrories($request, $product, $childrenIds)
     {
-        $categoryCheck = ProductCategory::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
+        DB::beginTransaction();
+        try {
 
-        $childrenIdsArray = $childrenIds;
-        $childrenIdsArray[] = $product->id;
+            $categoryCheck = ProductCategory::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
 
-        if (!$request->has('categories'))
-            return $this;
+            $childrenIdsArray = $childrenIds;
+            $childrenIdsArray[] = $product->id;
 
-        $categoriesIdsArray = [];
-        $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($request->categories);
-        foreach ($childrenIdsArray as $key => $child) {
-            foreach ($oneLevelCategoryArray as $key => $category) {
-                $isChecked = filter_var($category['checked'], FILTER_VALIDATE_BOOLEAN);
-                if ($isChecked) {
-                    $categoriesIdsArray[] = [
-                        'product_id' => $child,
-                        'category_id' => $category['id'],
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
-                    ];
+            if (!$request->has('categories'))
+                return $this;
+
+            $categoriesIdsArray = [];
+            $oneLevelCategoryArray = CategoryService::loopOverMultiDimentionArray($request->categories);
+            foreach ($childrenIdsArray as $key => $child) {
+                foreach ($oneLevelCategoryArray as $key => $category) {
+                    $isChecked = filter_var($category['checked'], FILTER_VALIDATE_BOOLEAN);
+                    if ($isChecked) {
+                        $categoriesIdsArray[] = [
+                            'product_id' => $child,
+                            'category_id' => $category['id'],
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now(),
+                        ];
+                    }
                 }
             }
-        }
-        if (ProductCategory::insert($categoriesIdsArray))
+            ProductCategory::insert($categoriesIdsArray);
+            DB::commit();
             return $this;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
 
-        throw new Exception('Error while storing product categories');
+        // throw new Exception('Error while storing product categories');
     }
     public function storeAdditionalFields($request, $product)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             if (!$request->has('fields'))
                 return $this;
 
@@ -118,21 +126,26 @@ class ProductService
                 }
             }
             $create = ProductField::query()->create($data);
-            return $this;
 
-            // DB::commit();
+            DB::commit();
+            return $this;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
+
         // } catch (Exception $error) {
-            // DB::rollback();
+        // DB::rollback();
         // } catch (Error $error) {
-            // DB::rollback();
+        // DB::rollback();
         // }
 
         // throw new Exception('Error while storing product fields');
     }
     public function storeAdditionalAttributes($request, $product)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
 
             if (!$request->has('attributes'))
                 return $this;
@@ -183,12 +196,16 @@ class ProductService
                 }
             }
             $create = ProductField::query()->create($data);
-            // DB::commit();
+            DB::commit();
             return $this;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
         // } catch (Exception $error) {
-            // DB::rollback();
+        // DB::rollback();
         // } catch (Error $error) {
-            // DB::rollback();
+        // DB::rollback();
         // }
 
         // throw new Exception('Error while storing product attributes');
@@ -207,95 +224,112 @@ class ProductService
     public function storeAdditionalImages($request, $product)
     {
         //$request=(object)$request;
+        DB::beginTransaction();
+        try {
+            if (!$request->has('images') || is_null($request->images)) {
+                return $this;
+            }
+            if (count($request->images) != count($request->images_data)) {
+                throw new Exception('Images and images_data count is not equal');
+            }
 
-        if (!$request->has('images') || is_null($request->images)) {
+            $data = [];
+            foreach ($request->images as $index => $image) {
+                $imagePath = "";
+                if ($request->file('images') && !is_string($request->file('images')))
+                    $imagePath = uploadImage($image, config('images_paths.product.images'));
+
+                $data[] = [
+                    'product_id' => $product->id,
+                    'image' => $imagePath,
+                    'title' => json_encode($request->images_data[$index]['title']),
+                    'sort' => $request->images_data[$index]['sort'],
+                    'created_at'  => Carbon::now()->toDateString(),
+                    'updated_at' => Carbon::now()->toDateString(),
+                ];
+            }
+
+
+            ProductImage::insert($data);
+            DB::commit();
             return $this;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
         }
-        if (count($request->images) != count($request->images_data)) {
-            throw new Exception('Images and images_data count is not equal');
-        }
-
-        $data = [];
-        foreach ($request->images as $index => $image) {
-            $imagePath = "";
-            if ($request->file('images') && !is_string($request->file('images')))
-                $imagePath = uploadImage($image, config('images_paths.product.images'));
-
-            $data[] = [
-                'product_id' => $product->id,
-                'image' => $imagePath,
-                'title' => json_encode($request->images_data[$index]['title']),
-                'sort' => $request->images_data[$index]['sort'],
-                'created_at'  => Carbon::now()->toDateString(),
-                'updated_at' => Carbon::now()->toDateString(),
-            ];
-        }
-
-
-        if (ProductImage::insert($data)) {
-            return $this;
-        }
-        throw new Exception('Error while storing product images');
     }
     public function storeAdditionalLabels($request, $product, $childrenIds)
     {
         //$request=(object)$request;
-        $labelCheck = ProductLabel::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
+        DB::beginTransaction();
+        try {
+            if (!$request->has('labels'))
+                return $this;
+            if (is_null($request->has('labels')))
+                return $this;
 
-        if (!$request->has('labels'))
-            return $this;
+            $labelCheck = ProductLabel::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
 
-        $childrenIdsArray = $childrenIds;
-        $childrenIdsArray[] = $product->id;
+            $childrenIdsArray = $childrenIds;
+            $childrenIdsArray[] = $product->id;
 
-        $data = [];
+            $data = [];
 
-        foreach ($childrenIdsArray as $key => $child) {
-            foreach ($request->labels as $index => $label) {
-                $data[] = [
-                    'product_id' => $child,
-                    'label_id' => $label,
-                    'created_at' => Carbon::now()->toDateTimeString(),
-                    'updated_at' => Carbon::now()->toDateTimeString()
-                ];
+            foreach ($childrenIdsArray as $key => $child) {
+                foreach ($request->labels as $index => $label) {
+                    $data[] = [
+                        'product_id' => $child,
+                        'label_id' => $label,
+                        'created_at' => Carbon::now()->toDateTimeString(),
+                        'updated_at' => Carbon::now()->toDateTimeString()
+                    ];
+                }
             }
-        }
 
-        if (ProductLabel::insert($data)) {
+            ProductLabel::insert($data);
+            DB::commit();
             return $this;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
         }
-
-        throw new Exception('Error while storing product categories');
     }
     public function storeAdditionalTags($request, $product, $childrenIds)
     {
         //$request=(object)$request;
-        $tagCheck = ProductTag::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
+        DB::beginTransaction();
+        try {
+            if (!$request->has('tags'))
+                return $this;
 
-        if (!$request->has('tags'))
-            return $this;
+            if (is_null($request->tags))
+                return $this;
 
-        $childrenIdsArray = $childrenIds;
-        $childrenIdsArray[] = $product->id;
+            $tagCheck = ProductTag::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
 
-        $data = [];
+            $childrenIdsArray = $childrenIds;
+            $childrenIdsArray[] = $product->id;
 
-        foreach ($childrenIdsArray as $key => $child) {
-            foreach ($request->tags as $index => $tag) {
-                $data[] = [
-                    'product_id' => $child,
-                    'tag_id' => $tag,
-                    'created_at' => Carbon::now()->toDateTimeString(),
-                    'updated_at' => Carbon::now()->toDateTimeString()
-                ];
+            $data = [];
+
+            foreach ($childrenIdsArray as $key => $child) {
+                foreach ($request->tags as $index => $tag) {
+                    $data[] = [
+                        'product_id' => $child,
+                        'tag_id' => $tag,
+                        'created_at' => Carbon::now()->toDateTimeString(),
+                        'updated_at' => Carbon::now()->toDateTimeString()
+                    ];
+                }
             }
-        }
 
-        if (ProductTag::insert($data)) {
+            ProductTag::insert($data);
+            DB::commit();
             return $this;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
         }
-
-        throw new Exception('Error while storing product tags');
     }
     // TYPE BUNDLE
     public function storeAdditionalBundle($request, $product)
@@ -324,9 +358,14 @@ class ProductService
     public function storeAdditionalPrices($request, $product)
     {
         //$request=(object)$request;
-        $priceCheck = ProductPrice::where('product_id', $product->id)->delete();
+        DB::beginTransaction();
+        try {
+            if (!$request->has('prices'))
+                return $this;
+            if (is_null($request->prices))
+                return $this;
 
-        if ($request->has('prices')) {
+            $priceCheck = ProductPrice::where('product_id', $product->id)->delete();
             $pricesArray =  [];
             foreach ($request->prices as $price => $value) {
                 $pricesArray[$price]["product_id"] = $product->id;
@@ -337,8 +376,12 @@ class ProductService
                 $pricesArray[$price]["updated_at"] = Carbon::now()->toDateTimeString();
             }
             ProductPrice::insert($pricesArray);
+            DB::commit();
+            return $this;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
         }
-        return $this;
     }
     public static function deleteRelatedDataForProduct(Product $product)
     {
@@ -381,8 +424,8 @@ class ProductService
     // TYPE VARIABLE
     public function storeFieldsForVariations($fieldsArray, $childrenIds)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             if (is_null($fieldsArray)  || count($fieldsArray) == 0)
                 return $this;
 
@@ -432,147 +475,163 @@ class ProductService
             }
             $create = ProductField::query()->create($data);
 
-            // DB::commit();
+            DB::commit();
             return $this;
-        // } catch (Exception $error) {
-            // DB::rollback();
-        // } catch (Error $error) {
-            // DB::rollback();
-        // }
-
-        // throw new Exception('Error while storing product fields');
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
     }
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
-        // DB::beginTransaction();
-        // try {
-        if (is_null($attributesArray) || count($attributesArray) == 0)
-            return $this;
+        DB::beginTransaction();
+        try {
+            if (is_null($attributesArray) || count($attributesArray) == 0)
+                return $this;
 
-        $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
-        $data = [];
+            $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
+            $data = [];
 
-        foreach ($childrenIds as $key => $child) {
-            foreach ($attributesArray as $index => $attribute) {
-                if (!in_array($attribute['type'], config('defaults.fields_types')))
-                    throw new Exception('Invalid fields type');
+            foreach ($childrenIds as $key => $child) {
+                foreach ($attributesArray as $index => $attribute) {
+                    if (!in_array($attribute['type'], config('defaults.fields_types')))
+                        throw new Exception('Invalid fields type');
 
-                if ($attribute['type'] == 'select') {
-                    throw_if(!is_numeric($attribute['value'], new Exception('Invalid value')));
-                    $data = [
-                        'product_id' => $child,
-                        'field_id' => (int)$attribute['field_id'],
-                        'field_value_id' =>  (int)$attribute['value'],
-                        'value' => null,
-                    ];
-                } elseif (($attribute['type']) == 'checkbox') {
-                    throw_if(!is_bool($attribute['value'], new Exception('Invalid value')));
-                    $data = [
-                        'product_id' => $child,
-                        'field_id' => (int)$attribute['field_id'],
-                        'field_value_id' =>  null,
-                        'value' => (bool)$attribute['value'],
-                    ];
-                } elseif (($attribute['type']) == 'date') {
-                    throw_if(Carbon::createFromFormat('Y-m-d H:i:s', $attribute['value']) !== false, new Exception('Invalid value'));
-                    $data = [
-                        'product_id' => $child,
-                        'field_id' => (int)$attribute['field_id'],
-                        'field_value_id' =>  null,
-                        'value' => Carbon::createFromFormat('Y-m-d H:i:s', $attribute['value']),
-                    ];
-                } elseif (($attribute['type']) == 'text' || gettype($attribute['type']) == 'textarea') {
-                    $data = [
-                        'product_id' => $child,
-                        'field_id' => (int)$attribute['field_id'],
-                        'field_value_id' =>  null,
-                        'value' => ($attribute['value']),
-                    ];
-                } else {
-                    continue;
+                    if ($attribute['type'] == 'select') {
+                        throw_if(!is_numeric($attribute['value'], new Exception('Invalid value')));
+                        $data = [
+                            'product_id' => $child,
+                            'field_id' => (int)$attribute['field_id'],
+                            'field_value_id' =>  (int)$attribute['value'],
+                            'value' => null,
+                        ];
+                    } elseif (($attribute['type']) == 'checkbox') {
+                        throw_if(!is_bool($attribute['value'], new Exception('Invalid value')));
+                        $data = [
+                            'product_id' => $child,
+                            'field_id' => (int)$attribute['field_id'],
+                            'field_value_id' =>  null,
+                            'value' => (bool)$attribute['value'],
+                        ];
+                    } elseif (($attribute['type']) == 'date') {
+                        throw_if(Carbon::createFromFormat('Y-m-d H:i:s', $attribute['value']) !== false, new Exception('Invalid value'));
+                        $data = [
+                            'product_id' => $child,
+                            'field_id' => (int)$attribute['field_id'],
+                            'field_value_id' =>  null,
+                            'value' => Carbon::createFromFormat('Y-m-d H:i:s', $attribute['value']),
+                        ];
+                    } elseif (($attribute['type']) == 'text' || gettype($attribute['type']) == 'textarea') {
+                        $data = [
+                            'product_id' => $child,
+                            'field_id' => (int)$attribute['field_id'],
+                            'field_value_id' =>  null,
+                            'value' => ($attribute['value']),
+                        ];
+                    } else {
+                        continue;
+                    }
                 }
             }
+            $create = ProductField::query()->create($data);
+            DB::commit();
+            return $this;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
         }
-        $create = ProductField::query()->create($data);
-
-        // DB::commit();
-        return $this;
-        // } catch (Exception $error) {
-            // DB::rollback();
-        // } catch (Error $error) {
-            // DB::rollback();
-        // }
-
-        // throw new Exception('Error while storing product fields');
     }
     public function removeImagesForVariations($imagesDeletedArray, $childrenIds)
     {
-        if (is_null($imagesDeletedArray))
-            return $this;
 
-        $imagesIdsArray = [];
-        foreach ($childrenIds as $key => $child) {
-            foreach ($imagesDeletedArray as $key => $value) {
-                $imagesIdsArray = $value[$key];
+        DB::beginTransaction();
+        try {
+            if (is_null($imagesDeletedArray))
+                return $this;
+
+            $imagesIdsArray = [];
+            foreach ($childrenIds as $key => $child) {
+                foreach ($imagesDeletedArray as $key => $value) {
+                    $imagesIdsArray = $value[$key];
+                }
             }
             ProductImage::whereIn('id', $imagesIdsArray)->delete();
+            DB::commit();
+            return $this;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
         }
     }
+
     public function storeImagesForVariations($imagesArray, $imagesData, $childrenIds)
     {
-        if (is_null($imagesArray) || is_null($imagesData))
-            return $this;
+        DB::beginTransaction();
+        try {
+            if (is_null($imagesArray) || is_null($imagesData))
+                return $this;
 
-        $data = [];
-        foreach ($childrenIds as $key => $child) {
-            foreach ($imagesArray as $index => $image) {
-                $imagePath = uploadImage($image, config('images_paths.product.images'));
-                $data[] = [
-                    'product_id' => $child,
-                    'image' => $imagePath,
-                    'title' => json_encode($imagesData[$index]['title']),
-                    'sort' => $imagesData[$index]['sort'],
-                    'created_at'  => Carbon::now()->toDateString(),
-                    'updated_at' => Carbon::now()->toDateString(),
-                ];
+            $data = [];
+            foreach ($childrenIds as $key => $child) {
+                foreach ($imagesArray as $index => $image) {
+                    $imagePath = uploadImage($image, config('images_paths.product.images'));
+                    $data[] = [
+                        'product_id' => $child,
+                        'image' => $imagePath,
+                        'title' => json_encode($imagesData[$index]['title']),
+                        'sort' => $imagesData[$index]['sort'],
+                        'created_at'  => Carbon::now()->toDateString(),
+                        'updated_at' => Carbon::now()->toDateString(),
+                    ];
+                }
             }
-        }
 
 
-        if (ProductImage::insert($data)) {
+            ProductImage::insert($data);
+            DB::commit();
             return $this;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
         }
-        throw new Exception('Error while storing product images');
     }
     public function storePricesForVariations($request, $childrenIds)
     {
-        $data = [];
-        foreach ($request->product_variations as $variation) {
-            $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : ($variation['prices'] ?? []);
-        }
-        if (is_null($pricesInfo)) {
-            return $this;
-        }
-        $childrenIdsArray = $childrenIds;
-        $data = [];
-        foreach ($childrenIdsArray as $key => $child) {
-            foreach ($pricesInfo as $key => $price) {
-                $data[] = [
-                    'product_id' => $child,
-                    'price_id' => $price['price_id'],
-                    'price' => $price['price_id'],
-                    'discounted_price' => $price['discounted_price'],
-                    'created_at' =>  Carbon::now()->toDateTimeString(),
-                    'updated_at' => Carbon::now()->toDateTimeString(),
-                ];
+        DB::beginTransaction();
+        try {
+            $data = [];
+            foreach ($request->product_variations as $variation) {
+                $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : ($variation['prices'] ?? []);
             }
+            if (is_null($pricesInfo)) {
+                return $this;
+            }
+            $childrenIdsArray = $childrenIds;
+            $data = [];
+            foreach ($childrenIdsArray as $key => $child) {
+                foreach ($pricesInfo as $key => $price) {
+                    $data[] = [
+                        'product_id' => $child,
+                        'price_id' => $price['price_id'],
+                        'price' => $price['price_id'],
+                        'discounted_price' => $price['discounted_price'],
+                        'created_at' =>  Carbon::now()->toDateTimeString(),
+                        'updated_at' => Carbon::now()->toDateTimeString(),
+                    ];
+                }
+            }
+            ProductPrice::Insert($data);
+            DB::commit();
+            return $this;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
         }
-        ProductPrice::Insert($data);
     }
     public function storeVariations($request, $product)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
             $productVariationParentsArray = [];
@@ -647,11 +706,11 @@ class ProductService
                 $this->storeAttributesForVariations($attributesArray, $childrenIds);
             }
 
-            // DB::commit();
+            DB::commit();
             return $childrenIds;
-        // } catch (Exception $e) {
-            // throw new Exception($e->getMessage());
-        // }
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
     // END OF TYPE VARIABLE
     public function createAndUpdateProduct($request, $product)
