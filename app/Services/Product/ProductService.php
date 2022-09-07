@@ -25,8 +25,7 @@ class ProductService
     {
 
         //$request=(object)$request;
-     DB::beginTransaction();
-        try {
+   
         $this->storeAdditionalCategrories($request, $product, $childrenIds)
             ->storeAdditionalFields($request, $product)
             ->removeAdditionalImages($request)
@@ -35,12 +34,7 @@ class ProductService
             ->storeAdditionalTags($request, $product, $childrenIds)
             ->storeAdditionalPrices($request, $product, $childrenIds)
             ->storeAdditionalAttributes($request, $product);
-            
-            DB::commit();
-        } catch (Exception $e) {
-        DB::rollBack();
-        throw new Exception($e->getMessage());
-    }
+        
 }
     public function storeAdditionalCategrories($request, $product, $childrenIds)
     {
