@@ -628,7 +628,7 @@ class ProductService
                 'image' => $imagePath,
                 'is_show_related_product' => $variation['is_show_related_product'] ?? null,
                 'bundle_reserved_quantity' => null,
-                'pre_order' => $variation['pre_order'] ?? null,
+                'pre_order' => array_key_exists('pre_order', $variation) ? $variation['pre_order'] : null,
 
 
             ];
