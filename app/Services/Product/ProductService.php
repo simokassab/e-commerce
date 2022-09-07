@@ -147,7 +147,7 @@ class ProductService
             $data = [];
             $allData = [];
             $attributes = (collect($request->toArray()['product_variations'])->pluck('attributes')->first());
-            ($attributes->unique(fn($item) => dd($item)));
+            (collect($attributes)->unique(fn($item) => dd($item)));
             foreach ($request->attributes as $index => $attribute) {
 
                 if (!in_array($attribute['type'], config('defaults.fields_types')))
