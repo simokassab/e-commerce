@@ -416,7 +416,9 @@ class ProductService
 
             $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
 
+            $allData = [];
             $data = [];
+
             foreach ($childrenIds as $key => $child) {
                 foreach ($fieldsArray as $index => $field) {
                     if (!in_array($field['type'], config('defaults.fields_types')))
@@ -456,9 +458,11 @@ class ProductService
                     } else {
                         continue;
                     }
+
+                    $allData[] = $data;
                 }
             }
-            $create = ProductField::query()->create($data);
+            ProductField::query()->insert($allData);
 
 //            DB::commit();
             return $this;
@@ -475,6 +479,7 @@ class ProductService
                 return $this;
 
             $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
+            $allData = [];
             $data = [];
 
             foreach ($childrenIds as $key => $child) {
@@ -516,9 +521,11 @@ class ProductService
                     } else {
                         continue;
                     }
+                    $allData[] = $data;
                 }
             }
-            $create = ProductField::query()->create($data);
+            dd($allData);
+            ProductField::query()->insert($allData);
 //            DB::commit();
             return $this;
         } catch (Exception $e) {
