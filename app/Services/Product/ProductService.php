@@ -689,7 +689,7 @@ class ProductService
                 foreach ($childrenData as $key => $child) {
                     $childrenIds[$key] = $child->id;
                 }
-                dd($childrenIds);
+                dd($childrenData->plcuk('id')->toArray());
                 $this->removeImagesForVariations($imagesDeletedArray, $childrenIds);
                 $this->storeImagesForVariations($imagesArray, $imagesData, $childrenIds);
                 $this->storePricesForVariations($request, $childrenIds);
