@@ -147,8 +147,9 @@ class ProductService
             $data = [];
             $allData = [];
             $attributes = (collect($request->toArray()['product_variations'])->pluck('attributes')->first());
-            (collect($attributes)->unique(fn($item) => dd($item)));
-            foreach ($request->attributes as $index => $attribute) {
+            $attributesUnique = (collect($attributes)->unique(fn($item) => $item['value'] . $item['field_id'] ));
+            dd($attributesUnique);
+            foreach ($attributesUnique as $index => $attribute) {
 
                 if (!in_array($attribute['type'], config('defaults.fields_types')))
                     throw new Exception('Invalid fields type');
