@@ -170,8 +170,8 @@ class ProductController extends MainController
     public function store(StoreProductRequest $request,Product $product)
     {
 
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
         $product = $this->productService->createAndUpdateProduct($request);
         $childrenIds = [];
         if ($request->type == 'variable' && ($request->product_variations || count($request->product_variations) > 0)) {
@@ -191,13 +191,13 @@ class ProductController extends MainController
             ]
         );
 
-        // }catch (\Exception $ex) {
-        //     DB::rollBack();
-        //     return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
-        //     'message' => $ex->getMessage()
-        //      ]);
+        }catch (\Exception $ex) {
+            DB::rollBack();
+            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
+            'message' => $ex->getMessage()
+             ]);
 
-        // }
+        }
     }
 
     /**

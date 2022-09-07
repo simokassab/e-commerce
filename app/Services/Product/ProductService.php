@@ -25,7 +25,7 @@ class ProductService
     {
 
         //$request=(object)$request;
-   
+
         $this->storeAdditionalCategrories($request, $product, $childrenIds)
             ->storeAdditionalFields($request, $product)
             ->removeAdditionalImages($request)
@@ -34,22 +34,21 @@ class ProductService
             ->storeAdditionalTags($request, $product, $childrenIds)
             ->storeAdditionalPrices($request, $product, $childrenIds)
             ->storeAdditionalAttributes($request, $product);
-        
-}
+    }
     public function storeAdditionalCategrories($request, $product, $childrenIds)
     {
         DB::beginTransaction();
-       try {
-            
+        try {
+
             $childrenIdsArray = $childrenIds;
             $childrenIdsArray[] = $product->id;
-            
+
             if (!$request->has('categories'))
-            return $this;
+                return $this;
 
             if (is_null($request->categories))
-            return $this;
-            
+                return $this;
+
             $categoryCheck = ProductCategory::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
 
             $categoriesIdsArray = [];
@@ -74,12 +73,11 @@ class ProductService
             DB::rollBack();
             throw new Exception($e->getMessage());
         }
-
     }
     public function storeAdditionalFields($request, $product)
     {
         DB::beginTransaction();
-       try {
+        try {
             if (!$request->has('fields'))
                 return $this;
 
@@ -135,12 +133,11 @@ class ProductService
             DB::rollBack();
             throw new Exception($e->getMessage());
         }
-
     }
     public function storeAdditionalAttributes($request, $product)
     {
         DB::beginTransaction();
-       try {
+        try {
 
             if (!$request->has('attributes'))
                 return $this;
@@ -190,14 +187,13 @@ class ProductService
                     continue;
                 }
             }
-             ProductField::insert($data);
+            ProductField::insert($data);
             DB::commit();
             return $this;
         } catch (Exception $e) {
-          DB::rollBack();
+            DB::rollBack();
             throw new Exception($e->getMessage());
-      }
-       
+        }
     }
     public function removeAdditionalImages($request)
     {
@@ -214,7 +210,7 @@ class ProductService
     {
         //$request=(object)$request;
         DB::beginTransaction();
-       try {
+        try {
             if (!$request->has('images') || is_null($request->images)) {
                 return $this;
             }
@@ -251,7 +247,7 @@ class ProductService
     {
         //$request=(object)$request;
         DB::beginTransaction();
-       try {
+        try {
             if (!$request->has('labels'))
                 return $this;
             if (is_null($request->has('labels')))
@@ -287,7 +283,7 @@ class ProductService
     {
         //$request=(object)$request;
         DB::beginTransaction();
-       try {
+        try {
             if (!$request->has('tags'))
                 return $this;
 
@@ -348,7 +344,7 @@ class ProductService
     {
         //$request=(object)$request;
         DB::beginTransaction();
-       try {
+        try {
             if (!$request->has('prices'))
                 return $this;
             if (is_null($request->prices))
@@ -702,7 +698,7 @@ class ProductService
         }
     }
     // END OF TYPE VARIABLE
-    public function createAndUpdateProduct($request, $product=null)
+    public function createAndUpdateProduct($request, $product = null)
     {
         DB::beginTransaction();
         try {
