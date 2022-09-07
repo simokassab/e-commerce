@@ -424,7 +424,7 @@ class ProductService
             if (is_null($fieldsArray)  || count($fieldsArray) == 0)
                 return $this;
 
-            $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
+            $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->whereHas('field',fn($query) => $query->where('is_attribute',0))->delete();
 
             $allData = [];
             $data = [];
