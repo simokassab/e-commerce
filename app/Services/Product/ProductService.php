@@ -299,7 +299,6 @@ class ProductService
                 return $this;
 
             $tagCheck = ProductTag::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
-            dd($tagCheck);
             $childrenIdsArray = $childrenIds;
             $childrenIdsArray[] = $product->id;
 
