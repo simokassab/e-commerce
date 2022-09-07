@@ -146,6 +146,8 @@ class ProductService
 
             $data = [];
             $allData = [];
+            dd($request->attributes);
+
             foreach ($request->attributes as $index => $attribute) {
 
                 if (!in_array($attribute['type'], config('defaults.fields_types')))
@@ -183,7 +185,6 @@ class ProductService
                         'value' => ($attribute['value']),
                     ];
                 } else {
-                    dd($attribute);
 
                     continue;
                 }
