@@ -147,7 +147,7 @@ class ProductService
 
             $data = [];
             $allData = [];
-            $attributes = (collect($request->toArray()['product_variations'])->pluck('attributes')->first());
+            $attributes = $request->has('product_variations') ? (collect($request->toArray()['product_variations'])->pluck('attributes')->first()) : [];
             $attributesUnique = (collect($attributes)->unique(fn($item) => $item['value'] . $item['field_id'] ));
             foreach ($attributesUnique as $index => $attribute) {
 
