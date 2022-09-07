@@ -682,7 +682,6 @@ class ProductService
             }
             $model = new Product();
             $productVariation = Product::upsert($productVariationParentsArray, 'id', $model->getFillable());
-            dd($productVariation);
             $childrenIds = [];
             if ($productVariation) {
 
@@ -690,7 +689,7 @@ class ProductService
                 foreach ($childrenData as $key => $child) {
                     $childrenIds[$key] = $child->id;
                 }
-
+                dd($childrenData);
                 $this->removeImagesForVariations($imagesDeletedArray, $childrenIds);
                 $this->storeImagesForVariations($imagesArray, $imagesData, $childrenIds);
                 $this->storePricesForVariations($request, $childrenIds);
