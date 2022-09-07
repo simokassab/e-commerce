@@ -126,7 +126,7 @@ class ProductService
                 }
             }
             ProductField::insert($data);
-            DB::commit();
+            // DB::commit();
             return $this;
         // } catch (Exception $e) {
         //     DB::rollBack();
@@ -136,8 +136,8 @@ class ProductService
     }
     public function storeAdditionalAttributes($request, $product)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
 
             if (!$request->has('attributes'))
                 return $this;
@@ -187,13 +187,13 @@ class ProductService
                     continue;
                 }
             }
-            $create = ProductField::query()->create($data);
-            DB::commit();
+             ProductField::insert($data);
+            // DB::commit();
             return $this;
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw new Exception($e->getMessage());
-        }
+        // } catch (Exception $e) {
+        //     DB::rollBack();
+        //     throw new Exception($e->getMessage());
+        // }
        
     }
     public function removeAdditionalImages($request)
