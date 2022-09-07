@@ -184,7 +184,7 @@ class ProductController extends MainController
         $this->productService->storeAdditionalProductData($request,$product,$childrenIds);
 
         DB::commit();
-        return $this->successResponse(
+        return $this->successResponse('Success!',
             __('messages.success.create', ['name' => __(self::OBJECT_NAME)]),
             [
                 'product' =>  new ProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category']))
