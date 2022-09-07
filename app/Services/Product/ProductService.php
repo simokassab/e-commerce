@@ -210,8 +210,8 @@ class ProductService
     public function storeAdditionalImages($request, $product)
     {
         //$request=(object)$request;
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             if (!$request->has('images') || is_null($request->images)) {
                 return $this;
             }
@@ -237,18 +237,18 @@ class ProductService
 
 
             ProductImage::insert($data);
-            DB::commit();
+            // DB::commit();
             return $this;
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw new Exception($e->getMessage());
-        }
+        // } catch (Exception $e) {
+            // DB::rollBack();
+            // throw new Exception($e->getMessage());
+        // }
     }
     public function storeAdditionalLabels($request, $product, $childrenIds)
     {
         //$request=(object)$request;
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             if (!$request->has('labels'))
                 return $this;
             if (is_null($request->has('labels')))
@@ -273,18 +273,18 @@ class ProductService
             }
 
             ProductLabel::insert($data);
-            DB::commit();
+            // DB::commit();
             return $this;
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw new Exception($e->getMessage());
-        }
+        // } catch (Exception $e) {
+            // DB::rollBack();
+            // throw new Exception($e->getMessage());
+        // }
     }
     public function storeAdditionalTags($request, $product, $childrenIds)
     {
         //$request=(object)$request;
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             if (!$request->has('tags'))
                 return $this;
 
@@ -310,12 +310,12 @@ class ProductService
             }
 
             ProductTag::insert($data);
-            DB::commit();
+            // DB::commit();
             return $this;
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw new Exception($e->getMessage());
-        }
+        // } catch (Exception $e) {
+            // DB::rollBack();
+            // throw new Exception($e->getMessage());
+        // }
     }
     // TYPE BUNDLE
     public function storeAdditionalBundle($request, $product)
@@ -344,8 +344,8 @@ class ProductService
     public function storeAdditionalPrices($request, $product)
     {
         //$request=(object)$request;
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             if (!$request->has('prices'))
                 return $this;
             if (is_null($request->prices))
@@ -362,12 +362,12 @@ class ProductService
                 $pricesArray[$price]["updated_at"] = Carbon::now()->toDateTimeString();
             }
             ProductPrice::insert($pricesArray);
-            DB::commit();
+            // DB::commit();
             return $this;
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw new Exception($e->getMessage());
-        }
+        // } catch (Exception $e) {
+            // DB::rollBack();
+            // throw new Exception($e->getMessage());
+        // }
     }
     public static function deleteRelatedDataForProduct(Product $product)
     {
