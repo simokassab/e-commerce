@@ -142,7 +142,7 @@ class ProductService
                 return $this;
             }
 
-            $attributesCheck = ProductField::where('product_id', $product->id)->delete();
+//            $attributesCheck = ProductField::where('product_id', $product->id)->delete();
 
             $data = [];
             $allData = [];
@@ -423,7 +423,7 @@ class ProductService
             if (is_null($fieldsArray)  || count($fieldsArray) == 0)
                 return $this;
 
-            $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
+//            $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
 
             $allData = [];
             $data = [];
