@@ -43,6 +43,7 @@ use App\Models\Product\ProductField;
 use App\Models\Product\ProductImage;
 use App\Models\Product\ProductPrice;
 use App\Models\Product\ProductRelated;
+use Exception;
 
 class ProductController extends MainController
 {
@@ -191,7 +192,7 @@ class ProductController extends MainController
             ]
         ]);
 
-        }catch (\Exception $ex) {
+        }catch (Exception $ex) {
             DB::rollBack();
             return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME),]),
             'message' => $ex->getMessage()
