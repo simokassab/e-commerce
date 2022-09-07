@@ -38,8 +38,8 @@ class ProductService
 }
     public function storeAdditionalCategrories($request, $product, $childrenIds)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+       try {
             
             $childrenIdsArray = $childrenIds;
             $childrenIdsArray[] = $product->id;
@@ -68,18 +68,18 @@ class ProductService
                 }
             }
             ProductCategory::insert($categoriesIdsArray);
-            // DB::commit();
+            DB::commit();
             return $this;
-        // } catch (Exception $e) {
-            // DB::rollBack();
-            // throw new Exception($e->getMessage());
-        // }
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
 
     }
     public function storeAdditionalFields($request, $product)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+       try {
             if (!$request->has('fields'))
                 return $this;
 
@@ -94,7 +94,7 @@ class ProductService
                     throw new Exception('Invalid fields type');
 
                 if ($field['type'] == 'select') {
-                    throw_if(!is_numeric($field['value'], new Exception('Invalid value')));
+                    throw_if(!is_numeric($field['value']), new Exception('Invalid value'));
                     $data = [
                         'product_id' => $product->id,
                         'field_id' => (int)$field['field_id'],
@@ -102,7 +102,7 @@ class ProductService
                         'value' => null,
                     ];
                 } elseif (($field['type']) == 'checkbox') {
-                    throw_if(!is_bool($field['value'], new Exception('Invalid value')));
+                    throw_if(!is_bool($field['value']), new Exception('Invalid value'));
                     $data = [
                         'product_id' => $product->id,
                         'field_id' => (int)$field['field_id'],
@@ -129,18 +129,18 @@ class ProductService
                 }
             }
             ProductField::insert($data);
-            // DB::commit();
+            DB::commit();
             return $this;
-        // } catch (Exception $e) {
-        //     // DB::rollBack();
-        //     // throw new Exception($e->getMessage());
-        // }
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
 
     }
     public function storeAdditionalAttributes($request, $product)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+       try {
 
             if (!$request->has('attributes'))
                 return $this;
@@ -156,7 +156,7 @@ class ProductService
                     throw new Exception('Invalid fields type');
 
                 if ($attribute['type'] == 'select') {
-                    throw_if(!is_numeric($attribute['value'], new Exception('Invalid value')));
+                    throw_if(!is_numeric($attribute['value']), new Exception('Invalid value'));
                     $data = [
                         'product_id' => $product->id,
                         'field_id' => (int)$attribute['field_id'],
@@ -164,7 +164,7 @@ class ProductService
                         'value' => null,
                     ];
                 } elseif (($attribute['type']) == 'checkbox') {
-                    throw_if(!is_bool($attribute['value'], new Exception('Invalid value')));
+                    throw_if(!is_bool($attribute['value']), new Exception('Invalid value'));
                     $data = [
                         'product_id' => $product->id,
                         'field_id' => (int)$attribute['field_id'],
@@ -191,12 +191,12 @@ class ProductService
                 }
             }
              ProductField::insert($data);
-            // DB::commit();
+            DB::commit();
             return $this;
-        // } catch (Exception $e) {
-        //     DB::rollBack();
-        //     throw new Exception($e->getMessage());
-        // }
+        } catch (Exception $e) {
+          DB::rollBack();
+            throw new Exception($e->getMessage());
+      }
        
     }
     public function removeAdditionalImages($request)
@@ -213,8 +213,8 @@ class ProductService
     public function storeAdditionalImages($request, $product)
     {
         //$request=(object)$request;
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+       try {
             if (!$request->has('images') || is_null($request->images)) {
                 return $this;
             }
@@ -240,18 +240,18 @@ class ProductService
 
 
             ProductImage::insert($data);
-            // DB::commit();
+            DB::commit();
             return $this;
-        // } catch (Exception $e) {
-            // DB::rollBack();
-            // throw new Exception($e->getMessage());
-        // }
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
     }
     public function storeAdditionalLabels($request, $product, $childrenIds)
     {
         //$request=(object)$request;
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+       try {
             if (!$request->has('labels'))
                 return $this;
             if (is_null($request->has('labels')))
@@ -276,18 +276,18 @@ class ProductService
             }
 
             ProductLabel::insert($data);
-            // DB::commit();
+            DB::commit();
             return $this;
-        // } catch (Exception $e) {
-            // DB::rollBack();
-            // throw new Exception($e->getMessage());
-        // }
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
     }
     public function storeAdditionalTags($request, $product, $childrenIds)
     {
         //$request=(object)$request;
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+       try {
             if (!$request->has('tags'))
                 return $this;
 
@@ -313,12 +313,12 @@ class ProductService
             }
 
             ProductTag::insert($data);
-            // DB::commit();
+            DB::commit();
             return $this;
-        // } catch (Exception $e) {
-            // DB::rollBack();
-            // throw new Exception($e->getMessage());
-        // }
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
     }
     // TYPE BUNDLE
     public function storeAdditionalBundle($request, $product)
@@ -347,8 +347,8 @@ class ProductService
     public function storeAdditionalPrices($request, $product)
     {
         //$request=(object)$request;
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+       try {
             if (!$request->has('prices'))
                 return $this;
             if (is_null($request->prices))
@@ -365,12 +365,12 @@ class ProductService
                 $pricesArray[$price]["updated_at"] = Carbon::now()->toDateTimeString();
             }
             ProductPrice::insert($pricesArray);
-            // DB::commit();
+            DB::commit();
             return $this;
-        // } catch (Exception $e) {
-            // DB::rollBack();
-            // throw new Exception($e->getMessage());
-        // }
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
     }
     public static function deleteRelatedDataForProduct(Product $product)
     {
@@ -427,7 +427,7 @@ class ProductService
                         throw new Exception('Invalid fields type');
 
                     if ($field['type'] == 'select') {
-                        throw_if(!is_numeric($field['value'], new Exception('Invalid value')));
+                        throw_if(!is_numeric($field['value']), new Exception('Invalid value'));
                         $data = [
                             'product_id' => $child,
                             'field_id' => (int)$field['field_id'],
@@ -435,7 +435,7 @@ class ProductService
                             'value' => null,
                         ];
                     } elseif (($field['type']) == 'checkbox') {
-                        throw_if(!is_bool($field['value'], new Exception('Invalid value')));
+                        throw_if(!is_bool($field['value']), new Exception('Invalid value'));
                         $data = [
                             'product_id' => $child,
                             'field_id' => (int)$field['field_id'],
@@ -487,7 +487,7 @@ class ProductService
                         throw new Exception('Invalid fields type');
 
                     if ($attribute['type'] == 'select') {
-                        throw_if(!is_numeric($attribute['value'], new Exception('Invalid value')));
+                        throw_if(!is_numeric($attribute['value']), new Exception('Invalid value'));
                         $data = [
                             'product_id' => $child,
                             'field_id' => (int)$attribute['field_id'],
@@ -495,7 +495,7 @@ class ProductService
                             'value' => null,
                         ];
                     } elseif (($attribute['type']) == 'checkbox') {
-                        throw_if(!is_bool($attribute['value'], new Exception('Invalid value')));
+                        throw_if(!is_bool($attribute['value']), new Exception('Invalid value'));
                         $data = [
                             'product_id' => $child,
                             'field_id' => (int)$attribute['field_id'],
