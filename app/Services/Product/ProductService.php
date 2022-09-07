@@ -124,6 +124,7 @@ class ProductService
                 } else {
                     continue;
                 }
+            $allData = $data;
             }
             ProductField::insert($data);
 //            DB::commit();
@@ -482,12 +483,13 @@ class ProductService
     }
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
-//        DB::beginTransaction();
+//        DB::beginTransaction();`
         try {
             if (is_null($attributesArray) || count($attributesArray) == 0)
                 return $this;
 
-            $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
+            //TODO : handel this types of finctions
+            $attributesCheck = ProductField::query()->whereIn('product_id', $childrenIds)->whereHas('field',fn($query) => $query->where('is_attribute', 1))->delete();
             $allData = [];
             $data = [];
 
@@ -533,6 +535,7 @@ class ProductService
                     $allData[] = $data;
                 }
             }
+            dd($allData);
             ProductField::query()->insert($allData);
 //            DB::commit();
             return $this;
