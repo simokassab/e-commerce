@@ -197,7 +197,7 @@ class ProductController extends MainController
             DB::rollBack();
             return $this->errorResponse('An error occurred please try again later', [
                 'message' => __('messages.failed.create', ['name' => __(self::OBJECT_NAME)]),
-                'message' => $ex->getMessage()
+                'error_message' => $ex->getMessage()
             ]);
         }
     }
@@ -308,6 +308,7 @@ class ProductController extends MainController
             $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
 
             DB::commit();
+            dd('as');
             return $this->successResponse('Success!', [
                 'message' => __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
                 'product' =>  new ProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category']))
