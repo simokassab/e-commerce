@@ -533,7 +533,7 @@ class ProductService
                     $allData[] = $data;
                 }
             }
-           dd( ProductField::query()->insert($allData));
+           ( ProductField::query()->insert($allData));
 //            DB::commit();
             return $this;
         } catch (Exception $e) {
