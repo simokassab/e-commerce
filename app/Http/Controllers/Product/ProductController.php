@@ -170,6 +170,7 @@ class ProductController extends MainController
 
     public function store(StoreProductRequest $request, Product $product)
     {
+        DB::enableQueryLog();
         DB::beginTransaction();
         try {
             $product = $this->productService->createAndUpdateProduct($request);
@@ -184,7 +185,7 @@ class ProductController extends MainController
             $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
 
             DB::commit();
-            dd(DB::disableQueryLog());
+            dd(DB::getQueryLog());
 
             return $this->successResponse(
                 'Success!',
