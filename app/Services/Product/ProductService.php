@@ -487,7 +487,7 @@ class ProductService
             if (is_null($attributesArray) || count($attributesArray) == 0)
                 return $this;
 
-            $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
+//            $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
             $allData = [];
             $data = [];
 
