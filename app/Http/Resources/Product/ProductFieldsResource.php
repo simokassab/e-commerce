@@ -18,7 +18,6 @@ class ProductFieldsResource extends JsonResource
 
         $value = $this->value;
         if(!is_null($this->field_value_id)){
-            dd($this->field_value_id);
             $value = (int)$this->field_value_id;
         }
 
@@ -27,7 +26,7 @@ class ProductFieldsResource extends JsonResource
         return [
             'id' => (int)$this->id,
             'field_id' => (int)$this->field_id,
-            'value' => $value
+            'value' => is_numeric($value) ? (int)($value) : $value,
         ];
     }
 
