@@ -83,7 +83,7 @@ class ProductService
             if (is_null($request->fields))
                 return $this;
 
-            $fieldCheck = ProductField::where('product_id', $product->id)->delete();
+//            $fieldCheck = ProductField::where('product_id', $product->id)->delete();
 
             $data = [];
             foreach ($request->fields as $index => $field) {
@@ -190,7 +190,6 @@ class ProductService
                 }
                 $allData[] = $data;
             }
-            dd($allData);
 
             ProductField::query()->insert($allData);
 //            DB::commit();
@@ -199,6 +198,7 @@ class ProductService
 //            DB::rollBack();
             throw new Exception($e->getMessage());
         }catch (Error $e){
+//            DB::rollBack();
             throw new Exception($e->getMessage());
 
         }
