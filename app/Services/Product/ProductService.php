@@ -67,8 +67,8 @@ class ProductService
     }
     public function storeAdditionalFields($request, $product)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             if (!$request->has('fields'))
                 return $this;
 
@@ -119,22 +119,20 @@ class ProductService
             }
             $create = ProductField::query()->create($data);
 
-            // DB::commit();
+            DB::commit();
             return $this;
-        // } catch (Exception $error) {
-        //     dd($error);
-        //     DB::rollback();
-        // } catch (Error $error) {
-        //     dd($error);
-        //     DB::rollback();
-        // }
+        } catch (Exception $error) {
+            DB::rollback();
+        } catch (Error $error) {
+            DB::rollback();
+        }
 
         throw new Exception('Error while storing product fields');
     }
     public function storeAdditionalAttributes($request, $product)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
 
             if (!$request->has('attributes'))
                 return $this;
@@ -185,15 +183,13 @@ class ProductService
                 }
             }
             $create = ProductField::query()->create($data);
-            // DB::commit();
+            DB::commit();
             return $this;
-        // } catch (Exception $error) {
-        //     dd($error);
-        //     DB::rollback();
-        // } catch (Error $error) {
-        //     dd($error);
-        //     DB::rollback();
-        // }
+        } catch (Exception $error) {
+            DB::rollback();
+        } catch (Error $error) {
+            DB::rollback();
+        }
 
         throw new Exception('Error while storing product attributes');
     }
@@ -385,8 +381,8 @@ class ProductService
     // TYPE VARIABLE
     public function storeFieldsForVariations($fieldsArray, $childrenIds)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             if (is_null($fieldsArray)  || count($fieldsArray) == 0)
                 return $this;
 
@@ -436,80 +432,76 @@ class ProductService
             }
             $create = ProductField::query()->create($data);
 
-            // DB::commit();
+            DB::commit();
             return $this;
-        // } catch (Exception $error) {
-        //     dd($error);
-        //     DB::rollback();
-        // } catch (Error $error) {
-        //     dd($error);
-        //     DB::rollback();
-        // }
+        } catch (Exception $error) {
+            DB::rollback();
+        } catch (Error $error) {
+            DB::rollback();
+        }
 
         throw new Exception('Error while storing product fields');
     }
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
-        // DB::beginTransaction();
-        // try {
-            if (is_null($attributesArray) || count($attributesArray) == 0)
-                return $this;
+        DB::beginTransaction();
+        try {
+        if (is_null($attributesArray) || count($attributesArray) == 0)
+            return $this;
 
-            $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
-            $data = [];
+        $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
+        $data = [];
 
-            foreach ($childrenIds as $key => $child) {
-                foreach ($attributesArray as $index => $attribute) {
-                    if (!in_array($attribute['type'], config('defaults.fields_types')))
-                        throw new Exception('Invalid fields type');
+        foreach ($childrenIds as $key => $child) {
+            foreach ($attributesArray as $index => $attribute) {
+                if (!in_array($attribute['type'], config('defaults.fields_types')))
+                    throw new Exception('Invalid fields type');
 
-                    if ($attribute['type'] == 'select') {
-                        throw_if(!is_numeric($attribute['value'], new Exception('Invalid value')));
-                        $data = [
-                            'product_id' => $child,
-                            'field_id' => (int)$attribute['field_id'],
-                            'field_value_id' =>  (int)$attribute['value'],
-                            'value' => null,
-                        ];
-                    } elseif (($attribute['type']) == 'checkbox') {
-                        throw_if(!is_bool($attribute['value'], new Exception('Invalid value')));
-                        $data = [
-                            'product_id' => $child,
-                            'field_id' => (int)$attribute['field_id'],
-                            'field_value_id' =>  null,
-                            'value' => (bool)$attribute['value'],
-                        ];
-                    } elseif (($attribute['type']) == 'date') {
-                        throw_if(Carbon::createFromFormat('Y-m-d H:i:s', $attribute['value']) !== false, new Exception('Invalid value'));
-                        $data = [
-                            'product_id' => $child,
-                            'field_id' => (int)$attribute['field_id'],
-                            'field_value_id' =>  null,
-                            'value' => Carbon::createFromFormat('Y-m-d H:i:s', $attribute['value']),
-                        ];
-                    } elseif (($attribute['type']) == 'text' || gettype($attribute['type']) == 'textarea') {
-                        $data = [
-                            'product_id' => $child,
-                            'field_id' => (int)$attribute['field_id'],
-                            'field_value_id' =>  null,
-                            'value' => ($attribute['value']),
-                        ];
-                    } else {
-                        continue;
-                    }
+                if ($attribute['type'] == 'select') {
+                    throw_if(!is_numeric($attribute['value'], new Exception('Invalid value')));
+                    $data = [
+                        'product_id' => $child,
+                        'field_id' => (int)$attribute['field_id'],
+                        'field_value_id' =>  (int)$attribute['value'],
+                        'value' => null,
+                    ];
+                } elseif (($attribute['type']) == 'checkbox') {
+                    throw_if(!is_bool($attribute['value'], new Exception('Invalid value')));
+                    $data = [
+                        'product_id' => $child,
+                        'field_id' => (int)$attribute['field_id'],
+                        'field_value_id' =>  null,
+                        'value' => (bool)$attribute['value'],
+                    ];
+                } elseif (($attribute['type']) == 'date') {
+                    throw_if(Carbon::createFromFormat('Y-m-d H:i:s', $attribute['value']) !== false, new Exception('Invalid value'));
+                    $data = [
+                        'product_id' => $child,
+                        'field_id' => (int)$attribute['field_id'],
+                        'field_value_id' =>  null,
+                        'value' => Carbon::createFromFormat('Y-m-d H:i:s', $attribute['value']),
+                    ];
+                } elseif (($attribute['type']) == 'text' || gettype($attribute['type']) == 'textarea') {
+                    $data = [
+                        'product_id' => $child,
+                        'field_id' => (int)$attribute['field_id'],
+                        'field_value_id' =>  null,
+                        'value' => ($attribute['value']),
+                    ];
+                } else {
+                    continue;
                 }
             }
-            $create = ProductField::query()->create($data);
+        }
+        $create = ProductField::query()->create($data);
 
-            // DB::commit();
-            return $this;
-        // } catch (Exception $error) {
-        //     dd($error);
-        //     DB::rollback();
-        // } catch (Error $error) {
-        //     dd($error);
-        //     DB::rollback();
-        // }
+        DB::commit();
+        return $this;
+        } catch (Exception $error) {
+            DB::rollback();
+        } catch (Error $error) {
+            DB::rollback();
+        }
 
         throw new Exception('Error while storing product fields');
     }
@@ -579,147 +571,145 @@ class ProductService
     }
     public function storeVariations($request, $product)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
+            throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
-        throw_if(!$request->product_variations, Exception::class, 'No variations found');
-
-        $productVariationParentsArray = [];
-        $imagesDeletedArray = [];
-        $imagesArray = [];
-        $fieldsArray = [];
-        $attributesArray = [];
-        foreach ($request->product_variations as $variation) {
-            $imagePath = array_key_exists('image', $variation) ? $variation['image'] : "";
-            if (!is_null($variation['image'])) {
-                if ($variation['image'] && !is_string($variation['image'])) {
-                    $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
-                } else {
-                    $imagePath = "";
+            $productVariationParentsArray = [];
+            $imagesDeletedArray = [];
+            $imagesArray = [];
+            $fieldsArray = [];
+            $attributesArray = [];
+            foreach ($request->product_variations as $variation) {
+                $imagePath = array_key_exists('image', $variation) ? $variation['image'] : "";
+                if (!is_null($variation['image'])) {
+                    if ($variation['image'] && !is_string($variation['image'])) {
+                        $imagePath = uploadImage($variation['image'],  config('images_paths.product.images'));
+                    } else {
+                        $imagePath = "";
+                    }
                 }
+                $productVariationsArray = [
+                    'name' => json_encode($request->name),
+                    'code' => $variation['code'],
+                    'type' => 'variable_child',
+                    'sku' => array_key_exists('sku', $variation) ? $variation['sku'] : null,
+                    'quantity' => $variation['quantity'],
+                    'reserved_quantity' => $variation['reserved_quantity'],
+                    'minimum_quantity' => $variation['minimum_quantity'],
+                    'height' => array_key_exists('height', $variation) ? $variation['height'] : null,
+                    'width' => array_key_exists('width', $variation) ? $variation['width'] : null,
+                    'length' => array_key_exists('p_length', $variation) ? $variation['p_length'] : null,
+                    'weight' => array_key_exists('weight', $variation) ? $variation['weight'] : null,
+                    'barcode' => array_key_exists('barcode', $variation) ? $variation['barcode'] : null,
+                    'category_id' => $request->category_id,
+                    'unit_id' => $request->unit_id ?? null,
+                    'tax_id' => $request->tax_id ?? null,
+                    'brand_id' => $request->brand_id ?? null,
+                    'summary' => json_encode($request->summary) ?? null,
+                    'specification' => json_encode($request->specification) ?? null,
+                    'meta_title' => json_encode($request->meta_title) ?? null,
+                    'meta_keyword' => json_encode($request->meta_keyword) ?? null,
+                    'meta_description' => json_encode($request->meta_description) ?? null,
+                    'description' => json_encode($request->description) ?? null,
+                    'website_status' => $request->website_status,
+                    'parent_product_id' => $product->id,
+                    'products_statuses_id' =>  array_key_exists('products_statuses_id', $variation) ? $variation['products_statuses_id'] : null,
+                    'image' => $imagePath,
+                    'is_show_related_product' => $variation['is_show_related_product'] ?? null,
+                    'bundle_reserved_quantity' => null,
+                    'pre_order' => array_key_exists('pre_order', $variation) ? $variation['pre_order'] : null,
+
+
+                ];
+
+                $imagesDeletedArray = array_key_exists('images_deleted', $variation) ?  $variation['images_deleted'] : [];
+                $imagesArray = array_key_exists('images', $variation) ? $variation['images'] : [];
+                $imagesData = array_key_exists('images_data', $variation) ? $variation['images_data'] : [];
+                $fieldsArray = array_key_exists('fields', $variation) ? $variation['fields'] : [];
+                $attributesArray = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
+                $productVariationParentsArray[] = $productVariationsArray;
             }
-            $productVariationsArray = [
-                'name' => json_encode($request->name),
-                'code' => $variation['code'],
-                'type' => 'variable_child',
-                'sku' => array_key_exists('sku', $variation) ? $variation['sku'] : null,
-                'quantity' => $variation['quantity'],
-                'reserved_quantity' => $variation['reserved_quantity'],
-                'minimum_quantity' => $variation['minimum_quantity'],
-                'height' => array_key_exists('height', $variation) ? $variation['height'] : null,
-                'width' => array_key_exists('width', $variation) ? $variation['width'] : null,
-                'length' => array_key_exists('p_length', $variation) ? $variation['p_length'] : null,
-                'weight' => array_key_exists('weight', $variation) ? $variation['weight'] : null,
-                'barcode' => array_key_exists('barcode', $variation) ? $variation['barcode'] : null,
-                'category_id' => $request->category_id,
-                'unit_id' => $request->unit_id ?? null,
-                'tax_id' => $request->tax_id ?? null,
-                'brand_id' => $request->brand_id ?? null,
-                'summary' => json_encode($request->summary) ?? null,
-                'specification' => json_encode($request->specification) ?? null,
-                'meta_title' => json_encode($request->meta_title) ?? null,
-                'meta_keyword' => json_encode($request->meta_keyword) ?? null,
-                'meta_description' => json_encode($request->meta_description) ?? null,
-                'description' => json_encode($request->description) ?? null,
-                'website_status' => $request->website_status,
-                'parent_product_id' => $product->id,
-                'products_statuses_id' =>  array_key_exists('products_statuses_id', $variation) ? $variation['products_statuses_id'] : null,
-                'image' => $imagePath,
-                'is_show_related_product' => $variation['is_show_related_product'] ?? null,
-                'bundle_reserved_quantity' => null,
-                'pre_order' => array_key_exists('pre_order', $variation) ? $variation['pre_order'] : null,
+            $model = new Product();
+            $productVariation = Product::upsert($productVariationParentsArray, 'id', $model->getFillable());
+            $childrenIds = [];
+            if ($productVariation) {
 
+                $childrenData = Product::where('parent_product_id', $product->id)->get();
+                foreach ($childrenData as $key => $child) {
+                    $childrenIds[$key] = $child->id;
+                }
 
-            ];
-
-            $imagesDeletedArray = array_key_exists('images_deleted', $variation) ?  $variation['images_deleted'] : [];
-            $imagesArray = array_key_exists('images', $variation) ? $variation['images'] : [];
-            $imagesData = array_key_exists('images_data', $variation) ? $variation['images_data'] : [];
-            $fieldsArray =array_key_exists('fields', $variation) ? $variation['fields'] : [];
-            $attributesArray = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
-            $productVariationParentsArray[] = $productVariationsArray;
-        }
-        $model = new Product();
-        $productVariation = Product::upsert($productVariationParentsArray, 'id', $model->getFillable());
-        $childrenIds = [];
-        if ($productVariation) {
-
-            $childrenData = Product::where('parent_product_id', $product->id)->get();
-            foreach ($childrenData as $key => $child) {
-                $childrenIds[$key] = $child->id;
+                $this->removeImagesForVariations($imagesDeletedArray, $childrenIds);
+                $this->storeImagesForVariations($imagesArray, $imagesData, $childrenIds);
+                $this->storePricesForVariations($request, $childrenIds);
+                $this->storeFieldsForVariations($fieldsArray, $childrenIds);
+                $this->storeAttributesForVariations($attributesArray, $childrenIds);
             }
 
-            $this->removeImagesForVariations($imagesDeletedArray, $childrenIds);
-            $this->storeImagesForVariations($imagesArray, $imagesData, $childrenIds);
-            $this->storePricesForVariations($request, $childrenIds);
-            $this->storeFieldsForVariations($fieldsArray, $childrenIds);
-            $this->storeAttributesForVariations($attributesArray, $childrenIds);
+            DB::commit();
+            return $childrenIds;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
         }
-
-        DB::commit();
-        return $childrenIds;
-
-        // } catch (Exception $e) {
-        //     throw new Exception($e->getMessage());
-        // }
     }
     // END OF TYPE VARIABLE
     public function createAndUpdateProduct($request, $product)
     {
         DB::beginTransaction();
         try {
-        //$request=(object)$request;
-        $product = $product ?  $product : new Product();
-        $product->name = ($request->name);
-        $product->slug = $request->slug;
-        $product->code = $request->code;
-        $product->sku = $request->sku ?? null;
-        $product->type = $request->type;
-        $product->quantity = 0;
-        if (!$product->type == 'bundle') {
-            $diffrenceQuantity = $request->quantity - ($product->reserved_quantity + $product->bundle_reserved_quantity);
-            if ($diffrenceQuantity > ($request->reserved_quantity - $product->reserved_quantity)) {
+            //$request=(object)$request;
+            $product = $product ?  $product : new Product();
+            $product->name = ($request->name);
+            $product->slug = $request->slug;
+            $product->code = $request->code;
+            $product->sku = $request->sku ?? null;
+            $product->type = $request->type;
+            $product->quantity = 0;
+            if (!$product->type == 'bundle') {
+                $diffrenceQuantity = $request->quantity - ($product->reserved_quantity + $product->bundle_reserved_quantity);
+                if ($diffrenceQuantity > ($request->reserved_quantity - $product->reserved_quantity)) {
+                    $product->reserved_quantity = $request->reserved_quantity;
+                }
+            } else {
                 $product->reserved_quantity = $request->reserved_quantity;
             }
-        } else {
-            $product->reserved_quantity = $request->reserved_quantity;
-        }
-        $product->minimum_quantity = $request->minimum_quantity;
-        $product->summary = ($request->summary) ?? null;
-        $product->specification = ($request->specification) ?? null;
+            $product->minimum_quantity = $request->minimum_quantity;
+            $product->summary = ($request->summary) ?? null;
+            $product->specification = ($request->specification) ?? null;
 
-        $product->meta_title = $request->meta_title ?? null;
-        $product->meta_keyword = $request->meta_keyword ?? null;
-        $product->meta_description = $request->meta_description ?? null;
-        $product->description = $request->description ?? null;
-        $product->website_status = $request->website_status;
-        $product->barcode = $request->barcode ?? null;
-        $product->height = $request->height ?? null;
-        $product->width = $request->width ?? null;
-        $product->is_disabled = 0;
-        $product->length = $request->p_length ?? null;
-        $product->weight = $request->weight ?? null;
-        $product->is_default_child = $request->is_default_child ?? 0;
-        $product->parent_product_id = $request->parent_product_id ?? null;
-        $product->category_id = $request->category_id;
-        $product->unit_id = $request->unit_id ?? null;
-        $product->brand_id = $request->brand_id ?? null;
-        $product->tax_id = $request->tax_id ?? null;
-        $product->products_statuses_id = $request->products_statuses_id;
-        $product->is_show_related_product = $request->is_show_related_product ?? null;
-        $product->pre_order = $request->pre_order ?? null;
-        $product->bundle_reserved_quantity = null;
+            $product->meta_title = $request->meta_title ?? null;
+            $product->meta_keyword = $request->meta_keyword ?? null;
+            $product->meta_description = $request->meta_description ?? null;
+            $product->description = $request->description ?? null;
+            $product->website_status = $request->website_status;
+            $product->barcode = $request->barcode ?? null;
+            $product->height = $request->height ?? null;
+            $product->width = $request->width ?? null;
+            $product->is_disabled = 0;
+            $product->length = $request->p_length ?? null;
+            $product->weight = $request->weight ?? null;
+            $product->is_default_child = $request->is_default_child ?? 0;
+            $product->parent_product_id = $request->parent_product_id ?? null;
+            $product->category_id = $request->category_id;
+            $product->unit_id = $request->unit_id ?? null;
+            $product->brand_id = $request->brand_id ?? null;
+            $product->tax_id = $request->tax_id ?? null;
+            $product->products_statuses_id = $request->products_statuses_id;
+            $product->is_show_related_product = $request->is_show_related_product ?? null;
+            $product->pre_order = $request->pre_order ?? null;
+            $product->bundle_reserved_quantity = null;
 
-        if ($request->file('image') && !is_string($request->file('image')))
-            $product->image = uploadImage($request->image, config('images_paths.product.images'));
+            if ($request->file('image') && !is_string($request->file('image')))
+                $product->image = uploadImage($request->image, config('images_paths.product.images'));
 
-        $product->save();
+            $product->save();
 
-        DB::commit();
-        return $product;
+            DB::commit();
+            return $product;
         } catch (Exception $e) {
-        DB::rollBack();
-        throw new Exception($e->getMessage());
+            DB::rollBack();
+            throw new Exception($e->getMessage());
         }
     }
 }
