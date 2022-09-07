@@ -12,6 +12,7 @@ use App\Models\Product\ProductRelated;
 use App\Models\Product\ProductTag;
 use App\Services\Category\CategoryService;
 use Carbon\Carbon;
+use DateTime;
 use Error;
 use Exception;
 use Illuminate\Support\Arr;
@@ -82,7 +83,7 @@ class ProductService
             if (is_null($request->fields))
                 return $this;
 
-//            $fieldCheck = ProductField::where('product_id', $product->id)->delete();
+            $fieldCheck = ProductField::where('product_id', $product->id)->delete();
 
             $data = [];
             foreach ($request->fields as $index => $field) {
@@ -137,11 +138,11 @@ class ProductService
 //        DB::beginTransaction();
         try {
 
-            if (is_null($request->attributes) || !$request->has('product_variations')){
+            if (is_null($request->attributes)){
                 return $this;
             }
 
-//            $attributesCheck = ProductField::where('product_id', $product->id)->delete();
+            $attributesCheck = ProductField::where('product_id', $product->id)->delete();
 
             $data = [];
             $allData = [];
@@ -189,7 +190,6 @@ class ProductService
                 }
                 $allData[] = $data;
             }
-
             ProductField::query()->insert($allData);
 //            DB::commit();
             return $this;
@@ -197,7 +197,7 @@ class ProductService
 //            DB::rollBack();
             throw new Exception($e->getMessage());
         }catch (Error $e){
-//            DB::rollBack();
+            //            DB::rollBack();
             throw new Exception($e->getMessage());
 
         }
@@ -353,13 +353,14 @@ class ProductService
         //$request=(object)$request;
 //        DB::beginTransaction();
         try {
-            if (!$request->has('prices'))
-                return $this;
-            if (is_null($request->prices))
+            if (!$request->has('prices') || is_null($request->prices))
                 return $this;
 
-            $priceCheck = ProductPrice::where('product_id', $product->id)->delete();
+
+            ProductPrice::where('product_id', $product->id)->delete();
+
             $pricesArray =  [];
+
             foreach ($request->prices as $price => $value) {
                 $pricesArray[$price]["product_id"] = $product->id;
                 $pricesArray[$price]["price_id"] = $value['price_id'];
@@ -422,7 +423,7 @@ class ProductService
             if (is_null($fieldsArray)  || count($fieldsArray) == 0)
                 return $this;
 
-//            $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
+            $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
 
             $allData = [];
             $data = [];
@@ -486,7 +487,7 @@ class ProductService
             if (is_null($attributesArray) || count($attributesArray) == 0)
                 return $this;
 
-//            $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
+            $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->delete();
             $allData = [];
             $data = [];
 
@@ -532,7 +533,7 @@ class ProductService
                     $allData[] = $data;
                 }
             }
-           ( ProductField::query()->insert($allData));
+            ProductField::query()->insert($allData);
 //            DB::commit();
             return $this;
         } catch (Exception $e) {
