@@ -619,6 +619,10 @@ class ProductService
             throw new Exception($e->getMessage());
         }
     }
+
+    /**
+     * @throws \Throwable
+     */
     public function storeVariations($request, $product)
     {
 //        DB::beginTransaction();
@@ -668,7 +672,7 @@ class ProductService
                     'image' => $imagePath,
                     'is_show_related_product' => $variation['is_show_related_product'] ?? null,
                     'bundle_reserved_quantity' => null,
-                    'pre_order' => array_key_exists('pre_order', $variation) ? $variation['pre_order'] : null,
+                    'pre_order' => array_key_exists('pre_order', $variation) ? $variation['pre_order'] : false,
 
 
                 ];
@@ -681,26 +685,26 @@ class ProductService
                 $productVariationParentsArray[] = $productVariationsArray;
             }
             $model = new Product();
-            $productVariation = Product::upsert($productVariationParentsArray, 'id', $model->getFillable());
-            $childrenIds = [];
-            if ($productVariation) {
+            Product::query()->upsert($productVariationParentsArray, 'id', $model->getFillable());
 
-                $childrenData = Product::where('parent_product_id', $product->id)->get();
-                foreach ($childrenData as $key => $child) {
-                    $childrenIds[$key] = $child->id;
-                }
-                dd($childrenIds);
-                $this->removeImagesForVariations($imagesDeletedArray, $childrenIds);
-                $this->storeImagesForVariations($imagesArray, $imagesData, $childrenIds);
-                $this->storePricesForVariations($request, $childrenIds);
-                $this->storeFieldsForVariations($fieldsArray, $childrenIds);
-                $this->storeAttributesForVariations($attributesArray, $childrenIds);
-            }
+            $childrenIds= Product::query()->where('parent_product_id', $product->id)->get()->pluck('id');
+            dump($productVariationParentsArray);
+            dump(Product::query()->where('parent_product_id', $product->id)->get()->toArray());
+            dump($childrenIds);
+            die();
+            $this->removeImagesForVariations($imagesDeletedArray, $childrenIds);
+            $this->storeImagesForVariations($imagesArray, $imagesData, $childrenIds);
+            $this->storePricesForVariations($request, $childrenIds);
+            $this->storeFieldsForVariations($fieldsArray, $childrenIds);
+            $this->storeAttributesForVariations($attributesArray, $childrenIds);
 
 //            DB::commit();
             return $childrenIds;
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
+        }catch (Error $e){
+            throw new Exception($e->getMessage());
+
         }
     }
     // END OF TYPE VARIABLE
