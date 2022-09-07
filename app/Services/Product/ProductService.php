@@ -580,8 +580,8 @@ class ProductService
     }
     public function storeVariations($request, $product)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
 
         throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
@@ -636,7 +636,7 @@ class ProductService
             $imagesDeletedArray = array_key_exists('images_deleted', $variation) ?  $variation['images_deleted'] : [];
             $imagesArray = array_key_exists('images', $variation) ? $variation['images'] : [];
             $imagesData = array_key_exists('images_data', $variation) ? $variation['images_data'] : [];
-            // $fieldsArray =$variation['fields'];
+            $fieldsArray =array_key_exists('fields', $variation) ? $variation['fields'] : [];
             $attributesArray = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
             $productVariationParentsArray[] = $productVariationsArray;
         }
@@ -653,16 +653,16 @@ class ProductService
             $this->removeImagesForVariations($imagesDeletedArray, $childrenIds);
             $this->storeImagesForVariations($imagesArray, $imagesData, $childrenIds);
             $this->storePricesForVariations($request, $childrenIds);
-            // $this->storeFieldsForVariations($fields, $childrenIds);
+            $this->storeFieldsForVariations($fieldsArray, $childrenIds);
             $this->storeAttributesForVariations($attributesArray, $childrenIds);
         }
 
         return $childrenIds;
 
-        //     DB::commit();
-        // } catch (Exception $e) {
-        //     throw new Exception($e->getMessage());
-        // }
+            DB::commit();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
     // END OF TYPE VARIABLE
     public function createAndUpdateProduct($request, $product = null)
