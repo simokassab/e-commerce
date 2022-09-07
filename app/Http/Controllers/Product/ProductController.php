@@ -184,7 +184,7 @@ class ProductController extends MainController
             $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
 
             DB::commit();
-            DB::disableQueryLog();
+            dd(DB::disableQueryLog());
 
             return $this->successResponse(
                 'Success!',
