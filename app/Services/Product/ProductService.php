@@ -67,8 +67,8 @@ class ProductService
     }
     public function storeAdditionalFields($request, $product)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             if (!$request->has('fields'))
                 return $this;
 
@@ -118,21 +118,21 @@ class ProductService
                 }
             }
             $create = ProductField::query()->create($data);
-
-            DB::commit();
             return $this;
-        } catch (Exception $error) {
-            DB::rollback();
-        } catch (Error $error) {
-            DB::rollback();
-        }
 
-        throw new Exception('Error while storing product fields');
+            // DB::commit();
+        // } catch (Exception $error) {
+            // DB::rollback();
+        // } catch (Error $error) {
+            // DB::rollback();
+        // }
+
+        // throw new Exception('Error while storing product fields');
     }
     public function storeAdditionalAttributes($request, $product)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
 
             if (!$request->has('attributes'))
                 return $this;
@@ -183,15 +183,15 @@ class ProductService
                 }
             }
             $create = ProductField::query()->create($data);
-            DB::commit();
+            // DB::commit();
             return $this;
-        } catch (Exception $error) {
-            DB::rollback();
-        } catch (Error $error) {
-            DB::rollback();
-        }
+        // } catch (Exception $error) {
+            // DB::rollback();
+        // } catch (Error $error) {
+            // DB::rollback();
+        // }
 
-        throw new Exception('Error while storing product attributes');
+        // throw new Exception('Error while storing product attributes');
     }
     public function removeAdditionalImages($request)
     {
@@ -381,8 +381,8 @@ class ProductService
     // TYPE VARIABLE
     public function storeFieldsForVariations($fieldsArray, $childrenIds)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             if (is_null($fieldsArray)  || count($fieldsArray) == 0)
                 return $this;
 
@@ -432,20 +432,20 @@ class ProductService
             }
             $create = ProductField::query()->create($data);
 
-            DB::commit();
+            // DB::commit();
             return $this;
-        } catch (Exception $error) {
-            DB::rollback();
-        } catch (Error $error) {
-            DB::rollback();
-        }
+        // } catch (Exception $error) {
+            // DB::rollback();
+        // } catch (Error $error) {
+            // DB::rollback();
+        // }
 
-        throw new Exception('Error while storing product fields');
+        // throw new Exception('Error while storing product fields');
     }
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
         if (is_null($attributesArray) || count($attributesArray) == 0)
             return $this;
 
@@ -495,15 +495,15 @@ class ProductService
         }
         $create = ProductField::query()->create($data);
 
-        DB::commit();
+        // DB::commit();
         return $this;
-        } catch (Exception $error) {
-            DB::rollback();
-        } catch (Error $error) {
-            DB::rollback();
-        }
+        // } catch (Exception $error) {
+            // DB::rollback();
+        // } catch (Error $error) {
+            // DB::rollback();
+        // }
 
-        throw new Exception('Error while storing product fields');
+        // throw new Exception('Error while storing product fields');
     }
     public function removeImagesForVariations($imagesDeletedArray, $childrenIds)
     {
@@ -571,8 +571,8 @@ class ProductService
     }
     public function storeVariations($request, $product)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             throw_if(!$request->product_variations, Exception::class, 'No variations found');
 
             $productVariationParentsArray = [];
@@ -647,11 +647,11 @@ class ProductService
                 $this->storeAttributesForVariations($attributesArray, $childrenIds);
             }
 
-            DB::commit();
+            // DB::commit();
             return $childrenIds;
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
-        }
+        // } catch (Exception $e) {
+            // throw new Exception($e->getMessage());
+        // }
     }
     // END OF TYPE VARIABLE
     public function createAndUpdateProduct($request, $product)
