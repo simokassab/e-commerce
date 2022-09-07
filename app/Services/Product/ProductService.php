@@ -665,7 +665,7 @@ class ProductService
         }
     }
     // END OF TYPE VARIABLE
-    public function createAndUpdateProduct($request, $product = null)
+    public function createAndUpdateProduct($request, $product)
     {
         DB::beginTransaction();
         try {
