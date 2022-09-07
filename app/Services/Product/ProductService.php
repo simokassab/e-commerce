@@ -633,10 +633,7 @@ class ProductService
                         $imagePath = "";
                     }
                 }
-<<<<<<< HEAD
                 // dd($variation['is_default_child']);
-=======
->>>>>>> c99744fcf52ae56ce5fdf0d57ba557bd0ff0d1b1
                 $productVariationsArray = [
                     'name' => json_encode($request->name),
                     'code' => $variation['code'],
