@@ -634,6 +634,9 @@ class ProductService
             $imagesArray = [];
             $fieldsArray = [];
             $attributesArray = [];
+
+            $defaultChild = null;
+
             foreach ($request->product_variations as $variation) {
                 $imagePath = array_key_exists('image', $variation) ? $variation['image'] : "";
                 if (!is_null($variation['image'])) {
@@ -643,6 +646,11 @@ class ProductService
                         $imagePath = "";
                     }
                 }
+
+                if($variation->is_default_child){
+                    $defaultChild = $variation;
+                }
+
                 $productVariationsArray = [
                     'name' => json_encode($request->name),
                     'code' => $variation['code'],
@@ -688,10 +696,16 @@ class ProductService
             Product::query()->upsert($productVariationParentsArray, 'id', $model->getFillable());
 
             $childrenIds= Product::query()->where('parent_product_id', $product->id)->get()->pluck('id');
-            dump($productVariationParentsArray);
-            dump(Product::query()->where('parent_product_id', $product->id)->get()->toArray());
-            dump($childrenIds);
-            die();
+
+
+            // set default child as default child
+            if(!is_null($defaultChild)){
+                dd(Product::query()->where('code',$defaultChild['code'])->update([
+                    'is_default_child' => 1
+                ]));
+            }
+
+
             $this->removeImagesForVariations($imagesDeletedArray, $childrenIds);
             $this->storeImagesForVariations($imagesArray, $imagesData, $childrenIds);
             $this->storePricesForVariations($request, $childrenIds);
