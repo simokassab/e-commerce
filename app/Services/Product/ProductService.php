@@ -75,8 +75,8 @@ class ProductService
     }
     public function storeAdditionalFields($request, $product)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             if (!$request->has('fields'))
                 return $this;
 
@@ -125,22 +125,14 @@ class ProductService
                     continue;
                 }
             }
-            $create = ProductField::query()->create($data);
-
+            ProductField::insert($data);
             DB::commit();
             return $this;
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw new Exception($e->getMessage());
-        }
-
-        // } catch (Exception $error) {
-        // DB::rollback();
-        // } catch (Error $error) {
-        // DB::rollback();
+        // } catch (Exception $e) {
+        //     DB::rollBack();
+        //     throw new Exception($e->getMessage());
         // }
 
-        // throw new Exception('Error while storing product fields');
     }
     public function storeAdditionalAttributes($request, $product)
     {
@@ -202,13 +194,7 @@ class ProductService
             DB::rollBack();
             throw new Exception($e->getMessage());
         }
-        // } catch (Exception $error) {
-        // DB::rollback();
-        // } catch (Error $error) {
-        // DB::rollback();
-        // }
-
-        // throw new Exception('Error while storing product attributes');
+       
     }
     public function removeAdditionalImages($request)
     {
