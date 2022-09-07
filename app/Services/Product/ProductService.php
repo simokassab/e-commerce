@@ -623,7 +623,7 @@ class ProductService
     {
 //        DB::beginTransaction();
         try {
-            throw_if(!$request->product_variations, Exception::class, 'No variations found');
+            throw_if(count($request->product_variations) == 0, Exception::class, 'No variations found');
 
             $productVariationParentsArray = [];
             $imagesDeletedArray = [];
@@ -682,6 +682,7 @@ class ProductService
             }
             $model = new Product();
             $productVariation = Product::upsert($productVariationParentsArray, 'id', $model->getFillable());
+            dd($productVariation);
             $childrenIds = [];
             if ($productVariation) {
 
