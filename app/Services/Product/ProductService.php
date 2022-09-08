@@ -256,12 +256,11 @@ class ProductService
         //$request=(object)$request;
 //        DB::beginTransaction();
         try {
-            if (!$request->has('labels'))
-                return $this;
-            if (is_null($request->has('labels')))
+            $labelCheck = ProductLabel::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
+
+            if (!$request->has('labels') || is_null($request->has('labels')))
                 return $this;
 
-            $labelCheck = ProductLabel::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
 
             $childrenIdsArray = $childrenIds;
             $childrenIdsArray[] = $product->id;
@@ -292,13 +291,12 @@ class ProductService
         //$request=(object)$request;
 //        DB::beginTransaction();
         try {
-            if (!$request->has('tags'))
-                return $this;
-
-            if (is_null($request->tags))
-                return $this;
-
             $tagCheck = ProductTag::where('product_id', $product->id)->orWhereIn('product_id', $childrenIds)->delete();
+
+            if (!$request->has('tags') || is_null($request->tags))
+                return $this;
+
+
             $childrenIdsArray = $childrenIds;
             $childrenIdsArray[] = $product->id;
 
@@ -356,7 +354,6 @@ class ProductService
             if (!$request->has('prices') || is_null($request->prices))
                 return $this;
 
-            dd('hello');
 
             ProductPrice::where('product_id', $product->id)->delete();
 
