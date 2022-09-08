@@ -520,13 +520,15 @@ class ProductService
                 }
             }
 
-            dd(collect($allData));
-            $unique = collect($allData)->unique(function ($item)
-            {
-                return $item[''] . $item[''] ;
-            });
+//            dd(collect($allData));
+//            $unique = collect($allData)->unique(function ($item)
+//            {
+//                return $item['product_id'] . $item['field_id'] . $item['field_value_id'] ;
+//            });
+//
+//            dd($unique);
 
-            dd($unique);
+            dd($allData);
 
             ProductField::query()->insert($allData);
             //            DB::commit();
