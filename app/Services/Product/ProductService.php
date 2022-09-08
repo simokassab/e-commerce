@@ -513,7 +513,7 @@ class ProductService
                             'field_value_id' =>  (int)$attribute['value'],
                             'value' => null,
                         ];
-                        dd($data);
+                        dd('hello99');
                     }else {
                         continue;
                     }
