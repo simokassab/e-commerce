@@ -18,6 +18,7 @@ class ProductAttributesResource extends JsonResource
             'id' => (int)$this->id,
             'field_id' => (int)$this->field_id,
             'field_value_id' => (int)$this->field_value_id,
+            'is_used_for_variations' => (bool)$this->is_used_for_variations
         ];
     }
 }
