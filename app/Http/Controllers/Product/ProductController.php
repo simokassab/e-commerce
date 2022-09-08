@@ -314,9 +314,9 @@ class ProductController extends MainController
             ]);
         } catch (\Exception $ex) {
             DB::rollBack();
+            dd($ex);
             return $this->errorResponse([
                 'message' => __('messages.failed.create', ['name' => __(self::OBJECT_NAME)]),
-                'error_message' => $ex
             ]);
         }
     }
