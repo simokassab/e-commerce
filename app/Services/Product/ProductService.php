@@ -138,7 +138,7 @@ class ProductService
     {
 //        DB::beginTransaction();
         try {
-            if(!array_key_exists('attributes',$request->toArray)){
+            if(!array_key_exists('attributes',$request->toArray())){
                 return $this;
             }
 
