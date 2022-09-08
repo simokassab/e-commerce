@@ -138,7 +138,7 @@ class ProductService
     {
 //        DB::beginTransaction();
         try {
-
+            dd($request->attributes);
             if (is_null($request->attributes)){
                 return $this;
             }
