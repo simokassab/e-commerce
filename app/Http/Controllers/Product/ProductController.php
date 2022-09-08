@@ -292,7 +292,7 @@ class ProductController extends MainController
         DB::beginTransaction();
         try {
             // $oldReservedQuantity=Product::find($request->id)->pluck('reserved_quantity')->last();
-
+            dd('s');
             $product = $this->productService->createAndUpdateProduct($request, $product);
             $childrenIds = [];
 
