@@ -328,7 +328,7 @@ class ProductService
     {
         //$request=(object)$request;
         $bundleCheck = ProductRelated::where('parent_product_id', $product->id)->delete();
-
+        $pricesArray = [];
         if ($request->type == 'bundle') {
             foreach ($request->related_products as $related_product => $value) {
 
@@ -344,7 +344,7 @@ class ProductService
                 $data[$related_product] = [
                     'parent_product_id' => $product->id,
                     'child_product_id' => $value['child_product_id'],
-                    'child_name_status' => array_key_exists('name_status', $value) ? $value['name_status'] : 'default',
+                    'child_name_status' => array_key_exists('child_name_status', $value) ? $value['child_name_status'] : 'default',
                     'name' =>  $name,
                     'child_quantity' => $value['child_quantity'],
                     'created_at' => Carbon::now()->toDateTimeString(),
@@ -355,6 +355,7 @@ class ProductService
         }
         return $this;
     }
+
     // END OF TYPE BUNDLE
     public function storeAdditionalPrices($request, $product)
     {
@@ -699,7 +700,7 @@ class ProductService
                     'is_show_related_product' => $variation['is_show_related_product'] ?? null,
                     'bundle_reserved_quantity' => null,
                     'pre_order' => array_key_exists('pre_order', $variation) ? $variation['pre_order'] : false,
-
+                    'bundle_price_status' => array_key_exists('bundle_price_status', $variation) ? $variation['bundle_price_status'] : null
 
                 ];
 
@@ -784,6 +785,7 @@ class ProductService
             $product->is_show_related_product = $request->is_show_related_product ?? null;
             $product->pre_order = $request->pre_order ?? null;
             $product->bundle_reserved_quantity = null;
+            $product->bundle_price_status = $request->bundle_price_status ?? null;
 
             if ($request->file('image') && !is_string($request->file('image')))
                 $product->image = uploadImage($request->image, config('images_paths.product.images'));

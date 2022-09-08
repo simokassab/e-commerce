@@ -31,7 +31,6 @@ class Product extends MainModel
     protected $translatable = ['name', 'summary', 'specification', 'description', 'meta_title', 'meta_description', 'meta_keyword'];
     protected $table = 'products';
     protected $guard_name = 'web';
-
     protected $fillable = [
         'name',
         'slug',
