@@ -541,7 +541,7 @@ class ProductService
                     $allData[] = $data;
                 }
             }
-            dd($allData);
+            dd(collect($allData)->unique());
             ProductField::query()->insert($allData);
             //            DB::commit();
             return $this;
