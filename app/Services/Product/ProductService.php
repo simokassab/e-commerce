@@ -495,7 +495,7 @@ class ProductService
             if (is_null($attributesArray) || count($attributesArray) == 0)
                 return $this;
 
-            //TODO : handel this types of finctions
+            //TODO : handel this types of functions
             $attributesCheck = ProductField::query()->whereIn('product_id', $childrenIds)->whereHas('field', fn ($query) => $query->where('is_attribute', 1))->delete();
             $allData = [];
             $data = [];
@@ -541,7 +541,7 @@ class ProductService
                     $allData[] = $data;
                 }
             }
-
+            dd($allData);
             ProductField::query()->insert($allData);
             //            DB::commit();
             return $this;
