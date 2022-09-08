@@ -113,7 +113,7 @@ class StoreProductRequest extends FormRequest
             'related_products.*.name' => 'nullable',
             'related_products.*.child_name_status' => ['required', Rule::in(ProductRelated::$childNameStatuses)],
 
-            'bundle_price_status' => 'nullable | in:' . ProductRelated::$bundle_price_status,
+            'bundle_price_status' =>  ['nullable', Rule::in(ProductRelated::$bundle_price_status)],
 
             'order.*.id' => 'required | integer | exists:products,id',
             'order.*.sort' => 'required | integer',
