@@ -509,7 +509,6 @@ class ProductService
                         throw_if(!is_numeric($attribute['value']), new Exception('Invalid value'));
                         $data = [
                             'product_id' => $child,
-                            'test' =>'tesazzam',
                             'field_id' => (int)$attribute['field_id'],
                             'field_value_id' =>  (int)$attribute['value'],
                             'value' => null,
@@ -521,14 +520,13 @@ class ProductService
                 }
             }
 
-            dd($allData);
 
             $unique = collect($allData)->unique(function ($item)
             {
                 return $item['brand'] . $item['model'];
             });
 
-
+            dd($unique);
 
             ProductField::query()->insert($allData);
             //            DB::commit();
