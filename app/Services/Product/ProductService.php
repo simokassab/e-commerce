@@ -162,6 +162,7 @@ class ProductService
                         'product_id' => $product->id,
                         'field_id' => (int)$attribute['field_id'],
                         'field_value_id' =>  (int)$attribute['value'],
+                        'is_used_for_variations' =>  true,
                         'value' => null,
                     ];
                 } elseif (($attribute['type']) == 'checkbox') {
@@ -193,6 +194,7 @@ class ProductService
                 }
                 $allData[] = $data;
             }
+            dd($allData);
             ProductField::query()->insert($allData);
 //            DB::commit();
             return $this;

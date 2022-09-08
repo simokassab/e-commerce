@@ -17,6 +17,7 @@ class ProductField extends MainModel
         'field_id',
         'field_value_id',
         'value',
+        'is_used_for_variations'
     ];
 
 
