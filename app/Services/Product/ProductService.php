@@ -138,8 +138,11 @@ class ProductService
     {
 //        DB::beginTransaction();
         try {
-            dd($request['attributes']);
-            if (is_null($request->attributes)){
+            if(!array_key_exists('attributes',$request)){
+                return $this;
+            }
+
+            if (count($request['attributes']) == 0){
                 return $this;
             }
 
@@ -147,10 +150,10 @@ class ProductService
 
             $data = [];
             $allData = [];
-            $attributes = $request->has('product_variations') ? (collect($request->toArray()['product_variations'])->pluck('attributes')->first()) : [];
-            $attributesUnique = (collect($attributes)->unique(fn($item) => $item['value'] . $item['field_id'] ));
-            foreach ($attributesUnique as $index => $attribute) {
-
+//            $attributes = $request->has('product_variations') ? (collect($request->toArray()['product_variations'])->pluck('attributes')->first()) : [];
+//            $attributesUnique = (collect($attributes)->unique(fn($item) => $item['value'] . $item['field_id'] ));
+            foreach ($request['attributes'] as $index => $attribute) {
+                dd($attribute);
                 if (!in_array($attribute['type'], config('defaults.fields_types')))
                     throw new Exception('Invalid fields type');
 
