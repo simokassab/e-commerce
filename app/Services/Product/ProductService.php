@@ -498,9 +498,9 @@ class ProductService
             $attributesCheck = ProductField::query()->whereIn('product_id', $childrenIds)->whereHas('field', fn ($query) => $query->where('is_attribute', 1))->delete();
             $allData = [];
             $data = [];
-
             foreach ($childrenIds as $key => $child) {
                 foreach ($attributesArray as $index => $attribute) {
+                    dd($attributesArray);
                     if (!in_array($attribute['type'], config('defaults.fields_types')))
                         throw new Exception('Invalid fields type');
 
