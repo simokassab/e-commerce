@@ -316,7 +316,7 @@ class ProductController extends MainController
             DB::rollBack();
             return $this->errorResponse([
                 'message' => __('messages.failed.create', ['name' => __(self::OBJECT_NAME)]),
-                'error_message' => $ex->getMessage()
+                'error_message' => $ex
             ]);
         }
     }
