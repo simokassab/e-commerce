@@ -513,13 +513,14 @@ class ProductService
                             'field_value_id' =>  (int)$attribute['value'],
                             'value' => null,
                         ];
+                        dd($data);
                     }else {
                         continue;
                     }
                     $allData[] = $data;
                 }
             }
-            dd($allData);
+            dd('hello');
             $unique = collect($allData)->unique(function ($item)
             {
                 return $item['brand'] . $item['model'];
