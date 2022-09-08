@@ -358,7 +358,6 @@ class ProductService
     // END OF TYPE BUNDLE
     public function storeAdditionalPrices($request, $product)
     {
-        //$request=(object)$request;
         //        DB::beginTransaction();
         try {
             if (!$request->has('prices') || is_null($request->prices))
