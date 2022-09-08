@@ -520,10 +520,10 @@ class ProductService
                 }
             }
 
-
+            dd(collect($allData)->unique());
             $unique = collect($allData)->unique(function ($item)
             {
-                return $item['brand'] . $item['model'];
+                return $item[''] . $item[''] ;
             });
 
             dd($unique);
