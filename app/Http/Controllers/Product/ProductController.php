@@ -127,7 +127,8 @@ class ProductController extends MainController
             'taxes' => count($taxes) != 0 ? $taxes : "-",
             'categories' => count($categories) != 0 ? $categories : "-",
             'statuses' => count($statuses) != 0 ? $statuses : "-",
-            'nested_categories' => $nestedCategories
+            'nested_categories' => $nestedCategories,
+            'default_pricing_class' => Setting::query()->findOrFail(getSettings('default_pricing_class'))
 
         ]);
     }

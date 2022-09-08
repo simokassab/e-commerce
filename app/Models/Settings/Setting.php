@@ -22,7 +22,8 @@ class Setting extends MainModel
         'allow_negative_quantity',
         'products_prices_greater_than_or_equal',
         'products_discounted_price_greater_than_or_equal',
-        'is_discount_on_shipping'
+        'is_discount_on_shipping',
+        'default_pricing_class'
     ];
 
     public static string $cacheKey = 'settings';
