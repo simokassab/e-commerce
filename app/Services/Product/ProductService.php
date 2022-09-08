@@ -490,7 +490,9 @@ class ProductService
     }
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
-        //        DB::beginTransaction();`
+
+        dd('hello99');
+
         try {
             if (is_null($attributesArray) || count($attributesArray) == 0)
                 return $this;
@@ -513,7 +515,6 @@ class ProductService
                             'field_value_id' =>  (int)$attribute['value'],
                             'value' => null,
                         ];
-                        dd('hello99');
                     }else {
                         continue;
                     }
