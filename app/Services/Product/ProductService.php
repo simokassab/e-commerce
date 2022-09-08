@@ -529,7 +529,7 @@ class ProductService
 //            dd($unique);
 
 //
-//            ProductField::query()->insert($allData);
+            ProductField::query()->insert($allData);
             //            DB::commit();
             return $this;
         } catch (Exception $e) {
