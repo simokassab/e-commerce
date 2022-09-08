@@ -13,4 +13,5 @@ class ProductRelated extends Model
     protected $translatable = ['name'];
     protected $guarded = [];
     public static $childNameStatuses = ['hide', 'default', 'custom'];
+    public static $bundle_price_status = ['default', 'from_products'];
 }

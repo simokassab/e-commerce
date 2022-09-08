@@ -111,8 +111,9 @@ class StoreProductRequest extends FormRequest
             'related_products.*.child_product_id' => [Rule::when($request->type == 'bundle', ['required', 'integer', 'exists:products,id'])],
             'related_products.*.child_quantity' => [Rule::when($request->type == 'bundle', ['required', 'integer', 'gte:' . $this->QuantityValue])],
             'related_products.*.name' => 'nullable',
-            'related_products.*.child_name_status' => ['required',Rule::in(ProductRelated::$childNameStatuses)],
+            'related_products.*.child_name_status' => ['required', Rule::in(ProductRelated::$childNameStatuses)],
 
+            'bundle_price_status' => 'nullable | in:' . ProductRelated::$bundle_price_status,
 
             'order.*.id' => 'required | integer | exists:products,id',
             'order.*.sort' => 'required | integer',
