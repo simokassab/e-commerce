@@ -491,7 +491,6 @@ class ProductService
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
 
-        dd('hello99');
 
         try {
             if (is_null($attributesArray) || count($attributesArray) == 0)
@@ -521,7 +520,6 @@ class ProductService
                     $allData[] = $data;
                 }
             }
-            dd('hello');
             $unique = collect($allData)->unique(function ($item)
             {
                 return $item['brand'] . $item['model'];

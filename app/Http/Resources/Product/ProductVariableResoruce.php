@@ -19,7 +19,6 @@ class ProductVariableResoruce extends JsonResource
     public function toArray($request)
     {
         $childrenFieldValues= self::$childrenFieldValues;
-        // dd($childrenFieldValues);
         //Product fiedl values
         // fields le hene attributes
         $childrenImages = self::$childrenImages->where('product_id',$this->id);

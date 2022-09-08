@@ -292,7 +292,6 @@ class ProductController extends MainController
         DB::beginTransaction();
         try {
             // $oldReservedQuantity=Product::find($request->id)->pluck('reserved_quantity')->last();
-            dd('s');
             $product = $this->productService->createAndUpdateProduct($request, $product);
             $childrenIds = [];
 
@@ -314,7 +313,6 @@ class ProductController extends MainController
             ]);
         } catch (\Exception $ex) {
             DB::rollBack();
-            dd($ex);
             return $this->errorResponse([
                 'message' => __('messages.failed.create', ['name' => __(self::OBJECT_NAME)]),
             ]);

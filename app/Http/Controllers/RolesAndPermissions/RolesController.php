@@ -176,7 +176,6 @@ class RolesController extends MainController
 //
 //            $filteredPermissions = PermissionsServices::filterPermissionsAccordingToParentPermissions($parentPermissions,$childPermissions);
 //
-//            dd($filteredPermissions);
 
             foreach($request->permissions as $permission ){
                 $innerFlattenPermissions = PermissionsServices::loopOverMultiDimentionArray( $permission['tree']) ?? [];
