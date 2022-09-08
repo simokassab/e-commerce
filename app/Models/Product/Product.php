@@ -50,6 +50,7 @@ class Product extends MainModel
         'barcode',
         'height',
         'width',
+        'is_same_price_as_parent',
         'length',
         'weight',
         'is_default_child',

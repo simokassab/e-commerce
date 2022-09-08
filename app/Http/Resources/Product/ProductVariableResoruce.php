@@ -44,6 +44,7 @@ class ProductVariableResoruce extends JsonResource
             'width' => (float)$this->height,
             'length' => (float)$this->height,
             'weight' => (float)$this->height,
+            'isSamePriceAsParent' => (bool)$this->is_same_price_as_parent,
             'is_default_child' => (bool)$this->is_default_child,
             'products_statuses_id' =>(int)$this->products_statuses_id,
             'attributes' => SelectProductAttributesResource::collection($productAttribute ),

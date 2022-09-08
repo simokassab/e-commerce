@@ -154,7 +154,7 @@ class ProductService
 //            $attributesUnique = (collect($attributes)->unique(fn($item) => $item['value'] . $item['field_id'] ));
             foreach ($request['attributes'] as $index => $attribute) {
                 if (!in_array($attribute['type'], config('defaults.fields_types')))
-                    throw new Exception('Invalid fields type');
+                    throw new Exception('Invalid attribute type');
 
                 if ($attribute['type'] == 'select') {
                     throw_if(!is_numeric($attribute['value']), new Exception('Invalid value'));
@@ -668,6 +668,7 @@ class ProductService
                     'type' => 'variable_child',
                     'sku' => array_key_exists('sku', $variation) ? $variation['sku'] : null,
                     'quantity' => $variation['quantity'],
+                    'is_same_price_as_parent' => $variation['isSamePriceAsParent'],
                     'reserved_quantity' => $variation['reserved_quantity'],
                     'minimum_quantity' => $variation['minimum_quantity'],
                     'height' => array_key_exists('height', $variation) ? $variation['height'] : null,
