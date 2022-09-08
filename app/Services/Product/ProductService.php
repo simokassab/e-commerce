@@ -420,7 +420,7 @@ class ProductService
             //            DB::commit();
         } catch (\Exception $e) {
             //            DB::rollBack();
-            throw $e;
+            throw new Exception($e);
         }
     }
     // TYPE VARIABLE
@@ -520,6 +520,9 @@ class ProductService
                     $allData[] = $data;
                 }
             }
+
+            dd($allData);
+
             $unique = collect($allData)->unique(function ($item)
             {
                 return $item['brand'] . $item['model'];
