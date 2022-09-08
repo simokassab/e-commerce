@@ -406,6 +406,7 @@ class ProductService
                 $data[$key]["field_id"] = $attribute['field_id'];
             }
         }
+        dd($data);
         if (ProductField::insert($data)) {
             return $this;
         }
