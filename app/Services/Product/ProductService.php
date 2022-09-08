@@ -501,7 +501,6 @@ class ProductService
             $data = [];
             foreach ($childrenIds as $key => $child) {
                 foreach ($attributesArray as $index => $attribute) {
-                    dd($attributesArray);
                     if (!in_array($attribute['type'], config('defaults.fields_types')))
                         throw new Exception('Invalid fields type');
 
