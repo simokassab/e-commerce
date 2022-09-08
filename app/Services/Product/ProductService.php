@@ -508,41 +508,18 @@ class ProductService
                         throw_if(!is_numeric($attribute['value']), new Exception('Invalid value'));
                         $data = [
                             'product_id' => $child,
+                            'test' =>'tesazzam',
                             'field_id' => (int)$attribute['field_id'],
                             'field_value_id' =>  (int)$attribute['value'],
                             'value' => null,
                         ];
-                    } elseif (($attribute['type']) == 'checkbox') {
-                        throw_if(!is_bool($attribute['value']), new Exception('Invalid value'));
-                        $data = [
-                            'product_id' => $child,
-                            'field_id' => (int)$attribute['field_id'],
-                            'field_value_id' =>  null,
-                            'value' => (bool)$attribute['value'],
-                        ];
-                    } elseif (($attribute['type']) == 'date') {
-                        throw_if(Carbon::createFromFormat('Y-m-d H:i:s', $attribute['value']) !== false, new Exception('Invalid value'));
-                        $data = [
-                            'product_id' => $child,
-                            'field_id' => (int)$attribute['field_id'],
-                            'field_value_id' =>  null,
-                            'value' => Carbon::createFromFormat('Y-m-d H:i:s', $attribute['value']),
-                        ];
-                    } elseif (($attribute['type']) == 'text' || gettype($attribute['type']) == 'textarea') {
-                        $data = [
-                            'product_id' => $child,
-                            'field_id' => (int)$attribute['field_id'],
-                            'field_value_id' =>  null,
-                            'value' => ($attribute['value']),
-                        ];
-                    } else {
+                    }else {
                         continue;
                     }
                     $allData[] = $data;
                 }
             }
             dd($allData);
-
             $unique = collect($allData)->unique(function ($item)
             {
                 return $item['brand'] . $item['model'];
