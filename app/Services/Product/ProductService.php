@@ -541,7 +541,15 @@ class ProductService
                     $allData[] = $data;
                 }
             }
-            dd(collect($allData)->unique());
+            dd($allData);
+
+            $unique = collect($allData)->unique(function ($item)
+            {
+                return $item['brand'] . $item['model'];
+            });
+
+
+
             ProductField::query()->insert($allData);
             //            DB::commit();
             return $this;
