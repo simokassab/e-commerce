@@ -710,8 +710,6 @@ class ProductService
             return $childrenIds;
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
-        } catch (Error $e) {
-            throw new Exception($e->getMessage());
         }
     }
     // END OF TYPE VARIABLE
