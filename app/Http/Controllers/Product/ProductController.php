@@ -171,35 +171,35 @@ class ProductController extends MainController
     public function store(StoreProductRequest $request, Product $product)
     {
         DB::enableQueryLog();
-        DB::beginTransaction();
-        try {
-            $product = $this->productService->createAndUpdateProduct($request);
-            $childrenIds = [];
-            if ($request->type == 'variable' && ($request->product_variations || count($request->product_variations) > 0)) {
-                $childrenIds = $this->productService->storeVariations($request, $product);
-            }
-            if ($request->type == 'bundle') {
-                $this->productService->storeAdditionalBundle($request, $product);
-            }
-            Product::find($product->id)->updateProductQuantity($request->reserved_quantity, 'add');
-            $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
-
-            DB::commit();
-
-            return $this->successResponse(
-                'Success!',
-                [
-                    'message' => __('messages.success.create', ['name' => __(self::OBJECT_NAME)]),
-                    'product' =>  new ProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category']))
-                ]
-            );
-        } catch (Exception $ex) {
-            DB::rollBack();
-            return $this->errorResponse('An error occurred please try again later', [
-                'message' => __('messages.failed.create', ['name' => __(self::OBJECT_NAME)]),
-                'error_message' => $ex->getMessage()
-            ]);
+        // DB::beginTransaction();
+        // try {
+        $product = $this->productService->createAndUpdateProduct($request);
+        $childrenIds = [];
+        if ($request->type == 'variable' && ($request->product_variations || count($request->product_variations) > 0)) {
+            $childrenIds = $this->productService->storeVariations($request, $product);
         }
+        if ($request->type == 'bundle') {
+            $this->productService->storeAdditionalBundle($request, $product);
+        }
+        Product::find($product->id)->updateProductQuantity($request->reserved_quantity, 'add');
+        $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
+
+        DB::commit();
+
+        return $this->successResponse(
+            'Success!',
+            [
+                'message' => __('messages.success.create', ['name' => __(self::OBJECT_NAME)]),
+                'product' =>  new ProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category']))
+            ]
+        );
+        // } catch (Exception $ex) {
+        // DB::rollBack();
+        // return $this->errorResponse('An error occurred please try again later', [
+        // 'message' => __('messages.failed.create', ['name' => __(self::OBJECT_NAME)]),
+        // 'error_message' => $ex->getMessage()
+        // ]);
+        // }
     }
 
     /**
