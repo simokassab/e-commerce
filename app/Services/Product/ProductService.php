@@ -84,13 +84,9 @@ class ProductService
             if (count($request['fields']) == 0) {
                 return $this;
             }
-
-
             $fieldCheck = ProductField::where('product_id', $product->id)->delete();
-
             $data = [];
 
-            dd($request->fields);
             foreach ($request->fields as $index => $field) {
                 if (!in_array($field['type'], config('defaults.fields_types')))
                     throw new Exception('Invalid fields type');
@@ -131,6 +127,7 @@ class ProductService
                 }
                 $allData = $data;
             }
+            dd($data);
             ProductField::insert($data);
             //            DB::commit();
             return $this;
@@ -495,8 +492,6 @@ class ProductService
     }
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
-
-
         try {
             if (is_null($attributesArray) || count($attributesArray) == 0)
                 return $this;
