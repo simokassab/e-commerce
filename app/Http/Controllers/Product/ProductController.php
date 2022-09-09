@@ -67,12 +67,12 @@ class ProductController extends MainController
             $searchRelationsKeys = [];
             // $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
 
-            // $categoriesCount = Product::has('category')->count();
+            $categoriesCount = Product::has('category')->count();
             $tagsCount = Product::has('tags')->count();
             $brandsCount = Product::has('brand')->count();
 
-            // if ($categoriesCount > 0)
-            // $searchRelationsKeys['category'] = ['categories' => 'name'];
+            if ($categoriesCount > 0)
+                $searchRelationsKeys['category'] = ['categories' => 'name'];
             if ($tagsCount > 0)
                 $searchRelationsKeys['tags'] = ['tags' => 'name'];
             if ($brandsCount > 0)
