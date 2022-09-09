@@ -494,7 +494,7 @@ class ProductService
         try {
             if (is_null($attributesArray) || count($attributesArray) == 0)
                 return $this;
-
+            dd($attributesArray);
             //TODO : handel this types of functions
             $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->whereHas('field', fn ($query) => $query->where('is_attribute', 1))->delete();
             $data = [];
