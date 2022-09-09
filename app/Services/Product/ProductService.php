@@ -523,7 +523,7 @@ class ProductService
             return $this;
         } catch (Exception $e) {
             //            DB::rollBack();
-            throw new Exception($e->getMessage());
+            // throw new Exception($e->getMessage());
         }
     }
     public function removeImagesForVariations($imagesDeletedArray, $childrenIds)
