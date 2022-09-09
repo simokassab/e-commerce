@@ -341,7 +341,7 @@ class ProductService
                 elseif ($childNameStatus == 'default')
                     $name = json_encode($request->name);
                 elseif ($childNameStatus == 'custom')
-                    $name = array_key_exists('name', $value) ? $value['name'] : null;
+                    $name = array_key_exists('name', $value) ? json_encode($value['name']) : null;
 
                 $data[$related_product] = [
                     'parent_product_id' => $product->id,
