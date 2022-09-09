@@ -31,8 +31,8 @@ class ProductService
             ->storeAdditionalImages($request, $product)
             ->storeAdditionalLabels($request, $product, $childrenIds)
             ->storeAdditionalTags($request, $product, $childrenIds)
-            ->storeAdditionalPrices($request, $product, $childrenIds)
-            ->storeAdditionalAttributes($request, $product);
+            ->storeAdditionalPrices($request, $product, $childrenIds);
+        // ->storeAdditionalAttributes($request, $product);
     }
     public function storeAdditionalCategrories($request, $product, $childrenIds)
     {
@@ -704,7 +704,7 @@ class ProductService
         $this->storeImagesForVariations($imagesArray, $imagesData, $childrenIds);
         $this->storePricesForVariations($request, $childrenIds);
         $this->storeFieldsForVariations($fieldsArray, $childrenIds);
-        // $this->storeAttributesForVariations($attributesArray, $childrenIds);
+        $this->storeAttributesForVariations($attributesArray, $childrenIds);
 
         //            DB::commit();
         return $childrenIds;
