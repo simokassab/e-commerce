@@ -127,7 +127,6 @@ class ProductService
                 }
                 $allData = $data;
             }
-            dd($data);
             ProductField::insert($data);
             //            DB::commit();
             return $this;
