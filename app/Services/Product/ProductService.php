@@ -77,15 +77,20 @@ class ProductService
     {
         //        DB::beginTransaction();
         try {
-            if (!$request->has('fields'))
+            if (!array_key_exists('fields', $request->toArray())) {
                 return $this;
+            }
 
-            if (is_null($request->fields))
+            if (count($request['fields']) == 0) {
                 return $this;
+            }
+
 
             $fieldCheck = ProductField::where('product_id', $product->id)->delete();
 
             $data = [];
+
+            dd($request->fields);
             foreach ($request->fields as $index => $field) {
                 if (!in_array($field['type'], config('defaults.fields_types')))
                     throw new Exception('Invalid fields type');
@@ -513,22 +518,22 @@ class ProductService
                             'field_value_id' =>  (int)$attribute['value'],
                             'value' => null,
                         ];
-                    }else {
+                    } else {
                         continue;
                     }
                     $allData[] = $data;
                 }
             }
 
-//            dd(collect($allData));
-//            $unique = collect($allData)->unique(function ($item)
-//            {
-//                return $item['product_id'] . $item['field_id'] . $item['field_value_id'] ;
-//            });
-//
-//            dd($unique);
+            //            dd(collect($allData));
+            //            $unique = collect($allData)->unique(function ($item)
+            //            {
+            //                return $item['product_id'] . $item['field_id'] . $item['field_value_id'] ;
+            //            });
+            //
+            //            dd($unique);
 
-//
+            //
             ProductField::query()->insert($allData);
             //            DB::commit();
             return $this;
