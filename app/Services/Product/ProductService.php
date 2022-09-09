@@ -334,7 +334,6 @@ class ProductService
             foreach ($request->related_products as $related_product => $value) {
 
                 $childNameStatus = array_key_exists('child_name_status', $value) ? $value['child_name_status'] : 'default';
-                dd($value['name']);
                 $name = null;
                 if ($childNameStatus == 'hide')
                     $name = null;
