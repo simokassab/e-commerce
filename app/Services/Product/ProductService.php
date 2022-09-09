@@ -491,40 +491,40 @@ class ProductService
     }
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
-        try {
-            if (is_null($attributesArray) || count($attributesArray) == 0)
-                return $this;
-
-            //TODO : handel this types of functions
-            $attributesCheck = ProductField::query()->whereIn('product_id', $childrenIds)->whereHas('field', fn ($query) => $query->where('is_attribute', 1))->delete();
-            $allData = [];
-            $data = [];
-            foreach ($childrenIds as $key => $child) {
-                foreach ($attributesArray as $index => $attribute) {
-                    if (!in_array($attribute['type'], config('defaults.fields_types')))
-                        throw new Exception('Invalid fields type');
-
-                    if ($attribute['type'] == 'select') {
-                        throw_if(!is_numeric($attribute['value']), new Exception('Invalid value'));
-                        $data[] = [
-                            'product_id' => $child,
-                            'field_id' => (int)$attribute['field_id'],
-                            'field_value_id' =>  (int)$attribute['value'],
-                            'value' => null,
-                        ];
-                    } else {
-                        continue;
-                    }
-                    $allData[] = $data;
-                }
-            }
-            ProductField::query()->insert($allData);
-            //            DB::commit();
+        // try {
+        if (is_null($attributesArray) || count($attributesArray) == 0)
             return $this;
-        } catch (Exception $e) {
-            //            DB::rollBack();
-            throw new Exception($e->getMessage());
+
+        //TODO : handel this types of functions
+        $attributesCheck = ProductField::query()->whereIn('product_id', $childrenIds)->whereHas('field', fn ($query) => $query->where('is_attribute', 1))->delete();
+        $allData = [];
+        $data = [];
+        foreach ($childrenIds as $key => $child) {
+            foreach ($attributesArray as $index => $attribute) {
+                if (!in_array($attribute['type'], config('defaults.fields_types')))
+                    throw new Exception('Invalid fields type');
+
+                if ($attribute['type'] == 'select') {
+                    throw_if(!is_numeric($attribute['value']), new Exception('Invalid value'));
+                    $data[] = [
+                        'product_id' => $child,
+                        'field_id' => (int)$attribute['field_id'],
+                        'field_value_id' =>  (int)$attribute['value'],
+                        'value' => null,
+                    ];
+                } else {
+                    continue;
+                }
+                $allData[] = $data;
+            }
         }
+        ProductField::query()->insert($allData);
+        //            DB::commit();
+        return $this;
+        // } catch (Exception $e) {
+        //            DB::rollBack();
+        // throw new Exception($e->getMessage());
+        // }
     }
     public function removeImagesForVariations($imagesDeletedArray, $childrenIds)
     {
@@ -704,7 +704,7 @@ class ProductService
         $this->storeImagesForVariations($imagesArray, $imagesData, $childrenIds);
         $this->storePricesForVariations($request, $childrenIds);
         $this->storeFieldsForVariations($fieldsArray, $childrenIds);
-        $this->storeAttributesForVariations($attributesArray, $childrenIds);
+        // $this->storeAttributesForVariations($attributesArray, $childrenIds);
 
         //            DB::commit();
         return $childrenIds;
