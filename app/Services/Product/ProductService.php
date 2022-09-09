@@ -721,11 +721,13 @@ class ProductService
         try {
             //$request=(object)$request;
             $product = $product ?  $product : new Product();
+            if (is_null($product->id)) {
+                $product->type = $request->type;
+            }
             $product->name = ($request->name);
             $product->slug = $request->slug;
             $product->code = $request->code;
             $product->sku = $request->sku ?? null;
-            $product->type = $request->type;
             if (!$product->type == 'bundle') {
                 $product->quantity = 0;
                 $diffrenceQuantity = $request->quantity - ($product->reserved_quantity + $product->bundle_reserved_quantity);
@@ -734,7 +736,6 @@ class ProductService
                 }
             } else {
                 $product->quantity = $request->quantity;
-
                 $product->reserved_quantity = $request->reserved_quantity;
             }
             $product->minimum_quantity = $request->minimum_quantity;
