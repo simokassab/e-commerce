@@ -90,24 +90,27 @@ class MainController extends Controller
         }
 
         $model = $model::with($relations);
-        $model->when($request->has('general_search') && $request->general_search != null, function ($query)use($searchKeys,$request,$searchRelationsKeys) {
-            $value = strtolower($request->general_search);
-            foreach ($searchKeys as $key => $attribute){
-                $query->oRwhereRaw('lower('.$attribute.') like (?)', ["%$value%"]);
-            }
-
-            foreach ($searchRelationsKeys as $relation => $relationKeys){
-
-                foreach ($relationKeys as $dbColumn){
-                    $query->oRwhereHas($relation, fn($query) => $query->whereRaw('lower(' . $dbColumn . ') like (?)', ["%$value%"]));
+        $globalValue = strtolower($request->general_search);
+        if(!empty(trim($globalValue))){
+            $model->when($request->has('general_search') && $request->general_search != null, function ($query)use($searchKeys, $globalValue,$request,$searchRelationsKeys) {
+                foreach ($searchKeys as $key => $attribute){
+                    $query->oRwhereRaw('lower('.$attribute.') like (?)', ["%$globalValue%"]);
                 }
-            }
-        });
 
+                foreach ($searchRelationsKeys as $relation => $relationKeys){
+
+                    foreach ($relationKeys as $dbColumn){
+                        $query->oRwhereHas($relation, fn($query) => $query->whereRaw('lower(' . $dbColumn . ') like (?)', ["%$globalValue%"]));
+                    }
+                }
+            });
+        }
         if (is_array($data) && !empty($data)) {
             $model->where(function ($query) use ($data, $searchKeys, $relationKeysArr, $searchRelationsKeys,) {
                 foreach ($data as $key => $value) {
                     $value = strtolower($value);
+                    if(empty(trim($value)))
+                        continue;
                     if ((in_array($key, $searchKeys) && !empty($value))) {
                         $query->whereRaw('lower(' . $key . ') like (?)', ["%$value%"]);
                     }
