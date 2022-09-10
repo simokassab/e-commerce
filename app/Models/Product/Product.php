@@ -203,7 +203,6 @@ class Product extends MainModel
                 if($method == 'add'){
                     return $this->addQuantityForNormalAndVariableChild($quantity);
                 }else{
-
                     return $this->subQuantityForNormalAndVariableChild($quantity);
                 }
             }
@@ -235,21 +234,14 @@ class Product extends MainModel
      * @throws Exception
      */
     protected function subQuantityForNormalAndVariableChild(float $quantity){
-        $isAllowNegativeQuantity = getSettings('allow_negative_quantity');
-        if($isAllowNegativeQuantity){
+        $isAllowNegativeQuantity = getSettings('allow_negative_quantity')->value;
+        if($isAllowNegativeQuantity || $this->pre_order){
             $this->quantity -= $quantity;
             if($this->save())
                 return $this;
 
             throw new \Exception('An error occurred please try again !');
         }
-        if($this->pre_order){
-            $this->quantity -= $quantity;
-            if($this->save())
-                return $this;
-            throw new \Exception('An error occurred please try again !');
-        }
-
         if($this->quantity < $quantity){
             throw new Exception('You have less quantity than '. $quantity .' in stock');
         }
@@ -257,6 +249,7 @@ class Product extends MainModel
         $this->quantity -= $quantity;
         if($this->save())
             return $this;
+
         throw new \Exception('An error occurred please try again !');
 
 
@@ -265,7 +258,7 @@ class Product extends MainModel
     /**
      * @throws Exception
      */
-    private function addQuantityForBundle(float $quantity, Collection $allBundleProducts = null, Collection $allBundleRelatedProducts = null, bool $isOrder = false) : self
+    private function addQuantityForBundle(float $quantity, Collection $allBundleProducts, Collection $allBundleRelatedProducts, bool $isOrder = false) : self
     {
 
         if($this->type != 'bundle'){
@@ -307,26 +300,24 @@ class Product extends MainModel
     /**
      * @throws Exception
      * @throws \Throwable
+     * This function is used when we are planning to remove a bundle from the system
      */
     private function subQuantityForBundle(float $quantity, Collection $allBundleProducts = null, Collection $allRelatedProducts = null, bool $isOrder = false)
     {
         if(!$this->hasEnoughRelatedProductsQuantityForSubstitutingBundles($quantity,$allBundleProducts,$allRelatedProducts,$isOrder)){
             throw new Exception('Not enough quantity or substituting or buying bundles');
         }
-
-        if($this->reserved_quantity < $quantity){
+        $allowNegativeQuantity = getSettings('allow_negative_quantity')->value;
+        if(!$allowNegativeQuantity && $this->reserved_quantity < $quantity){
             throw new Exception('Not enough quantity for reserving a new bundle');
         }
-
 
         $this->reserved_quantity -= $quantity;
 
         foreach ($allBundleProducts as $bundleProduct){
-            if($bundleProduct->type == 'service'){
+            if($bundleProduct->type == 'service' || $bundleProduct->is_pre_order){
                 continue;
             }
-
-
             $bundleRelatedProduct = $allRelatedProducts->where('child_product_id',$bundleProduct->id)->first();
 
             $bundleProduct->bundle_reserved_quantity -= $quantity * $bundleRelatedProduct->child_quantity;
@@ -336,7 +327,7 @@ class Product extends MainModel
             }
 
             if(!$bundleProduct->save()){
-                throw new Exception("Error in saving product of id {$$bundleProduct->id} !");
+                throw new Exception("Error in saving product of id {$bundleProduct->id} !");
             }
 
         }
@@ -361,20 +352,17 @@ class Product extends MainModel
         if($this->type != 'bundle'){
             throw new Exception('Call hasEnoughRelatedProductsQuantityForReservingNewBundles on non-bundle product');
         }
-        $isAllowNegativeQuantity = getSettings('allow_negative_quantity');
+        $isAllowNegativeQuantity = getSettings('allow_negative_quantity')->value;
         if($isAllowNegativeQuantity){
             return true;
         }
-
-        $allProducts = count($allProducts) > 0 ? $allProducts : self::all();
-        $allRelatedProducts = count($allRelatedProducts) > 0 ? $allRelatedProducts : ProductRelated::all();
 
         $relatedProducts = ($allRelatedProducts)->where('parent_product_id',$this->id);
         $relatedProductsIds = $relatedProducts->pluck('child_product_id');
         $childrenProducts = collect($allProducts)->whereIn('id',$relatedProductsIds);
         foreach ($childrenProducts as $childProduct){
 
-            if($childProduct['pre_order']){
+            if($childProduct['pre_order'] || $childProduct['type'] == 'service'){
                 continue;
             }
 
