@@ -200,10 +200,10 @@ class ProductService
             return $this;
         } catch (Exception $e) {
             //            DB::rollBack();
-            throw new Exception($e->getMessage());
+            throw new Exception($e);
         } catch (Error $e) {
             //            DB::rollBack();
-            throw new Exception($e->getMessage());
+            throw new Exception($e);
         }
     }
     public function removeAdditionalImages($request)
