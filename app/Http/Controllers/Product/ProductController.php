@@ -65,7 +65,7 @@ class ProductController extends MainController
         if ($request->method() == 'POST') {
             $searchKeys = ['id', 'name', 'sku', 'type', 'quantity', 'website_status'];
             $searchRelationsKeys = [];
-            // $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
+             $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
 
             $categoriesCount = Product::query()->has('category')->count();
             $tagsCount = Product::query()->has('tags')->count();
