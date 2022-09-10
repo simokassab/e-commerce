@@ -89,7 +89,7 @@ class MainController extends Controller
             }
         }
 
-        $model = $model::with($relations);
+        $model = $model->with($relations);
         $globalValue = strtolower($request->general_search);
         if(!empty(trim($globalValue))){
             $model->when($request->has('general_search') && $request->general_search != null, function ($query)use($searchKeys, $globalValue,$request,$searchRelationsKeys) {

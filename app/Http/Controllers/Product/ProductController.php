@@ -78,7 +78,7 @@ class ProductController extends MainController
             if ($brandsCount > 0)
                 $searchRelationsKeys['brand'] = ['brands' => 'name'];
 
-            return $this->getSearchPaginated(ProductResource::class, Product::class, $request, $searchKeys, self::relations, $searchRelationsKeys);
+            return $this->getSearchPaginated(ProductResource::class, Product::where("type",'!=','variable_child'), $request, $searchKeys, self::relations, $searchRelationsKeys);
         }
 
         return $this->successResponsePaginated(ProductResource::class, Product::class, self::relations);
