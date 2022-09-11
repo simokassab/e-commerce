@@ -490,12 +490,14 @@ class ProductService
     }
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
+        dump($childrenIds);
         try {
             if (is_null($attributesArray) || count($attributesArray) == 0)
                 return $this;
             //TODO : handel this types of functions
             $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->whereHas('field', fn ($query) => $query->where('is_attribute', 1))->delete();
-            dd($attributesCheck);
+            dump($attributesCheck);
+            die();
             $data = [];
             foreach ($childrenIds as $key => $child) {
                 foreach ($attributesArray as $index => $attribute) {
