@@ -490,6 +490,7 @@ class ProductService
     }
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
+        dd($childrenIds);
         try {
             if (is_null($attributesArray) || count($attributesArray) == 0)
                 return $this;
