@@ -514,6 +514,8 @@ class ProductService
                     }
                 }
             }
+
+            dd($data);
             ProductField::insert($data);
             //            DB::commit();
             return $this;
