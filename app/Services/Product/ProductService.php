@@ -193,7 +193,6 @@ class ProductService
 
                     continue;
                 }
-                $allData[] = $data;
             }
             dd($allData);
             ProductField::query()->insert($allData);
