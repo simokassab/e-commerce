@@ -184,8 +184,25 @@ class Product extends MainModel
 
 }
 
-    public function getPriceRelation(){
-        return $this->price();
+    /**
+     * @throws \Throwable
+     */
+    public function editProductQuantity(float $newQuantity){
+        if($this->type == 'service' || $this->type == 'variable'){
+            return $this;
+        }
+        $oldQuantity = $this->quantity;
+        if($this->type == 'bundle'){
+            $oldQuantity = $this->reserved_quantity;
+        }
+
+        $differenceQuantity = $oldQuantity - $newQuantity;
+
+        if($differenceQuantity > 0){
+            return $this->updateProductQuantity($differenceQuantity,'sub');
+        }
+        return $this->updateProductQuantity(abs($differenceQuantity),'add');
+
     }
 
     /**
@@ -302,7 +319,7 @@ class Product extends MainModel
      * @throws \Throwable
      * This function is used when we are planning to remove a bundle from the system
      */
-    private function subQuantityForBundle(float $quantity, Collection $allBundleProducts = null, Collection $allRelatedProducts = null, bool $isOrder = false)
+    private function subQuantityForBundle(float $quantity, Collection $allBundleProducts = null, Collection $allRelatedProducts = null, bool $isOrder = false): self
     {
         if(!$this->hasEnoughRelatedProductsQuantityForSubstitutingBundles($quantity,$allBundleProducts,$allRelatedProducts,$isOrder)){
             throw new Exception('Not enough quantity or substituting or buying bundles');
@@ -419,8 +436,8 @@ class Product extends MainModel
             if($childProduct['bundle_reserved_quantity'] < 0 ){
                 $childProduct['bundle_reserved_quantity'] = 0;
             }
-
-            $childProduct['quantity'] -= $childProduct['reserved_quantity'];
+            $reservedQuantityFromOtherBundles = $childProduct['bundle_reserved_quantity'] - ($this->reserved_quantity * $childRelatedProduct['child_quantity']) ;
+            $childProduct['quantity'] -= $childProduct['reserved_quantity']+$reservedQuantityFromOtherBundles;
             $quantityToBeReserved = $childRelatedProduct['child_quantity'] * $quantity;
 
             if($quantityToBeReserved > $childProduct['quantity']){
