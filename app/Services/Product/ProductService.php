@@ -432,7 +432,6 @@ class ProductService
                 return $this;
 
             $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->whereHas('field', fn ($query) => $query->where('is_attribute', 0))->delete();
-            dd($childrenIds);
             $allData = [];
             $data = [];
 
