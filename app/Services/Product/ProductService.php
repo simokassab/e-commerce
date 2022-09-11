@@ -432,7 +432,7 @@ class ProductService
                 return $this;
 
             $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->whereHas('field', fn ($query) => $query->where('is_attribute', 0))->delete();
-
+            dd($childrenIds);
             $allData = [];
             $data = [];
 
@@ -490,14 +490,12 @@ class ProductService
     }
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
-        dump($childrenIds);
         try {
             if (is_null($attributesArray) || count($attributesArray) == 0)
                 return $this;
+
             //TODO : handel this types of functions
             $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->whereHas('field', fn ($query) => $query->where('is_attribute', 1))->delete();
-            dump($attributesCheck);
-            die();
             $data = [];
             foreach ($childrenIds as $key => $child) {
                 foreach ($attributesArray as $index => $attribute) {
@@ -512,8 +510,6 @@ class ProductService
                             'field_value_id' =>  (int)$attribute['value'],
                             'value' => null,
                         ];
-                    } else {
-                        continue;
                     }
                 }
             }
@@ -682,7 +678,8 @@ class ProductService
             $imagesDeletedArray = array_key_exists('images_deleted', $variation) ?  $variation['images_deleted'] : [];
             $imagesArray = array_key_exists('images', $variation) ? $variation['images'] : [];
             $imagesData = array_key_exists('images_data', $variation) ? $variation['images_data'] : [];
-            $fieldsArray = array_key_exists('fields', $variation) ? $variation['fields'] : [];
+//            $fieldsArray = array_key_exists('fields', $variation) ? $variation['fields'] : [];
+            $fieldsArray = [];
             $attributesArray = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
             $productVariationParentsArray[] = $productVariationsArray;
         }
