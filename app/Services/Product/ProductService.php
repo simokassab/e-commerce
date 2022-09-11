@@ -194,7 +194,6 @@ class ProductService
                     continue;
                 }
             }
-            dd($allData);
             ProductField::query()->insert($allData);
             //            DB::commit();
             return $this;
