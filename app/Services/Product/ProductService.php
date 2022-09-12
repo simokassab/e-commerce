@@ -146,7 +146,7 @@ class ProductService
             if (count($request['attributes']) == 0) {
                 return $this;
             }
-
+            dd($request['attributes']);
             $attributesCheck = ProductField::where('product_id', $product->id)->delete();
 
             $data = [];
