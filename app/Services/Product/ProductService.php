@@ -495,7 +495,7 @@ class ProductService
             $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->whereHas('field', fn ($query) => $query->where('is_attribute', 1))->delete();
             $data = [];
             foreach ($childrenIds as $key => $child) {
-                foreach ($attributesArray as $index => $attribute) {
+                foreach ($attributesArray[$key] as $index => $attribute) {
                     if (!in_array($attribute['type'], config('defaults.fields_types')))
                         throw new Exception('Invalid fields type');
 
@@ -671,11 +671,11 @@ class ProductService
 
             ];
 
-            $imagesDeletedArray[] = array_key_exists('images_deleted', $variation) ?  $variation['images_deleted'] : [];
+            $imagesDeletedArray = array_key_exists('images_deleted', $variation) ?  $variation['images_deleted'] : [];
             $imagesArray[] = array_key_exists('images', $variation) ? $variation['images'] : [];
             $imagesData[] = array_key_exists('images_data', $variation) ? $variation['images_data'] : [];
             //$fieldsArray = array_key_exists('fields', $variation) ? $variation['fields'] : [];
-            $fieldsArray[] = [];
+            $fieldsArray = [];
             $attributesArray[] = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
             $productVariationParentsArray[] = $productVariationsArray;
         }
@@ -697,7 +697,7 @@ class ProductService
         $this->storeImagesForVariations($imagesArray, $imagesData, $childrenIds);
         $this->storePricesForVariations($request, $childrenIds);
         $this->storeFieldsForVariations($fieldsArray, $childrenIds);
-        $this->storeAttributesForVariations($attributesArray, $childrenIds);
+        $this->storeAttributesForVariations($request->toArray(), $childrenIds);
 
         //            DB::commit();
         return $childrenIds;
