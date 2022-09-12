@@ -65,7 +65,7 @@ class ProductController extends MainController
         if ($request->method() == 'POST') {
             $searchKeys = ['id', 'name', 'sku', 'type', 'quantity', 'website_status'];
             $searchRelationsKeys = [];
-             $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
+            $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
 
             $categoriesCount = Product::query()->has('category')->count();
             $tagsCount = Product::query()->has('tags')->count();
@@ -78,7 +78,7 @@ class ProductController extends MainController
             if ($brandsCount > 0)
                 $searchRelationsKeys['brand'] = ['brands' => 'name'];
 
-            return $this->getSearchPaginated(ProductResource::class, Product::where("type",'!=','variable_child'), $request, $searchKeys, self::relations, $searchRelationsKeys);
+            return $this->getSearchPaginated(ProductResource::class, Product::where("type", '!=', 'variable_child'), $request, $searchKeys, self::relations, $searchRelationsKeys);
         }
 
         return $this->successResponsePaginated(ProductResource::class, Product::class, self::relations);
@@ -177,11 +177,13 @@ class ProductController extends MainController
         $childrenIds = [];
         if ($request->type == 'variable' && ($request->product_variations || count($request->product_variations) > 0)) {
             $childrenIds = $this->productService->storeVariations($request, $product);
-        }
-        if ($request->type == 'bundle') {
+        } elseif ($request->type == 'bundle') {
             $this->productService->storeAdditionalBundle($request, $product);
+            $product->editQuantity($request->reserved_quantity);
+        } else {
+            $product->editQuantity($request->quantity);
         }
-        Product::find($product->id)->updateProductQuantity($request->reserved_quantity, 'add');
+        $product->editQuantity($request->quantity);
         $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
 
         DB::commit();
@@ -297,12 +299,12 @@ class ProductController extends MainController
 
             if ($request->type == 'variable' && ($request->product_variations || count($request->product_variations) > 0)) {
                 $childrenIds = $this->productService->storeVariations($request, $product);
-            }
-            if ($request->type == 'bundle') {
+            } elseif ($request->type == 'bundle') {
                 $this->productService->storeAdditionalBundle($request, $product);
+                $product->editQuantity($request->reserved_quantity);
+            } else {
+                $product->editQuantity($request->quantity);
             }
-            Product::find($product->id)->updateProductQuantity($request->reserved_quantity, 'sub');
-
 
             $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
 
