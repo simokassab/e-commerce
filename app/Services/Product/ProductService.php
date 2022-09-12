@@ -146,7 +146,6 @@ class ProductService
             if (count($request['attributes']) == 0) {
                 return $this;
             }
-            dd($request['attributes']);
             $attributesCheck = ProductField::where('product_id', $product->id)->delete();
 
             $data = [];
@@ -194,7 +193,7 @@ class ProductService
                     continue;
                 }
             }
-            ProductField::query()->insert($allData);
+            ProductField::insert($data);
             //            DB::commit();
             return $this;
         } catch (Exception $e) {
