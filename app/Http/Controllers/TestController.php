@@ -48,7 +48,7 @@ class TestController extends MainController
     {
 
 
-        return Product::query()->find(1)->updateProductQuantity(5,'sub');
+        return Product::find(1);
 //        return Product::query()->find(1)->relatedProducts;
     }
 
