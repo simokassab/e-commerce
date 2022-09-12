@@ -26,34 +26,34 @@ use PDO;
 class MainController extends Controller
 {
 
-    public function __construct(/*$defaultPermissionsFromChild = null*/)
+    public function __construct( $defaultPermissionsFromChild = null )
     {
         $routeAction = basename(Route::currentRouteAction()); //we got the permission name
 
-//        if (isset($defaultPermissionsFromChild[$routeAction])) {
-//            $routeAction = $defaultPermissionsFromChild[$routeAction];
-//        }
-        //  if(!auth()->user()->hasPermissionTo($routeAction)){
-        //      $this->errorResponse(['message' => 'you are un authorized for this action'],401);
-        //  }
+
+
+        if (isset($this->map_permissions[$routeAction]))
+            $routeAction = $this->map_permissions[$routeAction];
+
+
+
+        if (!auth()->user()->hasPermissionTo($routeAction)) {
+             $this->errorResponse('you are un authorized for this action' ,returnCode:401);
+        }
 
 //        $this->defaultLocalize = config('app.locale');
 
 
-//        $route_action = basename(Route::currentRouteAction());
-//        if(isset($this->map_permissions[$route_action]))
-//            $route_action = $this->map_permissions[$route_action];
-
     }
 
-    protected function successResponse($message = 'Success!', Array $data=[], $returnCode = 1, $statusCode= 200): \Illuminate\Http\JsonResponse
+    protected function successResponse($message = 'Success!', array $data = [], $returnCode = 1, $statusCode = 200): \Illuminate\Http\JsonResponse
     {
-        return successResponse($message,$data,$returnCode,$statusCode);
+        return successResponse($message, $data, $returnCode, $statusCode);
     }
 
-    protected function errorResponse($message = 'An error occurred please try again later'  , array $data=[],  $returnCode = -1, $statusCode = 200): \Illuminate\Http\JsonResponse
+    protected function errorResponse($message = 'An error occurred please try again later', array $data = [], $returnCode = -1, $statusCode = 200): \Illuminate\Http\JsonResponse
     {
-        return errorResponse($message, $data ,$returnCode, $statusCode);
+        return errorResponse($message, $data, $returnCode, $statusCode);
     }
 
     protected function successResponsePaginated($resource, $model, array $relation = [], $pagintaion = null)
@@ -83,7 +83,7 @@ class MainController extends Controller
         $relationKeysArr = [];
         foreach ($searchRelationsKeys as $relation => $searchRelationKeys) {
             foreach ($searchRelationKeys as $key => $dbColumn) {
-                if(!isset($relationKeysArr[$key]))
+                if (!isset($relationKeysArr[$key]))
                     $relationKeysArr[$key] = [];
                 $relationKeysArr[$key][] = $relation;
             }
@@ -91,15 +91,15 @@ class MainController extends Controller
 
         $model = $model->with($relations);
         $globalValue = strtolower($request->general_search);
-        if(!empty(trim($globalValue))){
-            $model->when($request->has('general_search') && $request->general_search != null, function ($query)use($searchKeys, $globalValue,$request,$searchRelationsKeys) {
-                foreach ($searchKeys as $key => $attribute){
-                    $query->oRwhereRaw('lower('.$attribute.') like (?)', ["%$globalValue%"]);
+        if (!empty(trim($globalValue))) {
+            $model->when($request->has('general_search') && $request->general_search != null, function ($query) use ($searchKeys, $globalValue, $request, $searchRelationsKeys) {
+                foreach ($searchKeys as $key => $attribute) {
+                    $query->oRwhereRaw('lower(' . $attribute . ') like (?)', ["%$globalValue%"]);
                 }
 
-                foreach ($searchRelationsKeys as $relation => $relationKeys){
+                foreach ($searchRelationsKeys as $relation => $relationKeys) {
 
-                    foreach ($relationKeys as $dbColumn){
+                    foreach ($relationKeys as $dbColumn) {
                         $query->oRwhereHas($relation, fn($query) => $query->whereRaw('lower(' . $dbColumn . ') like (?)', ["%$globalValue%"]));
                     }
                 }
@@ -109,16 +109,15 @@ class MainController extends Controller
             $model->where(function ($query) use ($data, $searchKeys, $relationKeysArr, $searchRelationsKeys,) {
                 foreach ($data as $key => $value) {
                     $value = strtolower($value);
-                    if(empty(trim($value)))
+                    if (empty(trim($value)))
                         continue;
                     if ((in_array($key, $searchKeys) && !empty($value))) {
                         $query->whereRaw('lower(' . $key . ') like (?)', ["%$value%"]);
-                    }
-                    elseif (!empty($relationKeysArr[$key])) {
-                        $query->where(function($subQuery) use($relationKeysArr, $key, $searchRelationsKeys, $value) {
-                            foreach ($relationKeysArr[$key] as $key2 => $relation){
+                    } elseif (!empty($relationKeysArr[$key])) {
+                        $query->where(function ($subQuery) use ($relationKeysArr, $key, $searchRelationsKeys, $value) {
+                            foreach ($relationKeysArr[$key] as $key2 => $relation) {
                                 $dbColumn = $searchRelationsKeys[$relation][$key];
-                                if($key2 == 0)
+                                if ($key2 == 0)
                                     $subQuery->whereHas($relation, fn($query) => $query->whereRaw('lower(' . $dbColumn . ') like (?)', ["%$value%"]));
                                 else
                                     $subQuery->orWhereHas($relation, fn($query) => $query->whereRaw('lower(' . $dbColumn . ') like (?)', ["%$value%"]));

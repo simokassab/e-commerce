@@ -51,7 +51,6 @@ class CategoryController extends MainController
         $labels= Label::whereEntity('brand')->get();
         $parentCategories = Category::all();
         return $this->successResponse(
-            message:'Success!',
             data: [
                 'fields' =>  FieldsResource::collection($fields),
                 'labels' => LabelsResource::collection($labels),
