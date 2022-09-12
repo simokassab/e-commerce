@@ -31,7 +31,7 @@ class RolesController extends MainController
 
             $searchKeys=['name'];
             $searchRelationsKeys = ['parent' => ['parent_role' => 'name'] ];
-            return $this->getSearchPaginated(RolesResource::class, CustomRole::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
+            return $this->getSearchPaginated(RolesResource::class, CustomRole::query(),$request, $searchKeys,self::relations,$searchRelationsKeys);
         }
 
         return $this->successResponsePaginated(RolesResource::class,CustomRole::class,self::relations);

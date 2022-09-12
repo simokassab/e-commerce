@@ -84,7 +84,6 @@ class MainController extends Controller
                 $relationKeysArr[$key][] = $relation;
             }
         }
-
         $model = $model->with($relations);
         $globalValue = strtolower($request->general_search);
         if (!empty(trim($globalValue))) {
