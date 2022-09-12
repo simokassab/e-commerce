@@ -140,6 +140,7 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.is_default_child' => 'required | boolean',
             'product_variations.*.isSamePriceAsParent' => 'required | boolean',
             'product_variations.*.products_statuses_id' => 'required | integer | exists:products_statuses,id',
+            'product_variations.*.is_same_dimensions_as_parent' => 'required | boolean',
 
 
 
