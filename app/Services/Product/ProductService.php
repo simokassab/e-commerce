@@ -550,13 +550,13 @@ class ProductService
 
             $data = [];
             foreach ($childrenIds as $key => $child) {
-                foreach ($imagesArray as $index => $image) {
+                foreach ($imagesArray[$key] as $index => $image) {
                     $imagePath = uploadImage($image, config('images_paths.product.images'));
                     $data[] = [
                         'product_id' => $child,
                         'image' => $imagePath,
-                        'title' => json_encode($imagesData[$index]['title']),
-                        'sort' => $imagesData[$index]['sort'],
+                        'title' => json_encode($imagesData[$key][$index]['title']),
+                        'sort' => $imagesData[$key][$index]['sort'],
                         'created_at'  => Carbon::now()->toDateString(),
                         'updated_at' => Carbon::now()->toDateString(),
                     ];
@@ -672,9 +672,9 @@ class ProductService
             ];
 
             $imagesDeletedArray = array_key_exists('images_deleted', $variation) ?  $variation['images_deleted'] : [];
-            $imagesArray = array_key_exists('images', $variation) ? $variation['images'] : [];
-            $imagesData = array_key_exists('images_data', $variation) ? $variation['images_data'] : [];
-            //$fieldsArray = array_key_exists('fields', $variation) ? $variation['fields'] : [];
+            $imagesArray[] = array_key_exists('images', $variation) ? $variation['images'] : [];
+            $imagesData[] = array_key_exists('images_data', $variation) ? $variation['images_data'] : [];
+            //$fieldsArray[] = array_key_exists('fields', $variation) ? $variation['fields'] : [];
             $fieldsArray = [];
             $attributesArray[] = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
             $productVariationParentsArray[] = $productVariationsArray;
