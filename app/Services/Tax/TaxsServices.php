@@ -28,6 +28,34 @@ class TaxsServices{
         TaxComponent::insert($componentsArray);
     }
 
+    public static function calculateTaxAmountFromNonTTCPrice(float $price,int $taxId, $allTaxes, $allTaxComponents)
+    {
+        $taxAmount = 0;
+        $tax = $allTaxes[$taxId];
+        if (!$tax['is_complex']) {
+            $taxAmount = ($price * $tax['percentage'] / 100);
+            echo "Simple [{$tax['percentage']}%]: {$taxAmount}<br/>";
+            return $taxAmount;
+        }
+        $components = getTaxComponent($taxId, $allTaxes, $allTaxComponents);
+        if ($tax['complex_behavior'] == 'after') {
+            foreach ($components as $componentTax) {
+                $componentTaxAmount = self::calculateTaxAmountFromNonTTCPrice($price, $componentTax['id'], $allTaxes, $allTaxComponents);
+                $taxAmount += $componentTaxAmount;
+                $price += $componentTaxAmount; //so second componene will get tax include the previous tax
+                echo "Complex After [{$componentTax['percentage']}%]: {$componentTaxAmount}<br/>";
+            }
+        } else {
+            foreach ($components as $componentTax) {
+                $componentTaxAmount = self::calculateTaxAmountFromNonTTCPrice($price, $componentTax['id'], $allTaxes, $allTaxComponents);
+                $taxAmount += $componentTaxAmount;
+                echo "Complex Combine [{$componentTax['percentage']}%]: {$componentTaxAmount}<br/>";
+            }
+        }
+        return $taxAmount;
+    }
+
+
 }
 
 
