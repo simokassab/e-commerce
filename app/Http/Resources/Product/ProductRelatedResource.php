@@ -22,7 +22,7 @@ class ProductRelatedResource extends JsonResource
     {
         $relatedProducts = self::$relatedProducts;
         $relatedProductsImages = self::$relatedProductsImages;
-        $relatedProductsPrices= self::$relatedProductsPrices;
+        $relatedProductsPrices = self::$relatedProductsPrices;
 
         $product = $relatedProducts->where('id', $this->child_product_id)->first();
         $images =  $relatedProductsImages->where('product_id', $this->child_product_id);
@@ -33,13 +33,13 @@ class ProductRelatedResource extends JsonResource
             'child_quantity' => (int)$this->child_quantity,
             'name' => $this->getTranslations('name'),
             'name_original' => $product->getTranslations('name'),
-            'name_status' => $this->child_name_status,
+            'child_name_status' => $this->child_name_status,
             'images' => ProductImagesResource::collection($images) ?? [],
             'prices' => ProductPriceResoruce::collection($prices->load('prices')) ?? [],
         ];
     }
 
-    public static function customCollection($collection, $relatedProducts, $relatedProductsImages,$relatedProductsPrices)
+    public static function customCollection($collection, $relatedProducts, $relatedProductsImages, $relatedProductsPrices)
     {
 
         self::$relatedProducts = $relatedProducts;

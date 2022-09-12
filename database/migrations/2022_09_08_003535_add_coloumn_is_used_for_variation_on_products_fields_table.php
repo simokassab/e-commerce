@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('products_related', function (Blueprint $table) {
-            $table->enum('child_name_status', ['default', 'hide', 'custom'])->default('hide')->after('child_quantity');
+        Schema::table('products_fields', function (Blueprint $table){
+            $table->boolean('is_used_for_variations')->default(0)->after('value');
         });
     }
 
@@ -25,9 +25,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('products_related', function (Blueprint $table) {
-            if (Schema::hasColumn('products_related', 'child_name_status')) {
-                $table->dropColumn('child_name_status');
+        Schema::table('products_fields', function (Blueprint $table){
+            if (Schema::hasColumn('products_fields','is_used_for_variations')){
+                $table->dropColumn('is_used_for_variations');
             }
         });
     }

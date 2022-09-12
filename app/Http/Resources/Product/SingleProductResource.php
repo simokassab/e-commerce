@@ -36,7 +36,11 @@ class SingleProductResource extends JsonResource
         $this->productRelated = $data[0];
         $this->relatedProducts = $data[1];
         $this->relatedProductsImages = $data[2];
-        $this->relatedProductsPrices=$data[3];
+        $this->relatedProductsPrices = $data[3];
+        $this->productsFields = $data[4];
+        $this->productsAttributes = $data[5];
+        $this->childrenFieldValues = $data[6];
+        $this->childrenImages = $data[7];
         $this->resource = $product;
     }
     /**
@@ -49,8 +53,9 @@ class SingleProductResource extends JsonResource
     {
         $selectedCategoriesIds = $this->whenLoaded('category');
         $nestedCategories = CategoryService::getAllCategoriesNested($this->all_categories, $selectedCategoriesIds->pluck('id')->toArray());
-        $childrenIds = Product::where('parent_product_id', $this->id)->pluck('id')->toArray();
-        $productAttributes = ProductField::whereIn('product_id', $childrenIds)->get();
+        // $childrenIds = Product::where('parent_product_id', $this->id)->pluck('id')->toArray();
+        // $productAttributes = ProductField::whereIn('product_id', $childrenIds)->get();
+        // dd($this->whenLoaded('tags'));
 
         return [
             'id' => (int)$this->id,
@@ -61,9 +66,9 @@ class SingleProductResource extends JsonResource
             'sku' => $this->sku,
             'type' => $this->type,
             'unit' => $this->whenLoaded('unit') ? new SelectUnitResource($this->whenLoaded('unit')) : [],
-            'quantity' => (int)$this->quantity ?? 0,
-            'reserved_quantity' => (int)$this->reserved_quantity ?? 0,
-            'minimum_quantity' => (int)$this->minimum_quantity ?? 0,
+            'quantity' => (float)$this->quantity,
+            'reserved_quantity' => (float)$this->reserved_quantity,
+            'minimum_quantity' => (float)$this->minimum_quantity,
             'summary' => $this->getTranslations('summary') ?? [],
             'specification' => $this->getTranslations('specification')  ?? [],
             'image' => $this->image && !empty($this->image) ?  getAssetsLink('storage/' . $this->image) : 'default_image',
@@ -75,27 +80,29 @@ class SingleProductResource extends JsonResource
             'meta_keyword' => $this->getTranslations('meta_keyword')  ?? [],
             'description' => $this->getTranslations('description')  ?? [],
             'barcode' => $this->barcode ?? null,
-            'height' => (int)$this->height ?? 0,
-            'width' => (int)$this->width ?? 0,
-            'length' => (int)$this->length ?? 0,
-            'weight' => (int)$this->weight ?? 0,
+            'height' => (float)$this->height ?? 0,
+            'width' => (float)$this->width ?? 0,
+            'length' => (float)$this->length ?? 0,
+            'weight' => (float)$this->weight ?? 0,
             'is_disabled' => (bool)$this->is_disabled,
             'sort' => (int)$this->sort,
             'parent_product_id' => (int)$this->parent_product_id ?? null,
             'is_default_child' => (bool)$this->is_default_child,
-            'products_statuses_id' => (int)$this->product_statuses_id,
+            'products_statuses_id' => (int)$this->products_statuses_id,
             'is_show_related_product' => (bool)$this->is_show_related_product,
             'website_status' => $this->website_status,
             'pre_order' => (int)$this->pre_order ?? 0,
+            'bundle_price_status' => $this->bundle_price_status,
             'prices' => ProductPriceResoruce::collection($this->whenLoaded('price')->load('prices.currency')) ?? [],
             'fields' => SingleFieldResource::collection($this->whenLoaded('field'))->where('is_attribute', 0) ?? [],
-            'attributes' => $productAttributes ?? [],
+            'attributes' => ProductAttributesResource::collection($this->productsAttributes),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'labels' => SelectLabelResource::collection($this->whenLoaded('labels')),
             'categories' => $nestedCategories,
-            'related_products' => ProductRelatedResource::customCollection($this->productRelated,$this->relatedProducts,$this->relatedProductsImages,$this->relatedProductsPrices->load('prices')) ?? [],
-            'variations' => $this->whenLoaded('children') ? $this->whenLoaded('children') : [],
+            'related_products' => ProductRelatedResource::customCollection($this->productRelated, $this->relatedProducts, $this->relatedProductsImages, $this->relatedProductsPrices->load('prices')) ?? [],
+            'variations' => ProductVariableResoruce::customCollection($this->whenLoaded('children'), $this->childrenFieldValues, $this->childrenImages),
             'images' => ProductImagesResource::collection($this->whenLoaded('images')) ?? [],
+            'products_fields' => ProductFieldsResource::collection($this->productsFields),
         ];
     }
 }

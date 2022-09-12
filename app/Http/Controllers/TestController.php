@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\MainController;
 use App\Exceptions\FileErrorException;
+use App\Models\Product\ProductField;
 use App\Models\RolesAndPermissions\CustomPermission;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -45,9 +46,10 @@ class TestController extends MainController
 
     public function test()
     {
-    
-        return ( new CalculateTax(250,Tax::find(5)) )->handle();
 
+
+        return Product::query()->find(1)->updateProductQuantity(5,'sub');
+//        return Product::query()->find(1)->relatedProducts;
     }
 
 }

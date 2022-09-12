@@ -28,7 +28,7 @@ return [
     'default_string_length_2' => 125,
 
     'default_pagination' => 15,
-    'fields_types' => 'checkbox','text','select','textarea','date',
+    'fields_types' => ['checkbox','text','select','textarea','date'],
 
     'default_minimum_tax_percentage' => 0,
     'default_maximum_tax_percentage' => 100,

@@ -4,7 +4,7 @@ namespace App\Http\Resources\Product;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductImagesResource extends JsonResource
+class ProductFieldsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -12,13 +12,23 @@ class ProductImagesResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
+
     public function toArray($request)
     {
+
+        $value = $this->value;
+        if(!is_null($this->field_value_id)){
+            $value = (int)$this->field_value_id;
+        }
+
+
+        // $currentObject->id = $this->id
         return [
             'id' => (int)$this->id,
-            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
-            'product_id' => $this->product_id,
-            'title' => $this->getTranslations('title'),
+            'field_id' => (int)$this->field_id,
+            'value' => is_numeric($value) ? (int)($value) : $value,
         ];
     }
+
+
 }

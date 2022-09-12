@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('products_related', function (Blueprint $table) {
-            $table->enum('child_name_status', ['default', 'hide', 'custom'])->default('hide')->after('child_quantity');
+        Schema::table('products', function (Blueprint $table) {
+            $table->boolean('is_same_price_as_parent')->after('is_default_child')->default(0);
         });
     }
 
@@ -25,10 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('products_related', function (Blueprint $table) {
-            if (Schema::hasColumn('products_related', 'child_name_status')) {
-                $table->dropColumn('child_name_status');
-            }
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('is_same_price_as_parent');
         });
     }
 };
