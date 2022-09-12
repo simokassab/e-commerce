@@ -488,7 +488,6 @@ class ProductService
     }
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
-        dd($attributesArray);
         try {
             if (is_null($attributesArray) || count($attributesArray) == 0)
                 return $this;
@@ -496,7 +495,7 @@ class ProductService
             $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->whereHas('field', fn ($query) => $query->where('is_attribute', 1))->delete();
             $data = [];
             foreach ($childrenIds as $key => $child) {
-                foreach ($attributesArray as $index => $attribute) {
+                foreach ($attributesArray[$key] as $index => $attribute) {
                     if (!in_array($attribute['type'], config('defaults.fields_types')))
                         throw new Exception('Invalid fields type');
 
