@@ -187,7 +187,7 @@ class Product extends MainModel
     /**
      * @throws \Throwable
      */
-    public function editProductQuantity(float $newQuantity){
+    public function editQuantity(float $newQuantity){
         if($this->type == 'service' || $this->type == 'variable'){
             return $this;
         }
