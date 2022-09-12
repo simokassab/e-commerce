@@ -635,7 +635,23 @@ class ProductService
             if ($variation['is_default_child']) {
                 $defaultChild = $variation;
             }
+            $isSameDimensionsAsParent =  array_key_exists('is_same_dimensions_as_parent', $variation) ? $variation['is_same_dimensions_as_parent'] : false;
+            $height = "";
+            $width = "";
+            $length = "";
+            $weight = "";
 
+            if ($isSameDimensionsAsParent) {
+                $height = array_key_exists('height', $variation) ? $variation['height'] : null;
+                $width = array_key_exists('width', $variation) ? $variation['width'] : null;
+                $length = array_key_exists('p_length', $variation) ? $variation['p_length'] : null;
+                $weight = array_key_exists('weight', $variation) ? $variation['weight'] : null;
+            } else {
+                $height =  $request->height ?? null;
+                $width = $request->width ?? null;
+                $length =  $request->p_length  ?? null;
+                $weight = $request->weight ?? null;
+            }
             $productVariationsArray = [
                 'name' => json_encode($request->name),
                 'code' => $variation['code'],
@@ -645,10 +661,10 @@ class ProductService
                 'is_same_price_as_parent' => $variation['isSamePriceAsParent'],
                 'reserved_quantity' => $variation['reserved_quantity'],
                 'minimum_quantity' => $variation['minimum_quantity'],
-                'height' => array_key_exists('height', $variation) ? $variation['height'] : null,
-                'width' => array_key_exists('width', $variation) ? $variation['width'] : null,
-                'length' => array_key_exists('p_length', $variation) ? $variation['p_length'] : null,
-                'weight' => array_key_exists('weight', $variation) ? $variation['weight'] : null,
+                'height' => $height,
+                'width' => $width,
+                'length' => $length,
+                'weight' => $weight,
                 'barcode' => array_key_exists('barcode', $variation) ? $variation['barcode'] : null,
                 'category_id' => $request->category_id,
                 'unit_id' => $request->unit_id ?? null,

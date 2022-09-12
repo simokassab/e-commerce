@@ -27,10 +27,10 @@ class BrandController extends MainController
 {
     const OBJECT_NAME = 'objects.brands';
 
-//    public function __construct($defaultPermissionsFromChild = null)
-//    {
-//        parent::__construct(['BrancController@index' => ]);
-//    }
+    //    public function __construct($defaultPermissionsFromChild = null)
+    //    {
+    //        parent::__construct(['BrancController@index' => ]);
+    //    }
 
     /**
      * Display a listing of the resource.
@@ -40,12 +40,12 @@ class BrandController extends MainController
     public function index(Request $request)
     {
 
-        if ($request->method()=='POST') {
-            $searchKeys=['name','code','meta_title','meta_description','meta_keyword','description'];
-            return $this->getSearchPaginated(BrandResource::class, Brand::class,$request, $searchKeys);
+        if ($request->method() == 'POST') {
+            $searchKeys = ['name', 'code', 'meta_title', 'meta_description', 'meta_keyword', 'description'];
+            return $this->getSearchPaginated(BrandResource::class, Brand::class, $request, $searchKeys);
         }
 
-        return $this->successResponsePaginated(BrandResource::class,Brand::class);
+        return $this->successResponsePaginated(BrandResource::class, Brand::class);
     }
 
     /**
@@ -55,8 +55,8 @@ class BrandController extends MainController
      */
     public function create()
     {
-        $fields= Field::with('fieldValue')->whereEntity('brand')->get();
-        $labels= Label::whereEntity('brand')->get();
+        $fields = Field::with('fieldValue')->whereEntity('brand')->get();
+        $labels = Label::whereEntity('brand')->get();
 
         return $this->successResponse(
             'Success!',
@@ -80,37 +80,37 @@ class BrandController extends MainController
 
             $brand = new Brand();
 
-            if( gettype($request->name) != 'array'){
-                $brand->name =(array)json_decode($request->name);
-            }else{
+            if (gettype($request->name) != 'array') {
+                $brand->name = (array)json_decode($request->name);
+            } else {
                 $brand->name = $request->name;
             }
             $brand->code = '0';
 
-            if($request->image)
-                $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brands.images'));
+            if ($request->image)
+                $brand->image = $this->imageUpload($request->file('image'), config('images_paths.brands.images'));
 
-            if( gettype($request->meta_title) != 'array'){
-                $brand->meta_title =(array)json_decode($request->meta_title);
-            }else{
+            if (gettype($request->meta_title) != 'array') {
+                $brand->meta_title = (array)json_decode($request->meta_title);
+            } else {
                 $brand->meta_title = $request->meta_title;
             }
 
-            if( gettype($request->meta_description) != 'array'){
-                $brand->meta_description =(array)json_decode($request->meta_description);
-            }else{
+            if (gettype($request->meta_description) != 'array') {
+                $brand->meta_description = (array)json_decode($request->meta_description);
+            } else {
                 $brand->meta_description = $request->meta_description;
             }
 
-            if( gettype($request->meta_keyword) != 'array'){
-                $brand->meta_keyword =(array)json_decode($request->meta_keyword);
-            }else{
+            if (gettype($request->meta_keyword) != 'array') {
+                $brand->meta_keyword = (array)json_decode($request->meta_keyword);
+            } else {
                 $brand->meta_keyword = $request->meta_keyword;
             }
 
-            if( gettype($request->description) != 'array'){
-                $brand->description =(array)json_decode($request->description);
-            }else{
+            if (gettype($request->description) != 'array') {
+                $brand->description = (array)json_decode($request->description);
+            } else {
                 $brand->description = $request->description;
             }
 
@@ -122,34 +122,33 @@ class BrandController extends MainController
             $brand->save();
 
             //Fields Store
-            if($request->has('fields')){
-                BrandsService::addFieldsToBrands($brand,($request->fields));
+            if ($request->has('fields')) {
+                BrandsService::addFieldsToBrands($brand, ($request->fields));
             }
 
-                if ($request->has('labels')) {
-                    $oldLabel = $request->labels;
-                    if(gettype($request->labels) == 'string'){
-                        $request->labels = explode(",",$request->labels);
-                        if(count($request->labels) <= 0){
-                            $request->labels = $oldLabel;
-                        }
+            if ($request->has('labels')) {
+                $oldLabel = $request->labels;
+                if (gettype($request->labels) == 'string') {
+                    $request->labels = explode(",", $request->labels);
+                    if (count($request->labels) <= 0) {
+                        $request->labels = $oldLabel;
                     }
-                    BrandsService::addLabelsToBrands($brand,$request->labels);
                 }
+                BrandsService::addLabelsToBrands($brand, $request->labels);
+            }
 
-                DB::commit();
-                return $this->successResponse(
-                    __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                    [
-                        'brands' => new SingleBrandResource($brand->load(['label','field','fieldValue']))
-                    ]
-                );
+            DB::commit();
+            return $this->successResponse(
+                __('messages.success.create', ['name' => __(self::OBJECT_NAME)]),
+                [
+                    'brands' => new SingleBrandResource($brand->load(['label', 'field', 'fieldValue']))
+                ]
+            );
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse(
-                __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) . " error message : $e"  ,
+                __('messages.failed.create', ['name' => __(self::OBJECT_NAME)]) . " error message : $e",
             );
-
         }
     }
 
@@ -161,8 +160,7 @@ class BrandController extends MainController
      */
     public function show(Brand $brand)
     {
-        return $this->successResponse("success!",['brands' => new SingleBrandResource($brand->load(['field','label','fieldValue']))]);
-
+        return $this->successResponse("success!", ['brands' => new SingleBrandResource($brand->load(['field', 'label', 'fieldValue']))]);
     }
 
     /**
@@ -173,7 +171,6 @@ class BrandController extends MainController
      */
     public function edit($id)
     {
-
     }
 
     /**
@@ -191,84 +188,81 @@ class BrandController extends MainController
 
             BrandsService::deleteRelatedBrandFieldsAndLabels($brand);
 
-            if( gettype($request->name) != 'array'){
-                $brand->name =(array)json_decode($request->name);
-            }else{
+            if (gettype($request->name) != 'array') {
+                $brand->name = (array)json_decode($request->name);
+            } else {
                 $brand->name = $request->name;
             }
 
-            if($request->image){
-                if(!$this->removeImage($brand->image ) ){
+            if ($request->image) {
+                if (!$this->removeImage($brand->image)) {
                     throw new FileErrorException();
                 }
-                $brand->image= $this->imageUpload($request->file('image'),config('images_paths.brands.images'));
-
+                $brand->image = $this->imageUpload($request->file('image'), config('images_paths.brands.images'));
             }
 
-            if( gettype($request->meta_title) != 'array'){
-                $brand->meta_title =(array)json_decode($request->meta_title);
-            }else{
+            if (gettype($request->meta_title) != 'array') {
+                $brand->meta_title = (array)json_decode($request->meta_title);
+            } else {
                 $brand->meta_title = $request->meta_title;
             }
 
-            if( gettype($request->meta_description) != 'array'){
-                $brand->meta_description =(array)json_decode($request->meta_description);
-            }else{
+            if (gettype($request->meta_description) != 'array') {
+                $brand->meta_description = (array)json_decode($request->meta_description);
+            } else {
                 $brand->meta_description = $request->meta_description;
             }
 
-            if( gettype($request->meta_keyword) != 'array'){
-                $brand->meta_keyword =(array)json_decode($request->meta_keyword);
-            }else{
+            if (gettype($request->meta_keyword) != 'array') {
+                $brand->meta_keyword = (array)json_decode($request->meta_keyword);
+            } else {
                 $brand->meta_keyword = $request->meta_keyword;
             }
 
-            if( gettype($request->description) != 'array'){
-                $brand->description =(array)json_decode($request->description);
-            }else{
+            if (gettype($request->description) != 'array') {
+                $brand->description = (array)json_decode($request->description);
+            } else {
                 $brand->description = $request->description;
             }
 
             $brand->save();
 
 
-            if($request->has('fields')){
-                 BrandsService::addFieldsToBrands($brand, $request->fields);
+            if ($request->has('fields')) {
+                BrandsService::addFieldsToBrands($brand, $request->fields);
             }
             $oldLabel = $request->labels;
 
             if ($request->has('labels')) {
-                if(gettype($request->labels) == 'string'){
-                    $request->labels = explode(",",$request->labels);
-                    if(count($request->labels) <= 0){
+                if (gettype($request->labels) == 'string') {
+                    $request->labels = explode(",", $request->labels);
+                    if (count($request->labels) <= 0) {
                         $request->labels = $oldLabel;
                     }
                 }
-                BrandsService::addLabelsToBrands($brand,$request->labels);
+                BrandsService::addLabelsToBrands($brand, $request->labels);
             }
 
             DB::commit();
 
             return $this->successResponse(
-                __('messages.success.update',['name' => __(self::OBJECT_NAME)]) ,
+                __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
                 [
-                    'brands' => new SingleBrandResource($brand->load(['label','field','fieldValue']))
+                    'brands' => new SingleBrandResource($brand->load(['label', 'field', 'fieldValue']))
                 ]
             );
-
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->errorResponse(
-                __('messages.failed.update',['name' => __(self::OBJECT_NAME)]). "the error message: $e",
+                __('messages.failed.update', ['name' => __(self::OBJECT_NAME)]) . "the error message: $e",
             );
-
-        }catch(Error $error){
+        } catch (Error $error) {
             DB::rollBack();
             return $this->errorResponse(
-                __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) . "the error message: $error" ,
+                __('messages.failed.create', ['name' => __(self::OBJECT_NAME)]) . "the error message: $error",
             );
         }
-}
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -284,59 +278,56 @@ class BrandController extends MainController
             $brand->delete();
             DB::commit();
             return $this->successResponse(
-                __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+                __('messages.success.delete', ['name' => __(self::OBJECT_NAME)]),
 
             );
-
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse( __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]));
-
+            return $this->errorResponse(__('messages.failed.delete', ['name' => __(self::OBJECT_NAME)]));
         }
+    }
+    public function toggleStatus(Request $request, $id)
+    {
+
+        $request->validate([
+            'is_disabled' => 'boolean|required'
+        ]);
+
+        $brand = Brand::findOrFail($id);
+        $brand->is_disabled = $request->is_disabled;
+        if (!$brand->save())
+            return $this->errorResponse(__('messages.failed.update', ['name' => __(self::OBJECT_NAME)]));
+
+        return $this->successResponse(
+            __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
+            [
+                'brands' =>  new BrandResource($brand)
+            ]
+        );
+    }
+
+    public function getAllBrandsSorted()
+    {
+        $brands = Brand::order()->get();
+        return $this->successResponse('Success!', ['brands' => $brands]);
+    }
 
 
-}
-public function toggleStatus(Request $request ,$id){
+    public function updateSortValues(Request $request)
+    {
 
-    $request->validate([
-        'is_disabled' => 'boolean|required'
-    ]);
+        batch()->update($brand = new Brand(), $request->order, 'id');
 
-    $brand = Brand::findOrFail($id);
-    $brand->is_disabled = $request->is_disabled;
-    if(!$brand->save())
-        return $this->errorResponse(__('messages.failed.update',['name' => __(self::OBJECT_NAME)]) );
+        return $this->successResponsePaginated(BrandResource::class, Brand::class);
+    }
 
-    return $this->successResponse(
-        __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-        [
-            'brands' =>  new BrandResource($brand)
-        ]
-    );
+    public function getTableHeaders(): \Illuminate\Http\JsonResponse
+    {
+        return $this->successResponse('success', ['headers' => __('headers.brands')]);
+    }
 
-}
-
-public function getAllBrandsSorted(){
-    $brands=Brand::order()->get();
-    return $this->successResponse('Success!',['brands' => $brands ]);
-}
-
-
-public function updateSortValues(Request $request){
-
-    batch()->update($brand = new Brand(),$request->order,'id');
-
-    return $this->successResponsePaginated(BrandResource::class,Brand::class);
-
-}
-
-public function getTableHeaders(): \Illuminate\Http\JsonResponse
-{
-        return $this->successResponse( 'success' , ['headers' => __('headers.brands') ]);
-}
-
-public function getBrandsData()
-{
-    return $this->successResponsePaginated(RestFullBrandResource::class,Brand::class,['field','label']);
-}
+    public function getBrandsData()
+    {
+        return $this->successResponsePaginated(RestFullBrandResource::class, Brand::class, ['field', 'label']);
+    }
 }
