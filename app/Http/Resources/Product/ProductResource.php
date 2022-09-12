@@ -18,21 +18,21 @@ class ProductResource extends JsonResource
     {
 
 
-        $data[0]['name'] = $this->whenLoaded('defaultCategory') ? $this->whenLoaded('defaultCategory')->name : "-";
-        $data[0]['isMain'] = true;
-        $categories = [];
-        $categories = $this->whenLoaded('category')->map(
-            function ($category) {
-                $categoriesArray = [];
-                $categoriesArray['name'] = $category->name;
-                $categoriesArray['isMain'] = false;
+        // $data[0]['name'] = $this->whenLoaded('defaultCategory') ? $this->whenLoaded('defaultCategory')->name : "-";
+        // $data[0]['isMain'] = true;
+        // $categories = [];
+        // $categories = $this->whenLoaded('category')->map(
+        //     function ($category) {
+        //         $categoriesArray = [];
+        //         $categoriesArray['name'] = $category->name;
+        //         $categoriesArray['isMain'] = false;
 
-                return $categoriesArray;
-            }
-        );
+        //         return $categoriesArray;
+        //     }
+        // );
+        $category = $this->whenLoaded('defaultCategory') ? $this->whenLoaded('defaultCategory')->name : "-";
 
-
-        $categories = array_merge($data, $categories->toArray());
+        // $categories = array_merge($data, $categories->toArray());
 
         $tags = $this->whenLoaded('tags')->map(
             function ($tag) {
@@ -50,7 +50,8 @@ class ProductResource extends JsonResource
             'quantity' => $this->quantity,
             'image' => $this->image && !empty($this->image) ?  getAssetsLink('storage/' . $this->image) : 'default_image',
             'website_status' => $this->website_status,
-            'categories' => $categories ?? "-",
+            'categories' => $category,
+            // 'categories' => $categories ?? "-",
             'tags' => count($tags) != 0 ? $tags : '-',
             'brands' =>  $this->whenLoaded('brand') ? $this->whenLoaded('brand')->name : '-',
         ];

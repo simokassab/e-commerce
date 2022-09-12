@@ -116,13 +116,13 @@ return [
             'type' => 'integer',
             'sort' => true
         ],
-        'name' =>[
+        'name' => [
             'name' => 'Name',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
-        'code' =>[
+        'code' => [
             'name' => 'Code',
             'search' => 'integer',
             'type' => 'integer',
@@ -160,7 +160,7 @@ return [
             'type' => 'string',
             'sort' => true
         ],
-        'start_date' =>[
+        'start_date' => [
             'name' => 'Start Date',
             'search' => 'date',
             'type' => 'date',
@@ -353,12 +353,12 @@ return [
         // ],
 
         'categories' => [
-            'name' => 'Categories',
+            'name' => 'Main Category',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
         ],
-       
+
         'tags' => [
             'name' => 'Tags',
             'search' => 'string',
@@ -372,7 +372,7 @@ return [
             'sort' => true
         ],
 
-       
+
     ],
     'products_select_product' => [
         'id' => [
@@ -501,7 +501,7 @@ return [
             'is_visible' => false,
             'is_show' => false
         ],
-        
+
     ],
     'roles' => [
         'id' => [
@@ -779,8 +779,8 @@ return [
             'sort' => false
         ],
     ],
-    
-    
 
-    
+
+
+
 ];

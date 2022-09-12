@@ -395,7 +395,8 @@ class ProductService
                 ProductImage::class,
                 ProductLabel::class,
                 ProductPrice::class,
-                ProductTag::class
+                ProductTag::class,
+                ProductPrice::class,
             ];
 
             $productType = $product->type ?? '';
@@ -409,12 +410,17 @@ class ProductService
                     $table::whereIn('product_id', $productChildren)->delete();
                 }
                 Product::whereIn('id', $productChildren)->delete();
-            }
+            } elseif ($productType == 'bundle') {
 
-            ProductRelated::where('parent_product_id', $product->id)->delete();
-            foreach ($data as $table) {
-                $table::where('product_id', $product->id)->delete();
+                $product->updateProductQuantity($product->reserved_quanityt, 'sub');
+                ProductRelated::where('parent_product_id', $product->id)->delete();
+            } else {
+
+                foreach ($data as $table)
+                    $table::where('product_id', $product->id)->delete();
             }
+            Product::where('id', $product->id)->delete();
+
 
             //            DB::commit();
         } catch (\Exception $e) {
