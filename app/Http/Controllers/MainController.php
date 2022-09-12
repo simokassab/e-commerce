@@ -26,16 +26,12 @@ use PDO;
 class MainController extends Controller
 {
 
-    public function __construct( $defaultPermissionsFromChild = null )
+    public function __construct( /**  $defaultPermissionsFromChild = null */ )
     {
-        $routeAction = basename(Route::currentRouteAction()); //we got the permission name
+//        $routeAction = basename(Route::currentRouteAction()); //we got the permission name
 
-
-
-        if (isset($this->map_permissions[$routeAction]))
-            $routeAction = $this->map_permissions[$routeAction];
-
-
+//        if (isset($this->map_permissions[$routeAction]))
+//            $routeAction = $this->map_permissions[$routeAction];
 
 //        if (!auth()->user()->hasPermissionTo($routeAction)) {
 //             $this->errorResponse('you are un authorized for this action' ,returnCode:401);
