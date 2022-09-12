@@ -139,6 +139,7 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.weight' =>  [Rule::when(in_array('weight',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
             'product_variations.*.is_default_child' => 'required | boolean',
             'product_variations.*.isSamePriceAsParent' => 'required | boolean',
+            'product_variations.*.products_statuses_id' => 'required | integer | exists:products_statuses,id',
 
 
 
