@@ -624,7 +624,7 @@ class ProductService
 
         $defaultChild = null;
 
-        foreach ($request->product_variations as $variation) {
+        foreach ($request->product_variations as $key => $variation) {
             $imagePath = array_key_exists('image', $variation) ? $variation['image'] : "";
             if (!is_null($variation['image'])) {
                 if ($variation['image'] && !is_string($variation['image'])) {
@@ -677,7 +677,7 @@ class ProductService
             $imagesData = array_key_exists('images_data', $variation) ? $variation['images_data'] : [];
             //$fieldsArray = array_key_exists('fields', $variation) ? $variation['fields'] : [];
             $fieldsArray = [];
-            $attributesArray[] = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
+            $attributesArray[$key] = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
             $productVariationParentsArray[] = $productVariationsArray;
         }
         $model = new Product();
