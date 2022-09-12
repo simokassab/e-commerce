@@ -353,7 +353,7 @@ return [
         // ],
 
         'categories' => [
-            'name' => 'Main Category',
+            'name' => 'Categories',
             'search' => 'string',
             'type' => 'string',
             'sort' => true
