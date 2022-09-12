@@ -37,9 +37,9 @@ class MainController extends Controller
 
 
 
-        if (!auth()->user()->hasPermissionTo($routeAction)) {
-             $this->errorResponse('you are un authorized for this action' ,returnCode:401);
-        }
+//        if (!auth()->user()->hasPermissionTo($routeAction)) {
+//             $this->errorResponse('you are un authorized for this action' ,returnCode:401);
+//        }
 
 //        $this->defaultLocalize = config('app.locale');
 
