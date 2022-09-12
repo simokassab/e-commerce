@@ -17,6 +17,7 @@ class ProductPriceResoruce extends JsonResource
         $price = $this->whenLoaded('prices');
         return [
             'id' => $this->id,
+            'name' => $price->getTranslation('name','en'),
             'product_id' => (int)$this->product_id,
             'price_id' => (int)$this->price_id,
             'price' => (float)$this->price,

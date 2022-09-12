@@ -15,7 +15,7 @@ class SettingObserver
      */
     public function created(Setting $setting)
     {
-        Cache::forget('settings');
+        Cache::forget(Setting::$cacheKey);
     }
 
     /**
@@ -26,7 +26,7 @@ class SettingObserver
      */
     public function updated(Setting $setting)
     {
-        Cache::forget('settings');
+        Cache::forget(Setting::$cacheKey);
 
     }
 
@@ -38,7 +38,7 @@ class SettingObserver
      */
     public function deleted(Setting $setting)
     {
-        Cache::forget('settings');
+        Cache::forget(Setting::$cacheKey);
 
     }
 
@@ -50,7 +50,6 @@ class SettingObserver
      */
     public function restored(Setting $setting)
     {
-        Cache::forget('settings');
 
     }
 
@@ -62,7 +61,7 @@ class SettingObserver
      */
     public function forceDeleted(Setting $setting)
     {
-        Cache::forget('settings');
+        Cache::forget(Setting::$cacheKey);
 
     }
 }

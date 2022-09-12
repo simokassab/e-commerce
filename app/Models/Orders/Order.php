@@ -29,5 +29,17 @@ class Order extends Model
         return $this->hasMany(OrderNote::class, 'order_id','id');
     }
 
+    public function paymentMethod(){
+        return $this->hasOne(PaymentMethod::class,'id','payment_method_id');
+    }
+
+    public function shippingCountry(){
+        return $this->hasOne(Country::class,'id','shipping_country_id');
+    }
+
+    public function billingCountry(){
+        return $this->hasOne(Country::class,'id','billing_country_id');
+    }
+
 
 }

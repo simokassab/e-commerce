@@ -82,37 +82,48 @@ class MainController extends Controller
         $data = $request->data ?? [];
         $relationKeysArr = [];
         foreach ($searchRelationsKeys as $relation => $searchRelationKeys) {
-            foreach ($searchRelationKeys as $key => $dbColumn)
-                $relationKeysArr[$key] = $relation;
+            foreach ($searchRelationKeys as $key => $dbColumn) {
+                if(!isset($relationKeysArr[$key]))
+                    $relationKeysArr[$key] = [];
+                $relationKeysArr[$key][] = $relation;
+            }
         }
 
-        $model = $model::with($relations);
-        $model->when($request->has('general_search') && $request->general_search != null, function ($query)use($searchKeys,$request,$searchRelationsKeys) {
-            $value = strtolower($request->general_search);
-            foreach ($searchKeys as $key => $attribute){
-                $query->oRwhereRaw('lower('.$attribute.') like (?)', ["%$value%"]);
-            }
-
-            foreach ($searchRelationsKeys as $relation => $relationKeys){
-
-                foreach ($relationKeys as $dbColumn){
-                    $query->oRwhereHas($relation, fn($query) => $query->whereRaw('lower(' . $dbColumn . ') like (?)', ["%$value%"]));
+        $model = $model->with($relations);
+        $globalValue = strtolower($request->general_search);
+        if(!empty(trim($globalValue))){
+            $model->when($request->has('general_search') && $request->general_search != null, function ($query)use($searchKeys, $globalValue,$request,$searchRelationsKeys) {
+                foreach ($searchKeys as $key => $attribute){
+                    $query->oRwhereRaw('lower('.$attribute.') like (?)', ["%$globalValue%"]);
                 }
-            }
-        });
 
+                foreach ($searchRelationsKeys as $relation => $relationKeys){
 
+                    foreach ($relationKeys as $dbColumn){
+                        $query->oRwhereHas($relation, fn($query) => $query->whereRaw('lower(' . $dbColumn . ') like (?)', ["%$globalValue%"]));
+                    }
+                }
+            });
+        }
         if (is_array($data) && !empty($data)) {
             $model->where(function ($query) use ($data, $searchKeys, $relationKeysArr, $searchRelationsKeys,) {
                 foreach ($data as $key => $value) {
                     $value = strtolower($value);
+                    if(empty(trim($value)))
+                        continue;
                     if ((in_array($key, $searchKeys) && !empty($value))) {
                         $query->whereRaw('lower(' . $key . ') like (?)', ["%$value%"]);
                     }
-                    elseif (isset($relationKeysArr[$key])) {
-                        $relation = $relationKeysArr[$key];
-                        $dbColumn = $searchRelationsKeys[$relation][$key];
-                        $query->whereHas($relation, fn($query) => $query->whereRaw('lower(' . $dbColumn . ') like (?)', ["%$value%"]));
+                    elseif (!empty($relationKeysArr[$key])) {
+                        $query->where(function($subQuery) use($relationKeysArr, $key, $searchRelationsKeys, $value) {
+                            foreach ($relationKeysArr[$key] as $key2 => $relation){
+                                $dbColumn = $searchRelationsKeys[$relation][$key];
+                                if($key2 == 0)
+                                    $subQuery->whereHas($relation, fn($query) => $query->whereRaw('lower(' . $dbColumn . ') like (?)', ["%$value%"]));
+                                else
+                                    $subQuery->orWhereHas($relation, fn($query) => $query->whereRaw('lower(' . $dbColumn . ') like (?)', ["%$value%"]));
+                            }
+                        });
                     }
                 }
             });

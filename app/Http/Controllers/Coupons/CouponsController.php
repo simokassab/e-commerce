@@ -7,7 +7,9 @@ use App\Http\Requests\Coupons\CouponRequest;
 use App\Http\Requests\MainRequest;
 use App\Http\Resources\Coupons\CouponResource;
 use App\Http\Resources\Coupons\CouponSingleResource;
+use App\Http\Resources\Coupons\RestFullCouponResource;
 use App\Models\Coupons\Coupon;
+use App\Models\Currency\Currency;
 use Illuminate\Http\Request;
 
 class CouponsController extends MainController
@@ -36,11 +38,15 @@ class CouponsController extends MainController
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function create()
     {
-        //
+        $defaultCurrency = Currency::query()->where('is_default',1)->first();
+
+        return $this->successResponse(data:[
+            'default_currency' => $defaultCurrency
+        ]);
     }
 
     /**
@@ -56,8 +62,15 @@ class CouponsController extends MainController
         $coupon->code = $request->code;
         $coupon->start_date = $request->start_date;
         $coupon->expiry_date = $request->expiry_date;
-        $coupon->discount_percentage = $request?->discount_percentage;
-        $coupon->discount_amount = $request?->discount_amount;
+
+        if($request->type == 'amount'){
+            $coupon->discount_amount = $request->value;
+            $coupon->discount_percentage = null;
+        }else{
+            $coupon->discount_amount =null;
+            $coupon->discount_percentage = $request->value;
+        }
+
         $coupon->min_amount = $request?->min_amount;
         $coupon->is_one_time = $request->is_one_time ?? 0;
         $coupon->is_used =0;
@@ -106,15 +119,22 @@ class CouponsController extends MainController
      * @param  Coupon $coupon
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(CouponRequest $request, Coupon $coupon)
+    public function update(CouponRequest $request,Coupon $coupon)
     {
 
         $coupon->title = $request->title;
         $coupon->code = $request->code;
         $coupon->start_date = $request->start_date;
         $coupon->expiry_date = $request->expiry_date;
-        $coupon->discount_percentage = $request?->discount_percentage;
-        $coupon->discount_amount = $request?->discount_amount;
+
+        if($request->type == 'amount'){
+            $coupon->discount_amount = $request->value;
+            $coupon->discount_percentage = null;
+        }else{
+            $coupon->discount_amount =null;
+            $coupon->discount_percentage = $request->value;
+        }
+
         $coupon->min_amount = $request?->min_amount;
         $coupon->is_one_time = $request->is_one_time ?? 0;
         $coupon->is_used =0;
@@ -144,7 +164,9 @@ class CouponsController extends MainController
     public function getCouponByCode(Request $request,$code){
         $coupon = Coupon::whereRaw("BINARY `code`= ?",[$code])->first();
         if(is_null($coupon)){
-            return $this->errorResponse('The Coupon is invalid');
+            return $this->errorResponse('The Coupon is invalid',[
+                'coupon_code' => $code
+            ]);
         }
         $data = $coupon->checkIfCouponIsValid($request->amount);
         return $this->successResponse(data:$data);
@@ -153,6 +175,10 @@ class CouponsController extends MainController
     public function getTableHeaders(){
         return $this->successResponse('Success!',['headers' => __('headers.coupons') ]);
 
+    }
+
+    public function getCouponsData(){
+        return $this->successResponsePaginated(RestFullCouponResource::class,Coupon::class);
     }
 
 }

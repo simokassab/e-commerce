@@ -9,6 +9,7 @@ use App\Models\Currency\Currency;
 use App\Models\Label\Label;
 use App\Models\Product\Product;
 use App\Models\RolesAndPermissions\CustomRole;
+use App\Models\Tax\Tax;
 use Illuminate\Http\Request;
 use App\Models\User\User;
 use Illuminate\Support\Facades\Auth;
@@ -20,11 +21,14 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\MainController;
 use App\Exceptions\FileErrorException;
+use App\Models\Product\ProductField;
 use App\Models\RolesAndPermissions\CustomPermission;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Helpers\Aramex;
 use SoapClient;
+use App\Actions\Taxses\CalculateTax;
 
 class TestController extends MainController
 {
@@ -290,4 +294,5 @@ class TestController extends MainController
         $auth_call = $soapClient->CreateShipments($params);
         return $auth_call;
     }
+
 }

@@ -16,8 +16,6 @@ return new class extends Migration
         Schema::table('orders',function (Blueprint $table){
            if(!Schema::hasColumn('orders','currency_id')){
                $table->unsignedBigInteger('currency_id')->after('customer_id');
-//                $table->foreign('currency_id')->references('id')->on('currencies');
-
            }
         });
     }

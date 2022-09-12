@@ -32,14 +32,13 @@ class ProductResource extends JsonResource
         );
 
 
-        $categories = array_merge($data,$categories->toArray());
+        $categories = array_merge($data, $categories->toArray());
 
         $tags = $this->whenLoaded('tags')->map(
             function ($tag) {
                 $tagsArray = [];
                 $tagsArray['name'] = $tag->name;
                 return $tagsArray;
-
             }
         );
         return [
@@ -49,8 +48,8 @@ class ProductResource extends JsonResource
             'sku' => $this->sku,
             'type' => $this->type,
             'quantity' => $this->quantity,
-            'image' => $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
-            'status' => $this->status,
+            'image' => $this->image && !empty($this->image) ?  getAssetsLink('storage/' . $this->image) : 'default_image',
+            'website_status' => $this->website_status,
             'categories' => $categories ?? "-",
             'tags' => count($tags) != 0 ? $tags : '-',
             'brands' =>  $this->whenLoaded('brand') ? $this->whenLoaded('brand')->name : '-',

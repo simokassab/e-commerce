@@ -15,7 +15,7 @@ class ProductImagesResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
+            'id' => (int)$this->id,
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
             'product_id' => $this->product_id,
             'title' => $this->getTranslations('title'),
