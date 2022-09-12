@@ -488,7 +488,6 @@ class ProductService
     }
     public function storeAttributesForVariations($attributesArray, $childrenIds)
     {
-        dd($attributesArray);
         try {
             if (is_null($attributesArray) || count($attributesArray) == 0)
                 return $this;
@@ -672,12 +671,12 @@ class ProductService
 
             ];
 
-            $imagesDeletedArray = array_key_exists('images_deleted', $variation) ?  $variation['images_deleted'] : [];
-            $imagesArray = array_key_exists('images', $variation) ? $variation['images'] : [];
-            $imagesData = array_key_exists('images_data', $variation) ? $variation['images_data'] : [];
-            //            $fieldsArray = array_key_exists('fields', $variation) ? $variation['fields'] : [];
-            $fieldsArray = [];
-            $attributesArray = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
+            $imagesDeletedArray[] = array_key_exists('images_deleted', $variation) ?  $variation['images_deleted'] : [];
+            $imagesArray[] = array_key_exists('images', $variation) ? $variation['images'] : [];
+            $imagesData[] = array_key_exists('images_data', $variation) ? $variation['images_data'] : [];
+            //$fieldsArray = array_key_exists('fields', $variation) ? $variation['fields'] : [];
+            $fieldsArray[] = [];
+            $attributesArray[] = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
             $productVariationParentsArray[] = $productVariationsArray;
         }
         $model = new Product();
