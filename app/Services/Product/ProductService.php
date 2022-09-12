@@ -193,17 +193,16 @@ class ProductService
 
                     continue;
                 }
-                $allData[] = $data;
             }
             ProductField::query()->insert($allData);
             //            DB::commit();
             return $this;
         } catch (Exception $e) {
             //            DB::rollBack();
-            throw new Exception($e->getMessage());
+            throw new Exception($e);
         } catch (Error $e) {
             //            DB::rollBack();
-            throw new Exception($e->getMessage());
+            throw new Exception($e);
         }
     }
     public function removeAdditionalImages($request)
@@ -433,7 +432,6 @@ class ProductService
                 return $this;
 
             $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->whereHas('field', fn ($query) => $query->where('is_attribute', 0))->delete();
-
             $allData = [];
             $data = [];
 
@@ -510,8 +508,6 @@ class ProductService
                             'field_value_id' =>  (int)$attribute['value'],
                             'value' => null,
                         ];
-                    } else {
-                        continue;
                     }
                 }
             }
@@ -679,7 +675,8 @@ class ProductService
             $imagesDeletedArray = array_key_exists('images_deleted', $variation) ?  $variation['images_deleted'] : [];
             $imagesArray = array_key_exists('images', $variation) ? $variation['images'] : [];
             $imagesData = array_key_exists('images_data', $variation) ? $variation['images_data'] : [];
-            $fieldsArray = array_key_exists('fields', $variation) ? $variation['fields'] : [];
+            //            $fieldsArray = array_key_exists('fields', $variation) ? $variation['fields'] : [];
+            $fieldsArray = [];
             $attributesArray = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
             $productVariationParentsArray[] = $productVariationsArray;
         }

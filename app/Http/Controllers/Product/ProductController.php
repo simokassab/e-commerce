@@ -63,13 +63,13 @@ class ProductController extends MainController
     {
 
         if ($request->method() == 'POST') {
-            $searchKeys = ['id', 'name', 'sku', 'type', 'quantity', 'status'];
+            $searchKeys = ['id', 'name', 'sku', 'type', 'quantity', 'website_status'];
             $searchRelationsKeys = [];
-            // $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
+             $searchRelationsKeys['defaultCategory'] = ['categories' => 'name'];
 
-            $categoriesCount = Product::has('category')->count();
-            $tagsCount = Product::has('tags')->count();
-            $brandsCount = Product::has('brand')->count();
+            $categoriesCount = Product::query()->has('category')->count();
+            $tagsCount = Product::query()->has('tags')->count();
+            $brandsCount = Product::query()->has('brand')->count();
 
             if ($categoriesCount > 0)
                 $searchRelationsKeys['category'] = ['categories' => 'name'];
@@ -78,7 +78,7 @@ class ProductController extends MainController
             if ($brandsCount > 0)
                 $searchRelationsKeys['brand'] = ['brands' => 'name'];
 
-            return $this->getSearchPaginated(ProductResource::class, Product::class, $request, $searchKeys, self::relations, $searchRelationsKeys);
+            return $this->getSearchPaginated(ProductResource::class, Product::where("type",'!=','variable_child'), $request, $searchKeys, self::relations, $searchRelationsKeys);
         }
 
         return $this->successResponsePaginated(ProductResource::class, Product::class, self::relations);
