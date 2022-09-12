@@ -30,7 +30,7 @@ class RolesController extends MainController
         if ($request->method()=='POST') {
 
             $searchKeys=['name'];
-            $searchRelationsKeys = ['parent' => ['parent_name' => 'name'] ];
+            $searchRelationsKeys = ['parent' => ['parent_role' => 'name'] ];
             return $this->getSearchPaginated(RolesResource::class, CustomRole::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
         }
 
@@ -176,7 +176,6 @@ class RolesController extends MainController
 //
 //            $filteredPermissions = PermissionsServices::filterPermissionsAccordingToParentPermissions($parentPermissions,$childPermissions);
 //
-//            dd($filteredPermissions);
 
             foreach($request->permissions as $permission ){
                 $innerFlattenPermissions = PermissionsServices::loopOverMultiDimentionArray( $permission['tree']) ?? [];

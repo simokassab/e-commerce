@@ -14,14 +14,24 @@ class CouponSingleResource extends JsonResource
      */
     public function toArray($request)
     {
+        $type = '';
+        $value = '';
+
+        if(!is_null($this->discount_percentage)){
+            $type = 'percentage';
+            $value = $this->discount_percentage;
+        }else{
+            $type = 'amount';
+            $value = $this->discount_amount;
+        }
         return [
-            'id' => $this->id,
+            'id' => (int)$this->id,
             'title' => $this->title,
             'code' => $this->code,
             'start_date' => $this->start_date,
             'expiry_date' => $this->expiry_date,
-            'discount_percentage' => $this->discount_percentage,
-            'discount_amount' => $this->discount_amount,
+            'value' => $value,
+            'type' => $type,
             'min_amount' => $this->min_amount,
             'is_one_time' => $this->is_one_time,
             'is_used' => $this->is_used,

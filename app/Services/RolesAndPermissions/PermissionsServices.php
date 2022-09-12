@@ -101,7 +101,6 @@ class PermissionsServices {
         $lastResult = [];
         $rootPermissions = self::getRootPermissions($permissions);
 
-        //        dd(collect($rootPermissions)->pluck('name')->toArray());
         foreach ($rootPermissions as $rootPermission){
             $result = (object)[];
             $result->label = $rootPermission->name;
@@ -170,9 +169,7 @@ class PermissionsServices {
 //            if(array_key_exists('nodes' ,(array)$permission) && sizeof($permission->nodes )!= 0){
 //                self::markRolesPermissionAsChecked($permissionsOfRole,$permissions);
 //                if($key % 2 == 0)
-//                    dd('d');
 //            }
-//            dd($permissions);
 //        }
 //
 //

@@ -12,7 +12,7 @@ class Currency extends MainModel
 {
     use HasFactory,HasTranslations;
 
-    protected $translatable=['name'];
+    protected array $translatable=['name'];
     protected $table='currencies';
 
     public function currencyHistory(){

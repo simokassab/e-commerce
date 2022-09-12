@@ -18,9 +18,9 @@ return new class extends Migration
 
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('country_id');
-            $table->text('street');
-            $table->string('city');
-            $table->string('postal_code');
+            $table->text('street')->nullable();
+            $table->string('city')->nullable();
+            $table->string('postal_code')->nullable();
             $table->string('detail_address');
 
 
