@@ -24,11 +24,21 @@ use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
 use App\Models\Product\ProductField;
 use App\Models\Product\ProductImage;
+use App\Models\Product\ProductRelated;
 use App\Services\Category\CategoryService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SingleProductResource extends JsonResource
 {
+
+    public function __construct($product, ...$data)
+    {
+        $this->productRelated = $data[0];
+        $this->relatedProducts = $data[1];
+        $this->relatedProductsImages = $data[2];
+        $this->relatedProductsPrices=$data[3];
+        $this->resource = $product;
+    }
     /**
      * Transform the resource into an array.
      *
@@ -41,16 +51,6 @@ class SingleProductResource extends JsonResource
         $nestedCategories = CategoryService::getAllCategoriesNested($this->all_categories, $selectedCategoriesIds->pluck('id')->toArray());
         $childrenIds = Product::where('parent_product_id', $this->id)->pluck('id')->toArray();
         $productAttributes = ProductField::whereIn('product_id', $childrenIds)->get();
-
-        $productRelatedIds = collect($this->whenLoaded('productRelatedChildren'))->pluck('child_product_id');
-        $model=new Product();
-        $productsRelatedNames = Product::find($productRelatedIds->toArray())->toArray();
-        $productRelated = ($this->whenLoaded('productRelatedChildren'))->toArray();
-        $productRelatedImages=ProductImage::where('product_id',$productRelatedIds->toArray())->get();
-        dd($productRelatedIds);
-        foreach ($productRelated as $key => $product) {
-            $productRelated[$key]['name_original'] = $productsRelatedNames[$key]['name'];
-        }
 
         return [
             'id' => (int)$this->id,
@@ -83,7 +83,7 @@ class SingleProductResource extends JsonResource
             'sort' => (int)$this->sort,
             'parent_product_id' => (int)$this->parent_product_id ?? null,
             'is_default_child' => (bool)$this->is_default_child,
-            'products_statuses_id' => (int)$this->products_statuses_id,
+            'products_statuses_id' => (int)$this->product_statuses_id,
             'is_show_related_product' => (bool)$this->is_show_related_product,
             'website_status' => $this->website_status,
             'pre_order' => (int)$this->pre_order ?? 0,
@@ -93,7 +93,7 @@ class SingleProductResource extends JsonResource
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'labels' => SelectLabelResource::collection($this->whenLoaded('labels')),
             'categories' => $nestedCategories,
-            'related_products' => $productRelated ?? [],
+            'related_products' => ProductRelatedResource::customCollection($this->productRelated,$this->relatedProducts,$this->relatedProductsImages,$this->relatedProductsPrices->load('prices')) ?? [],
             'variations' => $this->whenLoaded('children') ? $this->whenLoaded('children') : [],
             'images' => ProductImagesResource::collection($this->whenLoaded('images')) ?? [],
         ];

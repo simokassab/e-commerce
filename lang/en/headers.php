@@ -339,7 +339,7 @@ return [
             'type' => 'image',
             'sort' => true
         ],
-        'status' => [
+        'website_status' => [
             'name' => 'Status',
             'search' => 'string',
             'type' => 'string',

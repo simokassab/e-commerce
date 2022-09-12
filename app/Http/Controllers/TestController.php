@@ -45,6 +45,7 @@ class TestController extends MainController
 
     public function test()
     {
+    
         return ( new CalculateTax(250,Tax::find(5)) )->handle();
 
     }

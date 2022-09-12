@@ -91,7 +91,7 @@ class Setting extends MainModel
 
         $returnBool = true; //1. if the title is not in the array of titlesOptions, return true
         foreach ($givenOptions as $option)
-            $returnBool &= in_array($option, Setting::$titlesOptions[$keyTitle]);
+            $returnBool &= in_array($option, Setting::getTitleOptions()[$keyTitle]);
 
         return $returnBool;
     }

@@ -179,7 +179,7 @@ class Product extends MainModel
     /**
      * @throws Exception
      */
-    public function updateProductQuantity(float $quantity, string $method){
+    public function updateProductQuantity(float $quantity, string $method, bool $isOrder = false){
             if($method != 'add' && $method != 'sub'){
                 throw new \Exception('Bad method type '.$method);
             }
@@ -220,7 +220,7 @@ class Product extends MainModel
      */
     protected function subQuantityForNormalAndVariableChild(float $quantity){
         //TODO: change the settings instead of sending a query get them from the cache
-        $isAllowNegativeQuantity = Setting::where('title','allow_negative_quantity')->first()->value;
+        $isAllowNegativeQuantity = getSettings('allow_negative_quantity');
         if($isAllowNegativeQuantity){
             $this->quantity -= $quantity;
             if($this->save())
@@ -249,8 +249,9 @@ class Product extends MainModel
     /**
      * @throws Exception
      */
-    private function addQuantityForBundle(float $quantity, array $allProducts = [], array $allRelatedProducts = [])
+    private function addQuantityForBundle(float $quantity, array $allProducts = [], array $allRelatedProducts = [], $isOrder = false)
     {
+        // @TODO font take all the products just take the needed ones from the child products
         $allProducts = count($allProducts) > 0 ? $allProducts : self::all();
         //$this->relatedProdcuts
         $allRelatedProducts = count($allRelatedProducts) > 0 ? $allRelatedProducts : ProductRelated::all()->toArray();
@@ -268,13 +269,14 @@ class Product extends MainModel
         $products = $allProducts->whereIn('id',$relatedProductsIds);
 
         foreach ($products as $product) {
+            // @TODO: instead of using query take it from the collection
             $productModel = self::find($product->id);
             $childRelatedProduct = $relatedProducts->where('child_product_id',$product->id)
                 ->where('parent_product_id',$this->id)
                 ->first();
             $productModel->bundle_reserved_quantity += $quantity * $childRelatedProduct['child_quantity'];
             if(!$productModel->save()){
-            throw new Exception('An error occurred please try again later');
+                throw new Exception('An error occurred please try again later');
             }
         }
 
@@ -334,10 +336,13 @@ class Product extends MainModel
      *
      */
     public function hasEnoughRelatedProductsQuantityForReservingNewBundles(float $quantity, array $allProducts = [], array $allRelatedProducts = []):bool{
+
+        //this function is for
+
         if($this->type != 'bundle'){
             throw new Exception('Call hasEnoughRelatedProductsQuantityForReservingNewBundles on non-bundle product');
         }
-        $isAllowNegativeQuantity = Cache::get('settings')->where('title','allow_negative_quantity')->first()->value;
+        $isAllowNegativeQuantity = getSettings('allow_negative_quantity');
         if($isAllowNegativeQuantity){
             return true;
         }
@@ -345,7 +350,7 @@ class Product extends MainModel
         $allProducts = count($allProducts) > 0 ? $allProducts : self::all();
         $allRelatedProducts = count($allRelatedProducts) > 0 ? $allRelatedProducts : ProductRelated::all();
 
-        $relatedProducts = collect($allRelatedProducts)->where('parent_product_id',$this->id);
+        $relatedProducts = ($allRelatedProducts)->where('parent_product_id',$this->id);
         $relatedProductsIds = $relatedProducts->pluck('child_product_id');
         $childrenProducts = collect($allProducts)->whereIn('id',$relatedProductsIds);
         foreach ($childrenProducts as $childProduct){
@@ -360,6 +365,7 @@ class Product extends MainModel
                 ->first();
 
             if($childProduct['bundle_reserved_quantity'] < 0 ){
+                // to ignore any problems with the calculations
                 $childProduct['bundle_reserved_quantity'] = 0;
             }
 
