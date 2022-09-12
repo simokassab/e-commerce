@@ -3,30 +3,12 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Controllers\Controller;
-use App\Models\Category\Category;
-use http\Client\Response;
-use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
-use PhpParser\Node\Expr\FuncCall;
-use App\Exceptions\FileErrorException;
-use App\Http\Resources\AttributeResource;
-use App\Models\Attribute\Attribute;
-use App\Models\Attribute\AttributeValue;
-use Exception;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use PDO;
 
 class MainController extends Controller
 {
 
-    public function __construct( /**  $defaultPermissionsFromChild = null */ )
+    public function __construct(/**  $defaultPermissionsFromChild = null */)
     {
 //        $routeAction = basename(Route::currentRouteAction()); //we got the permission name
 
@@ -84,7 +66,12 @@ class MainController extends Controller
                 $relationKeysArr[$key][] = $relation;
             }
         }
-        $model = $model->with($relations);
+        if (is_string($model)) {
+            //@TODO search about it :D (call_user_func)
+            $model = call_user_func($model . '::query')->with($relations);
+        } else {
+            $model = $model->with($relations);
+        }
         $globalValue = strtolower($request->general_search);
         if (!empty(trim($globalValue))) {
             $model->when($request->has('general_search') && $request->general_search != null, function ($query) use ($searchKeys, $globalValue, $request, $searchRelationsKeys) {
