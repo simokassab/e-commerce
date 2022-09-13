@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Product;
 
+use App\Models\Product\Product;
 use App\Models\Product\ProductRelated;
 use App\Models\Settings\Setting;
 use Illuminate\Foundation\Http\FormRequest;
@@ -50,7 +51,7 @@ class StoreProductRequest extends FormRequest
             'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
             'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
             'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
-            'type' => 'required | in:' . config('defaults.validation_default_types'),
+            'type' => 'required | in:' . Product::$prdouctTypes,
             'quantity' => [Rule::when(in_array($request->type, ['variable']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
             'reserved_quantity' => [Rule::when(in_array($request->type, ['variable']), ['in:0'], 'nullable'), 'integer', 'gte:0'],
             'minimum_quantity' => [Rule::when(in_array($request->type, ['variable']), ['in:0'], 'required'), 'integer', Rule::when(!$this->allowNegativeQuantity, ['gte:0'])],
@@ -66,7 +67,7 @@ class StoreProductRequest extends FormRequest
             'meta_description' => 'nullable',
             'meta_keyword' => 'nullable',
             'description' => 'nullable',
-            'website_status' => 'required | in:' . config('defaults.validation_default_status'),
+            'website_status' => 'required | in:' . Product::$productStatuses,
             'barcode' => [Rule::when(in_array('barcode',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'max:' . config('defaults.default_string_length')],
             'height' => [Rule::when(in_array('height',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
             'width' =>  [Rule::when(in_array('width',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],

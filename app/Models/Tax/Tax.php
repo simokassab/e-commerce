@@ -13,10 +13,10 @@ use Spatie\Translatable\HasTranslations;
 
 class Tax extends MainModel
 {
-    use HasFactory,HasTranslations;
+    use HasFactory, HasTranslations;
 
-    protected array $translatable=['name'];
-    protected $table='taxes';
+    protected array $translatable = ['name'];
+    protected $table = 'taxes';
     protected $guard_name = 'web';
     protected $fillable = [
         'id', // added just for when creating an object form this class while working with Orders in OrderService, so we don't use more unnecessary queries
@@ -26,29 +26,38 @@ class Tax extends MainModel
         'is_complex',
 
     ];
+    public static $taxTypes =  'combine,after_other';
+    public static $minimumTaxPercentage = 0;
+    public static $maximumTaxPercentage = 100;
 
-    public function taxComponents(){
-        return $this->hasMany(TaxComponent::class,'tax_id');
+    public function taxComponents()
+    {
+        return $this->hasMany(TaxComponent::class, 'tax_id');
     }
-    public function cateogry(){
-        return $this->hasMany(Category::class,'category_id');
+    public function cateogry()
+    {
+        return $this->hasMany(Category::class, 'category_id');
     }
-    public function product(){
-        return $this->hasMany(Product::class,'tax_id');
+    public function product()
+    {
+        return $this->hasMany(Product::class, 'tax_id');
     }
-    public function tax(){
-        return $this->hasMany(Tax::class,'tax_id');
+    public function tax()
+    {
+        return $this->hasMany(Tax::class, 'tax_id');
     }
-    public function brand(){
-        return $this->hasMany(Brand::class,'brand_id');
+    public function brand()
+    {
+        return $this->hasMany(Brand::class, 'brand_id');
     }
 
     /**
      * @throws \Exception
      */
-    public function getComplexPrice(float $price, array $allTaxComponents = [], $allTaxes = []) :float{
+    public function getComplexPrice(float $price, array $allTaxComponents = [], $allTaxes = []): float
+    {
 
-        if(!$this->is_complex){
+        if (!$this->is_complex) {
             throw new \Exception('Calling getComplexPrice on non-complex tax');
         }
 
@@ -57,55 +66,54 @@ class Tax extends MainModel
         $allTaxes = collect($allTaxes);
         $resultantTaxRate = 0;
 
-        if($this->complex_behavior == 'combine'){
-            $totalTax =  ($this->getComplexCombinePrice($allTaxes,$allTaxComponents,0,$price));
-            $resultantTaxRate += ($totalTax/ 100) * $price ;
-        }else{
-             $this->getComplexAfterOtherPrice($price,$allTaxes,$allTaxComponents,$resultantTaxRate);
+        if ($this->complex_behavior == 'combine') {
+            $totalTax =  ($this->getComplexCombinePrice($allTaxes, $allTaxComponents, 0, $price));
+            $resultantTaxRate += ($totalTax / 100) * $price;
+        } else {
+            $this->getComplexAfterOtherPrice($price, $allTaxes, $allTaxComponents, $resultantTaxRate);
         }
 
         return $resultantTaxRate;
     }
 
-    private function getComplexCombinePrice ($allTaxes, $allTaxComponents, $initialTax,$price): float
+    private function getComplexCombinePrice($allTaxes, $allTaxComponents, $initialTax, $price): float
     {
-        $neededTaxComponents = collect($allTaxComponents)->where('tax_id',$this->id)->toArray();
-        foreach($neededTaxComponents as $neededTaxComponent){
-//            $totalTax = 0.0;
-//            $modelTaxComponent = collect($allTaxes)->where('id',$neededTaxComponent['component_tax_id'])->first();
-            $tax = $allTaxes->where('id',$neededTaxComponent['component_tax_id'])->first();
+        $neededTaxComponents = collect($allTaxComponents)->where('tax_id', $this->id)->toArray();
+        foreach ($neededTaxComponents as $neededTaxComponent) {
+            //            $totalTax = 0.0;
+            //            $modelTaxComponent = collect($allTaxes)->where('id',$neededTaxComponent['component_tax_id'])->first();
+            $tax = $allTaxes->where('id', $neededTaxComponent['component_tax_id'])->first();
             $tax = new Tax($tax);
 
-            if(is_null($tax)){
+            if (is_null($tax)) {
                 continue;
             }
-            if($tax->is_complex){
-                $initialTax += $tax->getComplexPrice($price,$allTaxComponents,$allTaxes);
-            }else{
+            if ($tax->is_complex) {
+                $initialTax += $tax->getComplexPrice($price, $allTaxComponents, $allTaxes);
+            } else {
                 $initialTax += $tax['percentage'];
             }
         }
         return $initialTax;
-
     }
 
-    private function getComplexAfterOtherPrice(&$price,$allTaxes,$allTaxComponents,&$initialTax){
-        $neededTaxComponents = collect($allTaxComponents)->where('tax_id',$this->id)->toArray();
-        foreach($neededTaxComponents as $key => $neededTaxComponent){
+    private function getComplexAfterOtherPrice(&$price, $allTaxes, $allTaxComponents, &$initialTax)
+    {
+        $neededTaxComponents = collect($allTaxComponents)->where('tax_id', $this->id)->toArray();
+        foreach ($neededTaxComponents as $key => $neededTaxComponent) {
 
-            $neededTaxComponentObject = $allTaxes->where('id',$neededTaxComponent['component_tax_id'])->first();
+            $neededTaxComponentObject = $allTaxes->where('id', $neededTaxComponent['component_tax_id'])->first();
             $neededTaxComponentObject = new Tax($neededTaxComponentObject);
 
-            if($neededTaxComponentObject->is_complex){
-                $tempTax = $neededTaxComponentObject->getComplexPrice($price,$allTaxComponents,$allTaxes);
-            }else{
-                $tempTax = ($neededTaxComponentObject['percentage']/ 100 ) * $price;
+            if ($neededTaxComponentObject->is_complex) {
+                $tempTax = $neededTaxComponentObject->getComplexPrice($price, $allTaxComponents, $allTaxes);
+            } else {
+                $tempTax = ($neededTaxComponentObject['percentage'] / 100) * $price;
             }
             $price += $tempTax;
             $initialTax += $tempTax;
         }
     }
-
 }
 
 

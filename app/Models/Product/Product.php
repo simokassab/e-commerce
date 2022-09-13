@@ -65,6 +65,8 @@ class Product extends MainModel
     public static $imagesPath = [
         'images' => 'products/images',
     ];
+    public static $prdouctTypes = 'normal,bundle,service,variable,variable_child';
+    public static $productStatuses = 'draft,pending_review,published';
 
     public function parent()
     {

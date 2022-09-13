@@ -19,6 +19,7 @@ class Label extends MainModel
     public static $imagesPath = [
         'images' => 'labels/images',
     ];
+    public static $entities = 'category,product,brand';
 
     public function categories()
     {

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Tax;
 
 use App\Http\Requests\MainRequest;
+use App\Models\Tax\Tax;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
@@ -35,51 +36,52 @@ class StoreTaxRequest extends FormRequest
         return [
             'name' => 'required',
             'is_complex' => 'required | boolean',
-            'percentage' => ['required_if:is_complex,false' ,'nullable', 'numeric' , 'between:'.config('defaults.default_minimum_tax_percentage').','.config('defaults.default_maximum_tax_percentage')],
-//            'complex_behavior' => 'required_if:is_complex,true | in:'.config('defaults.validation_default_complex_behavior'),
-            'complex_behavior' => ['required_if:is_complex,true' ,Rule::when($request->is_complex,'in:'.config('defaults.validation_default_complex_behavior'))],
+            'percentage' => ['required_if:is_complex,false', 'nullable', 'numeric', 'between:' . Tax::$minimumTaxPercentage . ',' . Tax::$maximumTaxPercentage],
+            //''complex_behavior' => 'required_if:is_complex,true | in:'. Tax::$taxTypes,
+            'complex_behavior' => ['required_if:is_complex,true', Rule::when($request->is_complex, 'in:' . Tax::$taxTypes)],
 
             'components' => 'required_if:is_complex,true',
             'components.*'  => 'required_if:is_complex,true | integer | exists:taxes,id',
 
         ];
-
     }
 
     public function messages()
     {
         return [
-        'name.required' => 'the :attribute field is required.',
+            'name.required' => 'the :attribute field is required.',
 
-        'is_complex.required' => 'the :attribute field is required.',
-        'is_complex.boolean' => 'The :attribute field accepts only 0 or 1',
+            'is_complex.required' => 'the :attribute field is required.',
+            'is_complex.boolean' => 'The :attribute field accepts only 0 or 1',
 
-        'percentage.required' => 'the :attribute field is required.',
-        'percentage.numeric' => 'The :attribute must be decimal.',
+            'percentage.required' => 'the :attribute field is required.',
+            'percentage.numeric' => 'The :attribute must be decimal.',
 
-        'complex_behavior.in' => 'The :attribute is not a valid type',
+            'complex_behavior.in' => 'The :attribute is not a valid type',
 
 
-        'components.required_if' => 'the :attribute field is required.',
+            'components.required_if' => 'the :attribute field is required.',
 
-        'components.*.component_tax_id.required_if' => 'the component_tax_id field is required.',
-        'components.*.component_tax_id.integer' =>  'the component_tax_id must be an integer',
-        'components.*.component_tax_id.exists' =>  'the component_tax_id must be exists in taxes',
+            'components.*.component_tax_id.required_if' => 'the component_tax_id field is required.',
+            'components.*.component_tax_id.integer' =>  'the component_tax_id must be an integer',
+            'components.*.component_tax_id.exists' =>  'the component_tax_id must be exists in taxes',
 
-        'components.*.sort.required_if' => 'the sort field is required.',
-        'components.*.sort.integer' =>  'the sort must be an integer',
+            'components.*.sort.required_if' => 'the sort field is required.',
+            'components.*.sort.integer' =>  'the sort must be an integer',
 
-    ];
-
+        ];
     }
 
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator) {
-        throw new HttpResponseException(response()->json(
-            [
-                'code' => -1 ,
-                'errors'=>$validator->errors()->messages() ,
-            ],
-            200)
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        throw new HttpResponseException(
+            response()->json(
+                [
+                    'code' => -1,
+                    'errors' => $validator->errors()->messages(),
+                ],
+                200
+            )
 
         );
     }

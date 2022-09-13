@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Field;
 
 use App\Http\Requests\MainRequest;
+use App\Models\Field\Field;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -29,8 +30,8 @@ class StoreFieldRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'type' => ['required',' in:'.config('defaults.validation_default_type'),Rule::when($request->is_attribute,['in:select'])],
-            'entity' => 'required | in:'.config('defaults.validation_default_entities'),
+            'type' => ['required', ' in:' . convertFromArrayToString(Field::$fieldTypes, ','), Rule::when($request->is_attribute, ['in:select'])],
+            'entity' => 'required | in:' . Field::$entities,
             'is_required' => 'required | boolean',
             'is_attribute' => 'required | boolean',
 
