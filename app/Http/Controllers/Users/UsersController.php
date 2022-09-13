@@ -43,7 +43,6 @@ class UsersController extends MainController
     }
 
     public function store(StoreUserRequest $request){
-
         DB::beginTransaction();
 
         try {
@@ -53,7 +52,7 @@ class UsersController extends MainController
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'salt' => $request->salt ?? '',
-                'is_active' => $request->is_active,
+                'is_active' => (bool)$request->is_active,
                 'password' => Hash::make($request->password),
             ]);
             $user->AssignRole($request->role_id);
