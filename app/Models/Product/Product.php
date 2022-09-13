@@ -22,7 +22,6 @@ use App\Models\MainModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use phpDocumentor\Reflection\Types\False_;
 use Spatie\Translatable\HasTranslations;
 use Illuminate\Support\Facades\DB;
 
@@ -32,6 +31,7 @@ class Product extends MainModel
     protected array $translatable = ['name', 'summary', 'specification', 'description', 'meta_title', 'meta_description', 'meta_keyword'];
     protected $table = 'products';
     protected $guard_name = 'web';
+    protected $attributes = ['real_quantity'];
     protected $fillable = [
         'name',
         'slug',
@@ -187,6 +187,19 @@ class Product extends MainModel
         return is_null($productPricing) ? 0 : $productPricing->price;
     }
 
+    public function getRealQuantitsyAttribute()
+    {
+        return $this->quantity - ($this->reserved_quantity + $this->bundle_reserved_quantity);
+    }
+
+    //    protected function realQuantity(): Attribute
+    //    {
+    //        return Attribute::make(
+    //            get: fn ($value) => $this->quantity - ($this->reserved_quantity + $this->bundle_reserved_quantity),
+    ////            set: fn ($value) => strtolower($value),
+    //        );
+    //    }
+
 
 
 
@@ -267,7 +280,8 @@ class Product extends MainModel
 
             throw new \Exception('An error occurred please try again !');
         }
-        if ($this->quantity < $quantity) {
+        $realQuantity = $this->quantity - ($this->reserved_quantity + $this->bundle_reserved_quantity);
+        if ($realQuantity < $quantity) {
             throw new Exception('You have less quantity than ' . $quantity . ' in stock');
         }
 

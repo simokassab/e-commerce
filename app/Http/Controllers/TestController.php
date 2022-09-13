@@ -48,7 +48,12 @@ class TestController extends MainController
 
         // dd($this->imagesPath['images']);
 
+<<<<<<< HEAD
         // return Product::query()->find(1)->updateProductQuantity(5, 'sub');
         //        return Product::query()->find(1)->relatedProducts;
+=======
+        return Product::find(1);
+//        return Product::query()->find(1)->relatedProducts;
+>>>>>>> 5c5f262b6e791986c375200cfa716f5df5f55b0f
     }
 }

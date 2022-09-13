@@ -53,6 +53,7 @@ class UsersController extends MainController
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'salt' => $request->salt ?? '',
+                'is_disabled' => $request->is_default,
                 'password' => Hash::make($request->password),
             ]);
             $user->AssignRole($request->role_id);

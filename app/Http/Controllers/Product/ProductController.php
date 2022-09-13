@@ -71,18 +71,6 @@ class ProductController extends MainController
             $searchRelationsKeys['brand'] = ['brands' => 'name'];
 
 
-
-//            $categoriesCount = Product::query()->has('category')->count();
-//            $tagsCount = Product::query()->has('tags')->count();
-//            $brandsCount = Product::query()->has('brand')->count();
-//
-//            if ($categoriesCount > 0)
-//                $searchRelationsKeys['category'] = ['categories' => 'name'];
-//            if ($tagsCount > 0)
-//                $searchRelationsKeys['tags'] = ['tags' => 'name'];
-//            if ($brandsCount > 0)
-//                $searchRelationsKeys['brand'] = ['brands' => 'name'];
-
             return $this->getSearchPaginated(ProductResource::class, Product::where("type", '!=', 'variable_child'), $request, $searchKeys, self::relations, $searchRelationsKeys);
         }
 
