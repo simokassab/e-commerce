@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Error;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use \Exception;
@@ -11,7 +12,6 @@ use Ramsey\Collection\Exception\ValueExtractionException;
 use Spatie\FlareClient\Http\Exceptions\NotFound;
 use Throwable;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
 class Handler extends ExceptionHandler
 {
     /**
@@ -52,25 +52,40 @@ class Handler extends ExceptionHandler
      *
      * */
     protected array $exceptions= [
-        [
+        NotFoundHttpException::class => [
             'class' => NotFoundHttpException::class,
-            'message' => 'The object was not found! '
+            'message' => 'The object was not found! ',
+            'code' => 404,
         ],
-        [
+
+        FilesystemAdapter::class => [
             'class' => FilesystemAdapter::class,
-            'message' => 'The file was not found'
+            'message' => 'The file was not found',
+            'code' => 512,
         ],
-        [
-            'class' => \Illuminate\Filesystem\FilesystemAdapter::class,
-            'message' => 'The file was not found'
-        ],
-        [
+
+        FilesystemException::class => [
             'class' => FilesystemException::class,
-            'message' => 'The file was not saved please try again later'
+            'message' => 'The file was not saved please try again later',
+            'code' => 512,
         ],
-        [
+
+        ValueExtractionException::class => [
             'class' => ValueExtractionException::class,
-            'message' => 'The file was not saved please try again later'
+            'message' => 'The file was not saved please try again later',
+            'code' => 512,
+        ],
+
+        UnauthorizedException::class => [
+            'class' => UnauthorizedException::class,
+            'message' => 'You are unauthorized for this action',
+            'code' => 401,
+        ],
+
+        Error::class => [
+            'class' => Error::class,
+            'message' => 'Error occurred please try again later',
+            'code' => 512,
         ],
 
     ];
@@ -89,27 +104,33 @@ class Handler extends ExceptionHandler
         ];
 
         $this->renderable(function (Throwable $exception,$request) {
+            if(config('app.debug')){
 
-
-
-            if(!config('app.debug')){
-                foreach ($this->exceptions as $currentException){
-
-                    if($exception instanceof NotFoundHttpException){
-                        return errorResponse($currentException['message'] ?? 'error, please try again later' , [] , -1,500);
-                    }
-
-                    if($exception instanceof $currentException['class']){
-                        return errorResponse($currentException['message'] ?? 'error, please try again later' , [] , -1,500 );
-                    }
+                if(!array_key_exists(get_class($exception), $this->exceptions)){
+                    return errorResponse('error, please try again later');
                 }
+
+                $exception = $this->exceptions[get_class($exception)];
+                return errorResponse($exception['message']);
+
+
+//                foreach ($this->exceptions as $currentException){
+//
+//                    if($exception instanceof NotFoundHttpException){
+//                        return errorResponse($currentException['message'] ?? 'error, please try again later' , [] , -1,500);
+//                    }
+//
+//                    if($exception instanceof UnauthorizedException){
+//                        return errorResponse($currentException['message'] ?? 'error, please try again later' , [] , -1,500);
+//                    }
+//
+//                    if($exception instanceof $currentException['class']){
+//                        return errorResponse($currentException['message'] ?? 'error, please try again later' , [] , -1,500 );
+//                    }
+//                }
             }
 
-            if(!config('app.debug_code')){
-                if($exception instanceof \Error){
-                    return errorResponse($currentException['message'] ?? 'error, please try again later' , [] , -1,500);
-                }
-            }
+
         });
     }
 }

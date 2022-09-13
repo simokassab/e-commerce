@@ -33,6 +33,7 @@ class CategoryController extends MainController
     public function __construct()
     {
         $this->imagesPath = Category::$imagesPath;
+        parent::__construct();
     }
     public function index(Request $request)
     {
