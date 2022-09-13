@@ -53,7 +53,7 @@ class UsersController extends MainController
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'salt' => $request->salt ?? '',
-                'is_disabled' => $request->is_default,
+                'is_disabled' => !$request->is_active,
                 'password' => Hash::make($request->password),
             ]);
             $user->AssignRole($request->role_id);
@@ -87,6 +87,7 @@ class UsersController extends MainController
         $user->email = $request->email;
         $user->first_name = $request->first_name;
         $user->last_name =$request->last_name;
+        $user->is_disabled = !$request->is_active;
         $user->salt = $request->salt ?? '123';
 
         if(count($user->roles) > 0){
@@ -127,27 +128,27 @@ class UsersController extends MainController
 
     }
 
-    public function toggleStatus(Request $request ,$id){
-
-        $request->validate([
-            'is_disabled' => 'boolean|required'
-        ]);
-
-        $user = User::findOrFail($id);
-        $user->is_disabled=$request->is_disabled;
-        if(!$user->save())
-            return $this->errorResponse(
-                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
-            );
-
-        return $this->successResponse(
-            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-            [
-                'user' =>  new UserResource($user)
-            ]
-        );
-
-    }
+//    public function toggleStatus(Request $request ,$id){
+//
+//        $request->validate([
+//            'is_disabled' => 'boolean|required'
+//        ]);
+//
+//        $user = User::findOrFail($id);
+//        $user->is_disabled=$request->is_disabled;
+//        if(!$user->save())
+//            return $this->errorResponse(
+//                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+//            );
+//
+//        return $this->successResponse(
+//            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+//            [
+//                'user' =>  new UserResource($user)
+//            ]
+//        );
+//
+//    }
     public function getTableHeaders(){
         return $this->successResponse('Success',['headers' => __('headers.users') ]);
 }

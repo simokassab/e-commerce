@@ -28,7 +28,7 @@ class UpdateUserRequest extends MainRequest
     {
         return [
             'username' => ['required', Rule::unique('users')->ignore($this->user->id)],
-
+            'is_active' => 'required|boolean',
             'email' =>  ['required','email', Rule::unique('users')->ignore($this->user->id)],
             'first_name' => 'required|string',
             'last_name' => 'required|string',

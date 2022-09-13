@@ -20,12 +20,13 @@ class SingleUserResource extends JsonResource
         }
 
         return[
-            'id' => $this->id,
+            'id' => (int)$this->id,
             'username' => $this->username,
             'email' => $this->email,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
-            'role_id' => $role,
+            'role_id' => (int)$role,
+            'is_active' => (boolean)!$this->is_disabled
         ];
     }
 }
