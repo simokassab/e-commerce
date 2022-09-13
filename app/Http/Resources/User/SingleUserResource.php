@@ -26,7 +26,7 @@ class SingleUserResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'role_id' => (int)$role,
-            'is_active' => (boolean)!$this->is_disabled
+            'is_active' => (boolean)$this->is_active
         ];
     }
 }

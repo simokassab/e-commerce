@@ -53,7 +53,7 @@ class UsersController extends MainController
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'salt' => $request->salt ?? '',
-                'is_disabled' => !$request->is_active,
+                'is_active' => $request->is_active,
                 'password' => Hash::make($request->password),
             ]);
             $user->AssignRole($request->role_id);
@@ -87,7 +87,7 @@ class UsersController extends MainController
         $user->email = $request->email;
         $user->first_name = $request->first_name;
         $user->last_name =$request->last_name;
-        $user->is_disabled = !$request->is_active;
+        $user->is_active = $request->is_active;
         $user->salt = $request->salt ?? '123';
 
         if(count($user->roles) > 0){
