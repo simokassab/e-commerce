@@ -16,10 +16,10 @@ use App\Http\Resources\Country\RestFullCountryResource;
 class CountryController extends MainController
 {
     const OBJECT_NAME = 'objects.country';
-
+    private $imagesPath = "";
     public function __construct($defaultPermissionsFromChild = null)
     {
-
+        $this->imagesPath = Country::$imagesPath;
     }
 
     /**
@@ -30,31 +30,30 @@ class CountryController extends MainController
     public function index(Request $request)
     {
 
-        if ($request->method()=='POST') {
+        if ($request->method() == 'POST') {
 
-            $searchKeys=['name','iso_code_1','iso_code_2','phone_code'];
-            $data= $this->getSearchPaginated(CountryResource::class, Country::class,$request, $searchKeys);
-            if($data->isEmpty()){
-                $data=[
-                   'data' => [
-                       [
-                       'id' => '',
-                       'name'=>'',
-                       'iso_code_1'=> '',
-                       'iso_code_2'=> '',
-                       'phone_code'=> '',
-                       'flag'=> '',
-                   ]
-                   ]
-               ];
-               return response()->json($data);
-               return  CountryResource::collection($data);
-           }
-           return $data;
-
+            $searchKeys = ['name', 'iso_code_1', 'iso_code_2', 'phone_code'];
+            $data = $this->getSearchPaginated(CountryResource::class, Country::class, $request, $searchKeys);
+            if ($data->isEmpty()) {
+                $data = [
+                    'data' => [
+                        [
+                            'id' => '',
+                            'name' => '',
+                            'iso_code_1' => '',
+                            'iso_code_2' => '',
+                            'phone_code' => '',
+                            'flag' => '',
+                        ]
+                    ]
+                ];
+                return response()->json($data);
+                return  CountryResource::collection($data);
+            }
+            return $data;
         }
-        return $this->successResponsePaginated(CountryResource::class,Country::class);
-        }
+        return $this->successResponsePaginated(CountryResource::class, Country::class);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -82,19 +81,18 @@ class CountryController extends MainController
         $country->iso_code_2 = $request->iso_code_2;
         $country->phone_code = $request->phone_code;
         $country->flag = $request->flag;
-        if($request->flag){
-            $country->flag= $this->imageUpload($request->file('flag'),config('images_paths.country.images'));
+        if ($request->flag) {
+            $country->flag = $this->imageUpload($request->file('flag'), $this->imagesPath['images']);
         }
-        if(!$country->save())
-            return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]));
+        if (!$country->save())
+            return $this->errorResponse(__('messages.failed.create', ['name' => __(self::OBJECT_NAME)]));
 
         return $this->successResponse(
-            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            __('messages.success.create', ['name' => __(self::OBJECT_NAME)]),
             [
                 'country' => new CoutnrySingleResource($country)
             ]
         );
-
     }
     /**
      * Display the specified resource.
@@ -110,7 +108,6 @@ class CountryController extends MainController
                 'country' => new CoutnrySingleResource($country)
             ]
         );
-
     }
 
     /**
@@ -121,8 +118,6 @@ class CountryController extends MainController
      */
     public function edit($id)
     {
-
-
     }
 
     /**
@@ -139,23 +134,22 @@ class CountryController extends MainController
         $country->iso_code_2 = $request->iso_code_2;
         $country->iso_code_1 = $request->iso_code_1;
         $country->phone_code = $request->phone_code;
-        if($request->flag){
+        if ($request->flag) {
 
-            if($country->image){
-                if(!$this->removeImage($country->image ) ){
+            if ($country->image) {
+                if (!$this->removeImage($country->image)) {
                     throw new FileErrorException();
                 }
             }
-            $country->flag= $this->imageUpload($request->file('flag'),config('images_paths.country.images'));
-
-         }
-        if(!$country->save())
+            $country->flag = $this->imageUpload($request->file('flag'), $this->imagesPath['images']);
+        }
+        if (!$country->save())
             return $this->errorResponse(
-                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+                __('messages.failed.update', ['name' => __(self::OBJECT_NAME)])
             );
 
         return $this->successResponse(
-            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
             [
                 'country' => new CoutnrySingleResource($country)
             ]
@@ -170,26 +164,27 @@ class CountryController extends MainController
      */
     public function destroy(Country $country)
     {
-        if(!$country->delete())
+        if (!$country->delete())
             return $this->errorResponse(
-                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+                __('messages.failed.delete', ['name' => __(self::OBJECT_NAME)])
             );
 
         return $this->successResponse(
-            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            __('messages.success.delete', ['name' => __(self::OBJECT_NAME)]),
             [
                 'country' => new CoutnrySingleResource($country)
             ]
-    );
-
+        );
     }
 
 
-    public function getTableHeaders(){
-        return $this->successResponse('Success!',['headers' => __('headers.countries') ]);
-}
+    public function getTableHeaders()
+    {
+        return $this->successResponse('Success!', ['headers' => __('headers.countries')]);
+    }
 
-public function getCountriesData(){
-    return $this->successResponsePaginated(RestFullCountryResource::class,Country::class);
-}
+    public function getCountriesData()
+    {
+        return $this->successResponsePaginated(RestFullCountryResource::class, Country::class);
+    }
 }

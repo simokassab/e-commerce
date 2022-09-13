@@ -17,10 +17,12 @@ use Illuminate\Support\Facades\App;
 class LanguageController extends MainController
 {
     const OBJECT_NAME = 'objects.language';
+    private $imagesPath = "";
 
     public function __construct($defaultPermissionsFromChild = null)
     {
         parent::__construct($defaultPermissionsFromChild);
+        $this->imagesPath = Language::$imagesPath;
     }
     /**
      * Display a listing of the resource.
@@ -29,11 +31,11 @@ class LanguageController extends MainController
      */
     public function index(Request $request)
     {
-        if ($request->method()=='POST') {
-            $searchKeys=['name','code'];
-            return $this->getSearchPaginated(LanguageResource::class, Language::class,$request, $searchKeys);
+        if ($request->method() == 'POST') {
+            $searchKeys = ['name', 'code'];
+            return $this->getSearchPaginated(LanguageResource::class, Language::class, $request, $searchKeys);
         }
-        return $this->successResponsePaginated(LanguageResource::class,Language::class);
+        return $this->successResponsePaginated(LanguageResource::class, Language::class);
     }
 
     /**
@@ -54,29 +56,29 @@ class LanguageController extends MainController
      */
     public function store(StoreLanguageRequest $request)
     {
-//        $language=new Language();
-//        $language->name = (array)json_decode($request->name);
-//        $language->code=$request->code;
-//
-//        $language->is_default=false;
-//        if((bool)$request->is_default)
-//            $language->setIsDefault();
-//
-//        if($request->image){
-//            $language->image= $this->imageUpload($request->file('image'),config('images_paths.language.images'));
-//        }
-//
-//        if(!$language->save())
-//            return $this->errorResponse(
-//                __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
-//            );
-//
-//        return $this->successResponse(
-//            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-//            [
-//                'language' => new SingleLanguageResource($language)
-//            ]
-//        );
+        //        $language=new Language();
+        //        $language->name = (array)json_decode($request->name);
+        //        $language->code=$request->code;
+        //
+        //        $language->is_default=false;
+        //        if((bool)$request->is_default)
+        //            $language->setIsDefault();
+        //
+        //        if($request->image){
+        //            $language->image= $this->imageUpload($request->file('image'),$this->imagesPath['images']);
+        //        }
+        //
+        //        if(!$language->save())
+        //            return $this->errorResponse(
+        //                __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+        //            );
+        //
+        //        return $this->successResponse(
+        //            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+        //            [
+        //                'language' => new SingleLanguageResource($language)
+        //            ]
+        //        );
 
 
     }
@@ -89,7 +91,7 @@ class LanguageController extends MainController
      */
     public function show(Language $language)
     {
-        return $this->successResponse('Success' , ['language' => new SingleLanguageResource($language)]);
+        return $this->successResponse('Success', ['language' => new SingleLanguageResource($language)]);
     }
 
     /**
@@ -112,33 +114,33 @@ class LanguageController extends MainController
      */
     public function update(StoreLanguageRequest $request, Language $language)
     {
-//
-//        $language->name =  (array) json_decode($request->name);
-//        $language->code=$request->code;
-//        $language->is_default=false;
-//        if((bool)$request->is_default)
-//            $language->setIsDefault();
-//
-//        if($request->image){
-//            if( !$this->removeImage($language->image) ){
-//                 throw new FileErrorException();
-//            }
-//            $language->image= $this->imageUpload($request->file('image'),config('images_paths.language.images'));
-//
-//         }
-//
-//
-//        if(!$language->save())
-//            return $this->errorResponse(
-//                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
-//            );
-//
-//        return $this->successResponse(
-//            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-//            [
-//                'language' => new SingleLanguageResource($language)
-//            ]
-//        );
+        //
+        //        $language->name =  (array) json_decode($request->name);
+        //        $language->code=$request->code;
+        //        $language->is_default=false;
+        //        if((bool)$request->is_default)
+        //            $language->setIsDefault();
+        //
+        //        if($request->image){
+        //            if( !$this->removeImage($language->image) ){
+        //                 throw new FileErrorException();
+        //            }
+        //            $language->image= $this->imageUpload($request->file('image'),$this->imagesPath['images']);
+        //
+        //         }
+        //
+        //
+        //        if(!$language->save())
+        //            return $this->errorResponse(
+        //                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+        //            );
+        //
+        //        return $this->successResponse(
+        //            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+        //            [
+        //                'language' => new SingleLanguageResource($language)
+        //            ]
+        //        );
 
     }
 
@@ -150,35 +152,36 @@ class LanguageController extends MainController
      */
     public function destroy(Language $language)
     {
-//        $defaultLanugage=Language::where('is_default',1)->first();
-//        if($defaultLanugage)
-//            return $this->errorResponse(
-//                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
-//            );
-//
-//        if(!$language->delete())
-//            return $this->errorResponse(
-//                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
-//            );
-//
-//        return $this->successResponse(
-//            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
-//            [
-//                'language' => new SingleLanguageResource($language)
-//            ]
-//        );
+        //        $defaultLanugage=Language::where('is_default',1)->first();
+        //        if($defaultLanugage)
+        //            return $this->errorResponse(
+        //                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+        //            );
+        //
+        //        if(!$language->delete())
+        //            return $this->errorResponse(
+        //                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+        //            );
+        //
+        //        return $this->successResponse(
+        //            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+        //            [
+        //                'language' => new SingleLanguageResource($language)
+        //            ]
+        //        );
 
     }
-    public function setLanguage($locale){
+    public function setLanguage($locale)
+    {
 
-        $language=Language::where('code',$locale)->first();
-        if(!$language)
+        $language = Language::where('code', $locale)->first();
+        if (!$language)
             return $this->errorResponse(
-                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+                __('messages.failed.update', ['name' => __(self::OBJECT_NAME)])
             );
 
         App::setLocale($locale);
-        if(App::getLocale() == $locale){
+        if (App::getLocale() == $locale) {
             return $this->successResponse(
                 __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
             );
@@ -187,58 +190,59 @@ class LanguageController extends MainController
         return $this->errorResponse(
             __('messages.failed.update', ['name' => __(self::OBJECT_NAME)])
         );
-
     }
-public function toggleStatus(Request $request ,$id){
+    public function toggleStatus(Request $request, $id)
+    {
 
         $request->validate([
             'is_disabled' => 'boolean|required'
         ]);
 
         $language = Language::findOrFail($id);
-        $language->is_disabled= (bool) $request->is_disabled;
-        if(!$language->save())
+        $language->is_disabled = (bool) $request->is_disabled;
+        if (!$language->save())
             return $this->errorResponse(
-                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+                __('messages.failed.update', ['name' => __(self::OBJECT_NAME)])
             );
 
         return $this->successResponse(
-            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
             [
                 'language' =>  new SingleLanguageResource($language)
             ]
         );
-
     }
 
-    public function updateSortValues(Request $request){
+    public function updateSortValues(Request $request)
+    {
 
         $language = new Language();
         $order = $request->order;
         $index = 'id';
 
-        batch()->update($language,$order,$index);
+        batch()->update($language, $order, $index);
 
         return $this->successResponse(
-            __('messages.success.update',['name' => __(self::OBJECT_NAME)])
+            __('messages.success.update', ['name' => __(self::OBJECT_NAME)])
         );
-
     }
-    public function setLanguageIsDefault($language){
+    public function setLanguageIsDefault($language)
+    {
 
         $languageObject = Language::findOrFail($language);
         $languageObject->setIsDefault();
         $languageObject->save();
 
         return $this->successResponse(
-__('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
             [
                 'language' => new SingleLanguageResource($languageObject)
             ]
         );
     }
-    public function getAllLanguagesSorted(){
-        $languages=Language::order()->get();
+    public function getAllLanguagesSorted()
+    {
+        $languages = Language::order()->get();
         return $this->successResponse(
             'Success!',
             [
@@ -247,17 +251,18 @@ __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
         );
     }
 
-    public function getTableHeaders(){
+    public function getTableHeaders()
+    {
         return $this->successResponse(
             'Success!',
             [
                 'headers' => __('headers.languages')
             ]
         );
+    }
+
+    public function getLanguagesData()
+    {
+        return $this->successResponsePaginated(RestFullLanguageResource::class, Language::class);
+    }
 }
-
-    public function getLanguagesData(){
-        return $this->successResponsePaginated(RestFullLanguageResource::class,Language::class);
-    }
-    }
-

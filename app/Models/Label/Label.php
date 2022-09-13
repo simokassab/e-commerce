@@ -11,21 +11,25 @@ use Spatie\Translatable\HasTranslations;
 
 class Label extends MainModel
 {
-    use HasFactory,HasTranslations;
+    use HasFactory, HasTranslations;
 
-    protected $translatable=['title'];
-    protected $table='labels';
+    protected $translatable = ['title'];
+    protected $table = 'labels';
     protected $guard_name = 'web';
+    public static $imagesPath = [
+        'images' => 'labels/images',
+    ];
 
-    public function categories(){
-        return $this->belongsToMany(Category::class,'categories_labels','label_id','category_id');
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'categories_labels', 'label_id', 'category_id');
     }
-    public function brands(){
-        return $this->belongsToMany(brand::class,'brands_labels','label_id');
-
+    public function brands()
+    {
+        return $this->belongsToMany(brand::class, 'brands_labels', 'label_id');
     }
-    public function products(){
-        return $this->hasMany(Product::class,'product_id');
-
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'product_id');
     }
 }

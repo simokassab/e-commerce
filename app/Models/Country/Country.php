@@ -10,11 +10,11 @@ class Country extends MainModel
 {
     use HasFactory, HasTranslations;
 
-    protected $translatable=['name'];
-    protected $table='countries';
+    protected $translatable = ['name'];
+    protected $table = 'countries';
     protected $guard_name = 'web';
 
-    protected $fillable=[
+    protected $fillable = [
         'name',
         'iso_code_1',
         'iso_code_2',
@@ -22,4 +22,7 @@ class Country extends MainModel
         'flag'
     ];
 
+    public static $imagesPath = [
+        'images' => 'countries/images',
+    ];
 }

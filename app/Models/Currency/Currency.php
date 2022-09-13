@@ -10,15 +10,20 @@ use Spatie\Translatable\HasTranslations;
 
 class Currency extends MainModel
 {
-    use HasFactory,HasTranslations;
+    use HasFactory, HasTranslations;
 
-    protected array $translatable=['name'];
-    protected $table='currencies';
+    protected $translatable = ['name'];
+    protected $table = 'currencies';
+    public static $imagesPath =  [
+        'images' => 'currencies/images',
+    ];
 
-    public function currencyHistory(){
-        return $this->hasMany(CurrencyHistory::class,'currency_id');
+    public function currencyHistory()
+    {
+        return $this->hasMany(CurrencyHistory::class, 'currency_id');
     }
-    public function price(){
-        return $this->hasMany(Price::class,'currency_id');
+    public function price()
+    {
+        return $this->hasMany(Price::class, 'currency_id');
     }
 }

@@ -26,11 +26,12 @@ use Illuminate\Validation\Rule;
 class BrandController extends MainController
 {
     const OBJECT_NAME = 'objects.brands';
-
-    //    public function __construct($defaultPermissionsFromChild = null)
-    //    {
-    //        parent::__construct(['BrancController@index' => ]);
-    //    }
+    private $imagesPath = "";
+    public function __construct($defaultPermissionsFromChild = null)
+    {
+        $this->imagesPath = Brand::$imagesPath;
+        //    parent::__construct(['BrancController@index' => ]);
+    }
 
     /**
      * Display a listing of the resource.
@@ -88,7 +89,7 @@ class BrandController extends MainController
             $brand->code = '0';
 
             if ($request->image)
-                $brand->image = $this->imageUpload($request->file('image'), config('images_paths.brands.images'));
+                $brand->image = $this->imageUpload($request->file('image'), $this->imagesPath['images']);
 
             if (gettype($request->meta_title) != 'array') {
                 $brand->meta_title = (array)json_decode($request->meta_title);
@@ -198,7 +199,7 @@ class BrandController extends MainController
                 if (!$this->removeImage($brand->image)) {
                     throw new FileErrorException();
                 }
-                $brand->image = $this->imageUpload($request->file('image'), config('images_paths.brands.images'));
+                $brand->image = $this->imageUpload($request->file('image'), $this->imagesPath['images']);
             }
 
             if (gettype($request->meta_title) != 'array') {

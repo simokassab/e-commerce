@@ -15,10 +15,10 @@ use Illuminate\Http\Request;
 class LabelController extends MainController
 {
     const OBJECT_NAME = 'objects.label';
-
+    private $imagesPath = "";
     public function __construct()
     {
-
+        $this->imagesPath = Label::$imagesPath;
     }
 
     /**
@@ -29,12 +29,11 @@ class LabelController extends MainController
     public function index(Request $request)
     {
 
-        if ($request->method()=='POST') {
-            $searchKeys=['title','entity','color','image',];
-            return $this->getSearchPaginated(LabelsResource::class, Label::class,$request, $searchKeys);
+        if ($request->method() == 'POST') {
+            $searchKeys = ['title', 'entity', 'color', 'image',];
+            return $this->getSearchPaginated(LabelsResource::class, Label::class, $request, $searchKeys);
         }
-        return $this->successResponsePaginated(LabelsResource::class,Label::class);
-
+        return $this->successResponsePaginated(LabelsResource::class, Label::class);
     }
 
     /**
@@ -44,7 +43,6 @@ class LabelController extends MainController
      */
     public function create()
     {
-
     }
 
     /**
@@ -62,23 +60,22 @@ class LabelController extends MainController
         $label->entity = $request->entity;
         $label->color = $request->color;
 
-        if($request->image){
-            $label->image= $this->imageUpload($request->file('image'),config('images_paths.label.images'));
+        if ($request->image) {
+            $label->image = $this->imageUpload($request->file('image'), $this->imagesPath['images']);
         }
         $label->key = $request->key;
 
-        if(!$label->save())
+        if (!$label->save())
             return $this->errorResponse(
-                __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+                __('messages.failed.create', ['name' => __(self::OBJECT_NAME)])
             );
 
         return $this->successResponse(
-            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            __('messages.success.create', ['name' => __(self::OBJECT_NAME)]),
             [
                 'label' => new SingleLableResource($label)
             ]
         );
-
     }
 
     /**
@@ -89,8 +86,7 @@ class LabelController extends MainController
      */
     public function show(Label $label)
     {
-        return $this->successResponse('Success!',['label' => new SingleLableResource($label)]);
-
+        return $this->successResponse('Success!', ['label' => new SingleLableResource($label)]);
     }
 
     /**
@@ -116,25 +112,25 @@ class LabelController extends MainController
 
         $dataTranslatable = (array)json_decode($request->title);
         $label->title =  ($dataTranslatable);
-        $label->entity =$request->entity;
+        $label->entity = $request->entity;
         $label->color = $request->color;
         $label->key = $request->key;
 
-        if($request->image){
-            if( !$this->removeImage($label->image) ){
-                 throw new FileErrorException();
-             }
-            $label->image= $this->imageUpload($request->file('image'),config('images_paths.label.images'));
-         }
+        if ($request->image) {
+            if (!$this->removeImage($label->image)) {
+                throw new FileErrorException();
+            }
+            $label->image = $this->imageUpload($request->file('image'), $this->imagesPath['images']);
+        }
 
-        if(!$label->save())
+        if (!$label->save())
             return $this->errorResponse(
-                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+                __('messages.failed.update', ['name' => __(self::OBJECT_NAME)])
 
             );
 
         return $this->successResponse(
-            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
             [
                 'label' => new SingleLableResource($label)
             ]
@@ -149,24 +145,25 @@ class LabelController extends MainController
      */
     public function destroy(Label $label)
     {
-        if(!$label->delete())
+        if (!$label->delete())
             return $this->errorResponse(
-                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+                __('messages.failed.delete', ['name' => __(self::OBJECT_NAME)])
             );
 
         return $this->successResponse(
-            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            __('messages.success.delete', ['name' => __(self::OBJECT_NAME)]),
             [
                 'label' => new SingleLableResource($label)
             ]
         );
-
     }
-    public function getTableHeaders(){
-        return $this->successResponse('Success!',['headers' => __('headers.labels') ]);
+    public function getTableHeaders()
+    {
+        return $this->successResponse('Success!', ['headers' => __('headers.labels')]);
     }
 
-    public function getLabelsData(){
-        return $this->successResponsePaginated(RestFullLabelResource::class,Label::class);
+    public function getLabelsData()
+    {
+        return $this->successResponsePaginated(RestFullLabelResource::class, Label::class);
     }
 }

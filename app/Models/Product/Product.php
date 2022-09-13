@@ -28,9 +28,9 @@ use Illuminate\Support\Facades\DB;
 
 class Product extends MainModel
 {
-    use HasFactory,HasTranslations;
-    protected array $translatable=['name','summary','specification','description','meta_title','meta_description','meta_keyword'];
-    protected $table='products';
+    use HasFactory, HasTranslations;
+    protected array $translatable = ['name', 'summary', 'specification', 'description', 'meta_title', 'meta_description', 'meta_keyword'];
+    protected $table = 'products';
     protected $guard_name = 'web';
     protected $fillable = [
         'name',
@@ -62,7 +62,9 @@ class Product extends MainModel
         'products_statuses_id',
         'is_show_related_product',
     ];
-
+    public static $imagesPath = [
+        'images' => 'products/images',
+    ];
 
     public function parent()
     {
@@ -71,49 +73,49 @@ class Product extends MainModel
 
     public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Product::class,'parent_product_id');
+        return $this->hasMany(Product::class, 'parent_product_id');
     }
 
     public function relatedProducts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(ProductRelated::class,'parent_product_id','id');
+        return $this->hasMany(ProductRelated::class, 'parent_product_id', 'id');
     }
 
     public function category(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Category::class,'products_categories','product_id','category_id');
+        return $this->belongsToMany(Category::class, 'products_categories', 'product_id', 'category_id');
     }
     public function unit(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Unit::class,'unit_id');
+        return $this->belongsTo(Unit::class, 'unit_id');
     }
     public function tax(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Tax::class,'tax_id','id');
+        return $this->belongsTo(Tax::class, 'tax_id', 'id');
     }
     public function brand(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Brand::class,'brand_id');
+        return $this->belongsTo(Brand::class, 'brand_id');
     }
 
     public function priceClass(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Price::class,'products_prices','product_id','price_id');
+        return $this->belongsToMany(Price::class, 'products_prices', 'product_id', 'price_id');
     }
 
     public function pricesList(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(ProductPrice::class, 'product_id','id');
+        return $this->hasMany(ProductPrice::class, 'product_id', 'id');
     }
 
     public function price(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(ProductPrice::class,'product_id','id');
+        return $this->hasMany(ProductPrice::class, 'product_id', 'id');
     }
 
-    public function productRelatedParent(){
-        return $this->belongsTo(ProductRelated::class,'parent_product_id');
-
+    public function productRelatedParent()
+    {
+        return $this->belongsTo(ProductRelated::class, 'parent_product_id');
     }
     public function productRelatedChildren()
     {
@@ -157,8 +159,9 @@ class Product extends MainModel
         return $this->belongsTo(ProductStatus::class, 'products_statuses_id');
     }
 
-    public function getVirtualPricing(Price | int $pricingClass){
-        $pricingClass  = is_int($pricingClass)  ?  Price::findOrFail($pricingClass) : $pricingClass ;
+    public function getVirtualPricing(Price | int $pricingClass)
+    {
+        $pricingClass  = is_int($pricingClass)  ?  Price::findOrFail($pricingClass) : $pricingClass;
         $originalPricingClass = $pricingClass->originalPrice;
         if (!$originalPricingClass) {
             return 0;
@@ -190,52 +193,53 @@ class Product extends MainModel
     /**
      * @throws \Throwable
      */
-    public function editQuantity(float $newQuantity){
-        if($this->type == 'service' || $this->type == 'variable'){
+    public function editQuantity(float $newQuantity)
+    {
+        if ($this->type == 'service' || $this->type == 'variable') {
             return $this;
         }
         $oldQuantity = $this->quantity;
-        if($this->type == 'bundle'){
+        if ($this->type == 'bundle') {
             $oldQuantity = $this->reserved_quantity;
         }
 
         $differenceQuantity = $oldQuantity - $newQuantity;
 
-        if($differenceQuantity > 0){
-            return $this->updateProductQuantity($differenceQuantity,'sub');
+        if ($differenceQuantity > 0) {
+            return $this->updateProductQuantity($differenceQuantity, 'sub');
         }
-        return $this->updateProductQuantity(abs($differenceQuantity),'add');
-
+        return $this->updateProductQuantity(abs($differenceQuantity), 'add');
     }
 
     /**
      * @throws Exception
      * @throws \Throwable
      */
-    public function updateProductQuantity(float $quantity, string $method, bool $isOrder = false){
-            if($method != 'add' && $method != 'sub'){
-                throw new \Exception('Bad method type '.$method);
+    public function updateProductQuantity(float $quantity, string $method, bool $isOrder = false)
+    {
+        if ($method != 'add' && $method != 'sub') {
+            throw new \Exception('Bad method type ' . $method);
+        }
+        if ($this->type == 'service' || $this->type == 'variable') {
+            return $this;
+        }
+        if ($this->type == 'normal' || $this->type == 'variable_child') {
+            if ($method == 'add') {
+                return $this->addQuantityForNormalAndVariableChild($quantity);
+            } else {
+                return $this->subQuantityForNormalAndVariableChild($quantity);
             }
-            if($this->type == 'service' || $this->type == 'variable'){
-                return $this;
+        }
+        if ($this->type == 'bundle') {
+            $allBundleRelatedProducts = $this->relatedProducts;
+            //                $allBundleRelatedProducts = ProductRelated::query()->where('parent_product_id', $this->id)->get();
+            $allBundleProducts = self::query()->findMany($allBundleRelatedProducts->pluck('child_product_id')->toArray());
+            if ($method == 'add') {
+                return $this->addQuantityForBundle($quantity, $allBundleProducts, $allBundleRelatedProducts, $isOrder);
+            } else {
+                return $this->subQuantityForBundle($quantity, $allBundleProducts, $allBundleRelatedProducts, $isOrder);
             }
-            if($this->type == 'normal' || $this->type == 'variable_child'){
-                if($method == 'add'){
-                    return $this->addQuantityForNormalAndVariableChild($quantity);
-                }else{
-                    return $this->subQuantityForNormalAndVariableChild($quantity);
-                }
-            }
-            if($this->type == 'bundle'){
-                $allBundleRelatedProducts = $this->relatedProducts;
-//                $allBundleRelatedProducts = ProductRelated::query()->where('parent_product_id', $this->id)->get();
-                $allBundleProducts = self::query()->findMany($allBundleRelatedProducts->pluck('child_product_id')->toArray());
-                if($method == 'add'){
-                    return $this->addQuantityForBundle($quantity,$allBundleProducts,$allBundleRelatedProducts,$isOrder);
-                }else{
-                    return $this->subQuantityForBundle($quantity,$allBundleProducts,$allBundleRelatedProducts,$isOrder);
-                }
-            }
+        }
 
 
         throw new Exception('The type of product is invalid ' . $this->type);
@@ -253,17 +257,18 @@ class Product extends MainModel
     /**
      * @throws Exception
      */
-    protected function subQuantityForNormalAndVariableChild(float $quantity){
+    protected function subQuantityForNormalAndVariableChild(float $quantity)
+    {
         $isAllowNegativeQuantity = getSettings('allow_negative_quantity')->value;
-        if($isAllowNegativeQuantity || $this->pre_order){
+        if ($isAllowNegativeQuantity || $this->pre_order) {
             $this->quantity -= $quantity;
             if ($this->save())
                 return $this;
 
             throw new \Exception('An error occurred please try again !');
         }
-        if($this->quantity < $quantity){
-            throw new Exception('You have less quantity than '. $quantity .' in stock');
+        if ($this->quantity < $quantity) {
+            throw new Exception('You have less quantity than ' . $quantity . ' in stock');
         }
 
         $this->quantity -= $quantity;
@@ -276,16 +281,16 @@ class Product extends MainModel
     /**
      * @throws Exception
      */
-    private function addQuantityForBundle(float $quantity, Collection $allBundleProducts, Collection $allBundleRelatedProducts, bool $isOrder = false) : self
+    private function addQuantityForBundle(float $quantity, Collection $allBundleProducts, Collection $allBundleRelatedProducts, bool $isOrder = false): self
     {
 
-        if($this->type != 'bundle'){
+        if ($this->type != 'bundle') {
             throw new Exception('Calling addQuantityForBundle methode on non bundle product.');
         }
 
-        if(!$isOrder){
+        if (!$isOrder) {
             // not an order this means that a new bundle is being added to the database
-            if( !$this->hasEnoughRelatedProductsQuantityForReservingNewBundles($quantity,$allBundleProducts,$allBundleRelatedProducts) )
+            if (!$this->hasEnoughRelatedProductsQuantityForReservingNewBundles($quantity, $allBundleProducts, $allBundleRelatedProducts))
                 throw new Exception('Not enough quantity for reserving a new bundle');
         }
 
@@ -293,23 +298,23 @@ class Product extends MainModel
 
         foreach ($allBundleProducts as $bundleProduct) {
 
-            if($bundleProduct->type == 'service'){
+            if ($bundleProduct->type == 'service') {
                 continue;
             }
 
-            $bundleRelatedProduct = $allBundleRelatedProducts->where('child_product_id',$bundleProduct->id)->where('parent_product_id',$this->id)->first();
+            $bundleRelatedProduct = $allBundleRelatedProducts->where('child_product_id', $bundleProduct->id)->where('parent_product_id', $this->id)->first();
             $bundleProduct->bundle_reserved_quantity += $quantity * $bundleRelatedProduct['child_quantity'];
 
-            if($isOrder){
+            if ($isOrder) {
                 $bundleProduct->quantity += $quantity * $bundleRelatedProduct['child_quantity'];
             }
 
-            if(!$bundleProduct->save()){
+            if (!$bundleProduct->save()) {
                 throw new Exception("Error while saving the product with id {$bundleProduct->id} please try again later");
             }
         }
 
-        if(!$this->save()){
+        if (!$this->save()) {
             throw new Exception('Error while saving the product please try again later');
         }
         return $this;
@@ -322,36 +327,36 @@ class Product extends MainModel
      */
     private function subQuantityForBundle(float $quantity, Collection $allBundleProducts = null, Collection $allRelatedProducts = null, bool $isOrder = false): self
     {
-        if(!$this->hasEnoughRelatedProductsQuantityForSubstitutingBundles($quantity,$allBundleProducts,$allRelatedProducts,$isOrder)){
+        if (!$this->hasEnoughRelatedProductsQuantityForSubstitutingBundles($quantity, $allBundleProducts, $allRelatedProducts, $isOrder)) {
             throw new Exception('Not enough quantity or substituting or buying bundles');
         }
         $allowNegativeQuantity = getSettings('allow_negative_quantity')->value;
-        if(!$allowNegativeQuantity && $this->reserved_quantity < $quantity){
+        if (!$allowNegativeQuantity && $this->reserved_quantity < $quantity) {
             throw new Exception('Not enough quantity for reserving a new bundle');
         }
 
         $this->reserved_quantity -= $quantity;
 
-        foreach ($allBundleProducts as $bundleProduct){
-            if($bundleProduct->type == 'service' || $bundleProduct->is_pre_order){
+        foreach ($allBundleProducts as $bundleProduct) {
+            if ($bundleProduct->type == 'service' || $bundleProduct->is_pre_order) {
                 continue;
             }
-            $bundleRelatedProduct = $allRelatedProducts->where('child_product_id',$bundleProduct->id)->first();
+            $bundleRelatedProduct = $allRelatedProducts->where('child_product_id', $bundleProduct->id)->first();
 
             $bundleProduct->bundle_reserved_quantity -= $quantity * $bundleRelatedProduct->child_quantity;
 
-            if($isOrder){
+            if ($isOrder) {
                 $bundleProduct->quantity -= $quantity * $bundleRelatedProduct->child_quantity;
             }
         }
 
-            if(!$bundleProduct->save()){
-                throw new Exception("Error in saving product of id {$bundleProduct->id} !");
-            }
+        if (!$bundleProduct->save()) {
+            throw new Exception("Error in saving product of id {$bundleProduct->id} !");
+        }
 
 
 
-        if(!$this->save())
+        if (!$this->save())
             throw new Exception("Error in saving product, please try again later");
 
 
@@ -362,24 +367,25 @@ class Product extends MainModel
      * @throws Exception
      *
      */
-    public function hasEnoughRelatedProductsQuantityForReservingNewBundles(float $quantity, Collection $allProducts, Collection $allRelatedProducts):bool{
+    public function hasEnoughRelatedProductsQuantityForReservingNewBundles(float $quantity, Collection $allProducts, Collection $allRelatedProducts): bool
+    {
 
         //this function is for
 
-        if($this->type != 'bundle'){
+        if ($this->type != 'bundle') {
             throw new Exception('Call hasEnoughRelatedProductsQuantityForReservingNewBundles on non-bundle product');
         }
         $isAllowNegativeQuantity = getSettings('allow_negative_quantity')->value;
-        if($isAllowNegativeQuantity){
+        if ($isAllowNegativeQuantity) {
             return true;
         }
 
-        $relatedProducts = ($allRelatedProducts)->where('parent_product_id',$this->id);
+        $relatedProducts = ($allRelatedProducts)->where('parent_product_id', $this->id);
         $relatedProductsIds = $relatedProducts->pluck('child_product_id');
         $childrenProducts = collect($allProducts)->whereIn('id', $relatedProductsIds);
         foreach ($childrenProducts as $childProduct) {
 
-            if($childProduct['pre_order'] || $childProduct['type'] == 'service'){
+            if ($childProduct['pre_order'] || $childProduct['type'] == 'service') {
                 continue;
             }
 
@@ -388,7 +394,7 @@ class Product extends MainModel
                 ->where('parent_product_id', $this->id)
                 ->first();
 
-            if($childProduct['bundle_reserved_quantity'] < 0 ){
+            if ($childProduct['bundle_reserved_quantity'] < 0) {
                 // to ignore any problems with the calculations
                 $childProduct['bundle_reserved_quantity'] = 0;
             }
@@ -406,13 +412,14 @@ class Product extends MainModel
     /**
      * @throws \Throwable
      */
-    private function hasEnoughRelatedProductsQuantityForSubstitutingBundles($quantity, $allProducts, $allRelatedProducts, bool $isOrder = false) :bool{
-        if($this->type != 'bundle'){
+    private function hasEnoughRelatedProductsQuantityForSubstitutingBundles($quantity, $allProducts, $allRelatedProducts, bool $isOrder = false): bool
+    {
+        if ($this->type != 'bundle') {
             throw new Exception('Call hasEnoughRelatedProductsQuantityForSubstitutingBundles on non-bundle product');
         }
 
         $isAllowNegativeQuantity = getSettings('allow_negative_quantity')->value;
-        if($isAllowNegativeQuantity){
+        if ($isAllowNegativeQuantity) {
             return true;
         }
 
@@ -435,8 +442,8 @@ class Product extends MainModel
             if ($childProduct['bundle_reserved_quantity'] < 0) {
                 $childProduct['bundle_reserved_quantity'] = 0;
             }
-            $reservedQuantityFromOtherBundles = $childProduct['bundle_reserved_quantity'] - ($this->reserved_quantity * $childRelatedProduct['child_quantity']) ;
-            $childProduct['quantity'] -= $childProduct['reserved_quantity']+$reservedQuantityFromOtherBundles;
+            $reservedQuantityFromOtherBundles = $childProduct['bundle_reserved_quantity'] - ($this->reserved_quantity * $childRelatedProduct['child_quantity']);
+            $childProduct['quantity'] -= $childProduct['reserved_quantity'] + $reservedQuantityFromOtherBundles;
             $quantityToBeReserved = $childRelatedProduct['child_quantity'] * $quantity;
 
             if ($quantityToBeReserved > $childProduct['quantity']) {

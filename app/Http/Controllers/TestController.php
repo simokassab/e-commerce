@@ -27,15 +27,14 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use SoapClient;
 use App\Actions\Taxses\CalculateTax;
+use App\Models\Category\Category;
 
 class TestController extends MainController
 {
     use HasRoles;
-
     public function __construct()
     {
         $this->map_permissions = [];
-
         parent::__construct($this->map_permissions);
     }
 
@@ -47,9 +46,9 @@ class TestController extends MainController
     public function test()
     {
 
+        // dd($this->imagesPath['images']);
 
-        return Product::query()->find(1)->updateProductQuantity(5,'sub');
-//        return Product::query()->find(1)->relatedProducts;
+        // return Product::query()->find(1)->updateProductQuantity(5, 'sub');
+        //        return Product::query()->find(1)->relatedProducts;
     }
-
 }

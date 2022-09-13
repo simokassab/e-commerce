@@ -20,26 +20,31 @@ class CurrencyController extends MainController
 {
     const OBJECT_NAME = 'objects.currency';
     const relations = ['currencyHistory'];
+    private $imagesPath = "";
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->imagesPath = Currency::$imagesPath;
+    }
     public function index(Request $request)
     {
-        if ($request->method()=='POST') {
-            $searchKeys=['name','code','symbol','rate'];
-            $searchRelationsKeys = [ 'parent' =>['parent_name' => 'name'] ];
+        if ($request->method() == 'POST') {
+            $searchKeys = ['name', 'code', 'symbol', 'rate'];
+            $searchRelationsKeys = ['parent' => ['parent_name' => 'name']];
 
-            return $this->getSearchPaginated(IndexCurrencyResource::class, Currency::class,$request, $searchKeys,self::relations,$searchRelationsKeys);
-                }
-        return $this->successResponsePaginated(IndexCurrencyResource::class,Currency::class,self::relations);
-
+            return $this->getSearchPaginated(IndexCurrencyResource::class, Currency::class, $request, $searchKeys, self::relations, $searchRelationsKeys);
+        }
+        return $this->successResponsePaginated(IndexCurrencyResource::class, Currency::class, self::relations);
     }
 
-    public function getCurrencyHistories(){
+    public function getCurrencyHistories()
+    {
 
-        return $this->successResponsePaginated(CurrencyHistoryResource::class,CurrencyHistory::class);
+        return $this->successResponsePaginated(CurrencyHistoryResource::class, CurrencyHistory::class);
     }
     /**
      * Show the form for creating a new resource.
@@ -61,28 +66,27 @@ class CurrencyController extends MainController
     {
 
         $currency = new Currency();
-        $currency->name=(array)json_decode($request->name);
-        $currency->code=$request->code;
-        $currency->symbol=$request->symbol;
-        $currency->rate=$request->rate;
-        $currency->is_default=false;
-        if((bool)$request->is_default)
+        $currency->name = (array)json_decode($request->name);
+        $currency->code = $request->code;
+        $currency->symbol = $request->symbol;
+        $currency->rate = $request->rate;
+        $currency->is_default = false;
+        if ((bool)$request->is_default)
             $currency->setIsDefault();
 
-        if($request->image){
-            $currency->image= $this->imageUpload($request->file('image'),config('image_paths.currency.images'));
+        if ($request->image) {
+            $currency->image = $this->imageUpload($request->file('image'), $this->imagesPath['images']);
         }
 
-        if(!$currency->save())
-            return $this->errorResponse( __('messages.failed.create',['name' => __(self::OBJECT_NAME)]));
+        if (!$currency->save())
+            return $this->errorResponse(__('messages.failed.create', ['name' => __(self::OBJECT_NAME)]));
 
         return $this->successResponse(
-            __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+            __('messages.success.create', ['name' => __(self::OBJECT_NAME)]),
             [
                 'currency' => new SingleCurrencyResource($currency)
             ]
         );
-
     }
 
     /**
@@ -99,7 +103,6 @@ class CurrencyController extends MainController
                 'currency' => new SingleCurrencyResource($currency)
             ]
         );
-
     }
 
     /**
@@ -125,43 +128,40 @@ class CurrencyController extends MainController
         DB::beginTransaction();
 
         try {
-            $currency->name=(array)json_decode($request->name);
-            $currency->code=$request->code;
-            $currency->symbol=$request->symbol;
-            $currency->rate=$request->rate;
-            $currency->is_default=false;
-            if((bool)$request->is_default)
-             $currency->setIsDefault();
+            $currency->name = (array)json_decode($request->name);
+            $currency->code = $request->code;
+            $currency->symbol = $request->symbol;
+            $currency->rate = $request->rate;
+            $currency->is_default = false;
+            if ((bool)$request->is_default)
+                $currency->setIsDefault();
 
-            if($request->image){
-                if( !$this->removeImage($currency->image) ){
-                     throw new FileErrorException();
-                 }
-                $currency->image= $this->imageUpload($request->file('image'),config('image_paths.currency.images'));
-             }
+            if ($request->image) {
+                if (!$this->removeImage($currency->image)) {
+                    throw new FileErrorException();
+                }
+                $currency->image = $this->imageUpload($request->file('image'), $this->imagesPath['images']);
+            }
 
-             $currency->save();
+            $currency->save();
             DB::commit();
 
             return $this->successResponse(
-                __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+                __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
                 [
                     'currency' => new SingleCurrencyResource($currency)
                 ]
             );
-
-        }catch(\Exception $exception){
+        } catch (\Exception $exception) {
             DB::rollBack();
 
             return $this->errorResponse(
-                __('messages.failed.update',['name' => __(self::OBJECT_NAME)]),
+                __('messages.failed.update', ['name' => __(self::OBJECT_NAME)]),
                 [
                     $exception->getMessage()
                 ]
             );
-
         }
-
     }
 
     /**
@@ -172,36 +172,38 @@ class CurrencyController extends MainController
      */
     public function destroy(Currency $currency)
     {
-//        if(!$currency->delete()){
-//            return response()->json([
-//                'data' => [
-//                    'message' => 'The currency was not deleted ! please try again later',
-//                ]
-//            ],512);
-//        }
-//
-//        return response()->json([
-//            'data' => [
-//                'message' => 'currency deleted successfully',
-//                'currency' => new CurrencyResource($currency)
-//            ]
-//
-//        ],201);
+        //        if(!$currency->delete()){
+        //            return response()->json([
+        //                'data' => [
+        //                    'message' => 'The currency was not deleted ! please try again later',
+        //                ]
+        //            ],512);
+        //        }
+        //
+        //        return response()->json([
+        //            'data' => [
+        //                'message' => 'currency deleted successfully',
+        //                'currency' => new CurrencyResource($currency)
+        //            ]
+        //
+        //        ],201);
     }
-    public function setCurrencyIsDefault($currency){
+    public function setCurrencyIsDefault($currency)
+    {
 
         $currencyObject = Currency::findOrFail($currency);
         $currencyObject->setIsDefault();
         $currencyObject->save();
 
         return $this->successResponse(
-            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
             [
                 'currency' => new SingleCurrencyResource($currencyObject)
             ]
         );
     }
-     public function getTableHeaders(){
+    public function getTableHeaders()
+    {
         return $this->successResponse(
             'Success!',
             [
@@ -209,7 +211,8 @@ class CurrencyController extends MainController
             ]
         );
     }
-    public function getCurrenciesData(){
-        return $this->successResponsePaginated(RestFullCurrencyResource::class,Currency::class,['currencyHistory']);
+    public function getCurrenciesData()
+    {
+        return $this->successResponsePaginated(RestFullCurrencyResource::class, Currency::class, ['currencyHistory']);
     }
 }
