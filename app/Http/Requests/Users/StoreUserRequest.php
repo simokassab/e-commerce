@@ -25,6 +25,7 @@ class StoreUserRequest extends MainRequest
     {
         return [
             'username' => 'required|unique:users,username',
+            'is_disabled' => 'boolean',
             'email' => 'required|email|unique:users,email',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
