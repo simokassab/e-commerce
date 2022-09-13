@@ -19,13 +19,13 @@ class CustomRole extends Role
         return $this->belongsTo(self::class,'parent_id','id');
     }
 
-    // this function only returns the nearst children and dones'nt dig deeper into the relation
+    // this function only returns the nearest children and doesn't dig deeper into the relation
     public function children(){
         return $this->hasMany(self::class,'parent_id','id');
     }
 
     public function allChildren($flatten = false){
-        //this function will get all of the children and their nested children also
+        //this function will get all the children and their nested children also
         return RolesService::getRoleChildren($this->id, $flatten);
     }
 

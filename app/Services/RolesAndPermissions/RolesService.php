@@ -54,7 +54,7 @@ class RolesService {
 
     }
 
-    private static function drawRoleChildren(Int $parentRoleId, Array $allRolesID ,$isMultiLevel = false, $allRoles): Array{ //with levels
+    private static function drawRoleChildren(int $parentRoleId, array $allRolesID ,$isMultiLevel = false, $allRoles): array{ //with levels
         if(empty($allRolesID[$parentRoleId])){
             return [];
         }
