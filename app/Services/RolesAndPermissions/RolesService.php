@@ -212,7 +212,7 @@ class RolesService {
            self::createSinglePermssion('RolesController@show',$parentRole->id );
            self::createSinglePermssion('RolesController@update',$parentRole->id );
            self::createSinglePermssion('RolesController@destroy',$parentRole->id );
-     //End of Permission Permission
+     //End of Permission
 
       //Setting Permission
       $parentSetting= self::createSinglePermssion('SettingsController');
@@ -283,6 +283,16 @@ class RolesService {
      self::createSinglePermssion('TaxController@update',$parentTax->id );
      self::createSinglePermssion('TaxController@destroy',$parentTax->id );
     //End of Tax Permission
+
+    $parentOrder= self::createSinglePermssion('OrderController');
+    self::createSinglePermssion('OrderController@index',$parentOrder->id );
+    self::createSinglePermssion('OrderController@store',$parentOrder->id );
+    self::createSinglePermssion('OrderController@show',$parentOrder->id );
+    self::createSinglePermssion('OrderController@update',$parentOrder->id );
+    self::createSinglePermssion('OrderController@destroy',$parentOrder->id );
+
+    //End of Language Permission
+
 
 
     }
