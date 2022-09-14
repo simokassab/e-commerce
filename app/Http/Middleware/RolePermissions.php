@@ -25,7 +25,6 @@ class RolePermissions
     {
         $default_permissions = [
         ];
-        dd(Permission::findByName('CountryController@index'));
         $routeAction = basename(Route::currentRouteAction()); //we got the permission name
         $routeAction = Str::replaceAll(['show'], 'index', $routeAction);
         $routeAction = Str::replaceAll(['updateTst', 'unknowFunction'], 'update', $routeAction);
