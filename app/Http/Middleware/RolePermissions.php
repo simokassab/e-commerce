@@ -29,7 +29,7 @@ class RolePermissions
 
 
         $routeAction = basename( $path ); //we got the permission name
-        dd( $routeAction );
+        dd( $path );
         $routeAction = Str::replaceAll(['show'], 'index', $routeAction);
         $routeAction = Str::replaceAll(['updateTst', 'unknowFunction'], 'update', $routeAction);
 
