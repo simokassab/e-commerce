@@ -123,3 +123,8 @@ function arrayToObject($array)
     return array_to_obj($array, $object);
 
 }
+
+function mb_basename($filePath){
+    $array = explode('\\', $filePath);
+    return end($array);
+}

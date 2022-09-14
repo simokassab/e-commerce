@@ -23,19 +23,16 @@ class RolePermissions
      */
     public function handle(Request $request, Closure $next)
     {
-        $path =Route::currentRouteAction();
-        $array = explode('\\', (string)$path);
-        $routeAction = end($array);
-
 //        $routeAction = basename( $path ); //we got the permission name
+
+        $path =Route::currentRouteAction();
+        $routeAction = mb_basename($path);
         $routeAction = Str::replaceAll(['show'], 'index', $routeAction);
         $routeAction = Str::replaceAll(['updateTst', 'unknowFunction'], 'update', $routeAction);
          if (! auth()->check() ) {
-             dd('no auth');
              throw new UnauthorizedException();
         }
         if (!auth()->user()->hasPermissionTo($routeAction)) {
-            dd('no permission');
             throw new UnauthorizedException();
         }
 
