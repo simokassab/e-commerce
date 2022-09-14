@@ -23,13 +23,12 @@ class RolePermissions
      */
     public function handle(Request $request, Closure $next)
     {
+        $path =Route::currentRouteAction();
+        $array = explode('\\', (string)$path);
+        $routeAction = end($array);
 
-        $path = "App\Http\Controllers\Country\CountryController@index";
-
-
-
-        $routeAction = basename( $path ); //we got the permission name
-        dd( $path );
+//        $routeAction = basename( $path ); //we got the permission name
+        dd( $routeAction );
         $routeAction = Str::replaceAll(['show'], 'index', $routeAction);
         $routeAction = Str::replaceAll(['updateTst', 'unknowFunction'], 'update', $routeAction);
 
