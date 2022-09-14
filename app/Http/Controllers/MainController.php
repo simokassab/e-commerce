@@ -11,29 +11,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MainController extends Controller
 {
-
-    /**
-     * @throws UnauthorizedException
-     */
-    public function __construct($defaultPermissionsFromChild = null)
+    public function __construct()
     {
-
-        $routeAction = basename(Route::currentRouteAction()); //we got the permission name
-
-        if (isset($this->map_permissions[$routeAction]))
-            $routeAction = $this->map_permissions[$routeAction];
-
-        if($routeAction == 'AuthenticationController@login' || $routeAction == 'AuthenticationController@logout'){
-            return;
-        }
-
-        if (!auth()->user()->hasPermissionTo($routeAction)) {
-            throw new UnauthorizedException();
-        }
-
-//        $this->defaultLocalize = config('app.locale');
-
-
     }
 
     protected function successResponse($message = 'Success!', array $data = [], $returnCode = 1, $statusCode = 200): \Illuminate\Http\JsonResponse

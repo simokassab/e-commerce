@@ -3,21 +3,21 @@
 namespace App\Exceptions;
 
 use Error;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use \Exception;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemException;
+use Psr\Log\LogLevel;
 use Ramsey\Collection\Exception\ValueExtractionException;
-use Spatie\FlareClient\Http\Exceptions\NotFound;
-use Throwable;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
+
 class Handler extends ExceptionHandler
 {
     /**
      * A list of exception types with their corresponding custom log levels.
      *
-     * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
+     * @var array<class-string<Throwable>, LogLevel::*>
      */
     protected $levels = [
         //
@@ -26,7 +26,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of the exception types that are not reported.
      *
-     * @var array<int, class-string<\Throwable>>
+     * @var array<int, class-string<Throwable>>
      */
     protected $dontReport = [
         //
@@ -44,14 +44,13 @@ class Handler extends ExceptionHandler
     ];
 
 
-
     /**
      * A list of the expected exceptions.
      * Register all exceptions here
      * @var array<Exception, string>
      *
      * */
-    protected array $exceptions= [
+    protected array $exceptions = [
         NotFoundHttpException::class => [
             'class' => NotFoundHttpException::class,
             'message' => 'The object was not found! ',
@@ -88,6 +87,12 @@ class Handler extends ExceptionHandler
             'code' => 512,
         ],
 
+        Exception::class => [
+            'class' => Exception::class,
+            'message' => 'An error occurred please refresh the page and try again later',
+            'code' => 500,
+        ],
+
     ];
 
     /**
@@ -97,16 +102,9 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-
-        $this->exceptionsp[]=[
-            'name' => \Exception::class,
-            'message' => 'An error occurred please refresh the page and try again later'
-        ];
-
-        $this->renderable(function (Throwable $exception,$request) {
-            if(config('app.debug')){
-
-                if(!array_key_exists(get_class($exception), $this->exceptions)){
+        $this->renderable(function (Throwable $exception, $request) {
+            if (!config('app.debug')) {
+                if (!array_key_exists(get_class($exception), $this->exceptions)) {
                     return errorResponse('error, please try again later');
                 }
 
@@ -129,8 +127,6 @@ class Handler extends ExceptionHandler
 //                    }
 //                }
             }
-
-
         });
     }
 }
