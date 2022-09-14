@@ -23,6 +23,7 @@ class RolePermissions
      */
     public function handle(Request $request, Closure $next)
     {
+        dd(Route::currentRouteAction());
         dd(basename( Route::currentRouteAction() ));
         $routeAction = basename( Route::currentRouteAction() ); //we got the permission name
         $routeAction = Str::replaceAll(['show'], 'index', $routeAction);
