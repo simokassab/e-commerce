@@ -24,11 +24,11 @@ class RolePermissions
     public function handle(Request $request, Closure $next)
     {
 
-        $path = "App\Http\Controllers\Country\CountryController";
+        $path = "llll\Http\test\Countsry";
 
 
 
-        $routeAction = basename( $path ).PHP_EOL; //we got the permission name
+        $routeAction = basename( $path ); //we got the permission name
         dd( $routeAction );
         $routeAction = Str::replaceAll(['show'], 'index', $routeAction);
         $routeAction = Str::replaceAll(['updateTst', 'unknowFunction'], 'update', $routeAction);
