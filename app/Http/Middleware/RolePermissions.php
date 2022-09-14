@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Models\Permission;
 
 class RolePermissions
 {
@@ -24,10 +25,11 @@ class RolePermissions
     {
         $default_permissions = [
         ];
-
+        dd(Permission::findByName('CountryController@index'));
         $routeAction = basename(Route::currentRouteAction()); //we got the permission name
         $routeAction = Str::replaceAll(['show'], 'index', $routeAction);
         $routeAction = Str::replaceAll(['updateTst', 'unknowFunction'], 'update', $routeAction);
+
         if (! auth()->check() ) {
             throw new UnauthorizedException();
         }
