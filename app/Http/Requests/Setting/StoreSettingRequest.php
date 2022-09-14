@@ -7,7 +7,7 @@ use App\Rules\SettingValueRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
-class StoreSettingRequest extends MainRequest
+class StoreSettingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,22 +25,20 @@ class StoreSettingRequest extends MainRequest
      * @return array<string, mixed>
      */
     public function rules(Request $request)
-{
+    {
         return [
 
             'type' => 'required | string',
-            'value' => ['required','max:'.config('defaults.default_string_length'), new SettingValueRule($request->type,$this->setting->id)],
+            'value' => ['required', 'max:' . config('defaults.default_string_length'), new SettingValueRule($request->type, $this->setting->id)],
         ];
-
-
     }
 
     public function messages()
     {
         return [
 
-        'value.required' => 'the :attribute field is required',
-        'value.max' => 'the maximum string length is :max',
+            'value.required' => 'the :attribute field is required',
+            'value.max' => 'the maximum string length is :max',
         ];
     }
 }

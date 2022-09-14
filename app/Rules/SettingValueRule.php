@@ -26,26 +26,26 @@ class SettingValueRule implements InvokableRule
     {
         $settings = Cache::get('settings')->find($this->key);
 
-        if ( $this->type != $settings->type){
+        if ($this->type != $settings->type) {
             $fail('the value type must be the same as the setting type');
         }
 
         if ($this->type == 'select' || $this->type == 'text') {
             if (!is_string($value))
-            return $fail('the :attribute must be a string');
-        } elseif ($this->type == 'number') {
+                return $fail('the :attribute must be a string');
+        } elseif ($this->type == 'number' || $this->type == 'model_select') {
             if (!is_numeric($value))
-            return $fail('the :attribute must be a number');
+                return $fail('the :attribute must be a number');
         } elseif ($this->type == 'checkbox') {
             if (!is_bool($value))
-            return $fail('the :attribute must be a boolean');
+                return $fail('the :attribute must be a boolean');
         } elseif ($this->type == 'multi-select') {
-            if (!is_array($value)){
+            if (!is_array($value)) {
                 return $fail('the :attribute must be an array');
             }
 
             if (!Setting::validateOptionsByTitle($settings->title, $value))
-            return $fail('the :attribute must be an array of valid options');
+                return $fail('the :attribute must be an array of valid options');
         }
     }
 }
