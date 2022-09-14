@@ -285,12 +285,12 @@ class RolesService {
     //End of Tax Permission
 
     //Order Permission
-    $parentOrder= self::createSinglePermssion('OrderController');
-    self::createSinglePermssion('OrderController@index',$parentOrder->id );
-    self::createSinglePermssion('OrderController@store',$parentOrder->id );
-    self::createSinglePermssion('OrderController@show',$parentOrder->id );
-    self::createSinglePermssion('OrderController@update',$parentOrder->id );
-    self::createSinglePermssion('OrderController@destroy',$parentOrder->id );
+    $parentOrder= self::createSinglePermssion('OrdersController');
+    self::createSinglePermssion('OrdersController@index',$parentOrder->id );
+    self::createSinglePermssion('OrdersController@store',$parentOrder->id );
+    self::createSinglePermssion('OrdersController@show',$parentOrder->id );
+    self::createSinglePermssion('OrdersController@update',$parentOrder->id );
+    self::createSinglePermssion('OrdersController@destroy',$parentOrder->id );
     //End of Order Permission
 
 

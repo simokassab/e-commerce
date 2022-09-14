@@ -63,7 +63,7 @@ class OrdersController extends MainController
      */
     public function create()
     {
-        $defaultCurrency = Currency::query()->where('is_default', 1)->first();
+        $defaultCurrency = Currency::query()->where('is_default', 1)->firstOrFail();
         return $this->successResponse(data: [
             'countries' => SelectContryResource::collection(Country::query()->select(['id', 'name', 'iso_code_1'])->get()),
             'currencies' => SelectCurrencyResource::collection(Currency::all()),

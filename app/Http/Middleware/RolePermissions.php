@@ -27,6 +27,7 @@ class RolePermissions
 
         $path =Route::currentRouteAction();
         //hello world
+        dd(auth()->check());
         $routeAction = mb_basename($path);
         $routeAction = Str::replaceAll(['create','getProductsForOrders','getCouponByCode','getAllParentsSorted','getAllChildsSorted','getAllLanguagesSorted'], 'store', $routeAction);
         $routeAction = Str::replaceAll(['getTableHeaders','getAllRoles'], 'index', $routeAction);
