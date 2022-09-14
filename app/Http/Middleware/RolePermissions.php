@@ -24,8 +24,6 @@ class RolePermissions
     public function handle(Request $request, Closure $next)
     {
         $routeAction = basename(Route::currentRouteAction()); //we got the permission name
-        dd($routeAction);
-        dd( Permission::findByName($routeAction) );
         $routeAction = Str::replaceAll(['show'], 'index', $routeAction);
         $routeAction = Str::replaceAll(['updateTst', 'unknowFunction'], 'update', $routeAction);
 
