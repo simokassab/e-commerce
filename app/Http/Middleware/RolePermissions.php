@@ -24,7 +24,7 @@ class RolePermissions
     public function handle(Request $request, Closure $next)
     {
 
-        $path = "App\Http\Controllers\Country\CountryController@index";
+        $path = "App\Http\Controllers\Country\CountryController";
 
 
 
