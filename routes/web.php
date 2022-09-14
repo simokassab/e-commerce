@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\TestController;
-use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\AuthenticationController;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,12 +20,12 @@ Route::get('/', function () {
 });
 
 
-if(env('APP_DEBUG')){
+if (config('app.debug')) {
     // for development purposes only -----------------------------------------------------------------
 
-    Route::get('create-token',[TestController::class,'getToken']);
-    Route::get('password', fn () => Hash::make('12345678'));
-    Route::get('test',[TestController::class,'test']);
+    Route::get('create-token', [TestController::class, 'getToken']);
+    Route::get('password', fn() => Hash::make('12345678'));
+    Route::get('test', [TestController::class, 'test']);
 
     // for development purposes only ------------------------------------------------------------
 

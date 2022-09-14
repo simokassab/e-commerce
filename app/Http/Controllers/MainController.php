@@ -3,25 +3,16 @@
 namespace App\Http\Controllers;
 
 
+use App\Exceptions\UnauthorizedException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Spatie\FlareClient\Http\Exceptions\NotFound;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MainController extends Controller
 {
-
-    public function __construct(/**  $defaultPermissionsFromChild = null */)
+    public function __construct()
     {
-//        $routeAction = basename(Route::currentRouteAction()); //we got the permission name
-
-//        if (isset($this->map_permissions[$routeAction]))
-//            $routeAction = $this->map_permissions[$routeAction];
-
-//        if (!auth()->user()->hasPermissionTo($routeAction)) {
-//             $this->errorResponse('you are un authorized for this action' ,returnCode:401);
-//        }
-
-//        $this->defaultLocalize = config('app.locale');
-
-
     }
 
     protected function successResponse($message = 'Success!', array $data = [], $returnCode = 1, $statusCode = 200): \Illuminate\Http\JsonResponse

@@ -33,6 +33,10 @@ class CategoryController extends MainController
     public function __construct()
     {
         $this->imagesPath = Category::$imagesPath;
+        parent::__construct(['default_permission'=>[
+            'permission1',
+
+        ]]);
     }
     public function index(Request $request)
     {
