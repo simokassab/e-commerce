@@ -153,14 +153,6 @@ class ProductController extends MainController
      * @return \Illuminate\Http\JsonResponse
      */
 
-    // public function addproduct(Request $request){
-    //     $product = $this->productService->createProduct($request);
-    //     return $product;
-    // }
-
-
-
-
     public function store(StoreProductRequest $request, Product $product)
     {
         // DB::enableQueryLog();
@@ -333,6 +325,7 @@ class ProductController extends MainController
             return $this->errorResponse(['message' => __('messages.failed.delete', ['name' => __(self::OBJECT_NAME),])]);
         }
     }
+
     public function toggleStatus(Request $request, $id)
     {
 

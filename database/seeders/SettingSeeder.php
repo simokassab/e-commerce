@@ -66,7 +66,7 @@ class SettingSeeder extends Seeder
             ],
             [
                 'title' => "default_pricing_class",
-                'type' => 'model_select',
+                'type' => 'multi-select',
                 'value' => null,
                 'is_developer' => 1,
                 'created_at' => Carbon::now()->toDateString(),

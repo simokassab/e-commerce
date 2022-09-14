@@ -205,22 +205,22 @@ class RolesService {
            self::createSinglePermssion('PermissionsController@destroy',$parentPermissions->id );
       //End of Permission Permission
 
-      //Permission Permission
+      //Role Permission
       $parentRole= self::createSinglePermssion('RolesController');
-           self::createSinglePermssion('RolesController@index',$parentRole->id );
-           self::createSinglePermssion('RolesController@store',$parentRole->id );
-           self::createSinglePermssion('RolesController@show',$parentRole->id );
-           self::createSinglePermssion('RolesController@update',$parentRole->id );
-           self::createSinglePermssion('RolesController@destroy',$parentRole->id );
-     //End of Permission
+       self::createSinglePermssion('RolesController@index',$parentRole->id );
+       self::createSinglePermssion('RolesController@store',$parentRole->id );
+       self::createSinglePermssion('RolesController@show',$parentRole->id );
+       self::createSinglePermssion('RolesController@update',$parentRole->id );
+       self::createSinglePermssion('RolesController@destroy',$parentRole->id );
+     //End of Role Permission
 
       //Setting Permission
       $parentSetting= self::createSinglePermssion('SettingsController');
-           self::createSinglePermssion('SettingsController@index',$parentSetting->id );
-           self::createSinglePermssion('SettingsController@store',$parentSetting->id );
-           self::createSinglePermssion('SettingsController@show',$parentSetting->id );
-           self::createSinglePermssion('SettingsController@update',$parentSetting->id );
-           self::createSinglePermssion('SettingsController@destroy',$parentSetting->id );
+       self::createSinglePermssion('SettingsController@index',$parentSetting->id );
+       self::createSinglePermssion('SettingsController@store',$parentSetting->id );
+       self::createSinglePermssion('SettingsController@show',$parentSetting->id );
+       self::createSinglePermssion('SettingsController@update',$parentSetting->id );
+       self::createSinglePermssion('SettingsController@destroy',$parentSetting->id );
       //End of Setting Permission
 
       //Brand Permission
@@ -284,14 +284,38 @@ class RolesService {
      self::createSinglePermssion('TaxController@destroy',$parentTax->id );
     //End of Tax Permission
 
+    //Order Permission
     $parentOrder= self::createSinglePermssion('OrderController');
     self::createSinglePermssion('OrderController@index',$parentOrder->id );
     self::createSinglePermssion('OrderController@store',$parentOrder->id );
     self::createSinglePermssion('OrderController@show',$parentOrder->id );
     self::createSinglePermssion('OrderController@update',$parentOrder->id );
     self::createSinglePermssion('OrderController@destroy',$parentOrder->id );
+    //End of Order Permission
 
-    //End of Language Permission
+
+    //Price Permission
+    $parentPrice= self::createSinglePermssion('PricesController');
+    self::createSinglePermssion('PricesController@index',$parentPrice->id );
+    self::createSinglePermssion('PricesController@store',$parentPrice->id );
+    self::createSinglePermssion('PricesController@show',$parentPrice->id );
+    self::createSinglePermssion('PricesController@update',$parentPrice->id );
+    //End of Price Permission
+
+    //Price List Permission
+    $priceList= self::createSinglePermssion('PricesListController');
+    self::createSinglePermssion('PricesListController@show',$priceList->id );
+    self::createSinglePermssion('PricesListController@update',$priceList->id );
+    //End of Price List Permission
+
+    //Product Permission
+    $parentProduct= self::createSinglePermssion('ProductController');
+    self::createSinglePermssion('ProductController@index',$parentProduct->id );
+    self::createSinglePermssion('ProductController@store',$parentProduct->id );
+    self::createSinglePermssion('ProductController@show',$parentProduct->id );
+    self::createSinglePermssion('ProductController@update',$parentProduct->id );
+    self::createSinglePermssion('ProductController@destroy',$parentProduct->id );
+    //End of Product Permission
 
 
 

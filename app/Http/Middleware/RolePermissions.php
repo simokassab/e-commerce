@@ -27,8 +27,8 @@ class RolePermissions
 
         $path =Route::currentRouteAction();
         $routeAction = mb_basename($path);
-        $routeAction = Str::replaceAll(['show'], 'index', $routeAction);
-        $routeAction = Str::replaceAll(['updateTst', 'unknowFunction'], 'update', $routeAction);
+        $routeAction = Str::replaceAll(['create'], 'store', $routeAction);
+        $routeAction = Str::replaceAll(['getTableHeaders'], 'index', $routeAction);
          if (! auth()->check() ) {
              throw new UnauthorizedException();
         }
