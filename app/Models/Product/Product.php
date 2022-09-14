@@ -3,6 +3,7 @@
 namespace App\Models\Product;
 
 use App\Models\Settings\Setting;
+use App\Support\Str;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,7 +32,7 @@ class Product extends MainModel
     protected array $translatable = ['name', 'summary', 'specification', 'description', 'meta_title', 'meta_description', 'meta_keyword'];
     protected $table = 'products';
     protected $guard_name = 'web';
-    protected $attributes = ['real_quantity'];
+    protected $appends = ['real_quantity'];
     protected $fillable = [
         'name',
         'slug',
@@ -159,6 +160,14 @@ class Product extends MainModel
     public function productStatus()
     {
         return $this->belongsTo(ProductStatus::class, 'products_statuses_id');
+    }
+
+    public function getNameAttribute($value){
+        return Str::title($value);
+    }
+
+    public function getRealQuantityAttribute(): float{
+        return $this->quantity - ($this->reserved_quantity + $this->bundle_reserved_quantity);
     }
 
     public function getVirtualPricing(Price | int $pricingClass)

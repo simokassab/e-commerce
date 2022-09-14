@@ -47,6 +47,7 @@ class TestController extends MainController
 
     public function test()
     {
+        return Product::query()->find(1);
     }
 
 
