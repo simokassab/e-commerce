@@ -33,21 +33,26 @@ class SettingsResource extends JsonResource
 
         $options = [];
 
-
-        if(in_array($this->title,Setting::$fields) && ($this->type == 'select' || $this->type == 'multi-select')){
+        if (in_array($this->title, Setting::$fields) && ($this->type == 'select' || $this->type == 'multi-select' || $this->type == 'model_select')) {
             $options = Setting::getTitleOptions()[$this->title];
         }
-
+        if ($this->title == 'default_pricing_class') {
+            foreach (Setting::getTitleOptions()['default_pricing_class'] as $key => $option)
+                $options[$key]['name'] = $option['name']['en'];
+        }
         $id = $idsArray[array_search($this->title, $titlesArray)];
         $title = $titlesArray[array_search($this->title, $titlesArray)];
         $type = $typesArray[array_search($this->title, $titlesArray)];
+        if ($type == 'model_select')
+            $type = 'select';
+
         $value = $valuesArray[array_search($this->title, $titlesArray)];
 
         $value = match ($type) {
             'number' => (int)$value ?? 0,
             'checkbox' => (bool)$value ?? false,
             'multi-select' => $value ?? [],
-            default => $value ?? "",
+            default => $value ??  null,
         };
 
         return [

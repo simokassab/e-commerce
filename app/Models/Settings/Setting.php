@@ -18,7 +18,7 @@ class Setting extends MainModel
 
     public static array $fields = [
         'products_required_fields',
-        'products_quantity_greater_than_or_equal' ,
+        'products_quantity_greater_than_or_equal',
         'allow_negative_quantity',
         'products_prices_greater_than_or_equal',
         'products_discounted_price_greater_than_or_equal',
@@ -28,9 +28,10 @@ class Setting extends MainModel
 
     public static string $cacheKey = 'settings';
 
-    public static array $types =['multi-select', 'select','number','text','checkbox'];
+    public static array $types = ['multi-select', 'select', 'number', 'text', 'checkbox', 'model_select'];
 
-    public static function getTitleOptions(){
+    public static function getTitleOptions()
+    {
         $titlesOptions = [
             'products_required_fields' =>  [
                 [
@@ -75,11 +76,10 @@ class Setting extends MainModel
                 ],
 
             ],
-            'website_pricing' => Price::all('id','name')->toArray()
+            'default_pricing_class' => Price::all('id', 'name')->toArray(),
         ];
-
         //taking the english text from the translatable json text
-        foreach ($titlesOptions['website_pricing'] as $key => $option)
+        foreach ($titlesOptions['default_pricing_class'] as $key => $option)
             $titlesOptions[$key]['name'] = $option['name']['en'];
 
         return $titlesOptions;

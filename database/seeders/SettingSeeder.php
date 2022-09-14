@@ -22,7 +22,7 @@ class SettingSeeder extends Seeder
                 'title' => "products_required_fields",
                 'type' => 'multi-select',
                 'value' => null,
-                'is_developer'=> 1,
+                'is_developer' => 1,
                 'created_at' => Carbon::now()->toDateString(),
                 'updated_at' => Carbon::now()->toDateString(),
             ],
@@ -31,7 +31,7 @@ class SettingSeeder extends Seeder
                 'title' => "products_quantity_greater_than_or_equal",
                 'type' => 'number',
                 'value' => 0,
-                'is_developer'=> 1,
+                'is_developer' => 1,
                 'created_at' => Carbon::now()->toDateString(),
                 'updated_at' => Carbon::now()->toDateString(),
 
@@ -41,7 +41,7 @@ class SettingSeeder extends Seeder
                 'title' => "allow_negative_quantity",
                 'type' => 'checkbox',
                 'value' => 0,
-                'is_developer'=> 1,
+                'is_developer' => 1,
                 'created_at' => Carbon::now()->toDateString(),
                 'updated_at' => Carbon::now()->toDateString(),
 
@@ -50,7 +50,7 @@ class SettingSeeder extends Seeder
                 'title' => "products_prices_greater_than_or_equal",
                 'type' => 'number',
                 'value' => 0,
-                'is_developer'=> 1,
+                'is_developer' => 1,
                 'created_at' => Carbon::now()->toDateString(),
                 'updated_at' => Carbon::now()->toDateString(),
 
@@ -59,16 +59,16 @@ class SettingSeeder extends Seeder
                 'title' => "products_discounted_price_greater_than_or_equal",
                 'type' => 'number',
                 'value' => 0,
-                'is_developer'=> 1,
+                'is_developer' => 1,
                 'created_at' => Carbon::now()->toDateString(),
                 'updated_at' => Carbon::now()->toDateString(),
 
             ],
             [
-                'title' => "webiste_pricing",
-                'type' => 'number',
+                'title' => "default_pricing_class",
+                'type' => 'model_select',
                 'value' => null,
-                'is_developer'=> 1,
+                'is_developer' => 1,
                 'created_at' => Carbon::now()->toDateString(),
                 'updated_at' => Carbon::now()->toDateString(),
 

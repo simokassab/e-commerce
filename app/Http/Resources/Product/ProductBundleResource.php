@@ -18,15 +18,15 @@ class ProductBundleResource extends JsonResource
      */
     public function toArray($request)
     {
-        $defaultPriceId = Cache::get(Setting::$cacheKey)->where('title','website_pricing')->pluck('value','title')->toArray()['website_pricing'];
-        $defaultPrice = DefaultBundlePrice::collection($this->price()->where('price_id',$defaultPriceId)->get());
+        $defaultPriceId = Cache::get(Setting::$cacheKey)->where('title', 'default_pricing_class')->pluck('value', 'title')->toArray()['default_pricing_class'];
+        $defaultPrice = DefaultBundlePrice::collection($this->price()->where('price_id', $defaultPriceId)->get());
 
         return [
-          'id' => $this->id,
-          'name' => $this->getTranslations('name'),
-          'image' => $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
-          'prices' =>  arrayToObject(PriceBundleResource::collection($this->whenLoaded('price'))),
-          'default_price' => $defaultPrice
+            'id' => $this->id,
+            'name' => $this->getTranslations('name'),
+            'image' => $this->image && !empty($this->image) ?  getAssetsLink('storage/' . $this->image) : 'default_image',
+            'prices' =>  arrayToObject(PriceBundleResource::collection($this->whenLoaded('price'))),
+            'default_price' => $defaultPrice
         ];
     }
 }
