@@ -38,8 +38,11 @@ use Illuminate\Support\Facades\Route;
 */
 $dashboardMiddlewares = ['auth:sanctum', 'localization', 'role_permissions'];
 
-if (env('APP_DEBUG')) {
+if (config('app.debug')) {
     $key = array_search('auth:sanctum', $dashboardMiddlewares);
+    unset($dashboardMiddlewares[$key]);
+
+    $key = array_search('role_permissions', $dashboardMiddlewares);
     unset($dashboardMiddlewares[$key]);
 }
 
