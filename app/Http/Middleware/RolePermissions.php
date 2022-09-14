@@ -26,9 +26,12 @@ class RolePermissions
 //        $routeAction = basename( $path ); //we got the permission name
 
         $path =Route::currentRouteAction();
+        //hello world
         $routeAction = mb_basename($path);
-        $routeAction = Str::replaceAll(['create'], 'store', $routeAction);
-        $routeAction = Str::replaceAll(['getTableHeaders'], 'index', $routeAction);
+        $routeAction = Str::replaceAll(['create','getProductsForOrders','getCouponByCode','getAllParentsSorted','getAllChildsSorted','getAllLanguagesSorted'], 'store', $routeAction);
+        $routeAction = Str::replaceAll(['getTableHeaders','getAllRoles'], 'index', $routeAction);
+        $routeAction = Str::replaceAll(['setCurrencyIsDefault','toggleStatus','updateSortValues','getAllParentsSorted','getAllChildsSorted','setLanguageIsDefault'], 'update', $routeAction);
+        $routeAction = Str::replaceAll(['getNestedPermissionsForRole'], 'show', $routeAction);
          if (! auth()->check() ) {
              throw new UnauthorizedException();
         }
