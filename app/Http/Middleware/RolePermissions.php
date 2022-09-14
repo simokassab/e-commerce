@@ -30,6 +30,7 @@ class RolePermissions
 //        $routeAction = basename( $path ); //we got the permission name
         $routeAction = Str::replaceAll(['show'], 'index', $routeAction);
         $routeAction = Str::replaceAll(['updateTst', 'unknowFunction'], 'update', $routeAction);
+        dd($routeAction);
          if (! auth()->check() ) {
              dd('no auth');
              throw new UnauthorizedException();
