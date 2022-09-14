@@ -23,8 +23,12 @@ class RolePermissions
      */
     public function handle(Request $request, Closure $next)
     {
-        dd(Route::currentRouteAction());
-        dd(basename( Route::currentRouteAction() ));
+
+        $path = "/testweb/home.php";
+
+        dd( basename($path) );
+
+
         $routeAction = basename( Route::currentRouteAction() ); //we got the permission name
         $routeAction = Str::replaceAll(['show'], 'index', $routeAction);
         $routeAction = Str::replaceAll(['updateTst', 'unknowFunction'], 'update', $routeAction);
