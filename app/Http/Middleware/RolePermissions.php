@@ -33,7 +33,7 @@ class RolePermissions
         $routeAction = Str::replaceAll(['setCurrencyIsDefault','toggleStatus','updateSortValues','getAllParentsSorted','getAllChildsSorted','setLanguageIsDefault'], 'update', $routeAction);
         $routeAction = Str::replaceAll(['getNestedPermissionsForRole'], 'show', $routeAction);
          if (! auth()->check() ) {
-             abort(400,'You are unauthorized!');
+             abort(400,'You are unauthenticated!');
         }
         if (!auth()->user()->hasPermissionTo($routeAction)) {
             throw new UnauthorizedException();
