@@ -103,7 +103,6 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->renderable(function (Throwable $exception, $request) {
-            dd($exception->getMessage());
             if (!config('app.debug')) {
                 if (!array_key_exists(get_class($exception), $this->exceptions)) {
                     return errorResponse('error, please try again later');
