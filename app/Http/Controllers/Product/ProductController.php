@@ -81,6 +81,7 @@ class ProductController extends MainController
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws Exception
      */
     public function create()
     {

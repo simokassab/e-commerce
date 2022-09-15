@@ -19,7 +19,7 @@ class Category extends MainModel
 {
     use HasFactory, HasTranslations;
     protected array $translatable = ['name', 'meta_title', 'meta_description', 'meta_keyword', 'description'];
-    public static $imagesPath =  [
+    public static array $filePath =  [
         'images' => 'categories/images',
         'icons' => 'categories/icons',
     ];

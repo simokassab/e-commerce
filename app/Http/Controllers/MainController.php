@@ -31,11 +31,6 @@ class MainController extends Controller
         return ($resource::collection($model::with($relation)->paginate($pagination)));
     }
 
-    protected function notFoundResponse(array $data, $statusCode = 404)
-    {
-        return notFoundError($data, [$statusCode]);
-    }
-
     public function imageUpload($file, $folderpath)
     {
         return uploadImage($file, $folderpath);
@@ -107,10 +102,6 @@ class MainController extends Controller
 
     }
 
-    public function getLocaleTranslation($model, $key)
-    {
-        return getLocaleTranslation($model, $key);
-    }
 }
 
 

@@ -88,7 +88,7 @@ class SettingsController extends MainController
         try {
             $value="";
             if($request->type=='multi-select' && gettype($request->value)=='array'){
-                $value=convertFromArrayToString($request->value,',');
+                $value=implode(',',$request->value);
             }else{
                 $value=$request->value;
             }

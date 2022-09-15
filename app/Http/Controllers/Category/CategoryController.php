@@ -23,7 +23,6 @@ class CategoryController extends MainController
 {
     const OBJECT_NAME = 'objects.category';
     const relations = ['parent', 'children', 'label', 'fields', 'fieldValue', 'tags'];
-    private $imagesPath = "";
     /**
      * Display a listing of the resource.
      *
@@ -32,11 +31,7 @@ class CategoryController extends MainController
 
     public function __construct()
     {
-        $this->imagesPath = Category::$imagesPath;
-        parent::__construct(['default_permission'=>[
-            'permission1',
-
-        ]]);
+        parent::__construct();
     }
     public function index(Request $request)
     {
@@ -87,10 +82,10 @@ class CategoryController extends MainController
             $category->code = 0;
             if ($request->image) {
 
-                $category->image = $this->imageUpload($request->file('image'), $this->imagesPath['images']);
+                $category->image = $this->imageUpload($request->file('image'), Category::$filePath['images']);
             }
             if ($request->icon) {
-                $category->icon = $this->imageUpload($request->file('icon'), $this->imagesPath['icons']);
+                $category->icon = $this->imageUpload($request->file('icon'), Category::$filePath['icons']);
             }
             if ($request->parent_id == 'null') {
                 $category->parent_id = null;
@@ -205,10 +200,10 @@ class CategoryController extends MainController
             }
             $category->code = 0;
             if ($request->image) {
-                $category->image = $this->imageUpload($request->file('image'), config($this->imagesPath['images']));
+                $category->image = $this->imageUpload($request->file('image'), Category::$filePath['images']);
             }
             if ($request->icon) {
-                $category->icon = $this->imageUpload($request->file('icon'), config($this->imagesPath['icons']));
+                $category->icon = $this->imageUpload($request->file('icon'), Category::$filePath['icons']);
             }
             $category->parent_id = $request->parent_id;
 

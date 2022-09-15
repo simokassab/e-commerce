@@ -11,7 +11,7 @@ function uploadImage($file, $folderPath): bool|string
         $fileName = uniqid() . '_' . $file->getClientOriginalName();
         $path = Storage::putFileAs('public/' . $folderPath, $file, $fileName);
     } catch (\App\Exceptions\FileErrorException $exception) {
-        throw new FileErrorException();
+        throw $exception;
     } catch (ValueError $exception) {
         throw $exception;
     } catch (ErrorException $exception) {
@@ -21,7 +21,7 @@ function uploadImage($file, $folderPath): bool|string
     return $realPath = $folderPath . '/' . $fileName;
 }
 
-function getAssetsLink($path)
+function getAssetsLink($path): string
 {
     return asset($path);
 }
@@ -44,40 +44,18 @@ function successResponse($message = 'Success!', array $data = [], $returnCode = 
     return response()->json($return, $statusCode);
 }
 
-function notFoundError($message = 'Not found!', array $data = [], $returnCode = -2, $statusCode = 404): \Illuminate\Http\JsonResponse
+function removeImage(string | null $folderPath) : bool
 {
-    $return['message'] = $message;
-    $return['data'] = $data;
-    $return['code'] = $returnCode;
-
-    return response()->json($return, $statusCode);
-}
-
-function removeImage($folderpath)
-{
-    if ((empty($folderpath)) || $folderpath == null) {
+    if ((empty($folderPath))) {
         return true;
     }
-    if (Storage::exists($folderpath ?? '')) {
-        return Storage::delete($folderpath);
+    if (Storage::exists($folderPath)) {
+        return Storage::delete($folderPath);
     }
 
     return true;
 }
 
-function getLocaleTranslation($model, $key)
-{
-    return $model->getTranslation($key);
-}
-
-function convertFromArrayToString($array, $separator = ',')
-{
-    return implode($separator, $array);
-}
-
-/**
- * @throws Throwable
- */
 function getSettings(array | string $key=null) : mixed{
 
     $settings = Cache::get(Setting::$cacheKey,fn() => Setting::all());
@@ -102,7 +80,7 @@ function getSettings(array | string $key=null) : mixed{
     return $settings;
 }
 
-function array_to_obj($array, &$obj)
+function array_to_obj($array, $obj)
 {
     foreach ($array as $key => $value) {
         $id=$value->price_id;
@@ -124,7 +102,8 @@ function arrayToObject($array)
 
 }
 
-function mb_basename($filePath){
+function mbBaseName($filePath): bool|string
+{
     $array = explode('\\', $filePath);
     return end($array);
 }

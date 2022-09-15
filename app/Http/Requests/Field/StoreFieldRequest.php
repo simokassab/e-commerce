@@ -30,7 +30,7 @@ class StoreFieldRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'type' => ['required', ' in:' . convertFromArrayToString(Field::$fieldTypes, ','), Rule::when($request->is_attribute, ['in:select'])],
+            'type' => ['required', ' in:' . implode(',', Field::$fieldTypes), Rule::when($request->is_attribute, ['in:select'])],
             'entity' => 'required | in:' . Field::$entities,
             'is_required' => 'required | boolean',
             'is_attribute' => 'required | boolean',
