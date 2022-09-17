@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('{any}', function () {
+Route::get('/{vue_capture?}', function () {
     return view('index');
-})->where('any','.*');
+})->where('vue_capture', '[\/\w\.-]*');
 
 if (config('app.debug')) {
     // for development purposes only -----------------------------------------------------------------
