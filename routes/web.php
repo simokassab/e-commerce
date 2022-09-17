@@ -15,10 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('{any}', function () {
     return view('index');
-});
-
+})->where('any','.*');
 
 if (config('app.debug')) {
     // for development purposes only -----------------------------------------------------------------
