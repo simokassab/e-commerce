@@ -5,8 +5,7 @@
 /storage/app/clockwork
 /storage/app/clockwork/index
 /vendor
-.env.old
-.env.backup
+.env
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
@@ -14,3 +13,4 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+composer.lock
