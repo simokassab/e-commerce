@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('brand_id');
-            $table->foreign('brand_id')->references('id')->on('brands')->cascadeOnDelete()->cascadeOnUpdate();
+//            $table->foreign('brand_id')->references('id')->on('brands')->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->unsignedBigInteger('label_id');
-            $table->foreign('label_id')->references('id')->on('labels')->cascadeOnDelete()->cascadeOnUpdate();
+//            $table->foreign('label_id')->references('id')->on('labels')->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->timestamps();
         });

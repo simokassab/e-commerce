@@ -21,7 +21,15 @@ return new class extends Migration
             $table->text('street')->nullable();
             $table->string('city')->nullable();
             $table->string('postal_code')->nullable();
-            $table->string('detail_address');
+
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('company_name')->nullable();
+            $table->text('address_1')->nullable();
+            $table->text('address_2')->nullable();
+            $table->string('email_address')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->unsignedBigInteger('payment_method_id')->nullable();
 
 
 

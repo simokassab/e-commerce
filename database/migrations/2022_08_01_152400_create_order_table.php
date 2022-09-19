@@ -28,6 +28,35 @@ return new class extends Migration
             $table->text('customer_comment')->nullable();
             $table->unsignedBigInteger('order_status_id')->nullable();
 
+
+            $table->string('shipping_first_name')->nullable();
+            $table->string('shipping_last_name')->nullable();
+            $table->text('shipping_address_one')->nullable();
+            $table->text('shipping_address_two')->nullable();
+            $table->string('shipping_city')->nullable();
+            $table->string('shipping_company_name')->nullable();
+            $table->unsignedBigInteger('shipping_country_id')->nullable();
+            $table->string('shipping_email')->nullable();
+            $table->date('date')->nullable();
+            $table->string('shipping_phone_number')->nullable();
+            $table->unsignedBigInteger('payment_method_id')->nullable();
+            $table->unsignedBigInteger('currency_id');
+            $table->boolean('is_billing_as_shipping')->default(0);
+
+            $table->string('billing_first_name')->nullable();
+            $table->string('billing_last_name')->nullable();
+            $table->text('billing_address_one')->nullable();
+            $table->string('billing_company_name')->nullable();
+            $table->text('billing_address_two')->nullable();
+            $table->string('billing_city')->nullable();
+            $table->unsignedBigInteger('billing_country_id')->nullable();
+            $table->string('billing_email')->nullable();
+            $table->string('billing_phone_number')->nullable();
+            $table->text('billing_customer_notes')->nullable();
+            $table->unsignedBigInteger('shipping_address_id')->nullable();
+            $table->unsignedBigInteger('billing_address_id')->nullable();
+
+
             $table->timestamps();
         });
 

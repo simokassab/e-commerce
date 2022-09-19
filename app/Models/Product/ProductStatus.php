@@ -9,4 +9,8 @@ class ProductStatus extends Model
 {
     use HasFactory;
     protected $table='products_statuses';
+
+    public function products(){
+        return $this->hasMany(Product::class,'products_statuses_id','id');
+    }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('fields_values', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('field_id');
-            $table->foreign('field_id')->references('id')->on('fields')->cascadeOnDelete();
+//            $table->foreign('field_id')->references('id')->on('fields')->cascadeOnDelete();
             $table->json('value');
             $table->timestamps();
         });

@@ -34,11 +34,17 @@ class Tax extends MainModel
     {
         return $this->hasMany(TaxComponent::class, 'tax_id');
     }
+
+    public function taxComponentsParents()
+    {
+        return $this->hasMany(TaxComponent::class, 'component_tax_id');
+    }
+
     public function cateogry()
     {
         return $this->hasMany(Category::class, 'category_id');
     }
-    public function product()
+    public function product(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Product::class, 'tax_id');
     }

@@ -16,30 +16,34 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->json('name');
-            $table->string('slug',250)->unique();
+            $table->string('slug',250)->nullable()->unique();
             $table->unsignedBigInteger('category_id')->nullable();
-            $table->foreign('category_id')->references('id')->on('categories')->cascadeOnUpdate();
+//            $table->foreign('category_id')->references('id')->on('categories')->cascadeOnUpdate();
             $table->string('code',250)->unique();
             $table->string('sku',250)->nullable();
             $table->enum('type',['normal','bundle','service','variable','variable_child']);
             $table->unsignedBigInteger('unit_id')->nullable();
-            $table->foreign('unit_id')->references('id')->on('units')->cascadeOnUpdate();
-            $table->integer('quantity')->default(0);
-            $table->integer('reserved_quantity')->nullable();
-            $table->integer('minimum_quantity')->default(0);
+//            $table->foreign('unit_id')->references('id')->on('units')->cascadeOnUpdate();
+            $table->float('quantity')->default(0);
+            $table->float('reserved_quantity')->nullable();
+            $table->float('minimum_quantity')->default(0);
             $table->json('summary')->nullable();
+            $table->enum('bundle_price_status', ['default', 'from_products'])->nullable();
+            $table->boolean('is_same_price_as_parent')->default(0);
             $table->json('specification')->nullable();
+            $table->boolean('is_same_dimensions_as_parent')->default(false);
             $table->text('image',250)->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();
-            $table->foreign('brand_id')->references('id')->on('brands')->cascadeOnUpdate();
+//            $table->foreign('brand_id')->references('id')->on('brands')->cascadeOnUpdate();
             $table->unsignedBigInteger('tax_id')->nullable();
-            $table->foreign('tax_id')->references('id')->on('taxes')->cascadeOnUpdate();
+//            $table->foreign('tax_id')->references('id')->on('taxes')->cascadeOnUpdate();
             $table->json('meta_title')->nullable();
             $table->json('meta_description')->nullable();
             $table->json('meta_keyword')->nullable();
             $table->json('description')->nullable();
-            $table->enum('status',['draft','pending_review','published'])->default('draft');
+            $table->enum('website_status',['draft','published','pending_review'])->default('draft');
             $table->string('barcode',250)->nullable();
+            $table->float('bundle_reserved_quantity')->nullable();
             $table->double('height')->nullable();
             $table->double('width')->nullable();
             $table->double('length')->nullable();
@@ -47,7 +51,12 @@ return new class extends Migration
             $table->boolean('is_disabled')->default(0);
             $table->integer('sort')->nullable();
             $table->unsignedBigInteger('parent_product_id')->nullable();
+            $table->unsignedBigInteger('products_statuses_id');
+//            $table->foreign('products_statuses_id','products_statuses_id_products_statuses')->references('id')->on('products_statuses')->nullOnDelete();
             $table->boolean('is_default_child')->default(0);
+            $table->boolean('is_show_related_product')->default(0);
+            $table->boolean('pre_order')->nullable();
+
             $table->timestamps();
         });
     }

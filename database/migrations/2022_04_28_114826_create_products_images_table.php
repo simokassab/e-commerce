@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('products_images', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete();
+//            $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete();
             $table->text('image',250);
             $table->json('title');
             $table->integer('sort');

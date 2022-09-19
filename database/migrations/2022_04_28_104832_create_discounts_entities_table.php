@@ -17,16 +17,16 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('discount_id')->nullable();
-            $table->foreign('discount_id')->references('id')->on('discounts')->nullOnDelete();
+//            $table->foreign('discount_id')->references('id')->on('discounts')->nullOnDelete();
 
             $table->unsignedBigInteger('category_id')->nullable();
-            $table->foreign('category_id')->references('id')->on('categories')->nullOnDelete();
+//            $table->foreign('category_id')->references('id')->on('categories')->nullOnDelete();
 
             $table->unsignedBigInteger('brand_id')->nullable();
-            $table->foreign('brand_id')->references('id')->on('brands')->nullOnDelete();
+//            $table->foreign('brand_id')->references('id')->on('brands')->nullOnDelete();
 
             $table->unsignedBigInteger('tag_id')->nullable();
-            $table->foreign('tag_id')->references('id')->on('tags')->nullOnDelete();
+//            $table->foreign('tag_id')->references('id')->on('tags')->nullOnDelete();
 
             $table->timestamps();
         });

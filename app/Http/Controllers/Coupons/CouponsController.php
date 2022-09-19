@@ -8,8 +8,11 @@ use App\Http\Requests\MainRequest;
 use App\Http\Resources\Coupons\CouponResource;
 use App\Http\Resources\Coupons\CouponSingleResource;
 use App\Http\Resources\Coupons\RestFullCouponResource;
+use App\Models\Category\Category;
 use App\Models\Coupons\Coupon;
 use App\Models\Currency\Currency;
+use App\Models\Product\ProductStatus;
+use App\Models\Unit\Unit;
 use Illuminate\Http\Request;
 
 class CouponsController extends MainController
@@ -25,6 +28,8 @@ class CouponsController extends MainController
 
     public function index(Request $request)
     {
+        dd(Category::query()->find(1)->label->count());
+
         if ($request->method()=='POST') {
             $searchKeys=['id','title','code','start_date','expiry_date','discount_percentage','discount_amount','min_amount'];
             $searchRelationsKeys = [];

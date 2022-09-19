@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->json('name');
             $table->unsignedBigInteger('currency_id');
-            $table->foreign('currency_id')->references('id')->on('currencies');
+//            $table->foreign('currency_id')->references('id')->on('currencies');
             $table->boolean('is_virtual')->default(0);
             $table->unsignedBigInteger('original_price_id')->nullable();
-            $table->foreign('original_price_id')->references('id')->on('prices');
+//            $table->foreign('original_price_id')->references('id')->on('prices');
             $table->double('percentage',19,4)->default(0)->nullable();
             $table->timestamps();
         });

@@ -2,6 +2,7 @@
 
 namespace App\Models\Country;
 
+use App\Models\Orders\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
 use Spatie\Translatable\HasTranslations;
@@ -25,4 +26,12 @@ class Country extends MainModel
     public static $imagesPath = [
         'images' => 'countries/images',
     ];
+
+    public function shippingOrder(){
+        return $this->hasMany(Order::class,'shipping_country_id','id');
+    }
+    public function billingOrder(){
+        return $this->hasMany(Order::class,'shipping_country_id','id');
+    }
+
 }

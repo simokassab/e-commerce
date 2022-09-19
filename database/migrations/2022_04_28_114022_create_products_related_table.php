@@ -17,9 +17,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('parent_product_id')->nullable();
             $table->unsignedBigInteger('child_product_id')->nullable();
+            $table->json('name')->nullable();
+            $table->enum('child_name_status', ['default', 'hide', 'custom'])->default('hide');
 
-            $table->foreign('parent_product_id')->references('id')->on('products')->nullOnDelete()->cascadeOnUpdate();
-            $table->foreign('child_product_id')->references('id')->on('products')->nullOnDelete()->cascadeOnUpdate();
+//            $table->foreign('parent_product_id')->references('id')->on('products')->nullOnDelete()->cascadeOnUpdate();
+//            $table->foreign('child_product_id')->references('id')->on('products')->nullOnDelete()->cascadeOnUpdate();
 
             $table->double('child_quantity')->default(1);
             $table->timestamps();

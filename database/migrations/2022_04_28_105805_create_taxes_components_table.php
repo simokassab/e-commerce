@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('tax_id');
-            $table->foreign('tax_id')->references('id')->on('taxes')->cascadeOnDelete();
+//            $table->foreign('tax_id')->references('id')->on('taxes')->cascadeOnDelete();
 
             $table->unsignedBigInteger('component_tax_id');
-            $table->foreign('component_tax_id')->references('id')->on('taxes')->cascadeOnDelete();
+//            $table->foreign('component_tax_id')->references('id')->on('taxes')->cascadeOnDelete();
 
             $table->integer('sort');
 

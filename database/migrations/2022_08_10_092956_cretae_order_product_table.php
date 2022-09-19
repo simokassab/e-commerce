@@ -18,11 +18,11 @@ return new class extends Migration
 
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('product_id');
-            $table->integer('quantity');
-            $table->integer('unit_price');
-            $table->integer('tax_percentage');
-            $table->integer('tax_amount');
-            $table->integer('total');
+            $table->double('quantity');
+            $table->double('unit_price');
+            $table->double('tax_percentage');
+            $table->double('tax_amount');
+            $table->double('total');
 
             $table->timestamps();
         });

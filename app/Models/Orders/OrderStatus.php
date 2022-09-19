@@ -12,4 +12,7 @@ class OrderStatus extends Model
     use HasFactory,HasTranslations;
     protected array $translatable=['name'];
 
+    public function products(){
+        return $this->hasMany(Order::class,'order_id','id');
+    }
 }

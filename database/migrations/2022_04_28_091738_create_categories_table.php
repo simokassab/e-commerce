@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('code',250);
             $table->text('image')->nullable();
             $table->text('icon')->nullable();
-            $table->unsignedBigInteger('parent_id')->nullable();//foregin key in another migration
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('slug')->unique();
             $table->json('meta_title')->nullable();
             $table->json('meta_description')->nullable();
@@ -27,6 +27,12 @@ return new class extends Migration
             $table->json('description')->nullable();
             $table->integer('sort')->nullable();
             $table->boolean('is_disabled')->default(0);
+            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('label_id');
+
+//            $table->foreign('category_id')->references('id')->on('categories')->cascadeOnDelete()->cascadeOnUpdate();
+//            $table->foreign('label_id')->references('id')->on('labels')->cascadeOnDelete()->cascadeOnUpdate();
+
             $table->timestamps();
         });
     }

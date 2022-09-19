@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title',250)->unique();
             $table->text('value')->nullable();
-            $table->enum('type', ['number', 'text','checkbox','select','multi-select']);
+            $table->enum('type', ['number', 'text', 'checkbox', 'select', 'multi-select','model_select']);
             $table->boolean('is_developer')->default(0);
             $table->timestamps();
         });

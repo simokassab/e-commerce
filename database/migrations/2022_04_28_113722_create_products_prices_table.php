@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('products_prices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete()->cascadeOnUpdate();
+//            $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->unsignedBigInteger('price_id');
-            $table->foreign('price_id')->references('id')->on('prices')->cascadeOnDelete()->cascadeOnUpdate();
+//            $table->foreign('price_id')->references('id')->on('prices')->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->double('price')->default(0);
             $table->double('discounted_price')->nullable();

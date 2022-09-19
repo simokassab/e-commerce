@@ -10,6 +10,7 @@ use App\Models\Label\Label;
 use App\Models\Product\Product;
 use App\Models\RolesAndPermissions\CustomRole;
 use App\Models\Tax\Tax;
+use App\Models\Unit\Unit;
 use Illuminate\Http\Request;
 use App\Models\User\User;
 use Illuminate\Support\Facades\Auth;
@@ -34,11 +35,6 @@ use App\Models\Category\Category;
 class TestController extends MainController
 {
     use HasRoles;
-    public function __construct()
-    {
-        $this->map_permissions = [];
-        parent::__construct($this->map_permissions);
-    }
 
     public function getToken()
     {

@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products');
+//            $table->foreign('product_id')->references('id')->on('products');
 
             $table->unsignedBigInteger('tag_id');
-            $table->foreign('tag_id')->references('id')->on('tags');
+//            $table->foreign('tag_id')->references('id')->on('tags');
             $table->timestamps();
         });
     }
