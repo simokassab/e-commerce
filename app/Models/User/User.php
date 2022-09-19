@@ -2,6 +2,7 @@
 
 namespace App\Models\User;
 
+use App\Events\UserCreated;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -20,7 +21,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
 
-//    protected $guard_name = 'web';
+    //    protected $guard_name = 'web';
 
     protected $fillable = [
         'last_name',
@@ -52,11 +53,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function givePermissionToParentAndChildren(array|object $permissions){
-//        if(!is_array($permissions)){
-//        }
+    public function givePermissionToParentAndChildren(array|object $permissions)
+    {
+        //        if(!is_array($permissions)){
+        //        }
         $this->givePermissionTo($permissions);
         return $this;
-
     }
 }

@@ -68,11 +68,11 @@ class Setting extends MainModel
                 ],
                 [
                     'id' => 'brand_id',
-                    'name' => 'brand_id'
+                    'name' => 'brand'
                 ],
                 [
                     'id' => 'tax_id',
-                    'name' => 'tax_id'
+                    'name' => 'tax'
                 ],
 
             ],
