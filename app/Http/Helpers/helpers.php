@@ -2,6 +2,7 @@
 
 use App\Exceptions\FileErrorException;
 use App\Models\Settings\Setting;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
 
@@ -23,7 +24,11 @@ function uploadImage($file, $folderPath): bool|string
 
 function getAssetsLink($path): string
 {
-    return asset($path);
+    try {
+        return asset($path) . '?v=' . File::lastModified(public_path($path));
+    } catch (Exception $ex) {
+        return asset($path);
+    }
 }
 
 function errorResponse($message = 'An error occurred please try again later', array $data = [], $returnCode = -1, $statusCode = 200): \Illuminate\Http\JsonResponse
@@ -44,7 +49,7 @@ function successResponse($message = 'Success!', array $data = [], $returnCode = 
     return response()->json($return, $statusCode);
 }
 
-function removeImage(string | null $folderPath) : bool
+function removeImage(string|null $folderPath): bool
 {
     if ((empty($folderPath))) {
         return true;
@@ -56,22 +61,23 @@ function removeImage(string | null $folderPath) : bool
     return true;
 }
 
-function getSettings(array | string $key=null) : mixed{
+function getSettings(array|string $key = null): mixed
+{
 
-    $settings = Cache::get(Setting::$cacheKey,fn() => Setting::all());
+    $settings = Cache::get(Setting::$cacheKey, fn() => Setting::all());
 
-    if(is_array($key)){
+    if (is_array($key)) {
 
-        $multiSettings = $settings->whereIn('title',$key);
-        if($multiSettings->count() != count($key)){
+        $multiSettings = $settings->whereIn('title', $key);
+        if ($multiSettings->count() != count($key)) {
             throw new Exception('One of the keys is not valid settings');
         }
         return $multiSettings;
     }
 
-    if(is_string($key)){
-        $singleSettings = $settings->where('title',$key)->first();
-        if(is_null($singleSettings)){
+    if (is_string($key)) {
+        $singleSettings = $settings->where('title', $key)->first();
+        if (is_null($singleSettings)) {
             throw new Exception('The ' . $key . ' is not a valid settings');
         }
         return $singleSettings;
@@ -83,7 +89,7 @@ function getSettings(array | string $key=null) : mixed{
 function array_to_obj($array, $obj)
 {
     foreach ($array as $key => $value) {
-        $id=$value->price_id;
+        $id = $value->price_id;
         if (is_array($value)) {
             $obj->{$id} = new stdClass();
             array_to_obj($value, $obj->$key);
@@ -92,7 +98,7 @@ function array_to_obj($array, $obj)
         }
 
     }
-        return $obj;
+    return $obj;
 }
 
 function arrayToObject($array)

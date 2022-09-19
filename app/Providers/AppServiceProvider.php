@@ -28,10 +28,16 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-        Schema::defaultStringLength(125);
-       Setting::observe(SettingObserver::class);
+        Schema::defaultStringLength(191);
+        [
+            [
+                'class' => Setting::class,
+                'observer' => SettingObserver::class,
+            ]
+        ];
+        Setting::observe(SettingObserver::class);
 
-        Collection::macro('paginate', function($perPage, $total = null, $page = null, $pageName = 'page') {
+        Collection::macro('paginate', function ($perPage, $total = null, $page = null, $pageName = 'page') {
             $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
 
             return new LengthAwarePaginator(
