@@ -24,7 +24,6 @@ class RolePermissions
     public function handle(Request $request, Closure $next)
     {
 //        $routeAction = basename( $path ); //we got the permission name
-
         $path =Route::currentRouteAction();
 
         $routeAction = mbBaseName($path);

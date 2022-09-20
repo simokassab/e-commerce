@@ -22,7 +22,8 @@ return new class extends Migration
 //            $table->foreign('field_id')->references('id')->on('fields')->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->text('value')->nullable();
-            $table->unsignedBigInteger('field_value_id');
+
+            $table->unsignedBigInteger('field_value_id')->nullable();
 //            $table->foreign('field_value_id')->references('id')->on('fields_values')->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->timestamps();

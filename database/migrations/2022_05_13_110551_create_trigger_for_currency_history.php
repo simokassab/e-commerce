@@ -32,7 +32,7 @@ return new class extends Migration
      */
     public function down()
     {
-        DB::unprepared('DROP TRIGGER IF EXISTS  `rate_trigger`');
-
+        DB::unprepared('DROP TRIGGER IF EXISTS  `rate_trigger_update`');
+        DB::unprepared('DROP TRIGGER IF EXISTS  `rate_trigger_create`');
     }
 };

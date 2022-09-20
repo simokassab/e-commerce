@@ -18,7 +18,6 @@ class DevSeeder extends Seeder
      */
     public function run()
     {
-        if(env('APP_DEBUG')){
 
             $user_1=User::find(1);
             $user_2=User::find(2);
@@ -26,14 +25,11 @@ class DevSeeder extends Seeder
             $permissions=CustomPermission::all()->pluck('name');
 
 
-            $role= CustomRole::where('name' , 'dev')->where('guard_name', 'web')->first() ?? CustomRole::create(['name' => 'dev','guard_name'=>'web']);
-
+            $role= CustomRole::query()->where('name' , 'dev')->where('guard_name', 'web')->first() ?? CustomRole::create(['name' => 'dev','guard_name'=>'web']);
 
             $role->givePermissionTo($permissions);
             $user_1->assignRole($role);
             $user_2->assignRole($role);
-
-        }
 
 
 

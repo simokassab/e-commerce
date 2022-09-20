@@ -97,6 +97,7 @@ class RolesService {
         CustomRole::query()->truncate();
 
         self::createSingalRole('admin');
+        self::createSingalRole('dev');
 
         $chefEmployee = self::createSingalRole('chef_employee');
         self::createSingalRole('chef_employee1',$chefEmployee->id);
@@ -114,6 +115,16 @@ class RolesService {
        self::createSinglePermssion('CountryController@update',$parentCountry->id );
        self::createSinglePermssion('CountryController@destroy',$parentCountry->id );
        //End of Country Permission
+
+        //Coupon Permission
+        $parentCoupon= self::createSinglePermssion('CouponsController');
+        self::createSinglePermssion('CouponsController@index',$parentCoupon->id );
+        self::createSinglePermssion('CouponsController@store',$parentCoupon->id );
+        self::createSinglePermssion('CouponsController@show',$parentCoupon->id );
+        self::createSinglePermssion('CouponsController@update',$parentCoupon->id );
+        self::createSinglePermssion('CouponsController@destroy',$parentCoupon->id );
+        //End of Coupon Permission
+
 
         //Currency Permission
           $parentCurrency= self::createSinglePermssion('CurrencyController');
