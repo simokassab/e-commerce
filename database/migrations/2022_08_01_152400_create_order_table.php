@@ -23,7 +23,7 @@ return new class extends Migration
             $table->double('total')->nullable();
             $table->double('tax_total')->nullable();
             $table->double('discount_percentage')->nullable();
-            $table->integer('discount_amount')->nullable();
+            $table->double('discount_amount')->nullable();
             $table->unsignedBigInteger('coupon_id')->nullable();
             $table->text('customer_comment')->nullable();
             $table->unsignedBigInteger('order_status_id')->nullable();

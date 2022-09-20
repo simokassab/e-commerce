@@ -22,7 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('component_tax_id');
 //            $table->foreign('component_tax_id')->references('id')->on('taxes')->cascadeOnDelete();
 
-            $table->integer('sort');
+            $table->integer('sort')->nullable();
 
             $table->timestamps();
 

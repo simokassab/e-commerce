@@ -24,15 +24,15 @@ return new class extends Migration
             $table->enum('type',['normal','bundle','service','variable','variable_child']);
             $table->unsignedBigInteger('unit_id')->nullable();
 //            $table->foreign('unit_id')->references('id')->on('units')->cascadeOnUpdate();
-            $table->float('quantity')->default(0);
-            $table->float('reserved_quantity')->nullable();
-            $table->float('minimum_quantity')->default(0);
+            $table->double('quantity')->default(0);
+            $table->double('reserved_quantity')->nullable();
+            $table->double('minimum_quantity')->default(0);
             $table->json('summary')->nullable();
             $table->enum('bundle_price_status', ['default', 'from_products'])->nullable();
             $table->boolean('is_same_price_as_parent')->default(0);
             $table->json('specification')->nullable();
             $table->boolean('is_same_dimensions_as_parent')->default(false);
-            $table->text('image',250)->nullable();
+            $table->text('image')->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();
 //            $table->foreign('brand_id')->references('id')->on('brands')->cascadeOnUpdate();
             $table->unsignedBigInteger('tax_id')->nullable();
@@ -43,7 +43,7 @@ return new class extends Migration
             $table->json('description')->nullable();
             $table->enum('website_status',['draft','published','pending_review'])->default('draft');
             $table->string('barcode',250)->nullable();
-            $table->float('bundle_reserved_quantity')->nullable();
+            $table->double('bundle_reserved_quantity')->nullable();
             $table->double('height')->nullable();
             $table->double('width')->nullable();
             $table->double('length')->nullable();
@@ -55,7 +55,7 @@ return new class extends Migration
 //            $table->foreign('products_statuses_id','products_statuses_id_products_statuses')->references('id')->on('products_statuses')->nullOnDelete();
             $table->boolean('is_default_child')->default(0);
             $table->boolean('is_show_related_product')->default(0);
-            $table->boolean('pre_order')->nullable();
+            $table->boolean('pre_order')->default(0);
 
             $table->timestamps();
         });

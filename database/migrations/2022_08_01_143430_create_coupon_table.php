@@ -23,7 +23,7 @@ return new class extends Migration
             $table->double('discount_percentage')->nullable();
             $table->double('discount_amount')->nullable();
             $table->double('min_amount')->nullable();
-            $table->boolean('is_one_time')->default(1);
+            $table->boolean('is_one_time')->default(0);
             $table->boolean('is_used')->default(0);
 
             $table->timestamps();

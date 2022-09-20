@@ -27,11 +27,6 @@ return new class extends Migration
             $table->json('description')->nullable();
             $table->integer('sort')->nullable();
             $table->boolean('is_disabled')->default(0);
-//            $table->unsignedBigInteger('category_id');
-//            $table->unsignedBigInteger('label_id');
-
-//            $table->foreign('category_id')->references('id')->on('categories')->cascadeOnDelete()->cascadeOnUpdate();
-//            $table->foreign('label_id')->references('id')->on('labels')->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->timestamps();
         });

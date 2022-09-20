@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('symbol',250)->nullable();
             $table->double('rate')->nullable();
             $table->boolean('is_default')->nullable();
-            $table->text('image',250)->nullable();
+            $table->text('image')->nullable();
             $table->integer('sort')->nullable();;
             $table->timestamps();
         });
