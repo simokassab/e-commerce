@@ -21,10 +21,10 @@ use \App\Http\Controllers\AuthenticationController;
 
 $dashboardMiddleware = ['auth:sanctum','localization'];
 
-if( env('APP_DEBUG') ){
-    $key = array_search('auth:sanctum', $dashboardMiddleware);
-    unset( $dashboardMiddleware[$key] );
-}
+//if( env('APP_DEBUG') ){
+//    $key = array_search('auth:sanctum', $dashboardMiddleware);
+//    unset( $dashboardMiddleware[$key] );
+//}
 
 Route::post('login',[AuthenticationController::class,'thirdPartyLogin']);
 Route::get('logout',[AuthenticationController::class,'thirdPartyLogout']);

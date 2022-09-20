@@ -38,13 +38,13 @@ use Illuminate\Support\Facades\Route;
 */
 $dashboardMiddlewares = ['auth:sanctum', 'localization', 'role_permissions'];
 
-if (env('APP_DEBUG')) {
-    $key = array_search('auth:sanctum', $dashboardMiddlewares);
-    unset($dashboardMiddlewares[$key]);
-
-    $key = array_search('role_permissions', $dashboardMiddlewares);
-    unset($dashboardMiddlewares[$key]);
-}
+//if (env('APP_DEBUG')) {
+//    $key = array_search('auth:sanctum', $dashboardMiddlewares);
+//    unset($dashboardMiddlewares[$key]);
+//
+//    $key = array_search('role_permissions', $dashboardMiddlewares);
+//    unset($dashboardMiddlewares[$key]);
+//}
 
 Route::post('login', [AuthenticationController::class, 'login'])->name('login');
 Route::get('logout', [AuthenticationController::class, 'logout'])->name('logout');

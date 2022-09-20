@@ -107,6 +107,15 @@ class RolesService {
     public static function createPermissions(){
         CustomPermission::query()->truncate();
 
+        //User Permission
+        $parentCountry= self::createSinglePermssion('UsersController');
+        self::createSinglePermssion('UsersController@index',$parentCountry->id );
+        self::createSinglePermssion('UsersController@store',$parentCountry->id );
+        self::createSinglePermssion('UsersController@show',$parentCountry->id );
+        self::createSinglePermssion('UsersController@update',$parentCountry->id );
+        self::createSinglePermssion('UsersController@destroy',$parentCountry->id );
+        //End of User Permission
+
        //Country Permission
         $parentCountry= self::createSinglePermssion('CountryController');
        self::createSinglePermssion('CountryController@index',$parentCountry->id );
