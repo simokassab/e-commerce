@@ -28,7 +28,6 @@ class CouponsController extends MainController
 
     public function index(Request $request)
     {
-        dd(Category::query()->find(1)->label->count());
 
         if ($request->method()=='POST') {
             $searchKeys=['id','title','code','start_date','expiry_date','discount_percentage','discount_amount','min_amount'];
