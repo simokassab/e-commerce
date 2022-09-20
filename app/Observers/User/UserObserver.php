@@ -15,7 +15,6 @@ class UserObserver
      */
     public function created(User $user)
     {
-        dd('from create user observer');
     }
 
     /**
@@ -26,7 +25,6 @@ class UserObserver
      */
     public function updated(User $user)
     {
-        dd('from update user observer');
     }
 
     /**
