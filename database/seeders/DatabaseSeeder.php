@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Coupons\Coupon;
+use App\Models\User\CustomerAddress;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Database\Seeder;
@@ -38,7 +40,11 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
+            CouponSeed::class,
+            PaymentsTypesSeeder::class,
+            CustomeresAndAddressesSeeds::class,
             DevSeeder::class,
+
         ]);
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 

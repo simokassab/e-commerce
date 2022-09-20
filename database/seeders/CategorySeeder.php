@@ -27,7 +27,7 @@ class CategorySeeder extends Seeder
                 ],
 
                 [
-                    'name' => json_encode(['en' => 'hair','ar' => 'شعر']),
+                    'name' =>  json_encode(['en' => 'hair','ar' => 'شعر']),
                     'code' => "hair",
                     'slug' =>   "hair",
                     'parent_id' =>  null,

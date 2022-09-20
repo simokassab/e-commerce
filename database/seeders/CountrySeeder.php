@@ -17,7 +17,8 @@ class CountrySeeder extends Seeder
     {
         Country::query()->truncate();
 
-        Country::query()->insert([[
+        Country::query()->insert([
+        [
             'name' => json_encode(['en' => 'United States','ar' => 'الولايات المتحدة']),
             'iso_code_1' => "USA",
             'iso_code_2' =>   "US",
