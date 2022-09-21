@@ -109,30 +109,8 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->renderable(function (Throwable $exception, $request) {
-            return errorResponse($exception->getMessage());
-            if (!config('app.debug')) {
-                if (!array_key_exists(get_class($exception), $this->exceptions)) {
-                    return errorResponse('error, please try again later');
-                }
-
-                $exception = $this->exceptions[get_class($exception)];
-                return errorResponse($exception['message']);
-
-
-//                foreach ($this->exceptions as $currentException){
-//
-//                    if($exception instanceof NotFoundHttpException){
-//                        return errorResponse($currentException['message'] ?? 'error, please try again later' , [] , -1,500);
-//                    }
-//
-//                    if($exception instanceof UnauthorizedException){
-//                        return errorResponse($currentException['message'] ?? 'error, please try again later' , [] , -1,500);
-//                    }
-//
-//                    if($exception instanceof $currentException['class']){
-//                        return errorResponse($currentException['message'] ?? 'error, please try again later' , [] , -1,500 );
-//                    }
-//                }
+            if ($request->wantsJson()) {
+                return parent::prepareJsonResponse($request, $exception);
             }
         });
     }
