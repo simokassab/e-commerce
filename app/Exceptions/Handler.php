@@ -109,7 +109,6 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->renderable(function (Throwable $exception, $request) {
-            return $exception->getMessage();
             if ($request->wantsJson()) {
                 return parent::prepareJsonResponse($request, $exception);
             }
