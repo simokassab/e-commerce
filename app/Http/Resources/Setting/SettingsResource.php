@@ -54,7 +54,7 @@ class SettingsResource extends JsonResource
             default => $value ??  null,
         };
 
-        if ($type == 'model_select')
+        if ($type == 'model-select')
             $type = 'select';
         return [
             'key' => $id,

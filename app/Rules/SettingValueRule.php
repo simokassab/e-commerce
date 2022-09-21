@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Models\Price\Price;
 use App\Models\Settings\Setting;
 use Illuminate\Contracts\Validation\InvokableRule;
 use Illuminate\Support\Facades\Cache;
@@ -29,11 +30,10 @@ class SettingValueRule implements InvokableRule
         if ($this->type != $settings->type) {
             $fail('the value type must be the same as the setting type');
         }
-
         if ($this->type == 'select' || $this->type == 'text') {
             if (!is_string($value))
                 return $fail('the :attribute must be a string');
-        } elseif ($this->type == 'number' || $this->type == 'model_select') {
+        } elseif ($this->type == 'number') {
             if (!is_numeric($value))
                 return $fail('the :attribute must be a number');
         } elseif ($this->type == 'checkbox') {
@@ -43,9 +43,18 @@ class SettingValueRule implements InvokableRule
             if (!is_array($value)) {
                 return $fail('the :attribute must be an array');
             }
-
             if (!Setting::validateOptionsByTitle($settings->title, $value))
                 return $fail('the :attribute must be an array of valid options');
+        } elseif ($this->type == 'model-select' && $settings->title == 'default_pricing_class') {
+            if (!is_numeric($value))
+                return $fail('the :attribute must be a number');
+            else {
+                $priceIds = Price::whereIs_virtual(0)->pluck('id')->toArray();
+                foreach ($priceIds as $key => $priceId) {
+                    if ($value != $priceId)
+                        return $fail('the :attribute must be a valid price');
+                }
+            }
         }
     }
 }
