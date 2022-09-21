@@ -32,7 +32,7 @@ class FieldResourceEntity extends JsonResource
 
         return [
             'field_id' => $this->field_id,
-            'value' =>$this->getTranslations('value'),
+            'value' =>$this->value,
             'type' => $this->field->type
 
         ];
