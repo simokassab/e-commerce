@@ -2,16 +2,17 @@
 
 use App\Exceptions\FileErrorException;
 use App\Models\Settings\Setting;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Cache;
 
 function uploadImage($file, $folderPath): bool|string
 {
     try {
         $fileName = uniqid() . '_' . $file->getClientOriginalName();
         $path = Storage::putFileAs('public/' . $folderPath, $file, $fileName);
-    } catch (\App\Exceptions\FileErrorException $exception) {
+    } catch (FileErrorException $exception) {
         throw $exception;
     } catch (ValueError $exception) {
         throw $exception;
@@ -31,7 +32,7 @@ function getAssetsLink($path): string
     }
 }
 
-function errorResponse($message = 'An error occurred please try again later', array $data = [], $returnCode = -1, $statusCode = 200): \Illuminate\Http\JsonResponse
+function errorResponse($message = 'An error occurred please try again later', array $data = [], $returnCode = -1, $statusCode = 500): JsonResponse
 {
     $return['message'] = $message;
     $return['data'] = $data;
@@ -40,7 +41,7 @@ function errorResponse($message = 'An error occurred please try again later', ar
     return response()->json($return, $statusCode);
 }
 
-function successResponse($message = 'Success!', array $data = [], $returnCode = 1, $statusCode = 200): \Illuminate\Http\JsonResponse
+function successResponse($message = 'Success!', array $data = [], $returnCode = 1, $statusCode = 200): JsonResponse
 {
     $return['message'] = $message;
     $return['data'] = $data;

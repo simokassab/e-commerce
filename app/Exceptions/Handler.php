@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Error;
 use Exception;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemException;
@@ -92,6 +93,11 @@ class Handler extends ExceptionHandler
             'message' => 'An error occurred please refresh the page and try again later',
             'code' => 500,
         ],
+        AuthenticationException::class => [
+            'class' => AuthenticationException::class,
+            'message' => 'Unauthenticated',
+            'code' => 401
+        ]
 
     ];
 
@@ -103,7 +109,7 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->renderable(function (Throwable $exception, $request) {
-
+            return errorResponse($exception->getMessage());
             if (!config('app.debug')) {
                 if (!array_key_exists(get_class($exception), $this->exceptions)) {
                     return errorResponse('error, please try again later');
