@@ -45,6 +45,9 @@ $dashboardMiddlewares = ['auth:sanctum', 'localization', 'role_permissions'];
 //    $key = array_search('role_permissions', $dashboardMiddlewares);
 //    unset($dashboardMiddlewares[$key]);
 //}
+Route::get('test', [TestController::class, 'test']);
+Route::get('createShipment', [TestController::class, 'createShipment']);
+
 Route::get('/profile', fn() => auth()->user());
 
 Route::post('login', [AuthenticationController::class, 'login'])->name('login');
@@ -163,6 +166,3 @@ Route::group(['prefix' => 'dashboard', 'middleware' => $dashboardMiddlewares], f
     Route::get('createShipment', [TestController::class, 'createShipment']);
 
 });
-Route::get('test', [TestController::class, 'test']);
-Route::get('createShipment', [TestController::class, 'createShipment']);
-
