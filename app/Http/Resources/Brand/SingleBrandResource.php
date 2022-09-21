@@ -20,8 +20,8 @@ class SingleBrandResource extends JsonResource
     public function toArray($request)
     {
 
-        $labels = $this->whenLoaded('label') ? $this->whenLoaded('label') : $this->whenLoaded('label')->pluck('id');
-        $fieldsValues = $this->whenLoaded('fieldValue');
+        $labels = $this->whenLoaded('label') ?  $this->whenLoaded('label')->pluck('id') :[];
+        $fieldsValues = $this->whenLoaded('fieldValue') ?? [];
 
 
         return [

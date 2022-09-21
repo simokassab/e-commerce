@@ -45,6 +45,7 @@ $dashboardMiddlewares = ['auth:sanctum', 'localization', 'role_permissions'];
 //    $key = array_search('role_permissions', $dashboardMiddlewares);
 //    unset($dashboardMiddlewares[$key]);
 //}
+Route::get('/profile', fn() => auth()->user());
 
 Route::post('login', [AuthenticationController::class, 'login'])->name('login');
 Route::get('logout', [AuthenticationController::class, 'logout'])->name('logout');
@@ -106,7 +107,6 @@ Route::group(['prefix' => 'dashboard', 'middleware' => $dashboardMiddlewares], f
     Route::post('unit/all', [UnitController::class, 'index']);// for search
 
     // @TODO: make a correct function for the user profile
-    Route::get('/profile', fn() => auth()->user());
 
     Route::post('tax/all', [TaxController::class, 'index']);//for searching
     Route::get('tax/create', [TaxController::class, 'create']);
