@@ -26,7 +26,6 @@ class SettingObserver
      */
     public function updated(Setting $setting)
     {
-        dd('hello');
         Cache::forget(Setting::$cacheKey);
 
     }

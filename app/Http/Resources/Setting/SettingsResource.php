@@ -43,8 +43,6 @@ class SettingsResource extends JsonResource
         $id = $idsArray[array_search($this->title, $titlesArray)];
         $title = $titlesArray[array_search($this->title, $titlesArray)];
         $type = $typesArray[array_search($this->title, $titlesArray)];
-        if ($type == 'model_select')
-            $type = 'select';
 
         $value = $valuesArray[array_search($this->title, $titlesArray)];
 
@@ -52,9 +50,12 @@ class SettingsResource extends JsonResource
             'number' => (int)$value ?? 0,
             'checkbox' => (bool)$value ?? false,
             'multi-select' => $value ?? [],
+            'model-select' => (int)$value ?? null,
             default => $value ??  null,
         };
 
+        if ($type == 'model_select')
+            $type = 'select';
         return [
             'key' => $id,
             'title' => $title,
