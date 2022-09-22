@@ -59,7 +59,6 @@ class StoreCategoryRequest extends MainRequest
             'order.*.id' => 'required | integer | exists:categories,id',
             'order.*.sort' => 'required | integer',
 
-            'labels.*' => 'required | exists:labels,id',
         ];
     }
 

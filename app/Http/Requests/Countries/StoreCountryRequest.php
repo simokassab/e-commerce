@@ -6,7 +6,7 @@ use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
-class   StoreCountryRequest extends FormRequest
+class   StoreCountryRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.
