@@ -7,16 +7,16 @@ use App\Http\Controllers\MainController;
 use App\Http\Requests\Countries\StoreCountryRequest;
 use App\Http\Requests\Countries\UpdateCountryRequest;
 use App\Http\Resources\Country\CountryResource;
-use App\Models\Country\Country;
-use Exception;
-use Illuminate\Http\Request;
 use App\Http\Resources\Country\CoutnrySingleResource;
 use App\Http\Resources\Country\RestFullCountryResource;
+use App\Models\Country\Country;
+use Illuminate\Http\Request;
 
 class CountryController extends MainController
 {
     const OBJECT_NAME = 'objects.country';
     private $imagesPath = "";
+
     public function __construct($defaultPermissionsFromChild = null)
     {
         $this->imagesPath = Country::$imagesPath;
@@ -48,7 +48,7 @@ class CountryController extends MainController
                     ]
                 ];
                 return response()->json($data);
-                return  CountryResource::collection($data);
+                return CountryResource::collection($data);
             }
             return $data;
         }
@@ -68,7 +68,7 @@ class CountryController extends MainController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreCountryRequest $request)
@@ -76,12 +76,12 @@ class CountryController extends MainController
 
         $country = new Country();
         $dataTranslatable = (array)json_decode($request->name);
-        $country->name =  ($dataTranslatable);
+        $country->name = ($dataTranslatable);
         $country->iso_code_1 = $request->iso_code_1;
         $country->iso_code_2 = $request->iso_code_2;
         $country->phone_code = $request->phone_code;
         $country->flag = $request->flag;
-        if ($request->flag) {
+        if ($request->hasFile('flag')) {
             $country->flag = $this->imageUpload($request->file('flag'), $this->imagesPath['images']);
         }
         if (!$country->save())
@@ -94,10 +94,11 @@ class CountryController extends MainController
             ]
         );
     }
+
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(Country $country)
@@ -113,7 +114,7 @@ class CountryController extends MainController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -123,14 +124,14 @@ class CountryController extends MainController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateCountryRequest $request, Country $country)
     {
         $dataTranslatable = (array)json_decode($request->name);
-        $country->name =  ($dataTranslatable);
+        $country->name = ($dataTranslatable);
         $country->iso_code_2 = $request->iso_code_2;
         $country->iso_code_1 = $request->iso_code_1;
         $country->phone_code = $request->phone_code;
@@ -159,7 +160,7 @@ class CountryController extends MainController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Country $country)
