@@ -27,10 +27,36 @@ class RolePermissions
         $path =Route::currentRouteAction();
 
         $routeAction = mbBaseName($path);
-        $routeAction = Str::replaceAll(['create','getProductsForOrders','getCouponByCode','getAllParentsSorted','getAllChildsSorted','getAllLanguagesSorted'], 'store', $routeAction);
-        $routeAction = Str::replaceAll(['getTableHeaders','getAllRoles'], 'index', $routeAction);
-        $routeAction = Str::replaceAll(['setCurrencyIsDefault','toggleStatus','updateSortValues','getAllParentsSorted','getAllChildsSorted','setLanguageIsDefault'], 'update', $routeAction);
-        $routeAction = Str::replaceAll(['getNestedPermissionsForRole'], 'show', $routeAction);
+        $routeAction = Str::replaceAll(
+            [
+                'create',
+                'getProductsForOrders',
+                'getCouponByCode',
+                'getAllParentsSorted',
+                'getAllChildsSorted',
+                'getAllLanguagesSorted',
+                'getOriginalPrices'
+            ], 'store', $routeAction);
+
+        $routeAction = Str::replaceAll(
+            [
+                'getTableHeaders',
+                'getAllRoles'
+            ], 'index', $routeAction);
+
+        $routeAction = Str::replaceAll(['setCurrencyIsDefault',
+            'toggleStatus',
+            'updateSortValues',
+            'getAllParentsSorted',
+            'getAllChildsSorted',
+            'setLanguageIsDefault'
+        ], 'update', $routeAction);
+
+        $routeAction = Str::replaceAll(
+            [
+                'getNestedPermissionsForRole'
+            ], 'show', $routeAction);
+
          if (! auth()->check() ) {
              abort(400,'You are unauthenticated!');
         }
