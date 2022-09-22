@@ -24,7 +24,7 @@ class RolePermissions
     public function handle(Request $request, Closure $next)
     {
 //        $routeAction = basename( $path ); //we got the permission name
-        $path =Route::currentRouteAction();
+        $path = Route::currentRouteAction();
 
         $routeAction = mbBaseName($path);
         $routeAction = Str::replaceAll(
@@ -57,11 +57,11 @@ class RolePermissions
                 'getNestedPermissionsForRole'
             ], 'show', $routeAction);
 
-         if (! auth()->check() ) {
-             abort(400,'You are unauthenticated!');
+        if (!auth()->check()) {
+            abort(401, 'You are unauthenticated!');
         }
         if (!auth()->user()->hasPermissionTo($routeAction)) {
-            throw new UnauthorizedException();
+            abort(401, 'You are unauthenticated!');
         }
 
         return $next($request);

@@ -48,12 +48,12 @@ $dashboardMiddlewares = ['auth:sanctum', 'localization', 'role_permissions'];
 Route::get('test', [TestController::class, 'test']);
 Route::get('createShipment', [TestController::class, 'createShipment']);
 
-Route::get('/profile', fn() => auth()->user());
 
 Route::post('login', [AuthenticationController::class, 'login'])->name('login');
 Route::get('logout', [AuthenticationController::class, 'logout'])->name('logout');
 
 Route::group(['prefix' => 'dashboard', 'middleware' => $dashboardMiddlewares], function () {
+    Route::get('/profile', fn() => auth()->user());
     Route::group(['prefix' => 'headers'], function () {
         Route::get('brands', [BrandController::class, 'getTableHeaders']);
         Route::get('categories', [CategoryController::class, 'getTableHeaders']);

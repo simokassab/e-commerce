@@ -23,7 +23,7 @@ class   StoreCountryRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(Request $request)
+    public function rules()
     {
         return [
             'name' => 'required',
