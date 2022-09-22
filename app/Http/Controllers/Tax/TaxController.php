@@ -102,7 +102,7 @@ class TaxController extends MainController
      */
     public function show(Tax $tax)
     {
-        $taxes = Tax::query()->whereNot(''.$tax->id)->get();
+        $taxes = Tax::query()->whereNot('id', $tax->id)->get();
         return $this->successResponse('Success' , [
             'tax' => new SingleTaxResource($tax->load('taxComponents')),
             'components' =>  TaxResource::collection($taxes)
