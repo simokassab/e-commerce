@@ -33,10 +33,8 @@ class CurrencyController extends MainController
     public function index(Request $request)
     {
         if ($request->method() == 'POST') {
-            $searchKeys = ['name', 'code', 'symbol', 'rate'];
-            $searchRelationsKeys = ['parent' => ['parent_name' => 'name']];
-
-            return $this->getSearchPaginated(IndexCurrencyResource::class, Currency::class, $request, $searchKeys, self::relations, $searchRelationsKeys);
+            $searchKeys = ['id', 'name', 'code', 'symbol', 'rate'];
+            return $this->getSearchPaginated(IndexCurrencyResource::class, Currency::class, $request, $searchKeys, self::relations);
         }
         return $this->successResponsePaginated(IndexCurrencyResource::class, Currency::class, self::relations);
     }

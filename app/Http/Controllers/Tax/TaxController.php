@@ -27,7 +27,7 @@ class TaxController extends MainController
 
         $relations=['taxComponents'];
         if ($request->method()=='POST') {
-            $searchKeys=['name','percentage','complex_behavior'];
+            $searchKeys=['id','name','percentage','complex_behavior'];
             return $this->getSearchPaginated(TaxResource::class, Tax::class,$request, $searchKeys,$relations);
         }
         return $this->successResponsePaginated(TaxResource::class,Tax::class,$relations);

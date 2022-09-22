@@ -27,7 +27,7 @@ class SettingsController extends MainController
     {
 
         if ($request->method() == 'POST') {
-            $searchKeys = ['title', 'value'];
+            $searchKeys = ['id','title', 'value'];
             return $this->getSearchPaginated(SettingsResource::class, Setting::class, $request, $searchKeys);
         }
 

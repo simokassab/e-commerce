@@ -48,7 +48,7 @@ class OrdersController extends MainController
     {
 
         if ($request->method() == 'POST') {
-            $searchKeys = ['code', 'time', 'date', 'total'];
+            $searchKeys = ['id','code', 'time', 'date', 'total'];
             $searchRelationsKeys = ['customer' => ['customer_first_name' => 'first_name', 'customer_last_name' => 'last_name']];
             return $this->getSearchPaginated(OrderResource::class, Order::class, $request, $searchKeys, self::relations, $searchRelationsKeys);
         }

@@ -32,7 +32,7 @@ class LanguageController extends MainController
     public function index(Request $request)
     {
         if ($request->method() == 'POST') {
-            $searchKeys = ['name', 'code'];
+            $searchKeys = ['id','name', 'code'];
             return $this->getSearchPaginated(LanguageResource::class, Language::class, $request, $searchKeys);
         }
         return $this->successResponsePaginated(LanguageResource::class, Language::class);

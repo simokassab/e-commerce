@@ -32,7 +32,7 @@ class FieldsController extends MainController
     public function index(Request $request)
     {
         if ($request->method()=='POST') {
-            $searchKeys=['title','type','entity','is_required'];
+            $searchKeys=['id','title','type','entity','is_required'];
             return $this->getSearchPaginated(FieldHeaderResource::class, Field::class,$request, $searchKeys,self::relations);
 
         }

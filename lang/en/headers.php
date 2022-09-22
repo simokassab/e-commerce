@@ -8,6 +8,12 @@ return [
             'type' => 'integer',
             'sort' => true
         ],
+        'image' => [
+            'name' => 'Image',
+            'search' => '',
+            'type' => 'string',
+            'sort' => false
+        ],
         'name' => [
             'name' => 'Name',
             'search' => 'string',
@@ -19,29 +25,11 @@ return [
             'search' => 'integer',
             'type' => 'integer',
             'sort' => true
-        ],
-        'image' => [
-            'name' => 'Image',
-            'search' => 'integer',
-            'type' => 'integer',
-            'sort' => false
         ],
     ],
     'categories' => [
         'id' => [
             'name' => 'ID',
-            'search' => 'integer',
-            'type' => 'integer',
-            'sort' => true
-        ],
-        'name' => [
-            'name' => 'Name',
-            'search' => 'string',
-            'type' => 'string',
-            'sort' => true
-        ],
-        'code' => [
-            'name' => 'Code',
             'search' => 'integer',
             'type' => 'integer',
             'sort' => true
@@ -52,6 +40,19 @@ return [
             'type' => 'image',
             'sort' => false
         ],
+        'name' => [
+            'name' => 'Name',
+            'search' => 'string',
+            'type' => 'string',
+            'sort' => true
+        ],
+        'code' => [
+            'name' => 'Code',
+            'search' => 'integer',
+            'type' => 'integer',
+            'sort' => true
+        ],
+       
         'icon' => [
             'name' => 'Icon',
             'search' => '',
@@ -78,6 +79,12 @@ return [
             'type' => 'integer',
             'sort' => true
         ],
+        'flag' => [
+            'name' => 'Flag',
+            'search' => '',
+            'type' => 'image',
+            'sort' => false
+        ],
         'name' => [
             'name' => 'Name',
             'search' => 'string',
@@ -102,12 +109,7 @@ return [
             'type' => 'integer',
             'sort' => true
         ],
-        'flag' => [
-            'name' => 'Flag',
-            'search' => '',
-            'type' => 'image',
-            'sort' => false
-        ],
+       
     ],
     'currencies' => [
         'id' => [
@@ -115,6 +117,12 @@ return [
             'search' => 'integer',
             'type' => 'integer',
             'sort' => true
+        ],
+        'image' => [
+            'name' => 'Image',
+            'search' => '',
+            'type' => 'image',
+            'sort' => false
         ],
         'name' => [
             'name' => 'Name',
@@ -140,12 +148,7 @@ return [
             'type' => 'string',
             'sort' => true
         ],
-        'image' => [
-            'name' => 'Image',
-            'search' => '',
-            'type' => 'image',
-            'sort' => false
-        ],
+       
     ],
     'discounts' => [
         'id' => [
@@ -212,6 +215,12 @@ return [
             'type' => 'integer',
             'sort' => true
         ],
+        'image' => [
+            'name' => 'Image',
+            'search' => '',
+            'type' => 'image',
+            'sort' => false
+        ],
         'title' => [
             'name' => 'Title',
             'search' => 'string',
@@ -231,12 +240,7 @@ return [
             'type' => 'string',
             'sort' => true
         ],
-        'image' => [
-            'name' => 'Image',
-            'search' => '',
-            'type' => 'image',
-            'sort' => false
-        ],
+  
         'key' => [
             'name' => 'Key',
             'search' => 'string',
@@ -251,6 +255,12 @@ return [
             'type' => 'integer',
             'sort' => true
         ],
+        'image' => [
+            'name' => 'Image',
+            'search' => '',
+            'type' => 'image',
+            'sort' => true
+        ],
         'name' => [
             'name' => 'Name',
             'search' => 'string',
@@ -263,12 +273,7 @@ return [
             'type' => 'integer',
             'sort' => true
         ],
-        'image' => [
-            'name' => 'Image',
-            'search' => '',
-            'type' => 'image',
-            'sort' => true
-        ],
+       
     ],
     'prices' => [
         'id' => [
@@ -309,6 +314,12 @@ return [
             'type' => 'integer',
             'sort' => true
         ],
+        'image' => [
+            'name' => 'Image',
+            'search' => '',
+            'type' => 'image',
+            'sort' => true
+        ],
         'name' => [
             'name' => 'Name',
             'search' => 'string',
@@ -333,12 +344,7 @@ return [
             'type' => 'integer',
             'sort' => true
         ],
-        'image' => [
-            'name' => 'Image',
-            'search' => '',
-            'type' => 'image',
-            'sort' => true
-        ],
+     
         'website_status' => [
             'name' => 'Status',
             'search' => 'string',

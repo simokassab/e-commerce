@@ -42,7 +42,7 @@ class BrandController extends MainController
     {
 
         if ($request->method() == 'POST') {
-            $searchKeys = ['name', 'code', 'meta_title', 'meta_description', 'meta_keyword', 'description'];
+            $searchKeys = ['id','name', 'code', 'meta_title'];
             return $this->getSearchPaginated(BrandResource::class, Brand::class, $request, $searchKeys);
         }
 

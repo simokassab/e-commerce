@@ -27,7 +27,7 @@ class PricesController extends MainController
     {
         if ($request->method()=='POST') {
 
-            $searchKeys=['name','percentage'];
+            $searchKeys=['id','name','percentage'];
             $searchRelationsKeys = ['parent' =>['parent_name' => 'name',]];
             return $this->getSearchPaginated(PriceResource::class, Price::class, $request, $searchKeys,self::relations,$searchRelationsKeys);
         }
