@@ -112,7 +112,7 @@ class CountryController extends MainController
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(StoreCountryRequest $request, Country $country)
+    public function update(UpdateCountryRequest $request, Country $country)
     {
         $dataTranslatable = (array)json_decode($request->name);
         $country->name = ($dataTranslatable);
