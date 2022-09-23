@@ -16,13 +16,9 @@ class LanguageResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
             'name' => $this->name,
             'code' => $this->code,
-            // 'is_default' => $this->is_default,
-            // 'is_disabled' => $this->is_disabled,
-            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
-            // 'sort' => $this->sort
-
         ];
     }
 }

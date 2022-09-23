@@ -65,7 +65,7 @@ class CountryController extends MainController
         $country->iso_code_2 = $request->iso_code_2;
         $country->phone_code = $request->phone_code;
         $country->flag = $request->flag;
-        if ($request->hasFile('flag')) {
+        if (($request->file('flag') && !is_string($request->file('flag')))) {
             $country->flag = $this->imageUpload($request->file('flag'), $this->imagesPath['images']);
         }
         if (!$country->save())
@@ -112,7 +112,7 @@ class CountryController extends MainController
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UpdateCountryRequest $request, Country $country)
+    public function update(StoreCountryRequest $request, Country $country)
     {
         $dataTranslatable = (array)json_decode($request->name);
         $country->name = ($dataTranslatable);

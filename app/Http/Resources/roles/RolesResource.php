@@ -14,13 +14,11 @@ class RolesResource extends JsonResource
      */
     public function toArray($request)
     {
-//        $roles=$this->whenLoaded('roles');
         $parentName = $this->parent ? $this->parent->name : '-';
         return [
             'id' => $this->id,
             'name' => $this->name,
             'parent_role' => $parentName,
-        //    'children' => self::collection($this->whenLoaded('children')),
 
         ];
     }

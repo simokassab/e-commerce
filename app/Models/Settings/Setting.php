@@ -16,7 +16,7 @@ class Setting extends MainModel
 
     protected $fillable = ['title', 'value', 'type', 'is_developer'];
 
-    public static array $fields = [
+    public static array $titles = [
         'products_required_fields',
         'products_quantity_greater_than_or_equal',
         'allow_negative_quantity',
@@ -78,9 +78,6 @@ class Setting extends MainModel
             ],
             'default_pricing_class' => Price::all('id', 'name')->toArray(),
         ];
-        //taking the english text from the translatable json text
-        foreach ($titlesOptions['default_pricing_class'] as $key => $option)
-            $titlesOptions[$key]['name'] = $option['name']['en'];
 
         return $titlesOptions;
     }

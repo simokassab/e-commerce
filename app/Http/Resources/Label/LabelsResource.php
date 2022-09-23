@@ -16,11 +16,10 @@ class LabelsResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
             'title' => $this->title,
             'entity' => $this->entity,
             'color' => $this->color,
-            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
-
             'key' => $this->key,
         ];
     }

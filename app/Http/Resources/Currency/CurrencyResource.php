@@ -22,16 +22,11 @@ class CurrencyResource extends JsonResource
 
         return [
             'id' => $this->id,
+            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_icon' ,
             'name'=>$this->name,
-            // 'title'=>$this->code . ' - ' . $this->symbol,
             'code' => $this->code,
             'symbol'=>$this->symbol,
             'rate'=>$this->rate,
-            // 'is_default'=>$this->is_default,
-            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_icon' ,
-
-            // 'sort'=>$this->sort,
-            // 'history' => CurrencyHistoryResource::collection($currency_history),
 
         ];
     }

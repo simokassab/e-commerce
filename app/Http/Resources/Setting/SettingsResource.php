@@ -19,34 +19,27 @@ class SettingsResource extends JsonResource
      */
     public function toArray($request)
     {
-        $idsArray = [];
-        $titlesArray = [];
-        $typesArray = [];
-        $valuesArray = [];
 
-        collect(getSettings())->map(function ($setting) use (&$idsArray, &$titlesArray, &$typesArray, &$valuesArray) {
-            $idsArray[] = $setting->id;
-            $titlesArray[] = $setting->title;
-            $typesArray[] = $setting->type;
-            $valuesArray[] = $setting->value;
-        });
-
+        $value = null;
         $options = [];
 
-        if (in_array($this->title, Setting::$fields) && ($this->type == 'select' || $this->type == 'multi-select' || $this->type == 'model_select')) {
+        if (in_array($this->title, Setting::$titles) && ($this->type == 'select' || $this->type == 'multi-select' || $this->type == 'model_select'))
             $options = Setting::getTitleOptions()[$this->title];
-        }
+
         if ($this->title == 'default_pricing_class') {
             foreach (Setting::getTitleOptions()['default_pricing_class'] as $key => $option)
+                $options[$key]['id'] = $option['id'];
                 $options[$key]['name'] = $option['name']['en'];
         }
-        $id = $idsArray[array_search($this->title, $titlesArray)];
-        $title = $titlesArray[array_search($this->title, $titlesArray)];
-        $type = $typesArray[array_search($this->title, $titlesArray)];
 
-        $value = $valuesArray[array_search($this->title, $titlesArray)];
+        if ($this->title == 'products_required_fields') {
+            $value = explode(',', $this->value);
+        }
 
-        $value = match ($type) {
+        if ($this->type == 'model-select')
+            $this->type = 'select';
+
+        $value = match ($this->type) {
             'number' => (int)$value ?? 0,
             'checkbox' => (bool)$value ?? false,
             'multi-select' => $value ?? [],
@@ -54,13 +47,11 @@ class SettingsResource extends JsonResource
             default => $value ??  null,
         };
 
-        if ($type == 'model-select')
-            $type = 'select';
         return [
-            'key' => $id,
-            'title' => $title,
-            'name' => ucwords(str_replace("_", " ", $title)),
-            'type' => $type,
+            'key' => $this->id,
+            'title' => $this->title,
+            'name' => ucwords(str_replace("_", " ", $this->title)),
+            'type' => $this->type,
             'options' => ($options),
             'value' => $value
         ];
