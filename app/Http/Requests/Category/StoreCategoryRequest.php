@@ -5,8 +5,9 @@ namespace App\Http\Requests\Category;
 use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
-class StoreCategoryRequest extends MainRequest
+class StoreCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +24,7 @@ class StoreCategoryRequest extends MainRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(Request $request)
     {
 
     return [
@@ -50,8 +51,7 @@ class StoreCategoryRequest extends MainRequest
             'sort' => 'nullable | integer',
 
             'fields.*.field_id' => 'required | exists:fields,id,entity,category',
-            'fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
-            'fields.*.value'=> 'nullable  | max:'.config('defaults.default_string_length_2'),
+            'fields.*.value'=> [Rule::when($request->type=='select',['integer','exists:fields_values,id'],'required'),'required','max:'.config('defaults.default_string_length_2') ],
             'fields.*.type' => 'required | exists:fields,type,entity,category',
 
             'labels.*' => 'required | integer | exists:labels,id',
@@ -107,16 +107,18 @@ class StoreCategoryRequest extends MainRequest
 
             'sort.integer' => 'the :attribute should be an integer',
 
-            'fields.*.field_id.required' => 'The field_id is required',
-            'fields.*.field_id.integer' => 'The field_id should be an integer',
-            'fields.*.field_id.exists' => 'The field_id is not exists or not for category entity',
-            'fields.*.field_value_id.required' => 'The field_value_id  is required',
-            'fields.*.field_value_id.exists' => 'The field_value_id  is not exists',
-            'fields.*.value.required' => 'The value is required',
+            'fields.*.field_id.required' => 'The field is required',
+            'fields.*.field_id.exists' => 'The field must be exists',
 
-            'labels.*.label_id.required' => 'The label_id is required',
-            'labels.*.label_id.integer' => 'The label_id should be an integer',
-            'labels.*.label_id.exists' => 'The label_id is not exists',
+            'fields.*.value.required' => 'The value is required',
+            'fields.*.value.max' => 'Invalid string length',
+
+            'fields.*.type.required' =>  'The type is required',
+            'fields.*.type.exists' =>  'The type is not exists',
+
+            'labels.*.label_id.required' => 'The label is required',
+            'labels.*.label_id.integer' => 'The label must be integer',
+            'labels.*.label_id.exists' => 'The label is not exists',
 
             'order.*.id.required' => 'The id is required',
             'order.*.id.integer' => 'The id should be an integer',
