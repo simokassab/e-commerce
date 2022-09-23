@@ -24,12 +24,13 @@ class SettingsResource extends JsonResource
         $options = [];
 
         if (in_array($this->title, Setting::$titles) && ($this->type == 'select' || $this->type == 'multi-select' || $this->type == 'model_select'))
-            $options = Setting::getTitleOptions()[$this->title];
+            $optionsArray = Setting::getTitleOptions()[$this->title];
 
         if ($this->title == 'default_pricing_class') {
-            foreach (Setting::getTitleOptions()['default_pricing_class'] as $key => $option)
+            foreach ($optionsArray as $key => $option) {
                 $options[$key]['id'] = $option['id'];
                 $options[$key]['name'] = $option['name']['en'];
+            }
         }
 
         if ($this->title == 'products_required_fields') {
