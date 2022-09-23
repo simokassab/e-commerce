@@ -102,7 +102,11 @@ class TaxController extends MainController
      */
     public function show(Tax $tax)
     {
-        return $this->successResponse('Success' , ['tax' => new SingleTaxResource($tax->load('taxComponents'))]);
+        $taxes = Tax::query()->whereNot('id', $tax->id)->get();
+        return $this->successResponse('Success' , [
+            'tax' => new SingleTaxResource($tax->load('taxComponents')),
+            'components' =>  TaxResource::collection($taxes)
+        ]);
     }
 
     /**
@@ -187,6 +191,7 @@ class TaxController extends MainController
             );
 
         }catch (\Exception $e){
+            dd($e);
             DB::rollBack();
             return $this->errorResponse(
                 __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])

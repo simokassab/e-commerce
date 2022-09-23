@@ -42,7 +42,7 @@ class TaxObserver
         if($tax->product->count() != 0){
             throw new \Exception('Sorry but this tax is already in use can\'t delete it');
         }
-        if($tax->taxComponentsParents->count != 0){
+        if($tax->taxComponentsParents->count() != 0){
             throw new \Exception('Sorry but this tax is already in use can\'t delete it');
 
         }

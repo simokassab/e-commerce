@@ -8,13 +8,8 @@ class TaxsServices{
 
     public static function deleteRelatedTaxComponents(Tax $tax){
 
-        $taxComponents = $tax->taxComponents();
-        if(!$taxComponents->exists()){
-            return ;
-        }
-        $taxComponentsId= $taxComponents->pluck('id');
+        $taxComponentsId= $tax->taxComponents->pluck('id')->toArray();
         TaxComponent::destroy($taxComponentsId);
-
     }
 
     public static function createComponentsForTax($components, $tax){

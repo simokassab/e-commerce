@@ -29,10 +29,7 @@ class CategoryController extends MainController
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+
     public function index(Request $request)
     {
         if ($request->method() == 'POST') {
