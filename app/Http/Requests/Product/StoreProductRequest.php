@@ -91,9 +91,12 @@ class StoreProductRequest extends FormRequest
             // 'categories.*.id' => 'exists:categories,id',
 
 
-            'fields.*.field_id' => 'required | integer | exists:fields,id,entity,product',
-            'fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
-            'fields.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
+            'fields.*.field_id' => 'required | exists:fields,id,entity,category',
+            'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id'], 'required'), 'required', 'max:' . config('defaults.default_string_length_2')],
+            'fields.*.type' => 'required | exists:fields,type,entity,category',
+
+            'labels.*' => 'exists:labels,id',
+
 
             'images.*.image' => 'required | file
             | mimes:' . config('defaults.default_image_extentions') . '
@@ -102,7 +105,6 @@ class StoreProductRequest extends FormRequest
             'images_data.*.title' => 'required ',
             'images_data.*.sort' => 'required | integer',
 
-            'labels.*' => 'exists:labels,id',
             'tags.*' => 'exists:tags,id',
 
             'prices.*.price_id' => 'required | integer | exists:prices,id',

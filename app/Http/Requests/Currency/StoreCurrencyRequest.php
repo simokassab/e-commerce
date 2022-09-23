@@ -4,9 +4,10 @@ namespace App\Http\Requests\Currency;
 
 use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class StoreCurrencyRequest extends MainRequest
+class StoreCurrencyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +25,9 @@ class StoreCurrencyRequest extends MainRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(Request $request)
     {
+        dd($request->image);
         return [
             'name' => 'required',
             'code' => 'required | max:'.config('defaults.default_string_length'),
