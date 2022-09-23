@@ -18,8 +18,6 @@ class CurrencyResource extends JsonResource
     public function toArray($request)
     {
 
-        // $currency_history=$this->whenLoaded('currencyHistory');
-
         return [
             'id' => $this->id,
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_icon' ,

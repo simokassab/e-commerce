@@ -30,7 +30,7 @@ class StoreCategoryRequest extends FormRequest
     return [
 
             'name' => 'required',
-            'code' => 'required | max:'.config('defaults.default_string_length'),
+            // 'code' => 'required | max:'.config('defaults.default_string_length'),
 
             'image' => 'nullable | file
             | mimes:'.config('defaults.default_image_extentions').'
