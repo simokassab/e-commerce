@@ -4,6 +4,7 @@ namespace App\Http\Requests\Brand;
 
 
 use App\Http\Requests\MainRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
@@ -60,7 +61,7 @@ class StoreBrandRequest extends FormRequest
         return [
 
             'name.required' => 'the :attribute field is required',
-            'code.required' => 'the :attribute field is required',
+//            'code.required' => 'the :attribute field is required',
 
             'image.file' => 'The input is not an image',
             'image.max' => 'The maximum :attribute size is :max.',
@@ -84,5 +85,18 @@ class StoreBrandRequest extends FormRequest
             'labels.*.label_id.exists' => 'The label is not exists',
 
         ];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+
+        throw new HttpResponseException(response()->json(
+            [
+                'message' => 'The input validation has failed, check your inputs',
+                'code' => -1,
+                'errors' => $validator->errors()->messages(),
+            ], 200)
+
+        );
     }
 }
