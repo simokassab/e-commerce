@@ -32,7 +32,7 @@ class StoreCurrencyRequest extends FormRequest
             'name' => 'required',
             'code' => 'required | max:'.config('defaults.default_string_length'),
             'symbol' => 'nullable | max:'.config('defaults.default_string_length'),
-            'rate' => 'required | numeric',
+            'rate' => 'required | numeric | gt:0',
             'is_default' => 'nullable | boolean',
 
             'image' => 'nullable | file
