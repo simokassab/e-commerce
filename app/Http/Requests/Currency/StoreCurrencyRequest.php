@@ -27,6 +27,7 @@ class StoreCurrencyRequest extends FormRequest
      */
     public function rules(Request $request)
     {
+        dd($request->image);
         return [
             'name' => 'required',
             'code' => 'required | max:'.config('defaults.default_string_length'),
