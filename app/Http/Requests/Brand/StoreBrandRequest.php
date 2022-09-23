@@ -33,7 +33,6 @@ class StoreBrandRequest extends FormRequest
         return [
 
             'name' => 'required',
-//            'code' => 'required | max:' . config('defaults.default_string_length'),
 
             'image' => 'nullable | file | max:' . config('defaults.default_string_length_2') . '
             | mimes:' . config('defaults.default_image_extentions') . '
