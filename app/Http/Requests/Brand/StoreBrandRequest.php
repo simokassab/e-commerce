@@ -44,7 +44,7 @@ class StoreBrandRequest extends FormRequest
             'meta_keyword' => 'nullable',
             'description' => 'nullable',
             'sort' => 'nullable | integer',
-
+            'fields' => 'nullable|array',
             'fields.*.field_id' => 'required | exists:fields,id,entity,category',
             'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id'], 'required'), 'required', 'max:' . config('defaults.default_string_length_2')],
             'fields.*.type' => 'required | exists:fields,type,entity,category',
