@@ -18,7 +18,7 @@ class CategoryObserver
      */
     public function created(Category $category)
     {
-        dd('from create user observer');
+//        dd('from create user observer');
     }
 
     /**
