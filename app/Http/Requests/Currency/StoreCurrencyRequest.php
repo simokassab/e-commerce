@@ -3,7 +3,9 @@
 namespace App\Http\Requests\Currency;
 
 use App\Http\Requests\MainRequest;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -84,5 +86,16 @@ class StoreCurrencyRequest extends FormRequest
     private function toBoolean($booleable)
     {
         return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json(
+            [
+                'message' => 'The input validation has failed, check your inputs',
+                'code' => -1,
+                'errors' => $validator->errors()->messages(),
+            ], 200)
+        );
     }
 }
