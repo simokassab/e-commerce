@@ -30,7 +30,7 @@ class LabelController extends MainController
     {
 
         if ($request->method() == 'POST') {
-            $searchKeys = ['id','title', 'entity', 'color', 'image',];
+            $searchKeys = ['id','title', 'entity', 'color', 'image','key'];
             return $this->getSearchPaginated(LabelsResource::class, Label::class, $request, $searchKeys);
         }
         return $this->successResponsePaginated(LabelsResource::class, Label::class);

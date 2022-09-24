@@ -50,9 +50,9 @@ class StoreCategoryRequest extends FormRequest
             'description' => 'nullable',
             'sort' => 'nullable | integer',
 
-            'fields.*.field_id' => 'required | exists:fields,id,entity,category',
-            'fields.*.value'=> [Rule::when($request->type=='select',['integer','exists:fields_values,id'],'required'),'required','max:'.config('defaults.default_string_length_2') ],
-            'fields.*.type' => 'required | exists:fields,type,entity,category',
+//            'fields.*.field_id' => 'required | exists:fields,id,entity,category',
+//            'fields.*.value'=> [Rule::when($request->type=='select',['integer','exists:fields_values,id'],'required'),'required','max:'.config('defaults.default_string_length_2') ],
+//            'fields.*.type' => 'required | exists:fields,type,entity,category',
 
             'labels.*' => 'required | integer | exists:labels,id',
 
