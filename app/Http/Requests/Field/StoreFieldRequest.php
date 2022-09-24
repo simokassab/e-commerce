@@ -4,7 +4,9 @@ namespace App\Http\Requests\Field;
 
 use App\Http\Requests\MainRequest;
 use App\Models\Field\Field;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -64,5 +66,19 @@ class StoreFieldRequest extends FormRequest
 
             'field_value.*.value.required_if' => 'the value field is required.',
         ];
+    }
+
+
+    protected function failedValidation(Validator $validator)
+    {
+
+        throw new HttpResponseException(response()->json(
+            [
+                'message' => 'The input validation has failed, check your inputs',
+                'code' => -1,
+                'errors' => $validator->errors()->messages(),
+            ], 200)
+
+        );
     }
 }
