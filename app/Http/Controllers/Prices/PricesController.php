@@ -28,11 +28,10 @@ class PricesController extends MainController
         if ($request->method()=='POST') {
 
             $searchKeys=['id','name','percentage'];
-            $searchRelationsKeys = ['originalPrice' =>['parent_name' => 'name',]];
+            $searchRelationsKeys = ['originalPrice' =>['original_price' => 'name'], 'currency' => ['currency' => 'code'] ];
             return $this->getSearchPaginated(PriceResource::class, Price::class, $request, $searchKeys,self::relations,$searchRelationsKeys);
         }
         return $this->successResponsePaginated(PriceResource::class,Price::class,self::relations);
-
 
     }
 
