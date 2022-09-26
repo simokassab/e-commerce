@@ -4,6 +4,7 @@ namespace App\Observers\Fields;
 
 use App\Models\Field\Field;
 use App\Models\Field\FieldValue;
+use Exception;
 
 class FieldsObserver
 {
@@ -32,25 +33,32 @@ class FieldsObserver
     /**
      * Handle the Field "deleted" event.
      *
-     * @param \App\Models\Field $field
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleted(Field $field)
     {
+        FieldValue::query()->where('field_id',$field->id)->delete();
+
+    }
+
+    /**
+     * @param Field $field
+     * @throws Exception
+     */
+    public function deleting(Field $field){
         if($field->category->count() != 0){
-            throw new \Exception('Can\'t delete field attached to categories.');
+            throw new Exception('Can\'t delete field attached to categories.');
         }
 
         if($field->brand->count() != 0){
-            throw new \Exception('Can\'t delete field attached to brands.');
+            throw new Exception('Can\'t delete field attached to brands.');
         }
 
         if($field->product->count() != 0){
-            throw new \Exception('Can\'t delete field attached to products.');
+            throw new Exception('Can\'t delete field attached to products.');
         }
 
-        FieldValue::query()->where('field_id',$field->id)->delete();
     }
 
     /**

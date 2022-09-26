@@ -131,7 +131,10 @@ class FieldsController extends MainController
     {
         DB::beginTransaction();
         try {
+            //@TODO: should remove the delete field values function
             FieldService::deleteRelatedfieldValues($field);
+
+            //@TODO: add field values update function upsert
 
             $field->title = ($request->title);
             $field->type = $request->type;
@@ -144,19 +147,20 @@ class FieldsController extends MainController
                 FieldService::addFieldValuesToField($request->field_values, $field);
             }
 
-                DB::commit();
-                return $this->successResponse(
-                    __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
-                    [
-                        'field' => new SingleFieldResource($field->load('fieldValue'))
-                    ]
-                );
+            DB::commit();
+            return $this->successResponse(
+                __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
+                [
+                    'field' => new SingleFieldResource($field->load('fieldValue'))
+                ]
+            );
             }
         catch(\Exception $e) {
-                DB::rollBack();
-                return $this->errorResponse(
-                    __('messages.failed.update', ['name' => __(self::OBJECT_NAME)])
-                );
+            dd($e);
+            DB::rollBack();
+            return $this->errorResponse(
+                __('messages.failed.update', ['name' => __(self::OBJECT_NAME)])
+            );
 
             }
 
@@ -184,6 +188,7 @@ class FieldsController extends MainController
             );
 
         }catch (\Exception $e){
+            dd($e);
             DB::rollBack();
             return $this->errorResponse(
                 __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
