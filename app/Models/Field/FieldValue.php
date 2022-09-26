@@ -18,6 +18,7 @@ class FieldValue extends MainModel
     protected array $translatable=['value'];
     protected $table='fields_values';
     protected $guard_name = 'web';
+    protected $fillable = ['value','field_id'];
 
     public function field(){
         return $this->belongsTo(Field::class,'field_id');
