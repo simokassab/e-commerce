@@ -89,7 +89,7 @@ class Setting extends MainModel
         // dd(Setting::getTitleOptions()[$keyTitle][0]['name']);
         $optionsArray=Setting::getTitleOptions()[$keyTitle];
         foreach ($optionsArray as $key => $dbOption) {
-            $optionsArray[$key]=$dbOption['name'];
+            $optionsArray[$key]=$dbOption['id'];
         }
         foreach ($givenOptions as $key => $option)
             $returnBool &= in_array($option, $optionsArray);
