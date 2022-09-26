@@ -16,7 +16,7 @@ use Spatie\Translatable\HasTranslations;
 class Brand extends MainModel
 {
     use HasFactory, HasTranslations;
-    protected array $translatable = ['name', 'meta_title', 'meta_description', 'meta_keyword', 'description'];
+    protected array $translatable = ['name'];
     protected $table = 'brands';
     protected $guard_name = 'web';
     public static $imagesPath = [
