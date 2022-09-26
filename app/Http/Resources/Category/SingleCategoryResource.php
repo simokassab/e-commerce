@@ -22,24 +22,8 @@ class SingleCategoryResource extends JsonResource
     public function toArray($request)
     {
 
-        $labels = $this->whenLoaded('label') ? [] : $this->whenLoaded('label')->pluck('id');
+        $labels = $this->whenLoaded('label') ? $this->whenLoaded('label')->pluck('id') : [];
         $fieldsValues = $this->whenLoaded('fieldValue');
-
-
-        // $languages = Language::all()->pluck('code');
-        // $nameTranslatable = [];
-        // $metaTitleTranslatable = [];
-        // $metaDescriptionTranslatable = [];
-        // $metaKeyWordTranslatable = [];
-        // $descriptionTranslatable = [];
-
-        // foreach ($languages as $language){
-        //     $nameTranslatable[$language] = $this->getTranslation('name',$language);
-        //     $metaTitleTranslatable[$language] = $this->getTranslation('meta_title',$language);
-        //     $metaDescriptionTranslatable[$language] = $this->getTranslation('meta_description',$language);
-        //     $metaKeyWordTranslatable[$language] = $this->getTranslation('meta_keyword',$language);
-        //     $descriptionTranslatable[$language] = $this->getTranslation('description',$language);
-        // }
 
         return [
             'id' => $this->id,
