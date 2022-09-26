@@ -57,7 +57,7 @@ class CountryController extends MainController
      */
     public function store(StoreCountryRequest $request)
     {
-
+dd($request->flag);
         $country = new Country();
         $dataTranslatable = (array)json_decode($request->name);
         $country->name = ($dataTranslatable);
