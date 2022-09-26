@@ -91,9 +91,9 @@ class StoreProductRequest extends FormRequest
             // 'categories.*.id' => 'exists:categories,id',
 
 
-            'fields.*.field_id' => 'required | exists:fields,id,entity,category',
+            'fields.*.field_id' => 'required | exists:fields,id,entity,product',
             'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id'], 'required'), 'required', 'max:' . config('defaults.default_string_length_2')],
-            'fields.*.type' => 'required | exists:fields,type,entity,category',
+            'fields.*.type' => 'required | exists:fields,type,entity,product',
 
             'labels.*' => 'exists:labels,id',
 
