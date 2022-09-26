@@ -189,7 +189,6 @@ class FieldsController extends MainController
             );
 
         }catch (\Exception $e){
-            dd($e);
             DB::rollBack();
             return $this->errorResponse(
                 __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])

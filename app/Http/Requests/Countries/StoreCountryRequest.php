@@ -25,7 +25,6 @@ class   StoreCountryRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-dd($request->flag);
 
         return [
             'name' => 'required',

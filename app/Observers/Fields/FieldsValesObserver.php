@@ -36,7 +36,6 @@ class FieldsValesObserver
      */
     public function deleted(FieldValue $fieldsValue)
     {
-        dd('hello');
     }
 
     /**
