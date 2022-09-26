@@ -47,7 +47,7 @@ class StoreBrandRequest extends FormRequest
 
             'fields.*.field_id' => 'exists:fields,id,entity,brand',
             'fields.*.type' => 'exists:fields,type,entity,brand',
-            'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id'], 'required'), 'max:' . config('defaults.default_string_length_2')],
+            'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id']), 'max:' . config('defaults.default_string_length_2')],
 
             'labels.*' => 'required | integer | exists:labels,id',
 
