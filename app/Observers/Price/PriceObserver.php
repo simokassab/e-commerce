@@ -43,6 +43,20 @@ class PriceObserver
     }
 
     /**
+     * Handle the Price "deleted" event.
+     *
+     * @param \App\Models\Price $price
+     * @return void
+     * @throws \Exception
+     */
+    public function deleting(Price $price)
+    {
+        if($price->originalPricesChildren->count() != 0 || ( getSettings('default_pricing_class') ? 0 : getSettings('default_pricing_class')->value ) == $price->id){
+            throw new \Exception('The Price is a parent to other prices');
+        }
+    }
+
+    /**
      * Handle the Price "restored" event.
      *
      * @param  \App\Models\Price  $price

@@ -132,9 +132,14 @@ class FieldsController extends MainController
         DB::beginTransaction();
         try {
             //@TODO: should remove the delete field values function
-            FieldService::deleteRelatedfieldValues($field);
 
             //@TODO: add field values update function upsert
+
+            if($request->type != 'select' && $request->is_attribute) throw new \Exception('Trying to set attribute on non select type field');
+
+            if($request->type != 'select'){
+                FieldService::deleteRelatedfieldValues($field);
+            }
 
             $field->title = ($request->title);
             $field->type = $request->type;

@@ -39,7 +39,7 @@ class FieldValue extends MainModel
         return $this->belongsToMany(Field::class,'brands_fields','field_value_id');
     }
     public function product(){
-        return $this->belongsTo(Product::class,'product_id');
+        return $this->hasMany(Product::class,'id','product_id');
 
     }
 }

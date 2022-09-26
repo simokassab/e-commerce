@@ -35,6 +35,7 @@ class FieldResourceEntity extends JsonResource
             $value = (bool)$this->value;
         }
         return [
+            'id' => $this->id,
             'field_id' => $this->field_id,
             'value' =>$value,
             'type' => $this->field->type
