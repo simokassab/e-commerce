@@ -15,6 +15,7 @@ class Field extends MainModel
     use HasFactory, HasTranslations;
 
     protected array $translatable = ['title'];
+    protected $fillable=['title','type','entity','is_required','is_attribute'];
     protected $table = 'fields';
     // array since I have used it product service and I need it to be array
     public static $fieldTypes = ['checkbox', 'text', 'select', 'textarea', 'date'];

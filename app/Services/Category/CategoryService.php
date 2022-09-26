@@ -28,8 +28,6 @@ class CategoryService {
 
     public static function addFieldsToCategory(Category $category, array $fields = [])
     {
-        $fields = $fields ? $fields : [];
-
         $tobeSavedArray = [];
         foreach ($fields as $key => $field) {
 
@@ -38,29 +36,21 @@ class CategoryService {
             }
 
             if ($field["type"] == 'select') {
+                $tobeSavedArray[$key]["value"] = null;
                 if (gettype($field["value"]) == 'array') {
                     $tobeSavedArray[$key]["field_value_id"] = $field["value"][0];
                 } elseif (gettype($field["value"]) == 'integer') {
                     $tobeSavedArray[$key]["field_value_id"] = $field["value"];
                 }
-                $tobeSavedArray[$key]["value"] = null;
-
-            } elseif ($field["type"] == 'text') {
-                if (gettype($field["value"]) == 'array') {
+            } else {
+                $tobeSavedArray[$key]["field_value_id"] = null;
+                $tobeSavedArray[$key]["value"] = ($field['value']);
+                if (is_array($field['value'])) {
                     $tobeSavedArray[$key]["value"] = json_encode($field['value']);
                 }
-                if (gettype($field) == 'string') {
-                    $tobeSavedArray[$key]["value"] = ($field['value']);
-                }
-                $tobeSavedArray[$key]["field_value_id"] = null;
-
-            } else {
-                $tobeSavedArray[$key]["value"] = $field['value'];
-                $tobeSavedArray[$key]["field_value_id"] = null;
             }
-            $tobeSavedArray[$key]["category_id"] = $category->id;
+            $tobeSavedArray[$key]["brand_id"] = $category->id;
             $tobeSavedArray[$key]["field_id"] = $field['field_id'];
-
         }
         return CategoriesFields::insert($tobeSavedArray);
     }

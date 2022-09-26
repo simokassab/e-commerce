@@ -14,23 +14,8 @@ class FieldResourceEntity extends JsonResource
      */
     public function toArray($request)
     {
-    //     $arrayToBeReturned = [
-    //         'field_id' => $this->field_id,
-    //         'value' => $this->value,
-    //         'type' => $this->field->type
-    //     ];
 
-    //     if($this->field->type == 'select'){
-    //         $arrayToBeReturned['value'] =$this->field_value_id;
-    //     }
-
-    //     if($this->field->type == 'checkbox'){
-    //         $arrayToBeReturned['value'] = (bool)$this->value;
-    //     }
-
-    //     return $arrayToBeReturned;
-
-        $value = $this->getTranslations('value');
+        $value = $this->value;
         if($this->field->type == 'checkbox'){
             $value = (bool)$this->value;
         }

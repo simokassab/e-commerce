@@ -50,10 +50,10 @@ class StoreCategoryRequest extends FormRequest
             'description' => 'nullable',
             'sort' => 'nullable | integer',
 
-        // I myself mohammad azzam stopped the validation of the fields on this part until we find a solution for this problem
-//            'fields.*.field_id' => 'required | exists:fields,id,entity,category',
-//            'fields.*.value'=> [Rule::when($request->type=='select',['integer','exists:fields_values,id'],'required'),'required','max:'.config('defaults.default_string_length_2') ],
-//            'fields.*.type' => 'required | exists:fields,type,entity,category',
+
+            'fields.*.field_id' => 'exists:fields,id,entity,categories',
+            'fields.*.type' => 'exists:fields,type,entity,categories',
+            'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id']), 'max:' . config('defaults.default_string_length_2')],
 
             'labels.*' => 'required | integer | exists:labels,id',
 
