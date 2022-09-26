@@ -4,8 +4,9 @@ namespace App\Http\Requests\Countries;
 
 use App\Http\Requests\MainRequest;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
-class   StoreCountryRequest extends MainRequest
+class   StoreCountryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +23,10 @@ class   StoreCountryRequest extends MainRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(Request $request)
     {
+dd($request->flag);
+
         return [
             'name' => 'required',
             'iso_code_1' => 'required | max:'.config('defaults.default_string_length'),
