@@ -6,6 +6,7 @@ use App\Models\Price\Price;
 use App\Models\Settings\Setting;
 use App\Services\Setting\SettingService;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 
 class SettingsResource extends JsonResource
@@ -19,7 +20,7 @@ class SettingsResource extends JsonResource
      */
     public function toArray($request)
     {
-        $lang =
+        $lang = App::getLocale();
 
         $value = null;
         $options = [];
@@ -30,7 +31,7 @@ class SettingsResource extends JsonResource
         if ($this->title == 'default_pricing_class') {
             foreach (Setting::getTitleOptions()[$this->title] as $key => $option) {
                 $options[$key]['id'] = $option['id'];
-                $options[$key]['name'] = $option['name']['en'];
+                $options[$key]['name'] = $option['name'][$lang] ?? 'N/A';
             }
         }
 
