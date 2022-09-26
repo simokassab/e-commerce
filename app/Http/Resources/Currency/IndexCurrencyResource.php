@@ -16,11 +16,11 @@ class IndexCurrencyResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_icon' ,
             'name'=>$this->name,
             'code' => $this->code,
             'symbol'=>$this->symbol,
             'rate'=>$this->rate,
-            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_icon' ,
         ];
     }
 }
