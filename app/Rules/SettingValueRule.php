@@ -18,19 +18,23 @@ class SettingValueRule implements InvokableRule
      * @return void
      */
 
-    public function __construct($type, $key)
+    public function __construct($settings, $type, $key)
     {
+        $this->settings = $settings;
         $this->type = $type;
         $this->key = $key;
     }
     public function __invoke($attribute, $value, $fail)
     {
-        $settings = Cache::get('settings')->find($this->key);
+        $settings = getSettings($this->settings->title);
+
+        if ($settings->title == 'default_pricing_class')
+            $this->type = 'model-select';
 
         if ($this->type != $settings->type) {
-            $fail('the value type must be the same as the setting type');
+            return $fail('the value type must be the same as the setting type');
         }
-        if ($this->type == 'select' || $this->type == 'text') {
+        if ($this->type == 'text') {
             if (!is_string($value))
                 return $fail('the :attribute must be a string');
         } elseif ($this->type == 'number') {
@@ -45,14 +49,14 @@ class SettingValueRule implements InvokableRule
             }
             if (!Setting::validateOptionsByTitle($settings->title, $value))
                 return $fail('the :attribute must be an array of valid options');
-        } elseif ($this->type == 'model-select' && $settings->title == 'default_pricing_class') {
+        } elseif ($settings->title == 'default_pricing_class') {
+            $this->type = 'select';
             if (!is_numeric($value))
                 return $fail('the :attribute must be a number');
             else {
                 $priceIds = Price::whereIs_virtual(0)->pluck('id')->toArray();
-                foreach ($priceIds as $key => $priceId) {
-                    if ($value != $priceId)
-                        return $fail('the :attribute must be a valid price');
+                if (!in_array($value, $priceIds)) {
+                    return $fail('the :attribute must be a valid price id');
                 }
             }
         }
