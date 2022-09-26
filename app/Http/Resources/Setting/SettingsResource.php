@@ -31,7 +31,7 @@ class SettingsResource extends JsonResource
         if ($this->title == 'default_pricing_class') {
             foreach (Setting::getTitleOptions()[$this->title] as $key => $option) {
                 $options[$key]['id'] = $option['id'];
-                $options[$key]['name'] = $option['name'][$lang] ?? 'N/A';
+                $options[$key]['name'] = $option['name'][$lang];
             }
         }
 
@@ -49,6 +49,8 @@ class SettingsResource extends JsonResource
             'select' => (int)$value ?? null,
             default => $value ??  null,
         };
+        if($this->title == 'default_pricing_class')
+            $value=null;
 
         return [
             'key' => $this->id,

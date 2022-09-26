@@ -76,7 +76,7 @@ class Setting extends MainModel
                 ],
 
             ],
-            'default_pricing_class' => Price::whereIs_virtual(0)->select('id', 'name')->get()->toArray(),
+            'default_pricing_class' => Price::whereIs_virtual(0)->select('id', 'name')->get()->toArray() ,
         ];
 
         return $titlesOptions;
