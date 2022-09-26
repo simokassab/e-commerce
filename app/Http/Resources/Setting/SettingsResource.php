@@ -56,7 +56,7 @@ class SettingsResource extends JsonResource
             'name' => ucwords(str_replace("_", " ", $this->title)),
             'type' => $this->type,
             'options' => ($options),
-            'value' => $this->value
+            'value' => $value
         ];
     }
 }

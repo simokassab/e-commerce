@@ -86,8 +86,13 @@ class Setting extends MainModel
     public static function validateOptionsByTitle($keyTitle, $givenOptions)
     {
         $returnBool = true; //1. if the title is not in the array of titlesOptions, return true
+        // dd(Setting::getTitleOptions()[$keyTitle][0]['name']);
+        $optionsArray=Setting::getTitleOptions()[$keyTitle];
+        foreach ($optionsArray as $key => $dbOption) {
+            $optionsArray[$key]=$dbOption['name'];
+        }
         foreach ($givenOptions as $key => $option)
-            $returnBool &= in_array($option, Setting::getTitleOptions()[$keyTitle][$key]);
+            $returnBool &= in_array($option, $optionsArray);
 
         return $returnBool;
     }
