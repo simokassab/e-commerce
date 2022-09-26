@@ -55,6 +55,7 @@ class StoreCategoryRequest extends FormRequest
             'fields.*.type' => 'exists:fields,type,entity,categories',
             'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id']), 'max:' . config('defaults.default_string_length_2')],
 
+            'label' => 'nullable|array',
             'labels.*' => 'required | integer | exists:labels,id',
 
             'order.*.id' => 'required | integer | exists:categories,id',
