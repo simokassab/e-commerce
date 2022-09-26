@@ -35,12 +35,12 @@ class SettingsResource extends JsonResource
             }
         }
 
-        if ($this->title == 'products_required_fields')
-            $value = explode(',', $this->value);
-
+        if ($this->title == 'products_required_fields') {
+            if (!is_null($value))
+                $value = explode(',', $this->value);
+        }
         if ($this->type == 'model-select')
             $this->type = 'select';
-
         $value = match ($this->type) {
             'number' => (int)$value ?? null,
             'checkbox' => (bool)$value ?? false,
