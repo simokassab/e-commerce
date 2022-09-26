@@ -15,28 +15,18 @@ class SingleCurrencyResource extends JsonResource
      */
     public function toArray($request)
     {
+        $currencyHistory = $this->whenLoaded('currencyHistory');
 
-
-        $currency_history=$this->whenLoaded('currencyHistory');
-        // $languages = Language::all()->pluck('code');
-        // $nameTranslatable = [];
-
-        // foreach ($languages as $language){
-        //     $nameTranslatable[$language] = $this->getTranslation('name',$language);
-        // }
-
-
-        $currencyHistory=$this->whenLoaded('currencyHistory');
         return [
             'id' => $this->id,
-            'name'=>$this->getTranslations('name'),
-            'title'=>$this->code . ' - ' . $this->symbol,
+            'image' => $this->image && !empty($this->image) ?  getAssetsLink('storage/' . $this->image) : 'default_image',
+            'name' => $this->getTranslations('name'),
+            'title' => $this->code . ' - ' . $this->symbol,
             'code' => $this->code,
-            'symbol'=>$this->symbol,
-            'rate'=>$this->rate,
-            'is_default'=>(bool)$this->is_default,
-            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
-            'sort'=>$this->sort,
+            'symbol' => $this->symbol,
+            'rate' => $this->rate,
+            'is_default' => (bool)$this->is_default,
+            'sort' => $this->sort,
             'history' => CurrencyHistoryResource::collection($currencyHistory),
         ];
     }
