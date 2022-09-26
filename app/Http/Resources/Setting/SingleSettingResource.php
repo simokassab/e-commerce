@@ -20,7 +20,7 @@ class SingleSettingResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'value' => $this->value,
+            'value' => $this->value ?? null,
             'is_developer' => $this->is_developer
         ];
     }
