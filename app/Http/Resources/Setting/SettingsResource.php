@@ -42,9 +42,9 @@ class SettingsResource extends JsonResource
             $this->type = 'select';
 
         $value = match ($this->type) {
-            'number' => (int)$value ?? 0,
+            'number' => (int)$value ?? null,
             'checkbox' => (bool)$value ?? false,
-            'multi-select' => $value ?? [],
+            'multi-select' => $value ?? null,
             'model-select' => (int)$value ?? null,
             default => $value ??  null,
         };
