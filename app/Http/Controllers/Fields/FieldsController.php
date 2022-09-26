@@ -131,9 +131,6 @@ class FieldsController extends MainController
     {
         DB::beginTransaction();
         try {
-            //@TODO: should remove the delete field values function
-
-            //@TODO: add field values update function upsert
 
             if($request->type != 'select' && $request->is_attribute) throw new \Exception('Trying to set attribute on non select type field');
 
@@ -161,7 +158,6 @@ class FieldsController extends MainController
             );
             }
         catch(\Exception $e) {
-            dd($e);
             DB::rollBack();
             return $this->errorResponse(
                 __('messages.failed.update', ['name' => __(self::OBJECT_NAME)])
