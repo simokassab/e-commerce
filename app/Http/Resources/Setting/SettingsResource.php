@@ -22,7 +22,7 @@ class SettingsResource extends JsonResource
     {
         $lang = App::getLocale();
 
-        $value = null;
+        $value = $this->value;
         $options = [];
 
         if ($this->type == 'select' || $this->type == 'multi-select' || $this->type == 'model_select')
@@ -46,6 +46,7 @@ class SettingsResource extends JsonResource
             'checkbox' => (bool)$value ?? false,
             'multi-select' => $value ?? null,
             'model-select' => (int)$value ?? null,
+            'select' => (int)$value ?? null,
             default => $value ??  null,
         };
 
