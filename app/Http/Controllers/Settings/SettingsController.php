@@ -98,9 +98,11 @@ class SettingsController extends MainController
                 return Setting::all(['id', 'title', 'type', 'value']);
             });
             DB::commit();
-            return $this->successResponse(
-                __('messages.success.update', ['name' => __(self::OBJECT_NAME)],),
-            );
+            return $this->successResponse("Success!", [
+                'meesage' => __('messages.success.update', ['name' => __(self::OBJECT_NAME)],),
+                'setting' => new SettingsResource($setting),
+
+            ]);
         } catch (\Exception $ex) {
             DB::rollBack();
             return $this->errorResponse(
