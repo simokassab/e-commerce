@@ -10,8 +10,6 @@ use App\Http\Resources\Category\SelectCategoryResource;
 use App\Http\Resources\Category\SingleCategoryResource;
 use App\Http\Resources\Field\FieldsResource;
 use App\Http\Resources\Label\LabelsResource;
-use App\Models\Category\CategoriesFields;
-use App\Models\Category\CategoriesLabels;
 use App\Models\Category\Category;
 use App\Models\Field\Field;
 use App\Models\Label\Label;
