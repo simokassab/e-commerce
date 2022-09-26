@@ -10,7 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class StoreBrandRequest extends MainRequest
+class StoreBrandRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +27,7 @@ class StoreBrandRequest extends MainRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(Request $request)
     {
 
         return [
@@ -45,9 +45,9 @@ class StoreBrandRequest extends MainRequest
             'description' => 'nullable',
             'sort' => 'nullable | integer',
 
-            'fields.*.field_id' => 'required | exists:fields,id,entity,brand',
-            // 'fields.*.type' => 'required | exists:fields,type,entity,brand',
-            // 'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id'], 'required'), 'required', 'max:' . config('defaults.default_string_length_2')],
+            'fields.*.field_id' => 'exists:fields,id,entity,brand',
+            'fields.*.type' => 'exists:fields,type,entity,brand',
+            'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id'], 'required'), 'max:' . config('defaults.default_string_length_2')],
 
             'labels.*' => 'required | integer | exists:labels,id',
 
