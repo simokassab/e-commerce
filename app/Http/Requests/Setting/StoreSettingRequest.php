@@ -29,7 +29,7 @@ class StoreSettingRequest extends FormRequest
         return [
 
             'type' => 'required | string',
-            'value' => ['required', 'max:' . config('defaults.default_string_length'), new SettingValueRule($request->type, $this->setting->id)],
+            'value' => ['required', 'max:' . config('defaults.default_string_length'), new SettingValueRule($this->setting,$request->type, $this->setting->id)],
         ];
     }
 

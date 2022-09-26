@@ -19,6 +19,7 @@ class SettingsResource extends JsonResource
      */
     public function toArray($request)
     {
+        $lang =
 
         $value = null;
         $options = [];

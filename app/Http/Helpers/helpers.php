@@ -65,10 +65,9 @@ function removeImage(string|null $folderPath): bool
 function getSettings(array|string $key = null): mixed
 {
 
-    $settings = Cache::get(Setting::$cacheKey, fn() => Setting::all());
+    $settings = Cache::get(Setting::$cacheKey, fn () => Setting::all());
 
     if (is_array($key)) {
-
         $multiSettings = $settings->whereIn('title', $key);
         if ($multiSettings->count() != count($key)) {
             throw new Exception('One of the keys is not valid settings');
@@ -82,7 +81,6 @@ function getSettings(array|string $key = null): mixed
             throw new Exception('The ' . $key . ' is not a valid settings');
         }
         return $singleSettings;
-
     }
     return $settings;
 }
@@ -97,7 +95,6 @@ function array_to_obj($array, $obj)
         } else {
             $obj->{$id} = $value;
         }
-
     }
     return $obj;
 }
@@ -106,7 +103,6 @@ function arrayToObject($array)
 {
     $object = new stdClass();
     return array_to_obj($array, $object);
-
 }
 
 function mbBaseName($filePath): bool|string

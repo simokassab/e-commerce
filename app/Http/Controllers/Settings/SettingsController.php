@@ -27,7 +27,7 @@ class SettingsController extends MainController
     {
 
         if ($request->method() == 'POST') {
-            $searchKeys = ['id','title', 'value'];
+            $searchKeys = ['id', 'title', 'value'];
             return $this->getSearchPaginated(SettingsResource::class, Setting::class, $request, $searchKeys);
         }
 
@@ -86,16 +86,16 @@ class SettingsController extends MainController
     {
         DB::beginTransaction();
         try {
-            $value="";
-            if($request->type=='multi-select' && gettype($request->value)=='array'){
-                $value=implode(',',$request->value);
-            }else{
-                $value=$request->value;
+            $value = "";
+            if ($request->type == 'multi-select' && gettype($request->value) == 'array') {
+                $value = implode(',', $request->value);
+            } else {
+                $value = $request->value;
             }
-            $setting->value=$value;
+            $setting->value = $value;
             $setting->save();
             Cache::rememberForever(Setting::$cacheKey, function () {
-                return Setting::all(['id','title','type','value']);
+                return Setting::all(['id', 'title', 'type', 'value']);
             });
             DB::commit();
             return $this->successResponse(
@@ -104,11 +104,9 @@ class SettingsController extends MainController
         } catch (\Exception $ex) {
             DB::rollBack();
             return $this->errorResponse(
-                __('messages.failed.update', ['name' => __(self::OBJECT_NAME)]). " The error message is : ". $ex->getMessage(),
+                __('messages.failed.update', ['name' => __(self::OBJECT_NAME)]) . " The error message is : " . $ex->getMessage(),
             );
-
         }
-
     }
     /**
      * Remove the specified resource from storage.
@@ -126,15 +124,16 @@ class SettingsController extends MainController
         return $this->successResponse('Success!', [
             'headers' => __('headers.settings'),
             'column_data' => [
-                    'key',
-                    'title',
-                    'name',
-                    'value',
+                'key',
+                'title',
+                'name',
+                'value',
             ]
         ]);
     }
 
-    public function getSettingsData(){
+    public function getSettingsData()
+    {
         return $this->successResponsePaginated(RestFullSettingResource::class, Setting::class);
-        }
+    }
 }
