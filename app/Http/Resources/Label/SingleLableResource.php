@@ -29,7 +29,7 @@ class SingleLableResource extends JsonResource
             'color' => $this->color,
             'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image) : 'default_image' ,
 
-            'key' => $this->key,
+            // 'key' => $this->key,
         ];
     }
 }
