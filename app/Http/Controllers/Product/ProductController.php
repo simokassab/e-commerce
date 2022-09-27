@@ -171,7 +171,7 @@ class ProductController extends MainController
         $product->editQuantity($request->quantity);
         $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
 
-        DB::commit();
+        // DB::commit();
 
         return $this->successResponse(
             'Success!',
