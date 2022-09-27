@@ -36,7 +36,7 @@ class StoreLabelRequest extends MainRequest
             | dimensions:min_width=' . config('defaults.default_image_minimum_width') . ',min_height=' . config('defaults.default_image_minimum_height') . '
                 ,max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
 
-            'key' => 'required | max:' . config('defaults.default_string_length'),
+            'key' => 'required | unique:labels,key,'.$this->id.' | max:' . config('defaults.default_string_length'),
         ];
     }
 

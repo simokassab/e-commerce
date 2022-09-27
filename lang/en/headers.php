@@ -240,13 +240,6 @@ return [
             'type' => 'string',
             'sort' => true
         ],
-  
-        'key' => [
-            'name' => 'Key',
-            'search' => 'string',
-            'type' => 'string',
-            'sort' => true
-        ],
     ],
     'languages' => [
         'id' => [
