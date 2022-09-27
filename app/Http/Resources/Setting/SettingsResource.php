@@ -33,14 +33,13 @@ class SettingsResource extends JsonResource
                 $options[$key]['id'] = $option['id'];
                 $options[$key]['name'] = $option['name'][$lang];
             }
+            $this->type = 'select';
         }
 
         if ($this->title == 'products_required_fields') {
             if (!is_null($value))
                 $value = explode(',', $this->value);
         }
-        if ($this->type == 'model-select')
-            $this->type = 'select';
         $value = match ($this->type) {
             'number' => (int)$value ?? null,
             'checkbox' => (bool)$value ?? false,
@@ -49,8 +48,8 @@ class SettingsResource extends JsonResource
             'select' => (int)$value ?? null,
             default => $value ??  null,
         };
-        if($this->title == 'default_pricing_class')
-            $value=null;
+        if ($this->title == 'default_pricing_class')
+            $value = null;
 
         return [
             'key' => $this->id,
