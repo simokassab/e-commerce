@@ -1,26 +1,26 @@
 <?php
 
-use App\Exceptions\FileErrorException;
 use App\Models\Settings\Setting;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
-function uploadImage($file, $folderPath): bool|string
+function uploadImage(File|UploadedFile|string $file, $folderPath = ''): bool|string
 {
-    try {
-        $fileName = uniqid() . '_' . $file->getClientOriginalName();
-        $path = Storage::putFileAs('public/' . $folderPath, $file, $fileName);
-    } catch (FileErrorException $exception) {
-        throw $exception;
-    } catch (ValueError $exception) {
-        throw $exception;
-    } catch (ErrorException $exception) {
-        throw new FileErrorException();
-    }
+    $fileName = uniqid();
+    if (is_string($file)) {
+        $file = substr($file, strpos($file, ",") + 1);
+        $file = base64_decode($file);
+        $fileName = $fileName . '.webp';
+    }/* else {
+            $fileName = $file->getClientOriginalName();
+        }*/
 
-    return $realPath = $folderPath . '/' . $fileName;
+    $path = $folderPath . '/' . $fileName;
+    Storage::disk('public')->put($path, $file);
+    return $path;
 }
 
 function getAssetsLink($path): string
@@ -65,7 +65,7 @@ function removeImage(string|null $folderPath): bool
 function getSettings(array|string $key = null): mixed
 {
 
-    $settings = Cache::get(Setting::$cacheKey, fn () => Setting::all());
+    $settings = Cache::get(Setting::$cacheKey, fn() => Setting::all());
 
     if (is_array($key)) {
         $multiSettings = $settings->whereIn('title', $key);
