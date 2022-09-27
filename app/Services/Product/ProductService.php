@@ -83,7 +83,7 @@ class ProductService
     public function storeAdditionalFields($request, $product)
     {
         //        DB::beginTransaction();
-        try {
+        // try {
             if (!array_key_exists('fields', $request->toArray())) {
                 return $this;
             }
@@ -98,9 +98,9 @@ class ProductService
                 if (!in_array($field['type'], $this->fieldTypes))
                     throw new Exception('Invalid fields type');
 
+                throw_if(!array_key_exists('value', $field), new Exception('Invalid value'));
                 if ($field['type'] == 'select') {
                     throw_if(!is_numeric($field['value']), new Exception('Invalid value'));
-                    throw_if(!array_key_exists('value',$field), new Exception('Invalid value'));
                     $data[] = [
                         'product_id' => $product->id,
                         'field_id' => (int)$field['field_id'],
@@ -138,10 +138,10 @@ class ProductService
             ProductField::insert($data);
             //            DB::commit();
             return $this;
-        } catch (Exception $e) {
-            //            DB::rollBack();
-            throw new Exception($e->getMessage());
-        }
+        // } catch (Exception $e) {
+        //     //            DB::rollBack();
+        //     throw new Exception($e->getMessage());
+        // }
     }
     public function storeAdditionalAttributes($request, $product)
     {
