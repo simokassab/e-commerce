@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Coupons;
 
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Coupons\CouponRequest;
-use App\Http\Requests\MainRequest;
 use App\Http\Resources\Coupons\CouponResource;
 use App\Http\Resources\Coupons\CouponSingleResource;
 use App\Http\Resources\Coupons\RestFullCouponResource;

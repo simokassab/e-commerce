@@ -2,15 +2,11 @@
 
 namespace App\Http\Requests\Brand;
 
-
 use App\Http\Requests\MainRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class StoreBrandRequest extends FormRequest
+class StoreBrandRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +23,7 @@ class StoreBrandRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(Request $request)
+    public function rules()
     {
 
         return [
@@ -47,7 +43,7 @@ class StoreBrandRequest extends FormRequest
 
             'fields.*.field_id' => 'exists:fields,id,entity,brand',
             'fields.*.type' => 'exists:fields,type,entity,brand',
-            'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id']), 'max:' . config('defaults.default_string_length_2')],
+            'fields.*.value' => [Rule::when($this->type == 'select', ['integer', 'exists:fields_values,id']), 'max:' . config('defaults.default_string_length_2')],
 
             'labels.*' => 'required | integer | exists:labels,id',
 

@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests\Attribute;
 
-use App\Http\Requests\MainRequest;
-use Illuminate\Foundation\Http\FormRequest;
 
 class StoreAttributeRequest extends MainRequest
 {

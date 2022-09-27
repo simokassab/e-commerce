@@ -3,7 +3,6 @@
 namespace App\Http\Requests\price;
 
 use App\Http\Requests\MainRequest;
-use Illuminate\Foundation\Http\FormRequest;
 
 class PricesRequest extends MainRequest
 {

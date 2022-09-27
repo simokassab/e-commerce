@@ -4,7 +4,6 @@ namespace App\Http\Requests\Labels;
 
 use App\Http\Requests\MainRequest;
 use App\Models\Label\Label;
-use Illuminate\Foundation\Http\FormRequest;
 
 class StoreLabelRequest extends MainRequest
 {

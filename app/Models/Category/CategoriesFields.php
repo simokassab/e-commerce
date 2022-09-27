@@ -2,7 +2,6 @@
 
 namespace App\Models\Category;
 
-use App\Http\Requests\MainRequest;
 use App\Models\Field\Field;
 use App\Models\MainModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

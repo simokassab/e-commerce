@@ -6,7 +6,6 @@ use App\Http\Requests\MainRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class StoreCategoryRequest extends FormRequest
@@ -26,7 +25,7 @@ class StoreCategoryRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(Request $request)
+    public function rules()
     {
 
     return [
@@ -55,7 +54,7 @@ class StoreCategoryRequest extends FormRequest
             'fields' => 'nullable|array',
             'fields.*.field_id' => 'exists:fields,id,entity,category',
             'fields.*.type' => 'exists:fields,type,entity,category',
-            'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id']), 'max:' . config('defaults.default_string_length_2')],
+            'fields.*.value' => [Rule::when($this->type == 'select', ['integer', 'exists:fields_values,id']), 'max:' . config('defaults.default_string_length_2')],
 
             'label' => 'nullable|array',
             'labels.*' => 'required | integer | exists:labels,id',

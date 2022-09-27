@@ -2,16 +2,15 @@
 
 namespace App\Http\Requests\Product;
 
+use App\Http\Requests\MainRequest;
 use App\Models\Product\Product;
 use App\Models\Product\ProductRelated;
 use App\Models\Settings\Setting;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 
-class StoreProductRequest extends FormRequest
+class StoreProductRequest extends MainRequest
 {
     private $productsRequiredSettingsArray = [];
     private $QuantityValue = 0;
@@ -33,7 +32,7 @@ class StoreProductRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(Request $request)
+    public function rules()
     {
         $settingsTitles = Cache::get(Setting::$cacheKey)->pluck('title')->toArray();
         $productSettings = Cache::get(Setting::$cacheKey)->whereIn('title', $settingsTitles)->groupBy('title')->toArray();
@@ -53,9 +52,9 @@ class StoreProductRequest extends FormRequest
             'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
             'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'type' => 'required | in:' . Product::$prdouctTypes,
-            'quantity' => [Rule::when(in_array($request->type, ['variable']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
-            'reserved_quantity' => [Rule::when(in_array($request->type, ['variable']), ['in:0'], 'nullable'), 'integer', 'gte:0'],
-            'minimum_quantity' => [Rule::when(in_array($request->type, ['variable']), ['in:0'], 'required'), 'integer', Rule::when(!$this->allowNegativeQuantity, ['gte:0'])],
+            'quantity' => [Rule::when(in_array($this->type, ['variable']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
+            'reserved_quantity' => [Rule::when(in_array($this->type, ['variable']), ['in:0'], 'nullable'), 'integer', 'gte:0'],
+            'minimum_quantity' => [Rule::when(in_array($this->type, ['variable']), ['in:0'], 'required'), 'integer', Rule::when(!$this->allowNegativeQuantity, ['gte:0'])],
             'summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
             'specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
 
@@ -78,7 +77,7 @@ class StoreProductRequest extends FormRequest
             'sort' => 'nullable | integer',
             'is_default_child' => 'required | boolean',
 
-            'parent_product_id' => [Rule::when($request->isSamePriceAsParent && $request->type == 'variable_child', 'required', 'nullable'), 'integer', 'exists:products,id'],
+            'parent_product_id' => [Rule::when($this->isSamePriceAsParent && $this->type == 'variable_child', 'required', 'nullable'), 'integer', 'exists:products,id'],
             'category_id' => 'required  | integer | exists:categories,id',
             'unit_id' => 'required | integer | exists:units,id',
             'brand_id' => [Rule::when(in_array('brand_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:brands,id'],
@@ -93,7 +92,7 @@ class StoreProductRequest extends FormRequest
 
 
             'fields.*.field_id' => 'required | exists:fields,id,entity,product',
-            'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id'], 'required'), 'required', 'max:' . config('defaults.default_string_length_2')],
+            'fields.*.value' => [Rule::when($this->type == 'select', ['integer', 'exists:fields_values,id'], 'required'), 'required', 'max:' . config('defaults.default_string_length_2')],
             'fields.*.type' => 'required | exists:fields,type,entity,product',
 
             'labels.*' => 'exists:labels,id',
@@ -112,8 +111,8 @@ class StoreProductRequest extends FormRequest
             'prices.*.price' => 'required | numeric | gte:' . $this->priceValue,
             'prices.*.discounted_price' => 'nullable | numeric | gte:' . $this->discountedPriceValue,
 
-            'related_products.*.child_product_id' => [Rule::when($request->type == 'bundle', ['required', 'integer', 'exists:products,id'])],
-            'related_products.*.child_quantity' => [Rule::when($request->type == 'bundle', ['required', 'integer', 'gte:' . $this->QuantityValue])],
+            'related_products.*.child_product_id' => [Rule::when($this->type == 'bundle', ['required', 'integer', 'exists:products,id'])],
+            'related_products.*.child_quantity' => [Rule::when($this->type == 'bundle', ['required', 'integer', 'gte:' . $this->QuantityValue])],
             'related_products.*.name' => 'nullable',
             'related_products.*.child_name_status' => ['required', Rule::in(ProductRelated::$childNameStatuses)],
 
@@ -122,7 +121,7 @@ class StoreProductRequest extends FormRequest
             'order.*.id' => 'required | integer | exists:products,id',
             'order.*.sort' => 'required | integer',
 
-            'product_variations' => [Rule::when($request->type == 'variable', 'required', 'nullable')],
+            'product_variations' => [Rule::when($this->type == 'variable', 'required', 'nullable')],
             'product_variations.*.code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
             'product_variations.*.sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
 
@@ -162,8 +161,8 @@ class StoreProductRequest extends FormRequest
             'product_variations.*.attributes.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
 
         ];
-        if ($request->type == 'variable') {
-            foreach ($request->product_variations ?? [] as $key => $variation) {
+        if ($this->type == 'variable') {
+            foreach ($this->product_variations ?? [] as $key => $variation) {
                 if (!$variation['isSamePriceAsParent']) {
                     $pricesRulesArray = [
                         'product_variations.*.prices.*.price_id' => 'required | integer | exists:prices,id',
