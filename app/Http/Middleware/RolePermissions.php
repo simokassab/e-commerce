@@ -41,20 +41,23 @@ class RolePermissions
         $routeAction = Str::replaceAll(
             [
                 'getTableHeaders',
-                'getAllRoles'
+                'getAllRoles',
+                'getPricesList',
             ], 'index', $routeAction);
 
-        $routeAction = Str::replaceAll(['setCurrencyIsDefault',
+        $routeAction = Str::replaceAll([
+            'setCurrencyIsDefault',
             'toggleStatus',
             'updateSortValues',
             'getAllParentsSorted',
             'getAllChildsSorted',
-            'setLanguageIsDefault'
+            'setLanguageIsDefault',
         ], 'update', $routeAction);
 
         $routeAction = Str::replaceAll(
             [
-                'getNestedPermissionsForRole'
+                'getNestedPermissionsForRole',
+                'getPricesList',
             ], 'show', $routeAction);
 
         if (!auth()->check()) {

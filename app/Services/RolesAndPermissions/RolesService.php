@@ -324,8 +324,8 @@ class RolesService {
 
     //Price List Permission
     $priceList= self::createSinglePermssion('PricesListController');
-        self::createSinglePermssion('PricesListController@show',$priceList->id );
-        self::createSinglePermssion('PricesListController@index',$priceList->id );
+    self::createSinglePermssion('PricesListController@show',$priceList->id );
+    self::createSinglePermssion('PricesListController@index',$priceList->id );
     self::createSinglePermssion('PricesListController@update',$priceList->id );
     //End of Price List Permission
 
