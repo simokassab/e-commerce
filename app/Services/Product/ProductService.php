@@ -100,6 +100,7 @@ class ProductService
 
                 if ($field['type'] == 'select') {
                     throw_if(!is_numeric($field['value']), new Exception('Invalid value'));
+                    throw_if(!array_key_exists('value',$field), new Exception('Invalid value'));
                     $data[] = [
                         'product_id' => $product->id,
                         'field_id' => (int)$field['field_id'],
