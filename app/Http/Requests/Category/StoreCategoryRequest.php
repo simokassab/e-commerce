@@ -52,10 +52,10 @@ class StoreCategoryRequest extends FormRequest
             'description' => 'nullable',
             'sort' => 'nullable | integer',
 
-//            'fields' => 'nullable|array',
-//            'fields.*.field_id' => 'exists:fields,id,entity,categories',
-//            'fields.*.type' => 'exists:fields,type,entity,categories',
-//            'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id']), 'max:' . config('defaults.default_string_length_2')],
+            'fields' => 'nullable|array',
+            'fields.*.field_id' => 'exists:fields,id,entity,category',
+            'fields.*.type' => 'exists:fields,type,entity,category',
+            'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id']), 'max:' . config('defaults.default_string_length_2')],
 
             'label' => 'nullable|array',
             'labels.*' => 'required | integer | exists:labels,id',
