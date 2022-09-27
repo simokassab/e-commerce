@@ -5,6 +5,7 @@ namespace App\Http\Requests\Setting;
 use App\Http\Requests\MainRequest;
 use App\Rules\SettingValueRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 
 class StoreSettingRequest extends FormRequest
@@ -40,5 +41,18 @@ class StoreSettingRequest extends FormRequest
             'value.required' => 'the :attribute field is required',
             'value.max' => 'the maximum string length is :max',
         ];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+
+        throw new HttpResponseException(response()->json(
+            [
+                'message' => 'The input validation has failed, check your inputs',
+                'code' => -1,
+                'errors' => $validator->errors()->messages(),
+            ], 200)
+
+        );
     }
 }

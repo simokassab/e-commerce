@@ -98,4 +98,6 @@ class StoreBrandRequest extends FormRequest
 
         );
     }
+
+
 }
