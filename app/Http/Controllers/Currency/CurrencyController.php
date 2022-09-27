@@ -64,11 +64,13 @@ class CurrencyController extends MainController
     {
 
         $currency = new Currency();
-        $currency->name = (array)json_decode($request->name);
+        $currency->name = ($request->name);
         $currency->code = $request->code;
         $currency->symbol = $request->symbol;
         $currency->rate = $request->rate;
         $currency->is_default = false;
+
+        //TODO: error check why it is replicating
         if ((bool)$request->is_default)
             $currency->setIsDefault();
 

@@ -10,24 +10,21 @@ class CurrencyObserver
 {
     public function created(Currency $currency)
     {
-        $data[] = [
-            'id' => $currency->id,
+        CurrencyHistory::query()->create([
+            'currency_id' => $currency->id,
             'rate' => $currency->rate,
             'created_at'  => Carbon::now()->toDateString(),
             'updated_at' => Carbon::now()->toDateString(),
-        ];
-        dd($data);
-        CurrencyHistory::create($data);
+        ]);
     }
 
     public function updated(Currency $currency)
     {
-        $data[] = [
-            'id' => $currency->id,
+        CurrencyHistory::query()->create([
             'rate' => $currency->rate,
+            'currency_id' => $currency->id,
             'created_at'  => Carbon::now()->toDateString(),
             'updated_at' => Carbon::now()->toDateString(),
-        ];
-        CurrencyHistory::create($data);
+        ]);
     }
 }
