@@ -4,11 +4,9 @@ namespace App\Http\Requests\Setting;
 
 use App\Http\Requests\MainRequest;
 use App\Rules\SettingValueRule;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\Request;
 
-class StoreSettingRequest extends FormRequest
+class StoreSettingRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,12 +23,12 @@ class StoreSettingRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(Request $request)
+    public function rules()
     {
         return [
 
             'type' => 'required | string',
-            'value' => ['required', 'max:' . config('defaults.default_string_length'), new SettingValueRule($this->setting,$request->type, $this->setting->id)],
+            'value' => ['required', 'max:' . config('defaults.default_string_length'), new SettingValueRule($this->setting,$this->type, $this->setting->id)],
         ];
     }
 

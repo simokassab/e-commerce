@@ -5,12 +5,10 @@ namespace App\Http\Requests\Field;
 use App\Http\Requests\MainRequest;
 use App\Models\Field\Field;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class StoreFieldRequest extends FormRequest
+class StoreFieldRequest extends MainRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,11 +26,11 @@ class StoreFieldRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(Request $request)
+    public function rules()
     {
         return [
             'title' => 'required',
-            'type' => ['required', ' in:' . implode(',', Field::$fieldTypes), Rule::when($request->is_attribute, ['in:select'])],
+            'type' => ['required', ' in:' . implode(',', Field::$fieldTypes), Rule::when($this->is_attribute, ['in:select'])],
             'entity' => 'required | in:' . Field::$entities,
             'is_required' => 'required | boolean',
             'is_attribute' => 'required | boolean',

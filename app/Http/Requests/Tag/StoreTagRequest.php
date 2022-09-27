@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Tag;
 
 use App\Http\Requests\MainRequest;
-use Illuminate\Foundation\Http\FormRequest;
 
 class StoreTagRequest extends MainRequest
 {

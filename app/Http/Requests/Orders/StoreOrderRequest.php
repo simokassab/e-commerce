@@ -4,8 +4,6 @@ namespace App\Http\Requests\Orders;
 
 use App\Http\Requests\MainRequest;
 use App\Models\Product\Product;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
 
 class StoreOrderRequest extends MainRequest
 {

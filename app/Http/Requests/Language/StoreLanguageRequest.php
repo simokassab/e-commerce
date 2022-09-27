@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Language;
 
 use App\Http\Requests\MainRequest;
-use Illuminate\Foundation\Http\FormRequest;
 
 class StoreLanguageRequest extends MainRequest
 {

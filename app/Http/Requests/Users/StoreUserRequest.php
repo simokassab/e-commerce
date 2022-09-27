@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests\Users;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Http\Requests\MainRequest;
 class StoreUserRequest extends MainRequest
 {
     /**

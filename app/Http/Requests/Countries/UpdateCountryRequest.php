@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Countries;
 
 use App\Http\Requests\MainRequest;
-use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCountryRequest extends MainRequest
 {

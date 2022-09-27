@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Discount;
 
 use App\Http\Requests\MainRequest;
-use Illuminate\Foundation\Http\FormRequest;
 
 class StoreDiscountRequest extends MainRequest
 {
