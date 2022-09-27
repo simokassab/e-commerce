@@ -93,7 +93,6 @@ class ProductService
             }
             $fieldCheck = ProductField::where('product_id', $product->id)->delete();
             $data = [];
-
             foreach ($request->fields as $index => $field) {
                 if (!in_array($field['type'], $this->fieldTypes))
                     throw new Exception('Invalid fields type');
