@@ -3,7 +3,9 @@
 namespace App\Http\Requests\Category;
 
 use App\Http\Requests\MainRequest;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -50,10 +52,10 @@ class StoreCategoryRequest extends FormRequest
             'description' => 'nullable',
             'sort' => 'nullable | integer',
 
-
-            'fields.*.field_id' => 'exists:fields,id,entity,categories',
-            'fields.*.type' => 'exists:fields,type,entity,categories',
-            'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id']), 'max:' . config('defaults.default_string_length_2')],
+//            'fields' => 'nullable|array',
+//            'fields.*.field_id' => 'exists:fields,id,entity,categories',
+//            'fields.*.type' => 'exists:fields,type,entity,categories',
+//            'fields.*.value' => [Rule::when($request->type == 'select', ['integer', 'exists:fields_values,id']), 'max:' . config('defaults.default_string_length_2')],
 
             'label' => 'nullable|array',
             'labels.*' => 'required | integer | exists:labels,id',
@@ -130,5 +132,18 @@ class StoreCategoryRequest extends FormRequest
 
         ];
 
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+
+        throw new HttpResponseException(response()->json(
+            [
+                'message' => 'The input validation has failed, check your inputs',
+                'code' => -1,
+                'errors' => $validator->errors()->messages(),
+            ], 200)
+
+        );
     }
 }

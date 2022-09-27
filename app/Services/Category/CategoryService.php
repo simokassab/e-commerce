@@ -49,10 +49,10 @@ class CategoryService {
                     $tobeSavedArray[$key]["value"] = json_encode($field['value']);
                 }
             }
-            $tobeSavedArray[$key]["brand_id"] = $category->id;
+            $tobeSavedArray[$key]["category_id"] = $category->id;
             $tobeSavedArray[$key]["field_id"] = $field['field_id'];
         }
-        return CategoriesFields::insert($tobeSavedArray);
+        return CategoriesFields::query()->insert($tobeSavedArray);
     }
 
     public static function addLabelsToCategory(Category $category, array $labels=[]){
