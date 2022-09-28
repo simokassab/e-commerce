@@ -44,8 +44,8 @@ class StoreLabelRequest extends MainRequest
     public function message()
     {
         return [
-            'title.required' =>  'the :attribute field is required',
-
+            'title.en' => 'the field is required',
+            'title.ar' => 'the field is required',
             'entity.required' => 'the :attribute field is required',
             'entity.in' => 'The entity must be one on the following: ' . Label::$entities,
 

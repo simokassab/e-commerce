@@ -89,8 +89,8 @@ class StoreBrandRequest extends MainRequest
     {
         return [
 
-            'name.en.required' => 'the :attribute field is required',
-            'name.ar.required' => 'the :attribute field is required',
+            'name.en.required' => 'the field is required',
+            'name.ar.required' => 'the field is required',
             //            'code.required' => 'the :attribute field is required',
 
             'image.file' => 'The input is not an image',
