@@ -24,14 +24,15 @@ class UpdateCountryRequest extends MainRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'iso_code_1' => 'required | max:'.config('defaults.default_string_length'),
-            'iso_code_2' => 'required | max:'.config('defaults.default_string_length'),
-            'phone_code' => ['required' , 'max:6' , 'regex:/^\+\d{1,3}$/'],
+            'name.en' => 'required',
+            'name.ar' => 'required',
+            'iso_code_1' => 'required | max:' . config('defaults.default_string_length'),
+            'iso_code_2' => 'required | max:' . config('defaults.default_string_length'),
+            'phone_code' => ['required', 'max:6', 'regex:/^\+\d{1,3}$/'],
             'flag' => 'nullable | file
-                | mimes:'.config('defaults.default_icon_extentions').'
-                | max:'.config('defaults.default_icon_size').'
-                | dimensions:max_width='.config('defaults.default_icon_maximum_width').',max_height='.config('defaults.default_icon_maximum_height')
+                | mimes:' . config('defaults.default_icon_extentions') . '
+                | max:' . config('defaults.default_icon_size') . '
+                | dimensions:max_width=' . config('defaults.default_icon_maximum_width') . ',max_height=' . config('defaults.default_icon_maximum_height')
 
         ];
     }
@@ -39,8 +40,8 @@ class UpdateCountryRequest extends MainRequest
     public function messages()
     {
         return [
-            'name.required' => 'The :attribute field is required.',
-
+            'name.en' => 'the :attribute field is required',
+            'name.ar' => 'the :attribute field is required',
             'iso_code_1.required' => 'The :attribute is required.',
             'iso_code_1.max' => 'Invalid length for :attribute!',
 
@@ -53,7 +54,7 @@ class UpdateCountryRequest extends MainRequest
 
             'flag.max' => 'The maximum :attribute size is :max.',
             'flag.mimes' => 'Invalid extention.',
-            'flag.dimensions' => 'Invalid dimentions! maximum('.config('defaults.default_icon_maximum_width').'x'.config('defaults.default_icon_maximum_height').')',
+            'flag.dimensions' => 'Invalid dimentions! maximum(' . config('defaults.default_icon_maximum_width') . 'x' . config('defaults.default_icon_maximum_height') . ')',
 
 
         ];

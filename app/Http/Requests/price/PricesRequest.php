@@ -25,11 +25,12 @@ class PricesRequest extends MainRequest
     {
 
         return [
-            'name' => 'required',
+            'name.en' => 'required',
+            'name.ar' => 'required',
             'currency_id' => 'required|exists:currencies,id',
             'is_virtual' => 'boolean|required',
             'original_price_id' => ' nullable | required_if:is_virtual,"true"|exists:prices,id',
-            'percentage' => ' nullable | required_if:is_virtual,"true"| numeric | min:'.config('defaults.default_minimum_price_percentage'),
+            'percentage' => ' nullable | required_if:is_virtual,"true"| numeric | min:' . config('defaults.default_minimum_price_percentage'),
 
             'data' => 'nullable',
             'data.currency_name' => 'nullable',
@@ -41,8 +42,8 @@ class PricesRequest extends MainRequest
     public function messages()
     {
         return [
-            'name.required' => 'the :attribute field is required',
-
+            'name.en' => 'the :attribute field is required',
+            'name.ar' => 'the :attribute field is required',
             'is_virtual.boolean' => 'the :attribute field must be a boolean',
             'is_virtual.required' => 'the :attribute field is required',
 
@@ -54,7 +55,7 @@ class PricesRequest extends MainRequest
 
             'percentage.required_if' => 'the :attribute field is required',
             'percentage.numeric' => 'the :attribute field must be a numeric',
-            'percentage.between' => 'the :attribute field must be between '.config('defaults.default_minimum_price_percentage').' and '.config('defaults.default_maximum_price_percentage'),
+            'percentage.between' => 'the :attribute field must be between ' . config('defaults.default_minimum_price_percentage') . ' and ' . config('defaults.default_maximum_price_percentage'),
 
         ];
     }

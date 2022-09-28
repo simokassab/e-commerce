@@ -25,7 +25,8 @@ class   StoreCountryRequest extends MainRequest
     {
 
         return [
-            'name' => 'required',
+            'name.en' => 'required',
+            'name.ar' => 'required',
             'iso_code_1' => 'required | max:'.config('defaults.default_string_length'),
             'iso_code_2' => 'required | max:'.config('defaults.default_string_length'),
             'phone_code' => ['required' , 'max:6' , 'regex:/^\+\d{1,3}$/'],
@@ -40,8 +41,8 @@ class   StoreCountryRequest extends MainRequest
     public function messages()
     {
         return [
-            'name.required' => 'The :attribute field is required.',
-
+            'name.en' => 'the :attribute field is required',
+            'name.ar' => 'the :attribute field is required',
             'iso_code_1.required' => 'The :attribute is required.',
             'iso_code_1.max' => 'Invalid length for :attribute!',
 

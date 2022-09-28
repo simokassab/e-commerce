@@ -47,7 +47,8 @@ class StoreProductRequest extends MainRequest
 
 
         $rules = [
-            'name' => 'required',
+            'name.en' => 'required',
+            'name.ar' => 'required',
             'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
             'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
             'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
@@ -90,10 +91,8 @@ class StoreProductRequest extends MainRequest
             // 'categories.*' => 'nullable',
             // 'categories.*.id' => 'exists:categories,id',
 
-
             'fields.*.field_id' => 'required | exists:fields,id,entity,product',
-            'fields.*.value' => [Rule::when($this->type == 'select', ['integer', 'exists:fields_values,id']), 'required', 'max:' . config('defaults.default_string_length_2')],
-            'fields.*.type' => 'required | exists:fields,type,entity,product',
+            'fields.*.type' => ['required', 'exists:fields,type,entity,product'],
 
             'labels.*' => 'exists:labels,id',
 
@@ -152,13 +151,16 @@ class StoreProductRequest extends MainRequest
             'product_variations.*.images.*.title' => 'required ',
             'product_variations.*.images.*.sort' => 'required | integer',
 
-            'product_variations.*.fields.*.field_id' => 'required | integer | exists:fields,id,entity,product',
-            'product_variations.*.fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
-            'product_variations.*.fields.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
+
+            'product_variations.*.fields.*.field_id' => 'required | exists:fields,id,entity,product',
+            'product_variations.*.fields.*.type' => ['required', 'exists:fields,type,entity,product'],
+            // 'product_variations.*.fields.*.field_id' => 'required | integer | exists:fields,id,entity,product',
+            // 'product_variations.*.fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
+            // 'product_variations.*.fields.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
 
             'product_variations.*.attributes.*.field_id' => 'required | integer | exists:fields,id,entity,product',
-            'product_variations.*.attributes.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
-            'product_variations.*.attributes.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
+            'product_variations.*.attributes.*.value' => 'required  |integer | exists:fields_values,id',
+            'product_variations.*.attributes.*.type' => 'required  | in:select',
 
         ];
         if ($this->type == 'variable') {
@@ -173,6 +175,62 @@ class StoreProductRequest extends MainRequest
                 }
             }
         }
+        $fieldsRules = [];
+        if ($this->has('fields')) {
+            foreach ($this->fields as $field) {
+                if ($field['type'] == 'date') {
+                    $fieldsRules = [
+                        'fields.*.value' => 'date'
+                    ];
+                } elseif ($field['type'] == 'select') {
+
+                    $fieldsRules = [
+                        'fields.*.value' => 'integer', 'exists:fields_values,id'
+                    ];
+                } elseif ($field['type'] == 'checkbox') {
+
+                    $fieldsRules = [
+                        'fields.*.value' => 'boolean'
+                    ];
+                } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
+                    $fieldsRules = [
+                        'fields.*.value.en' => 'required|string',
+                        'fields.*.value.ar' => 'required|string',
+
+                    ];
+                }
+                $rules = array_merge($rules, $fieldsRules);
+            }
+        }
+        if ($this->has('product_variations')) {
+            if (array_key_exists('fields', $this->product_variations)) {
+                foreach ($this->product_variations['fields'] as $field) {
+                    if ($field['type'] == 'date') {
+                        $fieldsRules = [
+                            'fields.*.value' => 'date'
+                        ];
+                    } elseif ($field['type'] == 'select') {
+
+                        $fieldsRules = [
+                            'fields.*.value' => 'integer', 'exists:fields_values,id'
+                        ];
+                    } elseif ($field['type'] == 'checkbox') {
+
+                        $fieldsRules = [
+                            'fields.*.value' => 'boolean'
+                        ];
+                    } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
+                        $fieldsRules = [
+                            'fields.*.value.en' => 'required|string',
+                            'fields.*.value.ar' => 'required|string',
+
+                        ];
+                    }
+                    $rules = array_merge($rules, $fieldsRules);
+                }
+            }
+        }
+
         return $rules;
     }
 
@@ -328,12 +386,15 @@ class StoreProductRequest extends MainRequest
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
 
-        throw new HttpResponseException(response()->json(
-            [
-                'message' => 'The input validation has failed, check your inputs',
-                'code' => -1,
-                'errors' => $validator->errors()->messages(),
-            ], 200)
+        throw new HttpResponseException(
+            response()->json(
+                [
+                    'message' => 'The input validation has failed, check your inputs',
+                    'code' => -1,
+                    'errors' => $validator->errors()->messages(),
+                ],
+                200
+            )
 
         );
     }
