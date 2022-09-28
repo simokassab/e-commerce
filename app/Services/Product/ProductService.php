@@ -235,7 +235,7 @@ class ProductService
             $data = [];
             foreach ($request->images as $index => $image) {
                 $imagePath = "";
-                if ($request->file('images') && !is_string($request->file('images')))
+                if ($request->images)
                     $imagePath = uploadImage($image, $this->imagesPath['images']);
 
                 $data[] = [
@@ -783,7 +783,7 @@ class ProductService
             $product->bundle_reserved_quantity = null;
             $product->bundle_price_status = $request->bundle_price_status ?? null;
 
-            if ($request->file('image') && !is_string($request->file('image')))
+            if ($request->image)
                 $product->image = uploadImage($request->image, $this->imagesPath['images']);
 
             $product->save();

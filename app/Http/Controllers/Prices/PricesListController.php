@@ -121,6 +121,7 @@ class PricesListController extends MainController
                 }
 
             }
+            $pricesToBeSaved = collect($pricesToBeSaved)->filter(fn ($value) => !$value['is_virtual']);
             $pricesWithIds = (collect($pricesToBeSaved)->whereNotNull('id')->map(fn($value)=> (collect($value)->forget('is_virtual')->forget('code') )));
             $pricesWithNull = (collect($pricesToBeSaved)->whereNull('id'));
             $codes = $pricesWithNull->pluck('code');
@@ -142,9 +143,8 @@ class PricesListController extends MainController
                     }
                 }
             }
-
             if(count($newPrices) != 0){
-                ProductPrice::insert($newPrices);
+                ProductPrice::query()->insert($newPrices);
             }
             if(count($pricesWithIds->toArray()) > 0){
                 batch()->update(new ProductPrice(),$pricesWithIds->toArray(),'id');
@@ -152,6 +152,7 @@ class PricesListController extends MainController
 
             return $this->successResponse('the prices have been updated successfully');
         }catch (\Exception $e){
+            return $e;
             return $this->errorResponse('error occurred please try again later!');
         }
 
