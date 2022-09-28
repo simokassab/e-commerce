@@ -70,7 +70,6 @@ class CurrencyController extends MainController
         $currency->rate = $request->rate;
         $currency->is_default = false;
 
-        //TODO: error check why it is replicating
         if ((bool)$request->is_default)
             $currency->setIsDefault();
 

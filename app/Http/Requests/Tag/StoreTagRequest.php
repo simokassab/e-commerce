@@ -24,7 +24,8 @@ class StoreTagRequest extends MainRequest
     public function rules()
     {
         return [
-            'name' => 'required'
+            'name.en' => 'required',
+            'name.ar' => 'required'
         ];
     }
 
