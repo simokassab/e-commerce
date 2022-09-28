@@ -184,6 +184,7 @@ class StoreProductRequest extends MainRequest
         $fieldsRules = [];
         if ($this->has('fields')) {
             foreach ($this->fields as $field) {
+                dd($field['type']);
                 if ($field['type'] == 'date') {
                     $fieldsRules = [
                         'fields.*.value' => 'date'
