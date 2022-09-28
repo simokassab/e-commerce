@@ -31,10 +31,10 @@ class StoreBrandRequest extends MainRequest
             'name.en' => 'required',
             'name.ar' => 'required',
 
-            // 'image' => 'nullable | file | max:' . config('defaults.default_string_length_2') . '
-            // | mimes:' . config('defaults.default_image_extentions') . '
-            // | max:' . config('defaults.default_image_size') . '
-            // | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
+//            'image' => 'nullable | file | max:' . config('defaults.default_string_length_2') . '
+//            | mimes:' . config('defaults.default_image_extentions') . '
+//            | max:' . config('defaults.default_image_size') . '
+//            | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
 
             'meta_title.en' => 'nullable',
             'meta_title.ar' => 'nullable',
@@ -55,6 +55,7 @@ class StoreBrandRequest extends MainRequest
 
         ];
         $fieldsRules = [];
+
         if ( $this->has('fields') ) {
             foreach ($this->fields as $field) {
                 if ($field['type'] == 'date') {
@@ -75,12 +76,12 @@ class StoreBrandRequest extends MainRequest
                     $fieldsRules = [
                         'fields.*.value.en' => 'required|string',
                         'fields.*.value.ar' => 'required|string',
-
                     ];
                 }
                 $rules = array_merge($rules, $fieldsRules);
             }
         }
+
         return $rules;
     }
 
@@ -116,19 +117,4 @@ class StoreBrandRequest extends MainRequest
         ];
     }
 
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-
-        throw new HttpResponseException(
-            response()->json(
-                [
-                    'message' => 'The input validation has failed, check your inputs',
-                    'code' => -1,
-                    'errors' => $validator->errors()->messages(),
-                ],
-                200
-            )
-
-        );
-    }
 }
