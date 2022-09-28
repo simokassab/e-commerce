@@ -28,33 +28,32 @@ class StoreCategoryRequest extends FormRequest
     public function rules()
     {
 
-    return [
+        $rules = [
 
-            'name' => 'required',
+            'name.en' => 'required',
+            'name.ar' => 'required',
             // 'code' => 'required | max:'.config('defaults.default_string_length'),
 
 //            'image' => 'nullable | file | string
 //            | mimes:'.config('defaults.default_image_extentions').'
 //            | max:'.config('defaults.default_image_size').'
 //            | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
-
+//
             'icon' => 'nullable | file
-            | mimes:'.config('defaults.default_icon_extentions').'
-            | max:'.config('defaults.default_icon_size').'
-            | dimensions:max_width='.config('defaults.default_icon_maximum_width').',max_height='.config('defaults.default_icon_maximum_height'),
+            | mimes:' . config('defaults.default_icon_extentions') . '
+            | max:' . config('defaults.default_icon_size') . '
+            | dimensions:max_width=' . config('defaults.default_icon_maximum_width') . ',max_height=' . config('defaults.default_icon_maximum_height'),
 
             'parent_id' => 'nullable | integer',
-            'slug' => 'required | max:'.config('defaults.default_string_length_2').' | unique:categories,slug,'.$this->id ?? null,
+            'slug' => 'required | max:' . config('defaults.default_string_length_2') . ' | unique:categories,slug,' . $this->id ?? null,
             'meta_title' => 'nullable',
             'meta_description' => 'nullable',
             'meta_keyword' => 'nullable',
             'description' => 'nullable',
             'sort' => 'nullable | integer',
 
-            'fields' => 'nullable|array',
-            'fields.*.field_id' => 'exists:fields,id,entity,category',
-            'fields.*.type' => 'exists:fields,type,entity,category',
-            'fields.*.value' => [Rule::when($this->type == 'select', ['integer', 'exists:fields_values,id']), 'max:' . config('defaults.default_string_length_2')],
+            'fields.*.field_id' => 'required | exists:fields,id,entity,brand',
+            'fields.*.type' => ['required', 'exists:fields,type,entity,brand'],
 
             'label' => 'nullable|array',
             'labels.*' => 'required | integer | exists:labels,id',
@@ -63,6 +62,34 @@ class StoreCategoryRequest extends FormRequest
             'order.*.sort' => 'required | integer',
 
         ];
+        $fieldsRules = [];
+        if ($this->has('fields')) {
+            foreach ($this->fields as $field) {
+                if ($field['type'] == 'date') {
+                    $fieldsRules = [
+                        'fields.*.value' => 'date'
+                    ];
+                } elseif ($field['type'] == 'select') {
+
+                    $fieldsRules = [
+                        'fields.*.value' => 'integer', 'exists:fields_values,id'
+                    ];
+                } elseif ($field['type'] == 'checkbox') {
+
+                    $fieldsRules = [
+                        'fields.*.value' => 'boolean'
+                    ];
+                } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
+                    $fieldsRules = [
+                        'fields.*.value.en' => 'required|string',
+                        'fields.*.value.ar' => 'required|string',
+
+                    ];
+                }
+                $rules = array_merge($rules, $fieldsRules);
+            }
+        }
+        return $rules;
     }
 
     public function getValidatorInstance()
@@ -74,11 +101,11 @@ class StoreCategoryRequest extends FormRequest
 
     protected function changeImageAndIconAndParentIdToNull()
     {
-        if($this->image == 'undefined')
+        if ($this->image == 'undefined')
             $this->merge(['image' => null]);
-        if($this->icon == 'undefined')
+        if ($this->icon == 'undefined')
             $this->merge(['icon' => null]);
-        if($this->parent_id == 'null')
+        if ($this->parent_id == 'null')
             $this->merge(['parent_id' => null]);
     }
 
@@ -86,7 +113,8 @@ class StoreCategoryRequest extends FormRequest
     {
 
         return [
-            'name.required' => 'the :attribute field is required',
+            'name.en' => 'the :attribute field is required',
+            'name.ar' => 'the :attribute field is required',
 
             'code.required' => 'the :attribute field is required',
             'code.max' => 'the maximum string length is :max',
@@ -94,12 +122,12 @@ class StoreCategoryRequest extends FormRequest
             'image.file' => 'The input is not an image',
             'image.max' => 'The maximum :attribute size is :max.',
             'image.mimes' => 'Invalid extention.',
-            'image.dimensions' => 'Invalid dimentions! maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
+            'image.dimensions' => 'Invalid dimentions! maximum(' . config('defaults.default_image_maximum_width') . 'x' . config('defaults.default_image_maximum_height') . ')',
 
             'icon.file' => 'The input is not an image',
             'icon.max' => 'The maximum :attribute size is :max.',
             'icon.mimes' => 'Invalid extention.',
-            'icon.dimensions' => 'Invalid dimentions! maximum('.config('defaults.default_icon_maximum_width').'x'.config('defaults.default_icon_maximum_height').')',
+            'icon.dimensions' => 'Invalid dimentions! maximum(' . config('defaults.default_icon_maximum_width') . 'x' . config('defaults.default_icon_maximum_height') . ')',
 
             'parent_id.integer' => 'the :attribute should be an integer',
 
@@ -130,18 +158,20 @@ class StoreCategoryRequest extends FormRequest
             'order.*.sort.integer' => 'The sort should be an integer',
 
         ];
-
     }
 
     protected function failedValidation(Validator $validator)
     {
 
-        throw new HttpResponseException(response()->json(
-            [
-                'message' => 'The input validation has failed, check your inputs',
-                'code' => -1,
-                'errors' => $validator->errors()->messages(),
-            ], 200)
+        throw new HttpResponseException(
+            response()->json(
+                [
+                    'message' => 'The input validation has failed, check your inputs',
+                    'code' => -1,
+                    'errors' => $validator->errors()->messages(),
+                ],
+                200
+            )
 
         );
     }

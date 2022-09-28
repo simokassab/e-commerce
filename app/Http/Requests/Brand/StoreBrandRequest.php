@@ -26,37 +26,71 @@ class StoreBrandRequest extends MainRequest
     public function rules()
     {
 
-        return [
+        $rules =  [
 
-            'name' => 'required',
+            'name.en' => 'required',
+            'name.ar' => 'required',
 
             'image' => 'nullable | file | max:' . config('defaults.default_string_length_2') . '
             | mimes:' . config('defaults.default_image_extentions') . '
             | max:' . config('defaults.default_image_size') . '
             | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
 
-            'meta_title' => 'nullable',
-            'meta_description' => 'nullable',
-            'meta_keyword' => 'nullable',
-            'description' => 'nullable',
+            'meta_title.en' => 'nullable',
+            'meta_title.ar' => 'nullable',
+            'meta_description.en' => 'nullable',
+            'meta_description.ar' => 'nullable',
+            'meta_keyword.en' => 'nullable',
+            'meta_keyword.ar' => 'nullable',
+            'description.en' => 'nullable',
+            'description.ar' => 'nullable',
             'sort' => 'nullable | integer',
 
-            'fields.*.field_id' => 'exists:fields,id,entity,brand',
-            'fields.*.type' => 'exists:fields,type,entity,brand',
-            'fields.*.value' => [Rule::when($this->type == 'select', ['integer', 'exists:fields_values,id']), 'max:' . config('defaults.default_string_length_2')],
+
+            'fields.*.field_id' => 'required | exists:fields,id,entity,brand',
+            'fields.*.type' => ['required', 'exists:fields,type,entity,brand'],
 
             'labels.*' => 'required | integer | exists:labels,id',
 
 
         ];
+        $fieldsRules = [];
+        if ( $this->has('fields') ) {
+            foreach ($this->fields as $field) {
+                if ($field['type'] == 'date') {
+                    $fieldsRules = [
+                        'fields.*.value' => 'date'
+                    ];
+                } elseif ($field['type'] == 'select') {
+
+                    $fieldsRules = [
+                        'fields.*.value' => 'integer', 'exists:fields_values,id'
+                    ];
+                } elseif ($field['type'] == 'checkbox') {
+
+                    $fieldsRules = [
+                        'fields.*.value' => 'boolean'
+                    ];
+                }elseif($field['type'] == 'text' || $field['type'] == 'textarea'){
+                    $fieldsRules = [
+                        'fields.*.value.en' => 'required|string',
+                        'fields.*.value.ar' => 'required|string',
+
+                    ];
+                }
+                $rules = array_merge($rules, $fieldsRules);
+            }
+        }
+        return $rules;
     }
 
     public function messages()
     {
         return [
 
-            'name.required' => 'the :attribute field is required',
-//            'code.required' => 'the :attribute field is required',
+            'name.en.required' => 'the :attribute field is required',
+            'name.ar.required' => 'the :attribute field is required',
+            //            'code.required' => 'the :attribute field is required',
 
             'image.file' => 'The input is not an image',
             'image.max' => 'The maximum :attribute size is :max.',
@@ -85,15 +119,16 @@ class StoreBrandRequest extends MainRequest
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
 
-        throw new HttpResponseException(response()->json(
-            [
-                'message' => 'The input validation has failed, check your inputs',
-                'code' => -1,
-                'errors' => $validator->errors()->messages(),
-            ], 200)
+        throw new HttpResponseException(
+            response()->json(
+                [
+                    'message' => 'The input validation has failed, check your inputs',
+                    'code' => -1,
+                    'errors' => $validator->errors()->messages(),
+                ],
+                200
+            )
 
         );
     }
-
-
 }

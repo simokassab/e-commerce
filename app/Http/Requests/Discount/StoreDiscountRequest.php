@@ -24,7 +24,8 @@ class StoreDiscountRequest extends MainRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name.en' => 'required',
+            'name.ar' => 'required',
             'start_date' => 'required | date',
             'end_date' => 'nullable | date | after:start_date',
             'discount_percentage' => 'required | between:0,100 | numeric',
@@ -34,7 +35,8 @@ class StoreDiscountRequest extends MainRequest
     public function messages()
     {
         return [
-            'name.required' => 'the :attribute field is required',
+            'name.en' => 'the :attribute field is required',
+            'name.ar' => 'the :attribute field is required',
 
             'start_date.required' => 'the :attribute field is required',
             'start_date.date' => 'the :attribute should be a date',

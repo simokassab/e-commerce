@@ -29,7 +29,8 @@ class StoreFieldRequest extends MainRequest
     public function rules()
     {
         return [
-            'title' => 'required',
+            'title.en' => 'required',
+            'title.ar' => 'required',
             'type' => ['required', ' in:' . implode(',', Field::$fieldTypes), Rule::when($this->is_attribute, ['in:select'])],
             'entity' => 'required | in:' . Field::$entities,
             'is_required' => 'required | boolean',
@@ -43,7 +44,8 @@ class StoreFieldRequest extends MainRequest
     public function messages()
     {
         return [
-            'title.required' => 'The :attribute is required',
+            'name.en' => 'the :attribute field is required',
+            'name.ar' => 'the :attribute field is required',
 
             'type.required' => 'The :attribute is required',
             'type.in' => 'The :attribute is not a valid type',
@@ -70,12 +72,15 @@ class StoreFieldRequest extends MainRequest
     protected function failedValidation(Validator $validator)
     {
 
-        throw new HttpResponseException(response()->json(
-            [
-                'message' => 'The input validation has failed, check your inputs',
-                'code' => -1,
-                'errors' => $validator->errors()->messages(),
-            ], 200)
+        throw new HttpResponseException(
+            response()->json(
+                [
+                    'message' => 'The input validation has failed, check your inputs',
+                    'code' => -1,
+                    'errors' => $validator->errors()->messages(),
+                ],
+                200
+            )
 
         );
     }

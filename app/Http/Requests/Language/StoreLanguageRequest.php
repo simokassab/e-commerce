@@ -24,16 +24,17 @@ class StoreLanguageRequest extends MainRequest
     public function rules()
     {
         return [
-            'name' => 'required | max:'.config('defaults.default_string_length'),
-            'code' => 'required | max:'.config('defaults.default_string_length'),
+            'name.en' => 'required',
+            'name.ar' => 'required',
+            'code' => 'required | max:' . config('defaults.default_string_length'),
             'is_default' => 'nullable | boolean',
             'is_disabled' => 'nullable | boolean',
 
             'image' => 'nullable | file
-            | mimes:'.config('defaults.default_image_extentions').'
-            | max:'.config('defaults.default_image_size').'
-            | dimensions:min_width='.config('defaults.default_image_minimum_width').',min_height='.config('defaults.default_image_minimum_height').'
-                ,max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
+            | mimes:' . config('defaults.default_image_extentions') . '
+            | max:' . config('defaults.default_image_size') . '
+            | dimensions:min_width=' . config('defaults.default_image_minimum_width') . ',min_height=' . config('defaults.default_image_minimum_height') . '
+                ,max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
 
             'sort' => 'nullable | integer'
 
@@ -43,8 +44,8 @@ class StoreLanguageRequest extends MainRequest
     public function messages()
     {
         return [
-            'name.required' => 'The field name is required.',
-            'name.max' => 'the maximum string length is :max',
+            'name.en' => 'the :attribute field is required',
+            'name.ar' => 'the :attribute field is required',
 
             'code.required' => 'The code is required.',
             'code.max' => 'the maximum string length is :max',
@@ -55,12 +56,12 @@ class StoreLanguageRequest extends MainRequest
             'image.file' => 'The input is not an image',
             'image.max' => 'The maximum :attribute size is :max.',
             'image.mimes' => 'Invalid extention.',
-            'image.dimensions' => 'Invalid dimentions, minimum('.config('defaults.default_image_minimum_width').'x'.config('defaults.default_image_minimum_height').'),
-                 maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
+            'image.dimensions' => 'Invalid dimentions, minimum(' . config('defaults.default_image_minimum_width') . 'x' . config('defaults.default_image_minimum_height') . '),
+                 maximum(' . config('defaults.default_image_maximum_width') . 'x' . config('defaults.default_image_maximum_height') . ')',
 
 
-           'sort.integer' => 'the :attribute should be an integer',
-                ];
+            'sort.integer' => 'the :attribute should be an integer',
+        ];
     }
 
     protected function prepareForValidation()

@@ -84,59 +84,57 @@ class ProductService
     {
         //        DB::beginTransaction();
         // try {
-            if (!array_key_exists('fields', $request->toArray())) {
-                return $this;
-            }
-
-            if (count($request['fields']) == 0) {
-                return $this;
-            }
-            $fieldCheck = ProductField::where('product_id', $product->id)->delete();
-            $data = [];
-            foreach ($request->fields as $index => $field) {
-                if (!in_array($field['type'], $this->fieldTypes))
-                    throw new Exception('Invalid fields type');
-
-                throw_if(!array_key_exists('value', $field), new Exception('Invalid value'));
-                if ($field['type'] == 'select') {
-                    throw_if(!is_numeric($field['value']), new Exception('Invalid value'));
-                    $data[] = [
-                        'product_id' => $product->id,
-                        'field_id' => (int)$field['field_id'],
-                        'field_value_id' =>  (int)$field['value'],
-                        'value' => null,
-                    ];
-                } elseif (($field['type']) == 'checkbox') {
-                    throw_if(!is_bool($field['value']), new Exception('Invalid value'));
-                    $data[] = [
-                        'product_id' => $product->id,
-                        'field_id' => (int)$field['field_id'],
-                        'field_value_id' =>  null,
-                        'value' => (bool)$field['value'],
-                    ];
-                } elseif (($field['type']) == 'date') {
-                    throw_if(Carbon::createFromFormat('Y-m-d H:i:s', $field['value']) !== false, new Exception('Invalid value'));
-                    $data[] = [
-                        'product_id' => $product->id,
-                        'field_id' => (int)$field['field_id'],
-                        'field_value_id' =>  null,
-                        'value' => Carbon::createFromFormat('Y-m-d H:i:s', $field['value']),
-                    ];
-                } elseif (($field['type']) == 'text' || gettype($field['type']) == 'textarea') {
-                    $data[] = [
-                        'product_id' => $product->id,
-                        'field_id' => (int)$field['field_id'],
-                        'field_value_id' =>  null,
-                        'value' => ($field['value']),
-                    ];
-                } else {
-                    continue;
-                }
-                $allData = $data;
-            }
-            ProductField::insert($data);
-            //            DB::commit();
+        if (!array_key_exists('fields', $request->toArray())) {
             return $this;
+        }
+
+        if (count($request['fields']) == 0) {
+            return $this;
+        }
+        $fieldCheck = ProductField::where('product_id', $product->id)->delete();
+        $data = [];
+        foreach ($request->fields as $index => $field) {
+            if (!in_array($field['type'], $this->fieldTypes))
+                throw new Exception('Invalid fields type');
+
+            throw_if(!array_key_exists('value', $field), new Exception('Invalid value'));
+            if ($field['type'] == 'select') {
+
+                $data[] = [
+                    'product_id' => $product->id,
+                    'field_id' => (int)$field['field_id'],
+                    'field_value_id' =>  (int)$field['value'],
+                    'value' => null,
+                ];
+            } elseif (($field['type']) == 'checkbox') {
+                $data[] = [
+                    'product_id' => $product->id,
+                    'field_id' => (int)$field['field_id'],
+                    'field_value_id' =>  null,
+                    'value' => (bool)$field['value'],
+                ];
+            } elseif (($field['type']) == 'date') {
+                $data[] = [
+                    'product_id' => $product->id,
+                    'field_id' => (int)$field['field_id'],
+                    'field_value_id' =>  null,
+                    'value' => Carbon::parse($field['value'])->format('Y-m-d'),
+                ];
+            } elseif (($field['type']) == 'text' || gettype($field['type']) == 'textarea') {
+                $data[] = [
+                    'product_id' => $product->id,
+                    'field_id' => (int)$field['field_id'],
+                    'field_value_id' =>  null,
+                    'value' => ($field['value']),
+                ];
+            } else {
+                continue;
+            }
+            $allData = $data;
+        }
+        ProductField::insert($data);
+        //            DB::commit();
+        return $this;
         // } catch (Exception $e) {
         //     //            DB::rollBack();
         //     throw new Exception($e->getMessage());
@@ -159,12 +157,14 @@ class ProductService
             $allData = [];
             //            $attributes = $request->has('product_variations') ? (collect($request->toArray()['product_variations'])->pluck('attributes')->first()) : [];
             //            $attributesUnique = (collect($attributes)->unique(fn($item) => $item['value'] . $item['field_id'] ));
+
             foreach ($request['attributes'] as $index => $attribute) {
                 if (!in_array($attribute['type'], $this->fieldTypes))
                     throw new Exception('Invalid attribute type');
 
+                throw_if(!array_key_exists('value', $attribute), new Exception('Invalid value'));
+
                 if ($attribute['type'] == 'select') {
-                    throw_if(!is_numeric($attribute['value']), new Exception('Invalid value'));
                     $data[] = [
                         'product_id' => $product->id,
                         'field_id' => (int)$attribute['field_id'],
@@ -173,7 +173,6 @@ class ProductService
                         'value' => null,
                     ];
                 } elseif (($attribute['type']) == 'checkbox') {
-                    throw_if(!is_bool($attribute['value']), new Exception('Invalid value'));
                     $data[] = [
                         'product_id' => $product->id,
                         'field_id' => (int)$attribute['field_id'],
@@ -181,12 +180,11 @@ class ProductService
                         'value' => (bool)$attribute['value'],
                     ];
                 } elseif (($attribute['type']) == 'date') {
-                    throw_if(Carbon::createFromFormat('Y-m-d H:i:s', $attribute['value']) !== false, new Exception('Invalid value'));
                     $data[] = [
                         'product_id' => $product->id,
                         'field_id' => (int)$attribute['field_id'],
                         'field_value_id' =>  null,
-                        'value' => Carbon::createFromFormat('Y-m-d H:i:s', $attribute['value']),
+                        'value' => Carbon::parse($attribute['value'])->format('Y-m-d'),
                     ];
                 } elseif (($attribute['type']) == 'text' || gettype($attribute['type']) == 'textarea') {
                     $data[] = [
@@ -452,8 +450,9 @@ class ProductService
                     if (!in_array($field['type'], $this->fieldTypes))
                         throw new Exception('Invalid fields type');
 
+                    throw_if(!array_key_exists('value', $field), new Exception('Invalid value'));
+
                     if ($field['type'] == 'select') {
-                        throw_if(!is_numeric($field['value']), new Exception('Invalid value'));
                         $data[] = [
                             'product_id' => $child,
                             'field_id' => (int)$field['field_id'],
@@ -461,7 +460,6 @@ class ProductService
                             'value' => null,
                         ];
                     } elseif (($field['type']) == 'checkbox') {
-                        throw_if(!is_bool($field['value']), new Exception('Invalid value'));
                         $data[] = [
                             'product_id' => $child,
                             'field_id' => (int)$field['field_id'],
@@ -469,12 +467,11 @@ class ProductService
                             'value' => (bool)$field['value'],
                         ];
                     } elseif (($field['type']) == 'date') {
-                        throw_if(Carbon::createFromFormat('Y-m-d H:i:s', $field['value']) !== false, new Exception('Invalid value'));
                         $data[] = [
                             'product_id' => $child,
                             'field_id' => (int)$field['field_id'],
                             'field_value_id' =>  null,
-                            'value' => Carbon::createFromFormat('Y-m-d H:i:s', $field['value']),
+                            'value' => Carbon::parse($field['value'])->format('Y-m-d'),
                         ];
                     } elseif (($field['type']) == 'text' || gettype($field['type']) == 'textarea') {
                         $data[] = [
@@ -512,8 +509,9 @@ class ProductService
                     if (!in_array($attribute['type'], $this->fieldTypes))
                         throw new Exception('Invalid fields type');
 
+                    throw_if(!array_key_exists('value', $attribute), new Exception('Invalid value'));
+
                     if ($attribute['type'] == 'select') {
-                        throw_if(!is_numeric($attribute['value']), new Exception('Invalid value'));
                         $data[] = [
                             'product_id' => $child,
                             'field_id' => (int)$attribute['field_id'],

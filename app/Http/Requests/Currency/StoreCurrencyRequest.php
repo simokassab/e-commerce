@@ -17,7 +17,7 @@ class StoreCurrencyRequest extends MainRequest
     public function authorize()
     {
 
-        return true ;
+        return true;
     }
 
     /**
@@ -28,26 +28,28 @@ class StoreCurrencyRequest extends MainRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'code' => 'required | max:'.config('defaults.default_string_length'),
-            'symbol' => 'nullable | max:'.config('defaults.default_string_length'),
+            'name.en' => 'required',
+            'name.ar' => 'required',
+            'code' => 'required | max:' . config('defaults.default_string_length'),
+            'symbol' => 'nullable | max:' . config('defaults.default_string_length'),
             'rate' => 'required | numeric | gt:0',
             'is_default' => 'nullable | boolean',
 
             'image' => 'nullable | file
-            | mimes:'.config('defaults.default_image_extentions').'
-            | max:'.config('defaults.default_image_size').'
-            | dimensions:min_width='.config('defaults.default_image_minimum_width').',min_height='.config('defaults.default_image_minimum_height').'
-                ,max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
+            | mimes:' . config('defaults.default_image_extentions') . '
+            | max:' . config('defaults.default_image_size') . '
+            | dimensions:min_width=' . config('defaults.default_image_minimum_width') . ',min_height=' . config('defaults.default_image_minimum_height') . '
+                ,max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
 
             'sort' => 'nullable | integer'
-         ];
+        ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'The :attribute field is required.',
+            'name.en' => 'the :attribute field is required',
+            'name.ar' => 'the :attribute field is required',
 
             'code.required' => 'The :attribute is required.',
             'code.max' => 'the maximum string length is :max',
@@ -62,10 +64,10 @@ class StoreCurrencyRequest extends MainRequest
             'image.image' => 'The input is not an image',
             'image.max' => 'The maximum :attribute size is :max.',
             'image.mimes' => 'Invalid extention.',
-            'image.dimensions' => 'Invalid dimentions! maximum('.config('defaults.default_image_maximum_width').'x'.config('defaults.default_image_maximum_height').')',
+            'image.dimensions' => 'Invalid dimentions! maximum(' . config('defaults.default_image_maximum_width') . 'x' . config('defaults.default_image_maximum_height') . ')',
 
             'sort.integer' => 'the :attribute should be an integer',
-          ];
+        ];
     }
     protected function prepareForValidation()
     {
@@ -87,12 +89,15 @@ class StoreCurrencyRequest extends MainRequest
 
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json(
-            [
-                'message' => 'The input validation has failed, check your inputs',
-                'code' => -1,
-                'errors' => $validator->errors()->messages(),
-            ], 200)
+        throw new HttpResponseException(
+            response()->json(
+                [
+                    'message' => 'The input validation has failed, check your inputs',
+                    'code' => -1,
+                    'errors' => $validator->errors()->messages(),
+                ],
+                200
+            )
         );
     }
 }
