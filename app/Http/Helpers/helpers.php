@@ -10,17 +10,24 @@ use Illuminate\Support\Facades\Storage;
 function uploadImage(File|UploadedFile|string $file, $folderPath = ''): bool|string
 {
     $fileName = uniqid();
+    $path = $folderPath;
+
     if (is_string($file)) {
         $file = substr($file, strpos($file, ",") + 1);
         $file = base64_decode($file);
         $fileName = $fileName . '.webp';
+        $path = $folderPath . '/' . $fileName;
+        // when using base64 it will return true when saving the image
+         Storage::disk('public')->put($path, $file);
+         return $path;
+
     }/* else {
             $fileName = $file->getClientOriginalName();
         }*/
 
-    $path = $folderPath . '/' . $fileName;
-    Storage::disk('public')->put($path, $file);
-    return $path;
+    // when using image file and upload file it will return the path of the file
+    return (Storage::disk('public')->put($path, $file));
+
 }
 
 function getAssetsLink($path): string

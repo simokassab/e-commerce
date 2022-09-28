@@ -33,10 +33,10 @@ class StoreCategoryRequest extends FormRequest
             'name' => 'required',
             // 'code' => 'required | max:'.config('defaults.default_string_length'),
 
-            'image' => 'nullable | file
-            | mimes:'.config('defaults.default_image_extentions').'
-            | max:'.config('defaults.default_image_size').'
-            | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
+//            'image' => 'nullable | file | string
+//            | mimes:'.config('defaults.default_image_extentions').'
+//            | max:'.config('defaults.default_image_size').'
+//            | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
 
             'icon' => 'nullable | file
             | mimes:'.config('defaults.default_icon_extentions').'

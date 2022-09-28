@@ -77,7 +77,7 @@ class CategoryController extends MainController
             $category->code = 0;
             if ($request->image) {
 
-                $category->image = $this->imageUpload($request->file('image'), Category::$filePath['images']);
+                $category->image = $this->imageUpload($request->image, Category::$filePath['images']);
             }
             if ($request->icon) {
                 $category->icon = $this->imageUpload($request->file('icon'), Category::$filePath['icons']);
@@ -140,6 +140,7 @@ class CategoryController extends MainController
                 ]
             );
         } catch (\Exception $e) {
+            dd($e);
             DB::rollBack();
             return $this->errorResponse(__('messages.failed.create', ['name' => __(self::OBJECT_NAME)]) . ' error message: ' . $e);
         }
