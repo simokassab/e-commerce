@@ -670,7 +670,7 @@ class ProductService
                     'sku' => array_key_exists('sku', $variation) ? $variation['sku'] : null,
                     'quantity' => $variation['quantity'],
                     'is_same_price_as_parent' => $variation['isSamePriceAsParent'],
-                    'reserved_quantity' => $variation['reserved_quantity'],
+                    'reserved_quantity' =>array_key_exists('reserved_quantity', $variation) ? $variation['reserved_quantity'] : 0,
                     'minimum_quantity' => $variation['minimum_quantity'],
                     'height' => $height,
                     'width' => $width,
@@ -691,7 +691,7 @@ class ProductService
                     'parent_product_id' => $product->id,
                     'products_statuses_id' =>  array_key_exists('products_statuses_id', $variation) ? $variation['products_statuses_id'] : null,
                     'image' => $imagePath,
-                    'is_show_related_product' => $variation['is_show_related_product'] ?? null,
+                    'is_show_related_product' => array_key_exists('is_show_related_product', $variation) ? $variation['is_show_related_product'] : 0,
                     'bundle_reserved_quantity' => null,
                     'pre_order' => array_key_exists('pre_order', $variation) ? $variation['pre_order'] : false,
                     'bundle_price_status' => array_key_exists('bundle_price_status', $variation) ? $variation['bundle_price_status'] : null

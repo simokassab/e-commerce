@@ -90,7 +90,7 @@ class StoreProductRequest extends MainRequest
             'tax_id' => [Rule::when(in_array('tax_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:taxes,id'],
             'products_statuses_id' => 'required | integer | exists:products_statuses,id',
             'is_show_related_product' => 'required | boolean',
-            'pre_order' => 'nullable | boolean',
+            'pre_order' => 'required | boolean',
             'bundle_reserved_quantity' => 'nullable | double',
             'bundle_price_status' =>  ['nullable', Rule::in(ProductRelated::$bundle_price_status)],
             'is_same_price_as_parent' => 'nullable | boolean',
@@ -171,6 +171,9 @@ class StoreProductRequest extends MainRequest
         ];
         if ($this->type == 'variable') {
             foreach ($this->product_variations ?? [] as $key => $variation) {
+                if(!array_key_exists('isSamePriceAsParent',$variation)){
+                    break;
+                }
                 if (!$variation['isSamePriceAsParent']) {
                     $pricesRulesArray = [
                         'product_variations.*.prices.*.price_id' => 'required | integer | exists:prices,id',
