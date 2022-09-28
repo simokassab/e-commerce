@@ -29,7 +29,11 @@ class FieldService{
     public static function addFieldValuesToField(array $fieldValues, Field $field){
             $fieldsValuesArray = [];
             foreach ($fieldValues as $key => $value){
-                $fieldsValuesArray[$key]['id'] = $value['id'];
+                if(!array_key_exists('id',$value)){
+                    $fieldsValuesArray[$key]['id'] = null;
+                }else{
+                    $fieldsValuesArray[$key]['id'] = $value['id'];
+                }
                 $fieldsValuesArray[$key]['field_id'] = $field->id;
                 $fieldsValuesArray[$key]['value'] = json_encode($value['value']);
             }
