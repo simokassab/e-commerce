@@ -32,7 +32,8 @@ class StoreTagRequest extends MainRequest
     public function messages()
     {
         return [
-        'name.required' => 'the :attribute field is required.'
+        'name.en' => 'the field is required.',
+        'name.ar' => 'the field is required.'
     ];
     }
 }

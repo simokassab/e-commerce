@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Users;
 
+use App\Http\Requests\MainRequest;
+
 class StoreUserRequest extends MainRequest
 {
     /**

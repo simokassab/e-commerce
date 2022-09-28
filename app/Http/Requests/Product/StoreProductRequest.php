@@ -91,16 +91,19 @@ class StoreProductRequest extends MainRequest
             'products_statuses_id' => 'required | integer | exists:products_statuses,id',
             'is_show_related_product' => 'required | boolean',
             'pre_order' => 'nullable | boolean',
-            'bundle_reserved_quantity' => 'nullable | integer',
+            'bundle_reserved_quantity' => 'nullable | double',
+            'bundle_price_status' =>  ['nullable', Rule::in(ProductRelated::$bundle_price_status)],
+            'is_same_price_as_parent' => 'nullable | boolean',
+
+            //FOR SORT
+            'order.*.id' => 'required | integer | exists:products,id',
+            'order.*.sort' => 'required | integer',
 
             // 'categories.*' => 'nullable',
             // 'categories.*.id' => 'exists:categories,id',
 
             'fields.*.field_id' => 'required | exists:fields,id,entity,product',
             'fields.*.type' => ['required', 'exists:fields,type,entity,product'],
-
-            'labels.*' => 'exists:labels,id',
-
 
             // 'images.*.image' => 'required | file
             // | mimes:' . config('defaults.default_image_extentions') . '
@@ -109,21 +112,19 @@ class StoreProductRequest extends MainRequest
             // 'images_data.*.title' => 'required ',
             // 'images_data.*.sort' => 'required | integer',
 
-            'tags.*' => 'exists:tags,id',
+            'labels.*' => 'exists:labels,id',
 
             'prices.*.price_id' => 'required | integer | exists:prices,id',
             'prices.*.price' => 'required | numeric | gte:' . $this->priceValue,
             'prices.*.discounted_price' => 'nullable | numeric | gte:' . $this->discountedPriceValue,
+
+            'tags.*' => 'exists:tags,id',
 
             'related_products.*.child_product_id' => [Rule::when($this->type == 'bundle', ['required', 'integer', 'exists:products,id'])],
             'related_products.*.child_quantity' => [Rule::when($this->type == 'bundle', ['required', 'integer', 'gte:' . $this->QuantityValue])],
             'related_products.*.name' => 'nullable',
             'related_products.*.child_name_status' => ['required', Rule::in(ProductRelated::$childNameStatuses)],
 
-            'bundle_price_status' =>  ['nullable', Rule::in(ProductRelated::$bundle_price_status)],
-
-            'order.*.id' => 'required | integer | exists:products,id',
-            'order.*.sort' => 'required | integer',
 
             'product_variations' => [Rule::when($this->type == 'variable', 'required', 'nullable')],
             'product_variations.*.code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
@@ -157,18 +158,14 @@ class StoreProductRequest extends MainRequest
             // | mimes:' . config('defaults.default_image_extentions') . '
             // | max:' . config('defaults.default_image_size') . '
             // | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
-            'product_variations.*.images.*.title' => 'required ',
-            'product_variations.*.images.*.sort' => 'required | integer',
-
+            // 'product_variations.*.images.*.title' => 'required ',
+            // 'product_variations.*.images.*.sort' => 'required | integer',
 
             'product_variations.*.fields.*.field_id' => 'required | exists:fields,id,entity,product',
             'product_variations.*.fields.*.type' => ['required', 'exists:fields,type,entity,product'],
-            // 'product_variations.*.fields.*.field_id' => 'required | integer | exists:fields,id,entity,product',
-            // 'product_variations.*.fields.*.field_value_id' =>  'nullable | integer | exists:fields_values,id',
-            // 'product_variations.*.fields.*.value' => 'nullable | max:' . config('defaults.default_string_length_2'),
 
             'product_variations.*.attributes.*.field_id' => 'required | integer | exists:fields,id,entity,product',
-            'product_variations.*.attributes.*.value' => 'required  |integer | exists:fields_values,id',
+            'product_variations.*.attributes.*.value' => 'required  | integer | exists:fields_values,id',
             'product_variations.*.attributes.*.type' => 'required  | in:select',
 
         ];
@@ -192,12 +189,10 @@ class StoreProductRequest extends MainRequest
                         'fields.*.value' => 'date'
                     ];
                 } elseif ($field['type'] == 'select') {
-
                     $fieldsRules = [
                         'fields.*.value' => 'integer', 'exists:fields_values,id'
                     ];
                 } elseif ($field['type'] == 'checkbox') {
-
                     $fieldsRules = [
                         'fields.*.value' => 'boolean'
                     ];

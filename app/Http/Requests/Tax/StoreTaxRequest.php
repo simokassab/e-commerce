@@ -44,7 +44,8 @@ class StoreTaxRequest extends MainRequest
     public function messages()
     {
         return [
-            'name.required' => 'the :attribute field is required.',
+            'name.en' => 'the field is required.',
+            'name.ar' => 'the field is required.',
 
             'is_complex.required' => 'the :attribute field is required.',
             'is_complex.boolean' => 'The :attribute field accepts only 0 or 1',

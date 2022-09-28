@@ -32,7 +32,8 @@ class StoreUnitRequest extends MainRequest
     public function messages()
     {
         return [
-            'name.required' => 'the name field is required',
+            'name.en' => 'the field is required',
+            'name.ar' => 'the field is required',
             'code.required' => 'the code field is required',
             'code.max' => 'the maximum string length is :max',
 
