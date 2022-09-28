@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Helpers\Aramex;
 use App\Actions\Taxses\CalculateTax;
 use App\Models\Category\Category;
+use SoapClient;
 use Symfony\Component\HttpFoundation\File\File;
 
 class TestController extends MainController

@@ -31,10 +31,10 @@ class StoreBrandRequest extends MainRequest
             'name.en' => 'required',
             'name.ar' => 'required',
 
-            'image' => 'nullable | file | max:' . config('defaults.default_string_length_2') . '
-            | mimes:' . config('defaults.default_image_extentions') . '
-            | max:' . config('defaults.default_image_size') . '
-            | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
+            // 'image' => 'nullable | file | max:' . config('defaults.default_string_length_2') . '
+            // | mimes:' . config('defaults.default_image_extentions') . '
+            // | max:' . config('defaults.default_image_size') . '
+            // | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
 
             'meta_title.en' => 'nullable',
             'meta_title.ar' => 'nullable',

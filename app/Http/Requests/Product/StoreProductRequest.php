@@ -59,15 +59,20 @@ class StoreProductRequest extends MainRequest
             'summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
             'specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
 
-            'image' => 'nullable | file
-            | mimes:' . config('defaults.default_image_extentions') . '
-            | max:' . config('defaults.default_image_size') . '
-            | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
+            // 'image' => 'nullable | file
+            // | mimes:' . config('defaults.default_image_extentions') . '
+            // | max:' . config('defaults.default_image_size') . '
+            // | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
 
-            'meta_title' => 'nullable',
-            'meta_description' => 'nullable',
-            'meta_keyword' => 'nullable',
-            'description' => 'nullable',
+            'meta_title.en' => 'nullable',
+            'meta_title.ar' => 'nullable',
+            'meta_description.en' => 'nullable',
+            'meta_description.ar' => 'nullable',
+            'meta_keyword.en' => 'nullable',
+            'meta_keyword.ar' => 'nullable',
+            'description.en' => 'nullable',
+            'description.ar' => 'nullable',
+
             'website_status' => 'required | in:' . Product::$productStatuses,
             'barcode' => [Rule::when(in_array('barcode',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'max:' . config('defaults.default_string_length')],
             'height' => [Rule::when(in_array('height',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
@@ -97,12 +102,12 @@ class StoreProductRequest extends MainRequest
             'labels.*' => 'exists:labels,id',
 
 
-            'images.*.image' => 'required | file
-            | mimes:' . config('defaults.default_image_extentions') . '
-            | max:' . config('defaults.default_image_size') . '
-            | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
-            'images_data.*.title' => 'required ',
-            'images_data.*.sort' => 'required | integer',
+            // 'images.*.image' => 'required | file
+            // | mimes:' . config('defaults.default_image_extentions') . '
+            // | max:' . config('defaults.default_image_size') . '
+            // | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
+            // 'images_data.*.title' => 'required ',
+            // 'images_data.*.sort' => 'required | integer',
 
             'tags.*' => 'exists:tags,id',
 
@@ -130,10 +135,14 @@ class StoreProductRequest extends MainRequest
 
             'product_variations.*.summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
             'product_variations.*.specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
-            'product_variations.*.meta_title' => 'nullable',
-            'product_variations.*.meta_description' => 'nullable',
-            'product_variations.*.meta_keyword' => 'nullable',
-            'product_variations.*.description' => 'nullable',
+            'product_variations.*.meta_title.en' => 'nullable',
+            'product_variations.*.meta_title.ar' => 'nullable',
+            'product_variations.*.meta_description.en' => 'nullable',
+            'product_variations.*.meta_description.ar' => 'nullable',
+            'product_variations.*.meta_keyword.en' => 'nullable',
+            'product_variations.*.meta_keyword.ar' => 'nullable',
+            'product_variations.*.description.en' => 'nullable',
+            'product_variations.*.description.ar' => 'nullable',
             'product_variations.*.barcode' => [Rule::when(in_array('barcode',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'max:' . config('defaults.default_string_length')],
             'product_variations.*.height' => [Rule::when(in_array('height',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
             'product_variations.*.width' =>  [Rule::when(in_array('width',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
@@ -144,10 +153,10 @@ class StoreProductRequest extends MainRequest
             'product_variations.*.products_statuses_id' => 'required | integer | exists:products_statuses,id',
             'product_variations.*.is_same_dimensions_as_parent' => 'required | boolean',
 
-            'product_variations.*.images.*.image' => 'required | file
-            | mimes:' . config('defaults.default_image_extentions') . '
-            | max:' . config('defaults.default_image_size') . '
-            | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
+            // 'product_variations.*.images.*.image' => 'required | file
+            // | mimes:' . config('defaults.default_image_extentions') . '
+            // | max:' . config('defaults.default_image_size') . '
+            // | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
             'product_variations.*.images.*.title' => 'required ',
             'product_variations.*.images.*.sort' => 'required | integer',
 
