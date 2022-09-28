@@ -92,7 +92,7 @@ class StoreProductRequest extends MainRequest
 
 
             'fields.*.field_id' => 'required | exists:fields,id,entity,product',
-            'fields.*.value' => [Rule::when($this->type == 'select', ['integer', 'exists:fields_values,id'], 'required'), 'required', 'max:' . config('defaults.default_string_length_2')],
+            'fields.*.value' => [Rule::when($this->type == 'select', ['integer', 'exists:fields_values,id']), 'required', 'max:' . config('defaults.default_string_length_2')],
             'fields.*.type' => 'required | exists:fields,type,entity,product',
 
             'labels.*' => 'exists:labels,id',
