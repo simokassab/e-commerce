@@ -30,6 +30,7 @@ class RolePermissions
         $routeAction = Str::replaceAll(
             [
                 'create',
+                'getAllProductsAndPrices',
                 'getProductsForOrders',
                 'getCouponByCode',
                 'getAllParentsSorted',
