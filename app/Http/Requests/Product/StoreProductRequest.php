@@ -203,9 +203,7 @@ class StoreProductRequest extends MainRequest
                     ];
                 } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
                     $fieldsRules = [
-                        'fields.*.value.en' => 'required|string',
-                        'fields.*.value.ar' => 'required|string',
-
+                        'fields.*.value' => 'required|string',
                     ];
                 }
                 $rules = array_merge($rules, $fieldsRules);
