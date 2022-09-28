@@ -247,7 +247,8 @@ class StoreProductRequest extends MainRequest
     public function messages()
     {
         return [
-            'name.required' => 'The :attribute field is required.',
+            'name.en' => 'The field is required.',
+            'name.ar' => 'The field is required.',
 
             'slug.required' => 'the :attribute field is required',
             'slug.max' => 'the maximum string length is :max',

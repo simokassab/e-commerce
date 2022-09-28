@@ -44,8 +44,8 @@ class StoreFieldRequest extends MainRequest
     public function messages()
     {
         return [
-            'name.en' => 'the :attribute field is required',
-            'name.ar' => 'the :attribute field is required',
+            'name.en' => 'the field is required',
+            'name.ar' => 'the field is required',
 
             'type.required' => 'The :attribute is required',
             'type.in' => 'The :attribute is not a valid type',

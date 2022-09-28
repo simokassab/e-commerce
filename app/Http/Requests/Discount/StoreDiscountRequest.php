@@ -35,8 +35,8 @@ class StoreDiscountRequest extends MainRequest
     public function messages()
     {
         return [
-            'name.en' => 'the :attribute field is required',
-            'name.ar' => 'the :attribute field is required',
+            'name.en' => 'the field is required',
+            'name.ar' => 'the field is required',
 
             'start_date.required' => 'the :attribute field is required',
             'start_date.date' => 'the :attribute should be a date',

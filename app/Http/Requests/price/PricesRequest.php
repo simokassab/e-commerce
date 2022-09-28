@@ -42,8 +42,8 @@ class PricesRequest extends MainRequest
     public function messages()
     {
         return [
-            'name.en' => 'the :attribute field is required',
-            'name.ar' => 'the :attribute field is required',
+            'name.en' => 'the field is required',
+            'name.ar' => 'the field is required',
             'is_virtual.boolean' => 'the :attribute field must be a boolean',
             'is_virtual.required' => 'the :attribute field is required',
 

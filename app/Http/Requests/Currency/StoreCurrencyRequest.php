@@ -48,8 +48,8 @@ class StoreCurrencyRequest extends MainRequest
     public function messages()
     {
         return [
-            'name.en' => 'the :attribute field is required',
-            'name.ar' => 'the :attribute field is required',
+            'name.en' => 'the field is required',
+            'name.ar' => 'the field is required',
 
             'code.required' => 'The :attribute is required.',
             'code.max' => 'the maximum string length is :max',
