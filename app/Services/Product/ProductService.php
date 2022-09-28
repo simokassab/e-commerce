@@ -235,8 +235,10 @@ class ProductService
             $data = [];
             foreach ($request->images as $index => $image) {
                 $imagePath = "";
-                if ($request->images)
+                if ($request->images){
+                    dd($request->image);
                     $imagePath = uploadImage($image, $this->imagesPath['images']);
+                }
 
                 $data[] = [
                     'product_id' => $product->id,
