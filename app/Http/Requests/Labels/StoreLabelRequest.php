@@ -31,11 +31,11 @@ class StoreLabelRequest extends MainRequest
             'entity' => 'required|in:' . Label::$entities,
             'color' => 'required | max:' . config('defaults.default_string_length'),
 
-            'image' => 'nullable | image | max:' . config('defaults.default_string_length') . '
-            | mimes:' . config('defaults.default_image_extentions') . '
-            | max:' . config('defaults.default_image_size') . '
-            | dimensions:min_width=' . config('defaults.default_image_minimum_width') . ',min_height=' . config('defaults.default_image_minimum_height') . '
-                ,max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
+            // 'image' => 'nullable | image | max:' . config('defaults.default_string_length') . '
+            // | mimes:' . config('defaults.default_image_extentions') . '
+            // | max:' . config('defaults.default_image_size') . '
+            // | dimensions:min_width=' . config('defaults.default_image_minimum_width') . ',min_height=' . config('defaults.default_image_minimum_height') . '
+            //     ,max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
 
             'key' => 'required | unique:labels,key,' . $this->id . ' | max:' . config('defaults.default_string_length'),
         ];

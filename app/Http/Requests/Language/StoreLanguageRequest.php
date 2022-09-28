@@ -30,11 +30,11 @@ class StoreLanguageRequest extends MainRequest
             'is_default' => 'nullable | boolean',
             'is_disabled' => 'nullable | boolean',
 
-            'image' => 'nullable | file
-            | mimes:' . config('defaults.default_image_extentions') . '
-            | max:' . config('defaults.default_image_size') . '
-            | dimensions:min_width=' . config('defaults.default_image_minimum_width') . ',min_height=' . config('defaults.default_image_minimum_height') . '
-                ,max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
+            // 'image' => 'nullable | file
+            // | mimes:' . config('defaults.default_image_extentions') . '
+            // | max:' . config('defaults.default_image_size') . '
+            // | dimensions:min_width=' . config('defaults.default_image_minimum_width') . ',min_height=' . config('defaults.default_image_minimum_height') . '
+            //     ,max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
 
             'sort' => 'nullable | integer'
 
