@@ -81,8 +81,7 @@ class StoreCategoryRequest extends FormRequest
                     ];
                 } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
                     $fieldsRules = [
-                        'fields.*.value.en' => 'required|string',
-                        'fields.*.value.ar' => 'required|string',
+                        'fields.*.value' => 'required | string',
 
                     ];
                 }
