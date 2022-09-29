@@ -93,13 +93,16 @@ class PricesListController extends MainController
     }
 
     public function update(Request $request){
+        $request->validate([
+            'data.*.code' => 'required|exists:App\Models\Product\Product,code'
+        ]);
+
         DB::beginTransaction();
         try {
             $pricesWithProducts = collect($request->all()['data']);
             $prices = [];
 
-            $productsCodes = $pricesWithProducts->pluck('code')->toArray();
-            $products = Product::query()->select('id','code')->whereIn('code',$productsCodes)->get();
+            $products = Product::query()->select('id','code')->whereIn('code',$pricesWithProducts->pluck('code')->toArray())->get();
             $allPrices = Price::all();
             foreach ($pricesWithProducts as $price) {
                 $productId = $products->where('code',$price['code'])->first()->id;
