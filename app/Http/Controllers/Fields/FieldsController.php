@@ -68,7 +68,9 @@ class FieldsController extends MainController
         $field->is_attribute =  (bool)$request->is_attribute;
 
         if(!$field->save())
-          return $this->errorResponse(__('messages.failed.create',['name' => __(self::OBJECT_NAME)]));
+          return $this->errorResponse(
+              __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+          );
 
         $check=true;
 
@@ -101,8 +103,7 @@ class FieldsController extends MainController
     public function show(Field $field)
     {
         return $this->successResponse(
-            'Success!',
-            [
+            data: [
                 'field' => new SingleFieldResource($field->load('fieldValue'))
             ]
         );

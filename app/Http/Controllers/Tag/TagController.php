@@ -79,8 +79,7 @@ class TagController extends MainController
     public function show(Tag $tag)
     {
          return $this->successResponse(
-             'Success!',
-             [
+             data: [
                  'tag' => new SingleTagResource($tag)
              ]
          );

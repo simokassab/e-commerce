@@ -109,7 +109,7 @@ class ProductController extends MainController
         $categoriesForNested = Category::with('parent')->get();
         $nestedCategories = CategoryService::getAllCategoriesNested($categoriesForNested);
 
-        return $this->successResponse('Success!', [
+        return $this->successResponse(data: [
             'prices' =>  count($PriceArray) != 0 ? $PriceArray : "-",
             'fields' => count($fields) != 0 ? $fields : [],
             'attributes' => count($attributes) != 0 ? $attributes : "-",
@@ -174,8 +174,7 @@ class ProductController extends MainController
         // DB::commit();
 
         return $this->successResponse(
-            'Success!',
-            [
+            data: [
                 'message' => __('messages.success.create', ['name' => __(self::OBJECT_NAME)]),
                 'product' =>  new ProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category']))
             ]
@@ -222,8 +221,7 @@ class ProductController extends MainController
         $childrenImages = ProductImage::query()->whereIn('product_id', $childrenIds)->get();
 
         return $this->successResponse(
-            'Success!',
-            [
+            data: [
                 'product' =>  new SingleProductResource(
                     $product->load([
                         'defaultCategory',
@@ -294,7 +292,7 @@ class ProductController extends MainController
             $this->productService->storeAdditionalProductData($request, $product, $childrenIds);
 
             DB::commit();
-            return $this->successResponse('Success!', [
+            return $this->successResponse(data: [
                 'message' => __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
                 'product' =>  new ProductResource($product->load(['defaultCategory', 'tags', 'brand', 'category']))
             ]);

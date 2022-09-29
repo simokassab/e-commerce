@@ -73,8 +73,7 @@ class UsersController extends MainController
     public function show(User $user)
     {
         return $this->successResponse(
-            'Success!',
-            ['user' => new SingleUserResource($user)]
+            data: ['user' => new SingleUserResource($user)]
         );
 
     }

@@ -23,7 +23,7 @@ class CouponsController extends MainController
      */
 
     const RELATIONS = [];
-    const OBJECT_NAME = [];
+    const OBJECT_NAME = 'objects.coupon';
 
     public function index(Request $request)
     {
@@ -79,10 +79,14 @@ class CouponsController extends MainController
         $coupon->is_used =0;
 
         if(!$coupon->save()){
-            return $this->errorResponse('Sorry but the coupon was not created try again later!');
+            return $this->errorResponse(
+                __('messages.failed.create', ['name' => __(self::OBJECT_NAME)]),
+            );
         }
 
-        return $this->successResponse(data:[
+        return $this->successResponse(
+            __('messages.success.create', ['name' => __(self::OBJECT_NAME)]),
+            [
             'coupon' => new CouponSingleResource($coupon)
         ]);
 
@@ -99,7 +103,7 @@ class CouponsController extends MainController
      */
     public function show(Coupon $coupon)
     {
-        return $this->successResponse('The created was updated successfully',data:[
+        return $this->successResponse(data:[
             'coupon' => new CouponSingleResource($coupon)
         ]);
     }
@@ -143,10 +147,14 @@ class CouponsController extends MainController
         $coupon->is_used =0;
 
         if(!$coupon->save()){
-            return $this->errorResponse('Sorry but the coupon was not updated, try again later!');
+            return $this->errorResponse(
+                __('messages.failed.update', ['name' => __(self::OBJECT_NAME)]),
+            );
         }
 
-        return $this->successResponse('The Coupon was updated successfully',data:[
+        return $this->successResponse(
+            __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
+            [
             'coupon' => new CouponSingleResource($coupon)
         ]);
 
@@ -176,7 +184,7 @@ class CouponsController extends MainController
     }
 
     public function getTableHeaders(){
-        return $this->successResponse('Success!',['headers' => __('headers.coupons') ]);
+        return $this->successResponse(data: ['headers' => __('headers.coupons') ]);
 
     }
 

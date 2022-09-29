@@ -15,12 +15,6 @@ use Illuminate\Http\Request;
 class CountryController extends MainController
 {
     const OBJECT_NAME = 'objects.country';
-    private $imagesPath = "";
-
-    public function __construct($defaultPermissionsFromChild = null)
-    {
-        $this->imagesPath = Country::$imagesPath;
-    }
 
     /**
      * Display a listing of the resource.
@@ -87,8 +81,7 @@ class CountryController extends MainController
     public function show(Country $country)
     {
         return $this->successResponse(
-            'Success!',
-            [
+            data: [
                 'country' => new CoutnrySingleResource($country)
             ]
         );
@@ -164,7 +157,7 @@ class CountryController extends MainController
 
     public function getTableHeaders()
     {
-        return $this->successResponse('Success!', ['headers' => __('headers.countries')]);
+        return $this->successResponse(data: ['headers' => __('headers.countries')]);
     }
 
     public function getCountriesData()

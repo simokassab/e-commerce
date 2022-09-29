@@ -42,7 +42,7 @@ class TaxController extends MainController
     public function create()
     {
         $taxes = Tax::all();
-        return $this->successResponse('success!',[
+        return $this->successResponse(data:[
             'components' =>  TaxResource::collection($taxes)
         ]);
     }
@@ -55,7 +55,7 @@ class TaxController extends MainController
      */
     public function store(StoreTaxRequest $request)
     {
-
+    // @TODO: review the code
     $tax=new Tax();
 
     $tax->name = ($request->name);
@@ -73,7 +73,7 @@ class TaxController extends MainController
     $check=true;
 
     if(!$tax->save())
-        return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+        return $this->errorResponse(__('messages.failed.create',['name' => __(self::OBJECT_NAME)]));
 
     if($request->is_complex && ($request->components != null || count($request->components) > 0)){
         TaxsServices::createComponentsForTax($request->components, $tax);
@@ -106,7 +106,7 @@ class TaxController extends MainController
     public function show(Tax $tax)
     {
         $taxes = Tax::query()->whereNot('id', $tax->id)->get();
-        return $this->successResponse('Success' , [
+        return $this->successResponse(data: [
             'tax' => new SingleTaxResource($tax->load('taxComponents')),
             'components' =>  TaxResource::collection($taxes)
         ]);

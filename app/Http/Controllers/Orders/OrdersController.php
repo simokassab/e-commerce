@@ -37,7 +37,7 @@ use mysql_xdevapi\Exception;
 
 class OrdersController extends MainController
 {
-    const OBJECT_NAME = 'objects.role';
+    const OBJECT_NAME = 'objects.order';
     const relations = ['customer'];
     /**
      * Display a listing of the resource.
@@ -332,15 +332,17 @@ class OrdersController extends MainController
             OrdersService::adjustQuantityOfOrderProducts($order->selected_products, $allProducts);
 
             DB::commit();
-            return $this->successResponse('The order has been created successfully !', [
-                'order' => new SingelOrdersResource($order->load(['status', 'coupon', 'products', 'notes']))
-            ]);
-        } catch (\Exception $exception) {
+            return $this->successResponse(
+                __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'order' => new SingelOrdersResource($order->load(['status', 'coupon', 'products', 'notes']))
+                ]
+            );
+        } catch (\Exception|\Error $exception) {
             DB::rollBack();
-            return $this->errorResponse('The Order has not been created successfully!' . 'error message: ' . $exception);
-        } catch (\Error $error) {
-            DB::rollBack();
-            return $this->errorResponse('The Order has not been created successfully!' . 'error message: ' . $error);
+            return $this->errorResponse(
+                __('messages.failed.create',['name' => __(self::OBJECT_NAME)]),
+            );
         }
     }
 
@@ -397,7 +399,6 @@ class OrdersController extends MainController
             $defaultPricingClass = Setting::where('title', 'default_pricing_class')->first()->value;
             $allTaxes = Tax::all();
             $allTaxComponents = TaxComponent::all();
-            $orderProducts =  OrderProduct::where('order_id', $order->id)->get();
             $defaultCurrency = Currency::where('is_default', 1)->first();
 
             $order->currency_rate = $request->currency_rate;
@@ -610,15 +611,17 @@ class OrdersController extends MainController
             $order->selected_products = OrdersService::generateOrderProducts($productsOrders, $defaultPricingClass, $allTaxComponents, $allTaxes, $selectedCurrency);
             OrdersService::adjustQuantityOfOrderProducts($order->selected_products, $allProducts);
             DB::commit();
-            return $this->successResponse('The order has been created successfully !', [
-                'order' => new SingelOrdersResource($order->load(['status', 'coupon', 'products', 'notes']))
-            ]);
+            return $this->successResponse(
+                __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'order' => new SingelOrdersResource($order->load(['status', 'coupon', 'products', 'notes']))
+                ]
+            );
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->errorResponse('The Order has not been created successfully!' . 'error message: ' . $exception);
-        } catch (\Error $error) {
-            DB::rollBack();
-            return $this->errorResponse('The Order has not been created successfully!' . 'error message: ' . $error);
+            return $this->errorResponse(
+                __('messages.failed.update',['name' => __(self::OBJECT_NAME)]),
+            );
         }
     }
 

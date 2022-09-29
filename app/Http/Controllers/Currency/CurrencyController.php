@@ -20,16 +20,12 @@ class CurrencyController extends MainController
 {
     const OBJECT_NAME = 'objects.currency';
     const relations = ['currencyHistory'];
-    private $imagesPath = "";
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-        $this->imagesPath = Currency::$imagesPath;
-    }
+
     public function index(Request $request)
     {
         if ($request->method() == 'POST') {
@@ -97,8 +93,7 @@ class CurrencyController extends MainController
     public function show(Currency $currency)
     {
         return $this->successResponse(
-            'Success!',
-            [
+            data:[
                 'currency' => new SingleCurrencyResource($currency)
             ]
         );
@@ -132,7 +127,7 @@ class CurrencyController extends MainController
             $currency->symbol = $request->symbol;
             $currency->rate = $request->rate;
             $currency->is_default = false;
-            if ((bool)$request->is_default)
+            if ($request->is_default)
                 $currency->setIsDefault();
 
             if ($request->image) {
@@ -157,7 +152,7 @@ class CurrencyController extends MainController
             return $this->errorResponse(
                 __('messages.failed.update', ['name' => __(self::OBJECT_NAME)]),
                 [
-                    $exception->getMessage()
+                    'error' => $exception->getMessage()
                 ]
             );
         }
@@ -204,8 +199,7 @@ class CurrencyController extends MainController
     public function getTableHeaders()
     {
         return $this->successResponse(
-            'Success!',
-            [
+            data: [
                 'headers' => __('headers.currencies')
             ]
         );

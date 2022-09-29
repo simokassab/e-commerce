@@ -19,9 +19,11 @@ return [
     'brands' => 'Brand',
     'discount' => 'Discount',
     'discountEntity' => 'Discount Entity',
-    'tax' => 'Tax',
-    'user' => 'User',
+    'tax' => 'tax',
+    'user' => 'user',
     'price'=> 'price',
     'product'=> 'product',
+    'coupon' => 'coupon',
+    'order' => 'order'
 
 ];

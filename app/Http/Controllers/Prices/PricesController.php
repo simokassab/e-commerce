@@ -45,8 +45,7 @@ class PricesController extends MainController
 
         $originalPrices = Price::with(['originalPrice','currency'])->where('is_virtual',0)->get();
         return $this->successResponse(
-            'Success!',
-            [
+            data: [
                 'prices' => PriceResource::collection($originalPrices)
             ]
         );
@@ -97,8 +96,7 @@ class PricesController extends MainController
     public function show(Price $price)
     {
         return $this->successResponse(
-            'Success!',
-            [
+            data: [
                 'price' => new SinglePriceResource($price->load(['originalPrice','currency']))
             ]
         );

@@ -15,11 +15,7 @@ use Illuminate\Http\Request;
 class LabelController extends MainController
 {
     const OBJECT_NAME = 'objects.label';
-    private $imagesPath = "";
-    public function __construct()
-    {
-        $this->imagesPath = Label::$imagesPath;
-    }
+
 
     /**
      * Display a listing of the resource.
@@ -86,7 +82,7 @@ class LabelController extends MainController
      */
     public function show(Label $label)
     {
-        return $this->successResponse('Success!', ['label' => new SingleLableResource($label)]);
+        return $this->successResponse(data: ['label' => new SingleLableResource($label)]);
     }
 
     /**
@@ -126,7 +122,6 @@ class LabelController extends MainController
         if (!$label->save())
             return $this->errorResponse(
                 __('messages.failed.update', ['name' => __(self::OBJECT_NAME)])
-
             );
 
         return $this->successResponse(
