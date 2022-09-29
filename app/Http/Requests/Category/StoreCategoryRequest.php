@@ -39,10 +39,10 @@ class StoreCategoryRequest extends FormRequest
 //            | max:'.config('defaults.default_image_size').'
 //            | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
 //
-            'icon' => 'nullable | file
-            | mimes:' . config('defaults.default_icon_extentions') . '
-            | max:' . config('defaults.default_icon_size') . '
-            | dimensions:max_width=' . config('defaults.default_icon_maximum_width') . ',max_height=' . config('defaults.default_icon_maximum_height'),
+            // 'icon' => 'nullable | file
+            // | mimes:' . config('defaults.default_icon_extentions') . '
+            // | max:' . config('defaults.default_icon_size') . '
+            // | dimensions:max_width=' . config('defaults.default_icon_maximum_width') . ',max_height=' . config('defaults.default_icon_maximum_height'),
 
             'parent_id' => 'nullable | integer',
             'slug' => 'required | max:' . config('defaults.default_string_length_2') . ' | unique:categories,slug,' . $this->id ?? null,
