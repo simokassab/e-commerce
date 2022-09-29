@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Prices;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MainController;
 use App\Http\Resources\Price\PriceListCreateResource;
+use App\Models\Field\FieldValue;
 use App\Models\Price\Price;
 use App\Models\Product\Product;
 use App\Models\Product\ProductPrice;
 use Illuminate\Http\Request;
 use App\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use function PHPUnit\Framework\isEmpty;
 
 class PricesListController extends MainController
@@ -91,69 +93,42 @@ class PricesListController extends MainController
     }
 
     public function update(Request $request){
+        DB::beginTransaction();
         try {
-            $pricesWithPricesClasses = ($request->data);
-            $newPrices = [];
-            $pricesToBeSaved = [];
-            $i = 0;
-            foreach ($pricesWithPricesClasses as $pricesWithPricesClass){
-                $code = $pricesWithPricesClass['code'];
-                unset($pricesWithPricesClass['UOM']);
-                unset($pricesWithPricesClass['item']);
-                unset($pricesWithPricesClass['code']);
-                $newPrices[$i] = $pricesWithPricesClass;
-                $newPrices[$i]['code'] = $code;
+            $pricesWithProducts = collect($request->all()['data']);
+            $prices = [];
 
-                $i++;
+            $productsCodes = $pricesWithProducts->pluck('code')->toArray();
+            $products = Product::query()->select('id','code')->whereIn('code',$productsCodes)->get();
+            $allPrices = Price::all();
+            foreach ($pricesWithProducts as $price) {
+                $productId = $products->where('code',$price['code'])->first()->id;
 
-            }
+                unset($price['code']);
+                unset($price['item']);
+                unset($price['UOM']);
 
-            foreach ($newPrices as $innerNewPrices){
-                $code = $innerNewPrices['code'];
-                $productId = Product::where('code' ,$code )->first()->id;
-                foreach($innerNewPrices as $innerInnerNewPrice){
-                    if(is_array($innerInnerNewPrice)){
-                        $innerInnerNewPrice['code'] = $code;
-                        $innerInnerNewPrice['product_id'] = $productId;
-                        $pricesToBeSaved[] = $innerInnerNewPrice;
+                foreach ($price as $priceElement) {
+                    unset($priceElement['is_virtual']);
+                    $priceElement['product_id'] = $productId;
+
+                    $currentPrice = $allPrices->where('id',$priceElement['price_id'])->first();
+                    if($currentPrice->is_virtual){
+                        continue;
                     }
 
-                }
-
-            }
-            $pricesToBeSaved = collect($pricesToBeSaved)->filter(fn ($value) => !$value['is_virtual']);
-            $pricesWithIds = (collect($pricesToBeSaved)->whereNotNull('id')->map(fn($value)=> (collect($value)->forget('is_virtual')->forget('code') )));
-            $pricesWithNull = (collect($pricesToBeSaved)->whereNull('id'));
-            $codes = $pricesWithNull->pluck('code');
-            $productsCodesAndIds = Product::select('code','id')->whereIn('code',$codes)->get();
-            $newPrices = [];
-            foreach ($pricesWithNull as $priceWithNull){
-                foreach($productsCodesAndIds as $productCodeAndIds){
-                    $price = [];
-                    if($priceWithNull['code'] == $productCodeAndIds['code']){
-                        $price['price'] = $priceWithNull['price'];
-                        $price['price_id'] = $priceWithNull['price_id'];
-                        $price['product_id'] = $productCodeAndIds['id'];
-                        $price['created_at'] = now();
-                        $price['updated_at'] = now();
-
-                    }
-                    if(count($price) > 0){
-                        $newPrices[] = $price;
-                    }
+                    $prices[] = $priceElement;
                 }
             }
-            if(count($newPrices) != 0){
-                ProductPrice::query()->insert($newPrices);
-            }
-            if(count($pricesWithIds->toArray()) > 0){
-                batch()->update(new ProductPrice(),$pricesWithIds->toArray(),'id');
-            }
+            ProductPrice::query()->upsert($prices,['id'],['price']);
+            DB::commit();
 
-            return $this->successResponse('the prices have been updated successfully');
+            return $this->successResponse('Prices updates successfully!');
         }catch (\Exception $e){
-            return $e;
-            return $this->errorResponse('error occurred please try again later!');
+            DB::rollback();
+            return $this->errorResponse('The prices where not updates, try again later!',[
+                'error_message' => $e
+            ]);
         }
 
 

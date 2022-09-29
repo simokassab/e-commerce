@@ -236,7 +236,7 @@ class ProductService
             foreach ($request->images as $index => $image) {
                 $imagePath = "";
                 if ($request->images){
-                    dd($request->image);
+                    dd($request->images);
                     $imagePath = uploadImage($image, $this->imagesPath['images']);
                 }
 
