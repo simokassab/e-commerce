@@ -58,6 +58,7 @@ class StoreBrandRequest extends MainRequest
 
         if ($this->has('fields')) {
             foreach ($this->fields as $field) {
+                dd($this->fields);
                 if ($field['type'] == 'date') {
                     $fieldsRules = [
                         'fields.*.value' => 'date'
