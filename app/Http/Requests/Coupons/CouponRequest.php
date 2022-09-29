@@ -24,7 +24,7 @@ class CouponRequest extends MainRequest
         return [
             'title.en' => 'the field is required',
             'title.ar' => 'the field is required',
-              'code' => 'unique:coupons,code,' . $id,
+            'code' => 'required|unique:coupons,code,' . $id,
             'start_date' => 'nullable|date|after_or_equal:' . now()->toDateString(),
             'expiry_date' => ['nullable', 'date', Rule::when($this->has('start_date'), ['after_or_equal:start_date'])],
             'type' => ['required', Rule::in(['percentage', 'amount'])],
