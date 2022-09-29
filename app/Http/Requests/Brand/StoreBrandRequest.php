@@ -68,7 +68,6 @@ class StoreBrandRequest extends MainRequest
                         'fields.*.value' => 'required | integer', 'exists:fields_values,id'
                     ];
                 } elseif ($field['type'] == 'checkbox') {
-                    $field['value'] = filter_var($field['value'], FILTER_VALIDATE_BOOLEAN);
                     $fieldsRules = [
                         'fields.*.value' => 'required | boolean'
                     ];
