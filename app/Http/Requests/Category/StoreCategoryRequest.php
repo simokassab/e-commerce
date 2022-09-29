@@ -39,10 +39,10 @@ class StoreCategoryRequest extends MainRequest
 //            | max:'.config('defaults.default_image_size').'
 //            | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
 //
-            'icon' => 'nullable | file
-            | mimes:' . config('defaults.default_icon_extentions') . '
-            | max:' . config('defaults.default_icon_size') . '
-            | dimensions:max_width=' . config('defaults.default_icon_maximum_width') . ',max_height=' . config('defaults.default_icon_maximum_height'),
+            // 'icon' => 'nullable | file
+            // | mimes:' . config('defaults.default_icon_extentions') . '
+            // | max:' . config('defaults.default_icon_size') . '
+            // | dimensions:max_width=' . config('defaults.default_icon_maximum_width') . ',max_height=' . config('defaults.default_icon_maximum_height'),
 
             'parent_id' => 'nullable | integer',
             'slug' => 'required | max:' . config('defaults.default_string_length_2') . ' | unique:categories,slug,' . $this->id ?? null,
@@ -64,30 +64,29 @@ class StoreCategoryRequest extends MainRequest
         ];
         $fieldsRules = [];
         if ($this->has('fields')) {
-            foreach ($this->fields as $field) {
+            foreach ($this->fields as $key => $field) {
                 if ($field['type'] == 'date') {
-                    $fieldsRules = [
-                        'fields.*.value' => 'date'
+                    $fieldsRules[] = [
+                        'fields.*.value' => 'required | date'
                     ];
                 } elseif ($field['type'] == 'select') {
 
-                    $fieldsRules = [
-                        'fields.*.value' => 'integer', 'exists:fields_values,id'
+                    $fieldsRules[] = [
+                        'fields.*.value' => 'required | integer', 'exists:fields_values,id'
                     ];
                 } elseif ($field['type'] == 'checkbox') {
-
-                    $fieldsRules = [
-                        'fields.*.value' => 'boolean'
+                    $fieldsRules[] = [
+                        'fields.*.value' => 'required | boolean'
                     ];
                 } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
-                    $fieldsRules = [
+                    $fieldsRules[] = [
                         'fields.*.value' => 'required | string',
-
                     ];
                 }
                 $rules = array_merge($rules, $fieldsRules);
             }
         }
+
         return $rules;
     }
 

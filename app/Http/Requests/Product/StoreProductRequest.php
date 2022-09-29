@@ -186,53 +186,55 @@ class StoreProductRequest extends MainRequest
         }
         $fieldsRules = [];
         if ($this->has('fields')) {
-            foreach ($this->fields as $field) {
+            foreach ($this->fields as $key => $field) {
                 if ($field['type'] == 'date') {
-                    $fieldsRules = [
-                        'fields.*.value' => 'date'
+                    $fieldsRules[] = [
+                        'fields.*.value' => 'required | date'
                     ];
                 } elseif ($field['type'] == 'select') {
-                    $fieldsRules = [
-                        'fields.*.value' => 'integer', 'exists:fields_values,id'
+
+                    $fieldsRules[] = [
+                        'fields.*.value' => 'required | integer', 'exists:fields_values,id'
                     ];
                 } elseif ($field['type'] == 'checkbox') {
-                    $fieldsRules = [
-                        'fields.*.value' => 'boolean'
+                    $fieldsRules[] = [
+                        'fields.*.value' => 'required | boolean'
                     ];
                 } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
-                    $fieldsRules = [
-                        'fields.*.value' => 'required|string',
+                    $fieldsRules[] = [
+                        'fields.*.value' => 'required | string',
                     ];
                 }
                 $rules = array_merge($rules, $fieldsRules);
             }
         }
+
         if ($this->has('product_variations')) {
             if (array_key_exists('fields', $this->product_variations)) {
-                foreach ($this->product_variations['fields'] as $field) {
+                foreach ($this->product_variations['fields'] as $key => $field) {
                     if ($field['type'] == 'date') {
-                        $fieldsRules = [
-                            'fields.*.value' => 'date'
+                        $fieldsRules[] = [
+                            'fields.*.value' => 'required | date'
                         ];
                     } elseif ($field['type'] == 'select') {
 
-                        $fieldsRules = [
-                            'fields.*.value' => 'integer', 'exists:fields_values,id'
+                        $fieldsRules[] = [
+                            'fields.*.value' => 'required | integer', 'exists:fields_values,id'
                         ];
                     } elseif ($field['type'] == 'checkbox') {
-
-                        $fieldsRules = [
-                            'fields.*.value' => 'boolean'
+                        $fieldsRules[] = [
+                            'fields.*.value' => 'required | boolean'
                         ];
                     } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
-                        $fieldsRules = [
-                            'fields.*.value' => 'required|string',
+                        $fieldsRules[] = [
+                            'fields.*.value' => 'required | string',
                         ];
                     }
                     $rules = array_merge($rules, $fieldsRules);
                 }
+                    $rules = array_merge($rules, $fieldsRules);
+                }
             }
-        }
 
         return $rules;
     }
