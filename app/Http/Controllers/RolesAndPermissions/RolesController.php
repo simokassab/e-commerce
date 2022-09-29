@@ -132,12 +132,9 @@ class RolesController extends MainController
 
 
         return $this->successResponse(
-            'Success!',
-            [
+            data: [
                 'role' => (new SingleRoleResource($role))->permissions($permissions),
             ],
-            202
-
         );
     }
 
@@ -264,7 +261,7 @@ class RolesController extends MainController
             $returnArray[] = $tempArray;
         }
 
-        return $this->successResponse('success!', $returnArray);
+        return $this->successResponse(data: $returnArray);
 
     }
 

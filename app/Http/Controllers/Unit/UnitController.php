@@ -72,7 +72,7 @@ class UnitController extends MainController
      */
     public function show(Unit $unit)
     {
-        return $this->successResponse('Success!' , ['unit' => new SingleUnitResource($unit)]);
+        return $this->successResponse(data: ['unit' => new SingleUnitResource($unit)]);
     }
 
     /**
@@ -135,7 +135,7 @@ class UnitController extends MainController
     }
 
     public function getTableHeaders(){
-        return $this->successResponse('Success!',['headers' => __('headers.units') ]);
+        return $this->successResponse(data:['headers' => __('headers.units') ]);
 }
 
     public function getUnitsData(){

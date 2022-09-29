@@ -17,13 +17,8 @@ use Illuminate\Support\Facades\App;
 class LanguageController extends MainController
 {
     const OBJECT_NAME = 'objects.language';
-    private $imagesPath = "";
 
-    public function __construct($defaultPermissionsFromChild = null)
-    {
-        parent::__construct($defaultPermissionsFromChild);
-        $this->imagesPath = Language::$imagesPath;
-    }
+
     /**
      * Display a listing of the resource.
      *

@@ -157,7 +157,6 @@ class CategoryController extends MainController
     {
 
         return $this->successResponse(
-            'Success!',
             data: [
                 'category' =>  new SingleCategoryResource($category->load(['fields', 'fieldValue', 'label']))
             ]
@@ -310,8 +309,7 @@ class CategoryController extends MainController
 
         $categories = Category::rootParent()->order()->get();
         return $this->successResponse(
-            'Success!',
-            [
+           data: [
                 'categories' => $categories
             ]
         );
@@ -321,8 +319,7 @@ class CategoryController extends MainController
     {
         $categories = Category::whereParentId($parent_id)->order()->get();
         return $this->successResponse(
-            'Success!',
-            [
+            data: [
                 'categories' => $categories
             ]
         );
@@ -337,7 +334,7 @@ class CategoryController extends MainController
 
     public function getTableHeaders()
     {
-        return $this->successResponse('Success!', ['headers' => __('headers.categories')]);
+        return $this->successResponse(data: ['headers' => __('headers.categories')]);
     }
 
     public function getCategoiresData()

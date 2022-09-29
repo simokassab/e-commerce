@@ -84,7 +84,9 @@ class DiscountController extends MainController
 
         }catch (\Exception $e){
             DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.create',['name' => __(self::OBJECT_NAME)]) ]);
+            return $this->errorResponse(
+                __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+            );
 
         }
 
@@ -102,8 +104,7 @@ class DiscountController extends MainController
     public function show(Discount $discount)
     {
         return $this->successResponse(
-            'Success!',
-            [
+            data: [
                 'discount' => new DiscountResource($discount)
             ]
         );
@@ -170,6 +171,6 @@ class DiscountController extends MainController
     }
 
     public function getTableHeaders(){
-        return $this->successResponse('Success' , ['headers' => __('headers.discounts') ]);
+        return $this->successResponse(data: ['headers' => __('headers.discounts') ]);
 }
 }

@@ -98,7 +98,7 @@ class SettingsController extends MainController
                 return Setting::all(['id', 'title', 'type', 'value']);
             });
             DB::commit();
-            return $this->successResponse("Success!", [
+            return $this->successResponse(data: [
                 'meesage' => __('messages.success.update', ['name' => __(self::OBJECT_NAME)],),
                 'setting' => new SettingsResource($setting),
 
@@ -123,7 +123,7 @@ class SettingsController extends MainController
 
     public function getTableHeaders()
     {
-        return $this->successResponse('Success!', [
+        return $this->successResponse(data: [
             'headers' => __('headers.settings'),
             'column_data' => [
                 'key',
