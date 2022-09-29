@@ -52,8 +52,8 @@ class StoreCategoryRequest extends FormRequest
             'description' => 'nullable',
             'sort' => 'nullable | integer',
 
-            'fields.*.field_id' => 'required | exists:fields,id,entity,brand',
-            'fields.*.type' => ['required', 'exists:fields,type,entity,brand'],
+            'fields.*.field_id' => 'required | exists:fields,id,entity,category',
+            'fields.*.type' => ['required', 'exists:fields,type,entity,category'],
 
             'label' => 'nullable|array',
             'labels.*' => 'required | integer | exists:labels,id',
