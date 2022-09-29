@@ -87,17 +87,4 @@ class StoreCurrencyRequest extends MainRequest
         return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(
-            response()->json(
-                [
-                    'message' => 'The input validation has failed, check your inputs',
-                    'code' => -1,
-                    'errors' => $validator->errors()->messages(),
-                ],
-                200
-            )
-        );
-    }
 }

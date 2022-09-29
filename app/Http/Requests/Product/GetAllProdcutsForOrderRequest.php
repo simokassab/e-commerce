@@ -34,16 +34,6 @@ class GetAllProdcutsForOrderRequest extends MainRequest
            'name' => 'nullable'
        ];
     }
-    protected function failedValidation(Validator $validator) {
-        throw new HttpResponseException(response()->json(
-            [
-                'code' => -1 ,
-                'errors'=>$validator->errors()->messages() ,
-                'message' => 'Please recheck the selected currency or currency rate'
-            ],
-            200)
 
-        );
-    }
 
 }

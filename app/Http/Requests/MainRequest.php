@@ -38,7 +38,7 @@ class MainRequest extends FormRequest
                 'message' => 'The input validation has failed, check your inputs',
                 'code' => -1,
                 'errors' => $validator->errors()->messages(),
-            ], 200)
+            ], 500)
 
         );
     }
