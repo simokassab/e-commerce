@@ -114,7 +114,7 @@ class CountryController extends MainController
             if (!$this->removeImage($country->flag)) {
                 throw new FileErrorException();
             }
-            $country->flag = $this->imageUpload($request->flag, $this->imagesPath['images']);
+            $country->flag = $this->imageUpload($request->flag, Country::$imagesPath['images']);
         }
         if (!$country->save())
             return $this->errorResponse(
