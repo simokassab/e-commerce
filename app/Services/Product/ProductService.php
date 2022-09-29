@@ -552,28 +552,28 @@ class ProductService
     {
         //        DB::beginTransaction();
         // try {
-            if (is_null($imagesArray) || is_null($imagesData))
-                return $this;
 
-            $data = [];
-            foreach ($childrenIds as $key => $child) {
-                foreach ($imagesArray as $index => $image) {
-                    $imagePath = uploadImage($image, $this->imagesPath['images']);
-                    $data[] = [
-                        'product_id' => $child,
-                        'image' => $imagePath,
-                        'title' => json_encode($imagesData[$key][$index]['title']),
-                        'sort' => $imagesData[$key][$index]['sort'],
-                        'created_at'  => Carbon::now()->toDateString(),
-                        'updated_at' => Carbon::now()->toDateString(),
-                    ];
-                }
+        $data = [];
+        foreach ($childrenIds as $key => $child) {
+            foreach ($imagesArray as $index => $image) {
+                if ($image || count($imagesData[$index]) == 0)
+                    break;
+                $imagePath = uploadImage($image, $this->imagesPath['images']);
+                $data[] = [
+                    'product_id' => $child,
+                    'image' => $imagePath,
+                    'title' => json_encode($imagesData[$key][$index]['title']),
+                    'sort' => $imagesData[$key][$index]['sort'],
+                    'created_at'  => Carbon::now()->toDateString(),
+                    'updated_at' => Carbon::now()->toDateString(),
+                ];
             }
+        }
 
 
-            ProductImage::insert($data);
-            //            DB::commit();
-            return $this;
+        ProductImage::insert($data);
+        //            DB::commit();
+        return $this;
         // } catch (Exception $e) {
         //     //            DB::rollBack();
         //     throw new Exception($e->getMessage());
@@ -620,108 +620,108 @@ class ProductService
     {
         //        DB::beginTransaction();
         // try {
-            throw_if(count($request->product_variations) == 0, Exception::class, 'No variations found');
+        throw_if(count($request->product_variations) == 0, Exception::class, 'No variations found');
 
-            $productVariationParentsArray = [];
-            $imagesDeletedArray = [];
-            $imagesArray = [];
-            $fieldsArray = [];
-            $attributesArray = [];
+        $productVariationParentsArray = [];
+        $imagesDeletedArray = [];
+        $imagesArray = [];
+        $fieldsArray = [];
+        $attributesArray = [];
 
-            $defaultChild = null;
+        $defaultChild = null;
 
-            foreach ($request->product_variations as $variation) {
-                $imagePath = array_key_exists('image', $variation) ? $variation['image'] : "";
-                if (!is_null($variation['image'])) {
-                    if ($variation['image'] && !is_string($variation['image'])) {
-                        $imagePath = uploadImage($variation['image'],  $this->imagesPath['images']);
-                    } else {
-                        $imagePath = "";
-                    }
-                }
-                if ($variation['is_default_child']) {
-                    $defaultChild = $variation;
-                }
-                $isSameDimensionsAsParent =  array_key_exists('is_same_dimensions_as_parent', $variation) ? $variation['is_same_dimensions_as_parent'] : false;
-                $height = "";
-                $width = "";
-                $length = "";
-                $weight = "";
-
-                if ($isSameDimensionsAsParent) {
-                    $height = array_key_exists('height', $variation) ? $variation['height'] : null;
-                    $width = array_key_exists('width', $variation) ? $variation['width'] : null;
-                    $length = array_key_exists('p_length', $variation) ? $variation['p_length'] : null;
-                    $weight = array_key_exists('weight', $variation) ? $variation['weight'] : null;
+        foreach ($request->product_variations as $variation) {
+            $imagePath = array_key_exists('image', $variation) ? $variation['image'] : "";
+            if (!is_null($variation['image'])) {
+                if ($variation['image']) {
+                    $imagePath = uploadImage($variation['image'],  $this->imagesPath['images']);
                 } else {
-                    $height =  $request->height ?? null;
-                    $width = $request->width ?? null;
-                    $length =  $request->p_length  ?? null;
-                    $weight = $request->weight ?? null;
+                    $imagePath = "";
                 }
-                $productVariationsArray = [
-                    'name' => json_encode($request->name),
-                    'code' => $variation['code'],
-                    'type' => 'variable_child',
-                    'sku' => array_key_exists('sku', $variation) ? $variation['sku'] : null,
-                    'quantity' => $variation['quantity'],
-                    'is_same_price_as_parent' => $variation['isSamePriceAsParent'],
-                    'reserved_quantity' => array_key_exists('reserved_quantity', $variation) ? $variation['reserved_quantity'] : 0,
-                    'minimum_quantity' => $variation['minimum_quantity'],
-                    'height' => $height,
-                    'width' => $width,
-                    'length' => $length,
-                    'weight' => $weight,
-                    'barcode' => array_key_exists('barcode', $variation) ? $variation['barcode'] : null,
-                    'category_id' => $request->category_id,
-                    'unit_id' => $request->unit_id ?? null,
-                    'tax_id' => $request->tax_id ?? null,
-                    'brand_id' => $request->brand_id ?? null,
-                    'summary' => json_encode($request->summary) ?? null,
-                    'specification' => json_encode($request->specification) ?? null,
-                    'meta_title' => json_encode($request->meta_title) ?? null,
-                    'meta_keyword' => json_encode($request->meta_keyword) ?? null,
-                    'meta_description' => json_encode($request->meta_description) ?? null,
-                    'description' => json_encode($request->description) ?? null,
-                    'website_status' => $request->website_status,
-                    'parent_product_id' => $product->id,
-                    'products_statuses_id' =>  array_key_exists('products_statuses_id', $variation) ? $variation['products_statuses_id'] : null,
-                    'image' => $imagePath,
-                    'is_show_related_product' => array_key_exists('is_show_related_product', $variation) ? $variation['is_show_related_product'] : 0,
-                    'bundle_reserved_quantity' => null,
-                    'pre_order' => array_key_exists('pre_order', $variation) ? $variation['pre_order'] : false,
-                    'bundle_price_status' => array_key_exists('bundle_price_status', $variation) ? $variation['bundle_price_status'] : null
-
-                ];
-
-                $imagesDeletedArray = array_key_exists('images_deleted', $variation) ?  $variation['images_deleted'] : [];
-                $imagesArray[] = array_key_exists('images', $variation) ? $variation['images'] : [];
-                $imagesData[] = array_key_exists('images_data', $variation) ? $variation['images_data'] : [];
-                //$fieldsArray[] = array_key_exists('fields', $variation) ? $variation['fields'] : [];
-                $fieldsArray = [];
-                $attributesArray[] = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
-                $productVariationParentsArray[] = $productVariationsArray;
             }
-            $model = new Product();
-            Product::query()->upsert($productVariationParentsArray, 'id', $model->getFillable());
-
-            $childrenIds = Product::query()->where('parent_product_id', $product->id)->get()->pluck('id');
-
-
-            // set default child as default child
-            if (!is_null($defaultChild)) {
-                Product::query()->where('code', $defaultChild['code'])->update([
-                    'is_default_child' => 1
-                ]);
+            if ($variation['is_default_child']) {
+                $defaultChild = $variation;
             }
-            $this->removeImagesForVariations($imagesDeletedArray, $childrenIds);
-            $this->storeImagesForVariations(collect($imagesArray)->flatten()->toArray(), $imagesData, $childrenIds);
-            $this->storePricesForVariations($request, $childrenIds);
-            $this->storeFieldsForVariations($fieldsArray, $childrenIds);
-            $this->storeAttributesForVariations($attributesArray, $childrenIds);
+            $isSameDimensionsAsParent =  array_key_exists('is_same_dimensions_as_parent', $variation) ? $variation['is_same_dimensions_as_parent'] : false;
+            $height = "";
+            $width = "";
+            $length = "";
+            $weight = "";
 
-            //            DB::commit();
-            return $childrenIds;
+            if ($isSameDimensionsAsParent) {
+                $height = array_key_exists('height', $variation) ? $variation['height'] : null;
+                $width = array_key_exists('width', $variation) ? $variation['width'] : null;
+                $length = array_key_exists('p_length', $variation) ? $variation['p_length'] : null;
+                $weight = array_key_exists('weight', $variation) ? $variation['weight'] : null;
+            } else {
+                $height =  $request->height ?? null;
+                $width = $request->width ?? null;
+                $length =  $request->p_length  ?? null;
+                $weight = $request->weight ?? null;
+            }
+            $productVariationsArray = [
+                'name' => json_encode($request->name),
+                'code' => $variation['code'],
+                'type' => 'variable_child',
+                'sku' => array_key_exists('sku', $variation) ? $variation['sku'] : null,
+                'quantity' => $variation['quantity'],
+                'is_same_price_as_parent' => $variation['isSamePriceAsParent'],
+                'reserved_quantity' => array_key_exists('reserved_quantity', $variation) ? $variation['reserved_quantity'] : 0,
+                'minimum_quantity' => $variation['minimum_quantity'],
+                'height' => $height,
+                'width' => $width,
+                'length' => $length,
+                'weight' => $weight,
+                'barcode' => array_key_exists('barcode', $variation) ? $variation['barcode'] : null,
+                'category_id' => $request->category_id,
+                'unit_id' => $request->unit_id ?? null,
+                'tax_id' => $request->tax_id ?? null,
+                'brand_id' => $request->brand_id ?? null,
+                'summary' => json_encode($request->summary) ?? null,
+                'specification' => json_encode($request->specification) ?? null,
+                'meta_title' => json_encode($request->meta_title) ?? null,
+                'meta_keyword' => json_encode($request->meta_keyword) ?? null,
+                'meta_description' => json_encode($request->meta_description) ?? null,
+                'description' => json_encode($request->description) ?? null,
+                'website_status' => $request->website_status,
+                'parent_product_id' => $product->id,
+                'products_statuses_id' =>  array_key_exists('products_statuses_id', $variation) ? $variation['products_statuses_id'] : null,
+                'image' => $imagePath,
+                'is_show_related_product' => array_key_exists('is_show_related_product', $variation) ? $variation['is_show_related_product'] : 0,
+                'bundle_reserved_quantity' => null,
+                'pre_order' => array_key_exists('pre_order', $variation) ? $variation['pre_order'] : false,
+                'bundle_price_status' => array_key_exists('bundle_price_status', $variation) ? $variation['bundle_price_status'] : null
+
+            ];
+
+            $imagesDeletedArray = array_key_exists('images_deleted', $variation) ?  $variation['images_deleted'] : [];
+            $imagesArray[] = array_key_exists('images', $variation) ? $variation['images'] : [];
+            $imagesData[] = array_key_exists('images_data', $variation) ? $variation['images_data'] : [];
+            //$fieldsArray[] = array_key_exists('fields', $variation) ? $variation['fields'] : [];
+            $fieldsArray = [];
+            $attributesArray[] = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
+            $productVariationParentsArray[] = $productVariationsArray;
+        }
+        $model = new Product();
+        Product::query()->upsert($productVariationParentsArray, 'id', $model->getFillable());
+
+        $childrenIds = Product::query()->where('parent_product_id', $product->id)->get()->pluck('id');
+
+
+        // set default child as default child
+        if (!is_null($defaultChild)) {
+            Product::query()->where('code', $defaultChild['code'])->update([
+                'is_default_child' => 1
+            ]);
+        }
+        $this->removeImagesForVariations($imagesDeletedArray, $childrenIds);
+        $this->storeImagesForVariations(collect($imagesArray)->flatten()->toArray(), $imagesData, $childrenIds);
+        $this->storePricesForVariations($request, $childrenIds);
+        $this->storeFieldsForVariations($fieldsArray, $childrenIds);
+        $this->storeAttributesForVariations($attributesArray, $childrenIds);
+
+        //            DB::commit();
+        return $childrenIds;
         // } catch (Exception $e) {
         //     throw new Exception($e->getMessage());
         // }

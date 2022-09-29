@@ -54,6 +54,7 @@ class StoreBrandRequest extends MainRequest
 
 
         ];
+        dd($this->fields[0]['value']);
         $fieldsRules = [];
 
         if ($this->has('fields')) {
