@@ -54,7 +54,6 @@ class StoreBrandRequest extends MainRequest
 
 
         ];
-        dd($this->fields[0]['value']);
         $fieldsRules = [];
 
         if ($this->has('fields')) {
@@ -66,12 +65,12 @@ class StoreBrandRequest extends MainRequest
                 } elseif ($field['type'] == 'select') {
 
                     $fieldsRules = [
-                        'fields.*.value' => 'integer', 'exists:fields_values,id'
+                        'fields.*.value' => 'required | integer', 'exists:fields_values,id'
                     ];
                 } elseif ($field['type'] == 'checkbox') {
-
+                    $field['value'] = filter_var($field['value'], FILTER_VALIDATE_BOOLEAN);
                     $fieldsRules = [
-                        'fields.*.value' => 'boolean'
+                        'fields.*.value' => 'required | boolean'
                     ];
                 } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
                     $fieldsRules = [
