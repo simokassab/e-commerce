@@ -103,10 +103,11 @@ class CountryController extends MainController
      * @param \Illuminate\Http\Request $request
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws FileErrorException
      */
     public function update(UpdateCountryRequest $request, Country $country)
     {
-        $dataTranslatable = (array)json_decode($request->name);
+        $dataTranslatable = (array)($request->name);
         $country->name = ($dataTranslatable);
         $country->iso_code_2 = $request->iso_code_2;
         $country->iso_code_1 = $request->iso_code_1;

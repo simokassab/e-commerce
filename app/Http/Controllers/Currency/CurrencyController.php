@@ -70,7 +70,7 @@ class CurrencyController extends MainController
             $currency->setIsDefault();
 
         if ($request->image) {
-            $currency->image = $this->imageUpload($request->file('image'), $this->imagesPath['images']);
+            $currency->image = $this->imageUpload($request->image, $this->imagesPath['images']);
         }
 
         if (!$currency->save())
@@ -122,7 +122,7 @@ class CurrencyController extends MainController
         DB::beginTransaction();
 
         try {
-            $currency->name = (array)json_decode($request->name);
+            $currency->name = ($request->name);
             $currency->code = $request->code;
             $currency->symbol = $request->symbol;
             $currency->rate = $request->rate;
@@ -134,7 +134,7 @@ class CurrencyController extends MainController
                 if (!$this->removeImage($currency->image)) {
                     throw new FileErrorException();
                 }
-                $currency->image = $this->imageUpload($request->file('image'), $this->imagesPath['images']);
+                $currency->image = $this->imageUpload($request->image, $this->imagesPath['images']);
             }
 
             $currency->save();
