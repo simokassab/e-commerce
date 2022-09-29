@@ -13,11 +13,8 @@ use App\Models\Product\ProductRelated;
 use App\Models\Product\ProductTag;
 use App\Services\Category\CategoryService;
 use Carbon\Carbon;
-use DateTime;
 use Error;
 use Exception;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 
 class ProductService
 {
@@ -30,8 +27,6 @@ class ProductService
     }
     public function storeAdditionalProductData($request, $product, $childrenIds)
     {
-
-
         $this->storeAdditionalCategrories($request, $product, $childrenIds)
             ->storeAdditionalFields($request, $product)
             ->removeAdditionalImages($request)
@@ -235,8 +230,7 @@ class ProductService
             $data = [];
             foreach ($request->images as $index => $image) {
                 $imagePath = "";
-                if ($request->images){
-                    dd($request->images);
+                if ($request->images) {
                     $imagePath = uploadImage($image, $this->imagesPath['images']);
                 }
 
@@ -557,13 +551,13 @@ class ProductService
     public function storeImagesForVariations($imagesArray, $imagesData, $childrenIds)
     {
         //        DB::beginTransaction();
-        try {
+        // try {
             if (is_null($imagesArray) || is_null($imagesData))
                 return $this;
 
             $data = [];
             foreach ($childrenIds as $key => $child) {
-                foreach ($imagesArray[$key] as $index => $image) {
+                foreach ($imagesArray as $index => $image) {
                     $imagePath = uploadImage($image, $this->imagesPath['images']);
                     $data[] = [
                         'product_id' => $child,
@@ -580,10 +574,10 @@ class ProductService
             ProductImage::insert($data);
             //            DB::commit();
             return $this;
-        } catch (Exception $e) {
-            //            DB::rollBack();
-            throw new Exception($e->getMessage());
-        }
+        // } catch (Exception $e) {
+        //     //            DB::rollBack();
+        //     throw new Exception($e->getMessage());
+        // }
     }
     public function storePricesForVariations($request, $childrenIds)
     {
@@ -625,7 +619,7 @@ class ProductService
     public function storeVariations($request, $product)
     {
         //        DB::beginTransaction();
-        try {
+        // try {
             throw_if(count($request->product_variations) == 0, Exception::class, 'No variations found');
 
             $productVariationParentsArray = [];
@@ -672,7 +666,7 @@ class ProductService
                     'sku' => array_key_exists('sku', $variation) ? $variation['sku'] : null,
                     'quantity' => $variation['quantity'],
                     'is_same_price_as_parent' => $variation['isSamePriceAsParent'],
-                    'reserved_quantity' =>array_key_exists('reserved_quantity', $variation) ? $variation['reserved_quantity'] : 0,
+                    'reserved_quantity' => array_key_exists('reserved_quantity', $variation) ? $variation['reserved_quantity'] : 0,
                     'minimum_quantity' => $variation['minimum_quantity'],
                     'height' => $height,
                     'width' => $width,
@@ -720,19 +714,17 @@ class ProductService
                     'is_default_child' => 1
                 ]);
             }
-
-
             $this->removeImagesForVariations($imagesDeletedArray, $childrenIds);
-            $this->storeImagesForVariations($imagesArray, $imagesData, $childrenIds);
+            $this->storeImagesForVariations(collect($imagesArray)->flatten()->toArray(), $imagesData, $childrenIds);
             $this->storePricesForVariations($request, $childrenIds);
             $this->storeFieldsForVariations($fieldsArray, $childrenIds);
             $this->storeAttributesForVariations($attributesArray, $childrenIds);
 
             //            DB::commit();
             return $childrenIds;
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
-        }
+        // } catch (Exception $e) {
+        //     throw new Exception($e->getMessage());
+        // }
     }
     // END OF TYPE VARIABLE
     public function createAndUpdateProduct($request, $product = null)
