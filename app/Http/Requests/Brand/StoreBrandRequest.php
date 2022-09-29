@@ -55,25 +55,23 @@ class StoreBrandRequest extends MainRequest
 
         ];
         $fieldsRules = [];
-
         if ($this->has('fields')) {
-            foreach ($this->fields as $field) {
-                dd($this->fields);
+            foreach ($this->fields as $key => $field) {
                 if ($field['type'] == 'date') {
-                    $fieldsRules = [
-                        'fields.*.value' => 'date'
+                    $fieldsRules[] = [
+                        'fields.*.value' => 'required | date'
                     ];
                 } elseif ($field['type'] == 'select') {
 
-                    $fieldsRules = [
+                    $fieldsRules[] = [
                         'fields.*.value' => 'required | integer', 'exists:fields_values,id'
                     ];
                 } elseif ($field['type'] == 'checkbox') {
-                    $fieldsRules = [
+                    $fieldsRules[] = [
                         'fields.*.value' => 'required | boolean'
                     ];
                 } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
-                    $fieldsRules = [
+                    $fieldsRules[] = [
                         'fields.*.value' => 'required | string',
                     ];
                 }
