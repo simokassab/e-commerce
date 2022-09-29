@@ -235,7 +235,6 @@ class StoreProductRequest extends MainRequest
                     $rules = array_merge($rules, $fieldsRules);
                 }
             }
-        }
 
         return $rules;
     }
