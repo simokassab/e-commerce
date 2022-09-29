@@ -52,8 +52,7 @@ class CountryController extends MainController
     public function store(StoreCountryRequest $request)
     {
         $country = new Country();
-        $dataTranslatable =($request->name);
-        $country->name = ($dataTranslatable);
+        $country->name = $request->name;
         $country->iso_code_1 = $request->iso_code_1;
         $country->iso_code_2 = $request->iso_code_2;
         $country->phone_code = $request->phone_code;
@@ -107,16 +106,13 @@ class CountryController extends MainController
      */
     public function update(UpdateCountryRequest $request, Country $country)
     {
-        $dataTranslatable =($request->name);
-        $country->name = ($dataTranslatable);
+        $country->name = $request->name;
         $country->iso_code_2 = $request->iso_code_2;
         $country->iso_code_1 = $request->iso_code_1;
         $country->phone_code = $request->phone_code;
         if ($request->flag) {
-            if ($country->image) {
-                if (!$this->removeImage($country->image)) {
-                    throw new FileErrorException();
-                }
+            if (!$this->removeImage($country->flag)) {
+                throw new FileErrorException();
             }
             $country->flag = $this->imageUpload($request->flag, $this->imagesPath['images']);
         }
