@@ -70,7 +70,7 @@ class CurrencyController extends MainController
             $currency->setIsDefault();
 
         if ($request->image) {
-            $currency->image = $this->imageUpload($request->image, $this->imagesPath['images']);
+            $currency->image = $this->imageUpload($request->image,Currency::$imagesPath['images']);
         }
 
         if (!$currency->save())
@@ -134,7 +134,7 @@ class CurrencyController extends MainController
                 if (!$this->removeImage($currency->image)) {
                     throw new FileErrorException();
                 }
-                $currency->image = $this->imageUpload($request->image, $this->imagesPath['images']);
+                $currency->image = $this->imageUpload($request->image,Currency::$imagesPath['images']);
             }
 
             $currency->save();

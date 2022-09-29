@@ -14,7 +14,7 @@ class Currency extends MainModel
 
     protected $translatable = ['name'];
     protected $table = 'currencies';
-    public static $imagesPath =  [
+    public static array $imagesPath =  [
         'images' => 'currencies/images',
     ];
 
