@@ -88,9 +88,14 @@ class BrandController extends MainController
             }
             $brand->code = '0';
 
-            if ($request->image)
+            if ($request->image){
+                if ($brand->image) {
+                    if (!$this->removeImage($brand->image)) {
+                        throw new FileErrorException();
+                    }
+                }
                 $brand->image = $this->imageUpload($request->image, $this->imagesPath['images']);
-
+            }
             if (gettype($request->meta_title) != 'array') {
                 $brand->meta_title = (array)json_decode($request->meta_title);
             } else {
