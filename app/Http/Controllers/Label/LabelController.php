@@ -51,13 +51,13 @@ class LabelController extends MainController
     {
         $label = new Label();
 
-        $dataTranslatable = (array)json_decode($request->title);
+        $dataTranslatable = ($request->title);
         $label->title =  ($dataTranslatable);
         $label->entity = $request->entity;
         $label->color = $request->color;
 
         if ($request->image) {
-            $label->image = $this->imageUpload($request->file('image'), $this->imagesPath['images']);
+            $label->image = $this->imageUpload($request->image, Label::$imagesPath['images']);
         }
         $label->key = $request->key;
 
@@ -106,7 +106,7 @@ class LabelController extends MainController
     public function update(StoreLabelRequest $request, Label $label)
     {
 
-        $dataTranslatable = (array)json_decode($request->title);
+        $dataTranslatable = ($request->title);
         $label->title =  ($dataTranslatable);
         $label->entity = $request->entity;
         $label->color = $request->color;
@@ -116,7 +116,7 @@ class LabelController extends MainController
             if (!$this->removeImage($label->image)) {
                 throw new FileErrorException();
             }
-            $label->image = $this->imageUpload($request->file('image'), $this->imagesPath['images']);
+            $label->image = $this->imageUpload($request->image, Label::$imagesPath['images'] );
         }
 
         if (!$label->save())

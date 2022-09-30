@@ -23,7 +23,7 @@ class Country extends MainModel
         'flag'
     ];
 
-    public static $imagesPath = [
+    public static array $imagesPath = [
         'images' => 'countries/images',
     ];
 

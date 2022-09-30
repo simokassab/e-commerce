@@ -21,6 +21,7 @@ class CategoryController extends MainController
 {
     const OBJECT_NAME = 'objects.category';
     const relations = ['parent', 'children', 'label', 'fields', 'fieldValue', 'tags'];
+
     /**
      * Display a listing of the resource.
      *
@@ -31,7 +32,7 @@ class CategoryController extends MainController
     public function index(Request $request)
     {
         if ($request->method() == 'POST') {
-            $searchKeys = ['id','name', 'code', 'slug', 'description'];
+            $searchKeys = ['id', 'name', 'code', 'slug', 'description'];
             $searchRelationsKeys = ['parent' => ['parent' => 'name',]];
             return $this->getSearchPaginated(CategoryResource::class, Category::class, $request, $searchKeys, self::relations, $searchRelationsKeys);
         }
@@ -50,7 +51,7 @@ class CategoryController extends MainController
         $parentCategories = Category::all();
         return $this->successResponse(
             data: [
-                'fields' =>  FieldsResource::collection($fields),
+                'fields' => FieldsResource::collection($fields),
                 'labels' => LabelsResource::collection($labels),
                 'categories' => SelectCategoryResource::collection($parentCategories)
             ]
@@ -60,7 +61,7 @@ class CategoryController extends MainController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreCategoryRequest $request)
@@ -69,49 +70,20 @@ class CategoryController extends MainController
         DB::beginTransaction();
         try {
             $category = new Category();
-            if (gettype($request->name) != 'array') {
-                $category->name = (array)json_decode($request->name);
-            } else {
-                $category->name = $request->name;
-            }
+            $category->name = $request->name;
             $category->code = 0;
             if ($request->image) {
-
                 $category->image = $this->imageUpload($request->image, Category::$filePath['images']);
             }
             if ($request->icon) {
                 $category->icon = $this->imageUpload($request->icon, Category::$filePath['icons']);
             }
-            if ($request->parent_id == 'null') {
-                $category->parent_id = null;
-            } else {
-                $category->parent_id = $request->parent_id;
-            }
+            $category->parent_id = $request->parent_id;
             $category->slug = $request->slug;
-
-            if (gettype($request->meta_title) != 'array') {
-                $category->meta_title = (array)json_decode($request->meta_title);
-            } else {
-                $category->meta_title = $request->meta_title;
-            }
-
-            if (gettype($request->meta_description) != 'array') {
-                $category->meta_description = (array)json_decode($request->meta_description);
-            } else {
-                $category->meta_description = $request->meta_description;
-            }
-
-            if (gettype($request->meta_keyword) != 'array') {
-                $category->meta_keyword = (array)json_decode($request->meta_keyword);
-            } else {
-                $category->meta_keyword = $request->meta_keyword;
-            }
-
-            if (gettype($request->description) != 'array') {
-                $category->description = (array)json_decode($request->description);
-            } else {
-                $category->description = $request->description;
-            }
+            $category->meta_title = $request->meta_title;
+            $category->meta_description = $request->meta_description;
+            $category->meta_keyword = $request->meta_keyword;
+            $category->description = $request->description;
 
             $category->save();
             $category->code = $category->id;
@@ -121,14 +93,7 @@ class CategoryController extends MainController
                 CategoryService::addFieldsToCategory($category, $request->fields);
             }
 
-            if ($request->has('labels')  && !is_null($request->labels)) {
-                $oldLabel = $request->labels;
-                if (gettype($request->labels) == 'string') {
-                    $request->labels = explode(",", $request->labels);
-                    if (count($request->labels) <= 0) {
-                        $request->labels = $oldLabel;
-                    }
-                }
+            if ($request->has('labels') && !is_null($request->labels)) {
                 CategoryService::addLabelsToCategory($category, $request->labels);
             }
 
@@ -150,7 +115,7 @@ class CategoryController extends MainController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(Category $category)
@@ -158,7 +123,7 @@ class CategoryController extends MainController
 
         return $this->successResponse(
             data: [
-                'category' =>  new SingleCategoryResource($category->load(['fields', 'fieldValue', 'label']))
+                'category' => new SingleCategoryResource($category->load(['fields', 'fieldValue', 'label']))
             ]
         );
     }
@@ -166,7 +131,7 @@ class CategoryController extends MainController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -177,8 +142,8 @@ class CategoryController extends MainController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreCategoryRequest $request, Category $category)
@@ -236,7 +201,7 @@ class CategoryController extends MainController
                 CategoryService::addFieldsToCategory($category, $request->fields);
             }
 
-            if ($request->has('labels')  && !is_null($request->labels)) {
+            if ($request->has('labels') && !is_null($request->labels)) {
                 $oldLabel = $request->labels;
                 if (gettype($request->labels) == 'string') {
                     $request->labels = explode(",", $request->labels);
@@ -263,7 +228,7 @@ class CategoryController extends MainController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return string
      */
     public function destroy(Category $category)
@@ -299,7 +264,7 @@ class CategoryController extends MainController
         return $this->successResponse(
             __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
             [
-                'category' =>  new CategoryResource($category)
+                'category' => new CategoryResource($category)
             ]
         );
     }
@@ -309,7 +274,7 @@ class CategoryController extends MainController
 
         $categories = Category::rootParent()->order()->get();
         return $this->successResponse(
-           data: [
+            data: [
                 'categories' => $categories
             ]
         );

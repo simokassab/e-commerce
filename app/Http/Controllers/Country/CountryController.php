@@ -52,14 +52,13 @@ class CountryController extends MainController
     public function store(StoreCountryRequest $request)
     {
         $country = new Country();
-        $dataTranslatable =($request->name);
-        $country->name = ($dataTranslatable);
+        $country->name = $request->name;
         $country->iso_code_1 = $request->iso_code_1;
         $country->iso_code_2 = $request->iso_code_2;
         $country->phone_code = $request->phone_code;
         $country->flag = $request->flag;
         if ($request->flag) {
-            $country->flag = $this->imageUpload($request->flag, $this->imagesPath['images']);
+            $country->flag = $this->imageUpload($request->flag, Country::$imagesPath['images']);
         }
         if (!$country->save())
             return $this->errorResponse(__('messages.failed.create', ['name' => __(self::OBJECT_NAME)]));
@@ -103,21 +102,19 @@ class CountryController extends MainController
      * @param \Illuminate\Http\Request $request
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws FileErrorException
      */
     public function update(UpdateCountryRequest $request, Country $country)
     {
-        $dataTranslatable =($request->name);
-        $country->name = ($dataTranslatable);
+        $country->name = $request->name;
         $country->iso_code_2 = $request->iso_code_2;
         $country->iso_code_1 = $request->iso_code_1;
         $country->phone_code = $request->phone_code;
         if ($request->flag) {
-            if ($country->image) {
-                if (!$this->removeImage($country->image)) {
-                    throw new FileErrorException();
-                }
+            if (!$this->removeImage($country->flag)) {
+                throw new FileErrorException();
             }
-            $country->flag = $this->imageUpload($request->flag, $this->imagesPath['images']);
+            $country->flag = $this->imageUpload($request->flag, Country::$imagesPath['images']);
         }
         if (!$country->save())
             return $this->errorResponse(
