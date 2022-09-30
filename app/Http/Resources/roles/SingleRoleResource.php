@@ -28,7 +28,6 @@ class SingleRoleResource extends JsonResource
             'name' => $this->name,
             'parent_role' => $parentId,
             'permissions' => $this->permissions
-//            'children' => self::collection($this->whenLoaded('children')),
 
         ];
     }

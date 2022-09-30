@@ -22,10 +22,6 @@ class OrderResource extends JsonResource
             "date" => $this->date ?? '00-00-0000',
             'total' => $this->total ?? 0 ,
 
-//            "status_id" => $this->whenLoaded('status') ? $this->whenLoaded('status')->name : '-',
-//            "comment" => $this->customer_comment,
-//            "shipping_as_billing" => false,
-//            "coupon_code" => $this->whenLoaded('coupon') ? $this->whenLoaded('coupon')->title : '-' ,
         ];
     }
 

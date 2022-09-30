@@ -25,22 +25,6 @@ class CategoryResource extends JsonResource
             'parent' => $parentName,
             'slug' => $this->slug,
 
-            // 'parent_id' => $this->parent_id,
-            // 'meta_title' => $this->meta_title,
-            // 'meta_description' => $this->meta_description,
-            // 'meta_keyword' => $this->meta_keyword,
-            // 'meta_keyword' => $this->description,
-            // 'sort' => $this->sort,
-            // 'is_disabled' => $this->is_disabled,
-            // 'children' => self::collection( $this->whenLoaded('children')),
-            // 'labels' => LabelsResource::collection($this->whenLoaded('label')),
-            // 'fields' => FieldsResource::collection($this->whenLoaded('fields')),
-            // 'fieldsValues' => FieldsValueResource::collection($this->whenLoaded('fieldValue')),
-            // 'tags' => TagResource::collection($this->whenLoaded('tags')),
-            // 'discounts' => new discount($this->whenLoaded('discount')),
-            // 'brands' => new CategoryResource($this->whenLoaded('brands')),
-            // 'products' => new CategoryResource($this->whenLoaded('products')),
-
              ];
     }
 }

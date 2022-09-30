@@ -20,7 +20,6 @@ class LabelsResource extends JsonResource
             'title' => $this->title,
             'entity' => $this->entity,
             'color' => $this->color,
-            // 'key' => $this->key,
         ];
     }
 }

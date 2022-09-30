@@ -15,23 +15,14 @@ class SingleTaxResource extends JsonResource
      */
     public function toArray($request)
     {
-        $taxComponent=$this->whenLoaded('taxComponents')->pluck('component_tax_id');
-
-        // $languages = Language::all()->pluck('code');
-
-        // $nameTranslatable = [];
-
-        // foreach ($languages as $language){
-        //     $nameTranslatable[$language] = $this->getTranslation('name',$language);
-        // }
-
-        return[
+        $taxComponent = $this->whenLoaded('taxComponents')->pluck('component_tax_id');
+        return [
             'id' => $this->id,
             'name' => $this->getTranslations('name'),
-            'is_complex' => (boolean)$this->is_complex,
+            'is_complex' => (bool)$this->is_complex,
             'percentage' => $this->percentage,
             'complex_behavior' => $this->complex_behavior,
-            'components' =>$taxComponent,
+            'components' => $taxComponent,
         ];
     }
 }

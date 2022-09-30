@@ -16,12 +16,6 @@ class SingleLableResource extends JsonResource
     public function toArray($request)
     {
 
-        // $languages = Language::all()->pluck('code');
-        // $titleTranslatable = [];
-
-        // foreach ($languages as $language){
-        //     $titleTranslatable[$language] = $this->getTranslation('title',$language);
-        // }
         return [
             'id' => $this->id,
             'title' => $this->getTranslations('title'),

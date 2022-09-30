@@ -21,8 +21,6 @@ class ProductFieldsResource extends JsonResource
             $value = (int)$this->field_value_id;
         }
 
-
-        // $currentObject->id = $this->id
         return [
             'id' => (int)$this->id,
             'field_id' => (int)$this->field_id,

@@ -16,14 +16,6 @@ class SingleTagResource extends JsonResource
     public function toArray($request)
     {
 
-        // $languages = Language::all()->pluck('code');
-
-        // $translatable = [];
-
-        // foreach ($languages as $language){
-        //     $translatable[$language] = $this->getTranslation('name',$language);
-        // }
-
         return [
             'id' => $this->id,
             'name' => $this->getTranslations('name'),

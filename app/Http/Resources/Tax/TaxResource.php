@@ -15,15 +15,11 @@ class   TaxResource extends JsonResource
     public function toArray($request)
     {
 
-//        $taxComponent=$this->whenLoaded('taxComponent');
-
-        return[
+        return [
             'id' => $this->id,
             'name' => $this->name,
-//             'is_complex' => (boolean)$this->is_complex,
             'percentage' => $this->percentage,
             'complex_behavior' => $this->complex_behavior ?? '-',
-            // 'tax_component' => TaxComponentResource::collection($taxComponent)
         ];
     }
 }

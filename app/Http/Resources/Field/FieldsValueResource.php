@@ -15,13 +15,7 @@ class FieldsValueResource extends JsonResource
      */
     public function toArray($request)
     {
-//
-//        $languages = Language::all()->pluck('code');
-//        $translatable = [];
-//
-//        foreach ($languages as $language){
-//            $valueTranslatable[$language] = $this->getTranslation('value',$language);
-//        }
+
 
         return [
             'id' => $this->id,
