@@ -45,7 +45,7 @@ class StoreCategoryRequest extends MainRequest
             // | dimensions:max_width=' . config('defaults.default_icon_maximum_width') . ',max_height=' . config('defaults.default_icon_maximum_height'),
 
             'parent_id' => 'nullable | integer',
-            'slug' => 'required | max:' . config('defaults.default_string_length_2') . ' | unique:categories,slug,' . $this->id ?? null,
+            'slug' => 'required | max:' . config('defaults.default_string_length_2') . ' | unique:categories,slug,' . $this->route('category')->id ?? null,
             'meta_title' => 'nullable',
             'meta_description' => 'nullable',
             'meta_keyword' => 'nullable',
