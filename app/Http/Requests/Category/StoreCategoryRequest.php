@@ -65,7 +65,6 @@ class StoreCategoryRequest extends MainRequest
 
         ];
         $fieldsRules = [];
-        dd(is_array($this->fields));
         if ($this->has('fields')) {
             if (!is_array($this->fields))
                 throw new Exception('fields must be of type array');
