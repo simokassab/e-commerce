@@ -49,8 +49,8 @@ class StoreProductRequest extends MainRequest
         $rules = [
             'name.en' => 'required',
             'name.ar' => 'required',
-            'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $id,
-            'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $id,
+            'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' .$id,
+            'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' .$id,
             'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'type' => 'required | in:' . Product::$prdouctTypes,
             'quantity' => [Rule::when(in_array($this->type, ['variable']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
