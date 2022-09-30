@@ -24,7 +24,8 @@ class StoreUnitRequest extends MainRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name.en' => 'required',
+            'name.ar' => 'required',
             'code' => 'required | max:'.config('defaults.default_string_length')
         ];
     }
