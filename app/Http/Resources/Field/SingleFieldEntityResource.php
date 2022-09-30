@@ -4,7 +4,7 @@ namespace App\Http\Resources\Field;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FieldResourceEntity extends JsonResource
+class SingleFieldEntityResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,20 +14,9 @@ class FieldResourceEntity extends JsonResource
      */
     public function toArray($request)
     {
-
-        $value = $this->value;
-        if($this->field->type == 'checkbox'){
-            $value = (bool)$this->value;
-        }
-        if($this->field->type == 'select'){
-            $value = (int)$this->field_value_id;
-        }
         return [
             'id' => $this->id,
-            'field_id' => $this->field_id,
-            'value' =>$this->value,
-            'type' => $this->field->type
-
+            'value' => $this->getTranslations('value'),
         ];
     }
 }

@@ -95,23 +95,6 @@ class StoreCategoryRequest extends MainRequest
         return $rules;
     }
 
-    public function getValidatorInstance()
-    {
-        $this->changeImageAndIconAndParentIdToNull();
-
-        return  parent::getValidatorInstance();
-    }
-
-    protected function changeImageAndIconAndParentIdToNull()
-    {
-        if ($this->image == 'undefined')
-            $this->merge(['image' => null]);
-        if ($this->icon == 'undefined')
-            $this->merge(['icon' => null]);
-        if ($this->parent_id == 'null')
-            $this->merge(['parent_id' => null]);
-    }
-
     public function messages()
     {
 
