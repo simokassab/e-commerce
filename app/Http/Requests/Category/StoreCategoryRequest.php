@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Category;
 
 use App\Http\Requests\MainRequest;
+use Exception;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -27,6 +28,7 @@ class StoreCategoryRequest extends MainRequest
      */
     public function rules()
     {
+        $id = $this->route('category') ? $this->route('category')->id : null;
 
         $rules = [
 
@@ -34,18 +36,18 @@ class StoreCategoryRequest extends MainRequest
             'name.ar' => 'required',
             // 'code' => 'required | max:'.config('defaults.default_string_length'),
 
-//            'image' => 'nullable | file | string
-//            | mimes:'.config('defaults.default_image_extentions').'
-//            | max:'.config('defaults.default_image_size').'
-//            | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
-//
+            //            'image' => 'nullable | file | string
+            //            | mimes:'.config('defaults.default_image_extentions').'
+            //            | max:'.config('defaults.default_image_size').'
+            //            | dimensions:max_width='.config('defaults.default_image_maximum_width').',max_height='.config('defaults.default_image_maximum_height'),
+            //
             // 'icon' => 'nullable | file
             // | mimes:' . config('defaults.default_icon_extentions') . '
             // | max:' . config('defaults.default_icon_size') . '
             // | dimensions:max_width=' . config('defaults.default_icon_maximum_width') . ',max_height=' . config('defaults.default_icon_maximum_height'),
 
             'parent_id' => 'nullable | integer',
-            'slug' => 'required | max:' . config('defaults.default_string_length_2') . ' | unique:categories,slug,' . $this->route('category')->id ?? null,
+            'slug' => 'required | max:' . config('defaults.default_string_length_2') . ' | unique:categories,slug,' .  $id,
             'meta_title' => 'nullable',
             'meta_description' => 'nullable',
             'meta_keyword' => 'nullable',
@@ -63,7 +65,10 @@ class StoreCategoryRequest extends MainRequest
 
         ];
         $fieldsRules = [];
+        dd(is_array($this->fields));
         if ($this->has('fields')) {
+            if (!is_array($this->fields))
+                throw new Exception('fields must be of type array');
             foreach ($this->fields as $key => $field) {
                 if ($field['type'] == 'date') {
                     $fieldsRules[] = [
@@ -157,6 +162,4 @@ class StoreCategoryRequest extends MainRequest
 
         ];
     }
-
-
 }
