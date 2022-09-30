@@ -8,6 +8,7 @@ use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyHistory;
 use App\Models\Discount\Discount;
 use App\Models\Field\Field;
+use App\Models\Field\FieldValue;
 use App\Models\Orders\Order;
 use App\Models\Price\Price;
 use App\Models\Product\Product;
@@ -22,6 +23,7 @@ use App\Observers\Currency\CurrencyObserver;
 use App\Observers\Customer\CustomerObserver;
 use App\Observers\Discount\DiscountObserver;
 use App\Observers\Fields\FieldsObserver;
+use App\Observers\Fields\FieldsValesObserver;
 use App\Observers\Order\OrderObserver;
 use App\Observers\Price\PriceObserver;
 use App\Observers\Product\ProductsObserver;
@@ -88,8 +90,8 @@ class AppServiceProvider extends ServiceProvider
                 'observer' => FieldsObserver::class,
             ],
             [
-                'model' => Field::class,
-                'observer' => FieldsObserver::class,
+                'model' => FieldValue::class,
+                'observer' => FieldsValesObserver::class,
             ],
             [
                 'model' => Order::class,

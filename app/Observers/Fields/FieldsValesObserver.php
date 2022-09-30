@@ -3,6 +3,7 @@
 namespace App\Observers\Fields;
 
 use App\Models\Field\FieldValue;
+use mysql_xdevapi\Exception;
 
 class FieldsValesObserver
 {
@@ -37,6 +38,30 @@ class FieldsValesObserver
     public function deleted(FieldValue $fieldsValue)
     {
     }
+
+    /**
+     * Handle the FieldsValue "deleted" event.
+     *
+     * @param \App\Models\FieldValue $fieldsValue
+     * @return void
+     * @throws \Exception
+     */
+    public function deleting(FieldValue $fieldsValue)
+    {
+
+        if($fieldsValue->fieldCategorie->count() != 0){
+            throw new \Exception('the field value is already in use in category entities');
+        }
+
+        if($fieldsValue->fieldBrand->count() != 0){
+            throw new \Exception('the field value is already in use in brand entities');
+        }
+
+        if($fieldsValue->fieldProduct->count() != 0){
+            throw new \Exception('the field value is already in use in product entities');
+        }
+    }
+
 
     /**
      * Handle the FieldsValue "restored" event.

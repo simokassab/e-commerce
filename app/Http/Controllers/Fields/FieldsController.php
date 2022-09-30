@@ -75,7 +75,7 @@ class FieldsController extends MainController
         $check=true;
 
           if($request->type=='select' && $request->field_values){
-             FieldService::addFieldValuesToField($request->field_values,$field);
+             FieldService::addOrUpdateFieldValuesToField($request->field_values,$field);
           }
 
           DB::commit();
@@ -147,7 +147,7 @@ class FieldsController extends MainController
             $field->save();
 
             if ($request->type == 'select' && $request->field_values) {
-                FieldService::addFieldValuesToField($request->field_values, $field);
+                FieldService::addOrUpdateFieldValuesToField($request->field_values, $field);
             }
 
             DB::commit();
