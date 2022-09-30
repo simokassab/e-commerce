@@ -29,7 +29,8 @@ class StoreTaxRequest extends MainRequest
     {
 
         return [
-            'name' => 'required',
+            'name.en' => 'required',
+            'name.ar' => 'required',
             'is_complex' => 'required | boolean',
             'percentage' => ['required_if:is_complex,false', 'nullable', 'numeric', 'between:' . Tax::$minimumTaxPercentage . ',' . Tax::$maximumTaxPercentage],
             //''complex_behavior' => 'required_if:is_complex,true | in:'. Tax::$taxTypes,
