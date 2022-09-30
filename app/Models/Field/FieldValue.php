@@ -2,9 +2,9 @@
 
 namespace App\Models\Field;
 
+use App\Models\Field\Field;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
-use App\Models\Field\Field;
 use App\Models\Brand\Brand;
 use App\Models\Category\Category;
 use App\Models\Product\Product;
@@ -40,6 +40,8 @@ class FieldValue extends MainModel
     }
     public function product(){
         return $this->hasMany(Product::class,'id','product_id');
-
+    }
+    public function fieldProduct(){
+        return $this->belongsToMany(Field::class,'products_fields','field_value_id','product_id');
     }
 }
