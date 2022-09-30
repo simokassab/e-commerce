@@ -47,7 +47,7 @@ class FieldsObserver
      * @throws Exception
      */
     public function deleting(Field $field){
-        if(!$field->category->count() != 0){
+        if($field->category->count() != 0){
             throw new Exception('Can\'t delete field attached to categories.');
         }
 

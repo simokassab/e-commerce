@@ -87,8 +87,9 @@ class CouponsController extends MainController
         return $this->successResponse(
             __('messages.success.create', ['name' => __(self::OBJECT_NAME)]),
             [
-            'coupon' => new CouponSingleResource($coupon)
-        ]);
+                'coupon' => new CouponSingleResource($coupon)
+            ]
+        );
 
 
 
