@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Users;
 
+use App\Http\Requests\MainRequest;
 use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends MainRequest

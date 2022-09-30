@@ -6,7 +6,9 @@ use App\Http\Requests\MainRequest;
 use App\Models\Product\Product;
 use App\Models\Product\ProductRelated;
 use App\Models\Settings\Setting;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 
@@ -44,13 +46,11 @@ class StoreProductRequest extends MainRequest
             $this->discountedPriceValue = $productSettings['products_discounted_price_greater_than_or_equal'][0]['value'] ?? 0;
         }
 
-
-
         $rules = [
             'name.en' => 'required',
             'name.ar' => 'required',
-            'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->id ?? null,
-            'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
+            'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->route('product')->id ?? null,
+            'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->route('product')->id ?? null,
             'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'type' => 'required | in:' . Product::$prdouctTypes,
             'quantity' => [Rule::when(in_array($this->type, ['variable']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
@@ -127,7 +127,7 @@ class StoreProductRequest extends MainRequest
 
 
             'product_variations' => [Rule::when($this->type == 'variable', 'required', 'nullable')],
-            'product_variations.*.code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->id ?? null,
+            'product_variations.*.code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' .$this->route('product')->id ?? null,
             'product_variations.*.sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
 
             'product_variations.*.quantity' => ['required', 'integer', 'gte:' . $this->QuantityValue],
@@ -171,7 +171,7 @@ class StoreProductRequest extends MainRequest
         ];
         if ($this->type == 'variable') {
             foreach ($this->product_variations ?? [] as $key => $variation) {
-                if(!array_key_exists('isSamePriceAsParent',$variation)){
+                if (!array_key_exists('isSamePriceAsParent', $variation)) {
                     break;
                 }
                 if (!$variation['isSamePriceAsParent']) {
@@ -232,9 +232,9 @@ class StoreProductRequest extends MainRequest
                     }
                     $rules = array_merge($rules, $fieldsRules);
                 }
-                    $rules = array_merge($rules, $fieldsRules);
-                }
+                $rules = array_merge($rules, $fieldsRules);
             }
+        }
 
         return $rules;
     }
@@ -389,5 +389,4 @@ class StoreProductRequest extends MainRequest
 
         ];
     }
-
 }
