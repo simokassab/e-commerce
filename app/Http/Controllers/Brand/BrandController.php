@@ -42,7 +42,7 @@ class BrandController extends MainController
     {
 
         if ($request->method() == 'POST') {
-            $searchKeys = ['id','name', 'code', 'meta_title'];
+            $searchKeys = ['id', 'name', 'code', 'meta_title'];
             return $this->getSearchPaginated(BrandResource::class, Brand::class, $request, $searchKeys);
         }
 
@@ -80,57 +80,28 @@ class BrandController extends MainController
         try {
 
             $brand = new Brand();
-
-            if (gettype($request->name) != 'array') {
-                $brand->name = (array)json_decode($request->name);
-            } else {
-                $brand->name = $request->name;
-            }
+            $brand->name = $request->name;
             $brand->code = '0';
 
-            if ($request->image){
+            if ($request->image) {
                 if ($brand->image) {
-                    if (!$this->removeImage($brand->image)) {
+                    if (!$this->removeImage($brand->image))
                         throw new FileErrorException();
-                    }
                 }
                 $brand->image = $this->imageUpload($request->image, $this->imagesPath['images']);
             }
-            if (gettype($request->meta_title) != 'array') {
-                $brand->meta_title = (array)json_decode($request->meta_title);
-            } else {
-                $brand->meta_title = $request->meta_title;
-            }
-
-            if (gettype($request->meta_description) != 'array') {
-                $brand->meta_description = (array)json_decode($request->meta_description);
-            } else {
-                $brand->meta_description = $request->meta_description;
-            }
-
-            if (gettype($request->meta_keyword) != 'array') {
-                $brand->meta_keyword = (array)json_decode($request->meta_keyword);
-            } else {
-                $brand->meta_keyword = $request->meta_keyword;
-            }
-
-            if (gettype($request->description) != 'array') {
-                $brand->description = (array)json_decode($request->description);
-            } else {
-                $brand->description = $request->description;
-            }
-
+            $brand->meta_title = $request->meta_title;
+            $brand->meta_description = $request->meta_description;
+            $brand->meta_keyword = $request->meta_keyword;
+            $brand->description = $request->description;
             $brand->save();
             //End of Brand Store
-
             $brand->code = $brand->id;
-
             $brand->save();
 
             //Fields Store
-            if ($request->has('fields')) {
+            if ($request->has('fields'))
                 BrandsService::addFieldsToBrands($brand, ($request->fields));
-            }
 
             if ($request->has('labels')) {
                 $oldLabel = $request->labels;
@@ -194,43 +165,20 @@ class BrandController extends MainController
 
             BrandsService::deleteRelatedBrandFieldsAndLabels($brand);
 
-            if (gettype($request->name) != 'array') {
-                $brand->name = (array)json_decode($request->name);
-            } else {
-                $brand->name = $request->name;
-            }
+            $brand->name = $request->name;
+            $brand->code = '0';
 
             if ($request->image) {
-                if (!$this->removeImage($brand->image)) {
-                    throw new FileErrorException();
+                if ($brand->image) {
+                    if (!$this->removeImage($brand->image))
+                        throw new FileErrorException();
                 }
                 $brand->image = $this->imageUpload($request->image, $this->imagesPath['images']);
             }
-
-            if (gettype($request->meta_title) != 'array') {
-                $brand->meta_title = (array)json_decode($request->meta_title);
-            } else {
-                $brand->meta_title = $request->meta_title;
-            }
-
-            if (gettype($request->meta_description) != 'array') {
-                $brand->meta_description = (array)json_decode($request->meta_description);
-            } else {
-                $brand->meta_description = $request->meta_description;
-            }
-
-            if (gettype($request->meta_keyword) != 'array') {
-                $brand->meta_keyword = (array)json_decode($request->meta_keyword);
-            } else {
-                $brand->meta_keyword = $request->meta_keyword;
-            }
-
-            if (gettype($request->description) != 'array') {
-                $brand->description = (array)json_decode($request->description);
-            } else {
-                $brand->description = $request->description;
-            }
-
+            $brand->meta_title = $request->meta_title;
+            $brand->meta_description = $request->meta_description;
+            $brand->meta_keyword = $request->meta_keyword;
+            $brand->description = $request->description;
             $brand->save();
 
 

@@ -151,13 +151,8 @@ class CategoryController extends MainController
         DB::beginTransaction();
         try {
 
-            CategoryService::deleteRelatedCategoryFieldsAndLabels($category);
 
-            if (gettype($request->name) != 'array') {
-                $category->name = (array)json_decode($request->name);
-            } else {
-                $category->name = $request->name;
-            }
+            $category->name = $request->name;
             $category->code = 0;
             if ($request->image) {
                 $category->image = $this->imageUpload($request->image, Category::$filePath['images']);
@@ -166,36 +161,17 @@ class CategoryController extends MainController
                 $category->icon = $this->imageUpload($request->icon, Category::$filePath['icons']);
             }
             $category->parent_id = $request->parent_id;
-
             $category->slug = $request->slug;
-
-            if (gettype($request->meta_title) != 'array') {
-                $category->meta_title = (array)json_decode($request->meta_title);
-            } else {
-                $category->meta_title = $request->meta_title;
-            }
-
-            if (gettype($request->meta_description) != 'array') {
-                $category->meta_description = (array)json_decode($request->meta_description);
-            } else {
-                $category->meta_description = $request->meta_description;
-            }
-
-            if (gettype($request->meta_keyword) != 'array') {
-                $category->meta_keyword = (array)json_decode($request->meta_keyword);
-            } else {
-                $category->meta_keyword = $request->meta_keyword;
-            }
-
-            if (gettype($request->description) != 'array') {
-                $category->description = (array)json_decode($request->description);
-            } else {
-                $category->description = $request->description;
-            }
+            $category->meta_title = $request->meta_title;
+            $category->meta_description = $request->meta_description;
+            $category->meta_keyword = $request->meta_keyword;
+            $category->description = $request->description;
 
             $category->save();
             $category->code = $category->id;
             $category->save();
+
+            CategoryService::deleteRelatedCategoryFieldsAndLabels($category);
 
             if ($request->has('fields') && !is_null($request->fields)) {
                 CategoryService::addFieldsToCategory($category, $request->fields);

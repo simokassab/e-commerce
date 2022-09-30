@@ -59,7 +59,7 @@ class DiscountController extends MainController
         try {
 
             $discount = new Discount();
-            $discount->name = json_encode($request->name);
+            $discount->name = ($request->name);
             $discount->start_date = $request->start_date;
             $discount->end_date = $request->end_date;
             $discount->discount_percentage = $request->discount_percentage;
