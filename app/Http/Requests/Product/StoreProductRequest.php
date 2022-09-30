@@ -46,7 +46,6 @@ class StoreProductRequest extends MainRequest
             $this->discountedPriceValue = $productSettings['products_discounted_price_greater_than_or_equal'][0]['value'] ?? 0;
         }
         $id = $this->route('proudct') ? $this->route('product')->id : null;
-        dd($id);
         $rules = [
             'name.en' => 'required',
             'name.ar' => 'required',
