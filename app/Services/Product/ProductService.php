@@ -207,7 +207,7 @@ class ProductService
     public function removeAdditionalImages($request)
     {
 
-        if (!$request->has('images_deleted') || is_null($request->images_deleted))
+        if (!$request->has('images_deleted') || is_null($request->images_deleted) || count($request->images_deleted) == 0)
             return $this;
 
         if (!ProductImage::whereIn('id', $request->images_deleted)->delete()) {
