@@ -36,8 +36,8 @@ class StoreProductRequest extends MainRequest
      */
     public function rules()
     {
-        $settingsTitles = Cache::get(Setting::$cacheKey)->pluck('title')->toArray();
-        $productSettings = Cache::get(Setting::$cacheKey)->whereIn('title', $settingsTitles)->groupBy('title')->toArray();
+        $productSettings = getSettings()->groupBy('title')->toArray();
+
         if ($productSettings) {
             $this->productsRequiredSettingsArray = explode(',', $productSettings['products_required_fields'][0]['value']) ?? "";
             $this->QuantityValue = $productSettings['products_quantity_greater_than_or_equal'][0]['value'] ?? 0;
@@ -45,12 +45,13 @@ class StoreProductRequest extends MainRequest
             $this->priceValue = $productSettings['products_prices_greater_than_or_equal'][0]['value'] ?? 0;
             $this->discountedPriceValue = $productSettings['products_discounted_price_greater_than_or_equal'][0]['value'] ?? 0;
         }
+        $id = $this->route('proudct') ? $this->route('product')->id : null;
 
         $rules = [
             'name.en' => 'required',
             'name.ar' => 'required',
-            'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $this->route('product')->id ?? null,
-            'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $this->route('product')->id ?? null,
+            'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $id,
+            'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $id,
             'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'type' => 'required | in:' . Product::$prdouctTypes,
             'quantity' => [Rule::when(in_array($this->type, ['variable']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
@@ -127,7 +128,7 @@ class StoreProductRequest extends MainRequest
 
 
             'product_variations' => [Rule::when($this->type == 'variable', 'required', 'nullable')],
-            'product_variations.*.code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' .$this->route('product')->id ?? null,
+            'product_variations.*.code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $id,
             'product_variations.*.sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
 
             'product_variations.*.quantity' => ['required', 'integer', 'gte:' . $this->QuantityValue],
