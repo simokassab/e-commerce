@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Authentication\LoginRequest;
+use App\Http\Resources\User\SingleUserResource;
 use Illuminate\Support\Facades\Auth;
 
 class AuthenticationController extends MainController
@@ -30,7 +31,7 @@ class AuthenticationController extends MainController
             'Authenticated Successfully! ',
             [
                 'token' => auth()->user()->createToken($request->userAgent())->plainTextToken,
-                'user' => \auth()->user(),
+                'user' => new SingleUserResource(\auth()->user()),
                 'permissions' => $permissions,
             ]
             , 1, 202);
