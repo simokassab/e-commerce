@@ -76,7 +76,7 @@ class StoreCategoryRequest extends MainRequest
                     ];
                 } elseif ($field['type'] == 'select') {
                     $fieldsRules[] = [
-                        'fields.*.value' => 'required | integer', 'exists:fields_values,id'
+                        'fields.*.value' => 'required | integer | exists:fields_values,id'
                     ];
                 } elseif ($field['type'] == 'checkbox') {
                     $fieldsRules[] = [
