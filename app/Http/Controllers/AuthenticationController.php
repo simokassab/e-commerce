@@ -52,7 +52,7 @@ class AuthenticationController extends MainController
 
 
         if (is_null(\auth()->user()->roles) || \auth()->user()->roles[0]->name != 'hxa') {
-            Auth::logout();
+            auth()->logout();
             return $this->errorResponse(message: 'Error! the user you logged in is not for general APIs', statusCode: 403);
         }
 
@@ -69,16 +69,16 @@ class AuthenticationController extends MainController
 
     public function logout()
     {
-        Auth::logout();
+        \auth()->logout();
         return $this->successResponse('Logout Successfully!');
     }
 
     public function thirdPartyLogout()
     {
-        if (\auth()->user()) {
+        if (\auth()->check()) {
             \auth()->user()->tokens()->delete();
         }
-        Auth::logout();
+        \auth()->logout();
         return $this->successResponse('Logout Successfully!');
 
     }

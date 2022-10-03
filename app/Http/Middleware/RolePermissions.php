@@ -2,7 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Exceptions\UnauthorizedException;
+use App\Exceptions\AuthenticationException;
+use App\Exceptions\PermissionException;
 use App\Support\Str;
 use Closure;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +20,8 @@ class RolePermissions
      * @param Request $request
      * @param Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return Response|RedirectResponse
-     * @throws UnauthorizedException
+     * @throws AuthenticationException
+     * @throws PermissionException
      */
     public function handle(Request $request, Closure $next)
     {
@@ -61,11 +63,8 @@ class RolePermissions
                 'getPricesList',
             ], 'show', $routeAction);
 
-        if (!auth()->check()) {
-            abort(401, 'You are unauthenticated!');
-        }
         if (!auth()->user()->hasPermissionTo($routeAction)) {
-            abort(401, 'You are unauthenticated!');
+            throw new PermissionException();
         }
 
         return $next($request);
