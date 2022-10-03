@@ -81,7 +81,7 @@ class BrandController extends MainController
 
             $brand = new Brand();
             $brand->name = $request->name;
-            $brand->code = '0';
+            $brand->code = uniqid();
 
             if ($request->image) {
                 if ($brand->image) {
