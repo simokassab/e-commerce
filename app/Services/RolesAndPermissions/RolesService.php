@@ -108,17 +108,17 @@ class RolesService {
         CustomPermission::query()->truncate();
 
         //User Permission
-        $parentCountry= self::createSinglePermssion('UsersController');
-        self::createSinglePermssion('UsersController@index',$parentCountry->id );
-        self::createSinglePermssion('UsersController@store',$parentCountry->id );
-        self::createSinglePermssion('UsersController@show',$parentCountry->id );
-        self::createSinglePermssion('UsersController@update',$parentCountry->id );
-        self::createSinglePermssion('UsersController@destroy',$parentCountry->id );
+        $parentUser= self::createSinglePermssion('UsersController');
+        self::createSinglePermssion('UsersController@index',$parentUser->id );
+        self::createSinglePermssion('UsersController@store',$parentUser->id );
+        self::createSinglePermssion('UsersController@show',$parentUser->id );
+        self::createSinglePermssion('UsersController@update',$parentUser->id );
+        self::createSinglePermssion('UsersController@destroy',$parentUser->id );
         //End of User Permission
 
         //Dashboard Permissions
-        $parentCountry= self::createSinglePermssion('DashboardController');
-        self::createSinglePermssion('DashboardController@home',$parentCountry->id );
+        $parentDashboard= self::createSinglePermssion('DashboardController');
+        self::createSinglePermssion('DashboardController@home',$parentDashboard->id );
         //End of Dashboard Permissions
 
        //Country Permission
