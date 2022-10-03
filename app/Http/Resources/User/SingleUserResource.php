@@ -21,6 +21,7 @@ class SingleUserResource extends JsonResource
 
         return[
             'id' => (int)$this->id,
+            'image'=> $this->image && !empty($this->image) ?  getAssetsLink('storage/'.$this->image): 'default_image' ,
             'username' => $this->username,
             'email' => $this->email,
             'first_name' => $this->first_name,

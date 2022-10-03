@@ -15,6 +15,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, HasPermissions;
 
+    public static array $filePath =  [
+        'images' => 'users/images',
+    ];
     /**
      * The attributes that are mass assignable.
      *

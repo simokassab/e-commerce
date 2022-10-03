@@ -18,31 +18,31 @@ class UsersController extends MainController
 
     const OBJECT_NAME = 'objects.user';
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
 
-        if ($request->method()=='POST') {
-            $data=$request->data ?? [];
+        if ($request->method() == 'POST') {
+            $data = $request->data ?? [];
             $roleName = $request->data['role_name'] ?? '';
             $keys = array_keys($data ?? []);
-            $searchKey = ['first_name','last_name','email','username'];
-            $rows=User::with(['roles' => fn($query) => $query->select('name')])
-                ->whereHas('roles',fn ($query) => $query->whereRaw('lower(name) like (?)',["%$roleName%"]))
-                ->where(function($query) use($data,$keys,$searchKey){
-                        foreach($keys as $key) if(in_array($key,$searchKey))
-                            $query->where($key,'LIKE', '%'.$data[$key].'%');
+            $searchKey = ['first_name', 'last_name', 'email', 'username'];
+            $rows = User::with(['roles' => fn ($query) => $query->select('name')])
+                ->whereHas('roles', fn ($query) => $query->whereRaw('lower(name) like (?)', ["%$roleName%"]))
+                ->where(function ($query) use ($data, $keys, $searchKey) {
+                    foreach ($keys as $key) if (in_array($key, $searchKey))
+                        $query->where($key, 'LIKE', '%' . $data[$key] . '%');
                 })
                 ->paginate($request->limit ?? config('defaults.default_pagination'));
 
 
-                return  UserResource::collection($rows);
-
+            return  UserResource::collection($rows);
         }
 
-        return $this->successResponse('Success',[UserResource::collection(User::with('roles')->paginate(config('defaults.default_pagination')))]);
-
+        return $this->successResponse('Success', [UserResource::collection(User::with('roles')->paginate(config('defaults.default_pagination')))]);
     }
 
-    public function store(StoreUserRequest $request){
+    public function store(StoreUserRequest $request)
+    {
         DB::beginTransaction();
 
         try {
@@ -54,17 +54,18 @@ class UsersController extends MainController
                 'salt' => $request->salt ?? '',
                 'is_active' => (bool)$request->is_active,
                 'password' => Hash::make($request->password),
+                'image' => $request->image ? $this->imageUpload($request->image, User::$filePath['images']) : null,
             ]);
             $user->AssignRole($request->role_id);
             DB::commit();
 
-                 return $this->successResponse(
-                     __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
-                 [
+            return $this->successResponse(
+                __('messages.success.create', ['name' => __(self::OBJECT_NAME)]),
+                [
                     'user' => new SingleUserResource($user),
-                 ]
-                 );
-        }catch (\Exception $exception){
+                ]
+            );
+        } catch (\Exception $exception) {
             DB::rollBack();
             return $this->errorResponse();
         }
@@ -75,7 +76,6 @@ class UsersController extends MainController
         return $this->successResponse(
             data: ['user' => new SingleUserResource($user)]
         );
-
     }
 
     public function update(UpdateUserRequest $request, User $user)
@@ -84,11 +84,13 @@ class UsersController extends MainController
         $user->username =  $request->username;
         $user->email = $request->email;
         $user->first_name = $request->first_name;
-        $user->last_name =$request->last_name;
+        $user->last_name = $request->last_name;
         $user->is_active = $request->is_active;
         $user->salt = $request->salt ?? '123';
-
-        if(count($user->roles) > 0){
+        if ($request->image) {
+            $user->image = $this->imageUpload($request->image, User::$filePath['images']);
+        }
+        if (count($user->roles) > 0) {
             $userOldRoles = $user->roles->pluck('name')->toArray()[0];
             $user->removeRole($userOldRoles);
         }
@@ -97,13 +99,13 @@ class UsersController extends MainController
         $user->assignRole($role);
 
 
-        if(!($user->save()))
+        if (!($user->save()))
             return $this->errorResponse(
-                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+                __('messages.failed.update', ['name' => __(self::OBJECT_NAME)])
             );
 
         return $this->successResponse(
-            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+            __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
             [
                 'user' => new SingleUserResource($user)
             ]
@@ -112,42 +114,42 @@ class UsersController extends MainController
 
     public function destroy(User $user)
     {
-        if(!$user->delete())
+        if (!$user->delete())
             return $this->errorResponse(
-                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+                __('messages.failed.delete', ['name' => __(self::OBJECT_NAME)])
             );
 
         return $this->successResponse(
-            __('messages.success.delete',['name' => __(self::OBJECT_NAME)]),
+            __('messages.success.delete', ['name' => __(self::OBJECT_NAME)]),
             [
                 'user' => new SingleUserResource($user)
             ]
         );
-
     }
 
-//    public function toggleStatus(Request $request ,$id){
-//
-//        $request->validate([
-//            'is_disabled' => 'boolean|required'
-//        ]);
-//
-//        $user = User::findOrFail($id);
-//        $user->is_disabled=$request->is_disabled;
-//        if(!$user->save())
-//            return $this->errorResponse(
-//                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
-//            );
-//
-//        return $this->successResponse(
-//            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
-//            [
-//                'user' =>  new UserResource($user)
-//            ]
-//        );
-//
-//    }
-    public function getTableHeaders(){
-        return $this->successResponse('Success',['headers' => __('headers.users') ]);
-}
+    //    public function toggleStatus(Request $request ,$id){
+    //
+    //        $request->validate([
+    //            'is_disabled' => 'boolean|required'
+    //        ]);
+    //
+    //        $user = User::findOrFail($id);
+    //        $user->is_disabled=$request->is_disabled;
+    //        if(!$user->save())
+    //            return $this->errorResponse(
+    //                __('messages.failed.update',['name' => __(self::OBJECT_NAME)])
+    //            );
+    //
+    //        return $this->successResponse(
+    //            __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+    //            [
+    //                'user' =>  new UserResource($user)
+    //            ]
+    //        );
+    //
+    //    }
+    public function getTableHeaders()
+    {
+        return $this->successResponse('Success', ['headers' => __('headers.users')]);
+    }
 }
