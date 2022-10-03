@@ -25,6 +25,7 @@ class SingleUserResource extends JsonResource
             'username' => $this->username,
             'email' => $this->email,
             'first_name' => $this->first_name,
+            'full_name' => $this->first_name . ' ' . $this->last_name,
             'last_name' => $this->last_name,
             'role_id' => (int)$role,
             'is_active' => (bool)$this->is_active
