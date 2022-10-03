@@ -116,6 +116,11 @@ class RolesService {
         self::createSinglePermssion('UsersController@destroy',$parentCountry->id );
         //End of User Permission
 
+        //Dashboard Permissions
+        $parentCountry= self::createSinglePermssion('DashboardController');
+        self::createSinglePermssion('DashboardController@home',$parentCountry->id );
+        //End of Dashboard Permissions
+
        //Country Permission
         $parentCountry= self::createSinglePermssion('CountryController');
        self::createSinglePermssion('CountryController@index',$parentCountry->id );
