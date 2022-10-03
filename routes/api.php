@@ -6,6 +6,7 @@ use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Country\CountryController;
 use App\Http\Controllers\Coupons\CouponsController;
 use App\Http\Controllers\Currency\CurrencyController;
+use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Discount\DiscountController;
 use App\Http\Controllers\Discount\DiscountEntityController;
 use App\Http\Controllers\Fields\FieldsController;
@@ -48,6 +49,7 @@ Route::get('logout', [AuthenticationController::class, 'logout'])->name('logout'
 
 Route::group(['prefix' => 'dashboard', 'middleware' => $dashboardMiddlewares], function () {
     Route::get('/profile', fn() => auth()->user());
+    Route::get('home',[DashboardController::class,'home']);
     Route::group(['prefix' => 'headers'], function () {
         Route::get('brands', [BrandController::class, 'getTableHeaders']);
         Route::get('categories', [CategoryController::class, 'getTableHeaders']);
