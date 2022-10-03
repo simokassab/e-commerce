@@ -71,7 +71,7 @@ class CategoryController extends MainController
         try {
             $category = new Category();
             $category->name = $request->name;
-            $category->code = 0;
+            $category->code = uniqid();
             if ($request->image) {
                 $category->image = $this->imageUpload($request->image, Category::$filePath['images']);
             }
@@ -152,7 +152,7 @@ class CategoryController extends MainController
         try {
 
             $category->name = $request->name;
-            $category->code = 0;
+            $category->code = uniqid();
             if ($request->image) {
                 $category->image = $this->imageUpload($request->image, Category::$filePath['images']);
             }

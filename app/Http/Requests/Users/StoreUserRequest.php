@@ -32,13 +32,18 @@ class StoreUserRequest extends MainRequest
             'salt' => 'nullable',
             'password' => 'required|confirmed|min:8',
             'password_confirmation' => 'required',
-            'role_id' => 'required|exists:roles,id'
+            'role_id' => 'required|exists:roles,id',
+            // 'image' => 'nullable | file | string
+            //            | mimes:' . config('defaults.default_image_extentions') . '
+            //            | max:' . config('defaults.default_image_size') . '
+            //            | dimensions:max_width=' . config('defaults.default_image_maximum_width') . ',max_height=' . config('defaults.default_image_maximum_height'),
+
         ];
 
-//        if($this->has('id')){
-//            $array['id'] = 'required|numeric|exists:users,id';
-//            $array['email'] =  "required|email|unique:users,email,".$this->id.',id';
-//            $array['username'] =  "required|string|unique:users,username,".$this->id.',id';
-//        }
+        //        if($this->has('id')){
+        //            $array['id'] = 'required|numeric|exists:users,id';
+        //            $array['email'] =  "required|email|unique:users,email,".$this->id.',id';
+        //            $array['username'] =  "required|string|unique:users,username,".$this->id.',id';
+        //        }
     }
 }

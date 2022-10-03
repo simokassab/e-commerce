@@ -52,7 +52,7 @@ return [
             'type' => 'integer',
             'sort' => true
         ],
-       
+
         'icon' => [
             'name' => 'Icon',
             'search' => '',
@@ -109,7 +109,7 @@ return [
             'type' => 'integer',
             'sort' => true
         ],
-       
+
     ],
     'currencies' => [
         'id' => [
@@ -148,7 +148,7 @@ return [
             'type' => 'string',
             'sort' => true
         ],
-       
+
     ],
     'discounts' => [
         'id' => [
@@ -266,7 +266,7 @@ return [
             'type' => 'integer',
             'sort' => true
         ],
-       
+
     ],
     'prices' => [
         'id' => [
@@ -337,7 +337,7 @@ return [
             'type' => 'integer',
             'sort' => true
         ],
-     
+
         'website_status' => [
             'name' => 'Status',
             'search' => 'string',
@@ -635,6 +635,15 @@ return [
             'search' => 'integer',
             'type' => 'integer',
             'sort' => true
+        ],
+        'image' => [
+            'key' => 'image',
+            'name' => 'Image',
+            'search' => '',
+            'type' => 'string',
+            'sort' => false,
+            'is_visible' => true,
+            'is_show' => true
         ],
         'username' => [
             'name' => 'User Name',
