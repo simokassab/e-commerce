@@ -16,16 +16,16 @@ class FieldResourceEntity extends JsonResource
     {
 
         $value = $this->value;
-        if($this->field->type == 'checkbox'){
+        if ($this->field->type == 'checkbox') {
             $value = (bool)$this->value;
         }
-        if($this->field->type == 'select'){
+        if ($this->field->type == 'select') {
             $value = (int)$this->field_value_id;
         }
         return [
             'id' => $this->id,
             'field_id' => $this->field_id,
-            'value' =>$this->value,
+            'value' => $value,
             'type' => $this->field->type
 
         ];
