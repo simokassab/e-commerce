@@ -98,6 +98,10 @@ class MainController extends Controller
 
         $rows = $model->paginate($request->limit ?? config('defaults.default_pagination'));
 
+        if($rows->toArray()['total'] < $request->page){
+            $request->page = $rows->toArray()['total']-1;
+            $this->getSearchPaginated($resource, $model,  $request, $searchKeys,  $relations,  $searchRelationsKeys);
+        }
         return $resource::collection($rows);
 
     }

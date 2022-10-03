@@ -29,7 +29,7 @@ class UpdateCountryRequest extends MainRequest
             'iso_code_1' => 'required | max:' . config('defaults.default_string_length'),
             'iso_code_2' => 'required | max:' . config('defaults.default_string_length'),
             'phone_code' => ['required', 'max:6', 'regex:/^\+\d{1,3}$/'],
-            'flag' => 'required',
+            'flag' => 'nullable',
             // 'flag' => 'nullable | file
             //     | mimes:' . config('defaults.default_icon_extentions') . '
             //     | max:' . config('defaults.default_icon_size') . '

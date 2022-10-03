@@ -8,6 +8,7 @@ use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
@@ -19,6 +20,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        Artisan::call('optimize:clear');
         // \App\Models\User::factory(10)->create();
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
