@@ -69,6 +69,7 @@ class StoreCategoryRequest extends MainRequest
             if (!is_array($this->fields))
                 throw new Exception('fields must be of type array');
                 foreach ($this->fields as $key => $field) {
+                dd($field['value']);
                     if ($field['type'] == 'date') {
                     $fieldsRules[] = [
                         'fields.*.value' => 'required | date'
