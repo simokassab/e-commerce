@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->text('image')->nullable();
+            $table->text('image')->after('remember_token')->nullable();
         });
     }
 
