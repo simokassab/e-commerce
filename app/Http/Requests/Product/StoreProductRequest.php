@@ -45,13 +45,12 @@ class StoreProductRequest extends MainRequest
             $this->priceValue = $productSettings['products_prices_greater_than_or_equal'][0]['value'] ?? 0;
             $this->discountedPriceValue = $productSettings['products_discounted_price_greater_than_or_equal'][0]['value'] ?? 0;
         }
-        $id = $this->route('proudct') ? $this->route('product')->id : null;
-
+        $id = $this->route('product') ? $this->route('product')->id : null;
         $rules = [
             'name.en' => 'required',
             'name.ar' => 'required',
-            'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $id,
-            'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $id,
+            'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' .$id,
+            'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' .$id,
             'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'type' => 'required | in:' . Product::$prdouctTypes,
             'quantity' => [Rule::when(in_array($this->type, ['variable']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
