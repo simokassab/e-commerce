@@ -20,12 +20,6 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        Artisan::call('optimize:clear');
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
         RolesService::createPermissions();
-
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
     }
 }
