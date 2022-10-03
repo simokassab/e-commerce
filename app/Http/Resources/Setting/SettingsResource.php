@@ -48,8 +48,10 @@ class SettingsResource extends JsonResource
             'select' => (int)$value ?? null,
             default => $value ??  null,
         };
-        if ($this->title == 'default_pricing_class')
-            $value = null;
+        if ($this->title == 'default_pricing_class') {
+            if ($value == 0)
+                $value = null;
+        }
 
         return [
             'key' => $this->id,

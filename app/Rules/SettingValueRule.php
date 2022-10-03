@@ -27,7 +27,6 @@ class SettingValueRule implements InvokableRule
     public function __invoke($attribute, $value, $fail)
     {
         $settings = getSettings($this->settings->title);
-
         if ($settings->title == 'default_pricing_class')
             $this->type = 'model-select';
 
