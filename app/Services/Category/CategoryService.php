@@ -31,23 +31,17 @@ class CategoryService {
         $tobeSavedArray = [];
         foreach ($fields as $key => $field) {
 
-            if (gettype($field) == 'string') {
-                $field = (array)json_decode($field);
-            }
-
             if ($field["type"] == 'select') {
                 $tobeSavedArray[$key]["value"] = null;
-                if (gettype($field["value"]) == 'array') {
+                if ( is_array($field["value"]) ) {
+                    //if multiple elements where sent only take the first element
                     $tobeSavedArray[$key]["field_value_id"] = $field["value"][0];
-                } elseif (gettype($field["value"]) == 'integer') {
+                } elseif ( is_int($field["value"]) ) {
                     $tobeSavedArray[$key]["field_value_id"] = $field["value"];
                 }
             } else {
                 $tobeSavedArray[$key]["field_value_id"] = null;
                 $tobeSavedArray[$key]["value"] = ($field['value']);
-                if (is_array($field['value'])) {
-                    $tobeSavedArray[$key]["value"] = json_encode($field['value']);
-                }
             }
             $tobeSavedArray[$key]["category_id"] = $category->id;
             $tobeSavedArray[$key]["field_id"] = $field['field_id'];

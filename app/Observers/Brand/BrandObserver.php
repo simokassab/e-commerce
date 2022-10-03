@@ -44,6 +44,22 @@ class BrandObserver
     }
 
     /**
+     * Handle the Brand "deleted" event.
+     *
+     * @param  \App\Models\Brand  $brand
+     * @return void
+     */
+    public function deleting(Brand $brand)
+    {
+        if($brand->products){
+            throw new \Exception('');
+        }
+
+
+
+    }
+
+    /**
      * Handle the Brand "restored" event.
      *
      * @param  \App\Models\Brand  $brand

@@ -151,7 +151,6 @@ class CategoryController extends MainController
         DB::beginTransaction();
         try {
 
-
             $category->name = $request->name;
             $category->code = 0;
             if ($request->image) {

@@ -35,12 +35,12 @@ class CountryObserver
      * @return void
      * @throws \Exception
      */
-    public function deleted(Country $country)
+    public function deleting(Country $country)
     {
 
-        if($country->products->count() != 0){
-            throw new \Exception('Can\'t delete the status used in orders.');
-        }
+//        if($country->products->count() != 0){
+//            throw new \Exception('Can\'t delete the status used in orders.');
+//        }
         if($country->shippingOrder->count() != 0){
             throw new \Exception('Can\'t delete the status used for shipping addresses.');
         }
