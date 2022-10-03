@@ -166,7 +166,6 @@ class BrandController extends MainController
             BrandsService::deleteRelatedBrandFieldsAndLabels($brand);
 
             $brand->name = $request->name;
-            $brand->code = '0';
 
             if ($request->image) {
                 if ($brand->image) {
