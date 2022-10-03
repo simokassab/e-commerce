@@ -79,13 +79,12 @@ class ProductService
     {
         //        DB::beginTransaction();
         // try {
-        if (!array_key_exists('fields', $request->toArray())) {
+        if (!array_key_exists('fields', $request->toArray()))
             return $this;
-        }
 
-        if (count($request['fields']) == 0) {
+        if (count($request['fields']) == 0)
             return $this;
-        }
+
         $fieldCheck = ProductField::where('product_id', $product->id)->delete();
         $data = [];
         foreach ($request->fields as $index => $field) {
@@ -94,14 +93,13 @@ class ProductService
 
             throw_if(!array_key_exists('value', $field), new Exception('Invalid value'));
             if ($field['type'] == 'select') {
-
                 $data[] = [
                     'product_id' => $product->id,
                     'field_id' => (int)$field['field_id'],
                     'field_value_id' =>  (int)$field['value'],
                     'value' => null,
                 ];
-            } elseif (($field['type']) == 'checkbox') {
+            } elseif ($field['type'] == 'checkbox') {
                 $data[] = [
                     'product_id' => $product->id,
                     'field_id' => (int)$field['field_id'],
@@ -120,12 +118,11 @@ class ProductService
                     'product_id' => $product->id,
                     'field_id' => (int)$field['field_id'],
                     'field_value_id' =>  null,
-                    'value' => ($field['value']),
+                    'value' => json_encode($field['value']),
                 ];
             } else {
                 continue;
             }
-            $allData = $data;
         }
         ProductField::insert($data);
         //            DB::commit();
