@@ -74,7 +74,6 @@ class StoreCategoryRequest extends MainRequest
                         'fields.*.value' => 'required | date'
                     ];
                 } elseif ($field['type'] == 'select') {
-
                     $fieldsRules[] = [
                         'fields.*.value' => 'required | integer', 'exists:fields_values,id'
                     ];

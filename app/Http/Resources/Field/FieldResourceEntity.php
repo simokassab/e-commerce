@@ -20,7 +20,7 @@ class FieldResourceEntity extends JsonResource
             $value = (bool)$this->value;
         }
         if ($this->field->type == 'select') {
-            $value = (int)$this->field_value_id;
+            $value = (int)$this->field_value_id ?? null;
         }
         return [
             'id' => $this->id,
