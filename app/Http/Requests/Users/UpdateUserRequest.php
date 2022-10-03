@@ -33,6 +33,10 @@ class UpdateUserRequest extends MainRequest
             'last_name' => 'required|string',
             'salt' => 'nullable',
             'role_id' => 'required|exists:roles,id'
+            // 'image' => 'nullable | file | string
+            //            | mimes:' . config('defaults.default_image_extentions') . '
+            //            | max:' . config('defaults.default_image_size') . '
+            //
         ];
 
     }
