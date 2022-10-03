@@ -32,7 +32,7 @@ class UsersController extends MainController
                     foreach ($keys as $key) if (in_array($key, $searchKey))
                         $query->where($key, 'LIKE', '%' . $data[$key] . '%');
                 })
-                ->paginate($request->limit ?? config('defaults.default_pagination'));
+                ->whereNot('id',auth()->user()->id)->paginate($request->limit ?? config('defaults.default_pagination'));
 
 
             return  UserResource::collection($rows);

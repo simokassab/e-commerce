@@ -76,8 +76,8 @@ class Handler extends ExceptionHandler
             'code' => 512,
         ],
 
-        UnauthorizedException::class => [
-            'class' => UnauthorizedException::class,
+        AuthenticationException::class => [
+            'class' => AuthenticationException::class,
             'message' => 'You are unauthorized for this action',
             'code' => 401,
         ],

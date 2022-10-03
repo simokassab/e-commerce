@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Exceptions\UnauthorizedException;
+use App\Exceptions\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Spatie\FlareClient\Http\Exceptions\NotFound;
