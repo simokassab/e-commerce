@@ -10,30 +10,22 @@ use App\Http\Resources\Customers\SelectCustomerResource;
 use App\Http\Resources\Orders\OrderResource;
 use App\Http\Resources\Orders\RestFullOrderResource;
 use App\Http\Resources\Orders\SingelOrdersResource;
-use App\Http\Resources\roles\RolesResource;
 use App\Models\Country\Country;
 use App\Models\Coupons\Coupon;
 use App\Models\Currency\Currency;
-use App\Models\Currency\CurrencyHistory;
-use App\Models\Orders\OrderNote;
 use App\Models\Orders\OrderProduct;
 use App\Models\Orders\OrderStatus;
-use App\Models\Price\Price;
 use App\Models\Product\Product;
-use App\Models\Product\ProductPrice;
-use App\Models\RolesAndPermissions\CustomRole;
 use App\Models\Settings\Setting;
 use App\Models\Tax\Tax;
 use App\Models\Tax\TaxComponent;
 use App\Models\User\Customer;
 use App\Models\User\CustomerAddress;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Resources\Orders\SelectOrderStatus;
 use App\Models\Orders\Order;
 use App\Services\Orders\OrdersService;
 use Illuminate\Support\Facades\DB;
-use mysql_xdevapi\Exception;
 
 class OrdersController extends MainController
 {
