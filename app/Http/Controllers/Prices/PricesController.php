@@ -34,17 +34,18 @@ class PricesController extends MainController
         return $this->successResponsePaginated(PriceResource::class, Price::class, self::relations);
     }
 
+    public function getPricesList()
+    {
+        $prices = Price::with('currency')->get();
+        return SelectPriceResource::collection($prices);
+    }
 
     public function create($priceId = null)
     {
-        $prices = Price::with(['originalPrice', 'currency'])->get();
-        $originalPrices = $prices->where('id', '!=', $priceId)->where('is_virtual', 0);
-
+        $originalPrices = Price::with(['originalPrice', 'currency'])->where('id', '!=', $priceId)->where('is_virtual', 0)->get();
         return $this->successResponse(
             data: [
                 'original_prices' => PriceResource::collection($originalPrices),
-                'prices_classes' => SelectPriceResource::collection($prices)
-
             ]
         );
     }

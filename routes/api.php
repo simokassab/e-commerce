@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 $dashboardMiddlewares = ['auth:sanctum', 'localization', 'role_permissions'];
 
 
@@ -44,8 +45,8 @@ Route::post('login', [AuthenticationController::class, 'login'])->name('login');
 Route::get('logout', [AuthenticationController::class, 'logout'])->name('logout');
 
 Route::group(['prefix' => 'dashboard', 'middleware' => $dashboardMiddlewares], function () {
-    Route::get('/profile', fn() => auth()->user());
-    Route::get('home',[DashboardController::class,'home']);
+    Route::get('/profile', fn () => auth()->user());
+    Route::get('home', [DashboardController::class, 'home']);
     Route::group(['prefix' => 'headers'], function () {
         Route::get('brands', [BrandController::class, 'getTableHeaders']);
         Route::get('categories', [CategoryController::class, 'getTableHeaders']);
@@ -75,15 +76,15 @@ Route::group(['prefix' => 'dashboard', 'middleware' => $dashboardMiddlewares], f
     Route::customLanguageResource('language', LanguageController::class);
     //End of Routes Macro
 
-    Route::post('user/all', [UsersController::class, 'index']);//for searching
+    Route::post('user/all', [UsersController::class, 'index']); //for searching
     Route::get('user/customer/get-addresses-of-customer/{customer}', [CustomersController::class, 'getCountriesOfCustomer']);
     Route::apiResource('user', UsersController::class);
 
     Route::apiResource('country', CountryController::class);
     Route::post('country/all', [CountryController::class, 'index']); // for search
-//    Route::post("country/{country}",[CountryController::class,'update']);
+    //    Route::post("country/{country}",[CountryController::class,'update']);
 
-    Route::post('order/all', [OrdersController::class, 'index']);// for search
+    Route::post('order/all', [OrdersController::class, 'index']); // for search
     Route::get('order/create', [OrdersController::class, 'create']);
     Route::apiResource('order', OrdersController::class);
 
@@ -102,41 +103,42 @@ Route::group(['prefix' => 'dashboard', 'middleware' => $dashboardMiddlewares], f
     Route::post('discount-entity/all', [DiscountEntityController::class, 'index']); // for search
 
     Route::apiResource('field', FieldsController::class);
-    Route::post('field/all', [FieldsController::class, 'index']);// for search
+    Route::post('field/all', [FieldsController::class, 'index']); // for search
 
     Route::apiResource('label', LabelController::class);
-    Route::post('label/all', [LabelController::class, 'index']);// for search
+    Route::post('label/all', [LabelController::class, 'index']); // for search
 
-    Route::post('role/all', [RolesController::class, 'index']);// for search
+    Route::post('role/all', [RolesController::class, 'index']); // for search
     Route::post('role/get-nested-permissions-for-role/', [RolesController::class, 'getNestedPermissionsForRole']);
     Route::get('role/create/{id?}', [RolesController::class, 'create']); //for select box
     Route::apiResource('role', RolesController::class);
 
     Route::apiResource('setting', SettingsController::class);
-    Route::post('setting/all', [SettingsController::class, 'index']);// for search
+    Route::post('setting/all', [SettingsController::class, 'index']); // for search
 
-    Route::post('tag/all', [TagController::class, 'index']);// for search
+    Route::post('tag/all', [TagController::class, 'index']); // for search
     Route::apiResource('tag', TagController::class);
 
     Route::apiResource('unit', UnitController::class);
-    Route::post('unit/all', [UnitController::class, 'index']);// for search
+    Route::post('unit/all', [UnitController::class, 'index']); // for search
 
     // @TODO: make a correct function for the user profile
 
-    Route::post('tax/all', [TaxController::class, 'index']);//for searching
+    Route::post('tax/all', [TaxController::class, 'index']); //for searching
     Route::get('tax/create', [TaxController::class, 'create']);
     Route::apiResource('tax', TaxController::class);
-    Route::post('tax/all', [TaxController::class, 'index']);// for search
+    Route::post('tax/all', [TaxController::class, 'index']); // for search
 
-    Route::post('price/all', [PricesController::class, 'index']);// for search
+    Route::post('price/all', [PricesController::class, 'index']); // for search
     Route::get('price/create/{id?}', [PricesController::class, 'create']);
+    Route::get('price/get-list', [PricesController::class, 'getPricesList']);
     Route::apiResource('price', PricesController::class);
 
     Route::post('price_list/show', [PricesListController::class, 'show']);
     Route::PUT('price_list', [PricesListController::class, 'update']);
     Route::apiResource('price_list', PricesListController::class);
 
-    Route::post('product/all', [ProductController::class, 'index']);// for search
+    Route::post('product/all', [ProductController::class, 'index']); // for search
     // Route::post('product/add',[ProductController::class,'addproduct']);// for search
     Route::get('product/create', [ProductController::class, 'create']);
 
