@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Field;
 
-use App\Http\Controllers\Fields\FieldValueController;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FieldsResource extends JsonResource

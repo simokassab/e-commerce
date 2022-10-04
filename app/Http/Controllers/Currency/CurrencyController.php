@@ -37,7 +37,6 @@ class CurrencyController extends MainController
 
     public function getCurrencyHistories()
     {
-
         return $this->successResponsePaginated(CurrencyHistoryResource::class, CurrencyHistory::class);
     }
     /**
@@ -70,7 +69,7 @@ class CurrencyController extends MainController
             $currency->setIsDefault();
 
         if ($request->image) {
-            $currency->image = $this->imageUpload($request->image,Currency::$imagesPath['images']);
+            $currency->image = $this->imageUpload($request->image, Currency::$imagesPath['images']);
         }
 
         if (!$currency->save())
@@ -93,7 +92,7 @@ class CurrencyController extends MainController
     public function show(Currency $currency)
     {
         return $this->successResponse(
-            data:[
+            data: [
                 'currency' => new SingleCurrencyResource($currency)
             ]
         );
@@ -134,7 +133,7 @@ class CurrencyController extends MainController
                 if (!$this->removeImage($currency->image)) {
                     throw new FileErrorException();
                 }
-                $currency->image = $this->imageUpload($request->image,Currency::$imagesPath['images']);
+                $currency->image = $this->imageUpload($request->image, Currency::$imagesPath['images']);
             }
 
             $currency->save();

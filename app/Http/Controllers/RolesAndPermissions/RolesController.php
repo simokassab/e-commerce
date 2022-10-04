@@ -30,7 +30,7 @@ class RolesController extends MainController
 
         if ($request->method() == 'POST') {
 
-            $searchKeys = ['id','name'];
+            $searchKeys = ['id', 'name'];
             $searchRelationsKeys = ['parent' => ['parent_role' => 'name']];
             return $this->getSearchPaginated(RolesResource::class, CustomRole::class, $request, $searchKeys, self::relations, $searchRelationsKeys);
         }
@@ -43,9 +43,10 @@ class RolesController extends MainController
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($roleId = null)
     {
-        //
+        $roles = CustomRole::whereNot('id', $roleId)->get();
+        return $this->successResponse('Success!', ["roles" => GetAllRolesResource::collection($roles)]);
     }
 
     /**
@@ -74,7 +75,7 @@ class RolesController extends MainController
             }
             $flattenPermissions = collect($flattenPermissions)->unique();
 
-            $approvedPermissions = array_filter($flattenPermissions->toArray(), fn($value) => $value[1]);
+            $approvedPermissions = array_filter($flattenPermissions->toArray(), fn ($value) => $value[1]);
             $approvedPermissions = (collect($approvedPermissions)->pluck(0));
             $role->givePermissionTo($approvedPermissions);
 
@@ -85,13 +86,12 @@ class RolesController extends MainController
                     'role' => new SingleRoleResource($role)
                 ]
             );
-
-        } catch (\Exception|QueryException $e) {
+        } catch (\Exception | QueryException $e) {
             DB::rollBack();
-            return $this->errorResponse(['message' => __('messages.failed.create', ['name' => __(self::OBJECT_NAME)]),
+            return $this->errorResponse([
+                'message' => __('messages.failed.create', ['name' => __(self::OBJECT_NAME)]),
                 'error' => $e->getMessage()
             ]);
-
         }
     }
 
@@ -169,11 +169,11 @@ class RolesController extends MainController
             $flattenPermissions = [];
             //@TODO: add validation to filter permissions that are added to the role but the role does n't have the rights to do it
             //plucked the name of flatten permissions
-//            $childPermissions = collect($flattenPermissions)->pluck(0)->toArray();
-//            $parentPermissions = CustomRole::findById($request->parent_id)->permissions->pluck('name')->toArray();
-//
-//            $filteredPermissions = PermissionsServices::filterPermissionsAccordingToParentPermissions($parentPermissions,$childPermissions);
-//
+            //            $childPermissions = collect($flattenPermissions)->pluck(0)->toArray();
+            //            $parentPermissions = CustomRole::findById($request->parent_id)->permissions->pluck('name')->toArray();
+            //
+            //            $filteredPermissions = PermissionsServices::filterPermissionsAccordingToParentPermissions($parentPermissions,$childPermissions);
+            //
 
             foreach ($request->permissions as $permission) {
                 $innerFlattenPermissions = PermissionsServices::loopOverMultiDimentionArray($permission['tree']) ?? [];
@@ -182,7 +182,7 @@ class RolesController extends MainController
             $flattenPermissions = collect($flattenPermissions)->unique();
 
             $allPermissionsNames = CustomPermission::all()->pluck('name')->toArray();
-            $approvedPermissions = array_filter($flattenPermissions->toArray(), fn($value) => $value[1]);
+            $approvedPermissions = array_filter($flattenPermissions->toArray(), fn ($value) => $value[1]);
             $approvedPermissions = (collect($approvedPermissions)->pluck(0));
 
             $role->revokePermissionTo($allPermissionsNames);
@@ -196,8 +196,7 @@ class RolesController extends MainController
                     'role' => new SingleRoleResource($role)
                 ]
             );
-
-        } catch (\Exception|QueryException $e) {
+        } catch (\Exception | QueryException $e) {
             DB::rollBack();
             return $this->errorResponse(
                 __('messages.failed.update', ['name' => __(self::OBJECT_NAME)]),
@@ -262,12 +261,6 @@ class RolesController extends MainController
         }
 
         return $this->successResponse(data: $returnArray);
-
-    }
-
-    public function getAllRoles()
-    {
-        return $this->successResponse('Success!', ["roles" => GetAllRolesResource::collection(CustomRole::all())]);
     }
 
     public function getTableHeaders()

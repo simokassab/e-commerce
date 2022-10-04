@@ -127,7 +127,6 @@ class ProductController extends MainController
     }
     public function getAllProductsAndPrices(Request $request)
     {
-
         $products = Product::with('priceClass', 'price')
             ->when(($request->has('product_name') && $request->product_name != null), function ($query) use ($request) {
                 $value = strtolower($request->product_name);

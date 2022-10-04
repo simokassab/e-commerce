@@ -191,15 +191,6 @@ class RolesService {
            self::createSinglePermssion('FieldsController@destroy',$parentField->id );
       //End of Field Permission
 
-       //Field Permission
-       $parentFieldValue= self::createSinglePermssion('FieldValueController');
-           self::createSinglePermssion('FieldValueController@index',$parentFieldValue->id );
-           self::createSinglePermssion('FieldValueController@store',$parentFieldValue->id );
-           self::createSinglePermssion('FieldValueController@show',$parentFieldValue->id );
-           self::createSinglePermssion('FieldValueController@update',$parentFieldValue->id );
-           self::createSinglePermssion('FieldValueController@destroy',$parentFieldValue->id );
-     //End of Field Permission
-
       //Language Permission
       $parentLanguage= self::createSinglePermssion('LanguageController');
            self::createSinglePermssion('LanguageController@index',$parentLanguage->id );

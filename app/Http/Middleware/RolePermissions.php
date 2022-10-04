@@ -25,7 +25,7 @@ class RolePermissions
      */
     public function handle(Request $request, Closure $next)
     {
-//        $routeAction = basename( $path ); //we got the permission name
+        //        $routeAction = basename( $path ); //we got the permission name
         $path = Route::currentRouteAction();
 
         $routeAction = mbBaseName($path);
@@ -38,15 +38,18 @@ class RolePermissions
                 'getAllParentsSorted',
                 'getAllChildsSorted',
                 'getAllLanguagesSorted',
-
-            ], 'store', $routeAction);
+            ],
+            'store',
+            $routeAction
+        );
 
         $routeAction = Str::replaceAll(
             [
                 'getTableHeaders',
-                'getAllRoles',
-                'getPricesList',
-            ], 'index', $routeAction);
+            ],
+            'index',
+            $routeAction
+        );
 
         $routeAction = Str::replaceAll([
             'setCurrencyIsDefault',
@@ -60,8 +63,10 @@ class RolePermissions
         $routeAction = Str::replaceAll(
             [
                 'getNestedPermissionsForRole',
-                'getPricesList',
-            ], 'show', $routeAction);
+            ],
+            'show',
+            $routeAction
+        );
 
         if (!auth()->user()->hasPermissionTo($routeAction)) {
             throw new PermissionException();
