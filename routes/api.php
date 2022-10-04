@@ -39,9 +39,6 @@ use Illuminate\Support\Facades\Route;
 $dashboardMiddlewares = ['auth:sanctum', 'localization', 'role_permissions'];
 
 
-Route::get('test', [TestController::class, 'test']);
-Route::get('createShipment', [TestController::class, 'createShipment']);
-
 
 Route::post('login', [AuthenticationController::class, 'login'])->name('login');
 Route::get('logout', [AuthenticationController::class, 'logout'])->name('logout');
@@ -131,7 +128,6 @@ Route::group(['prefix' => 'dashboard', 'middleware' => $dashboardMiddlewares], f
     Route::apiResource('tax', TaxController::class);
     Route::post('tax/all', [TaxController::class, 'index']);// for search
 
-    Route::get('price/get-list', [PricesController::class, 'getPricesList']);
     Route::post('price/all', [PricesController::class, 'index']);// for search
     Route::get('price/create/{id?}', [PricesController::class, 'create']);
     Route::apiResource('price', PricesController::class);
@@ -155,7 +151,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => $dashboardMiddlewares], f
     Route::get('coupon/create', [CouponsController::class, 'create']);
     Route::apiResource('coupon', CouponsController::class);
 
-    Route::get('createShipment', [TestController::class, 'createShipment']);
+    // Route::get('createShipment', [TestController::class, 'createShipment']);
 
 });
 

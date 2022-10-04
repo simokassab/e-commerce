@@ -37,11 +37,14 @@ class PricesController extends MainController
 
     public function create($priceId = null)
     {
-        $originalPrices = Price::with(['originalPrice', 'currency'])->whereNot('id', $priceId)->where('is_virtual', 0)->get();
+        $prices = Price::with(['originalPrice', 'currency'])->get();
+        $originalPrices = $prices->where('id', '!=', $priceId)->where('is_virtual', 0);
 
         return $this->successResponse(
             data: [
-                'prices' => PriceResource::collection($originalPrices)
+                'original_prices' => PriceResource::collection($originalPrices),
+                'prices_classes' => SelectPriceResource::collection($prices)
+
             ]
         );
     }
@@ -154,11 +157,11 @@ class PricesController extends MainController
         //this module can't be destroyed
     }
 
-    public function getPricesList()
-    {
-        $prices = Price::with('currency')->get();
-        return SelectPriceResource::collection($prices);
-    }
+    // public function getPricesList()
+    // {
+    //     $prices = Price::with('currency')->get();
+    //     return SelectPriceResource::collection($prices);
+    // }
 
     public function getTableHeaders()
     {
