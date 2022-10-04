@@ -23,11 +23,11 @@ class Field extends MainModel
 
     public function fieldValue()
     {
-        return $this->hasMany(fieldValue::class, 'field_id');
+        return $this->hasMany(FieldValue::class, 'field_id');
     }
     public function category()
     {
-        return $this->belongsToMany(Category::class, 'categories_fields', 'field_id', 'category_id');
+        return $this->belongsToMany(Category::class, 'categories_fields', 'field_id', 'category_id')->whereModel(Category::class);
     }
     public function fieldValueCategoire()
     {

@@ -47,7 +47,7 @@ class StoreCategoryRequest extends MainRequest
             // | dimensions:max_width=' . config('defaults.default_icon_maximum_width') . ',max_height=' . config('defaults.default_icon_maximum_height'),
 
             'parent_id' => 'nullable | integer',
-            'slug' => 'required | max:' . config('defaults.default_string_length_2') . ' | unique:categories,slug,' .$id,
+            'slug' => 'required | max:' . config('defaults.default_string_length_2') . ' | unique:categories,slug,' . $id,
             'meta_title' => 'nullable',
             'meta_description' => 'nullable',
             'meta_keyword' => 'nullable',
@@ -68,9 +68,8 @@ class StoreCategoryRequest extends MainRequest
         if ($this->has('fields')) {
             if (!is_array($this->fields))
                 throw new Exception('fields must be of type array');
-                foreach ($this->fields as $key => $field) {
-                dd($field['value']);
-                    if ($field['type'] == 'date') {
+            foreach ($this->fields as $key => $field) {
+                if ($field['type'] == 'date') {
                     $fieldsRules[] = [
                         'fields.*.value' => 'required | date'
                     ];
