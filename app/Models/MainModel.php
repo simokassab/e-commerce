@@ -2,22 +2,23 @@
 
 namespace App\Models;
 
+use App\Trait\AdditionalField;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
 class MainModel extends Model
 {
-    use HasFactory,HasTranslations;
+    use HasFactory, HasTranslations, AdditionalField;
 
-   protected $guard_name = 'web';
+    protected $guard_name = 'web';
 
 
-
-    public function setIsDefault(){
+    public function setIsDefault()
+    {
         $this->query()
-            ->where('is_default' , true)
-            ->whereNot('id',$this->id)
+            ->where('is_default', true)
+            ->whereNot('id', $this->id)
             ->update(['is_default' => false]);
 
         $this->is_default = true;
@@ -25,11 +26,10 @@ class MainModel extends Model
         return $this;
     }
 
-    public static function getMaxSortValue(){
-
+    public static function getMaxSortValue()
+    {
         return self::max('sort') + 1;// get the max sort and add one to it
-
-}
+    }
 
     public function scopeOrder($query)
     {
@@ -40,6 +40,5 @@ class MainModel extends Model
     // a new function that is called on an objec and retuens the translated value of the field
     // it will paginate the data and return it with translations
 
-    
 
 }

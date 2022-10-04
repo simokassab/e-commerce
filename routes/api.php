@@ -128,7 +128,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => $dashboardMiddlewares], f
     Route::apiResource('unit', UnitController::class);
     Route::post('unit/all', [UnitController::class, 'index']);// for search
 
-    // @TODO: make a correct function for the user profile
+    //TODO: make a correct function for the user profile
 
     Route::post('tax/all', [TaxController::class, 'index']);//for searching
     Route::get('tax/create', [TaxController::class, 'create']);

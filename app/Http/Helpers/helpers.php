@@ -69,6 +69,9 @@ function removeImage(string|null $folderPath): bool
     return true;
 }
 
+/**
+ * @throws Exception
+ */
 function getSettings(array|string $key = null): mixed
 {
 

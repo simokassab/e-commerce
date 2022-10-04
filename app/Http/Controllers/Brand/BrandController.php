@@ -60,8 +60,7 @@ class BrandController extends MainController
         $labels = Label::whereEntity('brand')->get();
 
         return $this->successResponse(
-            'Success!',
-            [
+           data:[
                 'fields' =>  FieldsResource::collection($fields),
                 'labels' => LabelsResource::collection($labels)
             ]
@@ -100,8 +99,8 @@ class BrandController extends MainController
             $brand->save();
 
             //Fields Store
-            if ($request->has('fields'))
-                BrandsService::addFieldsToBrands($brand, ($request->fields));
+            if ( $request->has('fields') )
+                $brand->storeUpdateFields($request->fields);
 
             if ($request->has('labels')) {
                 $oldLabel = $request->labels;
@@ -182,7 +181,7 @@ class BrandController extends MainController
 
 
             if ($request->has('fields')) {
-                BrandsService::addFieldsToBrands($brand, $request->fields);
+                $brand->storeUpdateFields($request->fields);
             }
             $oldLabel = $request->labels;
 

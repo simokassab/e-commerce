@@ -33,8 +33,9 @@ class CategoryObserver
      * Handle the User "deleted" event.
      *
      * @return void
+     * @throws \Exception
      */
-    public function deleted(Category $category)
+    public function deleting(Category $category)
     {
         if($category->children->count() != 0){
             throw new \Exception('can\'t delete this category, it is a parent to other categories');
@@ -48,6 +49,10 @@ class CategoryObserver
         if($category->multipleProducts->count() != 0){
             throw new \Exception('can\'t delete this category, it\'s used in labels');
         }
+
+    }
+
+    public function deleted(Category $category){
         //set related products to null
         Product::query()->where('category_id',$category->id)->update(['category_id' => null]);
 

@@ -2,7 +2,6 @@
 
 namespace App\Models\Product;
 
-use App\Models\Settings\Setting;
 use App\Support\Str;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,22 +12,16 @@ use App\Models\Tax\Tax;
 use App\Models\Brand\Brand;
 use App\Models\Price\Price;
 use App\Models\Tag\Tag;
-use App\Models\Product\ProductImage;
 use App\Models\Label\Label;
-use App\Models\Attribute\Attribute;
-use App\Models\Attribute\AttributeValue;
 use App\Models\Field\Field;
-use App\Models\Field\FieldValue;
 use App\Models\MainModel;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Spatie\Translatable\HasTranslations;
-use Illuminate\Support\Facades\DB;
+use App\Trait\AdditionalField;
 
 class Product extends MainModel
 {
-    use HasFactory, HasTranslations;
+    use HasFactory, HasTranslations, AdditionalField;
+
     protected array $translatable = ['name', 'summary', 'specification', 'description', 'meta_title', 'meta_description', 'meta_keyword'];
     protected $table = 'products';
     protected $guard_name = 'web';
@@ -88,14 +81,17 @@ class Product extends MainModel
     {
         return $this->belongsToMany(Category::class, 'products_categories', 'product_id', 'category_id');
     }
+
     public function unit(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Unit::class, 'unit_id');
     }
+
     public function tax(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Tax::class, 'tax_id', 'id');
     }
+
     public function brand(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Brand::class, 'brand_id');
@@ -120,10 +116,12 @@ class Product extends MainModel
     {
         return $this->belongsTo(ProductRelated::class, 'parent_product_id');
     }
+
     public function productRelatedChildren()
     {
         return $this->hasMany(ProductRelated::class, 'parent_product_id');
     }
+
     public function productImages()
     {
         return $this->hasMany(ProductImage::class, 'product_id');
@@ -138,6 +136,7 @@ class Product extends MainModel
     {
         return $this->belongsToMany(Tag::class, 'products_tags', 'product_id', 'tag_id');
     }
+
     public function labels()
     {
         return $this->belongsToMany(Label::class, 'products_labels', 'product_id', 'label_id');
@@ -162,17 +161,19 @@ class Product extends MainModel
         return $this->belongsTo(ProductStatus::class, 'products_statuses_id');
     }
 
-    public function getNameAttribute($value){
+    public function getNameAttribute($value)
+    {
         return Str::title($value);
     }
 
-    public function getRealQuantityAttribute(): float{
+    public function getRealQuantityAttribute(): float
+    {
         return $this->quantity - ($this->reserved_quantity + $this->bundle_reserved_quantity);
     }
 
-    public function getVirtualPricing(Price | int $pricingClass)
+    public function getVirtualPricing(Price|int $pricingClass)
     {
-        $pricingClass  = is_int($pricingClass)  ?  Price::findOrFail($pricingClass) : $pricingClass;
+        $pricingClass = is_int($pricingClass) ? Price::findOrFail($pricingClass) : $pricingClass;
         $originalPricingClass = $pricingClass->originalPrice;
         if (!$originalPricingClass) {
             return 0;
@@ -190,7 +191,7 @@ class Product extends MainModel
 
     public function getPrice(int $pricingClassId)
     {
-        $pricingClass  = Price::findOrFail($pricingClassId);
+        $pricingClass = Price::findOrFail($pricingClassId);
         if ($pricingClass->is_virtual) {
             return $this->getVirtualPricing($pricingClassId);
         }
@@ -210,8 +211,6 @@ class Product extends MainModel
     ////            set: fn ($value) => strtolower($value),
     //        );
     //    }
-
-
 
 
     /**
@@ -378,7 +377,6 @@ class Product extends MainModel
         if (!$bundleProduct->save()) {
             throw new Exception("Error in saving product of id {$bundleProduct->id} !");
         }
-
 
 
         if (!$this->save())

@@ -26,13 +26,12 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if(Schema::hasTable('settings')){
-            Cache::rememberForever('settings', function () {
-                $setting=Setting::all(['id','title','type','value']);
-                return $setting;
-            });
-        }
-
+//        if(Schema::hasTable('settings')){
+//            Cache::rememberForever('settings', function () {
+//                $setting=Setting::all(['id','title','type','value']);
+//                return $setting;
+//            });
+//        }
 
 
     }

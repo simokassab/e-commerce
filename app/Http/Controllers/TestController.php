@@ -44,7 +44,7 @@ class TestController extends MainController
 
     public function test(Request $request)
     {
-        dd(Carbon::createFromFormat('Y-m-d H:i:s', "29-10-2022"));
+        Product::query()->find(1)->storeUpdateFields([],new Product());
     }
 
 

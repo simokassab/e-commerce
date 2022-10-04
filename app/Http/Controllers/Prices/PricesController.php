@@ -164,7 +164,6 @@ class PricesController extends MainController
     public function getPricesList(){
         $prices = Price::with('currency')->get();
         return SelectPriceResource::collection($prices);
-
     }
 
     public function getTableHeaders(){

@@ -184,6 +184,7 @@ class StoreProductRequest extends MainRequest
                 }
             }
         }
+//        Product::rules();
         $fieldsRules = [];
         if ($this->has('fields')) {
             foreach ($this->fields as $key => $field) {

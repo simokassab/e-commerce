@@ -38,7 +38,7 @@ class RolePermissions
                 'getAllParentsSorted',
                 'getAllChildsSorted',
                 'getAllLanguagesSorted',
-                'getOriginalPrices'
+
             ], 'store', $routeAction);
 
         $routeAction = Str::replaceAll(

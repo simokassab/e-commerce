@@ -18,11 +18,16 @@ use Spatie\Translatable\HasTranslations;
 class Category extends MainModel
 {
     use HasFactory, HasTranslations;
+
+    public static array $keys = ['id','name','code','image','icon','parent_id','slug','meta_title','meta_description','meta_keyword','description','sort','is_disabled','created_at','updated_at'];
+
     protected array $translatable = ['name', 'meta_title', 'meta_description', 'meta_keyword', 'description'];
+
     public static array $filePath =  [
         'images' => 'categories/images',
         'icons' => 'categories/icons',
-    ];
+
+        ];
     public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_id');
