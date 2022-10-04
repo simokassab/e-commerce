@@ -559,7 +559,7 @@ class ProductService
         $data = [];
         foreach ($childrenIds as $key => $child) {
             foreach ($imagesArray as $index => $image) {
-                if (count($imagesData[$index]) == 0)
+                if (count($imagesData[$key][$index]) == 0)
                     break;
                 $imagePath = uploadImage($image, $this->imagesPath['images']);
                 $data[] = [
