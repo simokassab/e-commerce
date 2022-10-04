@@ -35,9 +35,9 @@ class PricesController extends MainController
     }
 
 
-    public function create($price = null)
+    public function create($priceId = null)
     {
-        $originalPrices = Price::with(['originalPrice', 'currency'])->whereNot('id', $price)->where('is_virtual', 0)->get();
+        $originalPrices = Price::with(['originalPrice', 'currency'])->whereNot('id', $priceId)->where('is_virtual', 0)->get();
 
         return $this->successResponse(
             data: [

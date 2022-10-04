@@ -112,7 +112,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => $dashboardMiddlewares], f
 
     Route::post('role/all', [RolesController::class, 'index']);// for search
     Route::post('role/get-nested-permissions-for-role/', [RolesController::class, 'getNestedPermissionsForRole']);
-    Route::get('role/get-all-roles', [RolesController::class, 'getAllRoles']); //for select box
+    Route::get('role/create/{id?}', [RolesController::class, 'create']); //for select box
     Route::apiResource('role', RolesController::class);
 
     Route::apiResource('setting', SettingsController::class);
