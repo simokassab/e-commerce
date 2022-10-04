@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Error;
 use Exception;
 use Illuminate\Support\Facades\DB;
+
 class ProductService
 {
 
@@ -127,8 +128,8 @@ class ProductService
         }
         DB::beginTransaction();
         try {
-            static::where('product_id', $product->id)->delete();
-            static::insert($data);
+            ProductField::where('product_id', $product->id)->delete();
+            ProductField::insert($data);
             DB::commit();
             return $this;
         } catch (Exception $e) {
@@ -558,7 +559,7 @@ class ProductService
         $data = [];
         foreach ($childrenIds as $key => $child) {
             foreach ($imagesArray as $index => $image) {
-                if ($image || count($imagesData[$index]) == 0)
+                if (count($imagesData[$index]) == 0)
                     break;
                 $imagePath = uploadImage($image, $this->imagesPath['images']);
                 $data[] = [
