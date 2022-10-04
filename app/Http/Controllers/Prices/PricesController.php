@@ -15,7 +15,7 @@ class PricesController extends MainController
 {
 
     const OBJECT_NAME = 'objects.price';
-    const relations = ['currency','products','originalPrice','originalPricesChildren'];
+    const relations = ['currency', 'products', 'originalPrice', 'originalPricesChildren'];
     /**
      * Display a listing of the resource.
      *
@@ -25,19 +25,20 @@ class PricesController extends MainController
      */
     public function index(Request $request)
     {
-        if ($request->method()=='POST') {
+        if ($request->method() == 'POST') {
 
-            $searchKeys=['id','name','percentage'];
-            $searchRelationsKeys = ['originalPrice' =>['original_price' => 'name'], 'currency' => ['currency' => 'code'] ];
-            return $this->getSearchPaginated(PriceResource::class, Price::class, $request, $searchKeys,self::relations,$searchRelationsKeys);
+            $searchKeys = ['id', 'name', 'percentage'];
+            $searchRelationsKeys = ['originalPrice' => ['original_price' => 'name'], 'currency' => ['currency' => 'code']];
+            return $this->getSearchPaginated(PriceResource::class, Price::class, $request, $searchKeys, self::relations, $searchRelationsKeys);
         }
-        return $this->successResponsePaginated(PriceResource::class,Price::class,self::relations);
-
+        return $this->successResponsePaginated(PriceResource::class, Price::class, self::relations);
     }
 
-    public function getOriginalPrices()
+
+    public function create($price = null)
     {
-        $originalPrices = Price::with(['originalPrice','currency'])->where('is_virtual',0)->get();
+        $originalPrices = Price::with(['originalPrice', 'currency'])->whereNot('id', $price)->where('is_virtual', 0)->get();
+
         return $this->successResponse(
             data: [
                 'prices' => PriceResource::collection($originalPrices)
@@ -58,27 +59,26 @@ class PricesController extends MainController
         $price->currency_id = $request->currency_id;
         $price->is_virtual = (bool)$request->is_virtual;
 
-        if($request->is_virtual){
+        if ($request->is_virtual) {
             $price->original_price_id = $request->original_price_id;
             $price->percentage = $request->percentage;
-        }else{
+        } else {
             $price->original_price_id = null;
             $price->percentage = null;
         }
 
-        if($price->save()){
+        if ($price->save()) {
             return $this->successResponse(
-                __('messages.success.create',['name' => __(self::OBJECT_NAME)]),
+                __('messages.success.create', ['name' => __(self::OBJECT_NAME)]),
                 [
-                    'price' => new SinglePriceResource($price->load(['originalPrice','currency']))
+                    'price' => new SinglePriceResource($price->load(['originalPrice', 'currency']))
                 ]
             );
         }
 
         return $this->errorResponse(
-             __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+            __('messages.failed.create', ['name' => __(self::OBJECT_NAME)])
         );
-
     }
 
     /**
@@ -91,7 +91,7 @@ class PricesController extends MainController
     {
         return $this->successResponse(
             data: [
-                'price' => new SinglePriceResource($price->load(['originalPrice','currency']))
+                'price' => new SinglePriceResource($price->load(['originalPrice', 'currency']))
             ]
         );
     }
@@ -105,7 +105,6 @@ class PricesController extends MainController
      */
     public function edit(Request $request)
     {
-
     }
 
     /**
@@ -122,27 +121,26 @@ class PricesController extends MainController
         $price->currency_id = $request->currency_id;
         $price->is_virtual = (bool)$request->is_virtual;
 
-        if($request->is_virtual){
+        if ($request->is_virtual) {
             $price->original_price_id = $request->original_price_id;
             $price->percentage = $request->percentage;
-        }else{
+        } else {
             $price->original_price_id = null;
             $price->percentage = null;
         }
 
-        if($price->save()){
+        if ($price->save()) {
             return $this->successResponse(
-                __('messages.success.update',['name' => __(self::OBJECT_NAME)]),
+                __('messages.success.update', ['name' => __(self::OBJECT_NAME)]),
                 [
-                    'price' => new SinglePriceResource($price->load(['originalPrice','currency']))
+                    'price' => new SinglePriceResource($price->load(['originalPrice', 'currency']))
                 ]
             );
         }
 
         return $this->errorResponse(
-            __('messages.failed.create',['name' => __(self::OBJECT_NAME)])
+            __('messages.failed.create', ['name' => __(self::OBJECT_NAME)])
         );
-
     }
 
     /**
@@ -156,16 +154,18 @@ class PricesController extends MainController
         //this module can't be destroyed
     }
 
-    public function getPricesList(){
+    public function getPricesList()
+    {
         $prices = Price::with('currency')->get();
         return SelectPriceResource::collection($prices);
-
     }
 
-    public function getTableHeaders(){
-        return $this->successResponse('Success!', ['headers' => __('headers.prices') ]);
+    public function getTableHeaders()
+    {
+        return $this->successResponse('Success!', ['headers' => __('headers.prices')]);
     }
-    public function getPricesData(){
-        return $this->successResponsePaginated(RestFullPriceResource::class,Price::class,['originalPrice','currency']);
+    public function getPricesData()
+    {
+        return $this->successResponsePaginated(RestFullPriceResource::class, Price::class, ['originalPrice', 'currency']);
     }
 }

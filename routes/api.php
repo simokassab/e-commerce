@@ -10,7 +10,6 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Discount\DiscountController;
 use App\Http\Controllers\Discount\DiscountEntityController;
 use App\Http\Controllers\Fields\FieldsController;
-use App\Http\Controllers\Fields\FieldValueController;
 use App\Http\Controllers\Label\LabelController;
 use App\Http\Controllers\Language\LanguageController;
 use App\Http\Controllers\Orders\OrdersController;
@@ -108,9 +107,6 @@ Route::group(['prefix' => 'dashboard', 'middleware' => $dashboardMiddlewares], f
     Route::apiResource('field', FieldsController::class);
     Route::post('field/all', [FieldsController::class, 'index']);// for search
 
-    Route::apiResource('field-value', FieldValueController::class);
-    Route::post('field-value/all', [FieldValueController::class, 'index']);// for search
-
     Route::apiResource('label', LabelController::class);
     Route::post('label/all', [LabelController::class, 'index']);// for search
 
@@ -137,7 +133,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => $dashboardMiddlewares], f
 
     Route::get('price/get-list', [PricesController::class, 'getPricesList']);
     Route::post('price/all', [PricesController::class, 'index']);// for search
-    Route::get('price/get-original-prices', [PricesController::class, 'getOriginalPrices'])->name('get.original.prices');
+    Route::get('price/create/{id?}', [PricesController::class, 'create']);
     Route::apiResource('price', PricesController::class);
 
     Route::post('price_list/show', [PricesListController::class, 'show']);
