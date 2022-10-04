@@ -34,10 +34,6 @@ class BrandsService
         $tobeSavedArray = [];
         foreach ($fields as $key => $field) {
 
-            if (gettype($field) == 'string') {
-                $field = (array)json_decode($field);
-            }
-
             if ($field["type"] == 'select') {
                 $tobeSavedArray[$key]["value"] = null;
                 if (gettype($field["value"]) == 'array') {
@@ -48,9 +44,7 @@ class BrandsService
             } else {
                 $tobeSavedArray[$key]["field_value_id"] = null;
                 $tobeSavedArray[$key]["value"] = ($field['value']);
-                if (is_array($field['value'])) {
-                    $tobeSavedArray[$key]["value"] = json_encode($field['value']);
-                }
+
             }
             $tobeSavedArray[$key]["brand_id"] = $brand->id;
             $tobeSavedArray[$key]["field_id"] = $field['field_id'];
