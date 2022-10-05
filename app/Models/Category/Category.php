@@ -2,7 +2,6 @@
 
 namespace App\Models\Category;
 
-use App\Models\Brand\BrandField;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\MainModel;
 use App\Models\Label\Label;
@@ -12,14 +11,12 @@ use App\Models\Tag\Tag;
 use App\Models\Discount\Discount;
 use App\Models\Brand\Brand;
 use App\Models\Product\Product;
-use phpDocumentor\Reflection\Types\Boolean;
 use Spatie\Translatable\HasTranslations;
 
 class Category extends MainModel
 {
-    use HasFactory, HasTranslations;
 
-    public static array $keys = ['id','name','code','image','icon','parent_id','slug','meta_title','meta_description','meta_keyword','description','sort','is_disabled','created_at','updated_at'];
+//    public static array $keys = ['id','name','code','image','icon','parent_id','slug','meta_title','meta_description','meta_keyword','description','sort','is_disabled','created_at','updated_at'];
 
     protected array $translatable = ['name', 'meta_title', 'meta_description', 'meta_keyword', 'description'];
 
@@ -28,6 +25,12 @@ class Category extends MainModel
         'icons' => 'categories/icons',
 
         ];
+
+    protected $fieldKey = 'category_id';
+    protected $fieldClass = CategoriesFields::class;
+    protected array $fieldDBColumns = ['id','value', 'field_value_id', 'field_id', 'category_id'];
+
+
     public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_id');

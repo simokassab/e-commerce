@@ -21,6 +21,11 @@ class AuthenticationController extends MainController
             return $this->errorResponse('Sorry, but you entered the wrong credentials!', [], -1, 401);
         }
 
+        if(! \auth()->user()->is_active){
+            \auth()->logout();
+            return $this->errorResponse('Ths user is inactive');
+        }
+
         $permissions = [];
 
         if (!is_null(\auth()->user()->roles) && count(\auth()->user()->roles) > 0) {

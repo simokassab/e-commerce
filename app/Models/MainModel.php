@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
-class MainModel extends Model
+abstract class MainModel extends Model
 {
     use HasFactory, HasTranslations, AdditionalField;
 

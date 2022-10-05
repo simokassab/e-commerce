@@ -15,12 +15,10 @@ use App\Models\Tag\Tag;
 use App\Models\Label\Label;
 use App\Models\Field\Field;
 use App\Models\MainModel;
-use Spatie\Translatable\HasTranslations;
-use App\Trait\AdditionalField;
+
 
 class Product extends MainModel
 {
-    use HasFactory, HasTranslations, AdditionalField;
 
     protected array $translatable = ['name', 'summary', 'specification', 'description', 'meta_title', 'meta_description', 'meta_keyword'];
     protected $table = 'products';

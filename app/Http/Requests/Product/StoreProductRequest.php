@@ -184,30 +184,10 @@ class StoreProductRequest extends MainRequest
                 }
             }
         }
-//        Product::rules();
+//        Product::generateValidationRules();
         $fieldsRules = [];
         if ($this->has('fields')) {
-            foreach ($this->fields as $key => $field) {
-                if ($field['type'] == 'date') {
-                    $fieldsRules[] = [
-                        'fields.*.value' => 'required | date'
-                    ];
-                } elseif ($field['type'] == 'select') {
 
-                    $fieldsRules[] = [
-                        'fields.*.value' => 'required | integer', 'exists:fields_values,id'
-                    ];
-                } elseif ($field['type'] == 'checkbox') {
-                    $fieldsRules[] = [
-                        'fields.*.value' => 'required | boolean'
-                    ];
-                } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
-                    $fieldsRules[] = [
-                        'fields.*.value' => 'required | string',
-                    ];
-                }
-                $rules = array_merge($rules, $fieldsRules);
-            }
         }
 
         if ($this->has('product_variations')) {

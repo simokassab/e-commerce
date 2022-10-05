@@ -172,7 +172,7 @@ class CategoryController extends MainController
             CategoryService::deleteRelatedCategoryFieldsAndLabels($category);
 
             if ($request->has('fields') && !is_null($request->fields)) {
-                CategoryService::addFieldsToCategory($category, $request->fields);
+               $category->storeUpdateFields($request->fields);
             }
 
             if ($request->has('labels') && !is_null($request->labels)) {

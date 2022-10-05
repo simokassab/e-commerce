@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Category;
 
 use App\Http\Requests\MainRequest;
+use App\Models\Brand\Brand;
+use App\Models\Category\Category;
 use Exception;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -64,30 +66,8 @@ class StoreCategoryRequest extends MainRequest
             'order.*.sort' => 'required | integer',
 
         ];
-        $fieldsRules = [];
         if ($this->has('fields')) {
-            if (!is_array($this->fields))
-                throw new Exception('fields must be of type array');
-            foreach ($this->fields as $key => $field) {
-                if ($field['type'] == 'date') {
-                    $fieldsRules[] = [
-                        'fields.*.value' => 'required | date'
-                    ];
-                } elseif ($field['type'] == 'select') {
-                    $fieldsRules[] = [
-                        'fields.*.value' => 'required | integer | exists:fields_values,id'
-                    ];
-                } elseif ($field['type'] == 'checkbox') {
-                    $fieldsRules[] = [
-                        'fields.*.value' => 'required | boolean'
-                    ];
-                } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
-                    $fieldsRules[] = [
-                        'fields.*.value' => 'required | string',
-                    ];
-                }
-                $rules = array_merge($rules, $fieldsRules);
-            }
+            $rules =  array_merge($rules,Category::generateValidationRules($this->fields));
         }
 
         return $rules;

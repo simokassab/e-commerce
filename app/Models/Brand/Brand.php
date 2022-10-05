@@ -2,7 +2,6 @@
 
 namespace App\Models\Brand;
 
-use App\Models\Category\Category;
 use App\Models\Product\Product;
 use App\Models\Tax\Tax;
 use App\Models\Unit\Unit;

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Brand;
 
 use App\Http\Requests\MainRequest;
+use App\Models\Brand\Brand;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
@@ -39,38 +40,16 @@ class StoreBrandRequest extends MainRequest
             'sort' => 'nullable | integer',
 
 
-            'fields.*.field_id' => 'required | exists:fields,id,entity,brand',
-            'fields.*.type' => ['required', 'exists:fields,type,entity,brand'],
+//            'fields.*.field_id' => 'required | exists:fields,id,entity,brand',
+//            'fields.*.type' => ['required', 'exists:fields,type,entity,brand'],
 
             'labels.*' => 'required | integer | exists:labels,id',
 
 
         ];
-        $fieldsRules = [];
         if ($this->has('fields')) {
-            foreach ($this->fields as $key => $field) {
-                if ($field['type'] == 'date') {
-                    $fieldsRules[] = [
-                        'fields.*.value' => 'required | date'
-                    ];
-                } elseif ($field['type'] == 'select') {
-
-                    $fieldsRules[] = [
-                        'fields.*.value' => 'required | integer', 'exists:fields_values,id'
-                    ];
-                } elseif ($field['type'] == 'checkbox') {
-                    $fieldsRules[] = [
-                        'fields.*.value' => 'required | boolean'
-                    ];
-                } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
-                    $fieldsRules[] = [
-                        'fields.*.value' => 'required | string',
-                    ];
-                }
-                $rules = array_merge($rules, $fieldsRules);
-            }
+            $rules =  array_merge($rules,Brand::generateValidationRules($this->fields));
         }
-
         return $rules;
     }
 

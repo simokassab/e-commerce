@@ -14,13 +14,15 @@ class FieldResourceEntity extends JsonResource
      */
     public function toArray($request)
     {
-
         $value = $this->value;
         if ($this->field->type == 'checkbox') {
             $value = (bool)$this->value ?? false;
         }
         if ($this->field->type == 'select') {
             $value = (int)$this->field_value_id ?? null;
+        }
+        if($this->field->type = 'multi-select'){
+
         }
         return [
             'id' => $this->id,
