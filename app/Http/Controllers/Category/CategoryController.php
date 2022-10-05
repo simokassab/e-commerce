@@ -90,7 +90,7 @@ class CategoryController extends MainController
             $category->save();
 
             if ($request->has('fields') && !is_null($request->fields)) {
-                CategoryService::addFieldsToCategory($category, $request->fields);
+                $category->storeUpdateFields($request->fields);
             }
 
             if ($request->has('labels') && !is_null($request->labels)) {
@@ -169,7 +169,7 @@ class CategoryController extends MainController
             $category->code = $category->id;
             $category->save();
 
-            CategoryService::deleteRelatedCategoryFieldsAndLabels($category);
+            CategoryService::deleteRelatedCategoryLabels($category);
 
             if ($request->has('fields') && !is_null($request->fields)) {
                 $category->storeUpdateFields($request->fields);
@@ -214,7 +214,7 @@ class CategoryController extends MainController
             if (!$category->canDelete($message)) {
                 return $this->errorResponse($message);
             }
-            CategoryService::deleteRelatedCategoryFieldsAndLabels($category);
+            CategoryService::deleteRelatedCategoryLabels($category);
             $category->delete();
             DB::commit();
             return $this->successResponse(
