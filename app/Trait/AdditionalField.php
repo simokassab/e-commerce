@@ -44,7 +44,7 @@ trait AdditionalField
             if ($field['type'] === 'multi-select') {
                 continue;
             }
-            $tobeSavedArray[$key]["field_value_id"] = null;
+            $toBeSavedArray[$key]["field_value_id"] = null;
 
             if ($field["type"] == 'select') {
                 $toBeSavedArray[$key]["value"] = null;

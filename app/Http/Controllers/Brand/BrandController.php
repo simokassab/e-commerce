@@ -162,7 +162,7 @@ class BrandController extends MainController
         DB::beginTransaction();
         try {
 
-            BrandsService::deleteRelatedBrandFieldsAndLabels($brand);
+            BrandsService::deleteRelatedBrandLabels($brand);
 
             $brand->name = $request->name;
 
@@ -226,7 +226,7 @@ class BrandController extends MainController
     {
         DB::beginTransaction();
         try {
-            BrandsService::deleteRelatedBrandFieldsAndLabels($brand);
+            BrandsService::deleteRelatedBrandLabels($brand);
             $brand->delete();
             DB::commit();
             return $this->successResponse(
