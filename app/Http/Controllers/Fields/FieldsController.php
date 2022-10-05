@@ -129,9 +129,9 @@ class FieldsController extends MainController
         DB::beginTransaction();
         try {
 
-            if($request->type != 'select' && $request->is_attribute) throw new \Exception('Trying to set attribute on non select type field');
+            if(($request->type != 'select' || $request->type != 'multi-select') && $request->is_attribute) throw new \Exception('Trying to set attribute on non select type field');
 
-            if($request->type != 'select'){
+            if($request->type != 'select' || $request->type != 'multi-select'){
                 FieldService::deleteRelatedfieldValues($field);
             }
 
@@ -142,7 +142,7 @@ class FieldsController extends MainController
             $field->is_attribute =  (bool)$request->is_attribute;
             $field->save();
 
-            if ($request->type == 'select' && $request->field_values) {
+            if ( ($request->type == 'select'|| $request->type != 'multi-select') && $request->field_values) {
                 FieldService::addOrUpdateFieldValuesToField($request->field_values, $field);
             }
 
@@ -188,7 +188,10 @@ class FieldsController extends MainController
         }catch (\Exception $e){
             DB::rollBack();
             return $this->errorResponse(
-                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)])
+                __('messages.failed.delete',['name' => __(self::OBJECT_NAME)]),
+                [
+                    'errors' => $e
+                ]
             );
 
         }
