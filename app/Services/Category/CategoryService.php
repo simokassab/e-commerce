@@ -12,18 +12,14 @@ class CategoryService
     /**
      * @throws \Exception
      */
-    public static function deleteRelatedCategoryFieldsAndLabels(Category $category)
+    public static function deleteRelatedCategoryLabels(Category $category)
     {
-        $deletedFields = true;
         $deletedLabels = true;
-
-        if ($category->fields()->exists())
-            $deletedFields = CategoriesFields::where('category_id', $category->id)->delete();
 
         if ($category->label()->exists())
             $deletedLabels =  CategoriesLabels::where('category_id', $category->id)->delete();
 
-        if (!($deletedFields || $deletedLabels)) throw new \Exception('delete category fields and labels failed');
+        if (!( $deletedLabels)) throw new \Exception('delete category fields and labels failed');
     }
 
     public static function addFieldsToCategory(Category $category, array $fields = [])

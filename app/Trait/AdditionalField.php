@@ -63,7 +63,7 @@ trait AdditionalField
 
             $toBeSavedArray[$key][$this->fieldKey] = $this->id;
             $toBeSavedArray[$key]["field_id"] = $field['field_id'];
-            $toBeSavedArray[$key]["id"] = $field['id'];
+            $toBeSavedArray[$key]["id"] = array_key_exists('id',$field) ? $field['id'] : null ;
         }
         return call_user_func($this->fieldClass . '::query')->upsert($toBeSavedArray, ['id'], $this->fieldDBColumns);
     }
