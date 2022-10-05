@@ -308,7 +308,7 @@ class ProductService
                 Product::whereIn('id', $productChildren)->delete();
             } elseif ($productType == 'bundle') {
 
-                $product->updateProductQuantity($product->reserved_quanityt, 'sub');
+                $product->updateProductQuantity($product->reserved_quantity, 'sub');
                 ProductRelated::where('parent_product_id', $product->id)->delete();
             } else {
 
