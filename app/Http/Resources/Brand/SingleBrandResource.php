@@ -22,7 +22,7 @@ class SingleBrandResource extends JsonResource
 
         $labels = $this->whenLoaded('label') ?  $this->whenLoaded('label')->pluck('id') :[];
         $fieldsValues = $this->whenLoaded('fieldValue') ?? [];
-
+        dd($fieldsValues->toArray());
 
         return [
             'id' => $this->id,
