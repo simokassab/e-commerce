@@ -38,6 +38,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\Product\SelectProductOrderResource;
 use App\Http\Resources\Product\SingleProductResource;
+use App\Http\Resources\Setting\SettingsResource;
+use App\Http\Resources\Setting\SingleSettingResource;
 use App\Models\Field\FieldValue;
 use App\Models\Product\ProductField;
 use App\Models\Product\ProductImage;
@@ -109,10 +111,18 @@ class ProductController extends MainController
         $categoriesForNested = Category::with('parent')->get();
         $nestedCategories = CategoryService::getAllCategoriesNested($categoriesForNested);
 
+        $settings = getSettings([
+            'products_required_fields',
+            'products_quantity_greater_than_or_equal',
+            'allow_negative_quantity',
+            'products_prices_greater_than_or_equal',
+            'products_discounted_price_greater_than_or_equal',
+        ]);
+
         return $this->successResponse(data: [
             'prices' =>  count($PriceArray) != 0 ? $PriceArray : "-",
             'fields' => count($fields) != 0 ? $fields : [],
-            'attributes' => count($attributes) != 0 ? $attributes : "-",
+            'attributes_fields' => count($attributes) != 0 ? $attributes : "-",
             'labels' => count($labels) != 0 ? $labels : "-",
             'tags' => count($tags) != 0 ? $tags : "-",
             'brands' => count($brands) != 0 ? $brands : "-",
@@ -121,7 +131,8 @@ class ProductController extends MainController
             'categories' => count($categories) != 0 ? $categories : "-",
             'statuses' => count($statuses) != 0 ? $statuses : "-",
             'nested_categories' => $nestedCategories,
-            'default_pricing_class' => Price::find(getSettings('default_pricing_class')->value)
+            'default_pricing_class' => Price::find(getSettings('default_pricing_class')->value),
+            'settings' => SettingsResource::collection($settings)
 
         ]);
     }

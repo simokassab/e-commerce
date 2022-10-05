@@ -169,7 +169,7 @@ class StoreProductRequest extends MainRequest
         if ($this->has('fields')) {
             $rules =  array_merge($rules, Product::generateValidationRules($this->fields, 'fields'));
         }
-        if ($this->has('attributes')) {
+        if ($this->has('attributes_fields')) {
             $rules =  array_merge($rules, Product::generateValidationRules($this->attributes_fields, 'attributes_fields'));
         }
 
