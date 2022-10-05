@@ -6,12 +6,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class FieldResourceEntity extends JsonResource
 {
-    private mixed $selectedFieldValuesOfMultiSelect;
+    private static mixed $selectedFieldValuesOfMultiSelect;
 
-    public function __construct($resource,$selectedFieldValuesOfMultiSelect = null)
+    public static function customerCollection($collection)
     {
-        $this->selectedFieldValuesOfMultiSelect = $selectedFieldValuesOfMultiSelect;
-        parent::__construct($resource);
+        self::$selectedFieldValuesOfMultiSelect = $collection;
+        return parent::collection($collection );
     }
 
     /**
@@ -22,22 +22,24 @@ class FieldResourceEntity extends JsonResource
      */
     public function toArray($request)
     {
+        $field = $this->field;
         $value = $this->value;
-        if ($this->field->type == 'checkbox') {
+        if ($field->type == 'checkbox') {
             $value = (bool)$this->value ?? false;
         }
-        if ($this->field->type == 'select') {
+        if ($field->type == 'select') {
             $value = (int)$this->field_value_id ?? null;
         }
-        if($this->field->type == 'multi-select'){
-
+        if($field->type == 'multi-select'){
+        $fieldValueIds = self::$selectedFieldValuesOfMultiSelect->where('field_id',$field->id)->pluck('id');
+        $value = $fieldValueIds->toArray();
         }
 
         return [
             'id' => $this->id,
             'field_id' => $this->field_id,
             'value' => $value,
-            'type' => $this->field->type
+            'type' => $field->type
 
         ];
     }

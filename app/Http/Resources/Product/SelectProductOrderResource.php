@@ -9,7 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class SelectProductOrderResource extends JsonResource
 {
-    private static $data = [];
+    private static array $data = [];
     /**
      * Transform the resource into an array.
      *
