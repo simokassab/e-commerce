@@ -32,9 +32,9 @@ class CouponSingleResource extends JsonResource
             'expiry_date' => $this->expiry_date,
             'value' => $value,
             'type' => $type,
-            'min_amount' => $this->min_amount,
-            'is_one_time' => $this->is_one_time,
-            'is_used' => $this->is_used,
+            'min_amount' => (float)$this->min_amount,
+            'is_one_time' => (bool)$this->is_one_time,
+            'is_used' => (bool)$this->is_used,
         ];
     }
 }

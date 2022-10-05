@@ -19,10 +19,6 @@ class FieldsController extends MainController
     const OBJECT_NAME = 'objects.field';
     const relations = ['fieldValue'];
 
-    public function __construct($defaultPermissionsFromChild = null)
-    {
-        parent::__construct($defaultPermissionsFromChild);
-    }
 
     /**
      * Display a listing of the resource.

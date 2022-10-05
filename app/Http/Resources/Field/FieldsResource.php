@@ -24,8 +24,8 @@ class FieldsResource extends JsonResource
         ];
 
         if($this->type == 'select'){
-            $fields_values=$this->whenLoaded('fieldValue');
-            $toBeReturned['select_options'] = FieldsValueResource::collection($fields_values);
+            $fieldValues=$this->whenLoaded('fieldValue');
+            $toBeReturned['select_options'] = FieldsValueResource::collection($fieldValues);
         }
 
         return $toBeReturned;
