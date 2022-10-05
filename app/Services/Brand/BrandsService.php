@@ -12,7 +12,7 @@ class BrandsService
     /**
      * @throws \Exception
      */
-    public static function deleteRelatedBrandFieldsAndLabels(Brand $brand)
+    public static function deleteRelatedBrandLabels(Brand $brand)
     {
         $deletedLabels = true;
 
