@@ -230,6 +230,8 @@ class ProductController extends MainController
 
         $childrenImages = ProductImage::query()->whereIn('product_id', $childrenIds)->get();
 
+        $childrenPrices = ProductPrice::query()->whereIn('product_id', $childrenIds)->get();
+
         return $this->successResponse(
             data: [
                 'product' =>  new SingleProductResource(
@@ -257,7 +259,8 @@ class ProductController extends MainController
                     $productsFields,
                     $productsAttributes,
                     $childrenFieldValues,
-                    $childrenImages
+                    $childrenImages,
+                    $childrenPrices
                 )
             ],
         );

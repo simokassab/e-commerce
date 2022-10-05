@@ -23,7 +23,7 @@ class FieldsResource extends JsonResource
             'is_required'=> (bool)$this->is_required,
         ];
 
-        if($this->type == 'select'){
+        if($this->type == 'select' || $this->type == 'multi-select'){
             $fieldValues=$this->whenLoaded('fieldValue');
             $toBeReturned['select_options'] = FieldsValueResource::collection($fieldValues);
         }

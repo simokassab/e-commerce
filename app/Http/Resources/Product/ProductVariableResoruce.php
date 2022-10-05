@@ -15,12 +15,14 @@ class ProductVariableResoruce extends JsonResource
 
     private static $childrenFieldValues;
     private static $childrenImages;
+    private static $childrenPrices;
 
     public function toArray($request)
     {
         $childrenFieldValues = self::$childrenFieldValues;
         $childrenImages = self::$childrenImages->where('product_id', $this->id);
         $productAttribute = $childrenFieldValues->where('product_id', $this->id);
+        $childrenPrices = self::$childrenPrices->where('product_id',$this->id);
         return [
             'id' => (int)$this->id,
             'name' => $this->getTranslations('name'),
@@ -43,14 +45,16 @@ class ProductVariableResoruce extends JsonResource
             'products_statuses_id' => (int)$this->products_statuses_id,
             'attributes_fields' => SelectProductAttributesResource::collection($productAttribute),
             'images' => ProductImagesResource::collection($childrenImages),
+            'prices' => ProductPriceResoruce::collection($childrenPrices)
         ];
     }
 
-    public static function customCollection($collection, $childrenFieldValues, $childrenImages)
+    public static function customCollection($collection, $childrenFieldValues, $childrenImages,$childrenPrices)
     {
 
         self::$childrenFieldValues = $childrenFieldValues;
         self::$childrenImages = $childrenImages;
+        self::$childrenPrices = $childrenPrices;
 
         return parent::collection($collection);
     }

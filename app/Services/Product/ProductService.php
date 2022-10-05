@@ -375,7 +375,7 @@ class ProductService
         $data = [];
         foreach ($childrenIds as $key => $child) {
             foreach ($imagesArray as $index => $image) {
-                if (count($imagesData[$key][$index]) == 0)
+                if ( !array_key_exists($index,$imagesData[$key]) )
                     break;
                 $imagePath = uploadImage($image, $this->imagesPath['images']);
                 $data[] = [
@@ -388,20 +388,16 @@ class ProductService
                 ];
             }
         }
-
-
         ProductImage::insert($data);
-        //            DB::commit();
         return $this;
-        // } catch (Exception $e) {
-        //     //            DB::rollBack();
-        //     throw new Exception($e->getMessage());
-        // }
+
     }
 
+    /**
+     * @throws Exception
+     */
     public function storePricesForVariations($request, $childrenIds)
     {
-        //        DB::beginTransaction();
         try {
             $data = [];
             foreach ($request->product_variations as $variation) {
@@ -425,18 +421,14 @@ class ProductService
                 }
             }
             ProductPrice::Insert($data);
-            //            DB::commit();
             return $this;
         } catch (Exception $e) {
-            //            DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
 
     public function storeVariations($request, $product)
     {
-        //        DB::beginTransaction();
-        // try {
         throw_if(count($request->product_variations) == 0, Exception::class, 'No variations found');
 
         $productVariationParentsArray = [];
@@ -449,7 +441,7 @@ class ProductService
 
         foreach ($request->product_variations as $variation) {
             $imagePath = array_key_exists('image', $variation) ? $variation['image'] : "";
-            if (!is_null($variation['image'])) {
+            if (array_key_exists('image',$variation)) {
                 if ($variation['image']) {
                     $imagePath = uploadImage($variation['image'],  $this->imagesPath['images']);
                 } else {
@@ -539,11 +531,8 @@ class ProductService
         $this->storeFieldsForVariations($fieldsArray, $children);
         $this->storeAttributesForVariations($attributesArray, $children);
 
-        //            DB::commit();
         return $childIds;
-        // } catch (Exception $e) {
-        //     throw new Exception($e->getMessage());
-        // }
+
     }
     // END OF TYPE VARIABLE
 
