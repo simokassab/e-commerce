@@ -38,7 +38,7 @@ class SingleCategoryResource extends JsonResource
             'meta_keyword' => $this->getTranslations('meta_keyword'),
             'description' => $this->getTranslations('description'),
             'labels' => $labels,
-            'fields' => FieldResourceEntity::collection($fieldsValues),
+            'fields' => FieldResourceEntity::customerCollection($fieldsValues),
             // 'brands' => new CategoryResource($this->whenLoaded('brands')),
 
         ];

@@ -88,7 +88,6 @@ trait AdditionalField
                 $fieldsRules[$key . '.*.value.ar'] = 'required | string';
             }
         }
-        dd($fieldsRules);
         return $fieldsRules;
     }
 }

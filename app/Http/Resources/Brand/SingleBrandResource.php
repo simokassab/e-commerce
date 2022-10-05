@@ -22,7 +22,6 @@ class SingleBrandResource extends JsonResource
 
         $labels = $this->whenLoaded('label') ?  $this->whenLoaded('label')->pluck('id') :[];
         $fieldsValues = $this->whenLoaded('fieldValue') ?? [];
-        dd($fieldsValues->toArray());
 
         return [
             'id' => $this->id,
@@ -36,7 +35,7 @@ class SingleBrandResource extends JsonResource
             'sort' => $this->sort,
             'is_disabled' => (bool) $this->is_disabled,
             'labels' => ($labels),
-            'fields' => FieldResourceEntity::collection($fieldsValues),
+            'fields' => FieldResourceEntity::customerCollection($fieldsValues),
 
 
         ];
