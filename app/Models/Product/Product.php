@@ -27,7 +27,7 @@ class Product extends MainModel
 
     protected $fieldKey = 'product_id';
     protected $fieldClass = ProductField::class;
-    protected array $fieldDBColumns = ['id','value', 'field_value_id', 'field_id', 'product_id','is_used_for_variations'];
+    protected array $fieldDBColumns = ['id', 'value', 'field_value_id', 'field_id', 'product_id', 'is_used_for_variations'];
 
 
     protected $fillable = [
@@ -150,10 +150,11 @@ class Product extends MainModel
     {
         return $this->belongsToMany(Field::class, 'products_fields', 'product_id', 'field_id');
     }
-    // public function fieldValue(){
-    //     return $this->hasMany(FieldValue::class,'id','');
 
-    // }
+    public function fieldValue()
+    {
+        return $this->hasMany(Product::class, 'product_id', 'id');
+    }
 
     public function images()
     {
