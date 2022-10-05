@@ -250,7 +250,6 @@ class ProductController extends MainController
                         'productRelatedParent',
                         'children',
                         'images'
-
                     ]),
                     $productRelated,
                     $relatedProducts,

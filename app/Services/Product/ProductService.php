@@ -512,9 +512,9 @@ class ProductService
             $productVariationParentsArray[] = $productVariationsArray;
         }
         $model = new Product();
-        //TODO:AZZAM OVER HERE
 
-        Product::upsert($productVariationParentsArray, ['id'], $model->getFillable());
+        //TODO:AZZAM OVER HERE
+        Product::query()->upsert($productVariationParentsArray, 'id', $model->getFillable());
 
         $children = Product::query()->where('parent_product_id', $product->id)->get();
         $childIds = $children->pluck('id');
