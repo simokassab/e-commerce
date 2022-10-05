@@ -153,7 +153,7 @@ class Product extends MainModel
 
     public function fieldValue()
     {
-        return $this->hasMany(Product::class, 'product_id', 'id');
+        return $this->hasMany(ProductField::class, 'product_id', 'id');
     }
 
     public function images()
