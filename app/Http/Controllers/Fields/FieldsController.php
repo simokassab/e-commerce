@@ -70,7 +70,7 @@ class FieldsController extends MainController
 
         $check=true;
 
-          if($request->type=='select' && $request->field_values){
+          if(($request->type=='select' || $request->type=='multi-select')  && $request->field_values){
              FieldService::addOrUpdateFieldValuesToField($request->field_values,$field);
           }
 
