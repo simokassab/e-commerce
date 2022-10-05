@@ -469,6 +469,7 @@ class ProductService
                 $weight = $request->weight ?? null;
             }
             $productVariationsArray = [
+                'id' => null,
                 'name' => json_encode($request->name),
                 'code' => $variation['code'],
                 'type' => 'variable_child',
@@ -488,11 +489,11 @@ class ProductService
                 'tax_id' => $request->tax_id ?? null,
                 'brand_id' => $request->brand_id ?? null,
                 'summary' =>  $request->summary ?? null,
-                'specification' => array_key_exists('specification', $variation) ? $variation['specification'] : null,
+                'specification' => array_key_exists('specification', $variation) ? json_encode($variation['specification']) : null,
                 'meta_title' => json_encode($request->meta_title) ?? null,
                 'meta_keyword' => json_encode($request->meta_keyword) ?? null,
                 'meta_description' => json_encode($request->meta_description) ?? null,
-                'description' => array_key_exists('description', $variation) ? $variation['description'] : null,
+                'description' => array_key_exists('description', $variation) ? json_encode($variation['description']) : null,
                 'website_status' => $request->website_status,
                 'parent_product_id' => $product->id,
                 'products_statuses_id' =>  array_key_exists('products_statuses_id', $variation) ? $variation['products_statuses_id'] : null,
@@ -510,11 +511,11 @@ class ProductService
             $fieldsArray[] = array_key_exists('fields', $variation) ? $variation['fields'] : [];
             $attributesArray[] = array_key_exists('attributes_fields', $variation) ? $variation['attributes_fields'] : [];
             $productVariationParentsArray[] = $productVariationsArray;
+
         }
         $model = new Product();
-
         //TODO:AZZAM OVER HERE
-        Product::query()->upsert($productVariationParentsArray, 'id', $model->getFillable());
+        Product::query()->upsert($productVariationParentsArray, ['id'], $model->getFillable());
 
         $children = Product::query()->where('parent_product_id', $product->id)->get();
         $childIds = $children->pluck('id');
