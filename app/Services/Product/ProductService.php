@@ -520,6 +520,7 @@ class ProductService
             $productVariationParentsArray[] = $productVariationsArray;
         }
         $model = new Product();
+        dd($productVariationParentsArray);
         Product::query()->upsert($productVariationParentsArray, 'id', $model->getFillable());
 
         $children = Product::query()->where('parent_product_id', $product->id)->get();
