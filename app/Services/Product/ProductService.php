@@ -476,7 +476,6 @@ class ProductService
                 $length =  $request->p_length  ?? null;
                 $weight = $request->weight ?? null;
             }
-            dd($request->product_variations);
             $productVariationsArray = [
                 'name' => json_encode($request->name),
                 'code' => $variation['code'],
