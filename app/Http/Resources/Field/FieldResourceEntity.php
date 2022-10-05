@@ -6,6 +6,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class FieldResourceEntity extends JsonResource
 {
+    private mixed $selectedFieldValuesOfMultiSelect;
+
+    public function __construct($resource,$selectedFieldValuesOfMultiSelect = null)
+    {
+        $this->selectedFieldValuesOfMultiSelect = $selectedFieldValuesOfMultiSelect;
+        parent::__construct($resource);
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -21,9 +29,10 @@ class FieldResourceEntity extends JsonResource
         if ($this->field->type == 'select') {
             $value = (int)$this->field_value_id ?? null;
         }
-        if($this->field->type = 'multi-select'){
+        if($this->field->type == 'multi-select'){
 
         }
+
         return [
             'id' => $this->id,
             'field_id' => $this->field_id,

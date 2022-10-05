@@ -83,7 +83,7 @@ trait AdditionalField
             } elseif ($field['type'] == 'multi-select') {
                 $fieldsRules['fields.*.value'] = 'required | array | exists:fields_values,id';
             } elseif ($field['type'] == 'checkbox') {
-                $fieldsRules['fields.*.value'] = 'required | boolean';
+                $fieldsRules['fields.*.value'] = 'required | boolean | nullable';
             } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
                 $fieldsRules['fields.*.value'] = 'required | array';
             }
