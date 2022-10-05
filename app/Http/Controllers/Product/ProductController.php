@@ -122,7 +122,7 @@ class ProductController extends MainController
         return $this->successResponse(data: [
             'prices' =>  count($PriceArray) != 0 ? $PriceArray : "-",
             'fields' => count($fields) != 0 ? $fields : [],
-            'attributes' => count($attributes) != 0 ? $attributes : "-",
+            'attributes_fields' => count($attributes) != 0 ? $attributes : "-",
             'labels' => count($labels) != 0 ? $labels : "-",
             'tags' => count($tags) != 0 ? $tags : "-",
             'brands' => count($brands) != 0 ? $brands : "-",
