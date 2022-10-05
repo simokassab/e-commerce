@@ -92,7 +92,7 @@ class SingleProductResource extends JsonResource
             'bundle_price_status' => $this->bundle_price_status,
             'prices' => ProductPriceResoruce::collection($this->whenLoaded('price')->load('prices.currency')) ?? [],
             'fields' => SingleFieldResource::collection($this->whenLoaded('field'))->where('is_attribute', 0) ?? [],
-            'attributes' => ProductAttributesResource::collection($this->productsAttributes),
+            'attributes_fields' => ProductAttributesResource::collection($this->productsAttributes),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'labels' => SelectLabelResource::collection($this->whenLoaded('labels')),
             'categories' => $nestedCategories,

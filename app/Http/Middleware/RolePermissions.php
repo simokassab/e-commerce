@@ -38,6 +38,7 @@ class RolePermissions
                 'getAllParentsSorted',
                 'getAllChildsSorted',
                 'getAllLanguagesSorted',
+                'getPricesList'
             ],
             'store',
             $routeAction

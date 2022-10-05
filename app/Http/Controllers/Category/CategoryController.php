@@ -172,9 +172,10 @@ class CategoryController extends MainController
             CategoryService::deleteRelatedCategoryFieldsAndLabels($category);
 
             if ($request->has('fields') && !is_null($request->fields)) {
-               $category->storeUpdateFields($request->fields);
+                $category->storeUpdateFields($request->fields);
             }
 
+            //TODO Azzam change the function to the correct order added by azzam
             if ($request->has('labels') && !is_null($request->labels)) {
                 $oldLabel = $request->labels;
                 if (gettype($request->labels) == 'string') {

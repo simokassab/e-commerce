@@ -10,17 +10,14 @@ trait AdditionalField
     protected $fieldKey;
     protected $fieldClass;
     protected array $fieldDBColumns;
-
     /**
      * @throws Exception
      */
     public function storeUpdateFields(array $newFields)
     {
-
         if ($this->fieldKey == null || $this->fieldClass == null || $this->fieldDBColumns == null) {
             throw new Exception('Missing fieldClass or fieldKey or fieldDBColumns!');
         }
-
         $oldFields = $this->fieldValue;
         if (count($oldFields) != 0) {
             $newFieldsIds = collect($newFields)->pluck('id');
@@ -29,9 +26,9 @@ trait AdditionalField
         }
 
         //explode all multi selects to smaller select to save in the database
-        $multiSelectFields = collect($newFields)->where('type','multi-select');
-        foreach ($multiSelectFields as $selectField){
-            foreach ($selectField['value'] as $innerFieldValue){
+        $multiSelectFields = collect($newFields)->where('type', 'multi-select');
+        foreach ($multiSelectFields as $selectField) {
+            foreach ($selectField['value'] as $innerFieldValue) {
                 $tempArray = [];
                 $tempArray['id'] = $selectField['id'];
                 $tempArray['field_id'] = $selectField['field_id'];
@@ -44,7 +41,7 @@ trait AdditionalField
         $toBeSavedArray = [];
         foreach ($newFields as $key => $field) {
             //ignore the multi selects since we already have exploded them to smaller selects
-            if($field['type'] === 'multi-select'){
+            if ($field['type'] === 'multi-select') {
                 continue;
             }
             $tobeSavedArray[$key]["field_value_id"] = null;
@@ -52,7 +49,7 @@ trait AdditionalField
             if ($field["type"] == 'select') {
                 $toBeSavedArray[$key]["value"] = null;
                 $toBeSavedArray[$key]["field_value_id"] = ($field["value"]);
-            }else if ($field["type"] == 'text' || $field["type"] == 'textarea') {
+            } else if ($field["type"] == 'text' || $field["type"] == 'textarea') {
                 $toBeSavedArray[$key]["value"] = json_encode($field['value']);
             } else if ($field["type"] == 'checkbox') {
                 $toBeSavedArray[$key]["value"] = boolval($field['value']);
@@ -71,25 +68,26 @@ trait AdditionalField
         return call_user_func($this->fieldClass . '::query')->upsert($toBeSavedArray, ['id'], $this->fieldDBColumns);
     }
 
-    public static function generateValidationRules(array $fields)
+
+    public static function generateValidationRules(array $fields, string $key)
     {
 
         $fieldsRules = [];
         foreach ($fields as $key => $field) {
             if ($field['type'] == 'date') {
-                $fieldsRules['fields.*.value'] = 'required | date';
+                $fieldsRules[$key . '.*.value'] = 'required | date';
             } elseif ($field['type'] == 'select') {
-                $fieldsRules['fields.*.value'] = 'required | integer | exists:fields_values,id';
+                $fieldsRules[$key . '.*.value'] = 'required | integer | exists:fields_values,id';
             } elseif ($field['type'] == 'multi-select') {
-                $fieldsRules['fields.*.value'] = 'required | array | exists:fields_values,id';
+                $fieldsRules[$key . '.*.value'] = 'required | array | exists:fields_values,id';
             } elseif ($field['type'] == 'checkbox') {
-                $fieldsRules['fields.*.value'] = 'required | boolean';
+                $fieldsRules[$key . '.*.value'] = 'required | boolean';
             } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
-                $fieldsRules['fields.*.value'] = 'required | array';
+                $fieldsRules[$key . '.*.value'] = 'required | array';
+                $fieldsRules[$key . '.*.value.en'] = 'required | string';
+                $fieldsRules[$key . '.*.value.ar'] = 'required | string';
             }
         }
         return $fieldsRules;
     }
-
-
 }
