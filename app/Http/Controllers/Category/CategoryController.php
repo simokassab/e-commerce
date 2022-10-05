@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Category;
 
+use App\Exceptions\FileErrorException;
 use App\Http\Controllers\MainController;
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Resources\Category\CategoryResource;
@@ -73,9 +74,17 @@ class CategoryController extends MainController
             $category->name = $request->name;
             $category->code = uniqid();
             if ($request->image) {
+                if ($category->image) {
+                    if (!$this->removeImage($category->image))
+                        throw new FileErrorException();
+                }
                 $category->image = $this->imageUpload($request->image, Category::$filePath['images']);
             }
             if ($request->icon) {
+                if ($category->icon) {
+                    if (!$this->removeImage($category->icon))
+                        throw new FileErrorException();
+                }
                 $category->icon = $this->imageUpload($request->icon, Category::$filePath['icons']);
             }
             $category->parent_id = $request->parent_id;
@@ -153,9 +162,17 @@ class CategoryController extends MainController
             $category->name = $request->name;
             $category->code = uniqid();
             if ($request->image) {
+                if ($category->image) {
+                    if (!$this->removeImage($category->image))
+                        throw new FileErrorException();
+                }
                 $category->image = $this->imageUpload($request->image, Category::$filePath['images']);
             }
             if ($request->icon) {
+                if ($category->icon) {
+                    if (!$this->removeImage($category->icon))
+                        throw new FileErrorException();
+                }
                 $category->icon = $this->imageUpload($request->icon, Category::$filePath['icons']);
             }
             $category->parent_id = $request->parent_id;

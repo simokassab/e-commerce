@@ -2,6 +2,8 @@
 
 namespace App\Services\Product;
 
+use App\Exceptions\FileErrorException;
+use App\Http\Controllers\MainController;
 use App\Models\Field\Field;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
@@ -100,6 +102,12 @@ class ProductService
         if (!$request->has('images_deleted') || is_null($request->images_deleted) || count($request->images_deleted) == 0)
             return $this;
 
+        $images = ProductImage::findMany($request->images_deleted)->pluck('image');;
+
+        foreach ($images as $key => $image) {
+            if (!removeImage($image))
+                throw new FileErrorException();
+        }
         if (!ProductImage::whereIn('id', $request->images_deleted)->delete()) {
             throw new Exception('Error while deleting product images');
         }
@@ -344,25 +352,19 @@ class ProductService
 
     public function removeImagesForVariations($imagesDeletedArray, $childrenIds)
     {
-
-        //        DB::beginTransaction();
-        try {
-            if (is_null($imagesDeletedArray))
-                return $this;
-
-            $imagesIdsArray = [];
-            foreach ($childrenIds as $key => $child) {
-                foreach ($imagesDeletedArray as $key => $value) {
-                    $imagesIdsArray = $value[$key];
-                }
-            }
-            ProductImage::whereIn('id', $imagesIdsArray)->delete();
-            //            DB::commit();
+        if (is_null($imagesDeletedArray) || count($imagesDeletedArray) == 0)
             return $this;
-        } catch (Exception $e) {
-            //            DB::rollBack();
-            throw new Exception($e->getMessage());
+
+        $images = ProductImage::findMany($imagesDeletedArray)->pluck('image');;
+
+        foreach ($images as $key => $image) {
+            if (!removeImage($image))
+                throw new FileErrorException();
         }
+        if (!ProductImage::whereIn('id', $imagesDeletedArray)->delete()) {
+            throw new Exception('Error while deleting product images');
+        }
+        return $this;
     }
 
     public function storeImagesForVariations($imagesArray, $imagesData, $childrenIds)
