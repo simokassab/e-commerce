@@ -488,7 +488,7 @@ class ProductService
                 'unit_id' => $request->unit_id ?? null,
                 'tax_id' => $request->tax_id ?? null,
                 'brand_id' => $request->brand_id ?? null,
-                'summary' =>  $request->summary ?? null,
+                'summary' =>  json_encode($request->summary) ?? null,
                 'specification' => array_key_exists('specification', $variation) ? json_encode($variation['specification']) : null,
                 'meta_title' => json_encode($request->meta_title) ?? null,
                 'meta_keyword' => json_encode($request->meta_keyword) ?? null,
