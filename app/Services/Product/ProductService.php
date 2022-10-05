@@ -78,133 +78,22 @@ class ProductService
         }
     }
 
-
     public function storeAdditionalFields($request, $product)
     {
-        //TODO: to be organized all addional fields here
-
-        if (!$request->has('fields') && count($request['fields']) == 0)
-            return $this;
-
-        $data = [];
-        foreach ($request->fields as $index => $field) {
-            if (!in_array($field['type'], $this->fieldTypes))
-                throw new Exception('Invalid fields type');
-
-            throw_if(!array_key_exists('value', $field), new Exception('Invalid value'));
-            if ($field['type'] == 'select') {
-                $data[] = [
-                    'product_id' => $product->id,
-                    'field_id' => (int)$field['field_id'],
-                    'field_value_id' =>  (int)$field['value'],
-                    'value' => null,
-                ];
-            } elseif ($field['type'] == 'checkbox') {
-                $data[] = [
-                    'product_id' => $product->id,
-                    'field_id' => (int)$field['field_id'],
-                    'field_value_id' =>  null,
-                    'value' => (bool)$field['value'],
-                ];
-            } elseif (($field['type']) == 'date') {
-                $data[] = [
-                    'product_id' => $product->id,
-                    'field_id' => (int)$field['field_id'],
-                    'field_value_id' =>  null,
-                    'value' => \Illuminate\Support\Carbon::parse($field['value'])->format('Y-m-d'),
-                ];
-            } elseif (($field['type']) == 'text' || gettype($field['type']) == 'textarea') {
-                $data[] = [
-                    'product_id' => $product->id,
-                    'field_id' => (int)$field['field_id'],
-                    'field_value_id' =>  null,
-                    'value' => json_encode($field['value']),
-                ];
-            } else {
-                continue;
-            }
+        if ($request->has('fields') && !is_null($request->fields)) {
+            $product->storeUpdateFields($request->fields);
         }
-        DB::beginTransaction();
-        try {
-            ProductField::where('product_id', $product->id)->delete();
-            ProductField::insert($data);
-            DB::commit();
-            return $this;
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw new Exception($e->getMessage());
-        }
+        return $this;
     }
 
     public function storeAdditionalAttributes($request, $product)
     {
-        //        DB::beginTransaction();
-        try {
-            if (!array_key_exists('attributes', $request->toArray())) {
-                return $this;
-            }
-
-            if (count($request['attributes']) == 0) {
-                return $this;
-            }
-            $attributesCheck = ProductField::where('product_id', $product->id)->delete();
-
-            $data = [];
-            $allData = [];
-            //            $attributes = $request->has('product_variations') ? (collect($request->toArray()['product_variations'])->pluck('attributes')->first()) : [];
-            //            $attributesUnique = (collect($attributes)->unique(fn($item) => $item['value'] . $item['field_id'] ));
-
-            foreach ($request['attributes'] as $index => $attribute) {
-                if (!in_array($attribute['type'], $this->fieldTypes))
-                    throw new Exception('Invalid attribute type');
-
-                throw_if(!array_key_exists('value', $attribute), new Exception('Invalid value'));
-
-                if ($attribute['type'] == 'select') {
-                    $data[] = [
-                        'product_id' => $product->id,
-                        'field_id' => (int)$attribute['field_id'],
-                        'field_value_id' =>  (int)$attribute['value'],
-                        'is_used_for_variations' =>  1,
-                        'value' => null,
-                    ];
-                } elseif (($attribute['type']) == 'checkbox') {
-                    $data[] = [
-                        'product_id' => $product->id,
-                        'field_id' => (int)$attribute['field_id'],
-                        'field_value_id' =>  null,
-                        'value' => (bool)$attribute['value'],
-                    ];
-                } elseif (($attribute['type']) == 'date') {
-                    $data[] = [
-                        'product_id' => $product->id,
-                        'field_id' => (int)$attribute['field_id'],
-                        'field_value_id' =>  null,
-                        'value' => Carbon::parse($attribute['value'])->format('Y-m-d'),
-                    ];
-                } elseif (($attribute['type']) == 'text' || gettype($attribute['type']) == 'textarea') {
-                    $data[] = [
-                        'product_id' => $product->id,
-                        'field_id' => (int)$attribute['field_id'],
-                        'field_value_id' =>  null,
-                        'value' => ($attribute['value']),
-                    ];
-                } else {
-
-                    continue;
-                }
-            }
-            ProductField::insert($data);
-            //            DB::commit();
-            return $this;
-        } catch (Exception $e) {
-            //            DB::rollBack();
-            throw new Exception($e);
-        } catch (Error $e) {
-            //            DB::rollBack();
-            throw new Exception($e);
+        if ($request->has('attributes_fields') && !is_null($request->attributes_fields)) {
+            $product->storeUpdateFields($request->attributes_fields);
         }
+        return $this;
     }
+
     public function removeAdditionalImages($request)
     {
 
@@ -216,6 +105,7 @@ class ProductService
         }
         return $this;
     }
+
     public function storeAdditionalImages($request, $product)
     {
         //$request=(object)$request;
@@ -254,6 +144,7 @@ class ProductService
             throw new Exception($e->getMessage());
         }
     }
+
     public function storeAdditionalLabels($request, $product, $childrenIds)
     {
         //$request=(object)$request;
@@ -289,6 +180,7 @@ class ProductService
             throw new Exception($e->getMessage());
         }
     }
+
     public function storeAdditionalTags($request, $product, $childrenIds)
     {
         //$request=(object)$request;
@@ -324,6 +216,7 @@ class ProductService
             throw new Exception($e->getMessage());
         }
     }
+
     // TYPE BUNDLE
     public function storeAdditionalBundle($request, $product)
     {
@@ -356,8 +249,8 @@ class ProductService
         }
         return $this;
     }
-
     // END OF TYPE BUNDLE
+
     public function storeAdditionalPrices($request, $product)
     {
         //        DB::beginTransaction();
@@ -386,6 +279,7 @@ class ProductService
             throw new Exception($e->getMessage());
         }
     }
+
     public static function deleteRelatedDataForProduct(Product $product)
     {
 
@@ -430,102 +324,24 @@ class ProductService
             throw new Exception($e);
         }
     }
+
     // TYPE VARIABLE
-    public function storeFieldsForVariations($fieldsArray, $childrenIds)
+    public function storeFieldsForVariations($fieldsArray, $children)
     {
-        //        DB::beginTransaction();
-        try {
-            if (is_null($fieldsArray)  || count($fieldsArray) == 0)
-                return $this;
-
-            $fieldCheck = ProductField::whereIn('product_id', $childrenIds)->whereHas('field', fn ($query) => $query->where('is_attribute', 0))->delete();
-            $allData = [];
-            $data = [];
-
-            foreach ($childrenIds as $key => $child) {
-                foreach ($fieldsArray as $index => $field) {
-                    if (!in_array($field['type'], $this->fieldTypes))
-                        throw new Exception('Invalid fields type');
-
-                    throw_if(!array_key_exists('value', $field), new Exception('Invalid value'));
-
-                    if ($field['type'] == 'select') {
-                        $data[] = [
-                            'product_id' => $child,
-                            'field_id' => (int)$field['field_id'],
-                            'field_value_id' =>  (int)$field['value'],
-                            'value' => null,
-                        ];
-                    } elseif (($field['type']) == 'checkbox') {
-                        $data[] = [
-                            'product_id' => $child,
-                            'field_id' => (int)$field['field_id'],
-                            'field_value_id' =>  null,
-                            'value' => (bool)$field['value'],
-                        ];
-                    } elseif (($field['type']) == 'date') {
-                        $data[] = [
-                            'product_id' => $child,
-                            'field_id' => (int)$field['field_id'],
-                            'field_value_id' =>  null,
-                            'value' => Carbon::parse($field['value'])->format('Y-m-d'),
-                        ];
-                    } elseif (($field['type']) == 'text' || gettype($field['type']) == 'textarea') {
-                        $data[] = [
-                            'product_id' => $child,
-                            'field_id' => (int)$field['field_id'],
-                            'field_value_id' =>  null,
-                            'value' => ($field['value']),
-                        ];
-                    } else {
-                        continue;
-                    }
-
-                    $allData[] = $data;
-                }
-            }
-            ProductField::query()->insert($allData);
-
-            //            DB::commit();
-            return $this;
-        } catch (Exception $e) {
-            //            DB::rollBack();
-            throw new Exception($e->getMessage());
+        foreach ($children as $key => $child) {
+            $child->storeUpdateFields($fieldsArray[$key]);
         }
+        return $this;
     }
-    public function storeAttributesForVariations($attributesArray, $childrenIds)
+
+    public function storeAttributesForVariations($attributesArray, $children)
     {
-        try {
-            if (is_null($attributesArray) || count($attributesArray) == 0)
-                return $this;
-            //TODO : handel this types of functions
-            $attributesCheck = ProductField::whereIn('product_id', $childrenIds)->whereHas('field', fn ($query) => $query->where('is_attribute', 1))->delete();
-            $data = [];
-            foreach ($childrenIds as $key => $child) {
-                foreach ($attributesArray[$key] as $index => $attribute) {
-                    if (!in_array($attribute['type'], $this->fieldTypes))
-                        throw new Exception('Invalid fields type');
-
-                    throw_if(!array_key_exists('value', $attribute), new Exception('Invalid value'));
-
-                    if ($attribute['type'] == 'select') {
-                        $data[] = [
-                            'product_id' => $child,
-                            'field_id' => (int)$attribute['field_id'],
-                            'field_value_id' =>  (int)$attribute['value'],
-                            'value' => null,
-                        ];
-                    }
-                }
-            }
-            ProductField::insert($data);
-            //            DB::commit();
-            return $this;
-        } catch (Exception $e) {
-            //            DB::rollBack();
-            throw new Exception($e->getMessage());
+        foreach ($children as $key => $child) {
+            $child->storeUpdateFields($attributesArray[$key]);
         }
+        return $this;
     }
+
     public function removeImagesForVariations($imagesDeletedArray, $childrenIds)
     {
 
@@ -580,13 +396,14 @@ class ProductService
         //     throw new Exception($e->getMessage());
         // }
     }
+
     public function storePricesForVariations($request, $childrenIds)
     {
         //        DB::beginTransaction();
         try {
             $data = [];
             foreach ($request->product_variations as $variation) {
-                $pricesInfo = $variation['isSamePriceAsParent'] ? $request->prices : ($variation['prices'] ?? []);
+                $pricesInfo = $variation['is_same_price_as_parent'] ? $request->prices : ($variation['prices'] ?? []);
             }
             if (is_null($pricesInfo)) {
                 return $this;
@@ -614,9 +431,6 @@ class ProductService
         }
     }
 
-    /**
-     * @throws \Throwable
-     */
     public function storeVariations($request, $product)
     {
         //        DB::beginTransaction();
@@ -666,7 +480,8 @@ class ProductService
                 'type' => 'variable_child',
                 'sku' => array_key_exists('sku', $variation) ? $variation['sku'] : null,
                 'quantity' => $variation['quantity'],
-                'is_same_price_as_parent' => $variation['isSamePriceAsParent'],
+                'is_same_price_as_parent' => array_key_exists('is_same_price_as_parent', $variation) ? $variation['is_same_price_as_parent'] : false,
+                'is_same_dimensions_as_parent' => array_key_exists('is_same_dimensions_as_parent', $variation) ? $variation['is_same_dimensions_as_parent'] : false,
                 'reserved_quantity' => array_key_exists('reserved_quantity', $variation) ? $variation['reserved_quantity'] : 0,
                 'minimum_quantity' => $variation['minimum_quantity'],
                 'height' => $height,
@@ -698,16 +513,15 @@ class ProductService
             $imagesDeletedArray = array_key_exists('images_deleted', $variation) ?  $variation['images_deleted'] : [];
             $imagesArray[] = array_key_exists('images', $variation) ? $variation['images'] : [];
             $imagesData[] = array_key_exists('images_data', $variation) ? $variation['images_data'] : [];
-            //$fieldsArray[] = array_key_exists('fields', $variation) ? $variation['fields'] : [];
-            $fieldsArray = [];
-            $attributesArray[] = array_key_exists('attributes', $variation) ? $variation['attributes'] : [];
+            $fieldsArray[] = array_key_exists('fields', $variation) ? $variation['fields'] : [];
+            $attributesArray[] = array_key_exists('attributes_fields', $variation) ? $variation['attributes_fields'] : [];
             $productVariationParentsArray[] = $productVariationsArray;
         }
         $model = new Product();
         Product::query()->upsert($productVariationParentsArray, 'id', $model->getFillable());
 
-        $childrenIds = Product::query()->where('parent_product_id', $product->id)->get()->pluck('id');
-
+        $children = Product::query()->where('parent_product_id', $product->id)->get();
+        $childIds = $children->pluck('id');
 
         // set default child as default child
         if (!is_null($defaultChild)) {
@@ -715,19 +529,20 @@ class ProductService
                 'is_default_child' => 1
             ]);
         }
-        $this->removeImagesForVariations($imagesDeletedArray, $childrenIds);
-        $this->storeImagesForVariations(collect($imagesArray)->flatten()->toArray(), $imagesData, $childrenIds);
-        $this->storePricesForVariations($request, $childrenIds);
-        $this->storeFieldsForVariations($fieldsArray, $childrenIds);
-        $this->storeAttributesForVariations($attributesArray, $childrenIds);
+        $this->removeImagesForVariations($imagesDeletedArray, $childIds);
+        $this->storeImagesForVariations(collect($imagesArray)->flatten()->toArray(), $imagesData, $childIds);
+        $this->storePricesForVariations($request, $childIds);
+        $this->storeFieldsForVariations($fieldsArray, $children);
+        $this->storeAttributesForVariations($attributesArray, $children);
 
         //            DB::commit();
-        return $childrenIds;
+        return $childIds;
         // } catch (Exception $e) {
         //     throw new Exception($e->getMessage());
         // }
     }
     // END OF TYPE VARIABLE
+
     public function createAndUpdateProduct($request, $product = null)
     {
         //        DB::beginTransaction();

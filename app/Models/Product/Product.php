@@ -24,6 +24,12 @@ class Product extends MainModel
     protected $table = 'products';
     protected $guard_name = 'web';
     protected $appends = ['real_quantity'];
+
+    protected $fieldKey = 'product_id';
+    protected $fieldClass = ProductField::class;
+    protected array $fieldDBColumns = ['id','value', 'field_value_id', 'field_id', 'product_id','is_used_for_variations'];
+
+
     protected $fillable = [
         'name',
         'slug',

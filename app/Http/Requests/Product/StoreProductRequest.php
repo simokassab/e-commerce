@@ -45,17 +45,19 @@ class StoreProductRequest extends MainRequest
             $this->priceValue = $productSettings['products_prices_greater_than_or_equal'][0]['value'] ?? 0;
             $this->discountedPriceValue = $productSettings['products_discounted_price_greater_than_or_equal'][0]['value'] ?? 0;
         }
+
         $id = $this->route('product') ? $this->route('product')->id : null;
+
         $rules = [
             'name.en' => 'required',
             'name.ar' => 'required',
-            'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' .$id,
-            'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' .$id,
+            'slug' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,slug,' . $id,
+            'code' => 'required | max:' . config('defaults.default_string_length') . ' | unique:products,code,' . $id,
             'sku' => [Rule::when(in_array('sku',  $this->productsRequiredSettingsArray), 'required', 'nullable'), ' max:' . config('defaults.default_string_length')],
             'type' => 'required | in:' . Product::$prdouctTypes,
-            'quantity' => [Rule::when(in_array($this->type, ['variable']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
-            'reserved_quantity' => [Rule::when(in_array($this->type, ['variable']), ['in:0'], 'nullable'), 'integer', 'gte:0'],
-            'minimum_quantity' => [Rule::when(in_array($this->type, ['variable']), ['in:0'], 'required'), 'integer', Rule::when(!$this->allowNegativeQuantity, ['gte:0'])],
+            'quantity' => [Rule::when(in_array($this->type, ['variable','service']), ['in:0'], 'required'), 'integer', 'gte:' . $this->QuantityValue],
+            'reserved_quantity' => [Rule::when(in_array($this->type, ['variable','service']), ['in:0'], 'nullable'), 'integer', 'gte:0'],
+            'minimum_quantity' => [Rule::when(in_array($this->type, ['variable','service']), ['in:0'], 'required'), 'integer', Rule::when(!$this->allowNegativeQuantity, ['gte:0'])],
             'summary' => [Rule::when(in_array('summary',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
             'specification' => [Rule::when(in_array('specification',  $this->productsRequiredSettingsArray), 'required', 'nullable')],
 
@@ -83,7 +85,7 @@ class StoreProductRequest extends MainRequest
             'sort' => 'nullable | integer',
             'is_default_child' => 'required | boolean',
 
-            'parent_product_id' => [Rule::when($this->isSamePriceAsParent && $this->type == 'variable_child', 'required', 'nullable'), 'integer', 'exists:products,id'],
+            'parent_product_id' => [Rule::when($this->is_same_price_as_parent && $this->type == 'variable_child', 'required', 'nullable'), 'integer', 'exists:products,id'],
             'category_id' => 'required  | integer | exists:categories,id',
             'unit_id' => 'required | integer | exists:units,id',
             'brand_id' => [Rule::when(in_array('brand_id',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'nullable', 'integer ', ' exists:brands,id'],
@@ -150,7 +152,7 @@ class StoreProductRequest extends MainRequest
             'product_variations.*.length' =>  [Rule::when(in_array('length',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
             'product_variations.*.weight' =>  [Rule::when(in_array('weight',  $this->productsRequiredSettingsArray), 'required', 'nullable'), 'numeric'],
             'product_variations.*.is_default_child' => 'required | boolean',
-            'product_variations.*.isSamePriceAsParent' => 'required | boolean',
+            'product_variations.*.is_same_price_as_parent' => 'required | boolean',
             'product_variations.*.products_statuses_id' => 'required | integer | exists:products_statuses,id',
             'product_variations.*.is_same_dimensions_as_parent' => 'required | boolean',
 
@@ -161,32 +163,38 @@ class StoreProductRequest extends MainRequest
             // 'product_variations.*.images.*.title' => 'required ',
             // 'product_variations.*.images.*.sort' => 'required | integer',
 
-            'product_variations.*.fields.*.field_id' => 'required | exists:fields,id,entity,product',
-            'product_variations.*.fields.*.type' => ['required', 'exists:fields,type,entity,product'],
 
-            'product_variations.*.attributes.*.field_id' => 'required | integer | exists:fields,id,entity,product',
-            'product_variations.*.attributes.*.value' => 'required  | integer | exists:fields_values,id',
-            'product_variations.*.attributes.*.type' => 'required  | in:select',
 
         ];
+        if ($this->has('fields')) {
+            $rules =  array_merge($rules, Product::generateValidationRules($this->fields, 'fields'));
+        }
+        if ($this->has('attributes')) {
+            $rules =  array_merge($rules, Product::generateValidationRules($this->attributes_fields, 'attributes_fields'));
+        }
+
         if ($this->type == 'variable') {
-            foreach ($this->product_variations ?? [] as $key => $variation) {
-                if (!array_key_exists('isSamePriceAsParent', $variation)) {
-                    break;
-                }
-                if (!$variation['isSamePriceAsParent']) {
-                    $pricesRulesArray = [
-                        'product_variations.*.prices.*.price_id' => 'required | integer | exists:prices,id',
-                        'product_variations.*.prices.*.price' => 'required | numeric | gte:' . $this->priceValue,
-                        'product_variations.*.prices.*.discounted_price' => 'nullable | numeric | gte:' . $this->discountedPriceValue,
-                    ];
-                    $rules = array_merge($rules, $pricesRulesArray);
+            if ($this->has('product_variations')) {
+                foreach ($this->product_variations as $key => $variation) {
+                    if (!array_key_exists('is_same_price_as_parent', $variation)) {
+                        break;
+                    }
+                    if (!$variation['is_same_price_as_parent']) {
+                        $pricesRulesArray['product_variations.*.prices.*.price_id'] = 'required | integer | exists:prices,id';
+                        $pricesRulesArray['product_variations.*.prices.*.price'] = 'required | numeric | gte:' . $this->priceValue;
+                        $pricesRulesArray['product_variations.*.prices.*.discounted_price'] = 'nullable | numeric | gte:' . $this->discountedPriceValue;
+
+                        $rules = array_merge($rules, $pricesRulesArray);
+                    }
+                    if (array_key_exists('fields', $variation))
+                        $rules =  array_merge($rules, Product::generateValidationRules($variation['fields'], 'product_variations.*.fields'));
+
+                    if (array_key_exists('attributes_fields',$variation))
+                        $rules =  array_merge($rules, Product::generateValidationRules($variation['attributes_fields'], 'product_variations.*.attributes_fields'));
                 }
             }
         }
-        if ($this->has('fields')) {
-            $rules =  array_merge($rules,Product::generateValidationRules($this->fields));
-        }
+
 
         return $rules;
     }

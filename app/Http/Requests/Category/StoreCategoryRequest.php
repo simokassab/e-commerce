@@ -67,7 +67,7 @@ class StoreCategoryRequest extends MainRequest
 
         ];
         if ($this->has('fields')) {
-            $rules =  array_merge($rules,Category::generateValidationRules($this->fields));
+            $rules =  array_merge($rules,Category::generateValidationRules($this->fields,'fields'));
         }
 
         return $rules;
