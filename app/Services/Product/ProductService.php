@@ -136,7 +136,7 @@ class ProductService
                 $data[] = [
                     'product_id' => $product->id,
                     'image' => $imagePath,
-                    'title' => json_encode($request->images_data[$index]['title']),
+                    'title' => ($request->images_data[$index]['title']),
                     'sort' => $request->images_data[$index]['sort'],
                     'created_at'  => Carbon::now()->toDateString(),
                     'updated_at' => Carbon::now()->toDateString(),
@@ -239,9 +239,9 @@ class ProductService
                 if ($childNameStatus == 'hide')
                     $name = null;
                 elseif ($childNameStatus == 'default')
-                    $name = json_encode($request->name);
+                    $name = ($request->name);
                 elseif ($childNameStatus == 'custom')
-                    $name = array_key_exists('name', $value) ? json_encode($value['name']) : null;
+                    $name = array_key_exists('name', $value) ? ($value['name']) : null;
 
                 $data[$related_product] = [
                     'parent_product_id' => $product->id,
@@ -381,7 +381,7 @@ class ProductService
                 $data[] = [
                     'product_id' => $child,
                     'image' => $imagePath,
-                    'title' => json_encode($imagesData[$key][$index]['title']),
+                    'title' => ($imagesData[$key][$index]['title']),
                     'sort' => $imagesData[$key][$index]['sort'],
                     'created_at'  => Carbon::now()->toDateString(),
                     'updated_at' => Carbon::now()->toDateString(),
@@ -477,7 +477,7 @@ class ProductService
                 $weight = $request->weight ?? null;
             }
             $productVariationsArray = [
-                'name' => json_encode($request->name),
+                'name' => ($request->name),
                 'code' => $variation['code'],
                 'type' => 'variable_child',
                 'sku' => array_key_exists('sku', $variation) ? $variation['sku'] : null,
@@ -495,12 +495,12 @@ class ProductService
                 'unit_id' => $request->unit_id ?? null,
                 'tax_id' => $request->tax_id ?? null,
                 'brand_id' => $request->brand_id ?? null,
-                'summary' => json_encode($request->summary) ?? null,
-                'specification' => json_encode($request->specification) ?? null,
-                'meta_title' => json_encode($request->meta_title) ?? null,
-                'meta_keyword' => json_encode($request->meta_keyword) ?? null,
-                'meta_description' => json_encode($request->meta_description) ?? null,
-                'description' => json_encode($request->description) ?? null,
+                'summary' => ($request->summary) ?? null,
+                'specification' => ($request->specification) ?? null,
+                'meta_title' => ($request->meta_title) ?? null,
+                'meta_keyword' => ($request->meta_keyword) ?? null,
+                'meta_description' => ($request->meta_description) ?? null,
+                'description' => ($request->description) ?? null,
                 'website_status' => $request->website_status,
                 'parent_product_id' => $product->id,
                 'products_statuses_id' =>  array_key_exists('products_statuses_id', $variation) ? $variation['products_statuses_id'] : null,
