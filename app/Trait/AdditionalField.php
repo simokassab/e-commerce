@@ -83,7 +83,9 @@ trait AdditionalField
             } elseif ($field['type'] == 'checkbox') {
                 $fieldsRules[$key . '.*.value'] = 'required | boolean';
             } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
-                $fieldsRules[$key . '.*.value'] = 'required | string';
+                $fieldsRules[$key . '.*.value'] = 'required | array';
+                $fieldsRules[$key . '.*.value.en'] = 'required | string';
+                $fieldsRules[$key . '.*.value.ar'] = 'required | string';
             }
         }
         return $fieldsRules;
