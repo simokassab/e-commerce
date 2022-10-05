@@ -68,7 +68,6 @@ trait AdditionalField
             $toBeSavedArray[$key]["field_id"] = $field['field_id'];
             $toBeSavedArray[$key]["id"] = $field['id'];
         }
-        dd($toBeSavedArray);
         return call_user_func($this->fieldClass . '::query')->upsert($toBeSavedArray, ['id'], $this->fieldDBColumns);
     }
 
@@ -86,7 +85,7 @@ trait AdditionalField
             } elseif ($field['type'] == 'checkbox') {
                 $fieldsRules['fields.*.value'] = 'required | boolean';
             } elseif ($field['type'] == 'text' || $field['type'] == 'textarea') {
-                $fieldsRules['fields.*.value'] = 'required | string';
+                $fieldsRules['fields.*.value'] = 'required | array';
             }
         }
         return $fieldsRules;
