@@ -135,11 +135,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => $dashboardMiddlewares], f
     Route::apiResource('price', PricesController::class);
 
     Route::post('price_list/show', [PricesListController::class, 'show']);
-    // Route::PUT('price_list', [PricesListController::class, 'update']);
     Route::apiResource('price_list', PricesListController::class);
 
     Route::post('product/all', [ProductController::class, 'index']); // for search
-    // Route::post('product/add',[ProductController::class,'addproduct']);// for search
     Route::get('product/create', [ProductController::class, 'create']);
 
     Route::post('product/get-products-for-order', [ProductController::class, 'getProductsForOrders']);
@@ -153,7 +151,6 @@ Route::group(['prefix' => 'dashboard', 'middleware' => $dashboardMiddlewares], f
     Route::get('coupon/create', [CouponsController::class, 'create']);
     Route::apiResource('coupon', CouponsController::class);
 
-    // Route::get('createShipment', [TestController::class, 'createShipment']);
 
 });
 
